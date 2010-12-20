@@ -4,6 +4,7 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/java-libglom/java-libglom-0.1.jar" sourcepath="/java-libglom/src/main/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/java-libglom">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="java-libglom/.libs"/>
