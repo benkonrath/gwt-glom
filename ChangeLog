@@ -1,5 +1,14 @@
 2010-12-20  Ben Konrath  <ben@bagu.org>
 
+	Add some basic style to the table listing.
+
+	* src/org/glom/web/client/OnlineGlom.java: Add style to the table
+	header, print useful error message on async callback failure.
+	* war/OnlineGlom.css: Add style for table header, remove defaults
+	provided by the Eclipse project wizard. 
+
+2010-12-20  Ben Konrath  <ben@bagu.org>
+
 	Load example file from installed glom dir.
 
 	* src/org/glom/web/server/TableNamesServiceImpl.java: Use the Java API

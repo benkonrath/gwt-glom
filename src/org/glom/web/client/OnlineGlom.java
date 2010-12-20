@@ -23,20 +23,23 @@ public class OnlineGlom implements EntryPoint {
 
 		// add some style
 		tablesFlexTable.setCellPadding(6);
-		mainPanel.add(tablesFlexTable);
+		tablesFlexTable.getRowFormatter().addStyleName(0, "tablesHeader");
 		
+		mainPanel.add(tablesFlexTable);
+
 		// associate the main panel with the HTML host page
 		RootPanel.get("tableList").add(mainPanel);
 		
-		// Initialize the service proxy.
+		// initialize the service proxy.
 		if (tableNameSvc == null) {
 			tableNameSvc = GWT.create(TableNameService.class);
 		}
 
-		// Set up the callback object.
+		// set up the callback object.
 		AsyncCallback<GlomTable[]> callback = new AsyncCallback<GlomTable[]>() {
 			public void onFailure(Throwable caught) {
-				System.out.println("BOrk");
+				// FIXME: need to deal with failure
+				System.out.println("AsyncCallback Failed: TableNameService");
 			}
 
 			public void onSuccess(GlomTable[] result) {
