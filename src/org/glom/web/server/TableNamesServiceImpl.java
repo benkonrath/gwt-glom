@@ -1,5 +1,7 @@
 package org.glom.web.server;
 
+import java.io.File;
+
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.libglom.StringsVector;
@@ -17,7 +19,7 @@ public class TableNamesServiceImpl extends RemoteServiceServlet implements
 		Glom.libglom_init();
 		//FIXME Need to call Glom.libglom_deinit()
 		document = new Document();
-		document.set_file_uri("file:///home/ben/Development/java-libglom/src/test/java/org/glom/libglom/example_music_collection.glom");
+		document.set_file_uri("file://" + Glom.GLOM_EXAMPLE_FILE_DIR +  File.separator + "example_music_collection.glom");
 		int error = 0;
 		boolean retval = document.load(error);
 		// FIXME handle error condition
