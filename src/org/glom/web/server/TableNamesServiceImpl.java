@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
-import org.glom.libglom.StringsVector;
+import org.glom.libglom.StringVector;
 import org.glom.web.client.GlomTable;
 import org.glom.web.client.TableNameService;
 
@@ -17,17 +17,18 @@ public class TableNamesServiceImpl extends RemoteServiceServlet implements
 	
 	public TableNamesServiceImpl() {
 		Glom.libglom_init();
-		//FIXME Need to call Glom.libglom_deinit()
+		// FIXME Need to call Glom.libglom_deinit()
 		document = new Document();
 		document.set_file_uri("file://" + Glom.GLOM_EXAMPLE_FILE_DIR +  File.separator + "example_music_collection.glom");
 		int error = 0;
+		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
 		// FIXME handle error condition
 	}
 
 	@Override
 	public GlomTable[] getNames() {
-		StringsVector names = document.get_table_names();
+		StringVector names = document.get_table_names();
 		int tableSize = safeLongToInt(names.size());
 		GlomTable[] tableNames = new GlomTable[tableSize];
 		for (int i = 0; i < tableSize; i++) {
