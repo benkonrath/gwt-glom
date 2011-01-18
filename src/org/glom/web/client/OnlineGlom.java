@@ -3,7 +3,9 @@ package org.glom.web.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -12,45 +14,45 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class OnlineGlom implements EntryPoint {
 
-	private VerticalPanel mainPanel = new VerticalPanel();
-	private FlexTable tablesFlexTable = new FlexTable();
-	private TableNameServiceAsync tableNameSvc = GWT
-			.create(TableNameService.class);
+	private VerticalPanel mainVPanel = new VerticalPanel();
+	private HorizontalPanel tableSelectorHPanel = new HorizontalPanel();
+	private ListBox tableListBox = new ListBox();
+	private LibGlomServiceAsync libGlomSvc = GWT.create(LibGlomService.class);
 
 	public void onModuleLoad() {
-		// create table to hold the table names
-		tablesFlexTable.setText(0, 0, "Tables");
 
-		// add some style
-		tablesFlexTable.setCellPadding(6);
-		tablesFlexTable.getRowFormatter().addStyleName(0, "tablesHeader");
+		tableSelectorHPanel.add(new Label("Table:"));
+		tableSelectorHPanel.add(tableListBox);
 		
-		mainPanel.add(tablesFlexTable);
+		mainVPanel.add(tableSelectorHPanel);
 
 		// associate the main panel with the HTML host page
-		RootPanel.get("tableList").add(mainPanel);
+		RootPanel.get("GlomWebApp").add(mainVPanel);
 		
-		// initialize the service proxy.
-		if (tableNameSvc == null) {
-			tableNameSvc = GWT.create(TableNameService.class);
+		// initialize the service proxy
+		if (libGlomSvc == null) {
+			libGlomSvc = GWT.create(LibGlomService.class);
 		}
 
 		// set up the callback object.
-		AsyncCallback<GlomTable[]> callback = new AsyncCallback<GlomTable[]>() {
+		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: TableNameService");
+				System.out.println("AsyncCallback Failed: LibGlomService");
 			}
 
-			public void onSuccess(GlomTable[] result) {
-				for (int i = 0; i < result.length; i++) {
-					tablesFlexTable.setText(i + 1, 0, result[i].getName());
+			public void onSuccess(GlomDocument result) {
+				// TODO set page title
+				GlomTable[] tables = result.getTables();
+				for (int i = 0; i < tables.length; i++) {
+					tableListBox.addItem(tables[i].getTitle());
 				}
+				tableListBox.setSelectedIndex(result.getDefaultTable());
 			}
 
 		};
 
-		// make the call to get the names
-		tableNameSvc.getNames(callback);
+		// make the call to get the filled in GlomDocument
+		libGlomSvc.getGlomDocument(callback);
 	}
 }

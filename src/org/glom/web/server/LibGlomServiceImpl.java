@@ -5,17 +5,18 @@ import java.io.File;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.libglom.StringVector;
+import org.glom.web.client.GlomDocument;
 import org.glom.web.client.GlomTable;
-import org.glom.web.client.TableNameService;
+import org.glom.web.client.LibGlomService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class TableNamesServiceImpl extends RemoteServiceServlet implements
-		TableNameService {
+public class LibGlomServiceImpl extends RemoteServiceServlet implements
+		LibGlomService {
 	private Document document;
-	
-	public TableNamesServiceImpl() {
+
+	public LibGlomServiceImpl() {
 		Glom.libglom_init();
 		// FIXME Need to call Glom.libglom_deinit()
 		document = new Document();
@@ -26,17 +27,6 @@ public class TableNamesServiceImpl extends RemoteServiceServlet implements
 		// FIXME handle error condition
 	}
 
-	@Override
-	public GlomTable[] getNames() {
-		StringVector names = document.get_table_names();
-		int tableSize = safeLongToInt(names.size());
-		GlomTable[] tableNames = new GlomTable[tableSize];
-		for (int i = 0; i < tableSize; i++) {
-			tableNames[i] = new GlomTable(names.get(i));
-		}
-		return tableNames;
-	}
-	
 	// FIXME I think Swig is generating long on 64-bit machines and int on 32-bit machines - need to keep this constant
 	// From http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
 	public static int safeLongToInt(long l) {
@@ -47,5 +37,30 @@ public class TableNamesServiceImpl extends RemoteServiceServlet implements
 	    return (int) l;
 	}
 
+	@Override
+	public GlomDocument getGlomDocument() {
+		GlomDocument glomDocument = new GlomDocument();
+
+		// set visable title
+		glomDocument.setTitle(document.get_database_title());
+
+		// set array of GlomTables and the default table index
+		StringVector tableNames = document.get_table_names();
+		GlomTable[] tables = new GlomTable[safeLongToInt(tableNames.size())];
+		for (int i = 0; i < tableNames.size(); i++) {
+			String tableName = tableNames.get(i);
+			GlomTable glomTable = new GlomTable();
+			glomTable.setName(tableName);
+			glomTable.setTitle(document.get_table_title(tableName));
+			tables[i] = glomTable;
+			if (tableName.equals(document.get_default_table())) {
+				glomDocument.setDefaultTable(i);
+			}
+		}
+		glomDocument.setTableNames(tables);
+
+		return glomDocument;
+
+	}
 
 }

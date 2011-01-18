@@ -1,3 +1,20 @@
+2011-01-18  Ben Konrath  <ben@bagu.org>
+
+	Make a listBox with table titles instead of the flexTable demo.
+
+	This is the start of something more useful.
+
+	* .classpath: Exclude a bunch of packages from the JVM that are
+	getting in the way of the Eclipse content assist.
+	* src/org/glom/web/client/GlomDocument.java:
+	* src/org/glom/web/client/GlomTable.java:
+	* src/org/glom/web/client/LibGlomService.java:
+	* src/org/glom/web/client/LibGlomServiceAsync.java:
+	* src/org/glom/web/client/OnlineGlom.java:
+	* src/org/glom/web/server/LibGlomServiceImpl.java:
+	* war/OnlineGlom.html:
+	* war/WEB-INF/web.xml:
+
 211-01-13  Ben Konrath  <ben@bagu.org>
 
 	Update to new java-libglom API.
