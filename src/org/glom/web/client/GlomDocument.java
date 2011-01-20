@@ -16,13 +16,13 @@ public class GlomDocument implements Serializable {
 	public void setTitle(String name) {
 		this.title = name;
 	}
-	public int getDefaultTable() {
+	public int getDefaultTableIndex() {
 		return defaultTable;
 	}
-	public void setDefaultTable(int defaultTable) {
+	public void setDefaultTableIndex(int defaultTable) {
 		this.defaultTable = defaultTable;
 	}
-	public void setTableNames(GlomTable[] tables) {
+	public void setTables(GlomTable[] tables) {
 		this.tables = tables;
 	}
 	public GlomTable[] getTables() {

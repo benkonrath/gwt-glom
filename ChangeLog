@@ -1,3 +1,22 @@
+2011-01-20  Ben Konrath  <ben@bagu.org>
+
+	Set table headers when table dropBox changes.
+
+	* src/org/glom/web/client/GlomDocument.java: Correct some method
+	names.
+	* src/org/glom/web/client/LibGlomService.java: Add method
+	to get list layout field names.
+	* src/org/glom/web/client/LibGlomServiceAsync.java: Add method
+	to get list layout field names.
+	* src/org/glom/web/client/ListLayoutTable.java: New file - composite
+	widget for list layout table.
+	* src/org/glom/web/client/OnlineGlom.java: Add a change handler for
+	the table drop box and add new updateTable() method to asynchronously
+	get the layout list field names for the currently selected table.
+	* src/org/glom/web/server/LibGlomServiceImpl.java: Add server side
+	implementation of getLayoutListHeaders() method.
+	* war/OnlineGlom.html: Remove GlomWebApp div tag as it is not required.
+
 2011-01-18  Ben Konrath  <ben@bagu.org>
 
 	Make a listBox with table titles instead of the flexTable demo.

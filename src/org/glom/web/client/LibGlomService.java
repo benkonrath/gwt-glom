@@ -8,4 +8,6 @@ public interface LibGlomService extends RemoteService {
 
 	GlomDocument getGlomDocument();
 
+	String[] getLayoutListHeaders(String table);
+
 }

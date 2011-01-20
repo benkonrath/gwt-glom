@@ -4,6 +4,9 @@ import java.io.File;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
+import org.glom.libglom.LayoutGroup;
+import org.glom.libglom.LayoutGroupVector;
+import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.GlomDocument;
 import org.glom.web.client.GlomTable;
@@ -41,7 +44,7 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements
 	public GlomDocument getGlomDocument() {
 		GlomDocument glomDocument = new GlomDocument();
 
-		// set visable title
+		// set visible title
 		glomDocument.setTitle(document.get_database_title());
 
 		// set array of GlomTables and the default table index
@@ -54,13 +57,25 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements
 			glomTable.setTitle(document.get_table_title(tableName));
 			tables[i] = glomTable;
 			if (tableName.equals(document.get_default_table())) {
-				glomDocument.setDefaultTable(i);
+				glomDocument.setDefaultTableIndex(i);
 			}
 		}
-		glomDocument.setTableNames(tables);
+		glomDocument.setTables(tables);
 
 		return glomDocument;
 
+	}
+
+	@Override
+	public String[] getLayoutListHeaders(String table) {
+		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
+		LayoutGroup layoutGroup = layoutList.get(0);
+		LayoutItemVector layoutItems = layoutGroup.get_items();
+		String[] headers = new String[safeLongToInt(layoutItems.size())];
+		for (int i = 0; i < layoutItems.size(); i++) {
+			headers[i] = layoutItems.get(i).get_title_or_name();
+		}
+		return headers;
 	}
 
 }

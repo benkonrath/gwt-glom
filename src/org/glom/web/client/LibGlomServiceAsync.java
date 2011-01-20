@@ -6,4 +6,6 @@ public interface LibGlomServiceAsync {
 
 	void getGlomDocument(AsyncCallback<GlomDocument> callback);
 
+	void getLayoutListHeaders(String table, AsyncCallback<String[]> callback);
+
 }
