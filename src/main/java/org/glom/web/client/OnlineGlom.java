@@ -27,9 +27,7 @@ public class OnlineGlom implements EntryPoint {
 	private String documentName = "";
 
 	public void onModuleLoad() {
-
 		dropBox.addChangeHandler(new ChangeHandler() {
-			@Override
 			public void onChange(ChangeEvent event) {
 				updateTable();
 			}
@@ -74,7 +72,6 @@ public class OnlineGlom implements EntryPoint {
 				System.out.println("AsyncCallback Failed: LibGlomService.updateTable()");
 			}
 
-			@Override
 			public void onSuccess(String[] result) {
 				if (table != null)
 					mainVPanel.remove(table);

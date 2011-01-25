@@ -1,5 +1,39 @@
 2011-01-25  Ben Konrath  <ben@bagu.org>
 
+	Convert to gwt-maven project.
+
+	* .classpath:
+	* .gitignore:
+	* .project:
+	* .settings/.jsdtscope:
+	* .settings/com.google.gdt.eclipse.core.prefs:
+	* .settings/com.google.gwt.eclipse.core.prefs:
+	* .settings/org.eclipse.jdt.core.prefs:
+	* .settings/org.eclipse.wst.common.component:
+	* .settings/org.eclipse.wst.common.project.facet.core.xml:
+	* .settings/org.eclipse.wst.jsdt.ui.superType.container:
+	* .settings/org.maven.ide.eclipse.prefs:
+	* OnlineGlomTest-dev.launch:
+	* OnlineGlomTest-prod.launch:
+	* README:
+	* pom.xml:
+	* src/main/java/org/glom/web/client/GlomDocument.java:
+	* src/main/java/org/glom/web/client/GlomTable.java:
+	* src/main/java/org/glom/web/client/LayoutList.java:
+	* src/main/java/org/glom/web/client/LayoutListDataProvider.java:
+	* src/main/java/org/glom/web/client/LibGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlom.java:
+	* src/main/java/org/glom/web/server/LibGlomServiceImpl.java:
+	* src/main/resources/org/glom/web/OnlineGlom.gwt.xml:
+	* src/main/resources/org/glom/web/client/Messages.properties:
+	* src/main/webapp/OnlineGlom.css:
+	* src/main/webapp/OnlineGlom.html:
+	* src/main/webapp/WEB-INF/web.xml:
+	* src/test/java/org/glom/web/tests/GwtTestOnlineGlom.java:
+	* src/test/resources/org/glom/web/OnlineGlomJUnit.gwt.xml:
+
+2011-01-25  Ben Konrath  <ben@bagu.org>
+
 	Remove unused println.
 
 	* src/org/glom/web/server/LibGlomServiceImpl.java:

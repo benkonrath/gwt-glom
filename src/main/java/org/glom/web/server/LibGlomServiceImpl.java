@@ -47,7 +47,6 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 		return (int) l;
 	}
 
-	@Override
 	public GlomDocument getGlomDocument() {
 		GlomDocument glomDocument = new GlomDocument();
 
@@ -72,7 +71,6 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 
 	}
 
-	@Override
 	public String[] getLayoutListHeaders(String table) {
 		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
 		LayoutItemVector layoutItems = layoutList.get(0).get_items();
@@ -88,7 +86,6 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 	 * will be adding the example data to a db so that it can be queried from it
 	 * rather than from the example data API as I'm doing now.
 	 */
-	@Override
 	public List<String[]> getTableData(int start, int length, String table) {
 		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
 		LayoutItemVector layoutItems = layoutList.get(0).get_items();

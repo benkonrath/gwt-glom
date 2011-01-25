@@ -4,18 +4,18 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  
+
   <!-- Servlets -->
   <servlet>
     <servlet-name>libGlomServlet</servlet-name>
     <servlet-class>org.glom.web.server.LibGlomServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>libGlomServlet</servlet-name>
-    <url-pattern>/onlineglom/libGlom</url-pattern>
+    <url-pattern>/OnlineGlom/libGlom</url-pattern>
   </servlet-mapping>
-  
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>OnlineGlom.html</welcome-file>

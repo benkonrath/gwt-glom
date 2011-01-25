@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='onlineglom'>
+<module rename-to='OnlineGlom'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
 
@@ -17,4 +17,6 @@
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
+  <!-- currently not used <source path='shared'/> -->
+
 </module>

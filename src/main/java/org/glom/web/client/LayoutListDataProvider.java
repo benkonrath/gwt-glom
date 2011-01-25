@@ -22,7 +22,6 @@ public class LayoutListDataProvider extends AsyncDataProvider<String[]> {
 				System.out.println("AsyncCallback Failed: LibGlomService.getTableData()");
 			}
 
-			@Override
 			public void onSuccess(List<String[]> result) {
 				updateRowData(start, result);
 			}
