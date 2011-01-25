@@ -68,7 +68,6 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 			}
 		}
 		glomDocument.setTables(tables);
-
 		return glomDocument;
 
 	}
@@ -132,8 +131,6 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 			}
 			rowsList.add(rowArray);
 		}
-		System.out.println();
-
 		return rowsList;
 
 	}
