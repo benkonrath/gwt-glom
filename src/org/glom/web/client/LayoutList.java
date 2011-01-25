@@ -1,19 +1,28 @@
 package org.glom.web.client;
 
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ListLayoutTable extends Composite {
+public class LayoutList extends Composite {
 
-	private CellTable<String[]> table = new CellTable<String[]>();
+	private CellTable<String[]> table = null;
 
-	public ListLayoutTable(String[] headers) {
+	public LayoutList(String[] headers) {
+		table = new CellTable<String[]>();
+		LayoutListDataProvider dataProvider = new LayoutListDataProvider();
+		dataProvider.addDataDisplay(table);
+
+		// TODO wire up the pager
+		SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
+		pager.setDisplay(table);
 
 		// a panel to hold our widgets
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
+		panel.add(pager);
 
 		for (int i = 0; i < headers.length; i++) {
 			// create a new column

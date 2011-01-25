@@ -17,13 +17,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class OnlineGlom implements EntryPoint {
 
+	// TODO move to a singleton class
+	private static LibGlomServiceAsync libGlomSvc = null;
+
 	private VerticalPanel mainVPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
-	private ListBox dropBox = new ListBox();
-	private ListLayoutTable table = null;
+	private static ListBox dropBox = new ListBox();
+	private LayoutList table = null;
 	private String documentName = "";
-
-	private LibGlomServiceAsync libGlomSvc = GWT.create(LibGlomService.class);
 
 	public void onModuleLoad() {
 
@@ -36,16 +37,11 @@ public class OnlineGlom implements EntryPoint {
 
 		hPanel.add(new Label("Table:"));
 		hPanel.add(dropBox);
-		
+
 		mainVPanel.add(hPanel);
 
 		// associate the main panel with the HTML host page
 		RootPanel.get().add(mainVPanel);
-		
-		// initialize the service proxy
-		if (libGlomSvc == null) {
-			libGlomSvc = GWT.create(LibGlomService.class);
-		}
 
 		// set up the callback object.
 		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
@@ -53,6 +49,7 @@ public class OnlineGlom implements EntryPoint {
 				// FIXME: need to deal with failure
 				System.out.println("AsyncCallback Failed: LibGlomService");
 			}
+
 			public void onSuccess(GlomDocument result) {
 				GlomTable[] tables = result.getTables();
 				for (int i = 0; i < tables.length; i++) {
@@ -65,14 +62,10 @@ public class OnlineGlom implements EntryPoint {
 		};
 
 		// make the call to get the filled in GlomDocument
-		libGlomSvc.getGlomDocument(callback);
+		getLibGlomServiceProxy().getGlomDocument(callback);
 	}
 
 	private void updateTable() {
-		// initialize the service proxy
-		if (libGlomSvc == null) {
-			libGlomSvc = GWT.create(LibGlomService.class);
-		}
 
 		// set up the callback object.
 		AsyncCallback<String[]> callback = new AsyncCallback<String[]>() {
@@ -80,18 +73,30 @@ public class OnlineGlom implements EntryPoint {
 				// FIXME: need to deal with failure
 				System.out.println("AsyncCallback Failed: LibGlomService.updateTable()");
 			}
+
 			@Override
 			public void onSuccess(String[] result) {
 				if (table != null)
 					mainVPanel.remove(table);
-				table = new ListLayoutTable(result);
+				table = new LayoutList(result);
 				mainVPanel.add(table);
 				Window.setTitle("OnlineGlom - " + documentName + ": " + dropBox.getItemText(dropBox.getSelectedIndex()));
 			}
 		};
 
 		String selectedTable = dropBox.getValue(dropBox.getSelectedIndex());
-		libGlomSvc.getLayoutListHeaders(selectedTable, callback);
+		getLibGlomServiceProxy().getLayoutListHeaders(selectedTable, callback);
 
+	}
+
+	public static LibGlomServiceAsync getLibGlomServiceProxy() {
+		if (libGlomSvc == null)
+			libGlomSvc = GWT.create(LibGlomService.class);
+		return libGlomSvc;
+	}
+
+	// FIXME find a better way to do this
+	public static String getCurrentTableName() {
+		return dropBox.getValue(dropBox.getSelectedIndex());
 	}
 }

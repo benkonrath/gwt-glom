@@ -1,3 +1,22 @@
+2011-01-25  Ben Konrath  <ben@bagu.org>
+
+	Populate celltable with example data.
+
+	* src/org/glom/web/client/GlomDocument.java: Correct formatting.
+	* src/org/glom/web/client/GlomTable.java: Correct formatting.
+	* src/org/glom/web/client/LayoutList.java: Renamed from ListLayoutTable.java,
+	add LayoutListDataProvider to CellTable, add simpler pager (not working yet).
+	* src/org/glom/web/client/LayoutListDataProvider.java: New file,
+	asynchronously gets the example data.
+	* src/org/glom/web/client/LibGlomService.java: Add getTableData() method.
+	* src/org/glom/web/client/LibGlomServiceAsync.java: Add getTableData() method.
+	* src/org/glom/web/client/OnlineGlom.java: Allow service proxy object and
+	curently selected table to be retrieved by other widgets.
+	* src/org/glom/web/server/LibGlomServiceImpl.java: Correct formatting,
+	implement getTableData() in a hacky way. This method needs to be updated
+	to grab information from the database when database creating is
+	implemented.
+
 2011-01-20  Ben Konrath  <ben@bagu.org>
 
 	Set table headers when table dropBox changes.

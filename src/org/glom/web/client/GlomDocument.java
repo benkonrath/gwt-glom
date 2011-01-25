@@ -10,21 +10,27 @@ public class GlomDocument implements Serializable {
 
 	public GlomDocument() {
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String name) {
 		this.title = name;
 	}
+
 	public int getDefaultTableIndex() {
 		return defaultTable;
 	}
+
 	public void setDefaultTableIndex(int defaultTable) {
 		this.defaultTable = defaultTable;
 	}
+
 	public void setTables(GlomTable[] tables) {
 		this.tables = tables;
 	}
+
 	public GlomTable[] getTables() {
 		return tables;
 	}
