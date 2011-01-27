@@ -1,9 +1,21 @@
+2011-01-27  Ben Konrath  <ben@bagu.org>
+
+	Cleanup ChangeLog entry from previous commit.
+
+	* ChangeLog: Add group logical changes together and add comments.
+
 2011-01-25  Ben Konrath  <ben@bagu.org>
 
 	Convert to gwt-maven project.
 
+	* .gitignore: Update for new project structure.
+	* README: New file with a link to the online documentation.
+	* pom.xml: The generated maven configuration file with some tweaks.
+
+	Add / update Eclipse settings. These files are a merge of the files that
+	were generated with the gwt-maven plugin and the files we were previously
+	using.
 	* .classpath:
-	* .gitignore:
 	* .project:
 	* .settings/.jsdtscope:
 	* .settings/com.google.gdt.eclipse.core.prefs:
@@ -15,8 +27,9 @@
 	* .settings/org.maven.ide.eclipse.prefs:
 	* OnlineGlomTest-dev.launch:
 	* OnlineGlomTest-prod.launch:
-	* README:
-	* pom.xml:
+
+	Java source files moved from the 'src' directory to the directory structure
+	required by maven.
 	* src/main/java/org/glom/web/client/GlomDocument.java:
 	* src/main/java/org/glom/web/client/GlomTable.java:
 	* src/main/java/org/glom/web/client/LayoutList.java:
@@ -24,11 +37,21 @@
 	* src/main/java/org/glom/web/client/LibGlomService.java:
 	* src/main/java/org/glom/web/client/OnlineGlom.java:
 	* src/main/java/org/glom/web/server/LibGlomServiceImpl.java:
-	* src/main/resources/org/glom/web/OnlineGlom.gwt.xml:
+
+	Non-functional property file used for translations. I included this as
+	reminder that it's something I need to sort out.
 	* src/main/resources/org/glom/web/client/Messages.properties:
+
+	The OnlineGlom GWT config file moved from the 'src/org/glom/web' directory.
+	* src/main/resources/org/glom/web/OnlineGlom.gwt.xml:
+
+	The servlet configuration files moved from the 'war' directory.
 	* src/main/webapp/OnlineGlom.css:
 	* src/main/webapp/OnlineGlom.html:
 	* src/main/webapp/WEB-INF/web.xml:
+
+	Generated test files with most of the code commented out. I included these
+	so that it's easy to add tests when we're ready for them.
 	* src/test/java/org/glom/web/tests/GwtTestOnlineGlom.java:
 	* src/test/resources/org/glom/web/OnlineGlomJUnit.gwt.xml:
 
