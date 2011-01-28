@@ -1,7 +1,6 @@
 package org.glom.web.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Window;
@@ -16,9 +15,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class OnlineGlom implements EntryPoint {
-
-	// TODO move to a singleton class
-	private static LibGlomServiceAsync libGlomSvc = null;
 
 	private VerticalPanel mainVPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
@@ -60,7 +56,7 @@ public class OnlineGlom implements EntryPoint {
 		};
 
 		// make the call to get the filled in GlomDocument
-		getLibGlomServiceProxy().getGlomDocument(callback);
+		LibGlomServiceAsync.Util.getInstance().getGlomDocument(callback);
 	}
 
 	private void updateTable() {
@@ -82,14 +78,8 @@ public class OnlineGlom implements EntryPoint {
 		};
 
 		String selectedTable = dropBox.getValue(dropBox.getSelectedIndex());
-		getLibGlomServiceProxy().getLayoutListHeaders(selectedTable, callback);
+		LibGlomServiceAsync.Util.getInstance().getLayoutListHeaders(selectedTable, callback);
 
-	}
-
-	public static LibGlomServiceAsync getLibGlomServiceProxy() {
-		if (libGlomSvc == null)
-			libGlomSvc = GWT.create(LibGlomService.class);
-		return libGlomSvc;
 	}
 
 	// FIXME find a better way to do this

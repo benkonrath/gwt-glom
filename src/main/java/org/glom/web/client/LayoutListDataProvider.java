@@ -27,7 +27,7 @@ public class LayoutListDataProvider extends AsyncDataProvider<String[]> {
 			}
 		};
 
-		OnlineGlom.getLibGlomServiceProxy().getTableData(start, length, OnlineGlom.getCurrentTableName(), callback);
+		LibGlomServiceAsync.Util.getInstance().getTableData(start, length, OnlineGlom.getCurrentTableName(), callback);
 
 	}
 
