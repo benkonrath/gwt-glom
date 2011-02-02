@@ -1,5 +1,18 @@
 2011-02-02  Ben Konrath  <ben@bagu.org>
 
+	Update Eclipse and Maven configs to in preparation for the postgres JDBC jar.
+
+	* .classpath: Change JRE to Java 1.6, remove GWT configuration as we're now
+	using Maven.
+	* .settings/com.google.gwt.eclipse.core.prefs: Don't copy gwt-servlet.jar to
+	the compiled webapp directory that Eclipse uses as we're using Maven now.
+	* .settings/org.eclipse.jdt.core.prefs: Change target platform to Java 1.6.
+	* .settings/org.eclipse.wst.common.project.facet.core.xml: Change Java version
+	to 1.6.
+	* pom.xml: Format file, change target Java version to 1.6.
+
+2011-02-02  Ben Konrath  <ben@bagu.org>
+
 	Add information about a deployment related issue.
 
 	* README: Add Notes section with the problem outlined.
