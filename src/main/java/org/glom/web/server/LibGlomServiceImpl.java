@@ -24,9 +24,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomService {
 	private Document document;
 
+	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
 	public LibGlomServiceImpl() {
 		Glom.libglom_init();
-		// FIXME Need to call Glom.libglom_deinit()
 		document = new Document();
 		document.set_file_uri("file://" + Glom.GLOM_EXAMPLE_FILE_DIR + File.separator + "example_music_collection.glom");
 		int error = 0;
@@ -130,6 +130,11 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 		}
 		return rowsList;
 
+	}
+
+	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
+	public void destroy() {
+		Glom.libglom_deinit();
 	}
 
 }
