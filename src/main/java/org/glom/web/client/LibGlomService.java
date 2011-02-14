@@ -1,6 +1,6 @@
 package org.glom.web.client;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -12,6 +12,6 @@ public interface LibGlomService extends RemoteService {
 
 	String[] getLayoutListHeaders(String table);
 
-	List<String[]> getTableData(int start, int length, String table);
+	ArrayList<String[]> getTableData(int start, int length, String table);
 
 }

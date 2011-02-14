@@ -1,6 +1,6 @@
 package org.glom.web.client;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -16,13 +16,13 @@ public class LayoutListDataProvider extends AsyncDataProvider<String[]> {
 		final int start = range.getStart();
 		final int length = range.getLength();
 
-		AsyncCallback<List<String[]>> callback = new AsyncCallback<List<String[]>>() {
+		AsyncCallback<ArrayList<String[]>> callback = new AsyncCallback<ArrayList<String[]>>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
 				System.out.println("AsyncCallback Failed: LibGlomService.getTableData()");
 			}
 
-			public void onSuccess(List<String[]> result) {
+			public void onSuccess(ArrayList<String[]> result) {
 				updateRowData(start, result);
 			}
 		};

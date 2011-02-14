@@ -1,5 +1,17 @@
 2011-02-14  Ben Konrath  <ben@bagu.org>
 
+	Use ArrayList instead of Array in GWT-RPC calls.
+
+	Apparently this gives a slight performance boost to the compiled
+	java script.
+
+	* src/main/java/org/glom/web/client/LayoutListDataProvider.java: Use ArrayList
+	instead of Array.
+	* src/main/java/org/glom/web/client/LibGlomService.java: Use ArrayList instead
+	of Array.
+
+2011-02-14  Ben Konrath  <ben@bagu.org>
+
 	Access data from a postgres db rather than the example glom file.
 
 	* .settings/com.google.gwt.eclipse.core.prefs: Change GWT setting to
