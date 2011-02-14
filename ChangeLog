@@ -1,5 +1,29 @@
 2011-02-14  Ben Konrath  <ben@bagu.org>
 
+	Add LGPL v3 licence notices.
+
+	Followed directions listed here:
+	http://www.gnu.org/licenses/gpl-howto.html
+
+	* COPYING: This file is a copy of the GPL v3.
+	* COPYING.LESSER: This file is a copy of the LGPL v3.
+	* src/main/java/org/glom/web/client/GlomDocument.java: Add licence
+	notice.
+	* src/main/java/org/glom/web/client/GlomTable.java: Add licence
+	notice.
+	* src/main/java/org/glom/web/client/LayoutList.java: Add licence
+	notice.
+	* src/main/java/org/glom/web/client/LayoutListDataProvider.java: Add
+	licence notice.
+	* src/main/java/org/glom/web/client/LibGlomService.java: Add licence
+	notice.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Add licence
+	notice.
+	* src/main/java/org/glom/web/server/LibGlomServiceImpl.java: Add
+	licence notice.
+
+2011-02-14  Ben Konrath  <ben@bagu.org>
+
 	Use ArrayList instead of Array in GWT-RPC calls.
 
 	Apparently this gives a slight performance boost to the compiled
