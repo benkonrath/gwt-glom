@@ -1,5 +1,15 @@
 2011-02-14  Ben Konrath  <ben@bagu.org>
 
+	Access data from a postgres db rather than the example glom file.
+
+	* .settings/com.google.gwt.eclipse.core.prefs: Change GWT setting to
+	compile down to obfuscated javascript.
+	* pom.xml: Add c3p0 and postgres JDBC libraries.
+	* src/main/java/org/glom/web/server/LibGlomServiceImpl.java: Return data
+	using a postgres db accessed through the c3p0 connection pooling library.
+
+2011-02-14  Ben Konrath  <ben@bagu.org>
+
 	Update Java formatter settings.
 
 	* .settings/org.eclipse.jdt.core.prefs: Change comment length to 120.

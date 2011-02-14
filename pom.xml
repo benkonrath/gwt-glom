@@ -44,6 +44,20 @@
 			<version>0.1</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>8.4-702.jdbc4</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<url>http://www.glom.org</url>

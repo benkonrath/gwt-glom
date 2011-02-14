@@ -1,45 +1,63 @@
 package org.glom.web.server;
 
-import java.io.File;
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.glom.libglom.Document;
-import org.glom.libglom.ExampleRowVector;
 import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
 import org.glom.libglom.Glom;
+import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem;
 import org.glom.libglom.LayoutItemVector;
-import org.glom.libglom.RowDataVector;
+import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.GlomDocument;
 import org.glom.web.client.GlomTable;
 import org.glom.web.client.LibGlomService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
 public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomService {
 	private Document document;
+	ComboPooledDataSource cpds;
 
 	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
 	public LibGlomServiceImpl() {
 		Glom.libglom_init();
 		document = new Document();
-		document.set_file_uri("file://" + Glom.GLOM_EXAMPLE_FILE_DIR + File.separator + "example_music_collection.glom");
+		// TODO hardcoded for now, need to figure out something for this
+		document.set_file_uri("file:///home/ben/music-collection.glom");
 		int error = 0;
 		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
-		// FIXME handle error condition
+		// TODO handle error condition (also below)
+
+		cpds = new ComboPooledDataSource();
+		// load the jdbc driver
+		try {
+			cpds.setDriverClass("org.postgresql.Driver");
+		} catch (PropertyVetoException e) {
+			// TODO log error, fatal error can't continue, user can be nofified when db access doesn't work
+			e.printStackTrace();
+		}
+
+		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
+				+ document.get_connection_database());
+		// TODO figure out something for db user name and password
+		cpds.setUser("ben");
+		cpds.setPassword("ChangeMe"); // of course it's not the password I'm using on my server
 	}
 
-	/*
-	 * FIXME I think Swig is generating long on 64-bit machines and int on
-	 * 32-bit machines - need to keep this constant
-	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
-	 */
+	/* FIXME I think Swig is generating long on 64-bit machines and int on 32-bit machines - need to keep this constant
+	 * http://stackoverflow.com/questions /1590831/safely-casting-long-to-int-in-java */
 	public static int safeLongToInt(long l) {
 		if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
@@ -81,60 +99,60 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 		return headers;
 	}
 
-	/*
-	 * This is a big hack just get the Layout List widget working. Next steps
-	 * will be adding the example data to a db so that it can be queried from it
-	 * rather than from the example data API as I'm doing now.
-	 */
-	public List<String[]> getTableData(int start, int length, String table) {
+	public ArrayList<String[]> getTableData(int start, int length, String table) {
 		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
 		LayoutItemVector layoutItems = layoutList.get(0).get_items();
-		ExampleRowVector rows = document.get_table_example_data(table);
 
-		/*
-		 * deal with the case when the requested number of rows is larger than
-		 * the number of rows in the data
-		 */
-		int displayLength = Math.min(safeLongToInt(rows.size()), length);
-
-		List<String[]> rowsList = new ArrayList<String[]>(displayLength);
-		for (int i = start; i < displayLength; i++) {
-			RowDataVector row = rows.get(i);
-
-			String[] rowArray = new String[safeLongToInt(layoutItems.size())];
-			for (int j = 0; j < layoutItems.size(); j++) {
-				LayoutItem layoutItem = layoutItems.get(j);
-				String fieldName = layoutItem.get_layout_display_name();
-				if (fieldName.contains("::")) {
-					// implement this when querying data from a db
-					rowArray[j] = "Not Implemented";
-				} else {
-
-					/*
-					 * need to find the field that the layoutItem is referring
-					 * to so we can put the example data in the layout list
-					 * order
-					 */
-					FieldVector fields = document.get_table_fields(table);
-					Field field = null;
-					int k = 0;
-					for (; k < fields.size(); k++) {
-						field = fields.get(k);
-						if (fieldName.equals(field.get_name()))
-							break;
-					}
-					rowArray[j] = Glom.get_text_for_gda_value(field.get_glom_type(), row.get(k));
+		LayoutFieldVector layoutFields = new LayoutFieldVector();
+		for (int i = 0; i < layoutItems.size(); i++) {
+			LayoutItem item = layoutItems.get(i);
+			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
+			if (field != null) {
+				layoutFields.add(field);
+				Field details = field.get_full_field_details();
+				if (details != null && details.get_primary_key()) {
+					// TODO implement this for sort order, will need to sort out swig support for std::list in Java
+					// C++ code to port to Java:
+					// sort_clause.push_back(Glom::type_pair_sort_field(field, true));
 				}
 			}
-			rowsList.add(rowArray);
 		}
-		return rowsList;
 
+		ArrayList<String[]> rowsList = new ArrayList<String[]>();
+		try {
+			Connection conn = cpds.getConnection();
+			Statement st = conn.createStatement();
+
+			String query = Glom.build_sql_select_simple(table, layoutFields);
+			ResultSet rs = st.executeQuery(query);
+
+			while (rs.next()) {
+				String[] rowArray = new String[safeLongToInt(layoutItems.size())];
+				for (int i = 0; i < layoutItems.size(); i++) {
+					rowArray[i] = rs.getString(i + 1);
+				}
+				rowsList.add(rowArray);
+			}
+
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			// TODO: log error, notify user of problem
+			e.printStackTrace();
+		}
+
+		return rowsList;
 	}
 
 	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
 	public void destroy() {
 		Glom.libglom_deinit();
+		try {
+			DataSources.destroy(cpds);
+		} catch (SQLException e) {
+			// TODO log error, don't need to notify user because this is a clean up method
+			e.printStackTrace();
+		}
 	}
 
 }
