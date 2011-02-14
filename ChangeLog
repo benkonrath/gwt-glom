@@ -1,3 +1,9 @@
+2011-02-14  Ben Konrath  <ben@bagu.org>
+
+	Update Java formatter settings.
+
+	* .settings/org.eclipse.jdt.core.prefs: Change comment length to 120.
+
 2011-02-02  Ben Konrath  <ben@bagu.org>
 
 	Update Eclipse and Maven configs to in preparation for the postgres JDBC jar.
