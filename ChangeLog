@@ -1,3 +1,15 @@
+2011-02-16  Ben Konrath  <ben@bagu.org>
+
+	Disable generateAsync feature of gwt-maven.
+
+	The generated interface does not correctly match the methods in LibGlomService
+	and the generated singleton Util inner-class doesn't respect the servlet
+	mappings.
+
+	* pom.xml: Turn off generateAsync feature.
+	* src/main/java/org/glom/web/client/LibGlomServiceAsync.java: Re-add file
+	with singleton Util inner-class.
+
 2011-02-14  Ben Konrath  <ben@bagu.org>
 
 	Add LGPL v3 licence notices.
