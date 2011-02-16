@@ -34,7 +34,9 @@ import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
+import org.glom.libglom.SortClause;
 import org.glom.web.client.GlomDocument;
 import org.glom.web.client.GlomTable;
 import org.glom.web.client.LibGlomService;
@@ -123,6 +125,7 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 		LayoutItemVector layoutItems = layoutList.get(0).get_items();
 
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
+		SortClause sortClause = new SortClause();
 		for (int i = 0; i < layoutItems.size(); i++) {
 			LayoutItem item = layoutItems.get(i);
 			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
@@ -130,9 +133,7 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 				layoutFields.add(field);
 				Field details = field.get_full_field_details();
 				if (details != null && details.get_primary_key()) {
-					// TODO implement this for sort order, will need to sort out swig support for std::list in Java
-					// C++ code to port to Java:
-					// sort_clause.push_back(Glom::type_pair_sort_field(field, true));
+					sortClause.addLast(new SortFieldPair(field, true)); // ascending
 				}
 			}
 		}
@@ -142,7 +143,7 @@ public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomS
 			Connection conn = cpds.getConnection();
 			Statement st = conn.createStatement();
 
-			String query = Glom.build_sql_select_simple(table, layoutFields);
+			String query = Glom.build_sql_select_simple(table, layoutFields, sortClause);
 			ResultSet rs = st.executeQuery(query);
 
 			while (rs.next()) {

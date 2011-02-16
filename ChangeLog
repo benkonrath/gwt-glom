@@ -1,5 +1,12 @@
 2011-02-16  Ben Konrath  <ben@bagu.org>
 
+	Add sort clause to the sql query that grabs table information.
+
+	* src/main/java/org/glom/web/server/LibGlomServiceImpl.java: Add sort clause
+	if one of the columns is a primary key.
+
+2011-02-16  Ben Konrath  <ben@bagu.org>
+
 	Disable generateAsync feature of gwt-maven.
 
 	The generated interface does not correctly match the methods in LibGlomService
