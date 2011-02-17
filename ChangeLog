@@ -1,5 +1,20 @@
 2011-02-17  Ben Konrath  <ben@bagu.org>
 
+	Rename RPC service classes from LibGlomService* to OnlineGlomService*.
+
+	* src/main/java/org/glom/web/client/LayoutListDataProvider.java: Update
+	references.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Update references.
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Rename
+	from LibGlomServer.java.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	Rename from LibGlomServiceAsync.java.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Rename from LibGlomServiceImpl.java.
+	* src/main/webapp/WEB-INF/web.xml: Update configuration.
+
+2011-02-17  Ben Konrath  <ben@bagu.org>
+
 	Update JDT settings.
 
 	* .settings/org.eclipse.jdt.core.prefs:

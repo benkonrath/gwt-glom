@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>libGlomServlet</servlet-name>
-    <servlet-class>org.glom.web.server.LibGlomServiceImpl</servlet-class>
+    <servlet-class>org.glom.web.server.OnlineGlomServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>

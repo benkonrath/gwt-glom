@@ -78,7 +78,7 @@ public class OnlineGlom implements EntryPoint {
 		};
 
 		// make the call to get the filled in GlomDocument
-		LibGlomServiceAsync.Util.getInstance().getGlomDocument(callback);
+		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(callback);
 	}
 
 	private void updateTable() {
@@ -100,7 +100,7 @@ public class OnlineGlom implements EntryPoint {
 		};
 
 		String selectedTable = dropBox.getValue(dropBox.getSelectedIndex());
-		LibGlomServiceAsync.Util.getInstance().getLayoutListHeaders(selectedTable, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getLayoutListHeaders(selectedTable, callback);
 
 	}
 

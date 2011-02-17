@@ -37,7 +37,7 @@ import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.libglom.SortClause;
-import org.glom.web.client.LibGlomService;
+import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomTable;
 
@@ -46,12 +46,12 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
-public class LibGlomServiceImpl extends RemoteServiceServlet implements LibGlomService {
+public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 	private Document document;
 	ComboPooledDataSource cpds;
 
 	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
-	public LibGlomServiceImpl() {
+	public OnlineGlomServiceImpl() {
 		Glom.libglom_init();
 		document = new Document();
 		// TODO hardcoded for now, need to figure out something for this

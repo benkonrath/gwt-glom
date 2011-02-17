@@ -7,7 +7,7 @@ import org.glom.web.shared.GlomDocument;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface LibGlomServiceAsync {
+public interface OnlineGlomServiceAsync {
 
 	void getGlomDocument(AsyncCallback<GlomDocument> callback);
 
@@ -19,11 +19,11 @@ public interface LibGlomServiceAsync {
 	 * Utility class to get the RPC Async interface from client-side code
 	 */
 	public static final class Util {
-		private static LibGlomServiceAsync instance;
+		private static OnlineGlomServiceAsync instance;
 
-		public static final LibGlomServiceAsync getInstance() {
+		public static final OnlineGlomServiceAsync getInstance() {
 			if (instance == null) {
-				instance = (LibGlomServiceAsync) GWT.create(LibGlomService.class);
+				instance = (OnlineGlomServiceAsync) GWT.create(OnlineGlomService.class);
 			}
 			return instance;
 		}

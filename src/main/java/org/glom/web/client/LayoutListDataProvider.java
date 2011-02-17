@@ -46,7 +46,7 @@ public class LayoutListDataProvider extends AsyncDataProvider<String[]> {
 			}
 		};
 
-		LibGlomServiceAsync.Util.getInstance().getTableData(start, length, OnlineGlom.getCurrentTableName(), callback);
+		OnlineGlomServiceAsync.Util.getInstance().getTableData(start, length, OnlineGlom.getCurrentTableName(), callback);
 
 	}
 
