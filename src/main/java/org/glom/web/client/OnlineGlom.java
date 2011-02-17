@@ -19,6 +19,9 @@
 
 package org.glom.web.client;
 
+import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.GlomTable;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;

@@ -17,31 +17,40 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client;
+package org.glom.web.shared;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class GlomTable implements Serializable {
-	private String name;
+public class GlomDocument implements Serializable {
 	private String title;
+	private int defaultTable;
+	private GlomTable[] tables;
 
-	public GlomTable() {
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public GlomDocument() {
 	}
 
 	public String getTitle() {
 		return title;
+	}
+
+	public void setTitle(String name) {
+		this.title = name;
+	}
+
+	public int getDefaultTableIndex() {
+		return defaultTable;
+	}
+
+	public void setDefaultTableIndex(int defaultTable) {
+		this.defaultTable = defaultTable;
+	}
+
+	public void setTables(GlomTable[] tables) {
+		this.tables = tables;
+	}
+
+	public GlomTable[] getTables() {
+		return tables;
 	}
 }

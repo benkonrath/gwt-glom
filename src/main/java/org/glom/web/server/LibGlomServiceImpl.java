@@ -37,9 +37,9 @@ import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.libglom.SortClause;
-import org.glom.web.client.GlomDocument;
-import org.glom.web.client.GlomTable;
 import org.glom.web.client.LibGlomService;
+import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.GlomTable;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;

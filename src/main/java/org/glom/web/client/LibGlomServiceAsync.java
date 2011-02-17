@@ -2,6 +2,8 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.GlomDocument;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
