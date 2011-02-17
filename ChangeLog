@@ -1,5 +1,11 @@
 2011-02-17  Ben Konrath  <ben@bagu.org>
 
+	Move LayoutListDataProvider class into LayoutList.java.
+
+	* src/main/java/org/glom/web/client/LayoutList.java:
+
+2011-02-17  Ben Konrath  <ben@bagu.org>
+
 	Rename RPC service classes from LibGlomService* to OnlineGlomService*.
 
 	* src/main/java/org/glom/web/client/LayoutListDataProvider.java: Update
