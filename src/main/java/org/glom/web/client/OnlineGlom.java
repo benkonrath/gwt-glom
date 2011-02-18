@@ -20,7 +20,6 @@
 package org.glom.web.client;
 
 import org.glom.web.shared.GlomDocument;
-import org.glom.web.shared.GlomTable;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -67,9 +66,10 @@ public class OnlineGlom implements EntryPoint {
 			}
 
 			public void onSuccess(GlomDocument result) {
-				GlomTable[] tables = result.getTables();
-				for (int i = 0; i < tables.length; i++) {
-					dropBox.addItem(tables[i].getTitle(), tables[i].getName());
+				String[] tableNames = result.getTableNames();
+				String[] tableTitles = result.getTableTitles();
+				for (int i = 0; i < tableNames.length; i++) {
+					dropBox.addItem(tableTitles[i], tableNames[i]);
 				}
 				dropBox.setSelectedIndex(result.getDefaultTableIndex());
 				documentName = result.getTitle();

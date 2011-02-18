@@ -24,33 +24,31 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class GlomDocument implements Serializable {
 	private String title;
-	private int defaultTable;
-	private GlomTable[] tables;
+	// could consider a LinkedHashMap if we need to support adding or removing tables
+	// order must be consistent between these two arrays
+	private String[] tableNames;
+	private String[] tableTitles;
+	private int defaultTableIndex;
 
 	public GlomDocument() {
+		new GlomDocument("", new String[] {}, new String[] {}, 0);
 	}
 
-	public String getTitle() {
-		return title;
+	public GlomDocument(String title, String[] tableNames, String[] tableTitles, int defaultTableIndex) {
+		this.title = title;
+		this.tableNames = tableNames;
+		this.tableTitles = tableTitles;
+		this.defaultTableIndex = defaultTableIndex;
 	}
 
-	public void setTitle(String name) {
-		this.title = name;
-	}
-
-	public int getDefaultTableIndex() {
-		return defaultTable;
-	}
-
-	public void setDefaultTableIndex(int defaultTable) {
-		this.defaultTable = defaultTable;
-	}
-
-	public void setTables(GlomTable[] tables) {
-		this.tables = tables;
-	}
-
-	public GlomTable[] getTables() {
-		return tables;
-	}
+	// @formatter:off
+	public String getTitle() { return title; }
+	public void setTitle(String name) { this.title = name; }
+	public int getDefaultTableIndex() { return defaultTableIndex; }
+	public void setDefaultTableIndex(int defaultTable) { this.defaultTableIndex = defaultTable; }
+	public String[] getTableNames() { return tableNames; }
+	public void setTableNames(String[] tableNames) { this.tableNames = tableNames; }
+	public void setTableTitles(String[] tableTitles) { this.tableTitles = tableTitles; }
+	public String[] getTableTitles() { return tableTitles; }
+	// @formatter:on
 }

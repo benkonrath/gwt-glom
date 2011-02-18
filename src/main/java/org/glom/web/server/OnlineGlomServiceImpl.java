@@ -34,12 +34,11 @@ import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
-import org.glom.libglom.SortClause;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.GlomDocument;
-import org.glom.web.shared.GlomTable;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -77,8 +76,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		cpds.setPassword("ChangeMe"); // of course it's not the password I'm using on my server
 	}
 
-	/* FIXME I think Swig is generating long on 64-bit machines and int on 32-bit machines - need to keep this constant
-	 * http://stackoverflow.com/questions /1590831/safely-casting-long-to-int-in-java */
+	/*
+	 * FIXME I think Swig is generating long on 64-bit machines and int on 32-bit machines - need to keep this constant
+	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
+	 */
 	public static int safeLongToInt(long l) {
 		if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
@@ -89,25 +90,29 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public GlomDocument getGlomDocument() {
 		GlomDocument glomDocument = new GlomDocument();
 
-		// set visible title
+		// get arrays of table names and titles, and find the default table index
+		StringVector tablesVec = document.get_table_names();
+		int numTables = safeLongToInt(tablesVec.size());
+		String[] tableNames = new String[numTables];
+		String[] tableTitles = new String[numTables];
+		boolean foundDefaultTable = false;
+		for (int i = 0; i < numTables; i++) {
+			String tableName = tablesVec.get(i);
+			tableNames[i] = tableName;
+			// JNI is "expensive", the comparison will only be called if we haven't already found the default table
+			if (!foundDefaultTable && tableName.equals(document.get_default_table())) {
+				glomDocument.setDefaultTableIndex(i);
+				foundDefaultTable = true;
+			}
+			tableTitles[i] = document.get_table_title(tableName);
+		}
+
+		// set everything we need
+		glomDocument.setTableNames(tableNames);
+		glomDocument.setTableTitles(tableTitles);
 		glomDocument.setTitle(document.get_database_title());
 
-		// set array of GlomTables and the default table index
-		StringVector tableNames = document.get_table_names();
-		GlomTable[] tables = new GlomTable[safeLongToInt(tableNames.size())];
-		for (int i = 0; i < tableNames.size(); i++) {
-			String tableName = tableNames.get(i);
-			GlomTable glomTable = new GlomTable();
-			glomTable.setName(tableName);
-			glomTable.setTitle(document.get_table_title(tableName));
-			tables[i] = glomTable;
-			if (tableName.equals(document.get_default_table())) {
-				glomDocument.setDefaultTableIndex(i);
-			}
-		}
-		glomDocument.setTables(tables);
 		return glomDocument;
-
 	}
 
 	public String[] getLayoutListHeaders(String table) {
