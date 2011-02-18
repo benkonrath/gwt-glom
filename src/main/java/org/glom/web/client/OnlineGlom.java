@@ -41,7 +41,7 @@ public class OnlineGlom implements EntryPoint {
 	private VerticalPanel mainVPanel = new VerticalPanel();
 	private HorizontalPanel hPanel = new HorizontalPanel();
 	private static ListBox dropBox = new ListBox();
-	private LayoutList table = null;
+	private LayoutListView table = null;
 	private String documentName = "";
 
 	public void onModuleLoad() {
@@ -93,7 +93,7 @@ public class OnlineGlom implements EntryPoint {
 			public void onSuccess(String[] result) {
 				if (table != null)
 					mainVPanel.remove(table);
-				table = new LayoutList(result);
+				table = new LayoutListView(result);
 				mainVPanel.add(table);
 				Window.setTitle("OnlineGlom - " + documentName + ": " + dropBox.getItemText(dropBox.getSelectedIndex()));
 			}

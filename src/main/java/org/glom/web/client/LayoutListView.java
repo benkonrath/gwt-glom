@@ -54,11 +54,11 @@ class LayoutListDataProvider extends AsyncDataProvider<String[]> {
 	}
 }
 
-public class LayoutList extends Composite {
+public class LayoutListView extends Composite {
 
 	private CellTable<String[]> table = null;
 
-	public LayoutList(String[] headers) {
+	public LayoutListView(String[] headers) {
 		table = new CellTable<String[]>();
 		LayoutListDataProvider dataProvider = new LayoutListDataProvider();
 		dataProvider.addDataDisplay(table);
