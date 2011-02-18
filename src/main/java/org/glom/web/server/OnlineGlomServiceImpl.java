@@ -39,6 +39,7 @@ import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -115,14 +116,67 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return glomDocument;
 	}
 
-	public String[] getLayoutListHeaders(String table) {
-		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
-		LayoutItemVector layoutItems = layoutList.get(0).get_items();
-		String[] headers = new String[safeLongToInt(layoutItems.size())];
-		for (int i = 0; i < layoutItems.size(); i++) {
-			headers[i] = layoutItems.get(i).get_title_or_name();
+	public LayoutListTable getLayoutListTable(String tableName) {
+
+		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
+		LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
+		int numItems = safeLongToInt(layoutItemsVec.size());
+		String[] columnTitles = new String[numItems];
+		for (int i = 0; i < numItems; i++) {
+			columnTitles[i] = layoutItemsVec.get(i).get_title_or_name();
 		}
-		return headers;
+
+		LayoutFieldVector layoutFields = new LayoutFieldVector();
+		for (int i = 0; i < numItems; i++) {
+			LayoutItem item = layoutItemsVec.get(i);
+			columnTitles[i] = item.get_title_or_name();
+			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
+			if (field != null) {
+				layoutFields.add(field);
+			}
+		}
+
+		// get the size of the returned query for the pager
+		// TODO since we're executing a query anyway, maybe we should return the rows that will be displayed on the
+		// first page
+		// TODO this code is really similar to code in getTableData, find a way to not duplicate the code
+		int numRows;
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			// setup and execute the query
+			conn = cpds.getConnection();
+			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			String query = Glom.build_sql_select_simple(tableName, layoutFields);
+			rs = st.executeQuery(query);
+
+			// get the number of rows in the query
+			rs.setFetchDirection(ResultSet.FETCH_FORWARD);
+			rs.last();
+			numRows = rs.getRow();
+
+		} catch (SQLException e) {
+			// TODO log error
+			// we don't know how many rows are in the query
+			e.printStackTrace();
+			numRows = 0;
+		} finally {
+			// this is a little awkward but we want to make we're cleaning everything up that has been used
+			try {
+				if (rs != null)
+					rs.close();
+				if (st != null)
+					st.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO log error
+				e.printStackTrace();
+			}
+		}
+
+		return new LayoutListTable(tableName, document.get_table_title(tableName), columnTitles, numRows);
 	}
 
 	public ArrayList<String[]> getTableData(int start, int length, String table) {
@@ -131,7 +185,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		SortClause sortClause = new SortClause();
-		for (int i = 0; i < layoutItems.size(); i++) {
+		int numItems = safeLongToInt(layoutItems.size());
+		for (int i = 0; i < numItems; i++) {
 			LayoutItem item = layoutItems.get(i);
 			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
 			if (field != null) {
@@ -144,28 +199,46 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		ArrayList<String[]> rowsList = new ArrayList<String[]>();
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
 		try {
-			Connection conn = cpds.getConnection();
-			Statement st = conn.createStatement();
-
+			// setup and execute the query
+			conn = cpds.getConnection();
+			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			String query = Glom.build_sql_select_simple(table, layoutFields, sortClause);
-			ResultSet rs = st.executeQuery(query);
+			rs = st.executeQuery(query);
 
-			while (rs.next()) {
+			// get data we're asked for
+			// TODO get the correct range with an sql query
+			rs.setFetchDirection(ResultSet.FETCH_FORWARD);
+			rs.absolute(start);
+			int rowCount = 0;
+			while (rs.next() && rowCount <= length) {
 				String[] rowArray = new String[safeLongToInt(layoutItems.size())];
 				for (int i = 0; i < layoutItems.size(); i++) {
 					rowArray[i] = rs.getString(i + 1);
 				}
 				rowsList.add(rowArray);
+				rowCount++;
 			}
-
-			rs.close();
-			st.close();
 		} catch (SQLException e) {
 			// TODO: log error, notify user of problem
 			e.printStackTrace();
+		} finally {
+			// this is a little awkward but we want to make we're cleaning everything up that has been used
+			try {
+				if (rs != null)
+					rs.close();
+				if (st != null)
+					st.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				// TODO log error
+				e.printStackTrace();
+			}
 		}
-
 		return rowsList;
 	}
 

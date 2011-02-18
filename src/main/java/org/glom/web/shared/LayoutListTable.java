@@ -22,26 +22,31 @@ package org.glom.web.shared;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class GlomTable implements Serializable {
+public class LayoutListTable implements Serializable {
 	private String name;
 	private String title;
+	private String[] columnTitles;
+	private int numRows;
 
-	public GlomTable() {
+	public LayoutListTable() {
+		new LayoutListTable("", "", new String[] {}, 0);
 	}
 
-	public void setName(String name) {
+	public LayoutListTable(String name, String title, String[] columnTitles, int numRows) {
 		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setTitle(String title) {
 		this.title = title;
+		this.columnTitles = columnTitles;
+		this.numRows = numRows;
 	}
 
-	public String getTitle() {
-		return title;
-	}
+	// @formatter:off
+	public String getName() { return name;}
+	public void setName(String name) { this.name = name;}
+	public String getTitle() { return title; }
+	public void setTitle(String title) { this.title = title; }
+	public String[] getColumnTitles() { return columnTitles; }
+	public void setColumnTitles(String[] columns) { this.columnTitles = columns; }
+	public int getNumRows() { return numRows; }
+	public void setColumns(int numRows) { this.numRows = numRows; }
+	// @formatter:on
 }

@@ -3,6 +3,7 @@ package org.glom.web.client;
 import java.util.ArrayList;
 
 import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -11,7 +12,7 @@ public interface OnlineGlomServiceAsync {
 
 	void getGlomDocument(AsyncCallback<GlomDocument> callback);
 
-	void getLayoutListHeaders(String table, AsyncCallback<String[]> callback);
+	void getLayoutListTable(String tableName, AsyncCallback<LayoutListTable> callback);
 
 	void getTableData(int start, int length, String table, AsyncCallback<ArrayList<String[]>> callback);
 

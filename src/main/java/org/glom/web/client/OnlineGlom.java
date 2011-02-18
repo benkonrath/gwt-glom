@@ -20,6 +20,7 @@
 package org.glom.web.client;
 
 import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -62,7 +63,7 @@ public class OnlineGlom implements EntryPoint {
 		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: LibGlomService");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
 			}
 
 			public void onSuccess(GlomDocument result) {
@@ -84,23 +85,23 @@ public class OnlineGlom implements EntryPoint {
 	private void updateTable() {
 
 		// set up the callback object.
-		AsyncCallback<String[]> callback = new AsyncCallback<String[]>() {
+		AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: LibGlomService.updateTable()");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
 			}
 
-			public void onSuccess(String[] result) {
+			public void onSuccess(LayoutListTable result) {
 				if (table != null)
 					mainVPanel.remove(table);
-				table = new LayoutListView(result);
+				table = new LayoutListView(result.getColumnTitles(), result.getNumRows());
 				mainVPanel.add(table);
 				Window.setTitle("OnlineGlom - " + documentName + ": " + dropBox.getItemText(dropBox.getSelectedIndex()));
 			}
 		};
 
 		String selectedTable = dropBox.getValue(dropBox.getSelectedIndex());
-		OnlineGlomServiceAsync.Util.getInstance().getLayoutListHeaders(selectedTable, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(selectedTable, callback);
 
 	}
 

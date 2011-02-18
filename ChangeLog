@@ -1,5 +1,34 @@
 2011-02-18  Ben Konrath  <ben@bagu.org>
 
+	Enable the CellTable Pager when more than 20 rows need to be viewed.
+
+	The Pager will automatically become active when the results are larger
+	than the CellTable size which is currently set to 20 lines.
+
+	* src/main/java/org/glom/web/client/LayoutListView.java: Correct class
+	name on debug statment in RPC call in LayoutListDataProvider, add
+	numRows parameter to LayoutListView constructor, propperly set rowCount
+	in CellTable.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Correct class
+	name on debug statment in RPC call, use LayoutListTable object in RPC
+	calls, pass rowCount to LayoutListView.
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Change
+	getLayoutListHeaders to getLayoutListTable and return LayoutListTable
+	object.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Update
+	interface for changes in OnlineGlomService.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Change
+	getLayoutListHeaders() to getLayoutListTable() and return
+	LayoutListTable. Using this object allows me to pass other information
+	about the LayoutList like the expected number of rows in the result set.
+	The Connection object from the connection pool is now propperly closed.
+	Only the requested number of lines are returned to the client in
+	getTableData().
+	* src/main/java/org/glom/web/shared/LayoutListTable.java: Move from
+	GlomTable and add columnTitles and numRows.
+
+2011-02-18  Ben Konrath  <ben@bagu.org>
+
 	Use String arrays instead of GlomTable objects in GlomDocument GWT-RPC object.
 
 	This is a small performance boost. I'll use GlomTable to get the required

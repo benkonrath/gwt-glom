@@ -42,7 +42,7 @@ class LayoutListDataProvider extends AsyncDataProvider<String[]> {
 		AsyncCallback<ArrayList<String[]>> callback = new AsyncCallback<ArrayList<String[]>>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: LibGlomService.getTableData()");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getTableData()");
 			}
 
 			public void onSuccess(ArrayList<String[]> result) {
@@ -58,12 +58,11 @@ public class LayoutListView extends Composite {
 
 	private CellTable<String[]> table = null;
 
-	public LayoutListView(String[] headers) {
-		table = new CellTable<String[]>();
+	public LayoutListView(String[] headers, int numRows) {
+		table = new CellTable<String[]>(20);
 		LayoutListDataProvider dataProvider = new LayoutListDataProvider();
 		dataProvider.addDataDisplay(table);
 
-		// TODO wire up the pager
 		SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
 		pager.setDisplay(table);
 
@@ -87,7 +86,7 @@ public class LayoutListView extends Composite {
 
 		}
 
-		table.setRowCount(0);
+		table.setRowCount(numRows);
 
 		// take care of the necessary stuff required for composite widgets
 		initWidget(panel);
