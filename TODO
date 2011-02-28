@@ -1,0 +1,24 @@
+Here's a list of TODO items / ideas in no particular order.
+
+
+Improvements to LayoutListView:
+
+* Implement column width size as specified in the glom file.
+
+* Implement column alignment (automatic, left, right) as specified in the glom file.
+
+* Add support for LayoutItem_Text, LayoutItem_Button and LayoutItem_Image items.
+
+* Make width of the CellTable used for the LayoutList consistent between the
+  tables so that the UI doesn't appear to jump around. One way to do this is to
+  find the width of the largest table and enlarge the column widths
+  proportionally in the smaller tables. Of course this will not respect the
+  column widths specified in the glom file. Another option is to pad the smaller
+  tables with empty columns at the end so that the line under the headers extends to
+  the end of the largest table. Some experimentation is required to see which option
+  is the best.
+
+
+Improvments to LayoutDetailsView:
+
+* This hasn't been started yet.
