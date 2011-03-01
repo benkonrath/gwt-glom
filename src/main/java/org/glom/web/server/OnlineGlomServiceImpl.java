@@ -21,9 +21,12 @@ package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -63,7 +66,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		Glom.libglom_init();
 		document = new Document();
 		// TODO hardcoded for now, need to figure out something for this
-		document.set_file_uri("file:///home/ben/music-collection.glom");
+		document.set_file_uri("file:///home/ben/small-business-example.glom");
 		int error = 0;
 		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
@@ -263,10 +266,22 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						rowArray[i] = numFormatJava.format(rs.getDouble(i + 1));
 						break;
 					case TYPE_DATE:
-						// TODO implement converting from Date to string
+						Date date = rs.getDate(i + 1);
+						if (date != null) {
+							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+							rowArray[i] = dateFormat.format(rs.getDate(i + 1));
+						} else {
+							rowArray[i] = "";
+						}
 						break;
 					case TYPE_TIME:
-						// TODO implement coverting from Time to string
+						Time time = rs.getTime(i + 1);
+						if (time != null) {
+							DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
+							rowArray[i] = timeFormat.format(time);
+						} else {
+							rowArray[i] = "";
+						}
 						break;
 					case TYPE_IMAGE:
 						// TODO log warning message

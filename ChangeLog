@@ -1,5 +1,13 @@
 2011-03-01  Ben Konrath  <ben@bagu.org>
 
+	Add support of Date and Time number types.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Implement formatting for Date and Time values. Change the default glom
+	file to small business example.
+
+2011-03-01  Ben Konrath  <ben@bagu.org>
+
 	Add support for formatting glom types as specified in the glom file.
 
 	Formatting isn't finished yet - I still need to add support for Date
