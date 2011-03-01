@@ -29,7 +29,6 @@ public class LayoutListTable implements Serializable {
 	private int numRows;
 
 	public LayoutListTable() {
-		new LayoutListTable("", "", new String[] {}, 0);
 	}
 
 	public LayoutListTable(String name, String title, String[] columnTitles, int numRows) {

@@ -31,7 +31,6 @@ public class GlomDocument implements Serializable {
 	private int defaultTableIndex;
 
 	public GlomDocument() {
-		new GlomDocument("", new String[] {}, new String[] {}, 0);
 	}
 
 	public GlomDocument(String title, String[] tableNames, String[] tableTitles, int defaultTableIndex) {

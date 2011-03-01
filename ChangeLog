@@ -1,3 +1,14 @@
+2011-03-01  Ben Konrath  <ben@bagu.org>
+
+	A few small code cleanups.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Remove
+	duplicate for loop.
+	* src/main/java/org/glom/web/shared/GlomDocument.java: Remove
+	unnecessary object creation in constructor.
+	* src/main/java/org/glom/web/shared/LayoutListTable.java: Remove
+	unnecessary object creation in constructor.
+
 2011-02-28  Ben Konrath  <ben@bagu.org>
 
 	Add file for TODO list.

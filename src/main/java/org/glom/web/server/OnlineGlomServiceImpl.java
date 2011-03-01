@@ -122,9 +122,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 		int numItems = safeLongToInt(layoutItemsVec.size());
 		String[] columnTitles = new String[numItems];
-		for (int i = 0; i < numItems; i++) {
-			columnTitles[i] = layoutItemsVec.get(i).get_title_or_name();
-		}
 
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		for (int i = 0; i < numItems; i++) {
