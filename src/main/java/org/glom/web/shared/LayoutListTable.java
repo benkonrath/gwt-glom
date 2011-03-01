@@ -46,6 +46,6 @@ public class LayoutListTable implements Serializable {
 	public String[] getColumnTitles() { return columnTitles; }
 	public void setColumnTitles(String[] columns) { this.columnTitles = columns; }
 	public int getNumRows() { return numRows; }
-	public void setColumns(int numRows) { this.numRows = numRows; }
+	public void setNumRows(int numRows) { this.numRows = numRows; }
 	// @formatter:on
 }

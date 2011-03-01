@@ -24,16 +24,22 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Locale;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
+import org.glom.libglom.FieldFormatting;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.NumericFormat;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
@@ -48,7 +54,9 @@ import com.mchange.v2.c3p0.DataSources;
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 	private Document document;
-	ComboPooledDataSource cpds;
+	private ComboPooledDataSource cpds;
+	// TODO implement locale
+	private Locale locale = Locale.ENGLISH;
 
 	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
 	public OnlineGlomServiceImpl() {
@@ -117,12 +125,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	public LayoutListTable getLayoutListTable(String tableName) {
+		LayoutListTable tableInfo = new LayoutListTable();
 
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
 		LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 		int numItems = safeLongToInt(layoutItemsVec.size());
 		String[] columnTitles = new String[numItems];
-
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		for (int i = 0; i < numItems; i++) {
 			LayoutItem item = layoutItemsVec.get(i);
@@ -133,11 +141,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		}
 
+		tableInfo.setColumnTitles(columnTitles);
+
 		// get the size of the returned query for the pager
 		// TODO since we're executing a query anyway, maybe we should return the rows that will be displayed on the
 		// first page
 		// TODO this code is really similar to code in getTableData, find a way to not duplicate the code
-		int numRows;
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -151,29 +160,26 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// get the number of rows in the query
 			rs.setFetchDirection(ResultSet.FETCH_FORWARD);
 			rs.last();
-			numRows = rs.getRow();
+			tableInfo.setNumRows(rs.getRow());
 
 		} catch (SQLException e) {
 			// TODO log error
 			// we don't know how many rows are in the query
 			e.printStackTrace();
-			numRows = 0;
+			tableInfo.setNumRows(0);
 		} finally {
-			// this is a little awkward but we want to make we're cleaning everything up that has been used
+			// this is a little awkward but we want to ensure that we're cleaning everything up that has been used
 			try {
-				if (rs != null)
-					rs.close();
-				if (st != null)
-					st.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (Exception e) {
 				// TODO log error
 				e.printStackTrace();
 			}
 		}
 
-		return new LayoutListTable(tableName, document.get_table_title(tableName), columnTitles, numRows);
+		return tableInfo;
 	}
 
 	public ArrayList<String[]> getTableData(int start, int length, String table) {
@@ -207,14 +213,69 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			rs = st.executeQuery(query);
 
 			// get data we're asked for
-			// TODO get the correct range with an sql query
+			// TODO need to setup the result set in cursor mode so that not all of the results are pulled into memory
 			rs.setFetchDirection(ResultSet.FETCH_FORWARD);
 			rs.absolute(start);
 			int rowCount = 0;
 			while (rs.next() && rowCount <= length) {
-				String[] rowArray = new String[safeLongToInt(layoutItems.size())];
-				for (int i = 0; i < layoutItems.size(); i++) {
-					rowArray[i] = rs.getString(i + 1);
+				int layoutItemsSize = safeLongToInt(layoutItems.size());
+				String[] rowArray = new String[layoutItemsSize];
+				for (int i = 0; i < layoutItemsSize; i++) {
+					LayoutItem_Field field = layoutFields.get(i);
+					FieldFormatting formatting = field.get_formatting_used();
+
+					// field values are converted to strings differently for every glom type
+					Field.glom_field_type fieldType = field.get_glom_type();
+					switch (fieldType) {
+					case TYPE_TEXT:
+						rowArray[i] = rs.getString(i + 1);
+						break;
+					case TYPE_BOOLEAN:
+						rowArray[i] = rs.getBoolean(i + 1) ? "TRUE" : "FALSE";
+						break;
+					case TYPE_NUMERIC:
+						NumericFormat numFormatGlom = formatting.getM_numeric_format();
+						// there's no isCurrency() method in the glom NumericFormat class so we're assuming that the
+						// number should be formatted as a currency if the currency symbol is set
+						String currencySymbol = numFormatGlom.getM_currency_symbol();
+						NumberFormat numFormatJava;
+						if (currencySymbol.length() == 3) {
+							Currency currency = Currency.getInstance(currencySymbol);
+							// we're not using the glom value for digits or grouping when it's a currency
+							int digits = currency.getDefaultFractionDigits();
+							numFormatJava = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+							numFormatJava.setCurrency(currency);
+							numFormatJava.setMinimumFractionDigits(digits);
+							numFormatJava.setMaximumFractionDigits(digits);
+						} else {
+							numFormatJava = NumberFormat.getInstance(locale);
+							if (numFormatGlom.getM_decimal_places_restricted()) {
+								int digits = safeLongToInt(numFormatGlom.getM_decimal_places());
+								numFormatJava.setMinimumFractionDigits(digits);
+								numFormatJava.setMaximumFractionDigits(digits);
+							}
+							numFormatJava.setGroupingUsed(numFormatGlom.getM_use_thousands_separator());
+						}
+
+						// TODO: Do I need to do something with this from libglom?
+						// NumericFormat.get_default_precision();
+
+						rowArray[i] = numFormatJava.format(rs.getDouble(i + 1));
+						break;
+					case TYPE_DATE:
+						// TODO implement converting from Date to string
+						break;
+					case TYPE_TIME:
+						// TODO implement coverting from Time to string
+						break;
+					case TYPE_IMAGE:
+						// TODO log warning message
+						break;
+					case TYPE_INVALID:
+					default:
+						// TODO log warning message
+						break;
+					}
 				}
 				rowsList.add(rowArray);
 				rowCount++;
@@ -223,15 +284,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// TODO: log error, notify user of problem
 			e.printStackTrace();
 		} finally {
-			// this is a little awkward but we want to make we're cleaning everything up that has been used
+			// this is a little awkward but we want to ensure that we're cleaning everything up that has been used
 			try {
-				if (rs != null)
-					rs.close();
-				if (st != null)
-					st.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
+				rs.close();
+				st.close();
+				conn.close();
+			} catch (Exception e) {
 				// TODO log error
 				e.printStackTrace();
 			}
