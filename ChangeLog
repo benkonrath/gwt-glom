@@ -1,5 +1,11 @@
 2011-03-01  Ben Konrath  <ben@bagu.org>
 
+	Use GWT 2.2.0 instead of 2.1.1.
+
+	* pom.xml: Change GWT version numbers.
+
+2011-03-01  Ben Konrath  <ben@bagu.org>
+
 	A few small code cleanups.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Remove
