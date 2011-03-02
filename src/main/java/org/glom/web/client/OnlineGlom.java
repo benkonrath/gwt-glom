@@ -19,6 +19,8 @@
 
 package org.glom.web.client;
 
+import java.util.ArrayList;
+
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.LayoutListTable;
 
@@ -67,10 +69,10 @@ public class OnlineGlom implements EntryPoint {
 			}
 
 			public void onSuccess(GlomDocument result) {
-				String[] tableNames = result.getTableNames();
-				String[] tableTitles = result.getTableTitles();
-				for (int i = 0; i < tableNames.length; i++) {
-					dropBox.addItem(tableTitles[i], tableNames[i]);
+				ArrayList<String> tableNames = result.getTableNames();
+				ArrayList<String> tableTitles = result.getTableTitles();
+				for (int i = 0; i < tableNames.size(); i++) {
+					dropBox.addItem(tableTitles.get(i), tableNames.get(i));
 				}
 				dropBox.setSelectedIndex(result.getDefaultTableIndex());
 				documentName = result.getTitle();

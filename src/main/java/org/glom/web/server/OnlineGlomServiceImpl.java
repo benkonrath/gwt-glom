@@ -104,19 +104,24 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// get arrays of table names and titles, and find the default table index
 		StringVector tablesVec = document.get_table_names();
+
 		int numTables = safeLongToInt(tablesVec.size());
-		String[] tableNames = new String[numTables];
-		String[] tableTitles = new String[numTables];
+		// we don't know how many tables will be hidden so we'll use half of the number of tables for the default size
+		// of the ArrayList
+		ArrayList<String> tableNames = new ArrayList<String>(numTables / 2);
+		ArrayList<String> tableTitles = new ArrayList<String>(numTables / 2);
 		boolean foundDefaultTable = false;
 		for (int i = 0; i < numTables; i++) {
 			String tableName = tablesVec.get(i);
-			tableNames[i] = tableName;
-			// JNI is "expensive", the comparison will only be called if we haven't already found the default table
-			if (!foundDefaultTable && tableName.equals(document.get_default_table())) {
-				glomDocument.setDefaultTableIndex(i);
-				foundDefaultTable = true;
+			if (!document.get_table_is_hidden(tableName)) {
+				tableNames.add(tableName);
+				// JNI is "expensive", the comparison will only be called if we haven't already found the default table
+				if (!foundDefaultTable && tableName.equals(document.get_default_table())) {
+					glomDocument.setDefaultTableIndex(i);
+					foundDefaultTable = true;
+				}
+				tableTitles.add(document.get_table_title(tableName));
 			}
-			tableTitles[i] = document.get_table_title(tableName);
 		}
 
 		// set everything we need
@@ -132,6 +137,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
 		LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
+
 		int numItems = safeLongToInt(layoutItemsVec.size());
 		String[] columnTitles = new String[numItems];
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
@@ -244,7 +250,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						NumberFormat numFormatJava;
 						if (currencySymbol.length() == 3) {
 							Currency currency = Currency.getInstance(currencySymbol);
-							// we're not using the glom value for digits or grouping when it's a currency
+							// we're not using the glom value for digits and grouping when it's a currency
 							int digits = currency.getDefaultFractionDigits();
 							numFormatJava = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
 							numFormatJava.setCurrency(currency);

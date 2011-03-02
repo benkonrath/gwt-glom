@@ -20,20 +20,21 @@
 package org.glom.web.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class GlomDocument implements Serializable {
 	private String title;
 	// could consider a LinkedHashMap if we need to support adding or removing tables
 	// order must be consistent between these two arrays
-	private String[] tableNames;
-	private String[] tableTitles;
+	private ArrayList<String> tableNames;
+	private ArrayList<String> tableTitles;
 	private int defaultTableIndex;
 
 	public GlomDocument() {
 	}
 
-	public GlomDocument(String title, String[] tableNames, String[] tableTitles, int defaultTableIndex) {
+	public GlomDocument(String title, ArrayList<String> tableNames, ArrayList<String> tableTitles, int defaultTableIndex) {
 		this.title = title;
 		this.tableNames = tableNames;
 		this.tableTitles = tableTitles;
@@ -43,11 +44,11 @@ public class GlomDocument implements Serializable {
 	// @formatter:off
 	public String getTitle() { return title; }
 	public void setTitle(String name) { this.title = name; }
+	public ArrayList<String> getTableNames() { return tableNames; }
+	public void setTableNames(ArrayList<String> tableNames) { this.tableNames = tableNames; }
+	public ArrayList<String> getTableTitles() { return tableTitles; }
+	public void setTableTitles(ArrayList<String> tableTitles) { this.tableTitles = tableTitles; }
 	public int getDefaultTableIndex() { return defaultTableIndex; }
 	public void setDefaultTableIndex(int defaultTable) { this.defaultTableIndex = defaultTable; }
-	public String[] getTableNames() { return tableNames; }
-	public void setTableNames(String[] tableNames) { this.tableNames = tableNames; }
-	public void setTableTitles(String[] tableTitles) { this.tableTitles = tableTitles; }
-	public String[] getTableTitles() { return tableTitles; }
 	// @formatter:on
 }
