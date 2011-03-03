@@ -1,3 +1,27 @@
+2011-03-03  Ben Konrath  <ben@bagu.org>
+
+	Add support for colour text and colour backgrounds to the layout list cells.
+
+	Only the cell backgrounds are coloured which leaves a gap between the
+	cells that isn't coloured. I need to figure out a way to set
+	'style=background-colour:' on the whole column rather than just the
+	cell.
+
+	* TODO: Add a note about colouring the background of the whole column.
+	* src/main/java/org/glom/web/client/LayoutListView.java: Add a custom
+	column type (GlomFieldColumn) and a custom cell type (GlomFieldCell) to
+	render the coloured text and backgrounds. Use GlomField[] for the row type.
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Use GlomField[]
+	for the row type.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Use
+	GlomField[] for the row type.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Use
+	GlomField[] for the row type. Set the text, text colour and background
+	colour in the GlomField objects as specified in the glom document. Add
+	method to convert from Gdk::Color to HTML colour string. Cleanup comments.
+	* src/main/java/org/glom/web/shared/GlomField.java: New file to	encapulate
+	the glom field text, foreground colour and background colour.
+
 2011-03-02  Ben Konrath  <ben@bagu.org>
 
 	Don't display hidden tables in the combo box.
