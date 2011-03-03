@@ -18,6 +18,10 @@ Improvements to LayoutListView:
   the end of the largest table. Some experimentation is required to see which option
   is the best.
 
+* Only the cell backgrounds are coloured which leaves a gap between the cells that
+  isn't coloured. I need to figure out a way to set 'style=background-colour:'
+  on the whole column rather than just the cell.
+
 
 Improvments to LayoutDetailsView:
 

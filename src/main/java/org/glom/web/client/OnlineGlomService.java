@@ -22,6 +22,7 @@ package org.glom.web.client;
 import java.util.ArrayList;
 
 import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -34,6 +35,6 @@ public interface OnlineGlomService extends RemoteService {
 
 	LayoutListTable getLayoutListTable(String tableName);
 
-	ArrayList<String[]> getTableData(int start, int length, String table);
+	ArrayList<GlomField[]> getTableData(int start, int length, String table);
 
 }

@@ -21,9 +21,15 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.GlomField;
+
+import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -31,35 +37,75 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
-class LayoutListDataProvider extends AsyncDataProvider<String[]> {
+class LayoutListDataProvider extends AsyncDataProvider<GlomField[]> {
 	@Override
-	protected void onRangeChanged(HasData<String[]> display) {
+	protected void onRangeChanged(HasData<GlomField[]> display) {
 		final Range range = display.getVisibleRange();
 
 		final int start = range.getStart();
 		final int length = range.getLength();
 
-		AsyncCallback<ArrayList<String[]>> callback = new AsyncCallback<ArrayList<String[]>>() {
+		AsyncCallback<ArrayList<GlomField[]>> callback = new AsyncCallback<ArrayList<GlomField[]>>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
 				System.out.println("AsyncCallback Failed: OnlineGlomService.getTableData()");
 			}
 
-			public void onSuccess(ArrayList<String[]> result) {
+			public void onSuccess(ArrayList<GlomField[]> result) {
 				updateRowData(start, result);
 			}
 		};
 
-		OnlineGlomServiceAsync.Util.getInstance().getTableData(start, length, OnlineGlom.getCurrentTableName(), callback);
+		OnlineGlomServiceAsync.Util.getInstance().getTableData(start, length, OnlineGlom.getCurrentTableName(),
+				callback);
 	}
 }
 
 public class LayoutListView extends Composite {
 
-	private CellTable<String[]> table = null;
+	private CellTable<GlomField[]> table;
+
+	private class GlomFieldCell extends AbstractCell<GlomField> {
+
+		// The SafeHtml class is used to escape strings to avoid XSS attacks. This is not strictly
+		// neccessary because the values aren't coming from a user but I'm using it anyway as a reminder.
+		@Override
+		public void render(Context context, GlomField value, SafeHtmlBuilder sb) {
+			if (value == null) {
+				return;
+			}
+
+			// get the foreground and background colours if they're set
+			SafeHtml fgcolour = null, bgcolour = null;
+			String colour = value.getFGColour();
+			if (colour == null) {
+				fgcolour = SafeHtmlUtils.fromSafeConstant("");
+			} else {
+				fgcolour = SafeHtmlUtils.fromString("color:" + colour + ";");
+			}
+			colour = value.getBGColour();
+			if (colour == null) {
+				bgcolour = SafeHtmlUtils.fromSafeConstant("");
+			} else {
+				bgcolour = SafeHtmlUtils.fromString("background-color:" + colour + ";");
+			}
+
+			// set the text and colours
+			sb.appendHtmlConstant("<div style=\"" + fgcolour.asString() + bgcolour.asString() + "\">");
+			SafeHtml text = SafeHtmlUtils.fromString(value.getText());
+			sb.append(text);
+			sb.appendHtmlConstant("</div>");
+		}
+	}
+
+	private abstract class GlomFieldColumn extends Column<GlomField[], GlomField> {
+		public GlomFieldColumn() {
+			super(new GlomFieldCell());
+		}
+	}
 
 	public LayoutListView(String[] headers, int numRows) {
-		table = new CellTable<String[]>(20);
+		table = new CellTable<GlomField[]>(20);
 		LayoutListDataProvider dataProvider = new LayoutListDataProvider();
 		dataProvider.addDataDisplay(table);
 
@@ -74,9 +120,9 @@ public class LayoutListView extends Composite {
 		for (int i = 0; i < headers.length; i++) {
 			// create a new column
 			final int j = new Integer(i);
-			TextColumn<String[]> column = new TextColumn<String[]>() {
+			GlomFieldColumn column = new GlomFieldColumn() {
 				@Override
-				public String getValue(String[] object) {
+				public GlomField getValue(GlomField[] object) {
 					return object[j];
 				}
 			};

@@ -3,6 +3,7 @@ package org.glom.web.client;
 import java.util.ArrayList;
 
 import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.core.client.GWT;
@@ -14,7 +15,7 @@ public interface OnlineGlomServiceAsync {
 
 	void getLayoutListTable(String tableName, AsyncCallback<LayoutListTable> callback);
 
-	void getTableData(int start, int length, String table, AsyncCallback<ArrayList<String[]>> callback);
+	void getTableData(int start, int length, String table, AsyncCallback<ArrayList<GlomField[]>> callback);
 
 	/**
 	 * Utility class to get the RPC Async interface from client-side code

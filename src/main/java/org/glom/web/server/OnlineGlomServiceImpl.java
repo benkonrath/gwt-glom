@@ -48,6 +48,7 @@ import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -66,7 +67,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		Glom.libglom_init();
 		document = new Document();
 		// TODO hardcoded for now, need to figure out something for this
-		document.set_file_uri("file:///home/ben/small-business-example.glom");
+		// document.set_file_uri("file:///home/ben/small-business-example.glom");
+		document.set_file_uri("file:///home/ben/music-collection.glom");
 		int error = 0;
 		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
@@ -135,9 +137,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public LayoutListTable getLayoutListTable(String tableName) {
 		LayoutListTable tableInfo = new LayoutListTable();
 
+		// access the layout list
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
 		LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
+		// find the layout list fields
 		int numItems = safeLongToInt(layoutItemsVec.size());
 		String[] columnTitles = new String[numItems];
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
@@ -149,7 +153,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				layoutFields.add(field);
 			}
 		}
-
 		tableInfo.setColumnTitles(columnTitles);
 
 		// get the size of the returned query for the pager
@@ -177,7 +180,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			e.printStackTrace();
 			tableInfo.setNumRows(0);
 		} finally {
-			// this is a little awkward but we want to ensure that we're cleaning everything up that has been used
+			// cleanup everything that has been used
 			try {
 				rs.close();
 				st.close();
@@ -191,7 +194,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return tableInfo;
 	}
 
-	public ArrayList<String[]> getTableData(int start, int length, String table) {
+	public ArrayList<GlomField[]> getTableData(int start, int length, String table) {
+		// access the layout list
 		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
 		LayoutItemVector layoutItems = layoutList.get(0).get_items();
 
@@ -204,13 +208,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (field != null) {
 				layoutFields.add(field);
 				Field details = field.get_full_field_details();
+
 				if (details != null && details.get_primary_key()) {
 					sortClause.addLast(new SortFieldPair(field, true)); // ascending
 				}
 			}
 		}
 
-		ArrayList<String[]> rowsList = new ArrayList<String[]>();
+		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -228,21 +233,33 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			int rowCount = 0;
 			while (rs.next() && rowCount <= length) {
 				int layoutItemsSize = safeLongToInt(layoutItems.size());
-				String[] rowArray = new String[layoutItemsSize];
+				GlomField[] rowArray = new GlomField[layoutItemsSize];
 				for (int i = 0; i < layoutItemsSize; i++) {
+					// make a new GlomField to set the text and colours
+					rowArray[i] = new GlomField();
+
+					// get foreground and background colours
 					LayoutItem_Field field = layoutFields.get(i);
 					FieldFormatting formatting = field.get_formatting_used();
+					String fgcolour = formatting.get_text_format_color_foreground();
+					if (!fgcolour.isEmpty())
+						rowArray[i].setFGColour(convertGdkColorToHtmlColour(fgcolour));
+					String bgcolour = formatting.get_text_format_color_background();
+					if (!bgcolour.isEmpty())
+						rowArray[i].setBGColour(convertGdkColorToHtmlColour(bgcolour));
 
-					// field values are converted to strings differently for every glom type
+					// convert field values are to strings based on the glom type
 					Field.glom_field_type fieldType = field.get_glom_type();
 					switch (fieldType) {
 					case TYPE_TEXT:
-						rowArray[i] = rs.getString(i + 1);
+						String text = rs.getString(i + 1);
+						rowArray[i].setText(text != null ? text : "");
 						break;
 					case TYPE_BOOLEAN:
-						rowArray[i] = rs.getBoolean(i + 1) ? "TRUE" : "FALSE";
+						rowArray[i].setText(rs.getBoolean(i + 1) ? "TRUE" : "FALSE");
 						break;
 					case TYPE_NUMERIC:
+						// take care of the numeric formatting before converting the number to a string
 						NumericFormat numFormatGlom = formatting.getM_numeric_format();
 						// there's no isCurrency() method in the glom NumericFormat class so we're assuming that the
 						// number should be formatted as a currency if the currency symbol is set
@@ -266,27 +283,33 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							numFormatJava.setGroupingUsed(numFormatGlom.getM_use_thousands_separator());
 						}
 
-						// TODO: Do I need to do something with this from libglom?
-						// NumericFormat.get_default_precision();
+						// TODO: Do I need to do something with NumericFormat.get_default_precision() from libglom?
 
-						rowArray[i] = numFormatJava.format(rs.getDouble(i + 1));
+						double number = rs.getDouble(i + 1);
+						if (number < 0) {
+							if (formatting.getM_numeric_format().getM_alt_foreground_color_for_negatives())
+								// overrides the set foreground colour
+								rowArray[i].setFGColour(convertGdkColorToHtmlColour(NumericFormat
+										.get_alternative_color_for_negatives()));
+						}
+						rowArray[i].setText(numFormatJava.format(number));
 						break;
 					case TYPE_DATE:
 						Date date = rs.getDate(i + 1);
 						if (date != null) {
 							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-							rowArray[i] = dateFormat.format(rs.getDate(i + 1));
+							rowArray[i].setText(dateFormat.format(rs.getDate(i + 1)));
 						} else {
-							rowArray[i] = "";
+							rowArray[i].setText("");
 						}
 						break;
 					case TYPE_TIME:
 						Time time = rs.getTime(i + 1);
 						if (time != null) {
 							DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
-							rowArray[i] = timeFormat.format(time);
+							rowArray[i].setText(timeFormat.format(time));
 						} else {
-							rowArray[i] = "";
+							rowArray[i].setText("");
 						}
 						break;
 					case TYPE_IMAGE:
@@ -298,6 +321,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						break;
 					}
 				}
+
+				// add the row of GlomFields to the ArrayList we're going to return and update the row count
 				rowsList.add(rowArray);
 				rowCount++;
 			}
@@ -305,7 +330,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// TODO: log error, notify user of problem
 			e.printStackTrace();
 		} finally {
-			// this is a little awkward but we want to ensure that we're cleaning everything up that has been used
+			// cleanup everything that has been used
 			try {
 				rs.close();
 				st.close();
@@ -316,6 +341,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		}
 		return rowsList;
+	}
+
+	/*
+	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by disgarding the least
+	 * significant 8-bits in each channel.
+	 */
+	private String convertGdkColorToHtmlColour(String gdkColor) {
+		if (gdkColor.length() == 13)
+			return gdkColor.substring(0, 2) + gdkColor.substring(5, 6) + gdkColor.substring(9, 10);
+		else if (gdkColor.length() == 7)
+			// TODO: log warning because we're expecting a 13 character string
+			return gdkColor;
+		else
+			// TODO: log error
+			return "";
 	}
 
 	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
