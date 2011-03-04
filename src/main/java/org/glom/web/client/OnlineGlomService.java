@@ -33,8 +33,11 @@ public interface OnlineGlomService extends RemoteService {
 
 	GlomDocument getGlomDocument();
 
-	LayoutListTable getLayoutListTable(String tableName);
+	LayoutListTable getLayoutListTable(String table);
 
-	ArrayList<GlomField[]> getTableData(int start, int length, String table);
+	ArrayList<GlomField[]> getTableData(String table, int start, int length);
+
+	ArrayList<GlomField[]> getSortedTableData(String table, int start, int length, int sortColumnIndex,
+			boolean isAscending);
 
 }

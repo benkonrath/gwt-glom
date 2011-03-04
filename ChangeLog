@@ -1,3 +1,23 @@
+2011-03-04  Ben Konrath  <ben@bagu.org>
+
+	Add support for column sorting.
+
+	* src/main/java/org/glom/web/client/LayoutListView.java: Change
+	AsynDataProvider to be an anonymous inner class. Use new
+	getSortedTableData RPC method when column sort is requested. Set all
+	columns sortable and add an AsyncHandler to activate sorting in the
+	AsyncDataProvider.
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Add new
+	method getSortedTableData(). Cleanup other method signatures.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Add
+	new method getSortedTableData(). Cleanup other method signatures.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Implement getSortedTableData() and getTableData() methods by using a
+	private helper method with the appropriate parameters filled in. Use
+	user supplied sort clause when supplied, otherwise fall back to
+	sorting by the primary key. Move destroy() method to be underneath
+	constructor for readability.  Cleanup comments.
+
 2011-03-03  Ben Konrath  <ben@bagu.org>
 
 	Add support for colour text and colour backgrounds to the layout list cells.

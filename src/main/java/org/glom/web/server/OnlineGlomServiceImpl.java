@@ -62,7 +62,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	// TODO implement locale
 	private Locale locale = Locale.ENGLISH;
 
-	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
+	/*
+	 * This is called when the servlet is started or restarted.
+	 */
 	public OnlineGlomServiceImpl() {
 		Glom.libglom_init();
 		document = new Document();
@@ -88,6 +90,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// TODO figure out something for db user name and password
 		cpds.setUser("ben");
 		cpds.setPassword("ChangeMe"); // of course it's not the password I'm using on my server
+	}
+
+	/*
+	 * This is called when the servlet is stopped or restarted.
+	 * 
+	 * @see javax.servlet.GenericServlet#destroy()
+	 */
+	public void destroy() {
+		Glom.libglom_deinit();
+		try {
+			DataSources.destroy(cpds);
+		} catch (SQLException e) {
+			// TODO log error, don't need to notify user because this is a clean up method
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -194,7 +211,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return tableInfo;
 	}
 
-	public ArrayList<GlomField[]> getTableData(int start, int length, String table) {
+	public ArrayList<GlomField[]> getTableData(String table, int start, int length) {
+		return getTableData(table, start, length, false, 0, false);
+	}
+
+	public ArrayList<GlomField[]> getSortedTableData(String table, int start, int length, int sortColumnIndex,
+			boolean isAscending) {
+		return getTableData(table, start, length, true, sortColumnIndex, isAscending);
+	}
+
+	private ArrayList<GlomField[]> getTableData(String table, int start, int length, boolean useSortClause,
+			int sortColumnIndex, boolean isAscending) {
+
 		// access the layout list
 		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
 		LayoutItemVector layoutItems = layoutList.get(0).get_items();
@@ -206,13 +234,26 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			LayoutItem item = layoutItems.get(i);
 			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
 			if (field != null) {
+				// use this field in the layout
 				layoutFields.add(field);
-				Field details = field.get_full_field_details();
 
-				if (details != null && details.get_primary_key()) {
-					sortClause.addLast(new SortFieldPair(field, true)); // ascending
+				// create a sort clause if it's a primary key and we're not asked to sort a specific column
+				if (!useSortClause) {
+					Field details = field.get_full_field_details();
+					if (details != null && details.get_primary_key()) {
+						sortClause.addLast(new SortFieldPair(field, true)); // ascending
+					}
 				}
 			}
+		}
+
+		// create a sort clause for the column we've been asked to sort
+		if (useSortClause) {
+			LayoutItem item = layoutItems.get(sortColumnIndex);
+			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
+			if (field != null)
+				sortClause.addLast(new SortFieldPair(field, isAscending));
+			// TODO: log error in the else condition
 		}
 
 		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
@@ -356,17 +397,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		else
 			// TODO: log error
 			return "";
-	}
-
-	// Called only when the servlet is stopped (the servlet container is stopped or restarted)
-	public void destroy() {
-		Glom.libglom_deinit();
-		try {
-			DataSources.destroy(cpds);
-		} catch (SQLException e) {
-			// TODO log error, don't need to notify user because this is a clean up method
-			e.printStackTrace();
-		}
 	}
 
 }

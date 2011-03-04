@@ -29,6 +29,9 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
+import com.google.gwt.user.cellview.client.ColumnSortList;
+import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -37,33 +40,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
-class LayoutListDataProvider extends AsyncDataProvider<GlomField[]> {
-	@Override
-	protected void onRangeChanged(HasData<GlomField[]> display) {
-		final Range range = display.getVisibleRange();
-
-		final int start = range.getStart();
-		final int length = range.getLength();
-
-		AsyncCallback<ArrayList<GlomField[]>> callback = new AsyncCallback<ArrayList<GlomField[]>>() {
-			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getTableData()");
-			}
-
-			public void onSuccess(ArrayList<GlomField[]> result) {
-				updateRowData(start, result);
-			}
-		};
-
-		OnlineGlomServiceAsync.Util.getInstance().getTableData(start, length, OnlineGlom.getCurrentTableName(),
-				callback);
-	}
-}
-
 public class LayoutListView extends Composite {
-
-	private CellTable<GlomField[]> table;
 
 	private class GlomFieldCell extends AbstractCell<GlomField> {
 
@@ -92,8 +69,7 @@ public class LayoutListView extends Composite {
 
 			// set the text and colours
 			sb.appendHtmlConstant("<div style=\"" + fgcolour.asString() + bgcolour.asString() + "\">");
-			SafeHtml text = SafeHtmlUtils.fromString(value.getText());
-			sb.append(text);
+			sb.append(SafeHtmlUtils.fromString(value.getText()));
 			sb.appendHtmlConstant("</div>");
 		}
 	}
@@ -105,8 +81,41 @@ public class LayoutListView extends Composite {
 	}
 
 	public LayoutListView(String[] headers, int numRows) {
-		table = new CellTable<GlomField[]>(20);
-		LayoutListDataProvider dataProvider = new LayoutListDataProvider();
+		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20);
+
+		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
+			@Override
+			@SuppressWarnings("unchecked")
+			protected void onRangeChanged(HasData<GlomField[]> display) {
+				// setup the callback object
+				final Range range = display.getVisibleRange();
+				final int start = range.getStart();
+				AsyncCallback<ArrayList<GlomField[]>> callback = new AsyncCallback<ArrayList<GlomField[]>>() {
+					public void onFailure(Throwable caught) {
+						// FIXME: need to deal with failure
+						System.out.println("AsyncCallback Failed: OnlineGlomService.getTableData()");
+					}
+
+					public void onSuccess(ArrayList<GlomField[]> result) {
+						updateRowData(start, result);
+					}
+				};
+
+				// get data from the server
+				ColumnSortList colSortList = table.getColumnSortList();
+				if (colSortList.size() > 0) {
+					// ColumnSortEvent has been requested by the user
+					ColumnSortInfo info = colSortList.get(0);
+					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(OnlineGlom.getCurrentTableName(),
+							start, range.getLength(), table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()),
+							info.isAscending(), callback);
+				} else {
+					OnlineGlomServiceAsync.Util.getInstance().getTableData(OnlineGlom.getCurrentTableName(), start,
+							range.getLength(), callback);
+				}
+			}
+		};
+
 		dataProvider.addDataDisplay(table);
 
 		SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
@@ -127,16 +136,21 @@ public class LayoutListView extends Composite {
 				}
 			};
 
-			// add the column to the list
+			// set column properties and add to cell table
+			column.setSortable(true);
 			table.addColumn(column, headers[i]);
 
 		}
 
+		// set row count which is needed for paging
 		table.setRowCount(numRows);
 
-		// take care of the necessary stuff required for composite widgets
+		// adds an AsyncHandler to activate sorting for the AsyncDataProvider that was created above
+		table.addColumnSortHandler(new AsyncHandler(table));
+
+		// take care of the stuff required for composite widgets
 		initWidget(panel);
-		setStyleName("glom-ListLayoutTable");
+		setStyleName("glom-LayoutListView");
 	}
 
 }
