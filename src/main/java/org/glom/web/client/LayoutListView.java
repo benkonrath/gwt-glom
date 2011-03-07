@@ -21,6 +21,7 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomField;
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -32,9 +33,11 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
+import com.google.gwt.user.cellview.client.SafeHtmlHeader;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -80,7 +83,7 @@ public class LayoutListView extends Composite {
 		}
 	}
 
-	public LayoutListView(String[] headers, int numRows) {
+	public LayoutListView(ColumnInfo[] columns, int numRows) {
 		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20);
 
 		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
@@ -126,7 +129,8 @@ public class LayoutListView extends Composite {
 		panel.add(table);
 		panel.add(pager);
 
-		for (int i = 0; i < headers.length; i++) {
+		// create instances of GlomFieldColumn to retrieve the GlomField objects
+		for (int i = 0; i < columns.length; i++) {
 			// create a new column
 			final int j = new Integer(i);
 			GlomFieldColumn column = new GlomFieldColumn() {
@@ -137,9 +141,21 @@ public class LayoutListView extends Composite {
 			};
 
 			// set column properties and add to cell table
+			switch (columns[i].getAlignment()) {
+			case HORIZONTAL_ALIGNMENT_LEFT:
+				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+				break;
+			case HORIZONTAL_ALIGNMENT_RIGHT:
+				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+				break;
+			case HORIZONTAL_ALIGNMENT_AUTO:
+			default:
+				// TODO: log warning, this shouldn't happen
+				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
+				break;
+			}
 			column.setSortable(true);
-			table.addColumn(column, headers[i]);
-
+			table.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(columns[i].getHeader())));
 		}
 
 		// set row count which is needed for paging

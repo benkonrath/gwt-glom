@@ -1,3 +1,25 @@
+2011-03-07  Ben Konrath  <ben@bagu.org>
+
+	Add support for horizontal alignment in the LayoutList columns. 
+
+	* TODO: Remove item about horizontal alignment. Add item about
+	improvements to ColumnInfo.
+	* src/main/java/org/glom/web/client/LayoutListView.java: Set horizontal
+	alignment on the columns. Use ColumnInfo RPC object get the column
+	title and horizontal alignment.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Update
+	LayoutListView creation with ColumnInfo RPC object.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Create
+	a ColumnInfo object for every LayoutList columnn. Convert the
+	FieldFormatting.HorizontalAlignment to the correct
+	ColumnnInfo.HorizontatlAlignment with the new
+	getColumnInfoHorizontalAlignment helper method.
+	* src/main/java/org/glom/web/shared/ColumnInfo.java: New RPC object
+	to encapsulate column information like alignment and title. This
+	could be used to set the colour instead of on a per cell field basis.
+	* src/main/java/org/glom/web/shared/LayoutListTable.java: Replace
+	column title storage and retrieval with ColumnInfo.
+
 2011-03-04  Ben Konrath  <ben@bagu.org>
 
 	Add support for column sorting.

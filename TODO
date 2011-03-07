@@ -5,8 +5,6 @@ Improvements to LayoutListView:
 
 * Implement column width size as specified in the glom file.
 
-* Implement column alignment (automatic, left, right) as specified in the glom file.
-
 * Add support for LayoutItem_Text, LayoutItem_Button and LayoutItem_Image items.
 
 * Make width of the CellTable used for the LayoutList consistent between the
@@ -22,6 +20,8 @@ Improvements to LayoutListView:
   isn't coloured. I need to figure out a way to set 'style=background-colour:'
   on the whole column rather than just the cell.
 
+* Use ColumnInfo rpc object to send text backgound and foreground colours
+  instead of sending this informaton for each cell.
 
 Improvments to LayoutDetailsView:
 

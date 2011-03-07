@@ -25,16 +25,16 @@ import java.io.Serializable;
 public class LayoutListTable implements Serializable {
 	private String name;
 	private String title;
-	private String[] columnTitles;
+	private ColumnInfo[] columns;
 	private int numRows;
 
 	public LayoutListTable() {
 	}
 
-	public LayoutListTable(String name, String title, String[] columnTitles, int numRows) {
+	public LayoutListTable(String name, String title, ColumnInfo[] columns, int numRows) {
 		this.name = name;
 		this.title = title;
-		this.columnTitles = columnTitles;
+		this.columns = columns;
 		this.numRows = numRows;
 	}
 
@@ -43,8 +43,8 @@ public class LayoutListTable implements Serializable {
 	public void setName(String name) { this.name = name;}
 	public String getTitle() { return title; }
 	public void setTitle(String title) { this.title = title; }
-	public String[] getColumnTitles() { return columnTitles; }
-	public void setColumnTitles(String[] columns) { this.columnTitles = columns; }
+	public ColumnInfo[] getColumns() { return columns; }
+	public void setColumns(ColumnInfo[] columns) { this.columns = columns; }
 	public int getNumRows() { return numRows; }
 	public void setNumRows(int numRows) { this.numRows = numRows; }
 	// @formatter:on

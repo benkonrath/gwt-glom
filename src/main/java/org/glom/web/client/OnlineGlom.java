@@ -96,7 +96,7 @@ public class OnlineGlom implements EntryPoint {
 			public void onSuccess(LayoutListTable result) {
 				if (table != null)
 					mainVPanel.remove(table);
-				table = new LayoutListView(result.getColumnTitles(), result.getNumRows());
+				table = new LayoutListView(result.getColumns(), result.getNumRows());
 				mainVPanel.add(table);
 				Window.setTitle("OnlineGlom - " + documentName + ": " + dropBox.getItemText(dropBox.getSelectedIndex()));
 			}

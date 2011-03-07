@@ -47,6 +47,7 @@ import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.OnlineGlomService;
+import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
@@ -160,17 +161,19 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// find the layout list fields
 		int numItems = safeLongToInt(layoutItemsVec.size());
-		String[] columnTitles = new String[numItems];
+		ColumnInfo[] columns = new ColumnInfo[numItems];
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		for (int i = 0; i < numItems; i++) {
+			// TODO add support for other LayoutItems (Text, Image, Button)
 			LayoutItem item = layoutItemsVec.get(i);
-			columnTitles[i] = item.get_title_or_name();
 			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
 			if (field != null) {
 				layoutFields.add(field);
+				FieldFormatting.HorizontalAlignment alignment = field.get_formatting_used_horizontal_alignment();
+				columns[i] = new ColumnInfo(item.get_title_or_name(), getColumnInfoHorizontalAlignment(alignment));
 			}
 		}
-		tableInfo.setColumnTitles(columnTitles);
+		tableInfo.setColumns(columns);
 
 		// get the size of the returned query for the pager
 		// TODO since we're executing a query anyway, maybe we should return the rows that will be displayed on the
@@ -397,6 +400,22 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		else
 			// TODO: log error
 			return "";
+	}
+
+	/*
+	 * This method converts a FieldFormatting.HorizontalAlignment to the equivalent ColumnInfo.HorizontalAlignment. The
+	 * need for this comes from the fact that the GWT HorizontalAlignment classes can't be used with RPC and there's no
+	 * easy way to use the java-libglom FieldFormatting.HorizontalAlignment enum with RPC. An enum indentical to
+	 * FieldFormatting.HorizontalAlignment is included in the ColumnInfo class.
+	 */
+	private ColumnInfo.HorizontalAlignment getColumnInfoHorizontalAlignment(
+			FieldFormatting.HorizontalAlignment alignment) {
+		int value = alignment.swigValue();
+		ColumnInfo.HorizontalAlignment[] columnInfoValues = ColumnInfo.HorizontalAlignment.class.getEnumConstants();
+		if (value < columnInfoValues.length && value >= 0)
+			return columnInfoValues[value];
+		// TODO: log error: value out of range, returning HORIZONTAL_ALIGNMENT_RIGHT
+		return columnInfoValues[FieldFormatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.swigValue()];
 	}
 
 }
