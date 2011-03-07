@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
   <!-- Inherit our applications main module.                      -->
-  <inherits name='org.glom.web.gwt-glom'/>
+  <inherits name='org.glom.web.OnlineGlom'/>
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/OnlineGlom/libGlom" class="org.glom.web.server.LibGlomServiceImpl" />
+  <servlet path="/OnlineGlom/libGlom" class="org.glom.web.server.OnlineGlomServiceImpl" />
 
 </module>

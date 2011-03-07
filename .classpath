@@ -6,15 +6,15 @@
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
 		<accessrules>
 			<accessrule kind="nonaccessible" pattern="**/internal/**"/>
 			<accessrule kind="nonaccessible" pattern="javax/swing/**"/>
 			<accessrule kind="nonaccessible" pattern="java/awt/**"/>
 			<accessrule kind="nonaccessible" pattern="org/GNOME/**"/>
 		</accessrules>
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
@@ -23,5 +23,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
 	<classpathentry kind="output" path="src/main/webapp/WEB-INF/classes"/>
 </classpath>
