@@ -1,3 +1,24 @@
+2011-03-08  Ben Konrath  <ben@bagu.org>
+
+	Remove test classes, launch configurations and configuration.
+
+	The test stuff was getting in the way when creating the war. To make
+	the war file you can now do 'mvn clean package'. The packaged war file
+	will be in the target directory.
+
+	* .classpath: Remove unused classpathentry for tests and i18n.
+	* pom.xml: Remove junit.jar dependency. Properly use gwt.version
+	property. Don't run test or i18n goals when packaging the war.
+	* src/main/webapp/WEB-INF/web.xml: Add xml name space. Correct
+	formatting.
+
+	Removed files:
+
+	* OnlineGlomTest-dev.launch:
+	* OnlineGlomTest-prod.launch:
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	* src/test/resources/org/glom/web/OnlineGlomJUnit.gwt.xml:
+
 2011-03-07  Ben Konrath  <ben@bagu.org>
 
 	Update gwt-maven plugin to 2.2.0 and fix other configuation problems.

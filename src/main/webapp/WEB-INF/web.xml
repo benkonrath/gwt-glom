@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
 
-<web-app>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>libGlomServlet</servlet-name>
+		<servlet-class>org.glom.web.server.OnlineGlomServiceImpl</servlet-class>
+	</servlet>
 
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>libGlomServlet</servlet-name>
-    <servlet-class>org.glom.web.server.OnlineGlomServiceImpl</servlet-class>
-  </servlet>
+	<servlet-mapping>
+		<servlet-name>libGlomServlet</servlet-name>
+		<url-pattern>/OnlineGlom/libGlom</url-pattern>
+	</servlet-mapping>
 
-  <servlet-mapping>
-    <servlet-name>libGlomServlet</servlet-name>
-    <url-pattern>/OnlineGlom/libGlom</url-pattern>
-  </servlet-mapping>
-
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>OnlineGlom.html</welcome-file>
-  </welcome-file-list>
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>OnlineGlom.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>
