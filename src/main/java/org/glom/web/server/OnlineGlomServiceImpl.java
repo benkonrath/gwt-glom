@@ -69,9 +69,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public OnlineGlomServiceImpl() {
 		Glom.libglom_init();
 		document = new Document();
-		// TODO hardcoded for now, need to figure out something for this
-		// document.set_file_uri("file:///home/ben/small-business-example.glom");
-		document.set_file_uri("file:///home/ben/music-collection.glom");
+		// TODO hard-coded for now, need to figure out something for this
+		document.set_file_uri("file:///home/ben/small-business-example.glom");
+		// document.set_file_uri("file:///home/ben/music-collection.glom");
 		int error = 0;
 		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
@@ -82,7 +82,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		try {
 			cpds.setDriverClass("org.postgresql.Driver");
 		} catch (PropertyVetoException e) {
-			// TODO log error, fatal error can't continue, user can be nofified when db access doesn't work
+			// TODO log error, fatal error can't continue, user can be notified when db access doesn't work
 			e.printStackTrace();
 		}
 
@@ -303,28 +303,38 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						rowArray[i].setText(rs.getBoolean(i + 1) ? "TRUE" : "FALSE");
 						break;
 					case TYPE_NUMERIC:
-						// take care of the numeric formatting before converting the number to a string
+						// Take care of the numeric formatting before converting the number to a string.
 						NumericFormat numFormatGlom = formatting.getM_numeric_format();
-						// there's no isCurrency() method in the glom NumericFormat class so we're assuming that the
-						// number should be formatted as a currency if the currency symbol is set
-						String currencySymbol = numFormatGlom.getM_currency_symbol();
-						NumberFormat numFormatJava;
-						if (currencySymbol.length() == 3) {
-							Currency currency = Currency.getInstance(currencySymbol);
-							// we're not using the glom value for digits and grouping when it's a currency
-							int digits = currency.getDefaultFractionDigits();
-							numFormatJava = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
-							numFormatJava.setCurrency(currency);
-							numFormatJava.setMinimumFractionDigits(digits);
-							numFormatJava.setMaximumFractionDigits(digits);
-						} else {
-							numFormatJava = NumberFormat.getInstance(locale);
-							if (numFormatGlom.getM_decimal_places_restricted()) {
-								int digits = safeLongToInt(numFormatGlom.getM_decimal_places());
+						// There's no isCurrency() method in the glom NumericFormat class so we're assuming that the
+						// number should be formatted as a currency if the currency code string is not empty.
+						String currencyCode = numFormatGlom.getM_currency_symbol();
+						NumberFormat numFormatJava = null;
+						boolean useGlomCurrencyCode = false;
+						if (currencyCode.length() == 3) {
+							// Try to format the currency using the Java Locales system.
+							try {
+								Currency currency = Currency.getInstance(currencyCode);
+								// Ignore the glom numeric formatting when a valid ISO 4217 currency code is being used.
+								int digits = currency.getDefaultFractionDigits();
+								numFormatJava = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+								numFormatJava.setCurrency(currency);
 								numFormatJava.setMinimumFractionDigits(digits);
 								numFormatJava.setMaximumFractionDigits(digits);
+							} catch (IllegalArgumentException e) {
+								// TODO: log warning
+								// The currency code is not this is not an ISO 4217 currency code.
+								// We're going to manually set the currency code and use the glom numeric formatting.
+								useGlomCurrencyCode = true;
+								numFormatJava = getJavaNumberFormat(numFormatGlom);
 							}
-							numFormatJava.setGroupingUsed(numFormatGlom.getM_use_thousands_separator());
+						} else if (currencyCode.length() > 0) {
+							// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
+							// We're going to manually set the currency code and use the glom numeric formatting.
+							useGlomCurrencyCode = true;
+							numFormatJava = getJavaNumberFormat(numFormatGlom);
+						} else {
+							// The length of the currency code is 0; the number is not a currency.
+							numFormatJava = getJavaNumberFormat(numFormatGlom);
 						}
 
 						// TODO: Do I need to do something with NumericFormat.get_default_precision() from libglom?
@@ -336,7 +346,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 								rowArray[i].setFGColour(convertGdkColorToHtmlColour(NumericFormat
 										.get_alternative_color_for_negatives()));
 						}
-						rowArray[i].setText(numFormatJava.format(number));
+
+						// Finally convert the number to text using the glom currency string if required.
+						if (useGlomCurrencyCode) {
+							rowArray[i].setText(currencyCode + " " + numFormatJava.format(number));
+						} else {
+							rowArray[i].setText(numFormatJava.format(number));
+						}
 						break;
 					case TYPE_DATE:
 						Date date = rs.getDate(i + 1);
@@ -385,6 +401,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		}
 		return rowsList;
+	}
+
+	private NumberFormat getJavaNumberFormat(NumericFormat numFormatGlom) {
+		NumberFormat numFormatJava = NumberFormat.getInstance(locale);
+		if (numFormatGlom.getM_decimal_places_restricted()) {
+			int digits = safeLongToInt(numFormatGlom.getM_decimal_places());
+			numFormatJava.setMinimumFractionDigits(digits);
+			numFormatJava.setMaximumFractionDigits(digits);
+		}
+		numFormatJava.setGroupingUsed(numFormatGlom.getM_use_thousands_separator());
+		return numFormatJava;
 	}
 
 	/*
