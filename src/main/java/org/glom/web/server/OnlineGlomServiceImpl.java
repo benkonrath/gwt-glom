@@ -61,7 +61,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private Document document;
 	private ComboPooledDataSource cpds;
 	// TODO implement locale
-	private Locale locale = Locale.ENGLISH;
+	private Locale locale = Locale.ROOT;
 
 	/*
 	 * This is called when the servlet is started or restarted.

@@ -1,5 +1,19 @@
 2011-03-09  Ben Konrath  <ben@bagu.org>
 
+	Change to using a neutral locale for currency, date and time formatting.
+
+	This solves the problem of currency values being represented without a
+	space between the currency code and the number (e.g. "EUR5.89" is now
+	represented as "EUR 5.89"). More work is required when we implement
+	a locale preference setting.
+
+	* TODO: Add note about currency formatting issues with different
+	locales.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Change
+	to using the neutral ROOT locale.
+
+2011-03-09  Ben Konrath  <ben@bagu.org>
+
 	Add support for currency codes that are not ISO 4217 codes.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Use
