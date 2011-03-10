@@ -32,6 +32,13 @@
 			<version>${gwt.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Since the java-libglom jar uses jni it can only be loaded once and 
+			therefore must not be included in each war. Instead the java-libglom jar 
+			must be placed in $CATALINA_HOME/lib. Scope provided ensures that the jar 
+			is available for compiling and testing but will not be packaged in the war. 
+			More information about this deploying servlets that use jni jars can be found 
+			in the "JNI Based Applications" section of the Tomcat 6 release notes:
+			http://tomcat.apache.org/tomcat-6.0-doc/RELEASE-NOTES.txt -->
 		<dependency>
 			<groupId>org.glom.libglom</groupId>
 			<artifactId>java-libglom</artifactId>

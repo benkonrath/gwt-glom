@@ -1,5 +1,12 @@
 2011-03-10  Ben Konrath  <ben@bagu.org>
 
+	Add comment to pom.xml about the previous change.
+
+	* pom.xml: Add comment about the deployment issue so that it's obvious
+	why java-libglom is set to the provided scope.
+
+2011-03-10  Ben Konrath  <ben@bagu.org>
+
 	Change java-libglom dependency from compile to provided in pom.xml.
 
 	Since java-libglom uses jni it can only be loaded once and therefore
