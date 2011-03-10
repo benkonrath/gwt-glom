@@ -1,3 +1,20 @@
+2011-03-10  Ben Konrath  <ben@bagu.org>
+
+	Change java-libglom dependency from compile to provided in pom.xml.
+
+	Since java-libglom uses jni it can only be loaded once and therefore
+	must be placed in $CATALINA_HOME/lib and not included in each war.
+	This directory is defined as /usr/share/tomcat6/lib/ on Ubuntu 10.04.
+	More information about this issue can be found in the Tomcat 6 release
+	notes in the "JNI Based Applications" section:
+
+	http://tomcat.apache.org/tomcat-6.0-doc/RELEASE-NOTES.txt
+
+	* README: Remove note about this issue. Deployment info should really
+	be on the wiki anyway so I'll add it right now.
+	* pom.xml: Change java-libglom dependency from compile to provided so
+	that it's copied in to the packaged war.
+
 2011-03-09  Ben Konrath  <ben@bagu.org>
 
 	Change to using a neutral locale for currency, date and time formatting.
