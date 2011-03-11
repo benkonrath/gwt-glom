@@ -378,11 +378,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						}
 						break;
 					case TYPE_IMAGE:
-						// TODO log warning message
+						// TODO implement this
+						rowArray[i].setText("Image (FIXME)");
 						break;
 					case TYPE_INVALID:
 					default:
 						// TODO log warning message
+						rowArray[i].setText("");
 						break;
 					}
 				}
