@@ -1,3 +1,11 @@
+2011-03-11  Ben Konrath  <ben@bagu.org>
+
+	Correctly set the index of the default table.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Correctly set the index of the default table. Add commented out example
+	file paths.
+
 2011-03-10  Ben Konrath  <ben@bagu.org>
 
 	Add comment to pom.xml about the previous change.

@@ -70,8 +70,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		Glom.libglom_init();
 		document = new Document();
 		// TODO hard-coded for now, need to figure out something for this
-		document.set_file_uri("file:///home/ben/small-business-example.glom");
-		// document.set_file_uri("file:///home/ben/music-collection.glom");
+		//document.set_file_uri("file:///home/ben/small-business-example.glom");
+		//document.set_file_uri("file:///home/ben/music-collection.glom");
+		//document.set_file_uri("file:///home/ben/project-manager-example.glom");
+		//document.set_file_uri("file:///home/ben/openismus-film-manager.glom");
+		document.set_file_uri("file:///home/ben/lesson-planner.glom");
 		int error = 0;
 		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
@@ -131,16 +134,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		ArrayList<String> tableNames = new ArrayList<String>(numTables / 2);
 		ArrayList<String> tableTitles = new ArrayList<String>(numTables / 2);
 		boolean foundDefaultTable = false;
+		int visibleIndex = 0;
 		for (int i = 0; i < numTables; i++) {
 			String tableName = tablesVec.get(i);
 			if (!document.get_table_is_hidden(tableName)) {
 				tableNames.add(tableName);
 				// JNI is "expensive", the comparison will only be called if we haven't already found the default table
 				if (!foundDefaultTable && tableName.equals(document.get_default_table())) {
-					glomDocument.setDefaultTableIndex(i);
+					glomDocument.setDefaultTableIndex(visibleIndex);
 					foundDefaultTable = true;
 				}
 				tableTitles.add(document.get_table_title(tableName));
+				visibleIndex++;
 			}
 		}
 
