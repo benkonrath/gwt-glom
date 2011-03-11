@@ -1,5 +1,13 @@
 2011-03-11  Ben Konrath  <ben@bagu.org>
 
+	Use table fields in layout list view if the layout list is not defined.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Manually create a LayoutFieldVector for the query builder using the
+	table fieldswhen a layout list is not defined in the glom file.
+
+2011-03-11  Ben Konrath  <ben@bagu.org>
+
 	Only show FIXME string for images when there's an image.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also included

@@ -35,6 +35,7 @@ import java.util.Locale;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldFormatting;
+import org.glom.libglom.FieldVector;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroupVector;
@@ -162,22 +163,47 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// access the layout list
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
-		LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
-
-		// find the layout list fields
-		int numItems = safeLongToInt(layoutItemsVec.size());
-		ColumnInfo[] columns = new ColumnInfo[numItems];
+		ColumnInfo[] columns = null;
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
-		for (int i = 0; i < numItems; i++) {
-			// TODO add support for other LayoutItems (Text, Image, Button)
-			LayoutItem item = layoutItemsVec.get(i);
-			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
-			if (field != null) {
-				layoutFields.add(field);
-				FieldFormatting.HorizontalAlignment alignment = field.get_formatting_used_horizontal_alignment();
-				columns[i] = new ColumnInfo(item.get_title_or_name(), getColumnInfoHorizontalAlignment(alignment));
+		if (layoutListVec.size() > 0) {
+			// a layout list is defined, we can use it to for the LayoutListTable
+			// TODO log warning when the layoutListVec.size() > 1 but still use the first list
+			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
+
+			// find the defined layout list fields
+			int numItems = safeLongToInt(layoutItemsVec.size());
+			columns = new ColumnInfo[numItems];
+			for (int i = 0; i < numItems; i++) {
+				// TODO add support for other LayoutItems (Text, Image, Button)
+				LayoutItem item = layoutItemsVec.get(i);
+				LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
+				if (layoutItemField != null) {
+					layoutFields.add(layoutItemField);
+					FieldFormatting.HorizontalAlignment alignment = layoutItemField
+							.get_formatting_used_horizontal_alignment();
+					columns[i] = new ColumnInfo(layoutItemField.get_title_or_name(),
+							getColumnInfoHorizontalAlignment(alignment));
+				}
+			}
+		} else {
+			// no layout list is defined, use the table fields as the layout list
+			FieldVector fieldsVec = document.get_table_fields(tableName);
+
+			// find the fields to display in the layout list
+			int numItems = safeLongToInt(fieldsVec.size());
+			columns = new ColumnInfo[numItems];
+			for (int i = 0; i < numItems; i++) {
+				Field field = fieldsVec.get(i);
+				LayoutItem_Field layoutItemField = new LayoutItem_Field();
+				layoutItemField.set_full_field_details(field);
+				layoutFields.add(layoutItemField);
+				FieldFormatting.HorizontalAlignment alignment = layoutItemField
+						.get_formatting_used_horizontal_alignment();
+				columns[i] = new ColumnInfo(layoutItemField.get_title_or_name(),
+						getColumnInfoHorizontalAlignment(alignment));
 			}
 		}
+
 		tableInfo.setColumns(columns);
 
 		// get the size of the returned query for the pager
@@ -231,25 +257,50 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private ArrayList<GlomField[]> getTableData(String table, int start, int length, boolean useSortClause,
 			int sortColumnIndex, boolean isAscending) {
 
-		// access the layout list
-		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
-		LayoutItemVector layoutItems = layoutList.get(0).get_items();
-
+		// access the layout list using the defined layout list or the table fields if there's no layout list
+		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", table);
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		SortClause sortClause = new SortClause();
-		int numItems = safeLongToInt(layoutItems.size());
-		for (int i = 0; i < numItems; i++) {
-			LayoutItem item = layoutItems.get(i);
-			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
-			if (field != null) {
-				// use this field in the layout
-				layoutFields.add(field);
+		if (layoutListVec.size() > 0) {
+			// a layout list is defined, we can use it to for the LayoutListTable
+			// TODO log warning when the layoutListVec.size() > 1 but still use the first list
+			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
+
+			// find the defined layout list fields
+			int numItems = safeLongToInt(layoutItemsVec.size());
+			for (int i = 0; i < numItems; i++) {
+				// TODO add support for other LayoutItems (Text, Image, Button)
+				LayoutItem item = layoutItemsVec.get(i);
+				LayoutItem_Field layoutItemfield = LayoutItem_Field.cast_dynamic(item);
+				if (layoutItemfield != null) {
+					// use this field in the layout
+					layoutFields.add(layoutItemfield);
+
+					// create a sort clause if it's a primary key and we're not asked to sort a specific column
+					if (!useSortClause) {
+						Field details = layoutItemfield.get_full_field_details();
+						if (details != null && details.get_primary_key()) {
+							sortClause.addLast(new SortFieldPair(layoutItemfield, true)); // ascending
+						}
+					}
+				}
+			}
+		} else {
+			// no layout list is defined, use the table fields as the layout list
+			FieldVector fieldsVec = document.get_table_fields(table);
+
+			// find the fields to display in the layout list
+			int numItems = safeLongToInt(fieldsVec.size());
+			for (int i = 0; i < numItems; i++) {
+				Field field = fieldsVec.get(i);
+				LayoutItem_Field layoutItemField = new LayoutItem_Field();
+				layoutItemField.set_full_field_details(field);
+				layoutFields.add(layoutItemField);
 
 				// create a sort clause if it's a primary key and we're not asked to sort a specific column
 				if (!useSortClause) {
-					Field details = field.get_full_field_details();
-					if (details != null && details.get_primary_key()) {
-						sortClause.addLast(new SortFieldPair(field, true)); // ascending
+					if (field.get_primary_key()) {
+						sortClause.addLast(new SortFieldPair(layoutItemField, true)); // ascending
 					}
 				}
 			}
@@ -257,7 +308,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// create a sort clause for the column we've been asked to sort
 		if (useSortClause) {
-			LayoutItem item = layoutItems.get(sortColumnIndex);
+			LayoutItem item = layoutFields.get(sortColumnIndex);
 			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
 			if (field != null)
 				sortClause.addLast(new SortFieldPair(field, isAscending));
@@ -281,9 +332,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			rs.absolute(start);
 			int rowCount = 0;
 			while (rs.next() && rowCount <= length) {
-				int layoutItemsSize = safeLongToInt(layoutItems.size());
-				GlomField[] rowArray = new GlomField[layoutItemsSize];
-				for (int i = 0; i < layoutItemsSize; i++) {
+				int layoutFieldsSize = safeLongToInt(layoutFields.size());
+				GlomField[] rowArray = new GlomField[layoutFieldsSize];
+				for (int i = 0; i < layoutFieldsSize; i++) {
 					// make a new GlomField to set the text and colours
 					rowArray[i] = new GlomField();
 
@@ -298,8 +349,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						rowArray[i].setBGColour(convertGdkColorToHtmlColour(bgcolour));
 
 					// convert field values are to strings based on the glom type
-					Field.glom_field_type fieldType = field.get_glom_type();
-					switch (fieldType) {
+					switch (field.get_glom_type()) {
 					case TYPE_TEXT:
 						String text = rs.getString(i + 1);
 						rowArray[i].setText(text != null ? text : "");
