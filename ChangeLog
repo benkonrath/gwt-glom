@@ -1,5 +1,15 @@
 2011-03-11  Ben Konrath  <ben@bagu.org>
 
+	Use properites file to configure servlet.
+
+	This allows people to change the glom file path, db username and db
+	password without recompiling the code.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	* src/main/webapp/OnlineGlom.properties:
+
+2011-03-11  Ben Konrath  <ben@bagu.org>
+
 	Use table fields in layout list view if the layout list is not defined.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:

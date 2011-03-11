@@ -20,6 +20,9 @@
 package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -31,6 +34,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Properties;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
@@ -69,19 +73,24 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public OnlineGlomServiceImpl() {
 		Glom.libglom_init();
 		document = new Document();
-		// TODO hard-coded for now, need to figure out something for this
-		// document.set_file_uri("file:///home/ben/small-business-example.glom");
-		// document.set_file_uri("file:///home/ben/music-collection.glom");
-		// document.set_file_uri("file:///home/ben/project-manager-example.glom");
-		// document.set_file_uri("file:///home/ben/openismus-film-manager.glom");
-		document.set_file_uri("file:///home/ben/lesson-planner.glom");
+
+		Properties dbconfig = new Properties();
+		try {
+			dbconfig.load(new FileInputStream("OnlineGlom.properties"));
+		} catch (IOException e1) {
+			// TODO log fatal error
+			e1.printStackTrace();
+		}
+
+		File file = new File(dbconfig.getProperty("glomfile"));
+		document.set_file_uri("file://" + file.getAbsolutePath());
 		int error = 0;
 		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
-		// TODO handle error condition (also below)
+		// TODO handle error condition
 
-		cpds = new ComboPooledDataSource();
 		// load the jdbc driver
+		cpds = new ComboPooledDataSource();
 		try {
 			cpds.setDriverClass("org.postgresql.Driver");
 		} catch (PropertyVetoException e) {
@@ -91,9 +100,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
 				+ document.get_connection_database());
-		// TODO figure out something for db user name and password
-		cpds.setUser("ben");
-		cpds.setPassword("ChangeMe"); // of course it's not the password I'm using on my server
+		cpds.setUser(dbconfig.getProperty("dbusername"));
+		cpds.setPassword(dbconfig.getProperty("dbpassword"));
 	}
 
 	/*
