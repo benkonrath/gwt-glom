@@ -1,5 +1,12 @@
 2011-03-11  Ben Konrath  <ben@bagu.org>
 
+	Only show FIXME string for images when there's an image.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also included
+	in this change are some small code cleanups. 
+
+2011-03-11  Ben Konrath  <ben@bagu.org>
+
 	Set text for fields with TYPE_IMAGE and TYPE_INVALID to avoid NPEs.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:

@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -58,10 +57,10 @@ import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
-	private Document document;
-	private ComboPooledDataSource cpds;
+	private final Document document;
+	private final ComboPooledDataSource cpds;
 	// TODO implement locale
-	private Locale locale = Locale.ROOT;
+	private final Locale locale = Locale.ROOT;
 
 	/*
 	 * This is called when the servlet is started or restarted.
@@ -70,10 +69,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		Glom.libglom_init();
 		document = new Document();
 		// TODO hard-coded for now, need to figure out something for this
-		//document.set_file_uri("file:///home/ben/small-business-example.glom");
-		//document.set_file_uri("file:///home/ben/music-collection.glom");
-		//document.set_file_uri("file:///home/ben/project-manager-example.glom");
-		//document.set_file_uri("file:///home/ben/openismus-film-manager.glom");
+		// document.set_file_uri("file:///home/ben/small-business-example.glom");
+		// document.set_file_uri("file:///home/ben/music-collection.glom");
+		// document.set_file_uri("file:///home/ben/project-manager-example.glom");
+		// document.set_file_uri("file:///home/ben/openismus-film-manager.glom");
 		document.set_file_uri("file:///home/ben/lesson-planner.glom");
 		int error = 0;
 		@SuppressWarnings("unused")
@@ -101,6 +100,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * 
 	 * @see javax.servlet.GenericServlet#destroy()
 	 */
+	@Override
 	public void destroy() {
 		Glom.libglom_deinit();
 		try {
@@ -321,7 +321,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 								Currency currency = Currency.getInstance(currencyCode);
 								// Ignore the glom numeric formatting when a valid ISO 4217 currency code is being used.
 								int digits = currency.getDefaultFractionDigits();
-								numFormatJava = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+								numFormatJava = NumberFormat.getCurrencyInstance(locale);
 								numFormatJava.setCurrency(currency);
 								numFormatJava.setMinimumFractionDigits(digits);
 								numFormatJava.setMaximumFractionDigits(digits);
@@ -378,8 +378,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						}
 						break;
 					case TYPE_IMAGE:
-						// TODO implement this
-						rowArray[i].setText("Image (FIXME)");
+						byte[] image = rs.getBytes(i + 1);
+						if (image != null) {
+							// TODO implement field TYPE_IMAGE
+							rowArray[i].setText("Image (FIXME)");
+						} else {
+							rowArray[i].setText("");
+						}
 						break;
 					case TYPE_INVALID:
 					default:
