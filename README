@@ -1,3 +1,12 @@
 Documentation is on the glom wiki:
 
 http://www.glom.org/wiki/index.php?title=Development/OnlineGlom
+
+We are using the default GWT compilation option of compiling the Java code to
+obfuscated JavaScript. The reason for this is covered by this snippet from the
+GWT developer docs:
+
+“obfuscation reduces the size of the generated JavaScript files, making them
+faster to download and parse”
+
+https://code.google.com/webtoolkit/doc/latest/FAQ_DebuggingAndCompiling.html

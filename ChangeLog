@@ -1,6 +1,12 @@
+2011-03-12  Ben Konrath  <ben@bagu.org>
+
+	Add note to README about why we're compiling down to obfuscated	JavaScript.
+
+	* README:
+
 2011-03-11  Ben Konrath  <ben@bagu.org>
 
-	Use properites file to configure servlet.
+	Use properties file to configure servlet.
 
 	This allows people to change the glom file path, db username and db
 	password without recompiling the code.
@@ -14,7 +20,7 @@
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
 	Manually create a LayoutFieldVector for the query builder using the
-	table fieldswhen a layout list is not defined in the glom file.
+	table fields when a layout list is not defined in the glom file.
 
 2011-03-11  Ben Konrath  <ben@bagu.org>
 
