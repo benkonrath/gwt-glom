@@ -1,3 +1,15 @@
+2011-03-14  Ben Konrath  <ben@bagu.org>
+
+	Locate OnlineGlom.properties using the ServletContext.
+
+	This is required to be able to locate the file in the deployed servlet.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Configure the database and glom document in in a helper method so
+	that the ServletContext can be used to locate OnlineGlom.properties.
+	* src/main/webapp/WEB-INF/OnlineGlom.properties: Moved from
+	src/main/webapp. This is the proper location for .properites files.
+
 2011-03-12  Ben Konrath  <ben@bagu.org>
 
 	Add note to README about why we're compiling down to obfuscated	JavaScript.

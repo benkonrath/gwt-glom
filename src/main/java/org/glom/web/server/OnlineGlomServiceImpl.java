@@ -21,7 +21,6 @@ package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -62,27 +61,37 @@ import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
-	private final Document document;
-	private final ComboPooledDataSource cpds;
+	private Document document = null;
+	private ComboPooledDataSource cpds = null;
 	// TODO implement locale
 	private final Locale locale = Locale.ROOT;
+	private boolean configured = false;
 
 	/*
 	 * This is called when the servlet is started or restarted.
 	 */
 	public OnlineGlomServiceImpl() {
 		Glom.libglom_init();
+	}
+
+	/*
+	 * The properties file can't be loaded in the constructor because the servlet is not yet initialised and
+	 * getServletContext() will return null. The work-around for this problem is to initialise the database and glom
+	 * document object when makes its first request.
+	 */
+	private void configureServlet() {
 		document = new Document();
 
-		Properties dbconfig = new Properties();
+		Properties props = new Properties();
+		String propFileName = "/WEB-INF/OnlineGlom.properties";
 		try {
-			dbconfig.load(new FileInputStream("OnlineGlom.properties"));
-		} catch (IOException e1) {
-			// TODO log fatal error
-			e1.printStackTrace();
+			props.load(getServletContext().getResourceAsStream(propFileName));
+		} catch (IOException e) {
+			// TODO log fatal error, notify user of problem
+			e.printStackTrace();
 		}
 
-		File file = new File(dbconfig.getProperty("glomfile"));
+		File file = new File(props.getProperty("glomfile"));
 		document.set_file_uri("file://" + file.getAbsolutePath());
 		int error = 0;
 		@SuppressWarnings("unused")
@@ -100,8 +109,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
 				+ document.get_connection_database());
-		cpds.setUser(dbconfig.getProperty("dbusername"));
-		cpds.setPassword(dbconfig.getProperty("dbpassword"));
+		cpds.setUser(props.getProperty("dbusername"));
+		cpds.setPassword(props.getProperty("dbpassword"));
+		configured = true;
 	}
 
 	/*
@@ -113,7 +123,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public void destroy() {
 		Glom.libglom_deinit();
 		try {
-			DataSources.destroy(cpds);
+			if (configured)
+				DataSources.destroy(cpds);
 		} catch (SQLException e) {
 			// TODO log error, don't need to notify user because this is a clean up method
 			e.printStackTrace();
@@ -124,7 +135,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * FIXME I think Swig is generating long on 64-bit machines and int on 32-bit machines - need to keep this constant
 	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
 	 */
-	public static int safeLongToInt(long l) {
+	private static int safeLongToInt(long l) {
 		if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
 		}
@@ -132,6 +143,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	public GlomDocument getGlomDocument() {
+		if (!configured)
+			configureServlet();
+
 		GlomDocument glomDocument = new GlomDocument();
 
 		// get arrays of table names and titles, and find the default table index
@@ -167,6 +181,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	public LayoutListTable getLayoutListTable(String tableName) {
+		if (!configured)
+			configureServlet();
+
 		LayoutListTable tableInfo = new LayoutListTable();
 
 		// access the layout list
@@ -264,6 +281,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	private ArrayList<GlomField[]> getTableData(String table, int start, int length, boolean useSortClause,
 			int sortColumnIndex, boolean isAscending) {
+		if (!configured)
+			configureServlet();
 
 		// access the layout list using the defined layout list or the table fields if there's no layout list
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", table);
