@@ -1,3 +1,12 @@
+2011-03-15  Murray Cumming  <murrayc@murrayc.com>
+
+	Added some earlier mockups to git, but not to the tarball dist.
+
+	* mockups/: Added some mockups from 2010-02 by Daniel Borgmann for
+	Openismus. These hopefully show how we might structure the HTML so that
+	it can be styled easily with CSS. However, we probably need to adapt them
+	for the CSS structure that GWT dictates for common widgets.
+
 2011-03-14  Ben Konrath  <ben@bagu.org>
 
 	Locate OnlineGlom.properties using the ServletContext.
@@ -39,7 +48,7 @@
 	Only show FIXME string for images when there's an image.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also included
-	in this change are some small code cleanups. 
+	in this change are some small code cleanups.
 
 2011-03-11  Ben Konrath  <ben@bagu.org>
 
@@ -147,7 +156,7 @@
 
 2011-03-07  Ben Konrath  <ben@bagu.org>
 
-	Add support for horizontal alignment in the LayoutList columns. 
+	Add support for horizontal alignment in the LayoutList columns.
 
 	* TODO: Remove item about horizontal alignment. Add item about
 	improvements to ColumnInfo.
@@ -617,7 +626,7 @@
 	* src/org/glom/web/client/OnlineGlom.java: Add style to the table
 	header, print useful error message on async callback failure.
 	* war/OnlineGlom.css: Add style for table header, remove defaults
-	provided by the Eclipse project wizard. 
+	provided by the Eclipse project wizard.
 
 2010-12-20  Ben Konrath  <ben@bagu.org>
 

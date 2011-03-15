@@ -1,0 +1,140 @@
+body
+{
+	font-family: sans-serif;
+	margin: 1em;
+}
+
+a
+{
+	font-weight: bold;
+	color: #333;
+	text-decoration: none;
+}
+a:hover
+{
+	color: #666;
+	text-decoration: underline;
+}
+
+#headbox, #footbox
+{
+	background-color: #eee;
+	border: 1px solid #aaa;
+	padding: 0.2em;
+	border-radius: 3px;
+}
+
+.backlink
+{
+	float: left;
+	margin: 0.2em 0.5em;
+}
+.records
+{
+	float: left;
+	margin: 0.2em 0.5em;
+	color: #333;
+}
+.details-navigation
+{
+	float: right;
+	margin: 0.2em 0.5em;
+}
+.details-navigation a
+{
+	padding-right: 1em;
+}
+
+.tablechooser
+{
+	float: right;
+}
+
+table
+{
+	border-collapse: collapse;
+}
+td
+{
+	vertical-align: top;
+	padding: 0;
+	padding-right: 2em;
+}
+
+/**
+ * List View
+ */
+table.data-list
+{
+	width: 100%;
+	margin-top: 1em;
+}
+table.data-list th
+{
+	background-color: #ccc;
+	border: 1px solid #000;
+	text-align: left;
+	font-weight: normal;
+	padding: 0.2em;
+	
+}
+table.data-list td
+{
+	background-color: #fff;
+	border: 1px dotted #aaa;
+	padding: 0.2em;
+}
+table.data-list td.details
+{
+	text-align: right;
+}
+
+
+/**
+ * Details View 
+ */
+.group
+{
+	margin: 1em 0;
+	background-color: #eee;
+	padding: 0.8em;
+	border-radius: 7px;
+}
+
+.group-contents
+{
+	padding-left: 0.8em;
+}
+
+.group table.data-list
+{
+	margin-bottom: 0.8em;
+}
+
+table.columns
+{
+	width: 100%;
+}
+
+h2.group-title
+{
+	font-size: 100%;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 0.8em;
+	border-bottom: 1px dashed #000;
+}
+
+group p
+{
+	margin-top: 0;
+	margin-bottom: 0.8em;
+}
+
+.details-data
+{
+	color: #333;
+}
+
+
+
