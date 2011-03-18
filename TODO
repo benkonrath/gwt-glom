@@ -42,3 +42,29 @@ currencies outside of the specified country. This might be a bug in Java which
 should be reported to the openjdk project if required. Regardless if it's a bug
 or not, it should be possible to work around this by using custom formatting
 strings when we implement a preference for setting locale.
+
+
+Servlet:
+
+* Test memory usage before and after we execute the query that would result in
+  a large ResultSet.  We need to ensure that the JDBC driver is in fact
+  returning a cursor based result set that has a low memory footprint. Check
+  the difference between this value before and after the query:
+
+  Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
+
+  See the TODO item about this in
+  src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java.
+
+* Create a memory and time efficient way to get the row count. Right now the
+  ResultSet is not being returned in cursor mode because we're using
+  TYPE_SCROLL_INSENSITIVE to able to seek to the last record of the ResultSet.
+  The PostgreSQL JDBC driver doesn't support moving around in the ResultSet
+  when in cursor mode.  Here's the relevant PostgreSQL documentation:
+
+  http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
+
+  An option might be to do a SELECT COUNT query using a method in libglom or a
+  custom method in java-libglom to build the query.
+
+  See: https://bugzilla.gnome.org/show_bug.cgi?id=645110

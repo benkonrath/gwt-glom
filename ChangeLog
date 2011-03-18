@@ -1,3 +1,16 @@
+2011-03-18  Ben Konrath  <ben@bagu.org>
+
+	Use cursor mode in the query that gets data for the list view.
+
+	I still need to fix the potential memory problem when getting the row
+	count for the list view.
+
+	* TODO: Add note about testing memory usage with large data sets. Add
+	item about fixing row counting with large data sets.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Put the
+	PostgreSQL JDBC driver into cursor mode when getting data for the
+	list view.
+
 2011-03-15  Ben Konrath  <ben@bagu.org>
 
 	Remove the GWT Container from the Eclipse build classpath.
