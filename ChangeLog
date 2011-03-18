@@ -1,5 +1,13 @@
 2011-03-18  Ben Konrath  <ben@bagu.org>
 
+	Remove unneeded GlomFieldColumn class.
+
+	This is just a small code cleanup.
+
+	* src/main/java/org/glom/web/client/LayoutListView.java:
+
+2011-03-18  Ben Konrath  <ben@bagu.org>
+
 	Use cursor mode in the query that gets data for the list view.
 
 	I still need to fix the potential memory problem when getting the row

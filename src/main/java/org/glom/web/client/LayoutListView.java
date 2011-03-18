@@ -48,7 +48,7 @@ public class LayoutListView extends Composite {
 	private class GlomFieldCell extends AbstractCell<GlomField> {
 
 		// The SafeHtml class is used to escape strings to avoid XSS attacks. This is not strictly
-		// neccessary because the values aren't coming from a user but I'm using it anyway as a reminder.
+		// necessary because the values aren't coming from a user but I'm using it anyway as a reminder.
 		@Override
 		public void render(Context context, GlomField value, SafeHtmlBuilder sb) {
 			if (value == null) {
@@ -74,12 +74,6 @@ public class LayoutListView extends Composite {
 			sb.appendHtmlConstant("<div style=\"" + fgcolour.asString() + bgcolour.asString() + "\">");
 			sb.append(SafeHtmlUtils.fromString(value.getText()));
 			sb.appendHtmlConstant("</div>");
-		}
-	}
-
-	private abstract class GlomFieldColumn extends Column<GlomField[], GlomField> {
-		public GlomFieldColumn() {
-			super(new GlomFieldCell());
 		}
 	}
 
@@ -133,7 +127,7 @@ public class LayoutListView extends Composite {
 		for (int i = 0; i < columns.length; i++) {
 			// create a new column
 			final int j = new Integer(i);
-			GlomFieldColumn column = new GlomFieldColumn() {
+			Column<GlomField[], GlomField> column = new Column<GlomField[], GlomField>(new GlomFieldCell()) {
 				@Override
 				public GlomField getValue(GlomField[] object) {
 					return object[j];
@@ -161,12 +155,11 @@ public class LayoutListView extends Composite {
 		// set row count which is needed for paging
 		table.setRowCount(numRows);
 
-		// adds an AsyncHandler to activate sorting for the AsyncDataProvider that was created above
+		// add an AsyncHandler to activate sorting for the AsyncDataProvider that was created above
 		table.addColumnSortHandler(new AsyncHandler(table));
 
 		// take care of the stuff required for composite widgets
 		initWidget(panel);
 		setStyleName("glom-LayoutListView");
 	}
-
 }
