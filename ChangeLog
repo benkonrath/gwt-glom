@@ -1,3 +1,9 @@
+2011-03-19  Ben Konrath  <ben@bagu.org>
+
+	Add TODO item about CellTable pager positioning.
+
+	* TODO:
+
 2011-03-18  Ben Konrath  <ben@bagu.org>
 
 	Remove unneeded GlomFieldColumn class.

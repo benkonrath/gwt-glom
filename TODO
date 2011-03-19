@@ -23,6 +23,24 @@ Improvements to LayoutListView:
 * Use ColumnInfo rpc object to send text background and foreground colours
   instead of sending this information for each cell.
 
+* Position the pager on the right side of the CellTable. Since the CellTable is
+  not a consistent horizontal size, the pager bounces around when switching and
+  doesn't look nice. A possible solution is to put the CellTable into a
+  container widget that adds a horizontal scrollbar if the horizontal table
+  size is larger than the browser window. I needed to work around some
+  alignment bugs so here's some to code that might help when tackling this
+  problem:
+
+  HorizontalPanel hPanel = new HorizontalPanel();
+  // setting the alignment through the object method doesn't work, I need to set the alignment manually ...
+  // hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+  hPanel.getElement().setPropertyString("align", HasHorizontalAlignment.ALIGN_RIGHT.getTextAlignString());
+  System.out.println(hPanel.getElement().getInnerHTML());
+  // I'm setting text location right but the text is actually at the left of the buttons ...
+  SimplePager pager = new SimplePager(SimplePager.TextLocation.RIGHT);
+  hPanel.add(pager);
+  panel.add(hPanel);
+
 
 Improvements to LayoutDetailsView:
 
@@ -31,17 +49,17 @@ Improvements to LayoutDetailsView:
 
 Currency formatting:
 
-The default Java currency formatting uses the currency symbol (€, $, etc) for
-the the currency used in the specified country and the currency code (EUR, USD,
-etc) for currencies used outside of the specified country. For example, when
-using en_CA (English Canada) with CAD (Canadian Dollars), the number 5.89 is
-represented as "$5.89". With EUR, the same number is represented as "EUR5.89"
-which is not what is expected. We should get either "€5.89" or "EUR 5.89".
-Obviously Java is just replacing the currency symbol with the currency code for
-currencies outside of the specified country. This might be a bug in Java which
-should be reported to the openjdk project if required. Regardless if it's a bug
-or not, it should be possible to work around this by using custom formatting
-strings when we implement a preference for setting locale.
+* The default Java currency formatting uses the currency symbol (€, $, etc) for
+  the currency used in the specified country and the currency code (EUR, USD,
+  etc) for currencies used outside of the specified country. For example, when
+  using en_CA (English Canada) with CAD (Canadian Dollars), the number 5.89 is
+  represented as "$5.89". With EUR, the same number is represented as "EUR5.89"
+  which is not what is expected. We should get either "€5.89" or "EUR 5.89".
+  Obviously Java is just replacing the currency symbol with the currency code for
+  currencies outside of the specified country. This might be a bug in Java which
+  should be reported to the openjdk project if required. Regardless if it's a bug
+  or not, it should be possible to work around this by using custom formatting
+  strings when we implement a preference for setting locale.
 
 
 Servlet:
