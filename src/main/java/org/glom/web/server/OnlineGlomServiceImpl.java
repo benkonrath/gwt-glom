@@ -231,35 +231,27 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		tableInfo.setColumns(columns);
 
-		// get the size of the returned query for the pager
-
-		// TODO Create a memory and time efficient way to get the row count. Right now the ResultSet is not being
-		// returned in cursor mode because we're using TYPE_SCROLL_INSENSITIVE to able to seek to the last record of the
-		// ResultSet. The PostgreSQL JDBC driver doesn't support moving around in the ResultSet when in cursor mode.
-		// Here's the relevant PostgreSQL documentation:
-		// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
-		// An option might be to do a SELECT COUNT query using a method in libglom or a custom method in java-libglom to
-		// build the query. If we do this, we wouldn't need to think about the two TODOs below.
-		// See: https://bugzilla.gnome.org/show_bug.cgi?id=645110
-
-		// TODO since we're executing a query anyway, maybe we should return the rows that will be displayed on the
-		// first page
-
-		// TODO this code is really similar to code in getTableData, find a way to not duplicate the code
+		// Get the number of rows a query with the table name and layout fields would return. This is needed for the
+		// list view pager.
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
 		try {
-			// setup and execute the query
+			// Setup and execute the count query. Special care needs to be take to ensure that the results will be based
+			// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
+			// data. Here's the relevant PostgreSQL documentation:
+			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
 			conn = cpds.getConnection();
-			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			String query = Glom.build_sql_select_simple(tableName, layoutFields);
+			conn.setAutoCommit(false);
+			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+			String query = Glom.build_sql_select_count_simple(tableName, layoutFields);
+			// TODO Test execution time of this query with when the number of rows in the table is large (say >
+			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
 			rs = st.executeQuery(query);
 
 			// get the number of rows in the query
-			rs.setFetchDirection(ResultSet.FETCH_FORWARD);
-			rs.last();
-			tableInfo.setNumRows(rs.getRow());
+			rs.next();
+			tableInfo.setNumRows(rs.getInt(1));
 
 		} catch (SQLException e) {
 			// TODO log error
@@ -371,6 +363,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// We need to ensure that the JDBC driver is in fact returning a cursor based result set that has a low
 			// memory footprint. Check the difference between this value before and after the query:
 			// Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
+			// Test the execution time at the same time (see the todo item in getLayoutListTable()).
 			rs = st.executeQuery(query);
 
 			// get the data we've been asked for

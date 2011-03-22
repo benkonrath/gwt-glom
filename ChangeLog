@@ -1,5 +1,11 @@
 2011-03-22  Ben Konrath  <ben@bagu.org>
 
+	Use a count query to get the number of rows for the list view pager.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-03-22  Ben Konrath  <ben@bagu.org>
+
 	Add more TODO information about CellTable pager positioning. 
 
 	* TODO:
