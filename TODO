@@ -27,20 +27,17 @@ Improvements to LayoutListView:
   not a consistent horizontal size, the pager bounces around when switching and
   doesn't look nice. A possible solution is to put the CellTable into a
   container widget that adds a horizontal scrollbar if the horizontal table
-  size is larger than the browser window. I needed to work around some
-  alignment bugs so here's some to code that might help when tackling this
-  problem:
+  size is larger than the browser window. Another possible solution is to
+  expand the right most column to fill all of the available space. That will
+  allow the pager to placed at the right most position of the hbox without
+  bouncing around. More investigation is required. See the layoutlistview-tweaks
+  branch for an implementation of some these ideas.
 
-  HorizontalPanel hPanel = new HorizontalPanel();
-  // setting the alignment through the object method doesn't work, I need to set the alignment manually ...
-  // hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-  hPanel.getElement().setPropertyString("align", HasHorizontalAlignment.ALIGN_RIGHT.getTextAlignString());
-  System.out.println(hPanel.getElement().getInnerHTML());
-  // I'm setting text location right but the text is actually at the left of the buttons ...
-  SimplePager pager = new SimplePager(SimplePager.TextLocation.RIGHT);
-  hPanel.add(pager);
-  panel.add(hPanel);
-
+* When you click on the next button in a table with a large number of rows, the
+  CellTable collapses then re-expands when retrieving the data. You can see an
+  example of this with the Songs table in the Music Collection example. It
+  would be nice if the pager didn't appear to jump around when making the RPC
+  requests to get more data.
 
 Improvements to LayoutDetailsView:
 

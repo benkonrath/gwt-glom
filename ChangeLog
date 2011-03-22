@@ -1,3 +1,9 @@
+2011-03-22  Ben Konrath  <ben@bagu.org>
+
+	Add more TODO information about CellTable pager positioning. 
+
+	* TODO:
+
 2011-03-19  Ben Konrath  <ben@bagu.org>
 
 	Add TODO item about CellTable pager positioning.
