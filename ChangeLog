@@ -1,3 +1,12 @@
+2011-03-22  Ben Konrath  <ben@bagu.org>
+
+	Position the Pager at the bottom right of CellTable.
+
+	This is probably not a good place for it as it bounces around when
+	paging.
+
+	* src/main/java/org/glom/web/client/LayoutListView.java:
+
 2011-03-19  Ben Konrath  <ben@bagu.org>
 
 	Add TODO item about CellTable pager positioning.

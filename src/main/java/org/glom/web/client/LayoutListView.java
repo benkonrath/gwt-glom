@@ -38,6 +38,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -115,13 +116,20 @@ public class LayoutListView extends Composite {
 
 		dataProvider.addDataDisplay(table);
 
-		SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
+		HorizontalPanel hPanel = new HorizontalPanel();
+		// setting the alignment through the object method doesn't work, I need to set the alignment manually ...
+		// hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		hPanel.getElement().setPropertyString("align", HasHorizontalAlignment.ALIGN_RIGHT.getTextAlignString());
+		System.out.println(hPanel.getElement().getInnerHTML());
+		// I'm setting text location right but the text is actually at the left of the buttons ...
+		SimplePager pager = new SimplePager(SimplePager.TextLocation.RIGHT);
 		pager.setDisplay(table);
+		hPanel.add(pager);
 
 		// a panel to hold our widgets
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
-		panel.add(pager);
+		panel.add(hPanel);
 
 		// create instances of GlomFieldColumn to retrieve the GlomField objects
 		for (int i = 0; i < columns.length; i++) {
