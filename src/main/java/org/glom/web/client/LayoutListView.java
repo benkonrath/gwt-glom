@@ -25,6 +25,7 @@ import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomField;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -151,6 +152,31 @@ public class LayoutListView extends Composite {
 			column.setSortable(true);
 			table.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(columns[i].getHeader())));
 		}
+
+		Column<GlomField[], String> detailsColumn = new Column<GlomField[], String>(new ButtonCell() {
+			@Override
+			public void render(com.google.gwt.cell.client.Cell.Context context, SafeHtml data, SafeHtmlBuilder sb) {
+				// TODO Enable the Details button: remove disabled=\"disabled\", add
+				// onclick=\"window.location.href='#targetHistoryToken'\", figure out how to create a history token to
+				// uniquely identify the row.
+				// TODO change to custom css class
+				// We're using a button tag for the link. If this causes a problem we can use an anchor tag with css
+				// styling
+				// to make it look like a button.
+				sb.appendHtmlConstant("<button class=\"gwt-Button\" title=\"Go to the details view for this row\" disabled=\"disabled\" type=\"button\" tabindex=\"-1\" >");
+				if (data != null) {
+					sb.append(data);
+				}
+				sb.appendHtmlConstant("</button>");
+			}
+		}) {
+			@Override
+			public String getValue(GlomField[] object) {
+				return "Details";
+			}
+		};
+
+		table.addColumn(detailsColumn, "");
 
 		// set row count which is needed for paging
 		table.setRowCount(numRows);
