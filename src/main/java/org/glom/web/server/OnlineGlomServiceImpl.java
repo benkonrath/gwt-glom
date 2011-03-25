@@ -35,6 +35,7 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldFormatting;
@@ -55,6 +56,7 @@ import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
@@ -87,30 +89,41 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		try {
 			props.load(getServletContext().getResourceAsStream(propFileName));
 		} catch (IOException e) {
-			// TODO log fatal error, notify user of problem
-			e.printStackTrace();
+			Log.fatal("Error loading " + propFileName, e);
+			// TODO can't continue, notify user of problem
 		}
 
 		File file = new File(props.getProperty("glomfile"));
 		document.set_file_uri("file://" + file.getAbsolutePath());
 		int error = 0;
-		@SuppressWarnings("unused")
 		boolean retval = document.load(error);
-		// TODO handle error condition
+		if (retval == false) {
+			String message;
+			if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
+				message = "Could not find " + file.getAbsolutePath();
+			} else {
+				message = "An unknown error occurred when trying to load " + file.getAbsolutePath();
+			}
+			Log.fatal(message);
+			// TODO can't continue, notify user of problem
+		}
 
 		// load the jdbc driver
 		cpds = new ComboPooledDataSource();
 		try {
 			cpds.setDriverClass("org.postgresql.Driver");
 		} catch (PropertyVetoException e) {
-			// TODO log error, fatal error can't continue, user can be notified when db access doesn't work
-			e.printStackTrace();
+			Log.fatal(
+					"Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?",
+					e);
+			// TODO can't continue, notify user of problem
 		}
 
 		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
 				+ document.get_connection_database());
 		cpds.setUser(props.getProperty("dbusername"));
 		cpds.setPassword(props.getProperty("dbpassword"));
+		// TODO notify user if dbusername or dbpassword are wrong
 		configured = true;
 	}
 
@@ -126,8 +139,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (configured)
 				DataSources.destroy(cpds);
 		} catch (SQLException e) {
-			// TODO log error, don't need to notify user because this is a clean up method
-			e.printStackTrace();
+			Log.error("Error cleaning up the ComboPooledDataSource", e);
 		}
 	}
 
@@ -190,9 +202,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
 		ColumnInfo[] columns = null;
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
-		if (layoutListVec.size() > 0) {
+		int listViewLayoutGroupSize = safeLongToInt(layoutListVec.size());
+		if (listViewLayoutGroupSize > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
-			// TODO log warning when the layoutListVec.size() > 1 but still use the first list
+			if (listViewLayoutGroupSize > 1)
+				Log.warn("The size of the list view layout group for table " + tableName
+						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
 			// find the defined layout list fields
@@ -254,9 +269,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			tableInfo.setNumRows(rs.getInt(1));
 
 		} catch (SQLException e) {
-			// TODO log error
-			// we don't know how many rows are in the query
-			e.printStackTrace();
+			Log.error("Error calculating number of rows in the query. Setting number of rows to 0.", e);
 			tableInfo.setNumRows(0);
 		} finally {
 			// cleanup everything that has been used
@@ -265,8 +278,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				st.close();
 				conn.close();
 			} catch (Exception e) {
-				// TODO log error
-				e.printStackTrace();
+				Log.error("Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 
@@ -291,9 +303,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", table);
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		SortClause sortClause = new SortClause();
+		int listViewLayoutGroupSize = safeLongToInt(layoutListVec.size());
 		if (layoutListVec.size() > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
-			// TODO log warning when the layoutListVec.size() > 1 but still use the first list
+			if (listViewLayoutGroupSize > 1)
+				Log.warn("The size of the list view layout group for table " + table
+						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
 			// find the defined layout list fields
@@ -342,7 +357,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
 			if (field != null)
 				sortClause.addLast(new SortFieldPair(field, isAscending));
-			// TODO: log error in the else condition
+			else {
+				Log.error("Error getting LayoutItem_Field for column index " + sortColumnIndex
+						+ ". Cannot create a sort clause for this column.");
+			}
+
 		}
 
 		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
@@ -406,20 +425,23 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							// Try to format the currency using the Java Locales system.
 							try {
 								Currency currency = Currency.getInstance(currencyCode);
-								// Ignore the glom numeric formatting when a valid ISO 4217 currency code is being used.
+								Log.info("A valid ISO 4217 currency code is being used. Overriding the numeric formatting with information from the locale.");
 								int digits = currency.getDefaultFractionDigits();
 								numFormatJava = NumberFormat.getCurrencyInstance(locale);
 								numFormatJava.setCurrency(currency);
 								numFormatJava.setMinimumFractionDigits(digits);
 								numFormatJava.setMaximumFractionDigits(digits);
 							} catch (IllegalArgumentException e) {
-								// TODO: log warning
+								Log.warn(currencyCode
+										+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
 								// The currency code is not this is not an ISO 4217 currency code.
 								// We're going to manually set the currency code and use the glom numeric formatting.
 								useGlomCurrencyCode = true;
 								numFormatJava = getJavaNumberFormat(numFormatGlom);
 							}
 						} else if (currencyCode.length() > 0) {
+							Log.warn(currencyCode
+									+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
 							// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
 							// We're going to manually set the currency code and use the glom numeric formatting.
 							useGlomCurrencyCode = true;
@@ -475,7 +497,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						break;
 					case TYPE_INVALID:
 					default:
-						// TODO log warning message
+						Log.warn("Invalid LayoutItem Field type. Using empty string for value.");
 						rowArray[i].setText("");
 						break;
 					}
@@ -486,8 +508,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				rowCount++;
 			}
 		} catch (SQLException e) {
-			// TODO: log error, notify user of problem
-			e.printStackTrace();
+			Log.error("Error executing database query.", e);
+			// TODO: somehow notify user of problem
 		} finally {
 			// cleanup everything that has been used
 			try {
@@ -495,8 +517,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				st.close();
 				conn.close();
 			} catch (Exception e) {
-				// TODO log error
-				e.printStackTrace();
+				Log.error("Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 		return rowsList;
@@ -520,12 +541,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private String convertGdkColorToHtmlColour(String gdkColor) {
 		if (gdkColor.length() == 13)
 			return gdkColor.substring(0, 2) + gdkColor.substring(5, 6) + gdkColor.substring(9, 10);
-		else if (gdkColor.length() == 7)
-			// TODO: log warning because we're expecting a 13 character string
+		else if (gdkColor.length() == 7) {
+			// FIXME will this happen in on 32-bit?
+			Log.warn("convertGdkColorToHtmlColour(): Expected a 13 character string but received a 7 character string. Returning received string.");
 			return gdkColor;
-		else
-			// TODO: log error
-			return "";
+		} else {
+			Log.error("convertGdkColorToHtmlColour(): Did not receive a 13 or 7 character string. Returning black HTML colour code.");
+			return "#000000";
+		}
 	}
 
 	/*
@@ -540,8 +563,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		ColumnInfo.HorizontalAlignment[] columnInfoValues = ColumnInfo.HorizontalAlignment.class.getEnumConstants();
 		if (value < columnInfoValues.length && value >= 0)
 			return columnInfoValues[value];
-		// TODO: log error: value out of range, returning HORIZONTAL_ALIGNMENT_RIGHT
+		Log.error("getColumnInfoHorizontalAlignment(): Mismatch between "
+				+ FieldFormatting.HorizontalAlignment.class.getName() + " and "
+				+ ColumnInfo.HorizontalAlignment.class.getName() + ". Returning HORIZONTAL_ALIGNMENT_RIGHT.");
 		return columnInfoValues[FieldFormatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.swigValue()];
 	}
-
 }

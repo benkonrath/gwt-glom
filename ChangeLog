@@ -1,3 +1,14 @@
+2011-03-25  Ben Konrath  <ben@bagu.org>
+
+	Add server side logging with the gwt-log library.
+
+	* .gitignore: Ignore the log file we're now producing.
+	* TODO: Add a couple TODO item for logging.
+	* pom.xml: Add gwt-log and log4j as a dependency.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Add
+	logging of errors, warnings and some important info.
+	* src/main/resources/log4j.properties: New file to configure log4j.
+
 2011-03-24  Ben Konrath  <ben@bagu.org>
 
 	Add a disable button for the Details view.

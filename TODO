@@ -83,3 +83,12 @@ Servlet:
   custom method in java-libglom to build the query.
 
   See: https://bugzilla.gnome.org/show_bug.cgi?id=645110
+
+
+Logging:
+
+* Add the ability to log client side GWT code to the server log. This can be configured with gwt-log.
+
+* Log the libglom error messages. This page describes how to add this:
+
+http://sysgears.com/articles/how-to-redirect-stdout-and-stderr-writing-to-a-log4j-appender
