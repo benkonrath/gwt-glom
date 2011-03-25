@@ -471,7 +471,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						Date date = rs.getDate(i + 1);
 						if (date != null) {
 							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-							rowArray[i].setText(dateFormat.format(rs.getDate(i + 1)));
+							rowArray[i].setText(dateFormat.format(date));
 						} else {
 							rowArray[i].setText("");
 						}

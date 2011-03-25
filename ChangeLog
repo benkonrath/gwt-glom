@@ -1,5 +1,11 @@
 2011-03-25  Ben Konrath  <ben@bagu.org>
 
+	Don't get the Date twice from the ResultSet.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-03-25  Ben Konrath  <ben@bagu.org>
+
 	Cleanup code in the servlet.
 
 	* TODO: Remove item about row count. Add item about testing row count
