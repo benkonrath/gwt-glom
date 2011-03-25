@@ -68,22 +68,11 @@ Servlet:
 
   Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
 
-  See the TODO item about this in
+* Test execution time of row count query with a large row count (> 1,000,000
+  rows).
+
+* See the TODO items about these two items in
   src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java.
-
-* Create a memory and time efficient way to get the row count. Right now the
-  ResultSet is not being returned in cursor mode because we're using
-  TYPE_SCROLL_INSENSITIVE to able to seek to the last record of the ResultSet.
-  The PostgreSQL JDBC driver doesn't support moving around in the ResultSet
-  when in cursor mode.  Here's the relevant PostgreSQL documentation:
-
-  http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
-
-  An option might be to do a SELECT COUNT query using a method in libglom or a
-  custom method in java-libglom to build the query.
-
-  See: https://bugzilla.gnome.org/show_bug.cgi?id=645110
-
 
 Logging:
 

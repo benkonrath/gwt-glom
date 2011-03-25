@@ -113,8 +113,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		try {
 			cpds.setDriverClass("org.postgresql.Driver");
 		} catch (PropertyVetoException e) {
-			Log.fatal(
-					"Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?",
+			Log.fatal("Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?",
 					e);
 			// TODO can't continue, notify user of problem
 		}
@@ -192,21 +191,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return glomDocument;
 	}
 
-	public LayoutListTable getLayoutListTable(String tableName) {
+	public LayoutListTable getLayoutListTable(String table) {
 		if (!configured)
 			configureServlet();
 
 		LayoutListTable tableInfo = new LayoutListTable();
 
 		// access the layout list
-		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
+		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", table);
 		ColumnInfo[] columns = null;
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		int listViewLayoutGroupSize = safeLongToInt(layoutListVec.size());
 		if (listViewLayoutGroupSize > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn("The size of the list view layout group for table " + tableName
+				Log.warn("The size of the list view layout group for table " + table
 						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
@@ -227,7 +226,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		} else {
 			// no layout list is defined, use the table fields as the layout list
-			FieldVector fieldsVec = document.get_table_fields(tableName);
+			FieldVector fieldsVec = document.get_table_fields(table);
 
 			// find the fields to display in the layout list
 			int numItems = safeLongToInt(fieldsVec.size());
@@ -259,7 +258,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			conn = cpds.getConnection();
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			String query = Glom.build_sql_select_count_simple(tableName, layoutFields);
+			String query = Glom.build_sql_select_count_simple(table, layoutFields);
 			// TODO Test execution time of this query with when the number of rows in the table is large (say >
 			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
 			rs = st.executeQuery(query);
@@ -535,7 +534,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	/*
-	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by disgarding the least
+	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by discarding the least
 	 * significant 8-bits in each channel.
 	 */
 	private String convertGdkColorToHtmlColour(String gdkColor) {
@@ -554,7 +553,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * This method converts a FieldFormatting.HorizontalAlignment to the equivalent ColumnInfo.HorizontalAlignment. The
 	 * need for this comes from the fact that the GWT HorizontalAlignment classes can't be used with RPC and there's no
-	 * easy way to use the java-libglom FieldFormatting.HorizontalAlignment enum with RPC. An enum indentical to
+	 * easy way to use the java-libglom FieldFormatting.HorizontalAlignment enum with RPC. An enum identical to
 	 * FieldFormatting.HorizontalAlignment is included in the ColumnInfo class.
 	 */
 	private ColumnInfo.HorizontalAlignment getColumnInfoHorizontalAlignment(

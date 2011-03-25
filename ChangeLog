@@ -1,5 +1,15 @@
 2011-03-25  Ben Konrath  <ben@bagu.org>
 
+	Cleanup code in the servlet.
+
+	* TODO: Remove item about row count. Add item about testing row count
+	query with large number of rows.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Fix
+	spelling mistakes, change method parameter to be consistent with
+	other methods.
+
+2011-03-25  Ben Konrath  <ben@bagu.org>
+
 	Add server side logging with the gwt-log library.
 
 	* .gitignore: Ignore the log file we're now producing.
