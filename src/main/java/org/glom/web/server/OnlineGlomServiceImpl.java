@@ -558,15 +558,19 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	private ColumnInfo.HorizontalAlignment getColumnInfoHorizontalAlignment(
 			FieldFormatting.HorizontalAlignment alignment) {
-		int value = alignment.swigValue();
-		ColumnInfo.HorizontalAlignment[] columnInfoValues = ColumnInfo.HorizontalAlignment.class.getEnumConstants();
-		if (value < columnInfoValues.length && value >= 0)
-			return columnInfoValues[value];
-		Log.error("getColumnInfoHorizontalAlignment(): Mismatch between "
-				+ FieldFormatting.HorizontalAlignment.class.getName() + " and "
-				+ ColumnInfo.HorizontalAlignment.class.getName() + ". Returning HORIZONTAL_ALIGNMENT_RIGHT.");
-		return columnInfoValues[FieldFormatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.swigValue()];
-
+		switch (alignment) {
+		case HORIZONTAL_ALIGNMENT_AUTO:
+			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
+		case HORIZONTAL_ALIGNMENT_LEFT:
+			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
+		case HORIZONTAL_ALIGNMENT_RIGHT:
+			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
+		default:
+			Log.error("getColumnInfoGlomFieldType(): Recieved an alignment that I don't know about: "
+					+ FieldFormatting.HorizontalAlignment.class.getName() + "." + alignment.toString() + ". Returning "
+					+ ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.toString() + ".");
+			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
+		}
 	}
 
 	/*
