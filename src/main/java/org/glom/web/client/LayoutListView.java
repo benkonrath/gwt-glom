@@ -26,6 +26,12 @@ import org.glom.web.shared.GlomField;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -46,7 +52,7 @@ import com.google.gwt.view.client.Range;
 
 public class LayoutListView extends Composite {
 
-	private class GlomFieldCell extends AbstractCell<GlomField> {
+	private class GlomTextCell extends AbstractCell<GlomField> {
 
 		// The SafeHtml class is used to escape strings to avoid XSS attacks. This is not strictly
 		// necessary because the values aren't coming from a user but I'm using it anyway as a reminder.
@@ -127,35 +133,76 @@ public class LayoutListView extends Composite {
 		// create instances of GlomFieldColumn to retrieve the GlomField objects
 		for (int i = 0; i < columns.length; i++) {
 			// create a new column
+			Column<GlomField[], ?> column = null;
 			final int j = new Integer(i);
-			Column<GlomField[], GlomField> column = new Column<GlomField[], GlomField>(new GlomFieldCell()) {
-				@Override
-				public GlomField getValue(GlomField[] object) {
-					return object[j];
-				}
-			};
 
-			// set column properties and add to cell table
-			switch (columns[i].getAlignment()) {
-			case HORIZONTAL_ALIGNMENT_LEFT:
-				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+			switch (columns[i].getType()) {
+			case TYPE_BOOLEAN:
+				// The onBrowserEvent method is overridden to ensure the user can't toggle the checkbox. We'll probably
+				// be able to use a CheckboxCell directly when we add support for editing.
+				column = new Column<GlomField[], Boolean>(new CheckboxCell(false, false) {
+					@Override
+					public void onBrowserEvent(Context context, Element parent, Boolean value, NativeEvent event,
+							ValueUpdater<Boolean> valueUpdater) {
+						String type = event.getType();
+
+						boolean enterPressed = "keydown".equals(type) && event.getKeyCode() == KeyCodes.KEY_ENTER;
+						if ("change".equals(type) || enterPressed) {
+							InputElement input = parent.getFirstChild().cast();
+							input.setChecked(!input.isChecked());
+						}
+					}
+				}) {
+					@Override
+					public Boolean getValue(GlomField[] object) {
+						return object[j].getBoolean();
+					}
+				};
+				// Make checkboxes centred in the column.
+				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				break;
-			case HORIZONTAL_ALIGNMENT_RIGHT:
-				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-				break;
-			case HORIZONTAL_ALIGNMENT_AUTO:
 			default:
-				// TODO: log warning, this shouldn't happen
-				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
+				// use a text rendering cell for types we don't know about but log an error
+				// TODO log error here
+			case TYPE_DATE:
+			case TYPE_IMAGE:
+			case TYPE_INVALID:
+			case TYPE_NUMERIC:
+			case TYPE_TIME:
+			case TYPE_TEXT:
+				// All of these types are formatted as text in the servlet.
+				column = new Column<GlomField[], GlomField>(new GlomTextCell()) {
+					@Override
+					public GlomField getValue(GlomField[] object) {
+						return object[j];
+					}
+				};
+
+				// Set the alignment of the text.
+				switch (columns[i].getAlignment()) {
+				case HORIZONTAL_ALIGNMENT_LEFT:
+					column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+					break;
+				case HORIZONTAL_ALIGNMENT_RIGHT:
+					column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+					break;
+				case HORIZONTAL_ALIGNMENT_AUTO:
+				default:
+					// TODO: log warning, this shouldn't happen
+					column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
+					break;
+				}
 				break;
 			}
+
+			// set column properties and add to cell table
 			column.setSortable(true);
 			table.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(columns[i].getHeader())));
 		}
 
 		Column<GlomField[], String> detailsColumn = new Column<GlomField[], String>(new ButtonCell() {
 			@Override
-			public void render(com.google.gwt.cell.client.Cell.Context context, SafeHtml data, SafeHtmlBuilder sb) {
+			public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
 				// TODO Enable the Details button: remove disabled=\"disabled\", add
 				// onclick=\"window.location.href='#targetHistoryToken'\", figure out how to create a history token to
 				// uniquely identify the row.
@@ -188,4 +235,5 @@ public class LayoutListView extends Composite {
 		initWidget(panel);
 		setStyleName("glom-LayoutListView");
 	}
+
 }

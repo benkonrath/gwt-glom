@@ -218,10 +218,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
 				if (layoutItemField != null) {
 					layoutFields.add(layoutItemField);
-					FieldFormatting.HorizontalAlignment alignment = layoutItemField
-							.get_formatting_used_horizontal_alignment();
-					columns[i] = new ColumnInfo(layoutItemField.get_title_or_name(),
-							getColumnInfoHorizontalAlignment(alignment));
+					columns[i] = new ColumnInfo(
+							layoutItemField.get_title_or_name(),
+							getColumnInfoHorizontalAlignment(layoutItemField.get_formatting_used_horizontal_alignment()),
+							getColumnInfoGlomFieldType(layoutItemField.get_glom_type()));
 				}
 			}
 		} else {
@@ -236,10 +236,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				LayoutItem_Field layoutItemField = new LayoutItem_Field();
 				layoutItemField.set_full_field_details(field);
 				layoutFields.add(layoutItemField);
-				FieldFormatting.HorizontalAlignment alignment = layoutItemField
-						.get_formatting_used_horizontal_alignment();
 				columns[i] = new ColumnInfo(layoutItemField.get_title_or_name(),
-						getColumnInfoHorizontalAlignment(alignment));
+						getColumnInfoHorizontalAlignment(layoutItemField.get_formatting_used_horizontal_alignment()),
+						getColumnInfoGlomFieldType(layoutItemField.get_glom_type()));
 			}
 		}
 
@@ -403,14 +402,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					if (!bgcolour.isEmpty())
 						rowArray[i].setBGColour(convertGdkColorToHtmlColour(bgcolour));
 
-					// convert field values are to strings based on the glom type
+					// Convert the field value to a string based on the glom type. We're doing the formatting on the
+					// server side for now but it might be useful to move this to the client side.
 					switch (field.get_glom_type()) {
 					case TYPE_TEXT:
 						String text = rs.getString(i + 1);
 						rowArray[i].setText(text != null ? text : "");
 						break;
 					case TYPE_BOOLEAN:
-						rowArray[i].setText(rs.getBoolean(i + 1) ? "TRUE" : "FALSE");
+						rowArray[i].setBoolean(rs.getBoolean(i + 1));
 						break;
 					case TYPE_NUMERIC:
 						// Take care of the numeric formatting before converting the number to a string.
@@ -566,5 +566,37 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				+ FieldFormatting.HorizontalAlignment.class.getName() + " and "
 				+ ColumnInfo.HorizontalAlignment.class.getName() + ". Returning HORIZONTAL_ALIGNMENT_RIGHT.");
 		return columnInfoValues[FieldFormatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.swigValue()];
+
+	}
+
+	/*
+	 * This method converts a Field.glom_field_type to the equivalent ColumnInfo.FieldType. The need for this comes from
+	 * the fact that the GWT FieldType classes can't be used with RPC and there's no easy way to use the java-libglom
+	 * Field.glom_field_type enum with RPC. An enum identical to FieldFormatting.glom_field_type is included in the
+	 * ColumnInfo class.
+	 */
+	private ColumnInfo.GlomFieldType getColumnInfoGlomFieldType(Field.glom_field_type type) {
+		switch (type) {
+		case TYPE_BOOLEAN:
+			return ColumnInfo.GlomFieldType.TYPE_BOOLEAN;
+		case TYPE_DATE:
+			return ColumnInfo.GlomFieldType.TYPE_DATE;
+		case TYPE_IMAGE:
+			return ColumnInfo.GlomFieldType.TYPE_IMAGE;
+		case TYPE_NUMERIC:
+			return ColumnInfo.GlomFieldType.TYPE_NUMERIC;
+		case TYPE_TEXT:
+			return ColumnInfo.GlomFieldType.TYPE_TEXT;
+		case TYPE_TIME:
+			return ColumnInfo.GlomFieldType.TYPE_TIME;
+		case TYPE_INVALID:
+			Log.info("getColumnInfoGlomFieldType(): Returning TYPE_INVALID.");
+			return ColumnInfo.GlomFieldType.TYPE_INVALID;
+		default:
+			Log.error("getColumnInfoGlomFieldType(): Recieved a type that I don't know about: "
+					+ Field.glom_field_type.class.getName() + "." + type.toString() + ". Returning "
+					+ ColumnInfo.GlomFieldType.TYPE_INVALID.toString() + ".");
+			return ColumnInfo.GlomFieldType.TYPE_INVALID;
+		}
 	}
 }

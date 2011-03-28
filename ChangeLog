@@ -1,3 +1,19 @@
+2011-03-28  Ben Konrath  <ben@bagu.org>
+
+	Use read-only checkboxes for boolean field types.
+
+	* src/main/java/org/glom/web/client/LayoutListView.java: Create columns
+	in the CellTable based on the field type. It currently only
+	distinguishes between boolean and text columns but I'll need to	add
+	support for more types.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Set the
+	column type in the ColumnInfo object. Add method to convert between the
+	glom field type enum in ColumnInfo and the glom field type in libglom.
+	* src/main/java/org/glom/web/shared/ColumnInfo.java: Add support for
+	field type.
+	* src/main/java/org/glom/web/shared/GlomField.java: Add support for
+	getting and setting booleans.
+
 2011-03-25  Ben Konrath  <ben@bagu.org>
 
 	Don't get the Date twice from the ResultSet.
