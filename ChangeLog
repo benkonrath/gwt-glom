@@ -1,3 +1,9 @@
+2011-03-30  Ben Konrath  <ben@bagu.org>
+
+	Propperly convert gdkColor string to html colour string.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
 2011-03-28  Ben Konrath  <ben@bagu.org>
 
 	Change implementation of OnlineGlomServiceImpl.getColumnInfoHorizontalAlignment().

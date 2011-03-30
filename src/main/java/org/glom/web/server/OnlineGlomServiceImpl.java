@@ -539,7 +539,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	private String convertGdkColorToHtmlColour(String gdkColor) {
 		if (gdkColor.length() == 13)
-			return gdkColor.substring(0, 2) + gdkColor.substring(5, 6) + gdkColor.substring(9, 10);
+			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
 		else if (gdkColor.length() == 7) {
 			// FIXME will this happen in on 32-bit?
 			Log.warn("convertGdkColorToHtmlColour(): Expected a 13 character string but received a 7 character string. Returning received string.");
