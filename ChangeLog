@@ -1,3 +1,9 @@
+2011-04-01  Ben Konrath  <ben@bagu.org>
+
+	Fix formatting of gwt.xml and add DTD.
+
+	* src/main/resources/org/glom/web/OnlineGlom.gwt.xml:
+
 2011-03-30  Ben Konrath  <ben@bagu.org>
 
 	Propperly convert gdkColor string to html colour string.
