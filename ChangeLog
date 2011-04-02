@@ -1,3 +1,17 @@
+2011-04-02  Ben Konrath  <ben@bagu.org>
+
+	Move UI code from the main module to its own class.
+
+	This is the first commit of a refactor that will allow OnlineGlom to be
+	used with multiple documents.
+
+	* src/main/java/org/glom/web/client/LayoutListView.java: Update
+	references to OnlineGlom to OnlineGlomView.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Move code to
+	OnlineGlomView and instantiate it here.
+	* src/main/java/org/glom/web/client/OnlineGlomView.java: New class that
+	represents the main OnlineGlomView with one document.
+
 2011-04-01  Ben Konrath  <ben@bagu.org>
 
 	Fix formatting of gwt.xml and add DTD.

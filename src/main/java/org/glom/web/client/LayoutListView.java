@@ -110,11 +110,11 @@ public class LayoutListView extends Composite {
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					ColumnSortInfo info = colSortList.get(0);
-					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(OnlineGlom.getCurrentTableName(),
+					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(OnlineGlomView.getCurrentTableName(),
 							start, range.getLength(), table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()),
 							info.isAscending(), callback);
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getTableData(OnlineGlom.getCurrentTableName(), start,
+					OnlineGlomServiceAsync.Util.getInstance().getTableData(OnlineGlomView.getCurrentTableName(), start,
 							range.getLength(), callback);
 				}
 			}
