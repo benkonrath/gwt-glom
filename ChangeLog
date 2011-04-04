@@ -1,3 +1,14 @@
+2011-04-04  Ben Konrath  <ben@bagu.org>
+
+	Move View classes to their own package.
+
+	This is the second commit of a refactor that will allow OnlineGlom to
+	be used with multiple documents.
+
+	* src/main/java/org/glom/web/client/OnlineGlom.java:
+	* src/main/java/org/glom/web/client/ui/LayoutListView.java:
+	* src/main/java/org/glom/web/client/ui/OnlineGlomView.java:
+
 2011-04-02  Ben Konrath  <ben@bagu.org>
 
 	Move UI code from the main module to its own class.

@@ -17,10 +17,11 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client;
+package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomField;
 

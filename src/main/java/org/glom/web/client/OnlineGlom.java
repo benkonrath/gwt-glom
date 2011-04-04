@@ -19,6 +19,8 @@
 
 package org.glom.web.client;
 
+import org.glom.web.client.ui.OnlineGlomView;
+
 import com.google.gwt.core.client.EntryPoint;
 
 /**
