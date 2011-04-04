@@ -17,17 +17,25 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.client;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import org.glom.web.client.ui.OnlineGlomView;
 
-public interface OnlineGlomView extends IsWidget {
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.gwt.place.shared.PlaceHistoryMapper;
 
-	void setPresenter(Presenter presenter);
+public interface ClientFactory {
 
-	public interface Presenter {
-		void goTo(Place place);
-	}
+	EventBus getEventBus();
+
+	PlaceController getPlaceController();
+
+	OnlineGlomView getOnlineGlomView();
+
+	PlaceHistoryHandler getHistoryHandler();
+
+	PlaceHistoryMapper getHistoryMapper();
 
 }

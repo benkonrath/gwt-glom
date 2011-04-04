@@ -17,17 +17,38 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.client.place;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.place.shared.PlaceTokenizer;
 
-public interface OnlineGlomView extends IsWidget {
+public class OnlineGlomPlace extends Place {
 
-	void setPresenter(Presenter presenter);
+	private final String documentName;
 
-	public interface Presenter {
-		void goTo(Place place);
+	public OnlineGlomPlace(String token) {
+		this.documentName = token;
+	}
+
+	public OnlineGlomPlace() {
+		this.documentName = "";
+	}
+
+	public String getDocumentName() {
+		return documentName;
+	}
+
+	public static class Tokenizer implements PlaceTokenizer<OnlineGlomPlace> {
+
+		@Override
+		public String getToken(OnlineGlomPlace place) {
+			return place.getDocumentName();
+		}
+
+		@Override
+		public OnlineGlomPlace getPlace(String token) {
+			return new OnlineGlomPlace(token);
+		}
 	}
 
 }

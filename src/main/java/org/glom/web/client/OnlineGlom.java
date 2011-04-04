@@ -19,20 +19,50 @@
 
 package org.glom.web.client;
 
-import org.glom.web.client.ui.OnlineGlomView;
+import org.glom.web.client.mvp.AppActivityMapper;
+import org.glom.web.client.place.OnlineGlomPlace;
 
+import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class OnlineGlom implements EntryPoint {
 
-	private OnlineGlomView onlineGlomView;
+	private final Place defaultPlace = new OnlineGlomPlace();
+	// an empty div tag that is the container widget for the ActivityManager
+	private final SimplePanel panel = new SimplePanel();
 
 	@Override
 	public void onModuleLoad() {
-		onlineGlomView = new OnlineGlomView();
+		ClientFactoryImpl clientFactory = GWT.create(ClientFactory.class);
+		EventBus eventBus = clientFactory.getEventBus();
+		PlaceController placeController = clientFactory.getPlaceController();
+
+		// Start ActivityManager for the main widget with our ActivityMapper
+		ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
+		ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+		activityManager.setDisplay(panel);
+
+		PlaceHistoryHandler historyHandler = clientFactory.getHistoryHandler();
+		historyHandler.register(placeController, eventBus, defaultPlace);
+
+		// FIXME don't need (delete)
+		// String bork = clientFactory.getHistoryMapper().getToken(defaultPlace);
+
+		RootPanel.get().add(panel);
+		// Goes to the place represented on URL else default place
+		historyHandler.handleCurrentHistory();
+
 	}
 
 }

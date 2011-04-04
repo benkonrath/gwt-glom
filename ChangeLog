@@ -1,5 +1,41 @@
 2011-04-04  Ben Konrath  <ben@bagu.org>
 
+	Start moving the existing OnlineGlom code to MVP.
+
+	This work is based on the GWT MVP framework that is documented here:
+
+	https://code.google.com/webtoolkit/doc/2.2/DevGuideMvpActivitiesAndPlaces.html
+
+	This is the third commit of a refactor that will allow OnlineGlom to
+	be used with multiple documents.
+
+	* src/main/java/org/glom/web/client/ClientFactory.java: New file.
+	Interface for client factory which is used to get instances of various
+	classes throughout the app.
+	* src/main/java/org/glom/web/client/ClientFactoryImpl.java: New file.
+	Implementation of client factory.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Add code to
+	initialize the MVP framework.
+	* src/main/java/org/glom/web/client/activity/OnlineGlomActivity.java:
+	New file. Activity manager for the main container widget. This is the
+	Presenter in MVP.
+	* src/main/java/org/glom/web/client/mvp/AppActivityMapper.java: New file.
+	Maps place (URL) to its corresponding activity.
+	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+	New file. This is just a place holder for a generated file.
+	* src/main/java/org/glom/web/client/place/OnlineGlomPlace.java:
+	New file. Represents the URL for the main Online Glom app.
+	* src/main/java/org/glom/web/client/ui/LayoutListView.java: Update
+	for changes in LayoutListViewImpl.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomView.java: Create
+	interface for View. Move code to OnlineGlomViewImpl class.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomViewImpl.java: New
+	file. Implementation of OnlineGlomView.
+	* src/main/resources/org/glom/web/OnlineGlom.gwt.xml: Add Activity and
+	Place resources. Use ClientFactoryImpl by default.
+
+2011-04-04  Ben Konrath  <ben@bagu.org>
+
 	Move View classes to their own package.
 
 	This is the second commit of a refactor that will allow OnlineGlom to
