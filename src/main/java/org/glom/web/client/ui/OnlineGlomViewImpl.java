@@ -21,91 +21,37 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
-import org.glom.web.client.OnlineGlomServiceAsync;
-import org.glom.web.shared.GlomDocument;
-import org.glom.web.shared.LayoutListTable;
-
-import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 
 	private final VerticalPanel mainVPanel = new VerticalPanel();
-	private static final ListBox listBox = new ListBox();
+	// FIXME remove static
+	private final static ListBox listBox = new ListBox();
 	private final HorizontalPanel hPanel = new HorizontalPanel();
-	private LayoutListView table = new LayoutListView();
-	private String documentName = "";
+	// FIXME make reusable and add a LayoutListActivity
+	// this will get rid of the static listBox and static method below
+	private final LayoutListView listTable = new LayoutListView();
+	private final SimplePanel dataPanel = new SimplePanel();
 	private Presenter presenter;
 
 	public OnlineGlomViewImpl() {
-		listBox.addChangeHandler(new ChangeHandler() {
-			public void onChange(ChangeEvent event) {
-				updateTable();
-			}
-		});
-
 		hPanel.add(new Label("Table:"));
 		hPanel.add(listBox);
 		mainVPanel.add(hPanel);
-		mainVPanel.add(table);
-
-		// set up the callback object.
-		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
-			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
-			}
-
-			public void onSuccess(GlomDocument result) {
-				listBox.clear();
-				ArrayList<String> tableNames = result.getTableNames();
-				ArrayList<String> tableTitles = result.getTableTitles();
-				for (int i = 0; i < tableNames.size(); i++) {
-					listBox.addItem(tableTitles.get(i), tableNames.get(i));
-				}
-				listBox.setSelectedIndex(result.getDefaultTableIndex());
-				documentName = result.getTitle();
-				updateTable();
-			}
-		};
-
-		// make the call to get the filled in GlomDocument
-		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(callback);
-
+		dataPanel.add(listTable);
+		mainVPanel.add(dataPanel);
 		initWidget(mainVPanel);
 	}
 
-	private void updateTable() {
-
-		// set up the callback object.
-		AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
-			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
-			}
-
-			public void onSuccess(LayoutListTable result) {
-				if (table != null)
-					mainVPanel.remove(table);
-				table = new LayoutListView(result.getColumns(), result.getNumRows());
-				mainVPanel.add(table);
-				Window.setTitle("OnlineGlom - " + documentName + ": " + listBox.getItemText(listBox.getSelectedIndex()));
-			}
-		};
-
-		String selectedTable = listBox.getValue(listBox.getSelectedIndex());
-		OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(selectedTable, callback);
-
-	}
-
-	// FIXME find a better way to do this
+	// FIXME this needs to go!!
 	public static String getCurrentTableName() {
 		int selectedIndex = listBox.getSelectedIndex();
 		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
@@ -116,4 +62,41 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 		this.presenter = presenter;
 	}
 
+	public void setTableSelection(ArrayList<String> names, ArrayList<String> titles) {
+		listBox.clear();
+		for (int i = 0; i < names.size(); i++) {
+			listBox.addItem(titles.get(i), names.get(i));
+		}
+	}
+
+	@Override
+	public void setTableSelectedIndex(int index) {
+		listBox.setTabIndex(index);
+	}
+
+	@Override
+	public void setDocumentTitle(String title) {
+		String selectedTable = "";
+		int selectedIndex = listBox.getSelectedIndex();
+		if (selectedIndex >= 0 && selectedIndex < listBox.getItemCount())
+			selectedTable = ": " + listBox.getItemText(selectedIndex);
+		Window.setTitle("OnlineGlom - " + title + selectedTable);
+	}
+
+	@Override
+	public void setTableChangeHandler(ChangeHandler changeHandler) {
+		listBox.addChangeHandler(changeHandler);
+	}
+
+	@Override
+	public String getSelectedTable() {
+		int selectedIndex = listBox.getSelectedIndex();
+		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
+	}
+
+	@Override
+	public void setListTable(LayoutListView listView) {
+		dataPanel.clear();
+		dataPanel.add(listView);
+	}
 }

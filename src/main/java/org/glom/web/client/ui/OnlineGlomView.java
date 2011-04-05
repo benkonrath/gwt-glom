@@ -19,6 +19,9 @@
 
 package org.glom.web.client.ui;
 
+import java.util.ArrayList;
+
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -29,5 +32,17 @@ public interface OnlineGlomView extends IsWidget {
 	public interface Presenter {
 		void goTo(Place place);
 	}
+
+	void setTableSelection(ArrayList<String> names, ArrayList<String> titles);
+
+	void setTableSelectedIndex(int index);
+
+	void setTableChangeHandler(ChangeHandler changeHandler);
+
+	void setDocumentTitle(String title);
+
+	String getSelectedTable();
+
+	void setListTable(LayoutListView listView);
 
 }

@@ -1,3 +1,17 @@
+2011-04-05  Ben Konrath  <ben@bagu.org>
+
+	Move RPC code from OnlineGlomViewImpl to OnlineGlomActivity.
+
+	This is the forth and final commit of a refactor that will allow
+	OnlineGlom to be used with multiple documents.
+
+	* src/main/java/org/glom/web/client/activity/OnlineGlomActivity.java:
+	Move RPC code from OnlineGlomViewImpl to this class.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomView.java: Add methods
+	to inferface.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomViewImpl.java: Move
+	RPC code to the presenter class (the P in MVP).
+
 2011-04-04  Ben Konrath  <ben@bagu.org>
 
 	Start moving the existing OnlineGlom code to MVP.
