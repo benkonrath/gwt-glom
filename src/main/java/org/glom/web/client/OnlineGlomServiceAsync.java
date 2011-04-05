@@ -11,15 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface OnlineGlomServiceAsync {
 
-	void getGlomDocument(AsyncCallback<GlomDocument> callback);
-
-	void getLayoutListTable(String table, AsyncCallback<LayoutListTable> callback);
-
-	void getTableData(String table, int start, int length, AsyncCallback<ArrayList<GlomField[]>> callback);
-
-	void getSortedTableData(String table, int start, int length, int columnIndex, boolean isAscending,
-			AsyncCallback<ArrayList<GlomField[]>> callback);
-
 	/**
 	 * Utility class to get the RPC Async interface from client-side code
 	 */
@@ -37,4 +28,15 @@ public interface OnlineGlomServiceAsync {
 			// Utility class should not be instanciated
 		}
 	}
+
+	void getGlomDocument(AsyncCallback<GlomDocument> callback);
+
+	void getLayoutListTable(String table, AsyncCallback<LayoutListTable> callback);
+
+	void getTableData(String table, int start, int length, AsyncCallback<ArrayList<GlomField[]>> callback);
+
+	void getSortedTableData(String table, int start, int length, int columnIndex, boolean isAscending,
+			AsyncCallback<ArrayList<GlomField[]>> callback);
+
+	void getDemoDatabaseTitles(AsyncCallback<ArrayList<String>> callback);
 }

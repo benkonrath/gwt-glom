@@ -21,6 +21,7 @@ package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -522,6 +523,42 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return rowsList;
 	}
 
+	public ArrayList<String> getDemoDatabaseTitles() {
+		String glomDemoDir = "/home/ben";
+
+		File file = new File(glomDemoDir);
+		if (!file.isDirectory()) {
+			// TODO notify user of error
+			Log.fatal(glomDemoDir + " is not a directory.");
+			return new ArrayList<String>(0);
+		}
+
+		if (!file.canRead()) {
+			// TODO notify user of error
+			Log.fatal("Can't read the files in : " + glomDemoDir);
+			return new ArrayList<String>(0);
+		}
+
+		File[] glomFiles = file.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".glom") ? true : false;
+			}
+		});
+
+		ArrayList<String> dbTitles = new ArrayList<String>();
+		for (File glomFile : glomFiles) {
+			Document curDoc = new Document();
+			curDoc.set_file_uri("file://" + glomFile.getAbsolutePath());
+			int error = 0;
+			boolean retval = curDoc.load(error);
+			if (retval != false) {
+				dbTitles.add(curDoc.get_database_title());
+			}
+		}
+		return dbTitles;
+	}
+
 	private NumberFormat getJavaNumberFormat(NumericFormat numFormatGlom) {
 		NumberFormat numFormatJava = NumberFormat.getInstance(locale);
 		if (numFormatGlom.getM_decimal_places_restricted()) {
@@ -603,4 +640,5 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return ColumnInfo.GlomFieldType.TYPE_INVALID;
 		}
 	}
+
 }

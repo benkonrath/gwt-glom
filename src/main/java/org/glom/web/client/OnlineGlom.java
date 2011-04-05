@@ -20,7 +20,7 @@
 package org.glom.web.client;
 
 import org.glom.web.client.mvp.AppActivityMapper;
-import org.glom.web.client.place.OnlineGlomPlace;
+import org.glom.web.client.place.DemoSelectionPlace;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -38,8 +38,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class OnlineGlom implements EntryPoint {
 
-	private final Place defaultPlace = new OnlineGlomPlace();
-	// an empty div tag that is the container widget for the ActivityManager
+	// The start page.
+	private final Place defaultPlace = new DemoSelectionPlace();
+	// A container widget that will be managed by the ActivityManager.
 	private final SimplePanel panel = new SimplePanel();
 
 	@Override
@@ -56,13 +57,11 @@ public class OnlineGlom implements EntryPoint {
 		PlaceHistoryHandler historyHandler = clientFactory.getHistoryHandler();
 		historyHandler.register(placeController, eventBus, defaultPlace);
 
-		// FIXME don't need (delete)
-		// String bork = clientFactory.getHistoryMapper().getToken(defaultPlace);
-
+		// Put the container managed by the activity manger in the root panel.
 		RootPanel.get().add(panel);
+
 		// Goes to the place represented on URL else default place
 		historyHandler.handleCurrentHistory();
-
 	}
 
 }

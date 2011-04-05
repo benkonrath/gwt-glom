@@ -1,5 +1,50 @@
 2011-04-05  Ben Konrath  <ben@bagu.org>
 
+	Add new page for demo selection.
+
+	This patch adds all the components required to view and start an
+	OnlineGlom demo by clicking on the desired hyperlink. The user is
+	able to return to the demo selection page with the browser's back
+	button. I still need to modify the servlet to work with multiple
+	documents so all demo links will load the file defined in the
+	OnlineGlom.properties.
+
+	* .gitignore: Add .gwt which holds the error log for the GWT UiBuidler.
+	This is only useful during development so we don't need to save it.
+	* src/main/java/org/glom/web/client/ClientFactory.java: Add method to
+	get a reference to the DemoSelectionView.
+	* src/main/java/org/glom/web/client/ClientFactoryImpl.java: Implement
+	method to get a reference to the DemoSelectionView.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Change the
+	default view to DemoSelectionView.
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Add method
+	to get glom document titles for glom files in a hard-coded directory.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Add
+	method to get glom document titles for glom files in a hard-coded
+	directory.
+	* src/main/java/org/glom/web/client/activity/DemoSelectionActivity.java:
+	Presenter for DemoSelectionView.
+	* src/main/java/org/glom/web/client/mvp/AppActivityMapper.java: Update
+	for DemoSelectionView.
+	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+	Update for DemoSelectionView.
+	* src/main/java/org/glom/web/client/place/DemoSelectionPlace.java:
+	Basic 'Place' implementation for the DemoSelectionView.
+	* src/main/java/org/glom/web/client/ui/DemoSelectionView.java:
+	The interface for the DemoSelectionView.
+	* src/main/java/org/glom/web/client/ui/DemoSelectionViewImpl.java:
+	The implementation of the DemoSelectionView.
+	* src/main/java/org/glom/web/client/ui/DemoSelectionViewImpl.ui.xml:
+	The GWT UiBuilder xml file used in DemoSelectionViewImpl.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Add
+	implementation of method to get glom document titles for glom files
+	in a hard-coded directory.
+	* src/main/webapp/OnlineGlom.html: Remove link to CSS file as it's
+	on longer being used.
+	* src/main/webapp/glom.png: Glom logo.
+
+2011-04-05  Ben Konrath  <ben@bagu.org>
+
 	Move RPC code from OnlineGlomViewImpl to OnlineGlomActivity.
 
 	This is the forth and final commit of a refactor that will allow

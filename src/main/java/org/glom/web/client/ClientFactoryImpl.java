@@ -20,6 +20,8 @@
 package org.glom.web.client;
 
 import org.glom.web.client.mvp.AppPlaceHistoryMapper;
+import org.glom.web.client.ui.DemoSelectionView;
+import org.glom.web.client.ui.DemoSelectionViewImpl;
 import org.glom.web.client.ui.OnlineGlomView;
 import org.glom.web.client.ui.OnlineGlomViewImpl;
 
@@ -31,11 +33,12 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 
 public class ClientFactoryImpl implements ClientFactory {
-	private static final EventBus eventBus = new SimpleEventBus();
-	private static final PlaceController placeController = new PlaceController(eventBus);
-	private static final OnlineGlomView onlineGlomView = new OnlineGlomViewImpl();
-	private static final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
-	private static final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+	private final EventBus eventBus = new SimpleEventBus();
+	private final PlaceController placeController = new PlaceController(eventBus);
+	private final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+	private final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+	private final OnlineGlomView onlineGlomView = new OnlineGlomViewImpl();
+	private final DemoSelectionView demoSelectionView = new DemoSelectionViewImpl();
 
 	public EventBus getEventBus() {
 		return eventBus;
@@ -57,4 +60,8 @@ public class ClientFactoryImpl implements ClientFactory {
 		return historyMapper;
 	}
 
+	@Override
+	public DemoSelectionView getDemoSelectionView() {
+		return demoSelectionView;
+	}
 }

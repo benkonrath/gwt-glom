@@ -19,6 +19,7 @@
 
 package org.glom.web.client;
 
+import org.glom.web.client.ui.DemoSelectionView;
 import org.glom.web.client.ui.OnlineGlomView;
 
 import com.google.gwt.event.shared.EventBus;
@@ -32,10 +33,12 @@ public interface ClientFactory {
 
 	PlaceController getPlaceController();
 
-	OnlineGlomView getOnlineGlomView();
-
 	PlaceHistoryHandler getHistoryHandler();
 
 	PlaceHistoryMapper getHistoryMapper();
+
+	OnlineGlomView getOnlineGlomView();
+
+	DemoSelectionView getDemoSelectionView();
 
 }
