@@ -1,5 +1,11 @@
 2011-04-08  Ben Konrath  <ben@bagu.org>
 
+	Add copyright header to one more file ... oops.
+
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+
+2011-04-08  Ben Konrath  <ben@bagu.org>
+
 	Add copyright header to files without it.
 
 	* src/main/java/org/glom/web/client/activity/DemoSelectionActivity.java:
