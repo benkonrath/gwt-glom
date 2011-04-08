@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class GlomDocument implements Serializable {
-	private String title;
 	// could consider a LinkedHashMap if we need to support adding or removing tables
 	// order must be consistent between these two arrays
 	private ArrayList<String> tableNames;
@@ -34,16 +33,13 @@ public class GlomDocument implements Serializable {
 	public GlomDocument() {
 	}
 
-	public GlomDocument(String title, ArrayList<String> tableNames, ArrayList<String> tableTitles, int defaultTableIndex) {
-		this.title = title;
+	public GlomDocument(ArrayList<String> tableNames, ArrayList<String> tableTitles, int defaultTableIndex) {
 		this.tableNames = tableNames;
 		this.tableTitles = tableTitles;
 		this.defaultTableIndex = defaultTableIndex;
 	}
 
 	// @formatter:off
-	public String getTitle() { return title; }
-	public void setTitle(String name) { this.title = name; }
 	public ArrayList<String> getTableNames() { return tableNames; }
 	public void setTableNames(ArrayList<String> tableNames) { this.tableNames = tableNames; }
 	public ArrayList<String> getTableTitles() { return tableTitles; }

@@ -39,10 +39,10 @@ public interface OnlineGlomView extends IsWidget {
 
 	void setTableChangeHandler(ChangeHandler changeHandler);
 
-	void setDocumentTitle(String title);
-
 	String getSelectedTable();
 
 	void setListTable(LayoutListView listView);
+
+	void clear();
 
 }

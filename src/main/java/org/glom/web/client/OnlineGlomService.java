@@ -31,14 +31,14 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("libGlom")
 public interface OnlineGlomService extends RemoteService {
 
-	GlomDocument getGlomDocument();
+	GlomDocument getGlomDocument(String documentTitle);
 
-	LayoutListTable getLayoutListTable(String table);
+	LayoutListTable getLayoutListTable(String documentTitle, String tableName);
 
-	ArrayList<GlomField[]> getTableData(String table, int start, int length);
+	ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length);
 
-	ArrayList<GlomField[]> getSortedTableData(String table, int start, int length, int sortColumnIndex,
-			boolean isAscending);
+	ArrayList<GlomField[]> getSortedTableData(String documentTitle, String tableName, int start, int length,
+			int sortColumnIndex, boolean isAscending);
 
 	ArrayList<String> getDemoDatabaseTitles();
 

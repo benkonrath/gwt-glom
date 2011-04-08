@@ -33,6 +33,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -64,8 +65,27 @@ import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
-	private Document document = null;
-	private ComboPooledDataSource cpds = null;
+	private class ConfiguredDocument {
+		private Document document;
+		private ComboPooledDataSource cpds;
+
+		public ConfiguredDocument(Document document, ComboPooledDataSource cpds) {
+			this.cpds = cpds;
+			this.document = document;
+		}
+
+		public Document getDocument() {
+			return document;
+		}
+
+		public ComboPooledDataSource getCpds() {
+			return cpds;
+		}
+
+	}
+
+	private final Hashtable<String, ConfiguredDocument> documents = new Hashtable<String, ConfiguredDocument>();
+
 	// TODO implement locale
 	private final Locale locale = Locale.ROOT;
 	private boolean configured = false;
@@ -75,6 +95,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	public OnlineGlomServiceImpl() {
 		Glom.libglom_init();
+
 	}
 
 	/*
@@ -83,47 +104,76 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * document object when makes its first request.
 	 */
 	private void configureServlet() {
-		document = new Document();
+		// TODO get this from a config file
+		String glomDemoDir = "/home/ben";
 
-		Properties props = new Properties();
-		String propFileName = "/WEB-INF/OnlineGlom.properties";
-		try {
-			props.load(getServletContext().getResourceAsStream(propFileName));
-		} catch (IOException e) {
-			Log.fatal("Error loading " + propFileName, e);
-			// TODO can't continue, notify user of problem
+		File file = new File(glomDemoDir);
+
+		if (!file.isDirectory()) {
+			// TODO notify user of error
+			Log.fatal(glomDemoDir + " is not a directory.");
 		}
 
-		File file = new File(props.getProperty("glomfile"));
-		document.set_file_uri("file://" + file.getAbsolutePath());
-		int error = 0;
-		boolean retval = document.load(error);
-		if (retval == false) {
-			String message;
-			if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
-				message = "Could not find " + file.getAbsolutePath();
-			} else {
-				message = "An unknown error occurred when trying to load " + file.getAbsolutePath();
+		if (!file.canRead()) {
+			// TODO notify user of error
+			Log.fatal("Can't read the files in : " + glomDemoDir);
+		}
+
+		File[] glomFiles = file.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".glom") ? true : false;
 			}
-			Log.fatal(message);
-			// TODO can't continue, notify user of problem
+		});
+
+		for (File glomFile : glomFiles) {
+			Document document = new Document();
+			document.set_file_uri("file://" + glomFile.getAbsolutePath());
+			int error = 0;
+			boolean retval = document.load(error);
+			if (retval == false) {
+				String message;
+				if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
+					message = "Could not find " + file.getAbsolutePath();
+				} else {
+					message = "An unknown error occurred when trying to load " + file.getAbsolutePath();
+				}
+				Log.error(message);
+				continue;
+			}
+
+			Properties props = new Properties();
+			String propFileName = "/WEB-INF/OnlineGlom.properties";
+			try {
+				props.load(getServletContext().getResourceAsStream(propFileName));
+			} catch (IOException e) {
+				Log.fatal("Error loading " + propFileName, e);
+				// TODO can't continue, notify user of problem
+			}
+
+			// load the jdbc driver for this document
+			ComboPooledDataSource cpds = new ComboPooledDataSource();
+			try {
+				cpds.setDriverClass("org.postgresql.Driver");
+			} catch (PropertyVetoException e) {
+				Log.fatal(
+						"Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?",
+						e);
+				// TODO can't continue, notify user of problem
+				break;
+			}
+
+			cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
+					+ document.get_connection_database());
+			// TODO notify user if dbusername or dbpassword are wrong
+			cpds.setUser(props.getProperty("dbusername"));
+			cpds.setPassword(props.getProperty("dbpassword"));
+
+			String documentTitle = document.get_database_title().trim();
+			ConfiguredDocument configuredDocument = new ConfiguredDocument(document, cpds);
+			documents.put(documentTitle, configuredDocument);
 		}
 
-		// load the jdbc driver
-		cpds = new ComboPooledDataSource();
-		try {
-			cpds.setDriverClass("org.postgresql.Driver");
-		} catch (PropertyVetoException e) {
-			Log.fatal("Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?",
-					e);
-			// TODO can't continue, notify user of problem
-		}
-
-		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
-				+ document.get_connection_database());
-		cpds.setUser(props.getProperty("dbusername"));
-		cpds.setPassword(props.getProperty("dbpassword"));
-		// TODO notify user if dbusername or dbpassword are wrong
 		configured = true;
 	}
 
@@ -135,12 +185,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public void destroy() {
 		Glom.libglom_deinit();
-		try {
-			if (configured)
-				DataSources.destroy(cpds);
-		} catch (SQLException e) {
-			Log.error("Error cleaning up the ComboPooledDataSource", e);
+
+		if (configured) {
+			for (String documenTitle : documents.keySet()) {
+				ConfiguredDocument configuredDoc = documents.get(documenTitle);
+				try {
+					DataSources.destroy(configuredDoc.getCpds());
+				} catch (SQLException e) {
+					Log.error("Error cleaning up the ComboPooledDataSource for " + documenTitle, e);
+				}
+			}
 		}
+
 	}
 
 	/*
@@ -154,10 +210,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return (int) l;
 	}
 
-	public GlomDocument getGlomDocument() {
+	public GlomDocument getGlomDocument(String documentTitle) {
 		if (!configured)
 			configureServlet();
 
+		Document document = documents.get(documentTitle).getDocument();
 		GlomDocument glomDocument = new GlomDocument();
 
 		// get arrays of table names and titles, and find the default table index
@@ -187,15 +244,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// set everything we need
 		glomDocument.setTableNames(tableNames);
 		glomDocument.setTableTitles(tableTitles);
-		glomDocument.setTitle(document.get_database_title());
 
 		return glomDocument;
 	}
 
-	public LayoutListTable getLayoutListTable(String table) {
+	public LayoutListTable getLayoutListTable(String documentTitle, String table) {
 		if (!configured)
 			configureServlet();
 
+		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		Document document = configuredDoc.getDocument();
 		LayoutListTable tableInfo = new LayoutListTable();
 
 		// access the layout list
@@ -206,7 +264,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (listViewLayoutGroupSize > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn("The size of the list view layout group for table " + table
+				Log.warn(documentTitle + " " + table + ": The size of the list view layout group for table " + table
 						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
@@ -255,6 +313,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
 			// data. Here's the relevant PostgreSQL documentation:
 			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
+			ComboPooledDataSource cpds = configuredDoc.getCpds();
 			conn = cpds.getConnection();
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
@@ -268,7 +327,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			tableInfo.setNumRows(rs.getInt(1));
 
 		} catch (SQLException e) {
-			Log.error("Error calculating number of rows in the query. Setting number of rows to 0.", e);
+			Log.error(documentTitle + " " + table
+					+ ": Error calculating number of rows in the query. Setting number of rows to 0.", e);
 			tableInfo.setNumRows(0);
 		} finally {
 			// cleanup everything that has been used
@@ -277,36 +337,45 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				st.close();
 				conn.close();
 			} catch (Exception e) {
-				Log.error("Error closing database resources. Subsequent database queries may not work.", e);
+				Log.error(documentTitle + " " + table
+						+ ": Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 
 		return tableInfo;
 	}
 
-	public ArrayList<GlomField[]> getTableData(String table, int start, int length) {
-		return getTableData(table, start, length, false, 0, false);
+	public ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length) {
+		return getTableData(documentTitle, tableName, start, length, false, 0, false);
 	}
 
-	public ArrayList<GlomField[]> getSortedTableData(String table, int start, int length, int sortColumnIndex,
-			boolean isAscending) {
-		return getTableData(table, start, length, true, sortColumnIndex, isAscending);
-	}
-
-	private ArrayList<GlomField[]> getTableData(String table, int start, int length, boolean useSortClause,
+	public ArrayList<GlomField[]> getSortedTableData(String documentTitle, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending) {
+		return getTableData(documentTitle, tableName, start, length, true, sortColumnIndex, isAscending);
+	}
+
+	private ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length,
+			boolean useSortClause, int sortColumnIndex, boolean isAscending) {
+
+		// FIXME fix LayoutListView to not call this method with empty table or document title
+		if (documentTitle.isEmpty() || tableName.isEmpty())
+			return new ArrayList<GlomField[]>();
+
 		if (!configured)
 			configureServlet();
 
+		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		Document document = configuredDoc.getDocument();
+
 		// access the layout list using the defined layout list or the table fields if there's no layout list
-		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", table);
+		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
 		LayoutFieldVector layoutFields = new LayoutFieldVector();
 		SortClause sortClause = new SortClause();
 		int listViewLayoutGroupSize = safeLongToInt(layoutListVec.size());
 		if (layoutListVec.size() > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn("The size of the list view layout group for table " + table
+				Log.warn(documentTitle + ": The size of the list view layout group for table " + tableName
 						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
@@ -331,7 +400,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		} else {
 			// no layout list is defined, use the table fields as the layout list
-			FieldVector fieldsVec = document.get_table_fields(table);
+			FieldVector fieldsVec = document.get_table_fields(tableName);
 
 			// find the fields to display in the layout list
 			int numItems = safeLongToInt(fieldsVec.size());
@@ -357,8 +426,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (field != null)
 				sortClause.addLast(new SortFieldPair(field, isAscending));
 			else {
-				Log.error("Error getting LayoutItem_Field for column index " + sortColumnIndex
-						+ ". Cannot create a sort clause for this column.");
+				Log.error(documentTitle + " " + tableName + ": Error getting LayoutItem_Field for column index "
+						+ sortColumnIndex + ". Cannot create a sort clause for this column.");
 			}
 
 		}
@@ -372,11 +441,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// cursor so that large amounts of memory are not consumed when the query retrieve a large amount of data.
 			// Here's the relevant PostgreSQL documentation:
 			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
+			ComboPooledDataSource cpds = configuredDoc.getCpds();
 			conn = cpds.getConnection();
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			st.setFetchSize(length);
-			String query = Glom.build_sql_select_simple(table, layoutFields, sortClause) + " OFFSET " + start;
+			String query = Glom.build_sql_select_simple(tableName, layoutFields, sortClause) + " OFFSET " + start;
 			// TODO Test memory usage before and after we execute the query that would result in a large ResultSet.
 			// We need to ensure that the JDBC driver is in fact returning a cursor based result set that has a low
 			// memory footprint. Check the difference between this value before and after the query:
@@ -425,14 +495,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							// Try to format the currency using the Java Locales system.
 							try {
 								Currency currency = Currency.getInstance(currencyCode);
-								Log.info("A valid ISO 4217 currency code is being used. Overriding the numeric formatting with information from the locale.");
+								Log.info(documentTitle
+										+ " "
+										+ tableName
+										+ ": A valid ISO 4217 currency code is being used. Overriding the numeric formatting with information from the locale.");
 								int digits = currency.getDefaultFractionDigits();
 								numFormatJava = NumberFormat.getCurrencyInstance(locale);
 								numFormatJava.setCurrency(currency);
 								numFormatJava.setMinimumFractionDigits(digits);
 								numFormatJava.setMaximumFractionDigits(digits);
 							} catch (IllegalArgumentException e) {
-								Log.warn(currencyCode
+								Log.warn(documentTitle
+										+ " "
+										+ tableName
+										+ ": "
+										+ currencyCode
 										+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
 								// The currency code is not this is not an ISO 4217 currency code.
 								// We're going to manually set the currency code and use the glom numeric formatting.
@@ -440,7 +517,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 								numFormatJava = getJavaNumberFormat(numFormatGlom);
 							}
 						} else if (currencyCode.length() > 0) {
-							Log.warn(currencyCode
+							Log.warn(documentTitle + " " + tableName + ": " + currencyCode
 									+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
 							// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
 							// We're going to manually set the currency code and use the glom numeric formatting.
@@ -497,7 +574,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						break;
 					case TYPE_INVALID:
 					default:
-						Log.warn("Invalid LayoutItem Field type. Using empty string for value.");
+						Log.warn(documentTitle + " " + tableName
+								+ ": Invalid LayoutItem Field type. Using empty string for value.");
 						rowArray[i].setText("");
 						break;
 					}
@@ -508,7 +586,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				rowCount++;
 			}
 		} catch (SQLException e) {
-			Log.error("Error executing database query.", e);
+			Log.error(documentTitle + " " + tableName + ": Error executing database query.", e);
 			// TODO: somehow notify user of problem
 		} finally {
 			// cleanup everything that has been used
@@ -517,46 +595,22 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				st.close();
 				conn.close();
 			} catch (Exception e) {
-				Log.error("Error closing database resources. Subsequent database queries may not work.", e);
+				Log.error(documentTitle + " " + tableName
+						+ ": Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 		return rowsList;
 	}
 
 	public ArrayList<String> getDemoDatabaseTitles() {
-		String glomDemoDir = "/home/ben";
+		if (!configured)
+			configureServlet();
 
-		File file = new File(glomDemoDir);
-		if (!file.isDirectory()) {
-			// TODO notify user of error
-			Log.fatal(glomDemoDir + " is not a directory.");
-			return new ArrayList<String>(0);
+		ArrayList<String> documentTitles = new ArrayList<String>();
+		for (String title : documents.keySet()) {
+			documentTitles.add(title);
 		}
-
-		if (!file.canRead()) {
-			// TODO notify user of error
-			Log.fatal("Can't read the files in : " + glomDemoDir);
-			return new ArrayList<String>(0);
-		}
-
-		File[] glomFiles = file.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".glom") ? true : false;
-			}
-		});
-
-		ArrayList<String> dbTitles = new ArrayList<String>();
-		for (File glomFile : glomFiles) {
-			Document curDoc = new Document();
-			curDoc.set_file_uri("file://" + glomFile.getAbsolutePath());
-			int error = 0;
-			boolean retval = curDoc.load(error);
-			if (retval != false) {
-				dbTitles.add(curDoc.get_database_title());
-			}
-		}
-		return dbTitles;
+		return documentTitles;
 	}
 
 	private NumberFormat getJavaNumberFormat(NumericFormat numFormatGlom) {

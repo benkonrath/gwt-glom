@@ -1,5 +1,43 @@
 2011-04-08  Ben Konrath  <ben@bagu.org>
 
+	Add support for accessing multiple glom documents in the servlet.
+
+	This completes the demo selection functionality.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Add
+	document title to methods.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Add
+	document title to methods.
+	* src/main/java/org/glom/web/client/activity/DemoSelectionActivity.java:
+	Set browser window title when the activity starts. Correct name of
+	document title variable.
+	* src/main/java/org/glom/web/client/activity/OnlineGlomActivity.java:
+	Set browser window title when the activity starts. Set the table
+	selector change handler after table selector has been set. Clear the
+	OnlineGlomView when the activity has been stopped.
+	* src/main/java/org/glom/web/client/place/OnlineGlomPlace.java: Use the
+	document title as the place token. Use "#Document:" instead of
+	"#OnlineGlomPlace:" in the URL.
+	* src/main/java/org/glom/web/client/ui/DemoSelectionViewImpl.ui.xml:
+	Change heading to "Online Glom"
+	* src/main/java/org/glom/web/client/ui/LayoutListView.java: Use
+	document title in RPC methods.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomView.java: Remove
+	setDocumentTitle() method. Add clear() method.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomViewImpl.java: Remove
+	setDocumentTitle() method. Implement clear() method which removes the
+	change handler on the ListBox, clears the ListBox and clears the
+	DataPanel.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Implement methods with document title. Keep track for the configured
+	glom documents and their corresponding JDBC configurations in a hash
+	table. This information is retrieved using the document title as the
+	key in the hash table.
+	* src/main/java/org/glom/web/shared/GlomDocument.java: Remove
+	document title field as it's no longer needed.
+
+2011-04-08  Ben Konrath  <ben@bagu.org>
+
 	Update the Eclipse JDT configuration.
 
 	* .settings/org.eclipse.jdt.ui.prefs: Automatically add comments to new

@@ -21,28 +21,26 @@ package org.glom.web.client.place;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
+import com.google.gwt.place.shared.Prefix;
 
 public class OnlineGlomPlace extends Place {
 
-	private final String documentName;
+	private final String documentTitle;
 
-	public OnlineGlomPlace(String token) {
-		this.documentName = token;
+	public OnlineGlomPlace(String documentTitle) {
+		this.documentTitle = documentTitle;
 	}
 
-	public OnlineGlomPlace() {
-		this.documentName = "";
+	public String getDocumentTitle() {
+		return documentTitle;
 	}
 
-	public String getDocumentName() {
-		return documentName;
-	}
-
+	@Prefix("Document")
 	public static class Tokenizer implements PlaceTokenizer<OnlineGlomPlace> {
 
 		@Override
 		public String getToken(OnlineGlomPlace place) {
-			return place.getDocumentName();
+			return place.getDocumentTitle();
 		}
 
 		@Override

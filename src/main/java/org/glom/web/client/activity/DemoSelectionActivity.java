@@ -9,6 +9,7 @@ import org.glom.web.client.ui.DemoSelectionView;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -24,6 +25,7 @@ public class DemoSelectionActivity extends AbstractActivity {
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		Window.setTitle("Online Glom");
 		final DemoSelectionView demoSelectionView = clientFactory.getDemoSelectionView();
 
 		AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
@@ -32,12 +34,12 @@ public class DemoSelectionActivity extends AbstractActivity {
 				System.out.println("AsyncCallback Failed: OnlineGlomService.getDemoDatabaseTitles()");
 			}
 
-			public void onSuccess(ArrayList<String> dbTitles) {
+			public void onSuccess(ArrayList<String> documentTitles) {
 				demoSelectionView.clearHyperLinks();
-				for (String dbTitle : dbTitles) {
-					OnlineGlomPlace place = new OnlineGlomPlace(dbTitle);
+				for (String documentTitle : documentTitles) {
+					OnlineGlomPlace place = new OnlineGlomPlace(documentTitle);
 					demoPlaces.add(place);
-					demoSelectionView.addHyperLink(dbTitle, clientFactory.getHistoryMapper().getToken(place));
+					demoSelectionView.addHyperLink(documentTitle, clientFactory.getHistoryMapper().getToken(place));
 				}
 
 			}

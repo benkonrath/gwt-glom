@@ -86,10 +86,10 @@ public class LayoutListView extends Composite {
 	}
 
 	public LayoutListView() {
-		this(new ColumnInfo[] {}, 0);
+		this("", new ColumnInfo[] {}, 0);
 	}
 
-	public LayoutListView(ColumnInfo[] columns, int numRows) {
+	public LayoutListView(final String documentTitle, ColumnInfo[] columns, int numRows) {
 		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20);
 
 		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
@@ -115,13 +115,13 @@ public class LayoutListView extends Composite {
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					ColumnSortInfo info = colSortList.get(0);
-					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(
+					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(documentTitle,
 							OnlineGlomViewImpl.getCurrentTableName(), start, range.getLength(),
 							table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()), info.isAscending(),
 							callback);
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getTableData(OnlineGlomViewImpl.getCurrentTableName(),
-							start, range.getLength(), callback);
+					OnlineGlomServiceAsync.Util.getInstance().getTableData(documentTitle,
+							OnlineGlomViewImpl.getCurrentTableName(), start, range.getLength(), callback);
 				}
 			}
 		};
@@ -241,5 +241,4 @@ public class LayoutListView extends Composite {
 		initWidget(panel);
 		setStyleName("glom-LayoutListView");
 	}
-
 }

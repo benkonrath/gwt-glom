@@ -32,32 +32,27 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomView.Presenter {
 
-	private final String documentName;
-	private String documentTitle;
+	private final String documentTitle;
 	private final ClientFactory clientFactory;
 	private final OnlineGlomView onlineGlomView;
 
 	public OnlineGlomActivity(OnlineGlomPlace place, ClientFactory clientFactory) {
-		this.documentName = place.getDocumentName();
+		this.documentTitle = place.getDocumentTitle();
 		this.clientFactory = clientFactory;
 		this.onlineGlomView = clientFactory.getOnlineGlomView();
 	}
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		Window.setTitle("Online Glom - " + documentTitle);
 
-		onlineGlomView.setTableChangeHandler(new ChangeHandler() {
-			@Override
-			public void onChange(ChangeEvent event) {
-				updateTable();
-			}
-		});
-
+		// define the callback object
 		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
@@ -67,15 +62,25 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 			public void onSuccess(GlomDocument result) {
 				onlineGlomView.setTableSelection(result.getTableNames(), result.getTableTitles());
 				onlineGlomView.setTableSelectedIndex(result.getDefaultTableIndex());
-				documentTitle = result.getTitle();
 				updateTable();
 			}
 		};
 
 		// make the RPC call to get the GlomDocument
-		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(callback);
+		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, callback);
 
+		// set the change handler for the table selection widget
+		onlineGlomView.setTableChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(ChangeEvent event) {
+				updateTable();
+			}
+		});
+
+		// register this class as the presenter
 		onlineGlomView.setPresenter(this);
+
+		// indicate that the view is ready to be displayed
 		panel.setWidget(onlineGlomView.asWidget());
 	}
 
@@ -89,15 +94,27 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 
 			public void onSuccess(LayoutListTable result) {
 				// FIXME make the ListView reusable
-				onlineGlomView.setListTable(new LayoutListView(result.getColumns(), result.getNumRows()));
-				onlineGlomView.setDocumentTitle(documentTitle);
+				onlineGlomView
+						.setListTable(new LayoutListView(documentTitle, result.getColumns(), result.getNumRows()));
 			}
 		};
-
-		OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(onlineGlomView.getSelectedTable(), callback);
+		OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(documentTitle, onlineGlomView.getSelectedTable(),
+				callback);
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
+	 */
+	@Override
+	public void onStop() {
+		// clear the data in the view once the user has navigated away from this activity
+		onlineGlomView.clear();
+	}
+
+	// FIXME this isn't currently being used
 	@Override
 	public void goTo(Place place) {
 		clientFactory.getPlaceController().goTo(place);

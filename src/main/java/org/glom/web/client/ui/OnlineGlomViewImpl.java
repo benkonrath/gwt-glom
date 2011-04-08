@@ -22,7 +22,7 @@ package org.glom.web.client.ui;
 import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 
 	private final VerticalPanel mainVPanel = new VerticalPanel();
-	// FIXME remove static
+	// FIXME remove static see FIXME below
 	private final static ListBox listBox = new ListBox();
 	private final HorizontalPanel hPanel = new HorizontalPanel();
 	// FIXME make reusable and add a LayoutListActivity
@@ -41,6 +41,7 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 	private final LayoutListView listTable = new LayoutListView();
 	private final SimplePanel dataPanel = new SimplePanel();
 	private Presenter presenter;
+	private HandlerRegistration changeHandlerRegistration = null;
 
 	public OnlineGlomViewImpl() {
 		hPanel.add(new Label("Table:"));
@@ -63,7 +64,7 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 	}
 
 	public void setTableSelection(ArrayList<String> names, ArrayList<String> titles) {
-		listBox.clear();
+
 		for (int i = 0; i < names.size(); i++) {
 			listBox.addItem(titles.get(i), names.get(i));
 		}
@@ -71,21 +72,12 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 
 	@Override
 	public void setTableSelectedIndex(int index) {
-		listBox.setTabIndex(index);
-	}
-
-	@Override
-	public void setDocumentTitle(String title) {
-		String selectedTable = "";
-		int selectedIndex = listBox.getSelectedIndex();
-		if (selectedIndex >= 0 && selectedIndex < listBox.getItemCount())
-			selectedTable = ": " + listBox.getItemText(selectedIndex);
-		Window.setTitle("OnlineGlom - " + title + selectedTable);
+		listBox.setSelectedIndex(index);
 	}
 
 	@Override
 	public void setTableChangeHandler(ChangeHandler changeHandler) {
-		listBox.addChangeHandler(changeHandler);
+		changeHandlerRegistration = listBox.addChangeHandler(changeHandler);
 	}
 
 	@Override
@@ -96,7 +88,16 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 
 	@Override
 	public void setListTable(LayoutListView listView) {
+		// FIXME don't need to clear the dataPanel when LayoutListView is fixed
 		dataPanel.clear();
 		dataPanel.add(listView);
+	}
+
+	@Override
+	public void clear() {
+		if (changeHandlerRegistration != null)
+			changeHandlerRegistration.removeHandler();
+		listBox.clear();
+		dataPanel.clear();
 	}
 }

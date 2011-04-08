@@ -25,18 +25,19 @@ public interface OnlineGlomServiceAsync {
 		}
 
 		private Util() {
-			// Utility class should not be instanciated
+			// Utility class should not be instantiated
 		}
 	}
 
-	void getGlomDocument(AsyncCallback<GlomDocument> callback);
+	void getGlomDocument(String documentTitle, AsyncCallback<GlomDocument> callback);
 
-	void getLayoutListTable(String table, AsyncCallback<LayoutListTable> callback);
+	void getLayoutListTable(String documentTitle, String tableName, AsyncCallback<LayoutListTable> callback);
 
-	void getTableData(String table, int start, int length, AsyncCallback<ArrayList<GlomField[]>> callback);
-
-	void getSortedTableData(String table, int start, int length, int columnIndex, boolean isAscending,
+	void getTableData(String documentTitle, String tableName, int start, int length,
 			AsyncCallback<ArrayList<GlomField[]>> callback);
+
+	void getSortedTableData(String documentTitle, String tableName, int start, int length, int columnIndex,
+			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
 
 	void getDemoDatabaseTitles(AsyncCallback<ArrayList<String>> callback);
 }
