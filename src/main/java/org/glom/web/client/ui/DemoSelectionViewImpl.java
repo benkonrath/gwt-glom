@@ -24,6 +24,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -48,4 +49,16 @@ public class DemoSelectionViewImpl extends Composite implements DemoSelectionVie
 		demoLinks.clear();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.DemoSelectionView#setErrorMessage(java.lang.String)
+	 */
+	@Override
+	public void setErrorMessage(String message) {
+		clearHyperLinks();
+		Label label = new Label(message);
+		label.getElement().getStyle().setColor("Red");
+		demoLinks.add(label);
+	}
 }

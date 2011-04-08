@@ -27,4 +27,12 @@ public interface DemoSelectionView extends IsWidget {
 
 	void clearHyperLinks();
 
+	/**
+	 * Sets an error message to be displayed to the user.
+	 * 
+	 * @param message
+	 *            the error message.
+	 */
+	void setErrorMessage(String message);
+
 }

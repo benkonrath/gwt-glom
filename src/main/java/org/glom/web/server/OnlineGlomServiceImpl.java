@@ -112,11 +112,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (!file.isDirectory()) {
 			// TODO notify user of error
 			Log.fatal(glomDemoDir + " is not a directory.");
+			return;
 		}
 
 		if (!file.canRead()) {
 			// TODO notify user of error
 			Log.fatal("Can't read the files in : " + glomDemoDir);
+			return;
 		}
 
 		File[] glomFiles = file.listFiles(new FilenameFilter() {

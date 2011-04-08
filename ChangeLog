@@ -1,5 +1,14 @@
 2011-04-08  Ben Konrath  <ben@bagu.org>
 
+	Display an error if no glom documents are found in the specified directory.
+
+	* src/main/java/org/glom/web/client/activity/DemoSelectionActivity.java:
+	* src/main/java/org/glom/web/client/ui/DemoSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/DemoSelectionViewImpl.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-04-08  Ben Konrath  <ben@bagu.org>
+
 	Add copyright header to one more file ... oops.
 
 	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:

@@ -55,12 +55,16 @@ public class DemoSelectionActivity extends AbstractActivity {
 
 			public void onSuccess(ArrayList<String> documentTitles) {
 				demoSelectionView.clearHyperLinks();
-				for (String documentTitle : documentTitles) {
-					OnlineGlomPlace place = new OnlineGlomPlace(documentTitle);
-					demoPlaces.add(place);
-					demoSelectionView.addHyperLink(documentTitle, clientFactory.getHistoryMapper().getToken(place));
+				if (!documentTitles.isEmpty()) {
+					for (String documentTitle : documentTitles) {
+						OnlineGlomPlace place = new OnlineGlomPlace(documentTitle);
+						demoPlaces.add(place);
+						demoSelectionView.addHyperLink(documentTitle, clientFactory.getHistoryMapper().getToken(place));
+					}
+				} else {
+					demoSelectionView
+							.setErrorMessage("Could not find any Glom documents to load. Check the error log for more information.");
 				}
-
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDemoDatabaseTitles(callback);
