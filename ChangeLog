@@ -1,5 +1,16 @@
 2011-04-08  Ben Konrath  <ben@bagu.org>
 
+	Add copyright header to files without it.
+
+	* src/main/java/org/glom/web/client/activity/DemoSelectionActivity.java:
+	* src/main/java/org/glom/web/client/place/DemoSelectionPlace.java:
+	* src/main/java/org/glom/web/client/ui/DemoSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/DemoSelectionViewImpl.java:
+	* src/main/java/org/glom/web/shared/ColumnInfo.java:
+	* src/main/java/org/glom/web/shared/GlomField.java:
+
+2011-04-08  Ben Konrath  <ben@bagu.org>
+
 	Add support for accessing multiple glom documents in the servlet.
 
 	This completes the demo selection functionality.
