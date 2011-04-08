@@ -201,17 +201,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	}
 
-	/*
-	 * FIXME I think Swig is generating long on 64-bit machines and int on 32-bit machines - need to keep this constant
-	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
-	 */
-	private static int safeLongToInt(long l) {
-		if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
-		}
-		return (int) l;
-	}
-
 	public GlomDocument getGlomDocument(String documentTitle) {
 		if (!configured)
 			configureServlet();
@@ -613,6 +602,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			documentTitles.add(title);
 		}
 		return documentTitles;
+	}
+
+	/*
+	 * This method safely converts longs from libglom into ints. This method was taken from stackoverflow:
+	 * 
+	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
+	 */
+	private int safeLongToInt(long value) {
+		if (value < Integer.MIN_VALUE || value > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException(value + " cannot be cast to int without changing its value.");
+		}
+		return (int) value;
 	}
 
 	private NumberFormat getJavaNumberFormat(NumericFormat numFormatGlom) {

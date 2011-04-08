@@ -1,5 +1,14 @@
 2011-04-08  Ben Konrath  <ben@bagu.org>
 
+	Remove FIXME from safeLongToInt() method.
+
+	Libglom uses longs on 32-bit and 64-bit platforms so it's ok to use
+	this method.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-04-08  Ben Konrath  <ben@bagu.org>
+
 	Display an error if no glom documents are found in the specified directory.
 
 	* src/main/java/org/glom/web/client/activity/DemoSelectionActivity.java:
