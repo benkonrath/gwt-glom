@@ -1,3 +1,10 @@
+2011-04-08  Ben Konrath  <ben@bagu.org>
+
+	Update the Eclipse JDT configuration.
+
+	* .settings/org.eclipse.jdt.ui.prefs: Automatically add comments to new
+	methods. Automatically add the copyright header to new files.
+
 2011-04-05  Ben Konrath  <ben@bagu.org>
 
 	Add new page for demo selection.
