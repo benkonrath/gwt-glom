@@ -54,7 +54,6 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 	 * 
 	 * @see org.glom.web.client.ui.DocumentSelectionView#setErrorMessage(java.lang.String)
 	 */
-	@Override
 	public void setErrorMessage(String message) {
 		clearHyperLinks();
 		Label label = new Label(message);

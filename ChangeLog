@@ -1,5 +1,11 @@
 2011-04-11  Ben Konrath  <ben@bagu.org>
 
+	Remove unnecessary @Override in DocumentSelectionViewImpl.
+
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+
+2011-04-11  Ben Konrath  <ben@bagu.org>
+
 	Remove center alignment in DocumentSelectionView.
 
 	The title element is still centred but the document titles and bottom
