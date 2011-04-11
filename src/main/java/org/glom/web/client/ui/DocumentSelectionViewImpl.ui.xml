@@ -15,8 +15,6 @@
 		font-size: 2em;
 		font-weight: bold;
 		color: #777777;
-		margin-left: auto;
-		margin-right: auto;
 		}
 
 		.info {
@@ -24,7 +22,6 @@
 		font-weight: bold;
 		color: #777777;
 		margin: 20px 0px 40px;
-		text-align: center;
 		}
 
 	</ui:style>
@@ -37,7 +34,7 @@
 		</div>
 
 		<div>
-			<g:VerticalPanel addStyleNames="{style.links}" ui:field="documentLinks" horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE" spacing="10" />
+			<g:VerticalPanel addStyleNames="{style.links}" ui:field="documentLinks" verticalAlignment="ALIGN_MIDDLE" spacing="10" />
 		</div>
 
 		<div class="{style.info}">

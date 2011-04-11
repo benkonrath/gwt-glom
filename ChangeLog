@@ -1,5 +1,14 @@
 2011-04-11  Ben Konrath  <ben@bagu.org>
 
+	Remove center alignment in DocumentSelectionView.
+
+	The title element is still centred but the document titles and bottom
+	sentence are both left-aligned.
+
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.ui.xml:
+
+2011-04-11  Ben Konrath  <ben@bagu.org>
+
 	Change 'Demo' naming convention to 'Document'.
 
 	This is just a rename refactor with no functional changes to the code.
