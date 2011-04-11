@@ -20,9 +20,9 @@
 package org.glom.web.client.mvp;
 
 import org.glom.web.client.ClientFactoryImpl;
-import org.glom.web.client.activity.DemoSelectionActivity;
+import org.glom.web.client.activity.DocumentSelectionActivity;
 import org.glom.web.client.activity.OnlineGlomActivity;
-import org.glom.web.client.place.DemoSelectionPlace;
+import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.OnlineGlomPlace;
 
 import com.google.gwt.activity.shared.Activity;
@@ -57,8 +57,8 @@ public class AppActivityMapper implements ActivityMapper {
 		// This is begging for GIN
 		if (place instanceof OnlineGlomPlace)
 			return new OnlineGlomActivity((OnlineGlomPlace) place, clientFactory);
-		else if (place instanceof DemoSelectionPlace)
-			return new DemoSelectionActivity(clientFactory);
+		else if (place instanceof DocumentSelectionPlace)
+			return new DocumentSelectionActivity(clientFactory);
 		return null;
 	}
 

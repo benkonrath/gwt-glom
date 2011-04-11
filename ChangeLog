@@ -1,3 +1,23 @@
+2011-04-11  Ben Konrath  <ben@bagu.org>
+
+	Change 'Demo' naming convention to 'Document'.
+
+	This is just a rename refactor with no functional changes to the code.
+
+	* src/main/java/org/glom/web/client/ClientFactory.java:
+	* src/main/java/org/glom/web/client/ClientFactoryImpl.java:
+	* src/main/java/org/glom/web/client/OnlineGlom.java:
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java:
+	* src/main/java/org/glom/web/client/mvp/AppActivityMapper.java:
+	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+	* src/main/java/org/glom/web/client/place/DocumentSelectionPlace.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.ui.xml:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
 2011-04-08  Ben Konrath  <ben@bagu.org>
 
 	Remove FIXME from safeLongToInt() method.

@@ -19,7 +19,7 @@
 
 package org.glom.web.client;
 
-import org.glom.web.client.ui.DemoSelectionView;
+import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.OnlineGlomView;
 
 import com.google.gwt.event.shared.EventBus;
@@ -39,6 +39,6 @@ public interface ClientFactory {
 
 	OnlineGlomView getOnlineGlomView();
 
-	DemoSelectionView getDemoSelectionView();
+	DocumentSelectionView getDocumentSelectionView();
 
 }

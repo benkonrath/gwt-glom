@@ -17,24 +17,22 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.place;
+package org.glom.web.client.ui;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceTokenizer;
+import com.google.gwt.user.client.ui.IsWidget;
 
-/*
- * The DemoSelectionPlace doesn't hold state so we just have to make a basic implementation.
- */
-public class DemoSelectionPlace extends Place {
-	public static class Tokenizer implements PlaceTokenizer<DemoSelectionPlace> {
-		@Override
-		public DemoSelectionPlace getPlace(String token) {
-			return new DemoSelectionPlace();
-		}
+public interface DocumentSelectionView extends IsWidget {
 
-		@Override
-		public String getToken(DemoSelectionPlace place) {
-			return null;
-		}
-	}
+	void addHyperLink(String dbTitle, String string);
+
+	void clearHyperLinks();
+
+	/**
+	 * Sets an error message to be displayed to the user.
+	 * 
+	 * @param message
+	 *            the error message.
+	 */
+	void setErrorMessage(String message);
+
 }

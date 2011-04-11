@@ -37,11 +37,11 @@
 		</div>
 
 		<div>
-			<g:VerticalPanel addStyleNames="{style.links}" ui:field="demoLinks" horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE" spacing="10" />
+			<g:VerticalPanel addStyleNames="{style.links}" ui:field="documentLinks" horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE" spacing="10" />
 		</div>
 
 		<div class="{style.info}">
-			You can build and run this demo by following
+			You can build and run Online Glom by following
 			<a href="http://www.glom.org/wiki/index.php?title=Development/OnlineGlom">these instructions</a>
 			.
 		</div>

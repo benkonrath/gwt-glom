@@ -105,19 +105,19 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	private void configureServlet() {
 		// TODO get this from a config file
-		String glomDemoDir = "/home/ben";
+		String glomDocumentDir = "/home/ben";
 
-		File file = new File(glomDemoDir);
+		File file = new File(glomDocumentDir);
 
 		if (!file.isDirectory()) {
 			// TODO notify user of error
-			Log.fatal(glomDemoDir + " is not a directory.");
+			Log.fatal(glomDocumentDir + " is not a directory.");
 			return;
 		}
 
 		if (!file.canRead()) {
 			// TODO notify user of error
-			Log.fatal("Can't read the files in : " + glomDemoDir);
+			Log.fatal("Can't read the files in : " + glomDocumentDir);
 			return;
 		}
 
@@ -593,7 +593,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return rowsList;
 	}
 
-	public ArrayList<String> getDemoDatabaseTitles() {
+	public ArrayList<String> getDocumentTitles() {
 		if (!configured)
 			configureServlet();
 

@@ -40,6 +40,6 @@ public interface OnlineGlomService extends RemoteService {
 	ArrayList<GlomField[]> getSortedTableData(String documentTitle, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending);
 
-	ArrayList<String> getDemoDatabaseTitles();
+	ArrayList<String> getDocumentTitles();
 
 }

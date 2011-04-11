@@ -28,37 +28,37 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class DemoSelectionViewImpl extends Composite implements DemoSelectionView {
+public class DocumentSelectionViewImpl extends Composite implements DocumentSelectionView {
 
-	interface DemoSelectionViewImplUiBinder extends UiBinder<Widget, DemoSelectionViewImpl> {
+	interface DocumentSelectionViewImplUiBinder extends UiBinder<Widget, DocumentSelectionViewImpl> {
 	}
 
-	private static DemoSelectionViewImplUiBinder uiBinder = GWT.create(DemoSelectionViewImplUiBinder.class);
+	private static DocumentSelectionViewImplUiBinder uiBinder = GWT.create(DocumentSelectionViewImplUiBinder.class);
 	@UiField
-	VerticalPanel demoLinks;
+	VerticalPanel documentLinks;
 
-	public DemoSelectionViewImpl() {
+	public DocumentSelectionViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	public void addHyperLink(String dbTitle, String targetHistoryToken) {
-		demoLinks.add(new Hyperlink(dbTitle, targetHistoryToken));
+		documentLinks.add(new Hyperlink(dbTitle, targetHistoryToken));
 	}
 
 	public void clearHyperLinks() {
-		demoLinks.clear();
+		documentLinks.clear();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.DemoSelectionView#setErrorMessage(java.lang.String)
+	 * @see org.glom.web.client.ui.DocumentSelectionView#setErrorMessage(java.lang.String)
 	 */
 	@Override
 	public void setErrorMessage(String message) {
 		clearHyperLinks();
 		Label label = new Label(message);
 		label.getElement().getStyle().setColor("Red");
-		demoLinks.add(label);
+		documentLinks.add(label);
 	}
 }

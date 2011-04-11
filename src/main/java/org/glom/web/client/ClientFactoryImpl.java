@@ -20,8 +20,8 @@
 package org.glom.web.client;
 
 import org.glom.web.client.mvp.AppPlaceHistoryMapper;
-import org.glom.web.client.ui.DemoSelectionView;
-import org.glom.web.client.ui.DemoSelectionViewImpl;
+import org.glom.web.client.ui.DocumentSelectionView;
+import org.glom.web.client.ui.DocumentSelectionViewImpl;
 import org.glom.web.client.ui.OnlineGlomView;
 import org.glom.web.client.ui.OnlineGlomViewImpl;
 
@@ -38,7 +38,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	private final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
 	private final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
 	private final OnlineGlomView onlineGlomView = new OnlineGlomViewImpl();
-	private final DemoSelectionView demoSelectionView = new DemoSelectionViewImpl();
+	private final DocumentSelectionView documentSelectionView = new DocumentSelectionViewImpl();
 
 	public EventBus getEventBus() {
 		return eventBus;
@@ -61,7 +61,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	}
 
 	@Override
-	public DemoSelectionView getDemoSelectionView() {
-		return demoSelectionView;
+	public DocumentSelectionView getDocumentSelectionView() {
+		return documentSelectionView;
 	}
 }

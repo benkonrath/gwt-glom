@@ -58,5 +58,5 @@ public interface OnlineGlomServiceAsync {
 	void getSortedTableData(String documentTitle, String tableName, int start, int length, int columnIndex,
 			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
 
-	void getDemoDatabaseTitles(AsyncCallback<ArrayList<String>> callback);
+	void getDocumentTitles(AsyncCallback<ArrayList<String>> callback);
 }

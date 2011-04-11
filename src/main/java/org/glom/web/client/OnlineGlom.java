@@ -20,7 +20,7 @@
 package org.glom.web.client;
 
 import org.glom.web.client.mvp.AppActivityMapper;
-import org.glom.web.client.place.DemoSelectionPlace;
+import org.glom.web.client.place.DocumentSelectionPlace;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class OnlineGlom implements EntryPoint {
 
 	// The start page.
-	private final Place defaultPlace = new DemoSelectionPlace();
+	private final Place defaultPlace = new DocumentSelectionPlace();
 	// A container widget that will be managed by the ActivityManager.
 	private final SimplePanel panel = new SimplePanel();
 
