@@ -49,8 +49,8 @@ public class DocumentSelectionActivity extends AbstractActivity {
 
 		AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
 			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getDocumentTitles()");
+				documentSelectionView
+						.setErrorMessage("Unable to communicate with the server. Check the error log for more information.");
 			}
 
 			public void onSuccess(ArrayList<String> documentTitles) {

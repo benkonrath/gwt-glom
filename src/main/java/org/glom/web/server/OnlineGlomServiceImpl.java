@@ -21,6 +21,7 @@ package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -65,69 +66,84 @@ import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
+
+	// class to hold configuration information for related to the glom document and db access
 	private class ConfiguredDocument {
 		private Document document;
 		private ComboPooledDataSource cpds;
+		private boolean authenticated = false;
 
-		public ConfiguredDocument(Document document, ComboPooledDataSource cpds) {
-			this.cpds = cpds;
-			this.document = document;
+		// @formatter:off
+		public Document getDocument() { return document; }
+		public void setDocument(Document document) { this.document = document; }
+		public ComboPooledDataSource getCpds() { return cpds; }
+		public void setCpds(ComboPooledDataSource cpds) { this.cpds = cpds;	}
+		public boolean isAuthenticated() { return authenticated; }
+		public void setAuthenticated(boolean authenticated) { this.authenticated = authenticated; }
+		// @formatter:on
+	}
+
+	// convenience class to for dealing with the Online Glom configuration file
+	private class OnlineGlomProperties extends Properties {
+		public String getKey(String value) {
+			for (String key : stringPropertyNames()) {
+				if (getProperty(key).trim().equals(value))
+					return key;
+			}
+			return null;
 		}
-
-		public Document getDocument() {
-			return document;
-		}
-
-		public ComboPooledDataSource getCpds() {
-			return cpds;
-		}
-
 	}
 
 	private final Hashtable<String, ConfiguredDocument> documents = new Hashtable<String, ConfiguredDocument>();
-
 	// TODO implement locale
 	private final Locale locale = Locale.ROOT;
-	private boolean configured = false;
 
 	/*
 	 * This is called when the servlet is started or restarted.
 	 */
-	public OnlineGlomServiceImpl() {
-		Glom.libglom_init();
+	public OnlineGlomServiceImpl() throws Exception {
 
-	}
+		// This retrieves configuration values from the onlineglom properties file located on the classpath for this
+		// servlet.
+		String classpath = System.getProperty("java.class.path");
+		String[] paths = classpath.split(File.pathSeparator);
+		File propFile = null;
+		boolean configFound = false;
+		for (String path : paths) {
+			propFile = new File(path, "onlineglom.properties");
+			if (propFile.exists() && !propFile.isDirectory()) {
+				configFound = true;
+				Log.info("Using configuration file: " + propFile.getAbsolutePath());
+				break;
+			}
+		}
+		if (!configFound) {
+			Log.fatal("onlineglom.properties not found on the classpath.");
+			throw new IOException();
+		}
+		OnlineGlomProperties config = new OnlineGlomProperties();
+		config.load(new FileInputStream(propFile));
 
-	/*
-	 * The properties file can't be loaded in the constructor because the servlet is not yet initialised and
-	 * getServletContext() will return null. The work-around for this problem is to initialise the database and glom
-	 * document object when makes its first request.
-	 */
-	private void configureServlet() {
-		// TODO get this from a config file
-		String glomDocumentDir = "/home/ben";
-
-		File file = new File(glomDocumentDir);
-
-		if (!file.isDirectory()) {
-			// TODO notify user of error
-			Log.fatal(glomDocumentDir + " is not a directory.");
-			return;
+		// check the configured glom file directory
+		String documentDirName = config.getProperty("glom.document.directory");
+		File documentDir = new File(documentDirName);
+		if (!documentDir.isDirectory()) {
+			Log.fatal(documentDirName + " is not a directory.");
+			throw new IOException();
+		}
+		if (!documentDir.canRead()) {
+			Log.fatal("Can't read the files in : " + documentDirName);
+			throw new IOException();
 		}
 
-		if (!file.canRead()) {
-			// TODO notify user of error
-			Log.fatal("Can't read the files in : " + glomDocumentDir);
-			return;
-		}
-
-		File[] glomFiles = file.listFiles(new FilenameFilter() {
+		// get and check the glom files in the specified directory
+		File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".glom") ? true : false;
 			}
 		});
-
+		Glom.libglom_init();
 		for (File glomFile : glomFiles) {
 			Document document = new Document();
 			document.set_file_uri("file://" + glomFile.getAbsolutePath());
@@ -136,47 +152,81 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (retval == false) {
 				String message;
 				if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
-					message = "Could not find " + file.getAbsolutePath();
+					message = "Could not find " + documentDir.getAbsolutePath();
 				} else {
-					message = "An unknown error occurred when trying to load " + file.getAbsolutePath();
+					message = "An unknown error occurred when trying to load " + documentDir.getAbsolutePath();
 				}
 				Log.error(message);
+				// continue with for loop because there may be other documents in the directory
 				continue;
 			}
 
-			Properties props = new Properties();
-			String propFileName = "/WEB-INF/OnlineGlom.properties";
-			try {
-				props.load(getServletContext().getResourceAsStream(propFileName));
-			} catch (IOException e) {
-				Log.fatal("Error loading " + propFileName, e);
-				// TODO can't continue, notify user of problem
-			}
-
-			// load the jdbc driver for this document
+			// load the jdbc driver for the current glom document
 			ComboPooledDataSource cpds = new ComboPooledDataSource();
+
 			try {
 				cpds.setDriverClass("org.postgresql.Driver");
 			} catch (PropertyVetoException e) {
-				Log.fatal(
-						"Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?",
-						e);
-				// TODO can't continue, notify user of problem
-				break;
+				Log.fatal("Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?");
+				throw e;
 			}
 
+			// setup the JDBC driver for the current glom document
 			cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
 					+ document.get_connection_database());
-			// TODO notify user if dbusername or dbpassword are wrong
-			cpds.setUser(props.getProperty("dbusername"));
-			cpds.setPassword(props.getProperty("dbpassword"));
 
+			// check if a username and password have been set and work for the current document
 			String documentTitle = document.get_database_title().trim();
-			ConfiguredDocument configuredDocument = new ConfiguredDocument(document, cpds);
+			ConfiguredDocument configuredDocument = new ConfiguredDocument();
+			String key = config.getKey(documentTitle);
+			if (key != null) {
+				String[] keyArray = key.split("\\.");
+				if (keyArray.length == 3 && "title".equals(keyArray[2])) {
+					// username/password could be set, let's check to see if it works
+					String usernameKey = key.replaceAll(keyArray[2], "username");
+					String passwordKey = key.replaceAll(keyArray[2], "password");
+					configuredDocument.setAuthenticated(isAuthenticationCorrect(documentTitle, cpds,
+							config.getProperty(usernameKey), config.getProperty(passwordKey)));
+				}
+			}
+
+			// check the if the global username and password have been set and work with this document
+			if (!configuredDocument.isAuthenticated()) {
+				configuredDocument.setAuthenticated(isAuthenticationCorrect(documentTitle, cpds,
+						config.getProperty("glom.document.username"), config.getProperty("glom.document.password")));
+			}
+
+			// add information to the hash table
+			configuredDocument.setDocument(document);
+			configuredDocument.setCpds(cpds);
 			documents.put(documentTitle, configuredDocument);
 		}
+	}
 
-		configured = true;
+	/*
+	 * Checks if the username and password works with the database configured with the specified ComboPooledDataSource.
+	 * 
+	 * @return true if authentication works, false otherwise
+	 */
+	private boolean isAuthenticationCorrect(String documentTitle, ComboPooledDataSource cpds, String username,
+			String password) throws SQLException {
+		cpds.setUser(username);
+		cpds.setPassword(password);
+
+		int acquireRetryAttempts = cpds.getAcquireRetryAttempts();
+		cpds.setAcquireRetryAttempts(1);
+		Connection conn = null;
+		try {
+			conn = cpds.getConnection();
+			return true;
+		} catch (SQLException e) {
+			Log.info("Username and password not correct for document: " + documentTitle);
+		} finally {
+			if (conn != null)
+				conn.close();
+			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
+		}
+		return false;
 	}
 
 	/*
@@ -188,22 +238,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public void destroy() {
 		Glom.libglom_deinit();
 
-		if (configured) {
-			for (String documenTitle : documents.keySet()) {
-				ConfiguredDocument configuredDoc = documents.get(documenTitle);
-				try {
-					DataSources.destroy(configuredDoc.getCpds());
-				} catch (SQLException e) {
-					Log.error("Error cleaning up the ComboPooledDataSource for " + documenTitle, e);
-				}
+		for (String documenTitle : documents.keySet()) {
+			ConfiguredDocument configuredDoc = documents.get(documenTitle);
+			try {
+				DataSources.destroy(configuredDoc.getCpds());
+			} catch (SQLException e) {
+				Log.error("Error cleaning up the ComboPooledDataSource for " + documenTitle, e);
 			}
 		}
 
 	}
 
 	public GlomDocument getGlomDocument(String documentTitle) {
-		if (!configured)
-			configureServlet();
 
 		Document document = documents.get(documentTitle).getDocument();
 		GlomDocument glomDocument = new GlomDocument();
@@ -240,9 +286,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	public LayoutListTable getLayoutListTable(String documentTitle, String table) {
-		if (!configured)
-			configureServlet();
-
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
 		LayoutListTable tableInfo = new LayoutListTable();
@@ -351,9 +394,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// FIXME fix LayoutListView to not call this method with empty table or document title
 		if (documentTitle.isEmpty() || tableName.isEmpty())
 			return new ArrayList<GlomField[]>();
-
-		if (!configured)
-			configureServlet();
 
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
@@ -594,9 +634,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	public ArrayList<String> getDocumentTitles() {
-		if (!configured)
-			configureServlet();
-
 		ArrayList<String> documentTitles = new ArrayList<String>();
 		for (String title : documents.keySet()) {
 			documentTitles.add(title);

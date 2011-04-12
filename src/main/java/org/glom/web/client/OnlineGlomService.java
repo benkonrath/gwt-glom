@@ -40,6 +40,12 @@ public interface OnlineGlomService extends RemoteService {
 	ArrayList<GlomField[]> getSortedTableData(String documentTitle, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending);
 
+	/**
+	 * Gets a list of Glom document titles found in the configured directory.
+	 * 
+	 * @return an {@link ArrayList<String>} of Glom document titles. If the list is empty, no glom documents were found
+	 *         in the configured directory because it's empty or the directory is not configured correctly.
+	 */
 	ArrayList<String> getDocumentTitles();
 
 }

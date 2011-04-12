@@ -1,3 +1,24 @@
+2011-04-12  Ben Konrath  <ben@bagu.org>
+
+	Move configuration of the servlet to the constructor.
+
+	The servlet will be initialized even if the database authentication
+	information is not set or correct. I still need to add the UI for prompting
+	the user for the authentication information when it's required.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Add
+	javadocs for getDocumentTitles() method.
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java:
+	Set error message when RPC fails.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Get the
+	glom files directory from the configuration file. Try to set the
+	database authentication information for the specific document if it's
+	set and works otherwise try to use the global authentication
+	information set for the directory.
+	* src/main/resources/onlineglom.properties: Moved from
+	src/main/webapp/WEB-INF/OnlineGlom.properties. Updated with new keys.
+	Added detailed comments for the new keys.
+
 2011-04-11  Ben Konrath  <ben@bagu.org>
 
 	Remove unnecessary @Override in DocumentSelectionViewImpl.
