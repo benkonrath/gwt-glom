@@ -298,7 +298,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (listViewLayoutGroupSize > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn(documentTitle + " " + table + ": The size of the list view layout group for table " + table
+				Log.warn(documentTitle + " - " + table + ": The size of the list view layout group for table " + table
 						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
@@ -361,7 +361,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			tableInfo.setNumRows(rs.getInt(1));
 
 		} catch (SQLException e) {
-			Log.error(documentTitle + " " + table
+			Log.error(documentTitle + " - " + table
 					+ ": Error calculating number of rows in the query. Setting number of rows to 0.", e);
 			tableInfo.setNumRows(0);
 		} finally {
@@ -374,7 +374,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(documentTitle + " " + table
+				Log.error(documentTitle + " - " + table
 						+ ": Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
@@ -460,7 +460,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (field != null)
 				sortClause.addLast(new SortFieldPair(field, isAscending));
 			else {
-				Log.error(documentTitle + " " + tableName + ": Error getting LayoutItem_Field for column index "
+				Log.error(documentTitle + " - " + tableName + ": Error getting LayoutItem_Field for column index "
 						+ sortColumnIndex + ". Cannot create a sort clause for this column.");
 			}
 
@@ -551,7 +551,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 								numFormatJava = getJavaNumberFormat(numFormatGlom);
 							}
 						} else if (currencyCode.length() > 0) {
-							Log.warn(documentTitle + " " + tableName + ": " + currencyCode
+							Log.warn(documentTitle + " - " + tableName + ": " + currencyCode
 									+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
 							// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
 							// We're going to manually set the currency code and use the glom numeric formatting.
@@ -608,7 +608,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						break;
 					case TYPE_INVALID:
 					default:
-						Log.warn(documentTitle + " " + tableName
+						Log.warn(documentTitle + " - " + tableName
 								+ ": Invalid LayoutItem Field type. Using empty string for value.");
 						rowArray[i].setText("");
 						break;
@@ -620,7 +620,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				rowCount++;
 			}
 		} catch (SQLException e) {
-			Log.error(documentTitle + " " + tableName + ": Error executing database query.", e);
+			Log.error(documentTitle + " - " + tableName + ": Error executing database query.", e);
 			// TODO: somehow notify user of problem
 		} finally {
 			// cleanup everything that has been used
@@ -632,7 +632,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(documentTitle + " " + tableName
+				Log.error(documentTitle + " - " + tableName
 						+ ": Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}

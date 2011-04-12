@@ -1,5 +1,13 @@
 2011-04-12  Ben Konrath  <ben@bagu.org>
 
+	Make log messages a little clearer.
+
+	Add a dash betweeen the document title and the table name.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-04-12  Ben Konrath  <ben@bagu.org>
+
 	Protect against NPEs when cleaning up database resources.
 
 	While this isn't strictly necessary because the exception is caught,
