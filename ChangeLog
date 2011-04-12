@@ -1,5 +1,15 @@
 2011-04-12  Ben Konrath  <ben@bagu.org>
 
+	Protect against NPEs when cleaning up database resources.
+
+	While this isn't strictly necessary because the exception is caught,
+	not protecting against the NPEs makes it harder to find the real error
+	in the log file.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-04-12  Ben Konrath  <ben@bagu.org>
+
 	Move configuration of the servlet to the constructor.
 
 	The servlet will be initialized even if the database authentication

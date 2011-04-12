@@ -367,9 +367,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		} finally {
 			// cleanup everything that has been used
 			try {
-				rs.close();
-				st.close();
-				conn.close();
+				if (rs != null)
+					rs.close();
+				if (st != null)
+					st.close();
+				if (conn != null)
+					conn.close();
 			} catch (Exception e) {
 				Log.error(documentTitle + " " + table
 						+ ": Error closing database resources. Subsequent database queries may not work.", e);
@@ -622,9 +625,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		} finally {
 			// cleanup everything that has been used
 			try {
-				rs.close();
-				st.close();
-				conn.close();
+				if (rs != null)
+					rs.close();
+				if (st != null)
+					st.close();
+				if (conn != null)
+					conn.close();
 			} catch (Exception e) {
 				Log.error(documentTitle + " " + tableName
 						+ ": Error closing database resources. Subsequent database queries may not work.", e);
