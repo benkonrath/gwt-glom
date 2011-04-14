@@ -185,14 +185,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					// username/password could be set, let's check to see if it works
 					String usernameKey = key.replaceAll(keyArray[2], "username");
 					String passwordKey = key.replaceAll(keyArray[2], "password");
-					configuredDocument.setAuthenticated(isAuthenticationCorrect(documentTitle, cpds,
+					configuredDocument.setAuthenticated(checkAuthentication(documentTitle, cpds,
 							config.getProperty(usernameKey), config.getProperty(passwordKey)));
 				}
 			}
 
 			// check the if the global username and password have been set and work with this document
 			if (!configuredDocument.isAuthenticated()) {
-				configuredDocument.setAuthenticated(isAuthenticationCorrect(documentTitle, cpds,
+				configuredDocument.setAuthenticated(checkAuthentication(documentTitle, cpds,
 						config.getProperty("glom.document.username"), config.getProperty("glom.document.password")));
 			}
 
@@ -208,7 +208,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * 
 	 * @return true if authentication works, false otherwise
 	 */
-	private boolean isAuthenticationCorrect(String documentTitle, ComboPooledDataSource cpds, String username,
+	private boolean checkAuthentication(String documentTitle, ComboPooledDataSource cpds, String username,
 			String password) throws SQLException {
 		cpds.setUser(username);
 		cpds.setPassword(password);
@@ -217,6 +217,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		cpds.setAcquireRetryAttempts(1);
 		Connection conn = null;
 		try {
+			// FIXME find a better way to check authentication
+			// it's possible that the connection could be failing for another reason
 			conn = cpds.getConnection();
 			return true;
 		} catch (SQLException e) {
@@ -339,6 +341,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// Get the number of rows a query with the table name and layout fields would return. This is needed for the
 		// list view pager.
+		if (!configuredDoc.isAuthenticated())
+			return tableInfo;
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -467,6 +471,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
+		if (!configuredDoc.isAuthenticated())
+			return rowsList;
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -741,4 +747,31 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
+	 */
+	public boolean isAuthenticated(String documentTitle) {
+		return documents.get(documentTitle).isAuthenticated();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	public boolean checkAuthentication(String documentTitle, String username, String password) {
+		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		boolean authenticated;
+		try {
+			authenticated = checkAuthentication(documentTitle, configuredDoc.getCpds(), username, password);
+		} catch (SQLException e) {
+			Log.error("", e);
+			return false;
+		}
+		configuredDoc.setAuthenticated(authenticated);
+		return authenticated;
+	}
 }

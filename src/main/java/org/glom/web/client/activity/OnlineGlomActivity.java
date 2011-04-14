@@ -30,6 +30,8 @@ import org.glom.web.shared.LayoutListTable;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
@@ -52,8 +54,24 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Window.setTitle("Online Glom - " + documentTitle);
 
-		// define the callback object
-		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
+		// check if the authentication info has been set for the document
+		AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
+			public void onSuccess(Boolean result) {
+				if (!result) {
+					setUpAuthClickHandler();
+					onlineGlomView.showAuthPopup();
+				}
+			}
+
+			public void onFailure(Throwable caught) {
+				// FIXME: need to deal with failure
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentTitle, isAuthCallback);
+
+		// get some information about the current document
+		AsyncCallback<GlomDocument> glomDocCallback = new AsyncCallback<GlomDocument>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
 				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
@@ -65,9 +83,7 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 				updateTable();
 			}
 		};
-
-		// make the RPC call to get the GlomDocument
-		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, glomDocCallback);
 
 		// set the change handler for the table selection widget
 		onlineGlomView.setTableChangeHandler(new ChangeHandler() {
@@ -84,8 +100,7 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 		panel.setWidget(onlineGlomView.asWidget());
 	}
 
-	protected void updateTable() {
-		// set up the callback object.
+	private void updateTable() {
 		AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
@@ -100,7 +115,36 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(documentTitle, onlineGlomView.getSelectedTable(),
 				callback);
+	}
 
+	private void setUpAuthClickHandler() {
+		onlineGlomView.setAuthClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				onlineGlomView.setAuthTextFieldsEnabled(false);
+				AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+					@Override
+					public void onSuccess(Boolean result) {
+						if (result) {
+							onlineGlomView.hideAuthPopup();
+							updateTable();
+						} else {
+							onlineGlomView.setAuthTextFieldsEnabled(true);
+							onlineGlomView.setAuthError();
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// FIXME: need to deal with failure
+						System.out.println("AsyncCallback Failed: OnlineGlomService.checkAuthentication()");
+					}
+				};
+				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentTitle,
+						onlineGlomView.getUsername(), onlineGlomView.getPassword(), callback);
+			}
+
+		});
 	}
 
 	/*
@@ -111,6 +155,7 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 	@Override
 	public void onStop() {
 		// clear the data in the view once the user has navigated away from this activity
+		onlineGlomView.hideAuthPopup();
 		onlineGlomView.clear();
 	}
 

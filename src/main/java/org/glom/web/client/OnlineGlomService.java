@@ -48,4 +48,27 @@ public interface OnlineGlomService extends RemoteService {
 	 */
 	ArrayList<String> getDocumentTitles();
 
+	/**
+	 * Checks if the PostgreSQL authentication has been set for this document.
+	 * 
+	 * @param documentTitle
+	 *            title of document to check
+	 * @return true if the authentication has been set, false if it hasn't
+	 */
+	boolean isAuthenticated(String documentTitle);
+
+	/**
+	 * Checks if the provided PostgreSQL username and password are correct for the specified glom document. If the
+	 * information is correct it is saved for future access.
+	 * 
+	 * @param documentTitle
+	 *            title of the document to check
+	 * @param username
+	 *            the PostgreSQL username
+	 * @param password
+	 *            the POstgreSQL password
+	 * @return true if username and password are correct, false otherwise
+	 */
+	boolean checkAuthentication(String documentTitle, String username, String password);
+
 }

@@ -22,6 +22,7 @@ package org.glom.web.client.ui;
 import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -42,6 +43,7 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 	private final SimplePanel dataPanel = new SimplePanel();
 	private Presenter presenter;
 	private HandlerRegistration changeHandlerRegistration = null;
+	private AuthenticationPopup authPopup = new AuthenticationPopup();
 
 	public OnlineGlomViewImpl() {
 		hPanel.add(new Label("Table:"));
@@ -58,46 +60,70 @@ public class OnlineGlomViewImpl extends Composite implements OnlineGlomView {
 		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
 	}
 
-	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
 
 	public void setTableSelection(ArrayList<String> names, ArrayList<String> titles) {
-
 		for (int i = 0; i < names.size(); i++) {
 			listBox.addItem(titles.get(i), names.get(i));
 		}
 	}
 
-	@Override
 	public void setTableSelectedIndex(int index) {
 		listBox.setSelectedIndex(index);
 	}
 
-	@Override
 	public void setTableChangeHandler(ChangeHandler changeHandler) {
 		changeHandlerRegistration = listBox.addChangeHandler(changeHandler);
 	}
 
-	@Override
 	public String getSelectedTable() {
 		int selectedIndex = listBox.getSelectedIndex();
 		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
 	}
 
-	@Override
 	public void setListTable(LayoutListView listView) {
 		// FIXME don't need to clear the dataPanel when LayoutListView is fixed
 		dataPanel.clear();
 		dataPanel.add(listView);
 	}
 
-	@Override
 	public void clear() {
-		if (changeHandlerRegistration != null)
-			changeHandlerRegistration.removeHandler();
+		authPopup.clear();
 		listBox.clear();
 		dataPanel.clear();
+		if (changeHandlerRegistration != null) {
+			changeHandlerRegistration.removeHandler();
+			changeHandlerRegistration = null;
+		}
+	}
+
+	public void showAuthPopup() {
+		authPopup.center();
+	}
+
+	public void hideAuthPopup() {
+		authPopup.hide();
+	}
+
+	public void setAuthClickHandler(ClickHandler clickHandler) {
+		authPopup.setClickOkHandler(clickHandler);
+	}
+
+	public void setAuthTextFieldsEnabled(boolean enabled) {
+		authPopup.setTextFieldsEnabled(enabled);
+	}
+
+	public String getUsername() {
+		return authPopup.getUsername();
+	}
+
+	public String getPassword() {
+		return authPopup.getPassword();
+	}
+
+	public void setAuthError() {
+		authPopup.setError();
 	}
 }

@@ -1,3 +1,29 @@
+2011-04-14  Ben Konrath  <ben@bagu.org>
+
+	Prompt for db username/password if they haven't been set.
+
+	This is implemented with a popup widget that is contained within the
+	OnlineGlomView and managed by the OnlineGlomActivity.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java: Two new
+	methods for checking and setting the database username and password.
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Two
+	new methods for checking and setting the database username and
+	password.
+	* src/main/java/org/glom/web/client/activity/OnlineGlomActivity.java:
+	Display authentication popup if the JDBC connection to the database
+	has not been authenticated.
+	* src/main/java/org/glom/web/client/ui/AuthenticationPopup.java: New
+	file.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomView.java: Add methods
+	for dealing with the authentication popup.
+	* src/main/java/org/glom/web/client/ui/OnlineGlomViewImpl.java:
+	Implement the methods for dealing with the authentication popup.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Don't
+	try to executed queries if the database connection hasn't been
+	authenticated. Implement methods for checking and setting the
+	database username and password.
+
 2011-04-12  Ben Konrath  <ben@bagu.org>
 
 	Make log messages a little clearer.

@@ -59,4 +59,9 @@ public interface OnlineGlomServiceAsync {
 			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
 
 	void getDocumentTitles(AsyncCallback<ArrayList<String>> callback);
+
+	void isAuthenticated(String documentTitle, AsyncCallback<Boolean> callback);
+
+	void checkAuthentication(String documentTitle, String username, String password, AsyncCallback<Boolean> callback);
+
 }
