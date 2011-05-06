@@ -23,20 +23,19 @@ import java.util.ArrayList;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
-import org.glom.web.client.place.OnlineGlomPlace;
 import org.glom.web.client.ui.DocumentSelectionView;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class DocumentSelectionActivity extends AbstractActivity {
+public class DocumentSelectionActivity extends AbstractActivity implements DocumentSelectionView.Presenter {
 
 	// TODO inject with GIN
 	private final ClientFactory clientFactory;
-	private final ArrayList<OnlineGlomPlace> documentPlaces = new ArrayList<OnlineGlomPlace>();
 
 	public DocumentSelectionActivity(ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
@@ -46,6 +45,7 @@ public class DocumentSelectionActivity extends AbstractActivity {
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Window.setTitle("Online Glom");
 		final DocumentSelectionView documentSelectionView = clientFactory.getDocumentSelectionView();
+		documentSelectionView.setPresenter(this);
 
 		AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
 			public void onFailure(Throwable caught) {
@@ -57,10 +57,7 @@ public class DocumentSelectionActivity extends AbstractActivity {
 				documentSelectionView.clearHyperLinks();
 				if (!documentTitles.isEmpty()) {
 					for (String documentTitle : documentTitles) {
-						OnlineGlomPlace place = new OnlineGlomPlace(documentTitle);
-						documentPlaces.add(place);
-						documentSelectionView.addHyperLink(documentTitle,
-								clientFactory.getHistoryMapper().getToken(place));
+						documentSelectionView.addDocumentLink(documentTitle);
 					}
 				} else {
 					documentSelectionView
@@ -72,4 +69,10 @@ public class DocumentSelectionActivity extends AbstractActivity {
 
 		panel.setWidget(documentSelectionView.asWidget());
 	}
+
+	@Override
+	public void goTo(Place place) {
+		clientFactory.getPlaceController().goTo(place);
+	}
+
 }

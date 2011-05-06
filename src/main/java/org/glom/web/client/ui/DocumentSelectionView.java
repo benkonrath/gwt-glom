@@ -19,11 +19,18 @@
 
 package org.glom.web.client.ui;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface DocumentSelectionView extends IsWidget {
 
-	void addHyperLink(String dbTitle, String string);
+	public interface Presenter {
+		void goTo(Place place);
+	}
+
+	void setPresenter(Presenter presenter);
+
+	void addDocumentLink(String documentTitle);
 
 	void clearHyperLinks();
 

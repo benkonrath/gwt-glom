@@ -1,3 +1,22 @@
+2011-05-06  Ben Konrath  <ben@bagu.org>
+
+	Use Presenter for app navigation.
+
+	This is the proper way to deal with Place (URL) changes with the MVP
+	framework.
+
+	* src/main/java/org/glom/web/client/ClientFactory.java:
+	* src/main/java/org/glom/web/client/ClientFactoryImpl.java: Remove
+	PlaceHistoryMapper and PlaceHistoryHandler.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Re-add
+	PlaceHistoryMapper and PlaceHistoryHandler.
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java:
+	Don't use getHistoryMapper().getToken(place) to create the hyperlinks.
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+	Add Presenter interface and setPresenter methods. Rename addHyperLink
+	to addDocumentLink taking only the document title as a parameter.
+
 2011-04-14  Ben Konrath  <ben@bagu.org>
 
 	Prompt for db username/password if they haven't been set.

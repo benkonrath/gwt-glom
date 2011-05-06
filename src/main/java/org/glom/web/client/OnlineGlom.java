@@ -20,6 +20,7 @@
 package org.glom.web.client;
 
 import org.glom.web.client.mvp.AppActivityMapper;
+import org.glom.web.client.mvp.AppPlaceHistoryMapper;
 import org.glom.web.client.place.DocumentSelectionPlace;
 
 import com.google.gwt.activity.shared.ActivityManager;
@@ -49,18 +50,20 @@ public class OnlineGlom implements EntryPoint {
 		EventBus eventBus = clientFactory.getEventBus();
 		PlaceController placeController = clientFactory.getPlaceController();
 
-		// Start ActivityManager for the main widget with our ActivityMapper
+		// Start the ActivityManager for the main root panel.
 		ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
 		ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
 		activityManager.setDisplay(panel);
 
-		PlaceHistoryHandler historyHandler = clientFactory.getHistoryHandler();
+		// Start PlaceHistoryHandler with our PlaceHistoryMapper
+		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+		PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
 		historyHandler.register(placeController, eventBus, defaultPlace);
 
-		// Put the container managed by the activity manger in the root panel.
+		// Put the container that is managed by the activity manager in the root panel.
 		RootPanel.get().add(panel);
 
-		// Goes to the place represented on URL else default place
+		// Goes to the place represented on URL or the default place.
 		historyHandler.handleCurrentHistory();
 	}
 

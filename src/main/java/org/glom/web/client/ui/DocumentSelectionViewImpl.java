@@ -19,11 +19,15 @@
 
 package org.glom.web.client.ui;
 
+import org.glom.web.client.place.OnlineGlomPlace;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,13 +40,21 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 	private static DocumentSelectionViewImplUiBinder uiBinder = GWT.create(DocumentSelectionViewImplUiBinder.class);
 	@UiField
 	VerticalPanel documentLinks;
+	private Presenter presenter;
 
 	public DocumentSelectionViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public void addHyperLink(String dbTitle, String targetHistoryToken) {
-		documentLinks.add(new Hyperlink(dbTitle, targetHistoryToken));
+	public void addDocumentLink(final String documentTitle) {
+		Anchor link = new Anchor(documentTitle);
+		link.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.goTo(new OnlineGlomPlace(documentTitle));
+			}
+		});
+		documentLinks.add(link);
 	}
 
 	public void clearHyperLinks() {
@@ -59,5 +71,10 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 		Label label = new Label(message);
 		label.getElement().getStyle().setColor("Red");
 		documentLinks.add(label);
+	}
+
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 }
