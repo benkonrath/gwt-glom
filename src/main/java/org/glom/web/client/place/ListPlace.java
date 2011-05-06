@@ -23,11 +23,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
-public class OnlineGlomPlace extends Place {
+public class ListPlace extends Place {
 
 	private final String documentTitle;
 
-	public OnlineGlomPlace(String documentTitle) {
+	public ListPlace(String documentTitle) {
 		this.documentTitle = documentTitle;
 	}
 
@@ -35,17 +35,17 @@ public class OnlineGlomPlace extends Place {
 		return documentTitle;
 	}
 
-	@Prefix("Document")
-	public static class Tokenizer implements PlaceTokenizer<OnlineGlomPlace> {
+	@Prefix("list")
+	public static class Tokenizer implements PlaceTokenizer<ListPlace> {
 
 		@Override
-		public String getToken(OnlineGlomPlace place) {
+		public String getToken(ListPlace place) {
 			return place.getDocumentTitle();
 		}
 
 		@Override
-		public OnlineGlomPlace getPlace(String token) {
-			return new OnlineGlomPlace(token);
+		public ListPlace getPlace(String token) {
+			return new ListPlace(token);
 		}
 	}
 

@@ -19,7 +19,7 @@
 
 package org.glom.web.client.ui;
 
-import org.glom.web.client.place.OnlineGlomPlace;
+import org.glom.web.client.place.ListPlace;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -51,7 +51,7 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 		link.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				presenter.goTo(new OnlineGlomPlace(documentTitle));
+				presenter.goTo(new ListPlace(documentTitle));
 			}
 		});
 		documentLinks.add(link);

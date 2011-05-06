@@ -1,5 +1,18 @@
 2011-05-06  Ben Konrath  <ben@bagu.org>
 
+	Rename OnlineGlomPlace to ListPlace.
+
+	The only change besides the rename is that url will now display #list
+	instead of #Document.
+
+	* src/main/java/org/glom/web/client/activity/OnlineGlomActivity.java:
+	* src/main/java/org/glom/web/client/mvp/AppActivityMapper.java:
+	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+	* src/main/java/org/glom/web/client/place/ListPlace.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+
+2011-05-06  Ben Konrath  <ben@bagu.org>
+
 	Use Presenter for app navigation.
 
 	This is the proper way to deal with Place (URL) changes with the MVP

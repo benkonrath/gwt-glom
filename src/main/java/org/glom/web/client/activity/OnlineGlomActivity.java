@@ -21,7 +21,7 @@ package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
-import org.glom.web.client.place.OnlineGlomPlace;
+import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.LayoutListView;
 import org.glom.web.client.ui.OnlineGlomView;
 import org.glom.web.shared.GlomDocument;
@@ -44,7 +44,7 @@ public class OnlineGlomActivity extends AbstractActivity implements OnlineGlomVi
 	private final ClientFactory clientFactory;
 	private final OnlineGlomView onlineGlomView;
 
-	public OnlineGlomActivity(OnlineGlomPlace place, ClientFactory clientFactory) {
+	public OnlineGlomActivity(ListPlace place, ClientFactory clientFactory) {
 		this.documentTitle = place.getDocumentTitle();
 		this.clientFactory = clientFactory;
 		this.onlineGlomView = clientFactory.getOnlineGlomView();
