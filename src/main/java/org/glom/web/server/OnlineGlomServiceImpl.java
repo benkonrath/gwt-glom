@@ -398,10 +398,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length,
 			boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 
-		// FIXME fix LayoutListView to not call this method with empty table or document title
-		if (documentTitle.isEmpty() || tableName.isEmpty())
-			return new ArrayList<GlomField[]>();
-
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
 

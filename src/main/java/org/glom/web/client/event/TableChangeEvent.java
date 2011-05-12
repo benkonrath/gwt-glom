@@ -17,28 +17,33 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client;
+package org.glom.web.client.event;
 
-import org.glom.web.client.ui.AuthenticationPopup;
-import org.glom.web.client.ui.DocumentSelectionView;
-import org.glom.web.client.ui.ListView;
-import org.glom.web.client.ui.TableSelectionView;
+import com.google.gwt.event.shared.GwtEvent;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
+/**
+ * @author Ben Konrath <ben@bagu.org>
+ * 
+ */
+public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
+	public static Type<TableChangeEventHandler> TYPE = new Type<TableChangeEventHandler>();
+	private final String name;
 
-public interface ClientFactory {
+	public TableChangeEvent(String name) {
+		this.name = name;
+	}
 
-	EventBus getEventBus();
+	public String getTableName() {
+		return name;
+	}
 
-	PlaceController getPlaceController();
+	@Override
+	public Type<TableChangeEventHandler> getAssociatedType() {
+		return TYPE;
+	}
 
-	DocumentSelectionView getDocumentSelectionView();
-
-	TableSelectionView getTableSelectionView();
-
-	ListView getListView();
-
-	AuthenticationPopup getAuthenticationPopup();
-
+	@Override
+	protected void dispatch(TableChangeEventHandler handler) {
+		handler.onTableChange(this);
+	}
 }

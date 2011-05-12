@@ -51,7 +51,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
-public class LayoutListView extends Composite {
+public class ListViewImpl extends Composite implements ListView {
 
 	private class GlomTextCell extends AbstractCell<GlomField> {
 
@@ -85,11 +85,31 @@ public class LayoutListView extends Composite {
 		}
 	}
 
-	public LayoutListView() {
-		this("", new ColumnInfo[] {}, 0);
+	final private VerticalPanel vPanel = new VerticalPanel();
+	final private SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
+	@SuppressWarnings("unused")
+	private Presenter presenter;
+
+	public ListViewImpl() {
+		initWidget(vPanel);
 	}
 
-	public LayoutListView(final String documentTitle, ColumnInfo[] columns, int numRows) {
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
+
+	@Override
+	public void setCellTable(final String documentTitle, final String tableName, ColumnInfo[] columns, int numRows) {
+		// This is not really in the MVP style but there are issues creating a re-usable CellTable with methods like
+		// setColumnTitles(), setNumRows() etc. The biggest problem is that the column objects (new Column<GlomField[],
+		// GlomField>(new GlomTextCell())) aren't destroyed when the column is removed from the CellTable and
+		// IndexOutOfBounds exceptions are encountered with invalid array indexes trying access the data in this line:
+		// return object[j]. There's probably a workaround that could be done to fix this but I'm leaving it until
+		// there's a reason to fix it (performance, ease of testing, alternate implementation or otherwise).
+
+		vPanel.clear();
+
 		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20);
 
 		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
@@ -115,26 +135,17 @@ public class LayoutListView extends Composite {
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					ColumnSortInfo info = colSortList.get(0);
-					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(documentTitle,
-							OnlineGlomViewImpl.getCurrentTableName(), start, range.getLength(),
-							table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()), info.isAscending(),
-							callback);
+					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(documentTitle, tableName, start,
+							range.getLength(), table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()),
+							info.isAscending(), callback);
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getTableData(documentTitle,
-							OnlineGlomViewImpl.getCurrentTableName(), start, range.getLength(), callback);
+					OnlineGlomServiceAsync.Util.getInstance().getTableData(documentTitle, tableName, start,
+							range.getLength(), callback);
 				}
 			}
 		};
 
 		dataProvider.addDataDisplay(table);
-
-		SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
-		pager.setDisplay(table);
-
-		// a panel to hold our widgets
-		VerticalPanel panel = new VerticalPanel();
-		panel.add(table);
-		panel.add(pager);
 
 		// create instances of GlomFieldColumn to retrieve the GlomField objects
 		for (int i = 0; i < columns.length; i++) {
@@ -237,8 +248,19 @@ public class LayoutListView extends Composite {
 		// add an AsyncHandler to activate sorting for the AsyncDataProvider that was created above
 		table.addColumnSortHandler(new AsyncHandler(table));
 
-		// take care of the stuff required for composite widgets
-		initWidget(panel);
-		setStyleName("glom-LayoutListView");
+		pager.setDisplay(table);
+		vPanel.add(table);
+		vPanel.add(pager);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.ListView#clear()
+	 */
+	@Override
+	public void clear() {
+		vPanel.clear();
+	}
+
 }

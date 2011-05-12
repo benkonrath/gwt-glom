@@ -19,24 +19,21 @@
 
 package org.glom.web.client.mvp;
 
-import org.glom.web.client.ClientFactoryImpl;
-import org.glom.web.client.activity.DocumentSelectionActivity;
-import org.glom.web.client.activity.OnlineGlomActivity;
-import org.glom.web.client.place.DocumentSelectionPlace;
+import org.glom.web.client.ClientFactory;
+import org.glom.web.client.activity.ListActivity;
 import org.glom.web.client.place.ListPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-/*
- * This code is mostly from AppActivityMapper.java in the hellomvp GWT example:
- *
- * https://code.google.com/webtoolkit/doc/2.2/DevGuideMvpActivitiesAndPlaces.html
+/**
+ * @author Ben Konrath <ben@bagu.org>
+ * 
  */
-public class AppActivityMapper implements ActivityMapper {
+public class DataActivityMapper implements ActivityMapper {
 
-	private final ClientFactoryImpl clientFactory;
+	private ClientFactory clientFactory;
 
 	/**
 	 * AppActivityMapper associates each Place with its corresponding {@link Activity}
@@ -44,7 +41,7 @@ public class AppActivityMapper implements ActivityMapper {
 	 * @param clientFactory
 	 *            Factory to be passed to activities
 	 */
-	public AppActivityMapper(ClientFactoryImpl clientFactory) {
+	public DataActivityMapper(ClientFactory clientFactory) {
 		super();
 		this.clientFactory = clientFactory;
 	}
@@ -56,9 +53,8 @@ public class AppActivityMapper implements ActivityMapper {
 	public Activity getActivity(Place place) {
 		// This is begging for GIN
 		if (place instanceof ListPlace)
-			return new OnlineGlomActivity((ListPlace) place, clientFactory);
-		else if (place instanceof DocumentSelectionPlace)
-			return new DocumentSelectionActivity(clientFactory);
+			return new ListActivity((ListPlace) place, clientFactory);
+
 		return null;
 	}
 

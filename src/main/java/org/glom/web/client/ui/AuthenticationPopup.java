@@ -63,7 +63,7 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 		setGlassEnabled(true);
 		setWidget(flexTable);
 
-		// setup properties for the error messsage
+		// setup properties for the error message
 		errorMessage.getElement().getStyle().setColor("Red");
 	}
 

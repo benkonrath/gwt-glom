@@ -21,42 +21,21 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface OnlineGlomView extends IsWidget {
+/**
+ * @author Ben Konrath <ben@bagu.org>
+ */
+public interface TableSelectionView extends IsWidget {
 
-	void setPresenter(Presenter presenter);
-
-	public interface Presenter {
-		void goTo(Place place);
-	}
-
-	void setTableSelection(ArrayList<String> names, ArrayList<String> titles);
-
-	void setTableSelectedIndex(int index);
-
-	void setTableChangeHandler(ChangeHandler changeHandler);
+	HasChangeHandlers getTableSelector();
 
 	String getSelectedTable();
 
-	void setListTable(LayoutListView listView);
+	void setTableSelection(ArrayList<String> tableNames, ArrayList<String> tableTitles);
+
+	void setTableSelectedIndex(int defaultTableIndex);
 
 	void clear();
-
-	void showAuthPopup();
-
-	void hideAuthPopup();
-
-	void setAuthClickHandler(ClickHandler clickHandler);
-
-	void setAuthTextFieldsEnabled(boolean enabled);
-
-	String getUsername();
-
-	String getPassword();
-
-	void setAuthError();
 }

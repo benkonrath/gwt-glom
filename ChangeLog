@@ -1,3 +1,42 @@
+2011-05-12  Ben Konrath  <ben@bagu.org>
+
+	Use a LayoutPanel with multiple display areas for main layout.
+
+	This is mostly a refactor in that there are no changes from the user
+	point of view. These changes are required so that we can swap out the list view
+	with the details view when the user clicks the "Details" button.
+
+	* src/main/java/org/glom/web/client/ClientFactory.java:
+	* src/main/java/org/glom/web/client/ClientFactoryImpl.java: Remove
+	OnlineGlomView. Add TableSelectionView, ListView and
+	AuthenticationPopup.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Use LayoutPanel
+	for main layout. Add display regions for main activities. Add
+	activity manager for for main activities.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: New
+	file from parts of the deleted OnlineGlomActivity.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	New file from parts of the deleted OnlineGlomActivity.
+	* src/main/java/org/glom/web/client/event/TableChangeEvent.java:
+	* src/main/java/org/glom/web/client/event/TableChangeEventHandler.java:
+	New files for app wide table change event.
+	* src/main/java/org/glom/web/client/mvp/DataActivityMapper.java:
+	* src/main/java/org/glom/web/client/mvp/DocumentSelectionActivityMapper.java:
+	* src/main/java/org/glom/web/client/mvp/TableSelectionActivityMapper.java:
+	Activity mappers for the main activities replace the deleted app-wide
+	AppActivityMapper.
+	* src/main/java/org/glom/web/client/ui/AuthenticationPopup.java:
+	Fix a spelling error in he comment.
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	Renamed from LayoutListView and modified for MVP. This still not a
+	proper dumb view as prescribed by the MVP pattern but it works for now.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	New widget stripped out of the deleted OnlineGlomView.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Remove hack that is fixed by this patch.
+
 2011-05-06  Ben Konrath  <ben@bagu.org>
 
 	Rename OnlineGlomPlace to ListPlace.

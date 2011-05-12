@@ -19,10 +19,13 @@
 
 package org.glom.web.client;
 
+import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.DocumentSelectionViewImpl;
-import org.glom.web.client.ui.OnlineGlomView;
-import org.glom.web.client.ui.OnlineGlomViewImpl;
+import org.glom.web.client.ui.ListView;
+import org.glom.web.client.ui.ListViewImpl;
+import org.glom.web.client.ui.TableSelectionView;
+import org.glom.web.client.ui.TableSelectionViewImpl;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -31,22 +34,39 @@ import com.google.gwt.place.shared.PlaceController;
 public class ClientFactoryImpl implements ClientFactory {
 	private final EventBus eventBus = new SimpleEventBus();
 	private final PlaceController placeController = new PlaceController(eventBus);
-	private final OnlineGlomView onlineGlomView = new OnlineGlomViewImpl();
 	private final DocumentSelectionView documentSelectionView = new DocumentSelectionViewImpl();
+	private final TableSelectionView tableSelectionView = new TableSelectionViewImpl();
+	private final ListView listView = new ListViewImpl();
+	private final AuthenticationPopup authenticationPopup = new AuthenticationPopup();
 
+	@Override
 	public EventBus getEventBus() {
 		return eventBus;
 	}
 
+	@Override
 	public PlaceController getPlaceController() {
 		return placeController;
 	}
 
-	public OnlineGlomView getOnlineGlomView() {
-		return onlineGlomView;
-	}
-
+	@Override
 	public DocumentSelectionView getDocumentSelectionView() {
 		return documentSelectionView;
 	}
+
+	@Override
+	public TableSelectionView getTableSelectionView() {
+		return tableSelectionView;
+	}
+
+	@Override
+	public ListView getListView() {
+		return listView;
+	}
+
+	@Override
+	public AuthenticationPopup getAuthenticationPopup() {
+		return authenticationPopup;
+	}
+
 }
