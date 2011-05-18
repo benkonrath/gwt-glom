@@ -20,6 +20,8 @@
 package org.glom.web.client;
 
 import org.glom.web.client.ui.AuthenticationPopup;
+import org.glom.web.client.ui.DetailsView;
+import org.glom.web.client.ui.DetailsViewImpl;
 import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.DocumentSelectionViewImpl;
 import org.glom.web.client.ui.ListView;
@@ -38,6 +40,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	private final TableSelectionView tableSelectionView = new TableSelectionViewImpl();
 	private final ListView listView = new ListViewImpl();
 	private final AuthenticationPopup authenticationPopup = new AuthenticationPopup();
+	private final DetailsView detailsView = new DetailsViewImpl();
 
 	@Override
 	public EventBus getEventBus() {
@@ -67,6 +70,11 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public AuthenticationPopup getAuthenticationPopup() {
 		return authenticationPopup;
+	}
+
+	@Override
+	public DetailsView getDetailsView() {
+		return detailsView;
 	}
 
 }

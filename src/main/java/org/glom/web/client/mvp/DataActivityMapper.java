@@ -20,7 +20,9 @@
 package org.glom.web.client.mvp;
 
 import org.glom.web.client.ClientFactory;
+import org.glom.web.client.activity.DetailsActivity;
 import org.glom.web.client.activity.ListActivity;
+import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.ListPlace;
 
 import com.google.gwt.activity.shared.Activity;
@@ -42,7 +44,6 @@ public class DataActivityMapper implements ActivityMapper {
 	 *            Factory to be passed to activities
 	 */
 	public DataActivityMapper(ClientFactory clientFactory) {
-		super();
 		this.clientFactory = clientFactory;
 	}
 
@@ -54,6 +55,8 @@ public class DataActivityMapper implements ActivityMapper {
 		// This is begging for GIN
 		if (place instanceof ListPlace)
 			return new ListActivity((ListPlace) place, clientFactory);
+		if (place instanceof DetailsPlace)
+			return new DetailsActivity((DetailsPlace) place, clientFactory);
 
 		return null;
 	}

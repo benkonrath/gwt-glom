@@ -17,31 +17,21 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client;
+package org.glom.web.client.ui;
 
-import org.glom.web.client.ui.AuthenticationPopup;
-import org.glom.web.client.ui.DetailsView;
-import org.glom.web.client.ui.DocumentSelectionView;
-import org.glom.web.client.ui.ListView;
-import org.glom.web.client.ui.TableSelectionView;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
+/**
+ * @author Ben Konrath <ben@bagu.org>
+ * 
+ */
+public interface DetailsView extends IsWidget {
 
-public interface ClientFactory {
+	public interface Presenter {
+		void goTo(Place place);
+	}
 
-	EventBus getEventBus();
-
-	PlaceController getPlaceController();
-
-	DocumentSelectionView getDocumentSelectionView();
-
-	TableSelectionView getTableSelectionView();
-
-	ListView getListView();
-
-	AuthenticationPopup getAuthenticationPopup();
-
-	DetailsView getDetailsView();
+	public void setPresenter(Presenter presenter);
 
 }

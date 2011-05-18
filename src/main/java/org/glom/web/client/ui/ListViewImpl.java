@@ -220,14 +220,15 @@ public class ListViewImpl extends Composite implements ListView {
 		Column<GlomField[], String> detailsColumn = new Column<GlomField[], String>(new ButtonCell() {
 			@Override
 			public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
-				// TODO Enable the Details button: remove disabled=\"disabled\", add
-				// onclick=\"window.location.href='#targetHistoryToken'\", figure out how to create a history token to
-				// uniquely identify the row.
+				// TODO figure out how to create a history token to uniquely identify the row.
 				// TODO change to custom css class
 				// We're using a button tag for the link. If this causes a problem we can use an anchor tag with css
-				// styling
-				// to make it look like a button.
-				sb.appendHtmlConstant("<button class=\"gwt-Button\" title=\"Go to the details view for this row\" disabled=\"disabled\" type=\"button\" tabindex=\"-1\" >");
+				// styling to make it look like a button.
+				// TODO investigate if I can use button objects with 'presenter.goTo(new DetailsPlace())' in the click
+				// handler
+				SafeHtml safeDocumentTitle = SafeHtmlUtils.fromString(documentTitle);
+				sb.appendHtmlConstant("<button class=\"gwt-Button\" title=\"Go to the details view for this row\" onclick=\"window.location.href='#details:"
+						+ safeDocumentTitle.asString() + "'\" type=\"button\" tabindex=\"-1\" >");
 				if (data != null) {
 					sb.append(data);
 				}

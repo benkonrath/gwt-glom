@@ -17,31 +17,36 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client;
+package org.glom.web.client.place;
 
-import org.glom.web.client.ui.AuthenticationPopup;
-import org.glom.web.client.ui.DetailsView;
-import org.glom.web.client.ui.DocumentSelectionView;
-import org.glom.web.client.ui.ListView;
-import org.glom.web.client.ui.TableSelectionView;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceTokenizer;
+import com.google.gwt.place.shared.Prefix;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
+public class DetailsPlace extends Place {
 
-public interface ClientFactory {
+	private final String documentTitle;
 
-	EventBus getEventBus();
+	public DetailsPlace(String documentTitle) {
+		this.documentTitle = documentTitle;
+	}
 
-	PlaceController getPlaceController();
+	public String getDocumentTitle() {
+		return documentTitle;
+	}
 
-	DocumentSelectionView getDocumentSelectionView();
+	@Prefix("details")
+	public static class Tokenizer implements PlaceTokenizer<DetailsPlace> {
 
-	TableSelectionView getTableSelectionView();
+		@Override
+		public String getToken(DetailsPlace place) {
+			return place.getDocumentTitle();
+		}
 
-	ListView getListView();
-
-	AuthenticationPopup getAuthenticationPopup();
-
-	DetailsView getDetailsView();
+		@Override
+		public DetailsPlace getPlace(String token) {
+			return new DetailsPlace(token);
+		}
+	}
 
 }

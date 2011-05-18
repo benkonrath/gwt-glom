@@ -21,6 +21,7 @@ package org.glom.web.client.mvp;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.activity.TableSelectionActivity;
+import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.ListPlace;
 
 import com.google.gwt.activity.shared.Activity;
@@ -54,6 +55,8 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 		// This is begging for GIN
 		if (place instanceof ListPlace)
 			return new TableSelectionActivity((ListPlace) place, clientFactory);
+		else if (place instanceof DetailsPlace)
+			return new TableSelectionActivity((DetailsPlace) place, clientFactory);
 
 		return null;
 	}

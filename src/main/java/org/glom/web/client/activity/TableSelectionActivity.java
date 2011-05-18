@@ -22,6 +22,7 @@ package org.glom.web.client.activity;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.event.TableChangeEvent;
+import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.shared.GlomDocument;
@@ -46,6 +47,11 @@ public class TableSelectionActivity extends AbstractActivity {
 	private HandlerRegistration changeHandlerRegistration = null;
 
 	public TableSelectionActivity(ListPlace place, ClientFactory clientFactory) {
+		this.documentTitle = place.getDocumentTitle();
+		this.clientFactory = clientFactory;
+	}
+
+	public TableSelectionActivity(DetailsPlace place, ClientFactory clientFactory) {
 		this.documentTitle = place.getDocumentTitle();
 		this.clientFactory = clientFactory;
 	}
@@ -86,7 +92,7 @@ public class TableSelectionActivity extends AbstractActivity {
 		containerWidget.setWidget(tableSelectionView.asWidget());
 	}
 
-	private void shutdown() {
+	private void clearView() {
 		clientFactory.getTableSelectionView().clear();
 		if (changeHandlerRegistration != null) {
 			changeHandlerRegistration.removeHandler();
@@ -101,7 +107,7 @@ public class TableSelectionActivity extends AbstractActivity {
 	 */
 	@Override
 	public void onCancel() {
-		shutdown();
+		clearView();
 	}
 
 	/*
@@ -111,6 +117,6 @@ public class TableSelectionActivity extends AbstractActivity {
 	 */
 	@Override
 	public void onStop() {
-		shutdown();
+		clearView();
 	}
 }
