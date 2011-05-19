@@ -1,5 +1,13 @@
 2011-05-19  Ben Konrath  <ben@bagu.org>
 
+	Override toDebugString() in TableChangeEvent.
+
+	This is useful to have for debugging.
+
+	* src/main/java/org/glom/web/client/event/TableChangeEvent.java:
+
+2011-05-19  Ben Konrath  <ben@bagu.org>
+
 	Add a "Back to List" link when at the DetailsPlace.
 
 	* src/main/java/org/glom/web/client/activity/ListActivity.java:

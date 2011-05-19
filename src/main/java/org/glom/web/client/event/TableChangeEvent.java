@@ -46,4 +46,9 @@ public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
 	protected void dispatch(TableChangeEventHandler handler) {
 		handler.onTableChange(this);
 	}
+
+	@Override
+	public String toDebugString() {
+		return super.toDebugString() + " " + name;
+	}
 }
