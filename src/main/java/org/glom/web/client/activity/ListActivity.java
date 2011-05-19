@@ -26,7 +26,6 @@ import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ListView;
-import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.LayoutListTable;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -110,20 +109,18 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		} else {
 			// The table name has not been set so we need to fill in the cell table using the default table for the glom
 			// document.
-			AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
+			AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
 				public void onFailure(Throwable caught) {
 					// FIXME: need to deal with failure
-					System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
+					System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
 				}
 
-				public void onSuccess(GlomDocument result) {
-					// FIXME the event handler may not be setup yet. I need to replace this with
-					// getDefaultLayoutListTable() RPC method to avoid this problem and the extra round trip with the
-					// server
-					eventBus.fireEvent(new TableChangeEvent(result.getTableNames().get(result.getDefaultTableIndex())));
+				public void onSuccess(LayoutListTable result) {
+					listView.setCellTable(documentTitle, result.getTableName(), result.getColumns(),
+							result.getNumRows());
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDefaultLayoutListTable(documentTitle, callback);
 		}
 
 		// indicate that the view is ready to be displayed

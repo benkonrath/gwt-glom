@@ -33,6 +33,15 @@ public interface OnlineGlomService extends RemoteService {
 
 	GlomDocument getGlomDocument(String documentTitle);
 
+	/**
+	 * Gets a {@link LayoutListTable} Object for the given Glom document title and table name.
+	 * 
+	 * @param documentTitle
+	 *            title of the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document
+	 * @return filled in {@link LayoutListTable}
+	 */
 	LayoutListTable getLayoutListTable(String documentTitle, String tableName);
 
 	ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length);
@@ -52,7 +61,7 @@ public interface OnlineGlomService extends RemoteService {
 	 * Checks if the PostgreSQL authentication has been set for this document.
 	 * 
 	 * @param documentTitle
-	 *            title of document to check
+	 *            title of Glom document to check
 	 * @return true if the authentication has been set, false if it hasn't
 	 */
 	boolean isAuthenticated(String documentTitle);
@@ -62,7 +71,7 @@ public interface OnlineGlomService extends RemoteService {
 	 * information is correct it is saved for future access.
 	 * 
 	 * @param documentTitle
-	 *            title of the document to check
+	 *            title of the Glom document to check
 	 * @param username
 	 *            the PostgreSQL username
 	 * @param password
@@ -70,5 +79,14 @@ public interface OnlineGlomService extends RemoteService {
 	 * @return true if username and password are correct, false otherwise
 	 */
 	boolean checkAuthentication(String documentTitle, String username, String password);
+
+	/**
+	 * Gets a {@link LayoutListTable} Object for the default table of the given Glom document title.
+	 * 
+	 * @param documentTitle
+	 *            title of the Glom document
+	 * @return filled in {@link LayoutListTable} for the default table
+	 */
+	LayoutListTable getDefaultLayoutListTable(String documentTitle);
 
 }

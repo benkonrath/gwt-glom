@@ -287,6 +287,20 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return glomDocument;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDefaultLayoutListTable(java.lang.String)
+	 */
+	@Override
+	public LayoutListTable getDefaultLayoutListTable(String documentTitle) {
+		GlomDocument glomDocument = getGlomDocument(documentTitle);
+		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
+		LayoutListTable layoutListTable = getLayoutListTable(documentTitle, tableName);
+		layoutListTable.setTableName(tableName);
+		return layoutListTable;
+	}
+
 	public LayoutListTable getLayoutListTable(String documentTitle, String table) {
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
@@ -770,4 +784,5 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		configuredDoc.setAuthenticated(authenticated);
 		return authenticated;
 	}
+
 }

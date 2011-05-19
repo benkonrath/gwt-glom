@@ -64,4 +64,6 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentTitle, String username, String password, AsyncCallback<Boolean> callback);
 
+	void getDefaultLayoutListTable(String documentTitle, AsyncCallback<LayoutListTable> callback);
+
 }

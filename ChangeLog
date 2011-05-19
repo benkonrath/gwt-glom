@@ -1,5 +1,25 @@
 2011-05-19  Ben Konrath  <ben@bagu.org>
 
+	Improve performance of initial ListView load.
+
+	I removed a round trip to the server for getting the default table name
+	and then requesting information about that table. This also removes a potential
+	problem with the table change handler not being setup in time to receive the
+	table change event from the ListActivity.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Add
+	getDefaultLayoutListTable() method. Improve comments.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Use
+	getDefaultLayoutListTable() method instead of firing a table change
+	event to get the table to load.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Add
+	implementation of getDefaultLayoutListTable() method.
+	* src/main/java/org/glom/web/shared/LayoutListTable.java: Add field for
+	table name.
+
+2011-05-19  Ben Konrath  <ben@bagu.org>
+
 	Override toDebugString() in TableChangeEvent.
 
 	This is useful to have for debugging.
