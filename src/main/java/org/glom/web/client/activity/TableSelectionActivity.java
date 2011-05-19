@@ -23,6 +23,7 @@ import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DetailsPlace;
+import org.glom.web.client.place.HasSelectableTablePlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.shared.GlomDocument;
@@ -33,6 +34,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -41,18 +43,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class TableSelectionActivity extends AbstractActivity {
+public class TableSelectionActivity extends AbstractActivity implements TableSelectionView.Presenter {
 	private final ClientFactory clientFactory;
 	private String documentTitle;
 	private HandlerRegistration changeHandlerRegistration = null;
 
-	public TableSelectionActivity(ListPlace place, ClientFactory clientFactory) {
-		this.documentTitle = place.getDocumentTitle();
-		this.clientFactory = clientFactory;
-	}
-
-	public TableSelectionActivity(DetailsPlace place, ClientFactory clientFactory) {
-		this.documentTitle = place.getDocumentTitle();
+	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
+	public TableSelectionActivity(ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 	}
 
@@ -64,6 +61,7 @@ public class TableSelectionActivity extends AbstractActivity {
 		Window.setTitle("Online Glom - " + documentTitle);
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
+		tableSelectionView.setPresenter(this);
 
 		HasChangeHandlers tableSelector = tableSelectionView.getTableSelector();
 
@@ -90,6 +88,19 @@ public class TableSelectionActivity extends AbstractActivity {
 
 		// we're done, set the widget
 		containerWidget.setWidget(tableSelectionView.asWidget());
+	}
+
+	public void setPlace(HasSelectableTablePlace place) {
+		this.documentTitle = place.getDocumentTitle();
+		TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
+
+		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
+		if (place instanceof DetailsPlace) {
+			tableSelectionView.setBackLinkVisible(true);
+			tableSelectionView.setBackLink(documentTitle);
+		} else if (place instanceof ListPlace) {
+			tableSelectionView.setBackLinkVisible(false);
+		}
 	}
 
 	private void clearView() {
@@ -119,4 +130,15 @@ public class TableSelectionActivity extends AbstractActivity {
 	public void onStop() {
 		clearView();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.TableSelectionView.Presenter#goTo(com.google.gwt.place.shared.Place)
+	 */
+	@Override
+	public void goTo(Place place) {
+		clientFactory.getPlaceController().goTo(place);
+	}
+
 }

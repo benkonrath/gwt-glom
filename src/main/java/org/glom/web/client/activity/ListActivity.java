@@ -92,20 +92,39 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 			}
 		});
 
-		// Populate the default table with data. We can't get the default table name from the TableSelectorView because
-		// the activities operate independently. If the double RPC turns out to cause a performance problem, caching
-		// can be added to the RPC code.
-		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
-			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
-			}
+		// populate the cell table with data
+		final String selectedTable = clientFactory.getTableSelectionView().getSelectedTable();
+		if (!selectedTable.equals("")) {
+			// The table name has been set so we can use the selected table name to populate the cell table.
+			AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
+				public void onFailure(Throwable caught) {
+					// FIXME: need to deal with failure
+					System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
+				}
 
-			public void onSuccess(GlomDocument result) {
-				eventBus.fireEvent(new TableChangeEvent(result.getTableNames().get(result.getDefaultTableIndex())));
-			}
-		};
-		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, callback);
+				public void onSuccess(LayoutListTable result) {
+					listView.setCellTable(documentTitle, selectedTable, result.getColumns(), result.getNumRows());
+				}
+			};
+			OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(documentTitle, selectedTable, callback);
+		} else {
+			// The table name has not been set so we need to fill in the cell table using the default table for the glom
+			// document.
+			AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
+				public void onFailure(Throwable caught) {
+					// FIXME: need to deal with failure
+					System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
+				}
+
+				public void onSuccess(GlomDocument result) {
+					// FIXME the event handler may not be setup yet. I need to replace this with
+					// getDefaultLayoutListTable() RPC method to avoid this problem and the extra round trip with the
+					// server
+					eventBus.fireEvent(new TableChangeEvent(result.getTableNames().get(result.getDefaultTableIndex())));
+				}
+			};
+			OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, callback);
+		}
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(listView.asWidget());

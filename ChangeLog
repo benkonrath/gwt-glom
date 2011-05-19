@@ -1,3 +1,30 @@
+2011-05-19  Ben Konrath  <ben@bagu.org>
+
+	Add a "Back to List" link when at the DetailsPlace.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	Populate the CellTable based on the selected table of the ListBox if
+	it's set otherwise use the default table. This allows the "Back to
+	List" link to work.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	Remove Place from constructors. Add a setPlace() method. Add
+	goToPlace() method. Set class as presenter for TableSelectionView.
+	* src/main/java/org/glom/web/client/mvp/TableSelectionActivityMapper.java:
+	Use the same TableSelectionActivity when switching between the List and
+	Details Places.
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java:
+	Subclass the new HasSelectableTablePlace. This removes some duplicate
+	code.
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java:
+	New class to represent Places that display the TableSelectionView.
+	* src/main/java/org/glom/web/client/place/ListPlace.java:
+	Subclass the new HasSelectableTablePlace. This removes some duplicate
+	code.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Add Presenter interface. Add setBackLinkVisible() method. Add
+	setBackLink() method.
+
 2011-05-18  Ben Konrath  <ben@bagu.org>
 
 	Enable the "Details" buttons.

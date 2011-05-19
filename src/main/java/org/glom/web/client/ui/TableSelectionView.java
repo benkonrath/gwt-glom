@@ -22,12 +22,18 @@ package org.glom.web.client.ui;
 import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  */
 public interface TableSelectionView extends IsWidget {
+	public interface Presenter {
+		void goTo(Place place);
+	}
+
+	void setPresenter(Presenter presenter);
 
 	HasChangeHandlers getTableSelector();
 
@@ -36,6 +42,10 @@ public interface TableSelectionView extends IsWidget {
 	void setTableSelection(ArrayList<String> tableNames, ArrayList<String> tableTitles);
 
 	void setTableSelectedIndex(int defaultTableIndex);
+
+	void setBackLinkVisible(boolean visible);
+
+	void setBackLink(final String documentTitle);
 
 	void clear();
 }

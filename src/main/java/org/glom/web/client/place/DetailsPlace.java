@@ -19,20 +19,13 @@
 
 package org.glom.web.client.place;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
-public class DetailsPlace extends Place {
-
-	private final String documentTitle;
+public class DetailsPlace extends HasSelectableTablePlace {
 
 	public DetailsPlace(String documentTitle) {
-		this.documentTitle = documentTitle;
-	}
-
-	public String getDocumentTitle() {
-		return documentTitle;
+		super(documentTitle);
 	}
 
 	@Prefix("details")

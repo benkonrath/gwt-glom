@@ -21,8 +21,7 @@ package org.glom.web.client.mvp;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.activity.TableSelectionActivity;
-import org.glom.web.client.place.DetailsPlace;
-import org.glom.web.client.place.ListPlace;
+import org.glom.web.client.place.HasSelectableTablePlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -34,7 +33,7 @@ import com.google.gwt.place.shared.Place;
  */
 public class TableSelectionActivityMapper implements ActivityMapper {
 
-	private ClientFactory clientFactory;
+	private TableSelectionActivity tableSelectionActivity;
 
 	/**
 	 * AppActivityMapper associates each Place with its corresponding {@link Activity}
@@ -43,8 +42,7 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	 *            Factory to be passed to activities
 	 */
 	public TableSelectionActivityMapper(ClientFactory clientFactory) {
-		super();
-		this.clientFactory = clientFactory;
+		tableSelectionActivity = new TableSelectionActivity(clientFactory);
 	}
 
 	/**
@@ -52,11 +50,12 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	 */
 	@Override
 	public Activity getActivity(Place place) {
-		// This is begging for GIN
-		if (place instanceof ListPlace)
-			return new TableSelectionActivity((ListPlace) place, clientFactory);
-		else if (place instanceof DetailsPlace)
-			return new TableSelectionActivity((DetailsPlace) place, clientFactory);
+		// We're not creating new TableSelectionActivity objects for each place because we want the ListBox to keep the
+		// table name when the Details button is clicked.
+		if (place instanceof HasSelectableTablePlace) {
+			tableSelectionActivity.setPlace((HasSelectableTablePlace) place);
+			return tableSelectionActivity;
+		}
 
 		return null;
 	}

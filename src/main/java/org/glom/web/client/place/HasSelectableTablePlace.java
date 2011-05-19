@@ -19,27 +19,24 @@
 
 package org.glom.web.client.place;
 
-import com.google.gwt.place.shared.PlaceTokenizer;
-import com.google.gwt.place.shared.Prefix;
+import com.google.gwt.place.shared.Place;
 
-public class ListPlace extends HasSelectableTablePlace {
+/**
+ * Super type for Place objects (bookmarkable URLs) that display the TableSelectionView.
+ * 
+ * @author Ben Konrath <ben@bagu.org>
+ * 
+ */
+public abstract class HasSelectableTablePlace extends Place {
 
-	public ListPlace(String documentTitle) {
-		super(documentTitle);
+	private String documentTitle;
+
+	public HasSelectableTablePlace(String documentTitle) {
+		this.documentTitle = documentTitle;
 	}
 
-	@Prefix("list")
-	public static class Tokenizer implements PlaceTokenizer<ListPlace> {
-
-		@Override
-		public String getToken(ListPlace place) {
-			return place.getDocumentTitle();
-		}
-
-		@Override
-		public ListPlace getPlace(String token) {
-			return new ListPlace(token);
-		}
+	public String getDocumentTitle() {
+		return documentTitle;
 	}
 
 }

@@ -21,7 +21,14 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.place.ListPlace;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -32,13 +39,35 @@ import com.google.gwt.user.client.ui.ListBox;
  */
 public class TableSelectionViewImpl extends Composite implements TableSelectionView {
 
-	private final HorizontalPanel hPanel = new HorizontalPanel();
 	ListBox listBox = new ListBox();
+	Anchor backLink = new Anchor("Back to List");
+	private Presenter presenter;
+	private HandlerRegistration backLinkHandlerReg;
 
 	public TableSelectionViewImpl() {
-		hPanel.add(new Label("Table:"));
-		hPanel.add(listBox);
-		initWidget(hPanel);
+		// the table chooser widget
+		HorizontalPanel tableChooser = new HorizontalPanel();
+		tableChooser.setStyleName("tablechooser");
+		tableChooser.add(new Label("Table:"));
+		tableChooser.add(listBox);
+
+		// the back link widget
+		backLink.setStyleName("backlink");
+		// empty click handler to avoid having to check for if the HandlerRegistration is null in setBackLink()
+		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+			}
+		});
+
+		// the main container widget
+		// TODO will probably need to change to different panel type to match the mockups
+		HorizontalPanel panel = new HorizontalPanel();
+		DOM.setElementAttribute(panel.getElement(), "id", "headbox");
+		panel.add(backLink);
+		panel.add(tableChooser);
+
+		initWidget(panel);
 	}
 
 	@Override
@@ -65,9 +94,28 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
 	}
 
+	public void setBackLink(final String documentTitle) {
+		backLinkHandlerReg.removeHandler();
+		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				presenter.goTo(new ListPlace(documentTitle));
+			}
+		});
+	}
+
 	@Override
 	public void clear() {
 		listBox.clear();
 	}
 
+	@Override
+	public void setBackLinkVisible(boolean visible) {
+		backLink.setVisible(visible);
+	}
+
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
 }
