@@ -1,5 +1,11 @@
 2011-05-24  Ben Konrath  <ben@bagu.org>
 
+	Add comment to ListActivity.goTo() method.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+
+2011-05-24  Ben Konrath  <ben@bagu.org>
+
 	Remove FIXME in convertGdkColorToHtmlColour()
 
 	The Gdk::Color value returned by libglom is 16-bits per channel on both

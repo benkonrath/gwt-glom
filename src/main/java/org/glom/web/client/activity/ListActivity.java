@@ -183,6 +183,11 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		clearView();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.ListView.Presenter#goTo(com.google.gwt.place.shared.Place)
+	 */
 	public void goTo(Place place) {
 		clientFactory.getPlaceController().goTo(place);
 	}
