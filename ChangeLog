@@ -1,5 +1,13 @@
 2011-05-24  Ben Konrath  <ben@bagu.org>
 
+	Update gwt-log from 3.1.0 to 3.1.2.
+
+	Gwt-log 3.1.0 has been marked as depreciated.
+
+	* pom.xml:
+
+2011-05-24  Ben Konrath  <ben@bagu.org>
+
 	Add comment to ListActivity.goTo() method.
 
 	* src/main/java/org/glom/web/client/activity/ListActivity.java:

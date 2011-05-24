@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>com.allen_sauer.gwt.log</groupId>
 			<artifactId>gwt-log</artifactId>
-			<version>3.1.0</version>
+			<version>3.1.2</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
