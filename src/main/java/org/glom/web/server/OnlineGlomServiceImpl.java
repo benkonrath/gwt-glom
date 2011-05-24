@@ -694,7 +694,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (gdkColor.length() == 13)
 			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
 		else if (gdkColor.length() == 7) {
-			// FIXME will this happen in on 32-bit?
+			// This shouldn't happen but let's deal with it if it does.
 			Log.warn("convertGdkColorToHtmlColour(): Expected a 13 character string but received a 7 character string. Returning received string.");
 			return gdkColor;
 		} else {
