@@ -1,3 +1,12 @@
+2011-05-27  Ben Konrath  <ben@bagu.org>
+
+	Fix problem with onlineglom.properties file loading.
+
+	The old way worked in Eclipse but not on the server. Loading the
+	onlineglom.properties file now works in Eclipse and on the server.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
 2011-05-24  Ben Konrath  <ben@bagu.org>
 
 	Update gwt-log from 3.1.0 to 3.1.2.

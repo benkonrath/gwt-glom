@@ -21,9 +21,9 @@ package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -103,26 +103,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	public OnlineGlomServiceImpl() throws Exception {
 
-		// This retrieves configuration values from the onlineglom properties file located on the classpath for this
-		// servlet.
-		String classpath = System.getProperty("java.class.path");
-		String[] paths = classpath.split(File.pathSeparator);
-		File propFile = null;
-		boolean configFound = false;
-		for (String path : paths) {
-			propFile = new File(path, "onlineglom.properties");
-			if (propFile.exists() && !propFile.isDirectory()) {
-				configFound = true;
-				Log.info("Using configuration file: " + propFile.getAbsolutePath());
-				break;
-			}
-		}
-		if (!configFound) {
-			Log.fatal("onlineglom.properties not found on the classpath.");
+		// Find the configuration file. See this thread for background info:
+		// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
+		OnlineGlomProperties config = new OnlineGlomProperties();
+		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("onlineglom.properties");
+		if (is == null) {
+			Log.fatal("onlineglom.properties not found.");
 			throw new IOException();
 		}
-		OnlineGlomProperties config = new OnlineGlomProperties();
-		config.load(new FileInputStream(propFile));
+		config.load(is);
 
 		// check the configured glom file directory
 		String documentDirName = config.getProperty("glom.document.directory");
