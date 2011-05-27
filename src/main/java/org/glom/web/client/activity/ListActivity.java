@@ -160,6 +160,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 
 	private void clearView() {
 		authenticationPopup.hide();
+		authenticationPopup.clear();
 		listView.clear();
 	}
 

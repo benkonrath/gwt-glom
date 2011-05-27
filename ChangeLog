@@ -1,5 +1,11 @@
 2011-05-27  Ben Konrath  <ben@bagu.org>
 
+	Reset the AuthenticationPopup when clearing the ListView.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+
+2011-05-27  Ben Konrath  <ben@bagu.org>
+
 	Fix problem with onlineglom.properties file loading.
 
 	The old way worked in Eclipse but not on the server. Loading the
