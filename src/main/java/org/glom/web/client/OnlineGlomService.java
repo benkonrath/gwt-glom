@@ -21,9 +21,11 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.ui.DetailsView;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
+import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -81,12 +83,34 @@ public interface OnlineGlomService extends RemoteService {
 	boolean checkAuthentication(String documentTitle, String username, String password);
 
 	/**
-	 * Gets a {@link LayoutListTable} Object for the default table of the given Glom document title.
+	 * Gets a {@link LayoutListTable} for the default table of the given Glom document title.
 	 * 
 	 * @param documentTitle
 	 *            title of the Glom document
 	 * @return filled in {@link LayoutListTable} for the default table
 	 */
 	LayoutListTable getDefaultLayoutListTable(String documentTitle);
+
+	/**
+	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the provided Glom document
+	 * and table name.
+	 * 
+	 * @param documentTitle
+	 *            title of the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document
+	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
+	 */
+	LayoutGroup getDetailsLayoutGroup(String documentTitle, String tableName);
+
+	/**
+	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the default table in the
+	 * specified Glom document.
+	 * 
+	 * @param documentTitle
+	 *            title of the Glom document
+	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
+	 */
+	LayoutGroup getDefaultDetailsLayoutGroup(String documentTitle);
 
 }

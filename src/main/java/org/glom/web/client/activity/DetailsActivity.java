@@ -19,27 +19,30 @@
 
 package org.glom.web.client.activity;
 
+import java.util.ArrayList;
+
 import org.glom.web.client.ClientFactory;
+import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItem;
+import org.glom.web.shared.layout.LayoutItemField;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
 	private final String documentTitle;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 
-	/**
-	 * 
-	 */
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
 		this.documentTitle = place.getDocumentTitle();
 		this.clientFactory = clientFactory;
@@ -57,10 +60,53 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		// register this class as the presenter
 		detailsView.setPresenter(this);
 
-		// TODO RPC and / or EventBus code goes here
+		// get the layout for the DetailsView
+		final String selectedTable = clientFactory.getTableSelectionView().getSelectedTable();
+		if (!selectedTable.isEmpty()) {
+			// The table name has been set so we can use the selected table name to populate the cell table.
+			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+				public void onFailure(Throwable caught) {
+					// FIXME: need to deal with failure
+					System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
+				}
+
+				@Override
+				public void onSuccess(LayoutGroup result) {
+					setDetailsLayout(result);
+				}
+			};
+			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutGroup(documentTitle, selectedTable, callback);
+		} else {
+			// The table name has not been set so we need to fill in the details layout using the default table for the
+			// glom document.
+			// The table name has been set so we can use the selected table name to populate the cell table.
+			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+				public void onFailure(Throwable caught) {
+					// FIXME: need to deal with failure
+					System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
+				}
+
+				@Override
+				public void onSuccess(LayoutGroup result) {
+					setDetailsLayout(result);
+				}
+			};
+			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayoutGroup(documentTitle, callback);
+		}
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());
+	}
+
+	private void setDetailsLayout(LayoutGroup layoutGroup) {
+		ArrayList<LayoutItem> items = layoutGroup.getItems();
+		for (LayoutItem layoutItem : items) {
+			if (layoutItem instanceof LayoutGroup) {
+				detailsView.addLayoutGroup((LayoutGroup) layoutItem);
+			} else if (layoutItem instanceof LayoutItemField) {
+				detailsView.addLayoutField((LayoutItemField) layoutItem);
+			}
+		}
 	}
 
 	/*
@@ -70,7 +116,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	 */
 	@Override
 	public void onCancel() {
-		// TODO detailsView.clear();
+		detailsView.clear();
 	}
 
 	/*
@@ -80,7 +126,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	 */
 	@Override
 	public void onStop() {
-		// TODO detailsView.clear();
+		detailsView.clear();
 	}
 
 	/*

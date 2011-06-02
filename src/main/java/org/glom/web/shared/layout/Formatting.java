@@ -17,39 +17,32 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.shared.layout;
 
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItemField;
-
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import java.io.Serializable;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public interface DetailsView extends IsWidget {
+@SuppressWarnings("serial")
+public class Formatting implements Serializable {
 
-	public interface Presenter {
-		void goTo(Place place);
+	// @formatter:off
+	public enum HorizontalAlignment {
+		HORIZONTAL_ALIGNMENT_AUTO, // For instance, RIGHT for numeric fields.
+		HORIZONTAL_ALIGNMENT_LEFT,
+		HORIZONTAL_ALIGNMENT_RIGHT
+	}
+	// @formatter:on
+
+	private HorizontalAlignment horizontalAlignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
+
+	public void setHorizontalAlignment(HorizontalAlignment alignment) {
+		horizontalAlignment = alignment;
 	}
 
-	public void setPresenter(Presenter presenter);
-
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutGroup(LayoutGroup layoutItem);
-
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutField(LayoutItemField layoutItem);
-
-	/**
-	 * 
-	 */
-	public void clear();
-
+	public HorizontalAlignment getHorizontalAlignment() {
+		return horizontalAlignment;
+	}
 }

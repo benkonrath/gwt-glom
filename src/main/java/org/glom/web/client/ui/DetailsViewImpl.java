@@ -19,9 +19,12 @@
 
 package org.glom.web.client.ui;
 
+import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItemField;
+
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -31,12 +34,11 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 
 	@SuppressWarnings("unused")
 	private Presenter presenter;
-	private final SimplePanel panel = new SimplePanel();
+	// private final VerticalPanel mainPanel = new VerticalPanel();
+	private final FlowPanel mainPanel = new FlowPanel();
 
 	public DetailsViewImpl() {
-		Label label = new Label("Details View");
-		panel.add(label);
-		initWidget(panel);
+		initWidget(mainPanel);
 	}
 
 	/*
@@ -48,4 +50,43 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.DetailsView#addLayoutGroup(org.glom.web.shared.layout.LayoutGroup)
+	 */
+	@Override
+	public void addLayoutGroup(LayoutGroup layoutGroup) {
+		FlowPanel group = new FlowPanel();
+		group.setStyleName("group");
+
+		Label label = new Label(layoutGroup.getTitle());
+		label.setStyleName("group-title");
+		group.add(label);
+
+		mainPanel.add(group);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.DetailsView#addLayoutField(org.glom.web.shared.layout.LayoutItemField)
+	 */
+	@Override
+	public void addLayoutField(LayoutItemField layoutItem) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.DetailsView#clear()
+	 */
+	@Override
+	public void clear() {
+		mainPanel.clear();
+	}
+
 }

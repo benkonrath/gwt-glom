@@ -17,39 +17,16 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.shared.layout;
 
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItemField;
-
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import java.io.Serializable;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ * A LayoutItemField doesn't add anything to LayoutItemWithFormatting but it's still nice to have as a type.
  * 
+ * @author Ben Konrath <ben@bagu.org>
  */
-public interface DetailsView extends IsWidget {
-
-	public interface Presenter {
-		void goTo(Place place);
-	}
-
-	public void setPresenter(Presenter presenter);
-
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutGroup(LayoutGroup layoutItem);
-
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutField(LayoutItemField layoutItem);
-
-	/**
-	 * 
-	 */
-	public void clear();
+@SuppressWarnings("serial")
+public class LayoutItemField extends LayoutItemWithFormatting implements Serializable {
 
 }

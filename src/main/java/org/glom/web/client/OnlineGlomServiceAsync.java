@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
+import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -65,5 +66,9 @@ public interface OnlineGlomServiceAsync {
 	void checkAuthentication(String documentTitle, String username, String password, AsyncCallback<Boolean> callback);
 
 	void getDefaultLayoutListTable(String documentTitle, AsyncCallback<LayoutListTable> callback);
+
+	void getDetailsLayoutGroup(String documentTitle, String tableName, AsyncCallback<LayoutGroup> callback);
+
+	void getDefaultDetailsLayoutGroup(String documentTitle, AsyncCallback<LayoutGroup> callback);
 
 }

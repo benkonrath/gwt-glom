@@ -17,39 +17,41 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.shared.layout;
 
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItemField;
-
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public interface DetailsView extends IsWidget {
+@SuppressWarnings("serial")
+public class LayoutGroup extends LayoutItem implements Serializable {
 
-	public interface Presenter {
-		void goTo(Place place);
+	private int columnCount = 1;
+	private ArrayList<LayoutItem> items = new ArrayList<LayoutItem>();
+
+	/**
+	 * Add the item to the end of the list.
+	 * 
+	 * @param item
+	 *            The item to add.
+	 */
+	public final void addItem(LayoutItem item) {
+		items.add(item);
 	}
 
-	public void setPresenter(Presenter presenter);
+	public final ArrayList<LayoutItem> getItems() {
+		return items;
+	}
 
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutGroup(LayoutGroup layoutItem);
+	public final int getColumnCount() {
+		return columnCount;
+	}
 
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutField(LayoutItemField layoutItem);
-
-	/**
-	 * 
-	 */
-	public void clear();
+	public final void setColumnCount(int columnCount) {
+		this.columnCount = columnCount;
+	}
 
 }

@@ -16,40 +16,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.glom.web.shared.layout;
 
-package org.glom.web.client.ui;
-
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItemField;
-
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import java.io.Serializable;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public interface DetailsView extends IsWidget {
+@SuppressWarnings("serial")
+public class LayoutItem implements Serializable {
 
-	public interface Presenter {
-		void goTo(Place place);
+	private String name;
+	private String title;
+
+	public String getTitle() {
+		return title;
 	}
 
-	public void setPresenter(Presenter presenter);
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutGroup(LayoutGroup layoutItem);
+	public String getName() {
+		return name;
+	}
 
-	/**
-	 * @param layoutItem
-	 */
-	public void addLayoutField(LayoutItemField layoutItem);
-
-	/**
-	 * 
-	 */
-	public void clear();
-
+	public void setName(String name) {
+		this.name = name;
+	}
 }

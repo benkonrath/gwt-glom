@@ -58,6 +58,8 @@ import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.LayoutListTable;
+import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItemField;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -774,4 +776,83 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return authenticated;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutGroup(java.lang.String, java.lang.String)
+	 */
+	public LayoutGroup getDetailsLayoutGroup(String documentTitle, String tableName) {
+		// FIXME not checking if authenticated
+		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		Document document = configuredDoc.getDocument();
+		LayoutGroupVector layoutGroupsVec = document.get_data_layout_groups("details", tableName);
+		org.glom.libglom.LayoutGroup libGlomLayoutGroup = layoutGroupsVec.get(0);
+
+		LayoutGroup layoutGroup = new LayoutGroup();
+		if (libGlomLayoutGroup == null)
+			return layoutGroup;
+
+		layoutGroup.setTitle(libGlomLayoutGroup.get_title());
+
+		return getLayoutGroup(documentTitle, tableName, libGlomLayoutGroup);
+	}
+
+	/**
+	 * Gets a GWT-Glom LayoutGroup object for the specified libglom LayoutGroup object.
+	 * 
+	 * @param libglomLayoutGroup
+	 *            <dt><b>Precondition:</b>
+	 *            <dd>
+	 *            libglomLayoutGroup must not be null
+	 * @return
+	 */
+	private LayoutGroup getLayoutGroup(String documentTitle, String tableName,
+			org.glom.libglom.LayoutGroup libglomLayoutGroup) {
+		LayoutGroup layoutGroup = new LayoutGroup();
+		layoutGroup.setColumnCount(safeLongToInt(libglomLayoutGroup.get_columns_count()));
+
+		// look at each child item
+		LayoutItemVector layoutItemsVec = libglomLayoutGroup.get_items();
+		for (int i = 0; i < layoutItemsVec.size(); i++) {
+			org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
+
+			// just a safety check
+			if (libglomLayoutItem == null)
+				continue;
+
+			org.glom.web.shared.layout.LayoutItem layoutItem = null;
+			org.glom.libglom.LayoutGroup group = org.glom.libglom.LayoutGroup.cast_dynamic(libglomLayoutItem);
+			if (group != null) {
+				// recurse into child groups
+				layoutItem = getLayoutGroup(documentTitle, tableName, group);
+			} else {
+				// create GWT-Glom LayoutItem types based on the the libglom type
+				String partTypeName = libglomLayoutItem.get_part_type_name();
+				if ("Field".equals(partTypeName)) {
+					layoutItem = new LayoutItemField();
+				} else {
+					Log.warn(documentTitle + " - " + tableName
+							+ "- getLayoutGroup(): Ignoring unknown LayoutItem of type: " + partTypeName);
+					continue;
+				}
+			}
+
+			layoutItem.setTitle(libglomLayoutItem.get_title_original());
+			layoutGroup.addItem(layoutItem);
+		}
+
+		return layoutGroup;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDefaultDetailsLayoutGroup(java.lang.String)
+	 */
+	@Override
+	public LayoutGroup getDefaultDetailsLayoutGroup(String documentTitle) {
+		GlomDocument glomDocument = getGlomDocument(documentTitle);
+		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
+		return getDetailsLayoutGroup(documentTitle, tableName);
+	}
 }
