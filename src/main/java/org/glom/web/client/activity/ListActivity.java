@@ -93,7 +93,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 
 		// populate the cell table with data
 		final String selectedTable = clientFactory.getTableSelectionView().getSelectedTable();
-		if (!selectedTable.equals("")) {
+		if (!selectedTable.isEmpty()) {
 			// The table name has been set so we can use the selected table name to populate the cell table.
 			AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
 				public void onFailure(Throwable caught) {

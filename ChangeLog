@@ -1,5 +1,11 @@
 2011-06-02  Ben Konrath  <ben@bagu.org>
 
+	Use String.isEmpty() to check for empty string.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+
+2011-06-02  Ben Konrath  <ben@bagu.org>
+
 	Display main layout group titles in the DetailsView.
 
 	This is the start of the DetailsActivity/DetailsView implementation.
