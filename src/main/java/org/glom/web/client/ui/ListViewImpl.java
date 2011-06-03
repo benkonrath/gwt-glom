@@ -22,6 +22,7 @@ package org.glom.web.client.ui;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomField;
 
@@ -87,7 +88,6 @@ public class ListViewImpl extends Composite implements ListView {
 
 	final private VerticalPanel vPanel = new VerticalPanel();
 	final private SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
-	@SuppressWarnings("unused")
 	private Presenter presenter;
 
 	public ListViewImpl() {
@@ -218,22 +218,20 @@ public class ListViewImpl extends Composite implements ListView {
 		}
 
 		Column<GlomField[], String> detailsColumn = new Column<GlomField[], String>(new ButtonCell() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see com.google.gwt.cell.client.ButtonCell#onEnterKeyDown(com.google.gwt.cell.client.Cell.Context,
+			 * com.google.gwt.dom.client.Element, java.lang.String, com.google.gwt.dom.client.NativeEvent,
+			 * com.google.gwt.cell.client.ValueUpdater)
+			 */
 			@Override
-			public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
-				// TODO figure out how to create a history token to uniquely identify the row.
-				// TODO change to custom css class
-				// We're using a button tag for the link. If this causes a problem we can use an anchor tag with css
-				// styling to make it look like a button.
-				// TODO investigate if I can use button objects with 'presenter.goTo(new DetailsPlace())' in the click
-				// handler
-				SafeHtml safeDocumentTitle = SafeHtmlUtils.fromString(documentTitle);
-				sb.appendHtmlConstant("<button class=\"gwt-Button\" title=\"Go to the details view for this row\" onclick=\"window.location.href='#details:"
-						+ safeDocumentTitle.asString() + "'\" type=\"button\" tabindex=\"-1\" >");
-				if (data != null) {
-					sb.append(data);
-				}
-				sb.appendHtmlConstant("</button>");
+			protected void onEnterKeyDown(com.google.gwt.cell.client.Cell.Context context, Element parent,
+					String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+				super.onEnterKeyDown(context, parent, value, event, valueUpdater);
+				presenter.goTo(new DetailsPlace(documentTitle));
 			}
+
 		}) {
 			@Override
 			public String getValue(GlomField[] object) {

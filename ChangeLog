@@ -1,3 +1,12 @@
+2011-06-03  Ben Konrath  <ben@bagu.org>
+
+	Use presenter.goTo() to change to the DetailsPlace.
+
+	This will make things easier when we need to open the DetailsView with
+	data specific to the row that was clicked.
+
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+
 2011-06-02  Ben Konrath  <ben@bagu.org>
 
 	Add CSS file from mockups.
