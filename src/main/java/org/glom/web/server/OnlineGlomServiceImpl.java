@@ -853,13 +853,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				layoutItem = getLayoutGroup(documentTitle, tableName, group);
 			} else {
 				// create GWT-Glom LayoutItem types based on the the libglom type
-				// FIXME use cast_dynamic methods to determine the libglom type
-				String partTypeName = libglomLayoutItem.get_part_type_name();
-				if ("Field".equals(partTypeName)) {
+				LayoutItem_Field tempField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
+				if (tempField != null) {
 					layoutItem = new LayoutItemField();
 				} else {
-					Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-							+ tableName + "- getLayoutGroup(): Ignoring unknown LayoutItem of type: " + partTypeName);
+					Log.info(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+							+ tableName + ": Ignoring unknown LayoutItem of type "
+							+ libglomLayoutItem.get_part_type_name() + ".");
 					continue;
 				}
 			}

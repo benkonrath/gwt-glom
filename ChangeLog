@@ -1,5 +1,14 @@
 2011-06-14  Ben Konrath  <ben@bagu.org>
 
+	Use cast_dynamic method to determine the libglom LayoutItem type.
+
+	This is better than finding the LayoutItem type by using the string
+	returned from the get_part_type_name() method.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-06-14  Ben Konrath  <ben@bagu.org>
+
 	Add method names to log entries in the servlet.
 
 	This helps when tracking down deployment problems.
