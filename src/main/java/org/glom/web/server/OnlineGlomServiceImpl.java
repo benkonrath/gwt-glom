@@ -49,6 +49,7 @@ import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.NumericFormat;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
@@ -404,6 +405,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		if (!configuredDoc.isAuthenticated())
+			return new ArrayList<GlomField[]>();
 		Document document = configuredDoc.getDocument();
 
 		// access the layout list using the defined layout list or the table fields if there's no layout list
@@ -472,15 +475,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
-		if (!configuredDoc.isAuthenticated())
-			return rowsList;
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
 		try {
-			// Setup and execute the query. Special care needs to be take to ensure that the results will be based on a
-			// cursor so that large amounts of memory are not consumed when the query retrieve a large amount of data.
-			// Here's the relevant PostgreSQL documentation:
+			// Setup the JDBC driver and get the query. Special care needs to be take to ensure that the results will be
+			// based on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount
+			// of data. Here's the relevant PostgreSQL documentation:
 			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
 			ComboPooledDataSource cpds = configuredDoc.getCpds();
 			conn = cpds.getConnection();
@@ -495,137 +496,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// Test the execution time at the same time (see the todo item in getLayoutListTable()).
 			rs = st.executeQuery(query);
 
-			// get the data we've been asked for
-			int rowCount = 0;
-			while (rs.next() && rowCount <= length) {
-				int layoutFieldsSize = safeLongToInt(layoutFields.size());
-				GlomField[] rowArray = new GlomField[layoutFieldsSize];
-				for (int i = 0; i < layoutFieldsSize; i++) {
-					// make a new GlomField to set the text and colours
-					rowArray[i] = new GlomField();
-
-					// get foreground and background colours
-					LayoutItem_Field field = layoutFields.get(i);
-					FieldFormatting formatting = field.get_formatting_used();
-					String fgcolour = formatting.get_text_format_color_foreground();
-					if (!fgcolour.isEmpty())
-						rowArray[i].setFGColour(convertGdkColorToHtmlColour(fgcolour));
-					String bgcolour = formatting.get_text_format_color_background();
-					if (!bgcolour.isEmpty())
-						rowArray[i].setBGColour(convertGdkColorToHtmlColour(bgcolour));
-
-					// Convert the field value to a string based on the glom type. We're doing the formatting on the
-					// server side for now but it might be useful to move this to the client side.
-					switch (field.get_glom_type()) {
-					case TYPE_TEXT:
-						String text = rs.getString(i + 1);
-						rowArray[i].setText(text != null ? text : "");
-						break;
-					case TYPE_BOOLEAN:
-						rowArray[i].setBoolean(rs.getBoolean(i + 1));
-						break;
-					case TYPE_NUMERIC:
-						// Take care of the numeric formatting before converting the number to a string.
-						NumericFormat numFormatGlom = formatting.getM_numeric_format();
-						// There's no isCurrency() method in the glom NumericFormat class so we're assuming that the
-						// number should be formatted as a currency if the currency code string is not empty.
-						String currencyCode = numFormatGlom.getM_currency_symbol();
-						NumberFormat numFormatJava = null;
-						boolean useGlomCurrencyCode = false;
-						if (currencyCode.length() == 3) {
-							// Try to format the currency using the Java Locales system.
-							try {
-								Currency currency = Currency.getInstance(currencyCode);
-								Log.info(documentTitle
-										+ " "
-										+ tableName
-										+ ": A valid ISO 4217 currency code is being used. Overriding the numeric formatting with information from the locale.");
-								int digits = currency.getDefaultFractionDigits();
-								numFormatJava = NumberFormat.getCurrencyInstance(locale);
-								numFormatJava.setCurrency(currency);
-								numFormatJava.setMinimumFractionDigits(digits);
-								numFormatJava.setMaximumFractionDigits(digits);
-							} catch (IllegalArgumentException e) {
-								Log.warn(documentTitle
-										+ " "
-										+ tableName
-										+ ": "
-										+ currencyCode
-										+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
-								// The currency code is not this is not an ISO 4217 currency code.
-								// We're going to manually set the currency code and use the glom numeric formatting.
-								useGlomCurrencyCode = true;
-								numFormatJava = getJavaNumberFormat(numFormatGlom);
-							}
-						} else if (currencyCode.length() > 0) {
-							Log.warn(documentTitle + " - " + tableName + ": " + currencyCode
-									+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
-							// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
-							// We're going to manually set the currency code and use the glom numeric formatting.
-							useGlomCurrencyCode = true;
-							numFormatJava = getJavaNumberFormat(numFormatGlom);
-						} else {
-							// The length of the currency code is 0; the number is not a currency.
-							numFormatJava = getJavaNumberFormat(numFormatGlom);
-						}
-
-						// TODO: Do I need to do something with NumericFormat.get_default_precision() from libglom?
-
-						double number = rs.getDouble(i + 1);
-						if (number < 0) {
-							if (formatting.getM_numeric_format().getM_alt_foreground_color_for_negatives())
-								// overrides the set foreground colour
-								rowArray[i].setFGColour(convertGdkColorToHtmlColour(NumericFormat
-										.get_alternative_color_for_negatives()));
-						}
-
-						// Finally convert the number to text using the glom currency string if required.
-						if (useGlomCurrencyCode) {
-							rowArray[i].setText(currencyCode + " " + numFormatJava.format(number));
-						} else {
-							rowArray[i].setText(numFormatJava.format(number));
-						}
-						break;
-					case TYPE_DATE:
-						Date date = rs.getDate(i + 1);
-						if (date != null) {
-							DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-							rowArray[i].setText(dateFormat.format(date));
-						} else {
-							rowArray[i].setText("");
-						}
-						break;
-					case TYPE_TIME:
-						Time time = rs.getTime(i + 1);
-						if (time != null) {
-							DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
-							rowArray[i].setText(timeFormat.format(time));
-						} else {
-							rowArray[i].setText("");
-						}
-						break;
-					case TYPE_IMAGE:
-						byte[] image = rs.getBytes(i + 1);
-						if (image != null) {
-							// TODO implement field TYPE_IMAGE
-							rowArray[i].setText("Image (FIXME)");
-						} else {
-							rowArray[i].setText("");
-						}
-						break;
-					case TYPE_INVALID:
-					default:
-						Log.warn(documentTitle + " - " + tableName
-								+ ": Invalid LayoutItem Field type. Using empty string for value.");
-						rowArray[i].setText("");
-						break;
-					}
-				}
-
-				// add the row of GlomFields to the ArrayList we're going to return and update the row count
-				rowsList.add(rowArray);
-				rowCount++;
-			}
+			// get the results from the ResultSet
+			rowsList = getData(documentTitle, tableName, length, layoutFields, rs);
 		} catch (SQLException e) {
 			Log.error(documentTitle + " - " + tableName + ": Error executing database query.", e);
 			// TODO: somehow notify user of problem
@@ -643,6 +515,141 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						+ ": Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
+		return rowsList;
+	}
+
+	private ArrayList<GlomField[]> getData(String documentTitle, String tableName, int length,
+			LayoutFieldVector layoutFields, ResultSet rs) throws SQLException {
+
+		// get the data we've been asked for
+		int rowCount = 0;
+		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
+		while (rs.next() && rowCount <= length) {
+			int layoutFieldsSize = safeLongToInt(layoutFields.size());
+			GlomField[] rowArray = new GlomField[layoutFieldsSize];
+			for (int i = 0; i < layoutFieldsSize; i++) {
+				// make a new GlomField to set the text and colours
+				rowArray[i] = new GlomField();
+
+				// get foreground and background colours
+				LayoutItem_Field field = layoutFields.get(i);
+				FieldFormatting formatting = field.get_formatting_used();
+				String fgcolour = formatting.get_text_format_color_foreground();
+				if (!fgcolour.isEmpty())
+					rowArray[i].setFGColour(convertGdkColorToHtmlColour(fgcolour));
+				String bgcolour = formatting.get_text_format_color_background();
+				if (!bgcolour.isEmpty())
+					rowArray[i].setBGColour(convertGdkColorToHtmlColour(bgcolour));
+
+				// Convert the field value to a string based on the glom type. We're doing the formatting on the
+				// server side for now but it might be useful to move this to the client side.
+				switch (field.get_glom_type()) {
+				case TYPE_TEXT:
+					String text = rs.getString(i + 1);
+					rowArray[i].setText(text != null ? text : "");
+					break;
+				case TYPE_BOOLEAN:
+					rowArray[i].setBoolean(rs.getBoolean(i + 1));
+					break;
+				case TYPE_NUMERIC:
+					// Take care of the numeric formatting before converting the number to a string.
+					NumericFormat numFormatGlom = formatting.getM_numeric_format();
+					// There's no isCurrency() method in the glom NumericFormat class so we're assuming that the
+					// number should be formatted as a currency if the currency code string is not empty.
+					String currencyCode = numFormatGlom.getM_currency_symbol();
+					NumberFormat numFormatJava = null;
+					boolean useGlomCurrencyCode = false;
+					if (currencyCode.length() == 3) {
+						// Try to format the currency using the Java Locales system.
+						try {
+							Currency currency = Currency.getInstance(currencyCode);
+							Log.info(documentTitle
+									+ " "
+									+ tableName
+									+ ": A valid ISO 4217 currency code is being used. Overriding the numeric formatting with information from the locale.");
+							int digits = currency.getDefaultFractionDigits();
+							numFormatJava = NumberFormat.getCurrencyInstance(locale);
+							numFormatJava.setCurrency(currency);
+							numFormatJava.setMinimumFractionDigits(digits);
+							numFormatJava.setMaximumFractionDigits(digits);
+						} catch (IllegalArgumentException e) {
+							Log.warn(documentTitle + " - " + tableName + ": " + currencyCode
+									+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
+							// The currency code is not this is not an ISO 4217 currency code.
+							// We're going to manually set the currency code and use the glom numeric formatting.
+							useGlomCurrencyCode = true;
+							numFormatJava = getJavaNumberFormat(numFormatGlom);
+						}
+					} else if (currencyCode.length() > 0) {
+						Log.warn(documentTitle + " - " + tableName + ": " + currencyCode
+								+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
+						// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
+						// We're going to manually set the currency code and use the glom numeric formatting.
+						useGlomCurrencyCode = true;
+						numFormatJava = getJavaNumberFormat(numFormatGlom);
+					} else {
+						// The length of the currency code is 0; the number is not a currency.
+						numFormatJava = getJavaNumberFormat(numFormatGlom);
+					}
+
+					// TODO: Do I need to do something with NumericFormat.get_default_precision() from libglom?
+
+					double number = rs.getDouble(i + 1);
+					if (number < 0) {
+						if (formatting.getM_numeric_format().getM_alt_foreground_color_for_negatives())
+							// overrides the set foreground colour
+							rowArray[i].setFGColour(convertGdkColorToHtmlColour(NumericFormat
+									.get_alternative_color_for_negatives()));
+					}
+
+					// Finally convert the number to text using the glom currency string if required.
+					if (useGlomCurrencyCode) {
+						rowArray[i].setText(currencyCode + " " + numFormatJava.format(number));
+					} else {
+						rowArray[i].setText(numFormatJava.format(number));
+					}
+					break;
+				case TYPE_DATE:
+					Date date = rs.getDate(i + 1);
+					if (date != null) {
+						DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+						rowArray[i].setText(dateFormat.format(date));
+					} else {
+						rowArray[i].setText("");
+					}
+					break;
+				case TYPE_TIME:
+					Time time = rs.getTime(i + 1);
+					if (time != null) {
+						DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
+						rowArray[i].setText(timeFormat.format(time));
+					} else {
+						rowArray[i].setText("");
+					}
+					break;
+				case TYPE_IMAGE:
+					byte[] image = rs.getBytes(i + 1);
+					if (image != null) {
+						// TODO implement field TYPE_IMAGE
+						rowArray[i].setText("Image (FIXME)");
+					} else {
+						rowArray[i].setText("");
+					}
+					break;
+				case TYPE_INVALID:
+				default:
+					Log.warn(documentTitle + " - " + tableName
+							+ ": Invalid LayoutItem Field type. Using empty string for value.");
+					rowArray[i].setText("");
+					break;
+				}
+			}
+
+			// add the row of GlomFields to the ArrayList we're going to return and update the row count
+			rowsList.add(rowArray);
+			rowCount++;
+		}
+
 		return rowsList;
 	}
 
@@ -827,6 +834,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				layoutItem = getLayoutGroup(documentTitle, tableName, group);
 			} else {
 				// create GWT-Glom LayoutItem types based on the the libglom type
+				// FIXME use cast_dynamic methods to determine the libglom type
 				String partTypeName = libglomLayoutItem.get_part_type_name();
 				if ("Field".equals(partTypeName)) {
 					layoutItem = new LayoutItemField();
@@ -837,11 +845,175 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				}
 			}
 
-			layoutItem.setTitle(libglomLayoutItem.get_title_original());
+			layoutItem.setTitle(libglomLayoutItem.get_title_or_name());
 			layoutGroup.addItem(layoutItem);
 		}
 
 		return layoutGroup;
+	}
+
+	public GlomField[] getDetailsData(String documentTitle, String tableName, String primaryKeyValue) {
+
+		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		Document document = configuredDoc.getDocument();
+
+		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName);
+
+		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
+			Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+					+ tableName + ": Didn't find any fields to show. Returning null.");
+			return null;
+		}
+
+		// get primary key for the table to use in the SQL query
+		Field primaryKey = null;
+		FieldVector fieldsVec = document.get_table_fields(tableName);
+		for (int i = 0; i < safeLongToInt(fieldsVec.size()); i++) {
+			Field field = fieldsVec.get(i);
+			if (field.get_primary_key()) {
+				primaryKey = field;
+				break;
+			}
+		}
+
+		// send back an empty GlomField array if can't find a primaryKey Field
+		if (primaryKey == null) {
+			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+					+ tableName + ": Couldn't find primary key in table. Returning null.");
+			return null;
+		}
+
+		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			// Setup the JDBC driver and get the query.
+			ComboPooledDataSource cpds = configuredDoc.getCpds();
+			conn = cpds.getConnection();
+			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+			String query = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey, primaryKeyValue);
+			rs = st.executeQuery(query);
+
+			// get the results from the ResultSet
+			// using 2 as a length parameter so we can log a warning if the result set is greater than one
+			rowsList = getData(documentTitle, tableName, 2, fieldsToGet, rs);
+		} catch (SQLException e) {
+			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+					+ tableName + ": Error executing database query.", e);
+			// TODO: somehow notify user of problem
+			return null;
+		} finally {
+			// cleanup everything that has been used
+			try {
+				if (rs != null)
+					rs.close();
+				if (st != null)
+					st.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e) {
+				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+						+ tableName + ": Error closing database resources. Subsequent database queries may not work.",
+						e);
+			}
+		}
+
+		if (rowsList.size() == 0) {
+			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+					+ tableName + ": The query returned an empty ResultSet. Returning null.");
+			return null;
+		} else if (rowsList.size() > 1) {
+			Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
+					+ tableName + ": The query did not return a unique result. Returning the first result in the set.");
+		}
+
+		return rowsList.get(0);
+
+	}
+
+	/*
+	 * Gets a LayoutFieldVector to use when generating an SQL query.
+	 */
+	private LayoutFieldVector getFieldsToShowForSQLQuery(Document document, String tableName) {
+		// TODO make general to be able to use "list" here - will need to change called methods
+		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
+		return getTableFieldsToShowForSequence(document, tableName, layoutGroupVec);
+	}
+
+	private LayoutFieldVector getTableFieldsToShowForSequence(Document document, String tableName,
+			LayoutGroupVector layoutGroupVec) {
+
+		LayoutFieldVector layoutFieldVector = new LayoutFieldVector();
+		// We will show the fields that the document says we should:
+		for (int i = 0; i < layoutGroupVec.size(); i++) {
+			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
+
+			// Get the fields:
+			ArrayList<LayoutItem_Field> layoutItemsFields = getTableFieldsToShowForSequenceAddGroup(document,
+					tableName, layoutGroup);
+			for (LayoutItem_Field layoutItem_Field : layoutItemsFields) {
+				layoutFieldVector.add(layoutItem_Field);
+			}
+		}
+		return layoutFieldVector;
+	}
+
+	private ArrayList<LayoutItem_Field> getTableFieldsToShowForSequenceAddGroup(Document document, String tableName,
+			org.glom.libglom.LayoutGroup layoutGroup) {
+
+		ArrayList<LayoutItem_Field> layoutItemFields = new ArrayList<LayoutItem_Field>();
+		LayoutItemVector items = layoutGroup.get_items();
+		for (int i = 0; i < items.size(); i++) {
+			LayoutItem layoutItem = items.get(i);
+
+			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(layoutItem);
+			if (layoutItemField != null) {
+				// the layoutItem is a LayoutItem_Field
+				FieldVector fields;
+				if (layoutItemField.get_has_relationship_name()) {
+					// layoutItemField is a field in a related table
+					fields = document.get_table_fields(layoutItemField.get_table_used(tableName));
+				} else {
+					// layoutItemField is a field in this table
+					fields = document.get_table_fields(tableName);
+				}
+
+				// set the layoutItemFeild with details from its Field in the document and
+				// add it to the list to be returned
+				for (int j = 0; j < fields.size(); j++) {
+					// check the names to see if they're the same
+					// this works because we're using the field list from the related table if necessary
+					if (layoutItemField.get_name().equals(fields.get(j).get_name())) {
+						Field field = fields.get(j);
+						if (field != null) {
+							layoutItemField.set_full_field_details(field);
+							layoutItemFields.add(layoutItemField);
+						} else {
+							Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": "
+									+ document.get_database_title() + " - " + tableName + "LayoutItem_Field "
+									+ layoutItemField.get_layout_display_name() + "not found in document field list.");
+						}
+						break;
+					}
+				}
+
+			} else {
+				// the layoutItem is not a LayoutItem_Field
+				org.glom.libglom.LayoutGroup subLayoutGroup = org.glom.libglom.LayoutGroup.cast_dynamic(layoutItem);
+				if (subLayoutGroup != null) {
+					// the layoutItem is a LayoutGroup
+					LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(layoutItem);
+					if (layoutItemPortal == null) {
+						// The subGroup is not a LayoutItem_Portal.
+						// We're ignoring portals because they are filled by means of a separate SQL query.
+						layoutItemFields.addAll(getTableFieldsToShowForSequenceAddGroup(document, tableName,
+								subLayoutGroup));
+					}
+				}
+			}
+		}
+		return layoutItemFields;
 	}
 
 	/*

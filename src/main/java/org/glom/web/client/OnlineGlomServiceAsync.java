@@ -71,4 +71,7 @@ public interface OnlineGlomServiceAsync {
 
 	void getDefaultDetailsLayoutGroup(String documentTitle, AsyncCallback<LayoutGroup> callback);
 
+	void getDetailsData(String documentTitle, String tableName, String primaryKeyValue,
+			AsyncCallback<GlomField[]> callback);
+
 }

@@ -25,6 +25,7 @@ import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -72,40 +73,69 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 				@Override
 				public void onSuccess(LayoutGroup result) {
-					setDetailsLayout(result);
+					addLayoutGroup(result, "");
 				}
 			};
 			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutGroup(documentTitle, selectedTable, callback);
 		} else {
 			// The table name has not been set so we need to fill in the details layout using the default table for the
 			// glom document.
-			// The table name has been set so we can use the selected table name to populate the cell table.
 			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
 				public void onFailure(Throwable caught) {
 					// FIXME: need to deal with failure
-					System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
+					System.out.println("AsyncCallback Failed: OnlineGlomService.getDefaultDetailsLayout()");
 				}
 
 				@Override
 				public void onSuccess(LayoutGroup result) {
-					setDetailsLayout(result);
+					addLayoutGroup(result, "");
 				}
 			};
 			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayoutGroup(documentTitle, callback);
 		}
 
+		// get the data from the server
+		AsyncCallback<GlomField[]> callback = new AsyncCallback<GlomField[]>() {
+			public void onFailure(Throwable caught) {
+				// FIXME: need to deal with failure
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsData()");
+			}
+
+			@Override
+			public void onSuccess(GlomField[] result) {
+				// FIXME there's no guarantee that the layout will be ready for this
+				detailsView.setData(result);
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentTitle, selectedTable, "0", callback);
+
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());
 	}
 
-	private void setDetailsLayout(LayoutGroup layoutGroup) {
-		ArrayList<LayoutItem> items = layoutGroup.getItems();
-		for (LayoutItem layoutItem : items) {
-			if (layoutItem instanceof LayoutGroup) {
-				detailsView.addLayoutGroup((LayoutGroup) layoutItem);
-			} else if (layoutItem instanceof LayoutItemField) {
-				detailsView.addLayoutField((LayoutItemField) layoutItem);
-			}
+	/*
+	 * This is just a temporary method for creating a basic layout without the flowtable/spreadtable that Glom has.
+	 */
+	private void addLayoutGroup(LayoutGroup layoutGroup, String indent) {
+		if (layoutGroup == null)
+			return;
+
+		// look at each child item
+		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
+		for (LayoutItem layoutItem : layoutItems) {
+
+			if (layoutItem == null)
+				continue;
+
+			String title = layoutItem.getTitle();
+			if (layoutItem instanceof LayoutItemField)
+				detailsView.addLayoutField(indent + title);
+			else if (!title.isEmpty())
+				detailsView.addLayoutGroup(indent + title);
+
+			// recurse into child groups
+			if (layoutItem instanceof LayoutGroup)
+				addLayoutGroup((LayoutGroup) layoutItem, indent + "-- ");
 		}
 	}
 

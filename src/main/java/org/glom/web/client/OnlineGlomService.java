@@ -113,4 +113,17 @@ public interface OnlineGlomService extends RemoteService {
 	 */
 	LayoutGroup getDefaultDetailsLayoutGroup(String documentTitle);
 
+	/**
+	 * Gets data for the Details View.
+	 * 
+	 * @param documentTitle
+	 *            title of the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document
+	 * @param primaryKeyValue
+	 *            value of the primary key in the specified Glom table to use in the query
+	 * @return the result of the SQL query as an array of {@link GlomField}s
+	 */
+	GlomField[] getDetailsData(String documentTitle, String tableName, String primaryKeyValue);
+
 }
