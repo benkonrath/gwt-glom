@@ -1,5 +1,13 @@
 2011-06-14  Ben Konrath  <ben@bagu.org>
 
+	Add method names to log entries in the servlet.
+
+	This helps when tracking down deployment problems.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-06-14  Ben Konrath  <ben@bagu.org>
+
 	Add data to the DetailsView using a hard-coded primary key value.
 
 	The layout and functionality of the DetailsView is not complete. This
