@@ -805,22 +805,36 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDefaultDetailsLayoutGroup(java.lang.String)
+	 */
+	@Override
+	public ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentTitle) {
+		GlomDocument glomDocument = getGlomDocument(documentTitle);
+		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
+		return getDetailsLayout(documentTitle, tableName);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutGroup(java.lang.String, java.lang.String)
 	 */
-	public LayoutGroup getDetailsLayoutGroup(String documentTitle, String tableName) {
+	public ArrayList<LayoutGroup> getDetailsLayout(String documentTitle, String tableName) {
 		// FIXME not checking if authenticated
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
-		LayoutGroupVector layoutGroupsVec = document.get_data_layout_groups("details", tableName);
-		org.glom.libglom.LayoutGroup libGlomLayoutGroup = layoutGroupsVec.get(0);
+		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
 
-		LayoutGroup layoutGroup = new LayoutGroup();
-		if (libGlomLayoutGroup == null)
-			return layoutGroup;
+		ArrayList<LayoutGroup> layoutGroups = new ArrayList<LayoutGroup>();
+		for (int i = 0; i < layoutGroupVec.size(); i++) {
+			org.glom.libglom.LayoutGroup libglomLayoutGroup = layoutGroupVec.get(i);
 
-		layoutGroup.setTitle(libGlomLayoutGroup.get_title());
+			if (libglomLayoutGroup == null)
+				continue;
 
-		return getLayoutGroup(documentTitle, tableName, libGlomLayoutGroup);
+			layoutGroups.add(getLayoutGroup(documentTitle, tableName, libglomLayoutGroup));
+		}
+		return layoutGroups;
 	}
 
 	/**
@@ -957,19 +971,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private LayoutFieldVector getFieldsToShowForSQLQuery(Document document, String tableName) {
 		// TODO make general to be able to use "list" here - will need to change called methods
 		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
-		return getTableFieldsToShowForSequence(document, tableName, layoutGroupVec);
-	}
 
-	private LayoutFieldVector getTableFieldsToShowForSequence(Document document, String tableName,
-			LayoutGroupVector layoutGroupVec) {
-
-		LayoutFieldVector layoutFieldVector = new LayoutFieldVector();
 		// We will show the fields that the document says we should:
+		LayoutFieldVector layoutFieldVector = new LayoutFieldVector();
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
 			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
 
 			// Get the fields:
-			ArrayList<LayoutItem_Field> layoutItemsFields = getTableFieldsToShowForSequenceAddGroup(document,
+			ArrayList<LayoutItem_Field> layoutItemsFields = getFieldsToShowForSQLQueryAddGroup(document,
 					tableName, layoutGroup);
 			for (LayoutItem_Field layoutItem_Field : layoutItemsFields) {
 				layoutFieldVector.add(layoutItem_Field);
@@ -978,7 +987,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return layoutFieldVector;
 	}
 
-	private ArrayList<LayoutItem_Field> getTableFieldsToShowForSequenceAddGroup(Document document, String tableName,
+	private ArrayList<LayoutItem_Field> getFieldsToShowForSQLQueryAddGroup(Document document, String tableName,
 			org.glom.libglom.LayoutGroup layoutGroup) {
 
 		ArrayList<LayoutItem_Field> layoutItemFields = new ArrayList<LayoutItem_Field>();
@@ -1026,7 +1035,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					if (layoutItemPortal == null) {
 						// The subGroup is not a LayoutItem_Portal.
 						// We're ignoring portals because they are filled by means of a separate SQL query.
-						layoutItemFields.addAll(getTableFieldsToShowForSequenceAddGroup(document, tableName,
+						layoutItemFields.addAll(getFieldsToShowForSQLQueryAddGroup(document, tableName,
 								subLayoutGroup));
 					}
 				}
@@ -1035,15 +1044,4 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return layoutItemFields;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDefaultDetailsLayoutGroup(java.lang.String)
-	 */
-	@Override
-	public LayoutGroup getDefaultDetailsLayoutGroup(String documentTitle) {
-		GlomDocument glomDocument = getGlomDocument(documentTitle);
-		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
-		return getDetailsLayoutGroup(documentTitle, tableName);
-	}
 }

@@ -65,33 +65,33 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		final String selectedTable = clientFactory.getTableSelectionView().getSelectedTable();
 		if (!selectedTable.isEmpty()) {
 			// The table name has been set so we can use the selected table name to populate the cell table.
-			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+			AsyncCallback<ArrayList<LayoutGroup>> callback = new AsyncCallback<ArrayList<LayoutGroup>>() {
 				public void onFailure(Throwable caught) {
 					// FIXME: need to deal with failure
 					System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
 				}
 
 				@Override
-				public void onSuccess(LayoutGroup result) {
-					addLayoutGroup(result, "");
+				public void onSuccess(ArrayList<LayoutGroup> result) {
+					addLayoutGroups(result);
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutGroup(documentTitle, selectedTable, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentTitle, selectedTable, callback);
 		} else {
 			// The table name has not been set so we need to fill in the details layout using the default table for the
 			// glom document.
-			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+			AsyncCallback<ArrayList<LayoutGroup>> callback = new AsyncCallback<ArrayList<LayoutGroup>>() {
 				public void onFailure(Throwable caught) {
 					// FIXME: need to deal with failure
 					System.out.println("AsyncCallback Failed: OnlineGlomService.getDefaultDetailsLayout()");
 				}
 
 				@Override
-				public void onSuccess(LayoutGroup result) {
-					addLayoutGroup(result, "");
+				public void onSuccess(ArrayList<LayoutGroup> result) {
+					addLayoutGroups(result);
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayoutGroup(documentTitle, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayout(documentTitle, callback);
 		}
 
 		// get the data from the server
@@ -113,8 +113,15 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		panel.setWidget(detailsView.asWidget());
 	}
 
+	private void addLayoutGroups(ArrayList<LayoutGroup> layoutGroups) {
+		for (LayoutGroup layoutGroup : layoutGroups) {
+			addLayoutGroup(layoutGroup, "");
+		}
+	}
+
 	/*
-	 * This is just a temporary method for creating a basic layout without the flowtable/spreadtable that Glom has.
+	 * This is just a temporary method for creating a basic indented layout without the flowtable/spreadtable that Glom
+	 * has.
 	 */
 	private void addLayoutGroup(LayoutGroup layoutGroup, String indent) {
 		if (layoutGroup == null)

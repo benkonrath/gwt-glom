@@ -1,3 +1,23 @@
+2011-06-15  Ben Konrath  <ben@bagu.org>
+
+	Return an ArrayList of LayoutGroups for the Details layout.
+
+	This corrects a problem with the details layout as it can have more
+	than one top level LayoutGroup.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java: Change
+	method name from get*DetailsLayoutGroup to get*DetailsLayout. Return
+	an ArrayList<LayoutGroup> in the get*DetailsLayout methods.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Deal
+	with ArrayList of LayoutGroups for the details view layout.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Change
+	method name from get*DetailsLayoutGroup to get*DetailsLayout. Return an
+	ArrayList<LayoutGroup> in the get*DetailsLayout methods. Inline
+	getTableFieldsToShowForSequence() into getFieldsToShowForSQLQuery() to simplify
+	the code a bit. Rename getTableFieldsToShowForSequenceAddGroup() to
+	getFieldsToShowForSQLQueryAddGroup() to try to keep things more consistent.
+
 2011-06-14  Ben Konrath  <ben@bagu.org>
 
 	Use cast_dynamic method to determine the libglom LayoutItem type.
