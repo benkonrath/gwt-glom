@@ -135,7 +135,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.endsWith(".glom") ? true : false;
+				return name.endsWith(".glom");
 			}
 		});
 		Glom.libglom_init();
