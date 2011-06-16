@@ -1,5 +1,17 @@
 2011-06-16  Ben Konrath  <ben@bagu.org>
 
+	Create wrapper class to create consistent log messages.
+
+	I wrapped methods in the Log class of gwt-log to add the method names
+	from the servlet and create consistent formatting of the document title
+	and table names in the log messages.
+
+	* src/main/java/org/glom/web/server/Log.java: New file with wrapped methods.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Convert all
+	log methods to use methods from wrapped Log class.
+
+2011-06-16  Ben Konrath  <ben@bagu.org>
+
 	Remove superfluous conditional return.
 
 	Thanks to Murray Cumming for pointing this out!

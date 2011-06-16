@@ -62,7 +62,6 @@ import org.glom.web.shared.LayoutListTable;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
@@ -111,8 +110,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		OnlineGlomProperties config = new OnlineGlomProperties();
 		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("onlineglom.properties");
 		if (is == null) {
-			Log.fatal(Thread.currentThread().getStackTrace()[1].getMethodName() + ": "
-					+ "onlineglom.properties not found.");
+			Log.fatal("onlineglom.properties not found.");
 			throw new IOException();
 		}
 		config.load(is);
@@ -121,13 +119,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		String documentDirName = config.getProperty("glom.document.directory");
 		File documentDir = new File(documentDirName);
 		if (!documentDir.isDirectory()) {
-			Log.fatal(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentDirName
-					+ " is not a directory.");
+			Log.fatal(documentDirName + " is not a directory.");
 			throw new IOException();
 		}
 		if (!documentDir.canRead()) {
-			Log.fatal(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + "Can't read the files in : "
-					+ documentDirName);
+			Log.fatal("Can't read the files in : " + documentDirName);
 			throw new IOException();
 		}
 
@@ -147,11 +143,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (retval == false) {
 				String message;
 				if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
-					message = "Could not find " + documentDir.getAbsolutePath();
+					message = "Could not find file: " + glomFile.getAbsolutePath();
 				} else {
-					message = "An unknown error occurred when trying to load " + documentDir.getAbsolutePath();
+					message = "An unknown error occurred when trying to load file: " + glomFile.getAbsolutePath();
 				}
-				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + message);
+				Log.error(message);
 				// continue with for loop because there may be other documents in the directory
 				continue;
 			}
@@ -162,9 +158,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			try {
 				cpds.setDriverClass("org.postgresql.Driver");
 			} catch (PropertyVetoException e) {
-				Log.fatal(Thread.currentThread().getStackTrace()[1].getMethodName()
-						+ ": "
-						+ "Error loading the PostgreSQL JDBC driver. Is the PostgreSQL JDBC jar available to the servlet?");
+				Log.fatal("Error loading the PostgreSQL JDBC driver."
+						+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
 				throw e;
 			}
 
@@ -219,8 +214,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			conn = cpds.getConnection();
 			return true;
 		} catch (SQLException e) {
-			Log.info(Thread.currentThread().getStackTrace()[1].getMethodName() + ": "
-					+ "Username and password not correct for document: " + documentTitle);
+			Log.info(documentTitle, "Username and password not correct.");
 		} finally {
 			if (conn != null)
 				conn.close();
@@ -243,8 +237,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			try {
 				DataSources.destroy(configuredDoc.getCpds());
 			} catch (SQLException e) {
-				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": "
-						+ "Error cleaning up the ComboPooledDataSource for " + documenTitle, e);
+				Log.error(documenTitle, "Error cleaning up the ComboPooledDataSource.", e);
 			}
 		}
 
@@ -313,8 +306,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (listViewLayoutGroupSize > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-						+ table + ": The size of the list view layout group for table " + table
+				Log.warn(documentTitle, table, "The size of the list view layout group for table " + table
 						+ " is greater than 1. Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
@@ -379,8 +371,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			tableInfo.setNumRows(rs.getInt(1));
 
 		} catch (SQLException e) {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - " + table
-					+ ": Error calculating number of rows in the query. Setting number of rows to 0.", e);
+			Log.error(documentTitle, table,
+					"Error calculating number of rows in the query. Setting number of rows to 0.", e);
 			tableInfo.setNumRows(0);
 		} finally {
 			// cleanup everything that has been used
@@ -392,8 +384,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-						+ table + ": Error closing database resources. Subsequent database queries may not work.", e);
+				Log.error(documentTitle, table,
+						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 
@@ -425,9 +417,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (layoutListVec.size() > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle
-						+ ": The size of the list view layout group for table " + tableName
-						+ " is greater than 1. Attempting to use the first item for the layout list view.");
+				Log.warn(documentTitle, tableName,
+						"The size of the list view layout group for table is greater than 1. "
+								+ "Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
 			// find the defined layout list fields
@@ -477,9 +469,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (field != null)
 				sortClause.addLast(new SortFieldPair(field, isAscending));
 			else {
-				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-						+ tableName + ": Error getting LayoutItem_Field for column index " + sortColumnIndex
-						+ ". Cannot create a sort clause for this column.");
+				Log.error(documentTitle, tableName, "Error getting LayoutItem_Field for column index "
+						+ sortColumnIndex + ". Cannot create a sort clause for this column.");
 			}
 
 		}
@@ -509,8 +500,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// get the results from the ResultSet
 			rowsList = getData(documentTitle, tableName, length, layoutFields, rs);
 		} catch (SQLException e) {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-					+ tableName + ": Error executing database query.", e);
+			Log.error(documentTitle, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
 		} finally {
 			// cleanup everything that has been used
@@ -522,9 +512,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-						+ tableName + ": Error closing database resources. Subsequent database queries may not work.",
-						e);
+				Log.error(documentTitle, tableName,
+						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 		return rowsList;
@@ -575,30 +564,24 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						// Try to format the currency using the Java Locales system.
 						try {
 							Currency currency = Currency.getInstance(currencyCode);
-							Log.info(Thread.currentThread().getStackTrace()[1].getMethodName()
-									+ ": "
-									+ documentTitle
-									+ " "
-									+ tableName
-									+ ": A valid ISO 4217 currency code is being used. Overriding the numeric formatting with information from the locale.");
+							Log.info(documentTitle, tableName, "A valid ISO 4217 currency code is being used."
+									+ " Overriding the numeric formatting with information from the locale.");
 							int digits = currency.getDefaultFractionDigits();
 							numFormatJava = NumberFormat.getCurrencyInstance(locale);
 							numFormatJava.setCurrency(currency);
 							numFormatJava.setMinimumFractionDigits(digits);
 							numFormatJava.setMaximumFractionDigits(digits);
 						} catch (IllegalArgumentException e) {
-							Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle
-									+ " - " + tableName + ": " + currencyCode
-									+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
+							Log.warn(documentTitle, tableName, currencyCode + " is not a valid ISO 4217 code."
+									+ " Manually setting currency code with this value.");
 							// The currency code is not this is not an ISO 4217 currency code.
 							// We're going to manually set the currency code and use the glom numeric formatting.
 							useGlomCurrencyCode = true;
 							numFormatJava = getJavaNumberFormat(numFormatGlom);
 						}
 					} else if (currencyCode.length() > 0) {
-						Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle
-								+ " - " + tableName + ": " + currencyCode
-								+ " is not a valid ISO 4217 code. Manually setting currency code with this value.");
+						Log.warn(documentTitle, tableName, currencyCode + " is not a valid ISO 4217 code."
+								+ " Manually setting currency code with this value.");
 						// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
 						// We're going to manually set the currency code and use the glom numeric formatting.
 						useGlomCurrencyCode = true;
@@ -654,8 +637,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					break;
 				case TYPE_INVALID:
 				default:
-					Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-							+ tableName + ": Invalid LayoutItem Field type. Using empty string for value.");
+					Log.warn(documentTitle, tableName, "Invalid LayoutItem Field type. Using empty string for value.");
 					rowArray[i].setText("");
 					break;
 				}
@@ -709,12 +691,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
 		else if (gdkColor.length() == 7) {
 			// This shouldn't happen but let's deal with it if it does.
-			Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName()
-					+ ": Expected a 13 character string but received a 7 character string. Returning received string.");
+			Log.warn("Expected a 13 character string but received a 7 character string. Returning received string.");
 			return gdkColor;
 		} else {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName()
-					+ ": Did not receive a 13 or 7 character string. Returning black HTML colour code.");
+			Log.error("Did not receive a 13 or 7 character string. Returning black HTML colour code.");
 			return "#000000";
 		}
 	}
@@ -735,8 +715,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		case HORIZONTAL_ALIGNMENT_RIGHT:
 			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
 		default:
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName()
-					+ ": Recieved an alignment that I don't know about: "
+			Log.error("Recieved an alignment that I don't know about: "
 					+ FieldFormatting.HorizontalAlignment.class.getName() + "." + alignment.toString() + ". Returning "
 					+ ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.toString() + ".");
 			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
@@ -764,11 +743,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		case TYPE_TIME:
 			return ColumnInfo.GlomFieldType.TYPE_TIME;
 		case TYPE_INVALID:
-			Log.info(Thread.currentThread().getStackTrace()[1].getMethodName() + ": Returning TYPE_INVALID.");
+			Log.info("Returning TYPE_INVALID.");
 			return ColumnInfo.GlomFieldType.TYPE_INVALID;
 		default:
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName()
-					+ ": Recieved a type that I don't know about: " + Field.glom_field_type.class.getName() + "."
+			Log.error("Recieved a type that I don't know about: " + Field.glom_field_type.class.getName() + "."
 					+ type.toString() + ". Returning " + ColumnInfo.GlomFieldType.TYPE_INVALID.toString() + ".");
 			return ColumnInfo.GlomFieldType.TYPE_INVALID;
 		}
@@ -795,7 +773,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		try {
 			authenticated = checkAuthentication(documentTitle, configuredDoc.getCpds(), username, password);
 		} catch (SQLException e) {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle, e);
+			Log.error(documentTitle, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
 		configuredDoc.setAuthenticated(authenticated);
@@ -871,9 +849,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (tempField != null) {
 					layoutItem = new LayoutItemField();
 				} else {
-					Log.info(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-							+ tableName + ": Ignoring unknown LayoutItem of type "
-							+ libglomLayoutItem.get_part_type_name() + ".");
+					Log.info(documentTitle, tableName,
+							"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
 					continue;
 				}
 			}
@@ -893,8 +870,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName);
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
-			Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-					+ tableName + ": Didn't find any fields to show. Returning null.");
+			Log.warn(documentTitle, tableName, "Didn't find any fields to show. Returning null.");
 			return null;
 		}
 
@@ -911,8 +887,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// send back an empty GlomField array if can't find a primaryKey Field
 		if (primaryKey == null) {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-					+ tableName + ": Couldn't find primary key in table. Returning null.");
+			Log.error(documentTitle, tableName, "Couldn't find primary key in table. Returning null.");
 			return null;
 		}
 
@@ -932,8 +907,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// using 2 as a length parameter so we can log a warning if the result set is greater than one
 			rowsList = getData(documentTitle, tableName, 2, fieldsToGet, rs);
 		} catch (SQLException e) {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-					+ tableName + ": Error executing database query.", e);
+			Log.error(documentTitle, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
 			return null;
 		} finally {
@@ -946,19 +920,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-						+ tableName + ": Error closing database resources. Subsequent database queries may not work.",
-						e);
+				Log.error(documentTitle, tableName,
+						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 
 		if (rowsList.size() == 0) {
-			Log.error(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-					+ tableName + ": The query returned an empty ResultSet. Returning null.");
+			Log.error(documentTitle, tableName, "The query returned an empty ResultSet. Returning null.");
 			return null;
 		} else if (rowsList.size() > 1) {
-			Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + documentTitle + " - "
-					+ tableName + ": The query did not return a unique result. Returning the first result in the set.");
+			Log.warn(documentTitle, tableName,
+					"The query did not return a unique result. Returning the first result in the set.");
 		}
 
 		return rowsList.get(0);
@@ -978,8 +950,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
 
 			// Get the fields:
-			ArrayList<LayoutItem_Field> layoutItemsFields = getFieldsToShowForSQLQueryAddGroup(document,
-					tableName, layoutGroup);
+			ArrayList<LayoutItem_Field> layoutItemsFields = getFieldsToShowForSQLQueryAddGroup(document, tableName,
+					layoutGroup);
 			for (LayoutItem_Field layoutItem_Field : layoutItemsFields) {
 				layoutFieldVector.add(layoutItem_Field);
 			}
@@ -1018,9 +990,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							layoutItemField.set_full_field_details(field);
 							layoutItemFields.add(layoutItemField);
 						} else {
-							Log.warn(Thread.currentThread().getStackTrace()[1].getMethodName() + ": "
-									+ document.get_database_title() + " - " + tableName + "LayoutItem_Field "
-									+ layoutItemField.get_layout_display_name() + "not found in document field list.");
+							Log.warn(document.get_database_title(), tableName,
+									"LayoutItem_Field " + layoutItemField.get_layout_display_name()
+											+ " not found in document field list.");
 						}
 						break;
 					}
@@ -1035,8 +1007,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					if (layoutItemPortal == null) {
 						// The subGroup is not a LayoutItem_Portal.
 						// We're ignoring portals because they are filled by means of a separate SQL query.
-						layoutItemFields.addAll(getFieldsToShowForSQLQueryAddGroup(document, tableName,
-								subLayoutGroup));
+						layoutItemFields
+								.addAll(getFieldsToShowForSQLQueryAddGroup(document, tableName, subLayoutGroup));
 					}
 				}
 			}
