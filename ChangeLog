@@ -1,5 +1,15 @@
 2011-06-16  Ben Konrath  <ben@bagu.org>
 
+	Add scripts for building and installing war.
+
+	These will help when updating OnlineGlom but they're also good
+	supplemental documentation of the build and deployment proceeding.
+
+	* utils/build-onlineglom-war.sh: New file.
+	* utils/install-onlineglom-war.sh: New file.
+
+2011-06-16  Ben Konrath  <ben@bagu.org>
+
 	Create wrapper class to create consistent log messages.
 
 	I wrapped methods in the Log class of gwt-log to add the method names
