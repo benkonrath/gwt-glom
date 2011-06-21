@@ -26,7 +26,7 @@ import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ListView;
-import org.glom.web.shared.LayoutListTable;
+import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -75,19 +75,18 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
+				AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
 					public void onFailure(Throwable caught) {
 						// FIXME: need to deal with failure
 						System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
 					}
 
-					public void onSuccess(LayoutListTable result) {
-						listView.setCellTable(documentTitle, event.getTableName(), result.getColumns(),
-								result.getNumRows());
+					public void onSuccess(LayoutGroup result) {
+						listView.setCellTable(documentTitle, event.getTableName(), result.getItems(),
+								result.getExpectedResultSize());
 					}
 				};
-				OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(documentTitle, event.getTableName(),
-						callback);
+				OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentTitle, event.getTableName(), callback);
 			}
 		});
 
@@ -95,32 +94,33 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		final String selectedTable = clientFactory.getTableSelectionView().getSelectedTable();
 		if (!selectedTable.isEmpty()) {
 			// The table name has been set so we can use the selected table name to populate the cell table.
-			AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
+			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
 				public void onFailure(Throwable caught) {
 					// FIXME: need to deal with failure
 					System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
 				}
 
-				public void onSuccess(LayoutListTable result) {
-					listView.setCellTable(documentTitle, selectedTable, result.getColumns(), result.getNumRows());
+				public void onSuccess(LayoutGroup result) {
+					listView.setCellTable(documentTitle, selectedTable, result.getItems(),
+							result.getExpectedResultSize());
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getLayoutListTable(documentTitle, selectedTable, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentTitle, selectedTable, callback);
 		} else {
 			// The table name has not been set so we need to fill in the cell table using the default table for the glom
 			// document.
-			AsyncCallback<LayoutListTable> callback = new AsyncCallback<LayoutListTable>() {
+			AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
 				public void onFailure(Throwable caught) {
 					// FIXME: need to deal with failure
 					System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
 				}
 
-				public void onSuccess(LayoutListTable result) {
-					listView.setCellTable(documentTitle, result.getTableName(), result.getColumns(),
-							result.getNumRows());
+				public void onSuccess(LayoutGroup result) {
+					listView.setCellTable(documentTitle, result.getDefaultTableName(), result.getItems(),
+							result.getExpectedResultSize());
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getDefaultLayoutListTable(documentTitle, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDefaultListLayout(documentTitle, callback);
 		}
 
 		// indicate that the view is ready to be displayed

@@ -19,7 +19,9 @@
 
 package org.glom.web.client.ui;
 
-import org.glom.web.shared.ColumnInfo;
+import java.util.ArrayList;
+
+import org.glom.web.shared.layout.LayoutItem;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -36,7 +38,8 @@ public interface ListView extends IsWidget {
 
 	public void setPresenter(Presenter presenter);
 
-	public void setCellTable(final String documentTitle, final String tableName, ColumnInfo[] columns, int numRows);
+	public void setCellTable(final String documentTitle, final String tableName, ArrayList<LayoutItem> arrayList,
+			int numRows);
 
 	void clear();
 

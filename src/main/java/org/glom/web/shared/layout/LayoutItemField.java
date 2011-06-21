@@ -22,11 +22,24 @@ package org.glom.web.shared.layout;
 import java.io.Serializable;
 
 /**
- * A LayoutItemField doesn't add anything to LayoutItemWithFormatting but it's still nice to have as a type.
+ * Represents the libglom LayoutItem_Field class.
  * 
  * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class LayoutItemField extends LayoutItemWithFormatting implements Serializable {
+	public enum GlomFieldType {
+		TYPE_INVALID, TYPE_NUMERIC, TYPE_TEXT, TYPE_DATE, TYPE_TIME, TYPE_BOOLEAN, TYPE_IMAGE;
+	}
+
+	private GlomFieldType type;
+
+	public GlomFieldType getType() {
+		return type;
+	}
+
+	public void setType(GlomFieldType type) {
+		this.type = type;
+	}
 
 }

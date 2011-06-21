@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
-import org.glom.web.shared.LayoutListTable;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -36,15 +35,24 @@ public interface OnlineGlomService extends RemoteService {
 	GlomDocument getGlomDocument(String documentTitle);
 
 	/**
-	 * Gets a {@link LayoutListTable} Object for the given Glom document title and table name.
+	 * Gets a {@link LayoutGroup} for the given Glom document title and table name.
 	 * 
 	 * @param documentTitle
 	 *            title of the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document
-	 * @return filled in {@link LayoutListTable}
+	 * @return filled in {@link LayoutGroup}
 	 */
-	LayoutListTable getLayoutListTable(String documentTitle, String tableName);
+	LayoutGroup getListLayout(String documentTitle, String tableName);
+
+	/**
+	 * Gets a {@link LayoutGroup} for the default table of the given Glom document title.
+	 * 
+	 * @param documentTitle
+	 *            title of the Glom document
+	 * @return filled in {@link LayoutGroup} for the default table
+	 */
+	LayoutGroup getDefaultListLayout(String documentTitle);
 
 	ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length);
 
@@ -81,15 +89,6 @@ public interface OnlineGlomService extends RemoteService {
 	 * @return true if username and password are correct, false otherwise
 	 */
 	boolean checkAuthentication(String documentTitle, String username, String password);
-
-	/**
-	 * Gets a {@link LayoutListTable} for the default table of the given Glom document title.
-	 * 
-	 * @param documentTitle
-	 *            title of the Glom document
-	 * @return filled in {@link LayoutListTable} for the default table
-	 */
-	LayoutListTable getDefaultLayoutListTable(String documentTitle);
 
 	/**
 	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the provided Glom document

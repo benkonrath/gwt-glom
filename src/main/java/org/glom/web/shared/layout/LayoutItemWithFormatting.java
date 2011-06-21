@@ -26,30 +26,16 @@ import java.io.Serializable;
  * 
  */
 @SuppressWarnings("serial")
-public class LayoutItemWithFormatting extends LayoutItem implements Serializable {
+public abstract class LayoutItemWithFormatting extends LayoutItem implements Serializable {
 
 	private Formatting formatting;
 
-	/**
-	 * Get the field formatting used by this layout item, which may be either custom field formatting or the default
-	 * field formatting.
-	 */
-	Formatting getFormatting() {
+	public Formatting getFormatting() {
 		return formatting;
 	}
 
-	/**
-	 * Get the alignment for the formatting used (see getFormattingUsed()), choosing an appropriate alignment if it is
-	 * set to HORIZONTAL_ALIGNMENT_AUTO. Note that this never returns HORIZONTAL_ALIGNMENT_AUTO.
-	 */
-	Formatting.HorizontalAlignment getFormattingHorizontalAlignment() {
-		Formatting.HorizontalAlignment alignment = formatting.getHorizontalAlignment();
-
-		if (alignment == Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO)
-			alignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
-
-		return alignment;
-
+	public void setFormatting(Formatting formatting) {
+		this.formatting = formatting;
 	}
 
 }

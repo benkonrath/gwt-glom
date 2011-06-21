@@ -24,12 +24,17 @@ import java.util.ArrayList;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- * 
  */
 @SuppressWarnings("serial")
 public class LayoutGroup extends LayoutItem implements Serializable {
 
+	// TODO Investigate if it's worthwhile creating ListLayoutGroup and DetailsLayoutGroup subclasses.
+	// columnCount is only used for the details layout
 	private int columnCount = 1;
+	// expectedResultSize and defaultTableName are only used for the list layout
+	private int expectedResultSize = -1;
+	private String defaultTableName = null;
+
 	private ArrayList<LayoutItem> items = new ArrayList<LayoutItem>();
 
 	/**
@@ -52,6 +57,22 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 
 	public final void setColumnCount(int columnCount) {
 		this.columnCount = columnCount;
+	}
+
+	public int getExpectedResultSize() {
+		return expectedResultSize;
+	}
+
+	public void setExpectedResultSize(int expectedResultSize) {
+		this.expectedResultSize = expectedResultSize;
+	}
+
+	public void setDefaultTableName(String defaultTableName) {
+		this.defaultTableName = defaultTableName;
+	}
+
+	public String getDefaultTableName() {
+		return defaultTableName;
 	}
 
 }

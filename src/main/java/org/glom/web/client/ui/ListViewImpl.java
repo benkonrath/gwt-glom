@@ -23,8 +23,9 @@ import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.place.DetailsPlace;
-import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomField;
+import org.glom.web.shared.layout.LayoutItem;
+import org.glom.web.shared.layout.LayoutItemField;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ButtonCell;
@@ -100,7 +101,8 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentTitle, final String tableName, ColumnInfo[] columns, int numRows) {
+	public void setCellTable(final String documentTitle, final String tableName, ArrayList<LayoutItem> layoutItems,
+			int numRows) {
 		// This is not really in the MVP style but there are issues creating a re-usable CellTable with methods like
 		// setColumnTitles(), setNumRows() etc. The biggest problem is that the column objects (new Column<GlomField[],
 		// GlomField>(new GlomTextCell())) aren't destroyed when the column is removed from the CellTable and
@@ -148,12 +150,20 @@ public class ListViewImpl extends Composite implements ListView {
 		dataProvider.addDataDisplay(table);
 
 		// create instances of GlomFieldColumn to retrieve the GlomField objects
-		for (int i = 0; i < columns.length; i++) {
+		for (int i = 0; i < layoutItems.size(); i++) {
+			LayoutItem layoutItem = layoutItems.get(i);
+
+			// only create columns for LayoutItemField types
+			if (!(layoutItem instanceof LayoutItemField)) {
+				continue;
+			}
+			LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
+
 			// create a new column
 			Column<GlomField[], ?> column = null;
 			final int j = new Integer(i);
 
-			switch (columns[i].getType()) {
+			switch (layoutItemField.getType()) {
 			case TYPE_BOOLEAN:
 				// The onBrowserEvent method is overridden to ensure the user can't toggle the checkbox. We'll probably
 				// be able to use a CheckboxCell directly when we add support for editing.
@@ -196,7 +206,7 @@ public class ListViewImpl extends Composite implements ListView {
 				};
 
 				// Set the alignment of the text.
-				switch (columns[i].getAlignment()) {
+				switch (layoutItemField.getFormatting().getHorizontalAlignment()) {
 				case HORIZONTAL_ALIGNMENT_LEFT:
 					column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 					break;
@@ -214,7 +224,7 @@ public class ListViewImpl extends Composite implements ListView {
 
 			// set column properties and add to cell table
 			column.setSortable(true);
-			table.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(columns[i].getHeader())));
+			table.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 		}
 
 		Column<GlomField[], String> detailsColumn = new Column<GlomField[], String>(new ButtonCell() {

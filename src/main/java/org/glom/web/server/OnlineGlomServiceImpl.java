@@ -55,10 +55,9 @@ import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.OnlineGlomService;
-import org.glom.web.shared.ColumnInfo;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
-import org.glom.web.shared.LayoutListTable;
+import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 
@@ -285,70 +284,66 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDefaultLayoutListTable(java.lang.String)
 	 */
 	@Override
-	public LayoutListTable getDefaultLayoutListTable(String documentTitle) {
+	public LayoutGroup getDefaultListLayout(String documentTitle) {
 		GlomDocument glomDocument = getGlomDocument(documentTitle);
 		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
-		LayoutListTable layoutListTable = getLayoutListTable(documentTitle, tableName);
-		layoutListTable.setTableName(tableName);
-		return layoutListTable;
+		LayoutGroup layoutGroup = getListLayout(documentTitle, tableName);
+		layoutGroup.setDefaultTableName(tableName);
+		return layoutGroup;
 	}
 
-	public LayoutListTable getLayoutListTable(String documentTitle, String table) {
+	public LayoutGroup getListLayout(String documentTitle, String tableName) {
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
-		LayoutListTable tableInfo = new LayoutListTable();
 
 		// access the layout list
-		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", table);
-		ColumnInfo[] columns = null;
-		LayoutFieldVector layoutFields = new LayoutFieldVector();
-		int listViewLayoutGroupSize = safeLongToInt(layoutListVec.size());
+		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("list", tableName);
+		int listViewLayoutGroupSize = safeLongToInt(layoutGroupVec.size());
+		org.glom.libglom.LayoutGroup libglomLayoutGroup = null;
 		if (listViewLayoutGroupSize > 0) {
-			// a layout list is defined, we can use it to for the LayoutListTable
+			// a list layout group is defined; we can use the first group as the list
 			if (listViewLayoutGroupSize > 1)
-				Log.warn(documentTitle, table, "The size of the list view layout group for table " + table
-						+ " is greater than 1. Attempting to use the first item for the layout list view.");
-			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
+				Log.warn(documentTitle, tableName,
+						"The size of the list layout group is greater than 1. Attempting to use the first item for the layout list view.");
 
-			// find the defined layout list fields
-			int numItems = safeLongToInt(layoutItemsVec.size());
-			columns = new ColumnInfo[numItems];
-			for (int i = 0; i < numItems; i++) {
-				// TODO add support for other LayoutItems (Text, Image, Button)
-				LayoutItem item = layoutItemsVec.get(i);
-				LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
-				if (layoutItemField != null) {
-					layoutFields.add(layoutItemField);
-					columns[i] = new ColumnInfo(
-							layoutItemField.get_title_or_name(),
-							getColumnInfoHorizontalAlignment(layoutItemField.get_formatting_used_horizontal_alignment()),
-							getColumnInfoGlomFieldType(layoutItemField.get_glom_type()));
-				}
-			}
+			libglomLayoutGroup = layoutGroupVec.get(0);
 		} else {
-			// no layout list is defined, use the table fields as the layout list
-			FieldVector fieldsVec = document.get_table_fields(table);
+			// a list layout group is *not* defined; we are going make a libglom layout group from the list of fields
+			Log.info(documentTitle, tableName,
+					"A list layout is not defined for this table. Displaying a list layout based on the field list.");
 
-			// find the fields to display in the layout list
-			int numItems = safeLongToInt(fieldsVec.size());
-			columns = new ColumnInfo[numItems];
-			for (int i = 0; i < numItems; i++) {
+			FieldVector fieldsVec = document.get_table_fields(tableName);
+			libglomLayoutGroup = new org.glom.libglom.LayoutGroup();
+			for (int i = 0; i < fieldsVec.size(); i++) {
 				Field field = fieldsVec.get(i);
 				LayoutItem_Field layoutItemField = new LayoutItem_Field();
 				layoutItemField.set_full_field_details(field);
-				layoutFields.add(layoutItemField);
-				columns[i] = new ColumnInfo(layoutItemField.get_title_or_name(),
-						getColumnInfoHorizontalAlignment(layoutItemField.get_formatting_used_horizontal_alignment()),
-						getColumnInfoGlomFieldType(layoutItemField.get_glom_type()));
+				libglomLayoutGroup.add_item(layoutItemField);
 			}
 		}
 
-		tableInfo.setColumns(columns);
+		// confirm the libglom LayoutGroup is not null as per the method's precondition
+		if (libglomLayoutGroup == null) {
+			Log.error(documentTitle, tableName, "A LayoutGroup was not found. Returning null.");
+			return null;
+		}
 
-		// Get the number of rows a query with the table name and layout fields would return. This is needed for the
-		// list view pager.
+		LayoutGroup layoutGroup = getLayoutGroup(documentTitle, tableName, libglomLayoutGroup);
+
+		// use the same fields list as will be used for the query
+		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "list");
+		layoutGroup.setExpectedResultSize(getResultSizeOfSQLQuery(documentTitle, tableName, fieldsToGet));
+		return layoutGroup;
+	}
+
+	/*
+	 * Get the number of rows a query with the table name and layout fields would return. This is needed for the /* list
+	 * view pager.
+	 */
+	private int getResultSizeOfSQLQuery(String documentTitle, String tableName, LayoutFieldVector fieldsToGet) {
+		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		if (!configuredDoc.isAuthenticated())
-			return tableInfo;
+			return -1;
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -361,19 +356,19 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			conn = cpds.getConnection();
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			String query = Glom.build_sql_select_count_simple(table, layoutFields);
+			String query = Glom.build_sql_select_count_simple(tableName, fieldsToGet);
 			// TODO Test execution time of this query with when the number of rows in the table is large (say >
 			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
 			rs = st.executeQuery(query);
 
 			// get the number of rows in the query
 			rs.next();
-			tableInfo.setNumRows(rs.getInt(1));
+			return rs.getInt(1);
 
 		} catch (SQLException e) {
-			Log.error(documentTitle, table,
+			Log.error(documentTitle, tableName,
 					"Error calculating number of rows in the query. Setting number of rows to 0.", e);
-			tableInfo.setNumRows(0);
+			return -1;
 		} finally {
 			// cleanup everything that has been used
 			try {
@@ -384,14 +379,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(documentTitle, table,
+				Log.error(documentTitle, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
-
-		return tableInfo;
 	}
 
+	// FIXME Rename to getListData(), getSortedListDat() for consistency in method naming.
+	// FIXME Check if we can use getFieldsToShowForSQLQuery() in these methods
 	public ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length) {
 		return getTableData(documentTitle, tableName, start, length, false, 0, false);
 	}
@@ -705,20 +700,20 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * easy way to use the java-libglom FieldFormatting.HorizontalAlignment enum with RPC. An enum identical to
 	 * FieldFormatting.HorizontalAlignment is included in the ColumnInfo class.
 	 */
-	private ColumnInfo.HorizontalAlignment getColumnInfoHorizontalAlignment(
+	private Formatting.HorizontalAlignment convertToGWTGlomHorizonalAlignment(
 			FieldFormatting.HorizontalAlignment alignment) {
 		switch (alignment) {
 		case HORIZONTAL_ALIGNMENT_AUTO:
-			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
+			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
 		case HORIZONTAL_ALIGNMENT_LEFT:
-			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
+			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
 		case HORIZONTAL_ALIGNMENT_RIGHT:
-			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
+			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
 		default:
 			Log.error("Recieved an alignment that I don't know about: "
 					+ FieldFormatting.HorizontalAlignment.class.getName() + "." + alignment.toString() + ". Returning "
-					+ ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.toString() + ".");
-			return ColumnInfo.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
+					+ Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.toString() + ".");
+			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
 		}
 	}
 
@@ -728,27 +723,27 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * Field.glom_field_type enum with RPC. An enum identical to FieldFormatting.glom_field_type is included in the
 	 * ColumnInfo class.
 	 */
-	private ColumnInfo.GlomFieldType getColumnInfoGlomFieldType(Field.glom_field_type type) {
+	private LayoutItemField.GlomFieldType convertToGWTGlomFieldType(Field.glom_field_type type) {
 		switch (type) {
 		case TYPE_BOOLEAN:
-			return ColumnInfo.GlomFieldType.TYPE_BOOLEAN;
+			return LayoutItemField.GlomFieldType.TYPE_BOOLEAN;
 		case TYPE_DATE:
-			return ColumnInfo.GlomFieldType.TYPE_DATE;
+			return LayoutItemField.GlomFieldType.TYPE_DATE;
 		case TYPE_IMAGE:
-			return ColumnInfo.GlomFieldType.TYPE_IMAGE;
+			return LayoutItemField.GlomFieldType.TYPE_IMAGE;
 		case TYPE_NUMERIC:
-			return ColumnInfo.GlomFieldType.TYPE_NUMERIC;
+			return LayoutItemField.GlomFieldType.TYPE_NUMERIC;
 		case TYPE_TEXT:
-			return ColumnInfo.GlomFieldType.TYPE_TEXT;
+			return LayoutItemField.GlomFieldType.TYPE_TEXT;
 		case TYPE_TIME:
-			return ColumnInfo.GlomFieldType.TYPE_TIME;
+			return LayoutItemField.GlomFieldType.TYPE_TIME;
 		case TYPE_INVALID:
 			Log.info("Returning TYPE_INVALID.");
-			return ColumnInfo.GlomFieldType.TYPE_INVALID;
+			return LayoutItemField.GlomFieldType.TYPE_INVALID;
 		default:
 			Log.error("Recieved a type that I don't know about: " + Field.glom_field_type.class.getName() + "."
-					+ type.toString() + ". Returning " + ColumnInfo.GlomFieldType.TYPE_INVALID.toString() + ".");
-			return ColumnInfo.GlomFieldType.TYPE_INVALID;
+					+ type.toString() + ". Returning " + LayoutItemField.GlomFieldType.TYPE_INVALID.toString() + ".");
+			return LayoutItemField.GlomFieldType.TYPE_INVALID;
 		}
 	}
 
@@ -798,7 +793,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutGroup(java.lang.String, java.lang.String)
 	 */
 	public ArrayList<LayoutGroup> getDetailsLayout(String documentTitle, String tableName) {
-		// FIXME not checking if authenticated
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
 		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
@@ -845,14 +839,22 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				layoutItem = getLayoutGroup(documentTitle, tableName, group);
 			} else {
 				// create GWT-Glom LayoutItem types based on the the libglom type
-				LayoutItem_Field tempField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
-				if (tempField != null) {
-					layoutItem = new LayoutItemField();
+				// TODO add support for other LayoutItems (Text, Image, Button etc.)
+				LayoutItem_Field libglomLayoutField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
+				if (libglomLayoutField != null) {
+					LayoutItemField layoutItemField = new LayoutItemField();
+					layoutItemField.setType(convertToGWTGlomFieldType(libglomLayoutField.get_glom_type()));
+					Formatting formatting = new Formatting();
+					formatting.setHorizontalAlignment(convertToGWTGlomHorizonalAlignment(libglomLayoutField
+							.get_formatting_used_horizontal_alignment()));
+					layoutItemField.setFormatting(formatting);
+					layoutItem = layoutItemField;
 				} else {
 					Log.info(documentTitle, tableName,
 							"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
 					continue;
 				}
+
 			}
 
 			layoutItem.setTitle(libglomLayoutItem.get_title_or_name());
@@ -867,7 +869,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
 		Document document = configuredDoc.getDocument();
 
-		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName);
+		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "details");
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
 			Log.warn(documentTitle, tableName, "Didn't find any fields to show. Returning null.");
@@ -940,12 +942,23 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * Gets a LayoutFieldVector to use when generating an SQL query.
 	 */
-	private LayoutFieldVector getFieldsToShowForSQLQuery(Document document, String tableName) {
-		// TODO make general to be able to use "list" here - will need to change called methods
-		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
+	private LayoutFieldVector getFieldsToShowForSQLQuery(Document document, String tableName, String layoutName) {
+		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups(layoutName, tableName);
+		LayoutFieldVector layoutFieldVector = new LayoutFieldVector();
+
+		// special case for list layouts that don't have a defined layout group
+		if ("list".equals(layoutName) && layoutGroupVec.size() == 0) {
+			FieldVector fieldsVec = document.get_table_fields(tableName);
+			for (int i = 0; i < fieldsVec.size(); i++) {
+				Field field = fieldsVec.get(i);
+				LayoutItem_Field layoutItemField = new LayoutItem_Field();
+				layoutItemField.set_full_field_details(field);
+				layoutFieldVector.add(layoutItemField);
+			}
+			return layoutFieldVector;
+		}
 
 		// We will show the fields that the document says we should:
-		LayoutFieldVector layoutFieldVector = new LayoutFieldVector();
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
 			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
 
