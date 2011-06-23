@@ -1,3 +1,14 @@
+2011-06-23  Ben Konrath  <ben@bagu.org>
+
+	Extract the ConfiguredDocument innerclass into its own class.
+
+	This makes the servlet code more object oriented.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Extracted
+	from private ConfiguredDocument class in OnlineGlomServiceImpl.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Use the
+	new ConfiguredDocument class.
+
 2011-06-21  Ben Konrath  <ben@bagu.org>
 
 	Use the LayoutGroup group for the list layout instead of ColumnInfo and LayoutListTable.

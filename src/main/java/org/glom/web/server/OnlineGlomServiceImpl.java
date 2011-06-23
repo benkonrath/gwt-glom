@@ -19,7 +19,6 @@
 
 package org.glom.web.server;
 
-import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -67,22 +66,6 @@ import com.mchange.v2.c3p0.DataSources;
 
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
-
-	// class to hold configuration information for related to the glom document and db access
-	private class ConfiguredDocument {
-		private Document document;
-		private ComboPooledDataSource cpds;
-		private boolean authenticated = false;
-
-		// @formatter:off
-		public Document getDocument() { return document; }
-		public void setDocument(Document document) { this.document = document; }
-		public ComboPooledDataSource getCpds() { return cpds; }
-		public void setCpds(ComboPooledDataSource cpds) { this.cpds = cpds;	}
-		public boolean isAuthenticated() { return authenticated; }
-		public void setAuthenticated(boolean authenticated) { this.authenticated = authenticated; }
-		// @formatter:on
-	}
 
 	// convenience class to for dealing with the Online Glom configuration file
 	private class OnlineGlomProperties extends Properties {
@@ -151,24 +134,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				continue;
 			}
 
-			// load the jdbc driver for the current glom document
-			ComboPooledDataSource cpds = new ComboPooledDataSource();
-
-			try {
-				cpds.setDriverClass("org.postgresql.Driver");
-			} catch (PropertyVetoException e) {
-				Log.fatal("Error loading the PostgreSQL JDBC driver."
-						+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
-				throw e;
-			}
-
-			// setup the JDBC driver for the current glom document
-			cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
-					+ document.get_connection_database());
-
+			ConfiguredDocument configuredDocument = new ConfiguredDocument(document);
 			// check if a username and password have been set and work for the current document
 			String documentTitle = document.get_database_title().trim();
-			ConfiguredDocument configuredDocument = new ConfiguredDocument();
 			String key = config.getKey(documentTitle);
 			if (key != null) {
 				String[] keyArray = key.split("\\.");
@@ -176,50 +144,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					// username/password could be set, let's check to see if it works
 					String usernameKey = key.replaceAll(keyArray[2], "username");
 					String passwordKey = key.replaceAll(keyArray[2], "password");
-					configuredDocument.setAuthenticated(checkAuthentication(documentTitle, cpds,
-							config.getProperty(usernameKey), config.getProperty(passwordKey)));
+					configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey),
+							config.getProperty(passwordKey));
 				}
 			}
 
 			// check the if the global username and password have been set and work with this document
 			if (!configuredDocument.isAuthenticated()) {
-				configuredDocument.setAuthenticated(checkAuthentication(documentTitle, cpds,
-						config.getProperty("glom.document.username"), config.getProperty("glom.document.password")));
+				configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username"),
+						config.getProperty("glom.document.password"));
 			}
 
 			// add information to the hash table
-			configuredDocument.setDocument(document);
-			configuredDocument.setCpds(cpds);
 			documents.put(documentTitle, configuredDocument);
-		}
-	}
 
-	/*
-	 * Checks if the username and password works with the database configured with the specified ComboPooledDataSource.
-	 * 
-	 * @return true if authentication works, false otherwise
-	 */
-	private boolean checkAuthentication(String documentTitle, ComboPooledDataSource cpds, String username,
-			String password) throws SQLException {
-		cpds.setUser(username);
-		cpds.setPassword(password);
-
-		int acquireRetryAttempts = cpds.getAcquireRetryAttempts();
-		cpds.setAcquireRetryAttempts(1);
-		Connection conn = null;
-		try {
-			// FIXME find a better way to check authentication
-			// it's possible that the connection could be failing for another reason
-			conn = cpds.getConnection();
-			return true;
-		} catch (SQLException e) {
-			Log.info(documentTitle, "Username and password not correct.");
-		} finally {
-			if (conn != null)
-				conn.close();
-			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
 		}
-		return false;
 	}
 
 	/*
@@ -764,15 +703,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	public boolean checkAuthentication(String documentTitle, String username, String password) {
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);
-		boolean authenticated;
 		try {
-			authenticated = checkAuthentication(documentTitle, configuredDoc.getCpds(), username, password);
+			return configuredDoc.setUsernameAndPassword(username, password);
 		} catch (SQLException e) {
 			Log.error(documentTitle, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
-		configuredDoc.setAuthenticated(authenticated);
-		return authenticated;
 	}
 
 	/*
