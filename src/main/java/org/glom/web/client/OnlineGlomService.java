@@ -54,9 +54,9 @@ public interface OnlineGlomService extends RemoteService {
 	 */
 	LayoutGroup getDefaultListLayout(String documentTitle);
 
-	ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length);
+	ArrayList<GlomField[]> getListData(String documentTitle, String tableName, int start, int length);
 
-	ArrayList<GlomField[]> getSortedTableData(String documentTitle, String tableName, int start, int length,
+	ArrayList<GlomField[]> getSortedListData(String documentTitle, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending);
 
 	/**

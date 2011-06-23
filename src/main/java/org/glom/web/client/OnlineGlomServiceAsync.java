@@ -52,10 +52,10 @@ public interface OnlineGlomServiceAsync {
 
 	void getListLayout(String documentTitle, String tableName, AsyncCallback<LayoutGroup> callback);
 
-	void getTableData(String documentTitle, String tableName, int start, int length,
+	void getListData(String documentTitle, String tableName, int start, int length,
 			AsyncCallback<ArrayList<GlomField[]>> callback);
 
-	void getSortedTableData(String documentTitle, String tableName, int start, int length, int columnIndex,
+	void getSortedListData(String documentTitle, String tableName, int start, int length, int columnIndex,
 			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
 
 	void getDocumentTitles(AsyncCallback<ArrayList<String>> callback);

@@ -324,18 +324,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 	}
 
-	// FIXME Rename to getListData(), getSortedListDat() for consistency in method naming.
 	// FIXME Check if we can use getFieldsToShowForSQLQuery() in these methods
-	public ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length) {
-		return getTableData(documentTitle, tableName, start, length, false, 0, false);
+	public ArrayList<GlomField[]> getListData(String documentTitle, String tableName, int start, int length) {
+		return getListData(documentTitle, tableName, start, length, false, 0, false);
 	}
 
-	public ArrayList<GlomField[]> getSortedTableData(String documentTitle, String tableName, int start, int length,
+	public ArrayList<GlomField[]> getSortedListData(String documentTitle, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending) {
-		return getTableData(documentTitle, tableName, start, length, true, sortColumnIndex, isAscending);
+		return getListData(documentTitle, tableName, start, length, true, sortColumnIndex, isAscending);
 	}
 
-	private ArrayList<GlomField[]> getTableData(String documentTitle, String tableName, int start, int length,
+	private ArrayList<GlomField[]> getListData(String documentTitle, String tableName, int start, int length,
 			boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 
 		ConfiguredDocument configuredDoc = documents.get(documentTitle);

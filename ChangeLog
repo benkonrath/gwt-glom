@@ -1,5 +1,16 @@
 2011-06-23  Ben Konrath  <ben@bagu.org>
 
+	Rename getTableData methods to getListData.
+
+	This is a rename refactor for consistency with other methods.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-06-23  Ben Konrath  <ben@bagu.org>
+
 	Extract the ConfiguredDocument innerclass into its own class.
 
 	This makes the servlet code more object oriented.

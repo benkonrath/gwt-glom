@@ -137,11 +137,11 @@ public class ListViewImpl extends Composite implements ListView {
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					ColumnSortInfo info = colSortList.get(0);
-					OnlineGlomServiceAsync.Util.getInstance().getSortedTableData(documentTitle, tableName, start,
+					OnlineGlomServiceAsync.Util.getInstance().getSortedListData(documentTitle, tableName, start,
 							range.getLength(), table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()),
 							info.isAscending(), callback);
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getTableData(documentTitle, tableName, start,
+					OnlineGlomServiceAsync.Util.getInstance().getListData(documentTitle, tableName, start,
 							range.getLength(), callback);
 				}
 			}
