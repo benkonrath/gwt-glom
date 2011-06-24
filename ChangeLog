@@ -1,5 +1,19 @@
 2011-06-24  Ben Konrath  <ben@bagu.org>
 
+	Pass primary key value to DetailsView.
+
+	This enables the DetailsView to load the correct data.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Add
+	primary key value field and set in constructor. Pass primary key
+	value to getDetailsData().
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java: Add URL
+	variables for document title and primary key value.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Pass primary
+	key value to the DetailsPlace.
+
+2011-06-24  Ben Konrath  <ben@bagu.org>
+
 	Add primary key index to LayoutGroup DTO and add ProvidesKey to CellTable.
 
 	This allows the primary key to be retrieved by the Details button. This

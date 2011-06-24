@@ -41,11 +41,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
 	private final String documentTitle;
+	private final String primaryKey;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
 		this.documentTitle = place.getDocumentTitle();
+		this.primaryKey = place.getPrimaryKey();
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
 	}
@@ -107,7 +109,11 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				detailsView.setData(result);
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentTitle, selectedTable, "0", callback);
+		// FIXME Need a getDefaultDetailsData so that we can grab data from the default list when a table is not
+		// specified in the URL (which it's not now). This affects starting OnlineGlom from a bookmarked or shared
+		// URL to the DetailsView. We'll also want to add a table URL variable and perform validation of the URL
+		// variables.
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentTitle, selectedTable, primaryKey, callback);
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());

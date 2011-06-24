@@ -23,22 +23,45 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
 public class DetailsPlace extends HasSelectableTablePlace {
+	private String primaryKey;
 
-	public DetailsPlace(String documentTitle) {
+	public DetailsPlace(String documentTitle, String primarykey) {
 		super(documentTitle);
+		this.primaryKey = primarykey;
+	}
+
+	public String getPrimaryKey() {
+		return primaryKey;
 	}
 
 	@Prefix("details")
 	public static class Tokenizer implements PlaceTokenizer<DetailsPlace> {
 
+		final String title = "title=";
+		private final String key = "key=";
+		protected final String seperator = "&";
+
 		@Override
 		public String getToken(DetailsPlace place) {
-			return place.getDocumentTitle();
+			return title + place.getDocumentTitle() + seperator + key + place.getPrimaryKey();
 		}
 
 		@Override
 		public DetailsPlace getPlace(String token) {
-			return new DetailsPlace(token);
+			String[] tokenArray = token.split(seperator);
+			String documentTitle = "", primaryKey = "";
+			if (tokenArray.length != 2)
+				return new DetailsPlace(documentTitle, primaryKey);
+
+			if (title.equals(tokenArray[0].substring(0, title.length()))) {
+				documentTitle = tokenArray[0].substring(title.length());
+			}
+
+			if (key.equals(tokenArray[1].substring(0, key.length()))) {
+				primaryKey = tokenArray[1].substring(key.length());
+			}
+
+			return new DetailsPlace(documentTitle, primaryKey);
 		}
 	}
 

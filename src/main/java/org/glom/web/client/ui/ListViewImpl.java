@@ -247,10 +247,10 @@ public class ListViewImpl extends Composite implements ListView {
 			 * com.google.gwt.cell.client.ValueUpdater)
 			 */
 			@Override
-			protected void onEnterKeyDown(com.google.gwt.cell.client.Cell.Context context, Element parent,
-					String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+			protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
+					ValueUpdater<String> valueUpdater) {
 				super.onEnterKeyDown(context, parent, value, event, valueUpdater);
-				presenter.goTo(new DetailsPlace(documentTitle));
+				presenter.goTo(new DetailsPlace(documentTitle, (String) context.getKey()));
 			}
 
 		}) {
