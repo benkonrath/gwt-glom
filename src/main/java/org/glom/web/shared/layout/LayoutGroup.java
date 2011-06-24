@@ -35,6 +35,15 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 	private int expectedResultSize = -1;
 	private String defaultTableName = null;
 
+	// This is the primary key index of the LayoutFieldVector that is used for getting the SQL query. It's being used
+	// here to avoid having to set an isPrimaryKey boolean with every LayoutItemField. This also has the advantage of
+	// not having to iterate through all of the LayoutItemFields to find the primary key index on the client side.
+	private int primaryKeyIndex = -1;
+
+	// indicates if the primary key is hidden and has been added to the end of the LayoutListFields list and the
+	// database data list (GlomField).
+	private boolean hiddenPrimaryKey = false;
+
 	private ArrayList<LayoutItem> items = new ArrayList<LayoutItem>();
 
 	/**
@@ -43,8 +52,8 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 	 * @param item
 	 *            The item to add.
 	 */
-	public final void addItem(LayoutItem item) {
-		items.add(item);
+	public final boolean addItem(LayoutItem item) {
+		return items.add(item);
 	}
 
 	public final ArrayList<LayoutItem> getItems() {
@@ -73,6 +82,22 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 
 	public String getDefaultTableName() {
 		return defaultTableName;
+	}
+
+	public void setPrimaryKeyIndex(int primaryKeyIndex) {
+		this.primaryKeyIndex = primaryKeyIndex;
+	}
+
+	public int getPrimaryKeyIndex() {
+		return primaryKeyIndex;
+	}
+
+	public void setHiddenPrimaryKey(boolean hiddenPrimaryKey) {
+		this.hiddenPrimaryKey = hiddenPrimaryKey;
+	}
+
+	public boolean hasHiddenPrimaryKey() {
+		return hiddenPrimaryKey;
 	}
 
 }

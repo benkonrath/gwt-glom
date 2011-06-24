@@ -82,8 +82,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 					}
 
 					public void onSuccess(LayoutGroup result) {
-						listView.setCellTable(documentTitle, event.getTableName(), result.getItems(),
-								result.getExpectedResultSize());
+						listView.setCellTable(documentTitle, event.getTableName(), result);
 					}
 				};
 				OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentTitle, event.getTableName(), callback);
@@ -101,8 +100,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 				}
 
 				public void onSuccess(LayoutGroup result) {
-					listView.setCellTable(documentTitle, selectedTable, result.getItems(),
-							result.getExpectedResultSize());
+					listView.setCellTable(documentTitle, selectedTable, result);
 				}
 			};
 			OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentTitle, selectedTable, callback);
@@ -116,8 +114,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 				}
 
 				public void onSuccess(LayoutGroup result) {
-					listView.setCellTable(documentTitle, result.getDefaultTableName(), result.getItems(),
-							result.getExpectedResultSize());
+					listView.setCellTable(documentTitle, result.getDefaultTableName(), result);
 				}
 			};
 			OnlineGlomServiceAsync.Util.getInstance().getDefaultListLayout(documentTitle, callback);

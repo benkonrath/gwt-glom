@@ -64,6 +64,13 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
+/**
+ * The servlet for retrieving layout information from libglom and data from the underlying PostgreSQL database.
+ * 
+ * TODO: move methods that that require a glom document object to the ConfiguredDocument class.
+ * 
+ * @author Ben Konrath <ben@bagu.org>
+ */
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 
@@ -272,7 +279,54 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// use the same fields list as will be used for the query
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "list");
 		layoutGroup.setExpectedResultSize(getResultSizeOfSQLQuery(documentTitle, tableName, fieldsToGet));
+
+		// Set the primary key index for the table and add a LayoutItemField for the primary key to the end of the item
+		// list in the LayoutGroup if it doesn't already contain a primary key.
+		int primaryKeyIndex = getPrimaryKeyIndex(fieldsToGet);
+		if (primaryKeyIndex < 0) {
+			LayoutItem_Field libglomLayoutItemField = getPrimaryKeyLayoutItemFromFields(document, tableName);
+			layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
+			layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
+			layoutGroup.setHiddenPrimaryKey(true);
+
+		} else {
+			layoutGroup.setPrimaryKeyIndex(primaryKeyIndex);
+		}
 		return layoutGroup;
+	}
+
+	private LayoutItem_Field getPrimaryKeyLayoutItemFromFields(Document document, String tableName) {
+		Field primaryKey = null;
+		FieldVector fieldVec = document.get_table_fields(tableName);
+		for (int i = 0; i < fieldVec.size(); i++) {
+			Field field = fieldVec.get(i);
+			if (field != null && field.get_primary_key()) {
+				primaryKey = field;
+				break;
+			}
+		}
+		if (primaryKey == null) {
+			Log.fatal(document.get_database_title(), tableName,
+					"A primary key was not found in the FieldVector for this table.");
+			// TODO throw exception
+		}
+
+		LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
+		libglomLayoutItemField.set_full_field_details(primaryKey);
+		return libglomLayoutItemField;
+	}
+
+	/*
+	 * Gets the primary key index of the LayoutFieldVector.
+	 */
+	private int getPrimaryKeyIndex(LayoutFieldVector layoutFieldVec) {
+		for (int i = 0; i < layoutFieldVec.size(); i++) {
+			LayoutItem_Field layoutItemField = layoutFieldVec.get(i);
+			Field field = layoutItemField.get_full_field_details();
+			if (field != null && field.get_primary_key())
+				return i;
+		}
+		return -1;
 	}
 
 	/*
@@ -305,8 +359,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return rs.getInt(1);
 
 		} catch (SQLException e) {
-			Log.error(documentTitle, tableName,
-					"Error calculating number of rows in the query. Setting number of rows to 0.", e);
+			Log.error(documentTitle, tableName, "Error calculating number of rows in the query.", e);
 			return -1;
 		} finally {
 			// cleanup everything that has been used
@@ -405,7 +458,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				Log.error(documentTitle, tableName, "Error getting LayoutItem_Field for column index "
 						+ sortColumnIndex + ". Cannot create a sort clause for this column.");
 			}
+		}
 
+		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
+		// a primary key.
+		// TODO Can we use a cached LayoutGroup object to find out if we need to add a LayoutItem_Field object for the
+		// primary key field?
+		if (getPrimaryKeyIndex(layoutFields) < 0) {
+			layoutFields.add(getPrimaryKeyLayoutItemFromFields(document, tableName));
 		}
 
 		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
@@ -510,7 +570,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							// The currency code is not this is not an ISO 4217 currency code.
 							// We're going to manually set the currency code and use the glom numeric formatting.
 							useGlomCurrencyCode = true;
-							numFormatJava = getJavaNumberFormat(numFormatGlom);
+							numFormatJava = convertToJavaNumberFormat(numFormatGlom);
 						}
 					} else if (currencyCode.length() > 0) {
 						Log.warn(documentTitle, tableName, currencyCode + " is not a valid ISO 4217 code."
@@ -518,10 +578,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
 						// We're going to manually set the currency code and use the glom numeric formatting.
 						useGlomCurrencyCode = true;
-						numFormatJava = getJavaNumberFormat(numFormatGlom);
+						numFormatJava = convertToJavaNumberFormat(numFormatGlom);
 					} else {
 						// The length of the currency code is 0; the number is not a currency.
-						numFormatJava = getJavaNumberFormat(numFormatGlom);
+						numFormatJava = convertToJavaNumberFormat(numFormatGlom);
 					}
 
 					// TODO: Do I need to do something with NumericFormat.get_default_precision() from libglom?
@@ -604,7 +664,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return (int) value;
 	}
 
-	private NumberFormat getJavaNumberFormat(NumericFormat numFormatGlom) {
+	private NumberFormat convertToJavaNumberFormat(NumericFormat numFormatGlom) {
 		NumberFormat numFormatJava = NumberFormat.getInstance(locale);
 		if (numFormatGlom.getM_decimal_places_restricted()) {
 			int digits = safeLongToInt(numFormatGlom.getM_decimal_places());
@@ -744,14 +804,20 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return layoutGroups;
 	}
 
-	/**
-	 * Gets a GWT-Glom LayoutGroup object for the specified libglom LayoutGroup object.
+	/*
+	 * Gets a GWT-Glom LayoutGroup object for the specified libglom LayoutGroup object. This is used for getting layout
+	 * information for the list and details views.
 	 * 
-	 * @param libglomLayoutGroup
-	 *            <dt><b>Precondition:</b>
-	 *            <dd>
-	 *            libglomLayoutGroup must not be null
-	 * @return
+	 * @param documentTitle Glom document title
+	 * 
+	 * @param tableName table name in the specified Glom document
+	 * 
+	 * @param libglomLayoutGroup libglom LayoutGroup to convert
+	 * 
+	 * @precondition libglomLayoutGroup must not be null
+	 * 
+	 * @return {@link LayoutGroup} object that represents the layout for the specified {@link
+	 * org.glom.libglom.LayoutGroup}
 	 */
 	private LayoutGroup getLayoutGroup(String documentTitle, String tableName,
 			org.glom.libglom.LayoutGroup libglomLayoutGroup) {
@@ -777,13 +843,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				// TODO add support for other LayoutItems (Text, Image, Button etc.)
 				LayoutItem_Field libglomLayoutField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 				if (libglomLayoutField != null) {
-					LayoutItemField layoutItemField = new LayoutItemField();
-					layoutItemField.setType(convertToGWTGlomFieldType(libglomLayoutField.get_glom_type()));
-					Formatting formatting = new Formatting();
-					formatting.setHorizontalAlignment(convertToGWTGlomHorizonalAlignment(libglomLayoutField
-							.get_formatting_used_horizontal_alignment()));
-					layoutItemField.setFormatting(formatting);
-					layoutItem = layoutItemField;
+					layoutItem = convertToGWTGlomLayoutItemField(libglomLayoutField);
 				} else {
 					Log.info(documentTitle, tableName,
 							"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
@@ -797,6 +857,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		return layoutGroup;
+	}
+
+	private LayoutItemField convertToGWTGlomLayoutItemField(LayoutItem_Field libglomLayoutField) {
+		LayoutItemField layoutItemField = new LayoutItemField();
+
+		// set type
+		layoutItemField.setType(convertToGWTGlomFieldType(libglomLayoutField.get_glom_type()));
+
+		// set formatting
+		Formatting formatting = new Formatting();
+		formatting.setHorizontalAlignment(convertToGWTGlomHorizonalAlignment(libglomLayoutField
+				.get_formatting_used_horizontal_alignment()));
+		layoutItemField.setFormatting(formatting);
+
+		return layoutItemField;
 	}
 
 	public GlomField[] getDetailsData(String documentTitle, String tableName, String primaryKeyValue) {
@@ -822,7 +897,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		}
 
-		// send back an empty GlomField array if can't find a primaryKey Field
 		if (primaryKey == null) {
 			Log.error(documentTitle, tableName, "Couldn't find primary key in table. Returning null.");
 			return null;

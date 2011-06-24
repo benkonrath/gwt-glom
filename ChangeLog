@@ -1,3 +1,26 @@
+2011-06-24  Ben Konrath  <ben@bagu.org>
+
+	Add primary key index to LayoutGroup DTO and add ProvidesKey to CellTable.
+
+	This allows the primary key to be retrieved by the Details button. This
+	functionality has not been implemented yet but it's in the works.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Pass
+	the LayoutGroup result to ListView.setCellTable instead of all of its
+	fields individually.
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Use
+	LayoutGroup as parameter for setCellTable. Add ProvidesKey to CellTable
+	get the primary key for the table.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Set the
+	index of the primary key in the LayoutGroup accounting for hidden
+	primary keys. Rename getJavaNumberFormat() to
+	convertToJavaNumberFormat() for consistency. Cleanup / add some
+	comments.
+	* src/main/java/org/glom/web/shared/layout/LayoutGroup.java: Add a
+	field for primary key index and a field to indicate whether the
+	primary key is hidden or not.
+
 2011-06-23  Ben Konrath  <ben@bagu.org>
 
 	Rename getTableData methods to getListData.

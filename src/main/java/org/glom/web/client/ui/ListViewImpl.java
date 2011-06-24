@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.shared.GlomField;
+import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 
@@ -51,6 +52,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 
 public class ListViewImpl extends Composite implements ListView {
@@ -101,8 +103,7 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentTitle, final String tableName, ArrayList<LayoutItem> layoutItems,
-			int numRows) {
+	public void setCellTable(final String documentTitle, final String tableName, LayoutGroup layoutGroup) {
 		// This is not really in the MVP style but there are issues creating a re-usable CellTable with methods like
 		// setColumnTitles(), setNumRows() etc. The biggest problem is that the column objects (new Column<GlomField[],
 		// GlomField>(new GlomTextCell())) aren't destroyed when the column is removed from the CellTable and
@@ -112,7 +113,15 @@ public class ListViewImpl extends Composite implements ListView {
 
 		vPanel.clear();
 
-		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20);
+		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
+		ProvidesKey<GlomField[]> keyProvider = new ProvidesKey<GlomField[]>() {
+			@Override
+			public Object getKey(GlomField[] item) {
+				return item[primaryKeyIndex].getText();
+			}
+		};
+
+		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20, keyProvider);
 
 		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
 			@Override
@@ -150,7 +159,9 @@ public class ListViewImpl extends Composite implements ListView {
 		dataProvider.addDataDisplay(table);
 
 		// create instances of GlomFieldColumn to retrieve the GlomField objects
-		for (int i = 0; i < layoutItems.size(); i++) {
+		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
+		int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();
+		for (int i = 0; i < numItems; i++) {
 			LayoutItem layoutItem = layoutItems.get(i);
 
 			// only create columns for LayoutItemField types
@@ -252,7 +263,7 @@ public class ListViewImpl extends Composite implements ListView {
 		table.addColumn(detailsColumn, "");
 
 		// set row count which is needed for paging
-		table.setRowCount(numRows);
+		table.setRowCount(layoutGroup.getExpectedResultSize());
 
 		// add an AsyncHandler to activate sorting for the AsyncDataProvider that was created above
 		table.addColumnSortHandler(new AsyncHandler(table));
