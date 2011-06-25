@@ -1,3 +1,14 @@
+2011-06-25  Ben Konrath  <ben@bagu.org>
+
+	Use filename as unique key for configuring database usernames and passwords.
+
+	This replaces the use of the Glom document title which could change
+	depending on the locale. Thanks to Murray Cumming for pointing out this
+	problem.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	* src/main/resources/onlineglom.properties:
+
 2011-06-24  Ben Konrath  <ben@bagu.org>
 
 	Pass primary key value to DetailsView.

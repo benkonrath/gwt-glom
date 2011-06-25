@@ -143,11 +143,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			ConfiguredDocument configuredDocument = new ConfiguredDocument(document);
 			// check if a username and password have been set and work for the current document
-			String documentTitle = document.get_database_title().trim();
-			String key = config.getKey(documentTitle);
+			String filename = glomFile.getName();
+			String key = config.getKey(filename);
 			if (key != null) {
 				String[] keyArray = key.split("\\.");
-				if (keyArray.length == 3 && "title".equals(keyArray[2])) {
+				if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
 					// username/password could be set, let's check to see if it works
 					String usernameKey = key.replaceAll(keyArray[2], "username");
 					String passwordKey = key.replaceAll(keyArray[2], "password");
@@ -163,7 +163,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 
 			// add information to the hash table
-			documents.put(documentTitle, configuredDocument);
+			documents.put(document.get_database_title().trim(), configuredDocument);
 
 		}
 	}
