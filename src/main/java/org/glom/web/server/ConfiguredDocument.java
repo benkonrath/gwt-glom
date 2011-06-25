@@ -87,7 +87,7 @@ final class ConfiguredDocument {
 				conn.close();
 			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
 		}
-		return false;
+		return authenticated;
 	}
 
 	public Document getDocument() {
