@@ -40,14 +40,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @author Ben Konrath <ben@bagu.org>
  */
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
-	private final String documentTitle;
+	private final String documentID;
 	private final String primaryKey;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
-		this.documentTitle = place.getDocumentTitle();
-		this.primaryKey = place.getPrimaryKey();
+		this.documentID = place.getDocumentID();
+		this.primaryKey = place.getPrimaryKeyValue();
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
 	}
@@ -78,7 +78,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 					addLayoutGroups(result);
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentTitle, selectedTable, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentID, selectedTable, callback);
 		} else {
 			// The table name has not been set so we need to fill in the details layout using the default table for the
 			// glom document.
@@ -93,7 +93,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 					addLayoutGroups(result);
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayout(documentTitle, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayout(documentID, callback);
 		}
 
 		// get the data from the server
@@ -113,7 +113,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		// specified in the URL (which it's not now). This affects starting OnlineGlom from a bookmarked or shared
 		// URL to the DetailsView. We'll also want to add a table URL variable and perform validation of the URL
 		// variables.
-		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentTitle, selectedTable, primaryKey, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentID, selectedTable, primaryKey, callback);
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());

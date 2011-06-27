@@ -36,22 +36,22 @@ public class Log {
 		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + message);
 	}
 
-	public static void fatal(String documentTitle, String tableName, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void fatal(String documentID, String tableName, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message, e);
 	}
 
-	public static void fatal(String documentTitle, String tableName, String message) {
-		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void fatal(String documentID, String tableName, String message) {
+		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message);
 	}
 
-	public static void fatal(String documentTitle, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentTitle + ": " + message, e);
+	public static void fatal(String documentID, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentID + ": " + message, e);
 	}
 
-	public static void fatal(String documentTitle, String message) {
-		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentTitle + ": " + message);
+	public static void fatal(String documentID, String message) {
+		com.allen_sauer.gwt.log.client.Log.fatal(getServletMethodName() + documentID + ": " + message);
 	}
 
 	// Error methods
@@ -63,22 +63,22 @@ public class Log {
 		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + message);
 	}
 
-	public static void error(String documentTitle, String tableName, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void error(String documentID, String tableName, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message, e);
 	}
 
-	public static void error(String documentTitle, String tableName, String message) {
-		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void error(String documentID, String tableName, String message) {
+		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message);
 	}
 
-	public static void error(String documentTitle, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentTitle + ": " + message, e);
+	public static void error(String documentID, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentID + ": " + message, e);
 	}
 
-	public static void error(String documentTitle, String message) {
-		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentTitle + ": " + message);
+	public static void error(String documentID, String message) {
+		com.allen_sauer.gwt.log.client.Log.error(getServletMethodName() + documentID + ": " + message);
 	}
 
 	// Warning methods
@@ -90,22 +90,22 @@ public class Log {
 		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + message);
 	}
 
-	public static void warn(String documentTitle, String tableName, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void warn(String documentID, String tableName, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message, e);
 	}
 
-	public static void warn(String documentTitle, String tableName, String message) {
-		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void warn(String documentID, String tableName, String message) {
+		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message);
 	}
 
-	public static void warn(String documentTitle, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentTitle + ": " + message, e);
+	public static void warn(String documentID, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentID + ": " + message, e);
 	}
 
-	public static void warn(String documentTitle, String message) {
-		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentTitle + ": " + message);
+	public static void warn(String documentID, String message) {
+		com.allen_sauer.gwt.log.client.Log.warn(getServletMethodName() + documentID + ": " + message);
 	}
 
 	// Info methods
@@ -117,22 +117,22 @@ public class Log {
 		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + message);
 	}
 
-	public static void info(String documentTitle, String tableName, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void info(String documentID, String tableName, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message, e);
 	}
 
-	public static void info(String documentTitle, String tableName, String message) {
-		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentTitle + " - " + tableName + ": "
+	public static void info(String documentID, String tableName, String message) {
+		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentID + " - " + tableName + ": "
 				+ message);
 	}
 
-	public static void info(String documentTitle, String message, Throwable e) {
-		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentTitle + ": " + message, e);
+	public static void info(String documentID, String message, Throwable e) {
+		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentID + ": " + message, e);
 	}
 
-	public static void info(String documentTitle, String message) {
-		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentTitle + ": " + message);
+	public static void info(String documentID, String message) {
+		com.allen_sauer.gwt.log.client.Log.info(getServletMethodName() + documentID + ": " + message);
 	}
 
 	// helper method

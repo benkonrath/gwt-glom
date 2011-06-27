@@ -22,6 +22,7 @@ package org.glom.web.client;
 import java.util.ArrayList;
 
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.shared.Documents;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -32,97 +33,97 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("libGlom")
 public interface OnlineGlomService extends RemoteService {
 
-	GlomDocument getGlomDocument(String documentTitle);
+	GlomDocument getGlomDocument(String documentID);
 
 	/**
-	 * Gets a {@link LayoutGroup} for the given Glom document title and table name.
+	 * Gets a {@link LayoutGroup} for the given Glom document and table name.
 	 * 
-	 * @param documentTitle
-	 *            title of the Glom document
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document
 	 * @return filled in {@link LayoutGroup}
 	 */
-	LayoutGroup getListLayout(String documentTitle, String tableName);
+	LayoutGroup getListLayout(String documentID, String tableName);
 
 	/**
-	 * Gets a {@link LayoutGroup} for the default table of the given Glom document title.
+	 * Gets a {@link LayoutGroup} for the default table of the given Glom document.
 	 * 
-	 * @param documentTitle
-	 *            title of the Glom document
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @return filled in {@link LayoutGroup} for the default table
 	 */
-	LayoutGroup getDefaultListLayout(String documentTitle);
+	LayoutGroup getDefaultListLayout(String documentID);
 
-	ArrayList<GlomField[]> getListData(String documentTitle, String tableName, int start, int length);
+	ArrayList<GlomField[]> getListData(String documentID, String tableName, int start, int length);
 
-	ArrayList<GlomField[]> getSortedListData(String documentTitle, String tableName, int start, int length,
+	ArrayList<GlomField[]> getSortedListData(String documentID, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending);
 
 	/**
-	 * Gets a list of Glom document titles found in the configured directory.
+	 * Gets a list of Glom documents found in the configured directory.
 	 * 
 	 * @return an {@link ArrayList<String>} of Glom document titles. If the list is empty, no glom documents were found
 	 *         in the configured directory because it's empty or the directory is not configured correctly.
 	 */
-	ArrayList<String> getDocumentTitles();
+	Documents getDocuments();
 
 	/**
 	 * Checks if the PostgreSQL authentication has been set for this document.
 	 * 
-	 * @param documentTitle
-	 *            title of Glom document to check
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @return true if the authentication has been set, false if it hasn't
 	 */
-	boolean isAuthenticated(String documentTitle);
+	boolean isAuthenticated(String documentID);
 
 	/**
 	 * Checks if the provided PostgreSQL username and password are correct for the specified glom document. If the
 	 * information is correct it is saved for future access.
 	 * 
-	 * @param documentTitle
-	 *            title of the Glom document to check
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @param username
 	 *            the PostgreSQL username
 	 * @param password
 	 *            the POstgreSQL password
 	 * @return true if username and password are correct, false otherwise
 	 */
-	boolean checkAuthentication(String documentTitle, String username, String password);
+	boolean checkAuthentication(String documentID, String username, String password);
 
 	/**
 	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the provided Glom document
 	 * and table name.
 	 * 
-	 * @param documentTitle
-	 *            title of the Glom document
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document
 	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
 	 */
-	ArrayList<LayoutGroup> getDetailsLayout(String documentTitle, String tableName);
+	ArrayList<LayoutGroup> getDetailsLayout(String documentID, String tableName);
 
 	/**
 	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the default table in the
 	 * specified Glom document.
 	 * 
-	 * @param documentTitle
-	 *            title of the Glom document
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
 	 */
-	ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentTitle);
+	ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentID);
 
 	/**
 	 * Gets data for the Details View.
 	 * 
-	 * @param documentTitle
-	 *            title of the Glom document
+	 * @param documentID
+	 *            identifier for the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document
 	 * @param primaryKeyValue
 	 *            value of the primary key in the specified Glom table to use in the query
 	 * @return the result of the SQL query as an array of {@link GlomField}s
 	 */
-	GlomField[] getDetailsData(String documentTitle, String tableName, String primaryKeyValue);
+	GlomField[] getDetailsData(String documentID, String tableName, String primaryKeyValue);
 
 }

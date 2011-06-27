@@ -46,12 +46,12 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public void addDocumentLink(final String documentTitle) {
-		Anchor link = new Anchor(documentTitle);
+	public void addDocumentLink(final String documentID, final String title) {
+		Anchor link = new Anchor(title);
 		link.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				presenter.goTo(new ListPlace(documentTitle));
+				presenter.goTo(new ListPlace(documentID));
 			}
 		});
 		documentLinks.add(link);

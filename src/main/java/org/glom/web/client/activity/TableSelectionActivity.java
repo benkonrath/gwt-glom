@@ -35,7 +35,6 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -45,7 +44,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public class TableSelectionActivity extends AbstractActivity implements TableSelectionView.Presenter {
 	private final ClientFactory clientFactory;
-	private String documentTitle;
+	private String documentID;
 	private HandlerRegistration changeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
@@ -58,7 +57,8 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 	 */
 	@Override
 	public void start(AcceptsOneWidget containerWidget, final EventBus eventBus) {
-		Window.setTitle("Online Glom - " + documentTitle);
+		// FIXME set the window title with the title from the glom document
+		// Window.setTitle("Online Glom - " + documentTitle);
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setPresenter(this);
@@ -84,20 +84,20 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 				tableSelectionView.setTableSelectedIndex(result.getDefaultTableIndex());
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentTitle, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentID, callback);
 
 		// we're done, set the widget
 		containerWidget.setWidget(tableSelectionView.asWidget());
 	}
 
 	public void setPlace(HasSelectableTablePlace place) {
-		this.documentTitle = place.getDocumentTitle();
+		this.documentID = place.getDocumentID();
 		TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {
 			tableSelectionView.setBackLinkVisible(true);
-			tableSelectionView.setBackLink(documentTitle);
+			tableSelectionView.setBackLink(documentID);
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}

@@ -19,11 +19,10 @@
 
 package org.glom.web.client.activity;
 
-import java.util.ArrayList;
-
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.ui.DocumentSelectionView;
+import org.glom.web.shared.Documents;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -47,17 +46,17 @@ public class DocumentSelectionActivity extends AbstractActivity implements Docum
 		final DocumentSelectionView documentSelectionView = clientFactory.getDocumentSelectionView();
 		documentSelectionView.setPresenter(this);
 
-		AsyncCallback<ArrayList<String>> callback = new AsyncCallback<ArrayList<String>>() {
+		AsyncCallback<Documents> callback = new AsyncCallback<Documents>() {
 			public void onFailure(Throwable caught) {
 				documentSelectionView
 						.setErrorMessage("Unable to communicate with the server. Check the error log for more information.");
 			}
 
-			public void onSuccess(ArrayList<String> documentTitles) {
+			public void onSuccess(Documents documents) {
 				documentSelectionView.clearHyperLinks();
-				if (!documentTitles.isEmpty()) {
-					for (String documentTitle : documentTitles) {
-						documentSelectionView.addDocumentLink(documentTitle);
+				if (documents.getCount() > 0) {
+					for (int i = 0; i < documents.getCount(); i++) {
+						documentSelectionView.addDocumentLink(documents.getDocumentID(i), documents.getTitle(i));
 					}
 				} else {
 					documentSelectionView
@@ -65,7 +64,7 @@ public class DocumentSelectionActivity extends AbstractActivity implements Docum
 				}
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getDocumentTitles(callback);
+		OnlineGlomServiceAsync.Util.getInstance().getDocuments(callback);
 
 		panel.setWidget(documentSelectionView.asWidget());
 	}

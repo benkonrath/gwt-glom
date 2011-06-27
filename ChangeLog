@@ -1,3 +1,37 @@
+2011-06-27  Ben Konrath  <ben@bagu.org>
+
+	Use filename based unique document ID in URL and for RPC.
+
+	The document ID is the glom document name with spaces (' ') replaced
+	with pluses ('+') and without the .glom extension.
+
+	This change is mostly a string substitution of 'documentTitle' for
+	'documentID'. The only code change is the addition of a Documents DTO to get the
+	filename to document title mappings as indicated below.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java:
+	Use Documents DTO to create the document links in the document
+	selection view.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java:
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java:
+	* src/main/java/org/glom/web/client/place/ListPlace.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	* src/main/java/org/glom/web/server/Log.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Change
+	getDocumentTitles() to getDocuments() and return the Documents DTO.
+	* src/main/java/org/glom/web/shared/Documents.java: New DTO for
+	transferring the filename to document title mappings.
+
 2011-06-25  Ben Konrath  <ben@bagu.org>
 
 	Make the authentication popup work again.

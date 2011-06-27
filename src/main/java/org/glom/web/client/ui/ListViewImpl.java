@@ -103,7 +103,7 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentTitle, final String tableName, LayoutGroup layoutGroup) {
+	public void setCellTable(final String documentID, final String tableName, LayoutGroup layoutGroup) {
 		// This is not really in the MVP style but there are issues creating a re-usable CellTable with methods like
 		// setColumnTitles(), setNumRows() etc. The biggest problem is that the column objects (new Column<GlomField[],
 		// GlomField>(new GlomTextCell())) aren't destroyed when the column is removed from the CellTable and
@@ -146,11 +146,11 @@ public class ListViewImpl extends Composite implements ListView {
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					ColumnSortInfo info = colSortList.get(0);
-					OnlineGlomServiceAsync.Util.getInstance().getSortedListData(documentTitle, tableName, start,
+					OnlineGlomServiceAsync.Util.getInstance().getSortedListData(documentID, tableName, start,
 							range.getLength(), table.getColumnIndex((Column<GlomField[], ?>) info.getColumn()),
 							info.isAscending(), callback);
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getListData(documentTitle, tableName, start,
+					OnlineGlomServiceAsync.Util.getInstance().getListData(documentID, tableName, start,
 							range.getLength(), callback);
 				}
 			}
@@ -250,7 +250,7 @@ public class ListViewImpl extends Composite implements ListView {
 			protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
 					ValueUpdater<String> valueUpdater) {
 				super.onEnterKeyDown(context, parent, value, event, valueUpdater);
-				presenter.goTo(new DetailsPlace(documentTitle, (String) context.getKey()));
+				presenter.goTo(new DetailsPlace(documentID, (String) context.getKey()));
 			}
 
 		}) {

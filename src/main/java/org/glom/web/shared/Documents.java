@@ -17,27 +17,37 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.shared;
 
-import org.glom.web.shared.layout.LayoutGroup;
-
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public interface ListView extends IsWidget {
+@SuppressWarnings("serial")
+public class Documents implements Serializable {
+	private ArrayList<String> documentIDs = new ArrayList<String>();
+	private ArrayList<String> titles = new ArrayList<String>();
 
-	public interface Presenter {
-		void goTo(Place place);
+	public Documents() {
 	}
 
-	public void setPresenter(Presenter presenter);
+	public void addDocuemnt(String documentID, String title) {
+		documentIDs.add(documentID);
+		titles.add(title);
+	}
 
-	public void setCellTable(final String documentID, final String tableName, LayoutGroup layoutGroup);
+	public String getDocumentID(int index) {
+		return documentIDs.get(index);
+	}
 
-	void clear();
+	public String getTitle(int index) {
+		return titles.get(index);
+	}
 
+	public int getCount() {
+		return documentIDs.size();
+	}
 }

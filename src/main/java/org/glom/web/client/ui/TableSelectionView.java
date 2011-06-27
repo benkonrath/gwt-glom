@@ -45,7 +45,7 @@ public interface TableSelectionView extends IsWidget {
 
 	void setBackLinkVisible(boolean visible);
 
-	void setBackLink(final String documentTitle);
+	void setBackLink(final String documentID);
 
 	void clear();
 }

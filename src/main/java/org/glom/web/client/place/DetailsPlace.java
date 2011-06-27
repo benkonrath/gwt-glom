@@ -23,45 +23,45 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
 public class DetailsPlace extends HasSelectableTablePlace {
-	private String primaryKey;
+	private String primaryKeyValue;
 
-	public DetailsPlace(String documentTitle, String primarykey) {
-		super(documentTitle);
-		this.primaryKey = primarykey;
+	public DetailsPlace(String documentID, String primarykey) {
+		super(documentID);
+		this.primaryKeyValue = primarykey;
 	}
 
-	public String getPrimaryKey() {
-		return primaryKey;
+	public String getPrimaryKeyValue() {
+		return primaryKeyValue;
 	}
 
 	@Prefix("details")
 	public static class Tokenizer implements PlaceTokenizer<DetailsPlace> {
 
-		final String title = "title=";
-		private final String key = "key=";
+		final String documentKey = "document=";
+		private final String primaryKeyValueKey = "value=";
 		protected final String seperator = "&";
 
 		@Override
 		public String getToken(DetailsPlace place) {
-			return title + place.getDocumentTitle() + seperator + key + place.getPrimaryKey();
+			return documentKey + place.getDocumentID() + seperator + primaryKeyValueKey + place.getPrimaryKeyValue();
 		}
 
 		@Override
 		public DetailsPlace getPlace(String token) {
 			String[] tokenArray = token.split(seperator);
-			String documentTitle = "", primaryKey = "";
+			String documentID = "", primaryKeyValue = "";
 			if (tokenArray.length != 2)
-				return new DetailsPlace(documentTitle, primaryKey);
+				return new DetailsPlace(documentID, primaryKeyValue);
 
-			if (title.equals(tokenArray[0].substring(0, title.length()))) {
-				documentTitle = tokenArray[0].substring(title.length());
+			if (documentKey.equals(tokenArray[0].substring(0, documentKey.length()))) {
+				documentID = tokenArray[0].substring(documentKey.length());
 			}
 
-			if (key.equals(tokenArray[1].substring(0, key.length()))) {
-				primaryKey = tokenArray[1].substring(key.length());
+			if (primaryKeyValueKey.equals(tokenArray[1].substring(0, primaryKeyValueKey.length()))) {
+				primaryKeyValue = tokenArray[1].substring(primaryKeyValueKey.length());
 			}
 
-			return new DetailsPlace(documentTitle, primaryKey);
+			return new DetailsPlace(documentID, primaryKeyValue);
 		}
 	}
 

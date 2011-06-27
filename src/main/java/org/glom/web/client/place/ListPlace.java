@@ -24,8 +24,8 @@ import com.google.gwt.place.shared.Prefix;
 
 public class ListPlace extends HasSelectableTablePlace {
 
-	public ListPlace(String documentTitle) {
-		super(documentTitle);
+	public ListPlace(String documentID) {
+		super(documentID);
 	}
 
 	@Prefix("list")
@@ -33,7 +33,7 @@ public class ListPlace extends HasSelectableTablePlace {
 
 		@Override
 		public String getToken(ListPlace place) {
-			return place.getDocumentTitle();
+			return place.getDocumentID();
 		}
 
 		@Override

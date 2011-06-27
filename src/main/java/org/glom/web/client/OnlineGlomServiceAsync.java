@@ -21,6 +21,7 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.Documents;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -48,29 +49,28 @@ public interface OnlineGlomServiceAsync {
 		}
 	}
 
-	void getGlomDocument(String documentTitle, AsyncCallback<GlomDocument> callback);
+	void getGlomDocument(String documentID, AsyncCallback<GlomDocument> callback);
 
-	void getListLayout(String documentTitle, String tableName, AsyncCallback<LayoutGroup> callback);
+	void getListLayout(String documentID, String tableName, AsyncCallback<LayoutGroup> callback);
 
-	void getListData(String documentTitle, String tableName, int start, int length,
+	void getListData(String documentID, String tableName, int start, int length,
 			AsyncCallback<ArrayList<GlomField[]>> callback);
 
-	void getSortedListData(String documentTitle, String tableName, int start, int length, int columnIndex,
+	void getSortedListData(String documentID, String tableName, int start, int length, int columnIndex,
 			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
 
-	void getDocumentTitles(AsyncCallback<ArrayList<String>> callback);
+	void getDocuments(AsyncCallback<Documents> callback);
 
-	void isAuthenticated(String documentTitle, AsyncCallback<Boolean> callback);
+	void isAuthenticated(String documentID, AsyncCallback<Boolean> callback);
 
-	void checkAuthentication(String documentTitle, String username, String password, AsyncCallback<Boolean> callback);
+	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getDefaultListLayout(String documentTitle, AsyncCallback<LayoutGroup> callback);
+	void getDefaultListLayout(String documentID, AsyncCallback<LayoutGroup> callback);
 
-	void getDetailsLayout(String documentTitle, String tableName, AsyncCallback<ArrayList<LayoutGroup>> callback);
+	void getDetailsLayout(String documentID, String tableName, AsyncCallback<ArrayList<LayoutGroup>> callback);
 
-	void getDefaultDetailsLayout(String documentTitle, AsyncCallback<ArrayList<LayoutGroup>> callback);
+	void getDefaultDetailsLayout(String documentID, AsyncCallback<ArrayList<LayoutGroup>> callback);
 
-	void getDetailsData(String documentTitle, String tableName, String primaryKeyValue,
-			AsyncCallback<GlomField[]> callback);
+	void getDetailsData(String documentID, String tableName, String primaryKeyValue, AsyncCallback<GlomField[]> callback);
 
 }

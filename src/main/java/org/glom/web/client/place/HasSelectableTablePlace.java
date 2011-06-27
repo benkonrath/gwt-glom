@@ -29,14 +29,14 @@ import com.google.gwt.place.shared.Place;
  */
 public abstract class HasSelectableTablePlace extends Place {
 
-	private String documentTitle;
+	private String documentID;
 
-	public HasSelectableTablePlace(String documentTitle) {
-		this.documentTitle = documentTitle;
+	public HasSelectableTablePlace(String documentID) {
+		this.documentID = documentID;
 	}
 
-	public String getDocumentTitle() {
-		return documentTitle;
+	public String getDocumentID() {
+		return documentID;
 	}
 
 }

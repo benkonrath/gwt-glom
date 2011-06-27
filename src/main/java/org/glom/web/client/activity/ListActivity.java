@@ -38,13 +38,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class ListActivity extends AbstractActivity implements ListView.Presenter {
 
-	private final String documentTitle;
+	private final String documentID;
 	private final ClientFactory clientFactory;
 	private final ListView listView;
 	private final AuthenticationPopup authenticationPopup;
 
 	public ListActivity(ListPlace place, ClientFactory clientFactory) {
-		this.documentTitle = place.getDocumentTitle();
+		this.documentID = place.getDocumentID();
 		this.clientFactory = clientFactory;
 		listView = clientFactory.getListView();
 		authenticationPopup = clientFactory.getAuthenticationPopup();
@@ -69,7 +69,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 				}
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentTitle, isAuthCallback);
+		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 
 		// set the change handler for the table selection widget
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
@@ -82,10 +82,10 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 					}
 
 					public void onSuccess(LayoutGroup result) {
-						listView.setCellTable(documentTitle, event.getTableName(), result);
+						listView.setCellTable(documentID, event.getTableName(), result);
 					}
 				};
-				OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentTitle, event.getTableName(), callback);
+				OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentID, event.getTableName(), callback);
 			}
 		});
 
@@ -100,10 +100,10 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 				}
 
 				public void onSuccess(LayoutGroup result) {
-					listView.setCellTable(documentTitle, selectedTable, result);
+					listView.setCellTable(documentID, selectedTable, result);
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentTitle, selectedTable, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getListLayout(documentID, selectedTable, callback);
 		} else {
 			// The table name has not been set so we need to fill in the cell table using the default table for the glom
 			// document.
@@ -114,10 +114,10 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 				}
 
 				public void onSuccess(LayoutGroup result) {
-					listView.setCellTable(documentTitle, result.getDefaultTableName(), result);
+					listView.setCellTable(documentID, result.getDefaultTableName(), result);
 				}
 			};
-			OnlineGlomServiceAsync.Util.getInstance().getDefaultListLayout(documentTitle, callback);
+			OnlineGlomServiceAsync.Util.getInstance().getDefaultListLayout(documentID, callback);
 		}
 
 		// indicate that the view is ready to be displayed
@@ -148,7 +148,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 						}
 					}
 				};
-				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentTitle,
+				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentID,
 						authenticationPopup.getUsername(), authenticationPopup.getPassword(), callback);
 			}
 

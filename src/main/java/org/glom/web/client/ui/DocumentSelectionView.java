@@ -30,7 +30,7 @@ public interface DocumentSelectionView extends IsWidget {
 
 	void setPresenter(Presenter presenter);
 
-	void addDocumentLink(String documentTitle);
+	void addDocumentLink(String documentID, String title);
 
 	void clearHyperLinks();
 

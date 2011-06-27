@@ -54,6 +54,7 @@ import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.StringVector;
 import org.glom.web.client.OnlineGlomService;
+import org.glom.web.shared.Documents;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.Formatting;
@@ -85,7 +86,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 	}
 
-	private final Hashtable<String, ConfiguredDocument> documents = new Hashtable<String, ConfiguredDocument>();
+	private final Hashtable<String, ConfiguredDocument> documentMapping = new Hashtable<String, ConfiguredDocument>();
 	// TODO implement locale
 	private final Locale locale = Locale.ROOT;
 
@@ -104,7 +105,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 		config.load(is);
 
-		// check the configured glom file directory
+		// check if we can read the configured glom file directory
 		String documentDirName = config.getProperty("glom.document.directory");
 		File documentDir = new File(documentDirName);
 		if (!documentDir.isDirectory()) {
@@ -117,10 +118,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		// get and check the glom files in the specified directory
+		final String glomFileExtension = ".glom";
 		File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.endsWith(".glom");
+				return name.endsWith(glomFileExtension);
 			}
 		});
 		Glom.libglom_init();
@@ -162,8 +164,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						config.getProperty("glom.document.password"));
 			}
 
-			// add information to the hash table
-			documents.put(document.get_database_title().trim(), configuredDocument);
+			// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced with
+			// pluses (+). The space/plus replacement makes the key more friendly for URLs.
+			String hashKey = filename.substring(0, glomFile.getName().length() - glomFileExtension.length()).replace(
+					' ', '+');
+			documentMapping.put(hashKey, configuredDocument);
 
 		}
 	}
@@ -177,8 +182,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public void destroy() {
 		Glom.libglom_deinit();
 
-		for (String documenTitle : documents.keySet()) {
-			ConfiguredDocument configuredDoc = documents.get(documenTitle);
+		for (String documenTitle : documentMapping.keySet()) {
+			ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
 			try {
 				DataSources.destroy(configuredDoc.getCpds());
 			} catch (SQLException e) {
@@ -188,9 +193,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	}
 
-	public GlomDocument getGlomDocument(String documentTitle) {
+	public GlomDocument getGlomDocument(String documentID) {
 
-		Document document = documents.get(documentTitle).getDocument();
+		Document document = documentMapping.get(documentID).getDocument();
 		GlomDocument glomDocument = new GlomDocument();
 
 		// get arrays of table names and titles, and find the default table index
@@ -230,16 +235,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDefaultLayoutListTable(java.lang.String)
 	 */
 	@Override
-	public LayoutGroup getDefaultListLayout(String documentTitle) {
-		GlomDocument glomDocument = getGlomDocument(documentTitle);
+	public LayoutGroup getDefaultListLayout(String documentID) {
+		GlomDocument glomDocument = getGlomDocument(documentID);
 		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
-		LayoutGroup layoutGroup = getListLayout(documentTitle, tableName);
+		LayoutGroup layoutGroup = getListLayout(documentID, tableName);
 		layoutGroup.setDefaultTableName(tableName);
 		return layoutGroup;
 	}
 
-	public LayoutGroup getListLayout(String documentTitle, String tableName) {
-		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+	public LayoutGroup getListLayout(String documentID, String tableName) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		Document document = configuredDoc.getDocument();
 
 		// access the layout list
@@ -249,13 +254,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (listViewLayoutGroupSize > 0) {
 			// a list layout group is defined; we can use the first group as the list
 			if (listViewLayoutGroupSize > 1)
-				Log.warn(documentTitle, tableName,
+				Log.warn(documentID, tableName,
 						"The size of the list layout group is greater than 1. Attempting to use the first item for the layout list view.");
 
 			libglomLayoutGroup = layoutGroupVec.get(0);
 		} else {
 			// a list layout group is *not* defined; we are going make a libglom layout group from the list of fields
-			Log.info(documentTitle, tableName,
+			Log.info(documentID, tableName,
 					"A list layout is not defined for this table. Displaying a list layout based on the field list.");
 
 			FieldVector fieldsVec = document.get_table_fields(tableName);
@@ -270,15 +275,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// confirm the libglom LayoutGroup is not null as per the method's precondition
 		if (libglomLayoutGroup == null) {
-			Log.error(documentTitle, tableName, "A LayoutGroup was not found. Returning null.");
+			Log.error(documentID, tableName, "A LayoutGroup was not found. Returning null.");
 			return null;
 		}
 
-		LayoutGroup layoutGroup = getLayoutGroup(documentTitle, tableName, libglomLayoutGroup);
+		LayoutGroup layoutGroup = getLayoutGroup(documentID, tableName, libglomLayoutGroup);
 
 		// use the same fields list as will be used for the query
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "list");
-		layoutGroup.setExpectedResultSize(getResultSizeOfSQLQuery(documentTitle, tableName, fieldsToGet));
+		layoutGroup.setExpectedResultSize(getResultSizeOfSQLQuery(documentID, tableName, fieldsToGet));
 
 		// Set the primary key index for the table and add a LayoutItemField for the primary key to the end of the item
 		// list in the LayoutGroup if it doesn't already contain a primary key.
@@ -333,8 +338,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * Get the number of rows a query with the table name and layout fields would return. This is needed for the /* list
 	 * view pager.
 	 */
-	private int getResultSizeOfSQLQuery(String documentTitle, String tableName, LayoutFieldVector fieldsToGet) {
-		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+	private int getResultSizeOfSQLQuery(String documentID, String tableName, LayoutFieldVector fieldsToGet) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated())
 			return -1;
 		Connection conn = null;
@@ -359,7 +364,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return rs.getInt(1);
 
 		} catch (SQLException e) {
-			Log.error(documentTitle, tableName, "Error calculating number of rows in the query.", e);
+			Log.error(documentID, tableName, "Error calculating number of rows in the query.", e);
 			return -1;
 		} finally {
 			// cleanup everything that has been used
@@ -371,26 +376,26 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(documentTitle, tableName,
+				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 	}
 
 	// FIXME Check if we can use getFieldsToShowForSQLQuery() in these methods
-	public ArrayList<GlomField[]> getListData(String documentTitle, String tableName, int start, int length) {
-		return getListData(documentTitle, tableName, start, length, false, 0, false);
+	public ArrayList<GlomField[]> getListData(String documentID, String tableName, int start, int length) {
+		return getListData(documentID, tableName, start, length, false, 0, false);
 	}
 
-	public ArrayList<GlomField[]> getSortedListData(String documentTitle, String tableName, int start, int length,
+	public ArrayList<GlomField[]> getSortedListData(String documentID, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending) {
-		return getListData(documentTitle, tableName, start, length, true, sortColumnIndex, isAscending);
+		return getListData(documentID, tableName, start, length, true, sortColumnIndex, isAscending);
 	}
 
-	private ArrayList<GlomField[]> getListData(String documentTitle, String tableName, int start, int length,
+	private ArrayList<GlomField[]> getListData(String documentID, String tableName, int start, int length,
 			boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 
-		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated())
 			return new ArrayList<GlomField[]>();
 		Document document = configuredDoc.getDocument();
@@ -403,9 +408,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (layoutListVec.size() > 0) {
 			// a layout list is defined, we can use it to for the LayoutListTable
 			if (listViewLayoutGroupSize > 1)
-				Log.warn(documentTitle, tableName,
-						"The size of the list view layout group for table is greater than 1. "
-								+ "Attempting to use the first item for the layout list view.");
+				Log.warn(documentID, tableName, "The size of the list view layout group for table is greater than 1. "
+						+ "Attempting to use the first item for the layout list view.");
 			LayoutItemVector layoutItemsVec = layoutListVec.get(0).get_items();
 
 			// find the defined layout list fields
@@ -455,8 +459,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (field != null)
 				sortClause.addLast(new SortFieldPair(field, isAscending));
 			else {
-				Log.error(documentTitle, tableName, "Error getting LayoutItem_Field for column index "
-						+ sortColumnIndex + ". Cannot create a sort clause for this column.");
+				Log.error(documentID, tableName, "Error getting LayoutItem_Field for column index " + sortColumnIndex
+						+ ". Cannot create a sort clause for this column.");
 			}
 		}
 
@@ -491,9 +495,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			rs = st.executeQuery(query);
 
 			// get the results from the ResultSet
-			rowsList = getData(documentTitle, tableName, length, layoutFields, rs);
+			rowsList = getData(documentID, tableName, length, layoutFields, rs);
 		} catch (SQLException e) {
-			Log.error(documentTitle, tableName, "Error executing database query.", e);
+			Log.error(documentID, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
 		} finally {
 			// cleanup everything that has been used
@@ -505,14 +509,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(documentTitle, tableName,
+				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 		return rowsList;
 	}
 
-	private ArrayList<GlomField[]> getData(String documentTitle, String tableName, int length,
+	private ArrayList<GlomField[]> getData(String documentID, String tableName, int length,
 			LayoutFieldVector layoutFields, ResultSet rs) throws SQLException {
 
 		// get the data we've been asked for
@@ -557,7 +561,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						// Try to format the currency using the Java Locales system.
 						try {
 							Currency currency = Currency.getInstance(currencyCode);
-							Log.info(documentTitle, tableName, "A valid ISO 4217 currency code is being used."
+							Log.info(documentID, tableName, "A valid ISO 4217 currency code is being used."
 									+ " Overriding the numeric formatting with information from the locale.");
 							int digits = currency.getDefaultFractionDigits();
 							numFormatJava = NumberFormat.getCurrencyInstance(locale);
@@ -565,7 +569,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							numFormatJava.setMinimumFractionDigits(digits);
 							numFormatJava.setMaximumFractionDigits(digits);
 						} catch (IllegalArgumentException e) {
-							Log.warn(documentTitle, tableName, currencyCode + " is not a valid ISO 4217 code."
+							Log.warn(documentID, tableName, currencyCode + " is not a valid ISO 4217 code."
 									+ " Manually setting currency code with this value.");
 							// The currency code is not this is not an ISO 4217 currency code.
 							// We're going to manually set the currency code and use the glom numeric formatting.
@@ -573,7 +577,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							numFormatJava = convertToJavaNumberFormat(numFormatGlom);
 						}
 					} else if (currencyCode.length() > 0) {
-						Log.warn(documentTitle, tableName, currencyCode + " is not a valid ISO 4217 code."
+						Log.warn(documentID, tableName, currencyCode + " is not a valid ISO 4217 code."
 								+ " Manually setting currency code with this value.");
 						// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
 						// We're going to manually set the currency code and use the glom numeric formatting.
@@ -630,7 +634,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					break;
 				case TYPE_INVALID:
 				default:
-					Log.warn(documentTitle, tableName, "Invalid LayoutItem Field type. Using empty string for value.");
+					Log.warn(documentID, tableName, "Invalid LayoutItem Field type. Using empty string for value.");
 					rowArray[i].setText("");
 					break;
 				}
@@ -644,12 +648,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return rowsList;
 	}
 
-	public ArrayList<String> getDocumentTitles() {
-		ArrayList<String> documentTitles = new ArrayList<String>();
-		for (String title : documents.keySet()) {
-			documentTitles.add(title);
+	public Documents getDocuments() {
+		Documents documents = new Documents();
+		for (String documentID : documentMapping.keySet()) {
+			ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+			documents.addDocuemnt(documentID, configuredDoc.getDocument().get_database_title());
 		}
-		return documentTitles;
+		return documents;
 	}
 
 	/*
@@ -750,8 +755,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * 
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
 	 */
-	public boolean isAuthenticated(String documentTitle) {
-		return documents.get(documentTitle).isAuthenticated();
+	public boolean isAuthenticated(String documentID) {
+		return documentMapping.get(documentID).isAuthenticated();
 	}
 
 	/*
@@ -760,12 +765,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
-	public boolean checkAuthentication(String documentTitle, String username, String password) {
-		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+	public boolean checkAuthentication(String documentID, String username, String password) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		try {
 			return configuredDoc.setUsernameAndPassword(username, password);
 		} catch (SQLException e) {
-			Log.error(documentTitle, "Unknown SQL Error checking the database authentication.", e);
+			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
 	}
@@ -776,10 +781,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDefaultDetailsLayoutGroup(java.lang.String)
 	 */
 	@Override
-	public ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentTitle) {
-		GlomDocument glomDocument = getGlomDocument(documentTitle);
+	public ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentID) {
+		GlomDocument glomDocument = getGlomDocument(documentID);
 		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
-		return getDetailsLayout(documentTitle, tableName);
+		return getDetailsLayout(documentID, tableName);
 	}
 
 	/*
@@ -787,8 +792,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * 
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutGroup(java.lang.String, java.lang.String)
 	 */
-	public ArrayList<LayoutGroup> getDetailsLayout(String documentTitle, String tableName) {
-		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+	public ArrayList<LayoutGroup> getDetailsLayout(String documentID, String tableName) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		Document document = configuredDoc.getDocument();
 		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
 
@@ -799,7 +804,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			if (libglomLayoutGroup == null)
 				continue;
 
-			layoutGroups.add(getLayoutGroup(documentTitle, tableName, libglomLayoutGroup));
+			layoutGroups.add(getLayoutGroup(documentID, tableName, libglomLayoutGroup));
 		}
 		return layoutGroups;
 	}
@@ -808,7 +813,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * Gets a GWT-Glom LayoutGroup object for the specified libglom LayoutGroup object. This is used for getting layout
 	 * information for the list and details views.
 	 * 
-	 * @param documentTitle Glom document title
+	 * @param documentID Glom document identifier
 	 * 
 	 * @param tableName table name in the specified Glom document
 	 * 
@@ -819,7 +824,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @return {@link LayoutGroup} object that represents the layout for the specified {@link
 	 * org.glom.libglom.LayoutGroup}
 	 */
-	private LayoutGroup getLayoutGroup(String documentTitle, String tableName,
+	private LayoutGroup getLayoutGroup(String documentID, String tableName,
 			org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		LayoutGroup layoutGroup = new LayoutGroup();
 		layoutGroup.setColumnCount(safeLongToInt(libglomLayoutGroup.get_columns_count()));
@@ -837,7 +842,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			org.glom.libglom.LayoutGroup group = org.glom.libglom.LayoutGroup.cast_dynamic(libglomLayoutItem);
 			if (group != null) {
 				// recurse into child groups
-				layoutItem = getLayoutGroup(documentTitle, tableName, group);
+				layoutItem = getLayoutGroup(documentID, tableName, group);
 			} else {
 				// create GWT-Glom LayoutItem types based on the the libglom type
 				// TODO add support for other LayoutItems (Text, Image, Button etc.)
@@ -845,7 +850,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (libglomLayoutField != null) {
 					layoutItem = convertToGWTGlomLayoutItemField(libglomLayoutField);
 				} else {
-					Log.info(documentTitle, tableName,
+					Log.info(documentID, tableName,
 							"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
 					continue;
 				}
@@ -874,15 +879,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return layoutItemField;
 	}
 
-	public GlomField[] getDetailsData(String documentTitle, String tableName, String primaryKeyValue) {
+	public GlomField[] getDetailsData(String documentID, String tableName, String primaryKeyValue) {
 
-		ConfiguredDocument configuredDoc = documents.get(documentTitle);
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		Document document = configuredDoc.getDocument();
 
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "details");
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
-			Log.warn(documentTitle, tableName, "Didn't find any fields to show. Returning null.");
+			Log.warn(documentID, tableName, "Didn't find any fields to show. Returning null.");
 			return null;
 		}
 
@@ -898,7 +903,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		if (primaryKey == null) {
-			Log.error(documentTitle, tableName, "Couldn't find primary key in table. Returning null.");
+			Log.error(documentID, tableName, "Couldn't find primary key in table. Returning null.");
 			return null;
 		}
 
@@ -916,9 +921,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// get the results from the ResultSet
 			// using 2 as a length parameter so we can log a warning if the result set is greater than one
-			rowsList = getData(documentTitle, tableName, 2, fieldsToGet, rs);
+			rowsList = getData(documentID, tableName, 2, fieldsToGet, rs);
 		} catch (SQLException e) {
-			Log.error(documentTitle, tableName, "Error executing database query.", e);
+			Log.error(documentID, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
 			return null;
 		} finally {
@@ -931,16 +936,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				Log.error(documentTitle, tableName,
+				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
 		}
 
 		if (rowsList.size() == 0) {
-			Log.error(documentTitle, tableName, "The query returned an empty ResultSet. Returning null.");
+			Log.error(documentID, tableName, "The query returned an empty ResultSet. Returning null.");
 			return null;
 		} else if (rowsList.size() > 1) {
-			Log.warn(documentTitle, tableName,
+			Log.warn(documentID, tableName,
 					"The query did not return a unique result. Returning the first result in the set.");
 		}
 
