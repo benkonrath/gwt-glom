@@ -24,21 +24,36 @@ import com.google.gwt.place.shared.Prefix;
 
 public class ListPlace extends HasSelectableTablePlace {
 
-	public ListPlace(String documentID) {
-		super(documentID);
+	public ListPlace(String documentID, String tableName) {
+		super(documentID, tableName);
 	}
 
 	@Prefix("list")
-	public static class Tokenizer implements PlaceTokenizer<ListPlace> {
+	public static class Tokenizer extends HasSelectableTablePlace.Tokenizer implements PlaceTokenizer<ListPlace> {
 
 		@Override
 		public String getToken(ListPlace place) {
-			return place.getDocumentID();
+			return documentKey + place.getDocumentID() + seperator + tableKey + place.getTableName();
 		}
 
 		@Override
 		public ListPlace getPlace(String token) {
-			return new ListPlace(token);
+			String[] tokenArray = token.split(seperator);
+
+			if (tokenArray.length != 2)
+				return new ListPlace("", "");
+
+			String documentID = "", tableName = "";
+
+			if (documentKey.equals(tokenArray[0].substring(0, documentKey.length()))) {
+				documentID = tokenArray[0].substring(documentKey.length());
+			}
+
+			if (tableKey.equals(tokenArray[1].substring(0, tableKey.length()))) {
+				tableName = tokenArray[1].substring(tableKey.length());
+			}
+
+			return new ListPlace(documentID, tableName);
 		}
 	}
 

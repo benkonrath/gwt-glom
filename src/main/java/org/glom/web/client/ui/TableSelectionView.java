@@ -41,11 +41,12 @@ public interface TableSelectionView extends IsWidget {
 
 	void setTableSelection(ArrayList<String> tableNames, ArrayList<String> tableTitles);
 
-	void setTableSelectedIndex(int defaultTableIndex);
+	void setSelectedTableName(String tableName);
 
 	void setBackLinkVisible(boolean visible);
 
-	void setBackLink(final String documentID);
+	void setBackLink(final String documentID, final String tableName);
 
 	void clear();
+
 }

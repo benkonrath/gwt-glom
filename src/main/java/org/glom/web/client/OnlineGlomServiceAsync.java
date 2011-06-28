@@ -65,8 +65,6 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getDefaultListLayout(String documentID, AsyncCallback<LayoutGroup> callback);
-
 	void getDetailsLayout(String documentID, String tableName, AsyncCallback<ArrayList<LayoutGroup>> callback);
 
 	void getDetailsData(String documentID, String tableName, String primaryKeyValue, AsyncCallback<GlomField[]> callback);

@@ -1,5 +1,43 @@
 2011-06-28  Ben Konrath  <ben@bagu.org>
 
+	Add the table name to the URL token for the ListPlace.
+
+	This makes things consistent between the DetailsPlace and the
+	ListPlace. It also allows the the ListPlace to be bookmarked.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Remove getDefaultListLayout(). The default layout is now returned
+	by the getListLayout() method when the table name is an empty string.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	Add table name field. Change to a new ListPlace when the table
+	has been changed. Use getListLayout() for getting the default
+	list layout.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	Add table name field. Set the correct table name in the list box
+	when loading from bookmark. This corrects a problem for the
+	DetailsPlace too.
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java:
+	Move table name to super-class (HasSelectableTable). Move document
+	and table URL keys to super-class in HasSelectableTable.
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java:
+	Add table name field. Add Tokenizer class with URL key common to
+	the subclasses (DetailsPlace and ListPlace).
+	* src/main/java/org/glom/web/client/place/ListPlace.java:
+	Add table name. Add code to parse the URL token.
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+	Update ListPlace construction with empty table name string.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Change setTableSelectedIndex(int) to setSelectedTableName(String).
+	Update ListPlace construction with table name string.
+	* src/main/java/org/glom/web/shared/layout/LayoutGroup.java:
+	Change defaultTableName field to tableName to reflect how it's now
+	used. Update the getter and setter methods.
+
+2011-06-28  Ben Konrath  <ben@bagu.org>
+
 	Enable the table selector in the DetailsView.
 
 	* src/main/java/org/glom/web/client/OnlineGlomService.java:

@@ -229,23 +229,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return glomDocument;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDefaultLayoutListTable(java.lang.String)
-	 */
-	@Override
-	public LayoutGroup getDefaultListLayout(String documentID) {
-		GlomDocument glomDocument = getGlomDocument(documentID);
-		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
-		LayoutGroup layoutGroup = getListLayout(documentID, tableName);
-		layoutGroup.setDefaultTableName(tableName);
-		return layoutGroup;
-	}
-
 	public LayoutGroup getListLayout(String documentID, String tableName) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		Document document = configuredDoc.getDocument();
+
+		// Use the default table if the table name hasn't been set or if the table name isn't in the glom document.
+		// The last check guards against SQL injection attacks since the table name could come from the URL.
+		if (tableName == null || tableName.isEmpty() || !document.get_table_is_known(tableName)) {
+			tableName = document.get_default_table();
+		}
 
 		// access the layout list
 		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("list", tableName);
@@ -297,6 +289,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		} else {
 			layoutGroup.setPrimaryKeyIndex(primaryKeyIndex);
 		}
+
+		layoutGroup.setTableName(tableName);
+
 		return layoutGroup;
 	}
 
@@ -399,6 +394,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (!configuredDoc.isAuthenticated())
 			return new ArrayList<GlomField[]>();
 		Document document = configuredDoc.getDocument();
+
+		// Use the default table if the table name hasn't been set or if the table name isn't in the glom document.
+		// The last check guards against SQL injection attacks since the table name could come from the URL.
+		if (tableName == null || tableName.isEmpty() || !document.get_table_is_known(tableName)) {
+			tableName = document.get_default_table();
+		}
 
 		// access the layout list using the defined layout list or the table fields if there's no layout list
 		LayoutGroupVector layoutListVec = document.get_data_layout_groups("list", tableName);
@@ -801,6 +802,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			layoutGroups.add(getLayoutGroup(documentID, tableName, libglomLayoutGroup));
 		}
+
 		return layoutGroups;
 	}
 

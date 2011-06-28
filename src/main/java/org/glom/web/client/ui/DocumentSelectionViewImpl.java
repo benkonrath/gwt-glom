@@ -51,7 +51,7 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 		link.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID));
+				presenter.goTo(new ListPlace(documentID, ""));
 			}
 		});
 		documentLinks.add(link);

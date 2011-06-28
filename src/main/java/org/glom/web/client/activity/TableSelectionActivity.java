@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class TableSelectionActivity extends AbstractActivity implements TableSelectionView.Presenter {
 	private final ClientFactory clientFactory;
 	private String documentID;
+	private String tableName;
 	private HandlerRegistration changeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
@@ -81,7 +82,12 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 
 			public void onSuccess(GlomDocument result) {
 				tableSelectionView.setTableSelection(result.getTableNames(), result.getTableTitles());
-				tableSelectionView.setTableSelectedIndex(result.getDefaultTableIndex());
+
+				if (tableName == null || tableName.isEmpty()) {
+					tableName = result.getTableNames().get(result.getDefaultTableIndex());
+				}
+
+				tableSelectionView.setSelectedTableName(tableName);
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentID, callback);
@@ -90,14 +96,17 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 		containerWidget.setWidget(tableSelectionView.asWidget());
 	}
 
+	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method
 	public void setPlace(HasSelectableTablePlace place) {
 		this.documentID = place.getDocumentID();
+		this.tableName = place.getTableName();
+
 		TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {
 			tableSelectionView.setBackLinkVisible(true);
-			tableSelectionView.setBackLink(documentID);
+			tableSelectionView.setBackLink(documentID, tableName);
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}

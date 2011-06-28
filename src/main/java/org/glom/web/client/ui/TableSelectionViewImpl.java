@@ -79,8 +79,14 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setTableSelectedIndex(int index) {
-		listBox.setSelectedIndex(index);
+	public void setSelectedTableName(String tableName) {
+		for (int i = 0; i < listBox.getItemCount(); i++) {
+			if (tableName.equals(listBox.getValue(i))) {
+				listBox.setSelectedIndex(i);
+				break;
+			}
+		}
+
 	}
 
 	@Override
@@ -94,12 +100,12 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
 	}
 
-	public void setBackLink(final String documentID) {
+	public void setBackLink(final String documentID, final String tableName) {
 		backLinkHandlerReg.removeHandler();
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID));
+				presenter.goTo(new ListPlace(documentID, tableName));
 			}
 		});
 	}

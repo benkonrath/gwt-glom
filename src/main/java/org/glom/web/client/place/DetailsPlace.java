@@ -24,11 +24,9 @@ import com.google.gwt.place.shared.Prefix;
 
 public class DetailsPlace extends HasSelectableTablePlace {
 	private String primaryKeyValue = "";
-	private String tableName = "";
 
 	public DetailsPlace(String documentID, String tableName, String primarykey) {
-		super(documentID);
-		this.tableName = tableName;
+		super(documentID, tableName);
 		this.primaryKeyValue = primarykey;
 	}
 
@@ -36,17 +34,10 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		return primaryKeyValue;
 	}
 
-	public String getTableName() {
-		return tableName;
-	}
-
 	@Prefix("details")
-	public static class Tokenizer implements PlaceTokenizer<DetailsPlace> {
+	public static class Tokenizer extends HasSelectableTablePlace.Tokenizer implements PlaceTokenizer<DetailsPlace> {
 
-		final String documentKey = "document=";
-		final String tableKey = "table=";
 		private final String primaryKeyValueKey = "value=";
-		protected final String seperator = "&";
 
 		@Override
 		public String getToken(DetailsPlace place) {

@@ -30,13 +30,25 @@ import com.google.gwt.place.shared.Place;
 public abstract class HasSelectableTablePlace extends Place {
 
 	private String documentID;
+	private String tableName;
 
-	public HasSelectableTablePlace(String documentID) {
+	public HasSelectableTablePlace(String documentID, String tableName) {
 		this.documentID = documentID;
+		this.tableName = tableName;
 	}
 
 	public String getDocumentID() {
 		return documentID;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public static class Tokenizer {
+		protected final String documentKey = "document=";
+		protected final String tableKey = "table=";
+		protected final String seperator = "&";
 	}
 
 }

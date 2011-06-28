@@ -31,9 +31,9 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 	// TODO Investigate if it's worthwhile creating ListLayoutGroup and DetailsLayoutGroup subclasses.
 	// columnCount is only used for the details layout
 	private int columnCount = 1;
-	// expectedResultSize and defaultTableName are only used for the list layout
+	// expectedResultSize and tableName are only used for the list layout
 	private int expectedResultSize = -1;
-	private String defaultTableName = null;
+	private String tableName = "";
 
 	// This is the primary key index of the LayoutFieldVector that is used for getting the SQL query. It's being used
 	// here to avoid having to set an isPrimaryKey boolean with every LayoutItemField. This also has the advantage of
@@ -76,12 +76,12 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 		this.expectedResultSize = expectedResultSize;
 	}
 
-	public void setDefaultTableName(String defaultTableName) {
-		this.defaultTableName = defaultTableName;
+	public void setTableName(String defaultTableName) {
+		this.tableName = defaultTableName;
 	}
 
-	public String getDefaultTableName() {
-		return defaultTableName;
+	public String getTableName() {
+		return tableName;
 	}
 
 	public void setPrimaryKeyIndex(int primaryKeyIndex) {
