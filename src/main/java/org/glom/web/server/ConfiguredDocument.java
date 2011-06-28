@@ -20,6 +20,7 @@
 package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -80,7 +81,7 @@ final class ConfiguredDocument {
 			conn = cpds.getConnection();
 			authenticated = true;
 		} catch (SQLException e) {
-			Log.info(document.get_database_title(), "Username and/or password are not correct.");
+			Log.info(getFileName(document.get_file_uri()), "The username or password is not correct.");
 			authenticated = false;
 		} finally {
 			if (conn != null)
@@ -100,6 +101,11 @@ final class ConfiguredDocument {
 
 	public boolean isAuthenticated() {
 		return authenticated;
+	}
+
+	private static String getFileName(String fileURI) {
+		String[] splitURI = fileURI.split(File.separator);
+		return splitURI[splitURI.length - 1];
 	}
 
 }

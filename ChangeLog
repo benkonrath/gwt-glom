@@ -1,5 +1,12 @@
 2011-06-28  Ben Konrath  <ben@bagu.org>
 
+	Use filename in Log for incorrect passwords.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Add
+	getFileName(String) method to get the filename from the URI.
+
+2011-06-28  Ben Konrath  <ben@bagu.org>
+
 	Add the table name to the URL token for the ListPlace.
 
 	This makes things consistent between the DetailsPlace and the
