@@ -778,23 +778,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDefaultDetailsLayoutGroup(java.lang.String)
-	 */
-	@Override
-	public ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentID) {
-		GlomDocument glomDocument = getGlomDocument(documentID);
-		String tableName = glomDocument.getTableNames().get(glomDocument.getDefaultTableIndex());
-		return getDetailsLayout(documentID, tableName);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutGroup(java.lang.String, java.lang.String)
 	 */
 	public ArrayList<LayoutGroup> getDetailsLayout(String documentID, String tableName) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		Document document = configuredDoc.getDocument();
+
+		// Use the default table if the table name hasn't been set or if the table name isn't in the glom document.
+		// The last check guards against SQL injection attacks since the table name could come from the URL.
+		if (tableName == null || tableName.isEmpty() || !document.get_table_is_known(tableName)) {
+			tableName = document.get_default_table();
+		}
+
 		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
 
 		ArrayList<LayoutGroup> layoutGroups = new ArrayList<LayoutGroup>();
@@ -884,6 +879,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		Document document = configuredDoc.getDocument();
 
+		// Use the default table if the table name hasn't been set or if the table name isn't in the glom document.
+		// The last check guards against SQL injection attacks since the table name could come from the URL.
+		if (tableName == null || tableName.isEmpty() || !document.get_table_is_known(tableName)) {
+			tableName = document.get_default_table();
+		}
+
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "details");
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
@@ -920,7 +921,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			rs = st.executeQuery(query);
 
 			// get the results from the ResultSet
-			// using 2 as a length parameter so we can log a warning if the result set is greater than one
+			// using 2 as a length parameter so we can log a warning if appropriate
 			rowsList = getData(documentID, tableName, 2, fieldsToGet, rs);
 		} catch (SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query.", e);
@@ -944,9 +945,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (rowsList.size() == 0) {
 			Log.error(documentID, tableName, "The query returned an empty ResultSet. Returning null.");
 			return null;
-		} else if (rowsList.size() > 1) {
+		} else if (rowsList.size() > 1 && primaryKeyValue != null && !primaryKeyValue.isEmpty()) {
+			// only log a warning if the result size is greater than 1 and the primaryKeyValue was set
 			Log.warn(documentID, tableName,
-					"The query did not return a unique result. Returning the first result in the set.");
+					"The query did not return the expected unique result. Returning the first result in the set.");
 		}
 
 		return rowsList.get(0);

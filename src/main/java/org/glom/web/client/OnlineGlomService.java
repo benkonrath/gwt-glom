@@ -98,20 +98,11 @@ public interface OnlineGlomService extends RemoteService {
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
-	 *            name of the table in the Glom document
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
 	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
 	 */
 	ArrayList<LayoutGroup> getDetailsLayout(String documentID, String tableName);
-
-	/**
-	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the default table in the
-	 * specified Glom document.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
-	 */
-	ArrayList<LayoutGroup> getDefaultDetailsLayout(String documentID);
 
 	/**
 	 * Gets data for the Details View.

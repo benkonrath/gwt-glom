@@ -250,7 +250,8 @@ public class ListViewImpl extends Composite implements ListView {
 			protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
 					ValueUpdater<String> valueUpdater) {
 				super.onEnterKeyDown(context, parent, value, event, valueUpdater);
-				presenter.goTo(new DetailsPlace(documentID, (String) context.getKey()));
+
+				presenter.goTo(new DetailsPlace(documentID, tableName, (String) context.getKey()));
 			}
 
 		}) {

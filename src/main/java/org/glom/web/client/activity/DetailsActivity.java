@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.event.TableChangeEvent;
+import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.shared.GlomField;
@@ -41,12 +43,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
 	private final String documentID;
+	private final String tableName;
 	private final String primaryKey;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID();
+		this.tableName = place.getTableName();
 		this.primaryKey = place.getPrimaryKeyValue();
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
@@ -63,38 +67,29 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		// register this class as the presenter
 		detailsView.setPresenter(this);
 
+		// TODO here's where we should check for database authentication - see ListActivity.start() for how to do this
+
+		// set the change handler for the table selection widget
+		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
+			@Override
+			public void onTableChange(final TableChangeEvent event) {
+				goTo(new DetailsPlace(documentID, event.getTableName(), ""));
+			}
+		});
+
 		// get the layout for the DetailsView
-		final String selectedTable = clientFactory.getTableSelectionView().getSelectedTable();
-		if (!selectedTable.isEmpty()) {
-			// The table name has been set so we can use the selected table name to populate the cell table.
-			AsyncCallback<ArrayList<LayoutGroup>> callback = new AsyncCallback<ArrayList<LayoutGroup>>() {
-				public void onFailure(Throwable caught) {
-					// FIXME: need to deal with failure
-					System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
-				}
+		AsyncCallback<ArrayList<LayoutGroup>> layoutCallback = new AsyncCallback<ArrayList<LayoutGroup>>() {
+			public void onFailure(Throwable caught) {
+				// FIXME: need to deal with failure
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
+			}
 
-				@Override
-				public void onSuccess(ArrayList<LayoutGroup> result) {
-					addLayoutGroups(result);
-				}
-			};
-			OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentID, selectedTable, callback);
-		} else {
-			// The table name has not been set so we need to fill in the details layout using the default table for the
-			// glom document.
-			AsyncCallback<ArrayList<LayoutGroup>> callback = new AsyncCallback<ArrayList<LayoutGroup>>() {
-				public void onFailure(Throwable caught) {
-					// FIXME: need to deal with failure
-					System.out.println("AsyncCallback Failed: OnlineGlomService.getDefaultDetailsLayout()");
-				}
-
-				@Override
-				public void onSuccess(ArrayList<LayoutGroup> result) {
-					addLayoutGroups(result);
-				}
-			};
-			OnlineGlomServiceAsync.Util.getInstance().getDefaultDetailsLayout(documentID, callback);
-		}
+			@Override
+			public void onSuccess(ArrayList<LayoutGroup> result) {
+				addLayoutGroups(result);
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentID, tableName, layoutCallback);
 
 		// get the data from the server
 		AsyncCallback<GlomField[]> callback = new AsyncCallback<GlomField[]>() {
@@ -109,11 +104,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				detailsView.setData(result);
 			}
 		};
-		// FIXME Need a getDefaultDetailsData so that we can grab data from the default list when a table is not
-		// specified in the URL (which it's not now). This affects starting OnlineGlom from a bookmarked or shared
-		// URL to the DetailsView. We'll also want to add a table URL variable and perform validation of the URL
-		// variables.
-		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentID, selectedTable, primaryKey, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentID, tableName, primaryKey, callback);
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());

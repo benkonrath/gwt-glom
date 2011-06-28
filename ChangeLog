@@ -1,3 +1,21 @@
+2011-06-28  Ben Konrath  <ben@bagu.org>
+
+	Enable the table selector in the DetailsView.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Remove getDefaultDetailsLayout(). The default layout is now returned
+	by the getDetailsLayout() method when the table name is an empty
+	string.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Add
+	event handler for table change event. Change to using
+	getDetailsLayout() for the default details layout.
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java: Add table
+	name to URL token.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Use table
+	when navigating to the details place.
+
 2011-06-27  Ben Konrath  <ben@bagu.org>
 
 	Use filename based unique document ID in URL and for RPC.
