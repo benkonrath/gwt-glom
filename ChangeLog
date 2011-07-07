@@ -1,3 +1,26 @@
+2011-07-07  Ben Konrath  <ben@bagu.org>
+
+	Update project config files for Eclipse 3.7 and use GWT 2.3.0.
+
+	These should really be two separate tasks but I counldn't get things to
+	work with GWT 2.2.0 and Eclipse 3.7.
+
+	* .classpath:
+	* .project:
+	* .settings/org.eclipse.jdt.core.prefs:
+	* .settings/org.eclipse.jdt.ui.prefs:
+	* .settings/org.eclipse.ltk.core.refactoring.prefs:
+	* .settings/org.eclipse.m2e.core.prefs:
+	Add new config files. Update current files. Remove references to the
+	webtools plugins as we're not using any of the webtools features.
+	* .gitignore: Add logs directory which is created when running with
+	'mvn gwt:run'.
+	* pom.xml: Update to GWT 2.3.0. Eclipse configuration was automatically added.
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: Moved from
+	src/main/resources/org/glom/web/OnlineGlom.gwt.xml as per this known
+	limitation:
+	http://mojo.codehaus.org/gwt-maven-plugin/eclipse/google_plugin.html#Limitations
+
 2011-07-07  Murray Cumming  <murrayc@murrayc.com>
 
 	onlineglom.properties: Add explanatory comments.
