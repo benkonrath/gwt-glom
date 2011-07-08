@@ -34,7 +34,7 @@ public class Documents implements Serializable {
 	public Documents() {
 	}
 
-	public void addDocuemnt(String documentID, String title) {
+	public void addDocument(String documentID, String title) {
 		documentIDs.add(documentID);
 		titles.add(title);
 	}

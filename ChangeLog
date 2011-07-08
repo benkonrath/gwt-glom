@@ -8,6 +8,15 @@
 
 2011-07-08  Murray Cumming  <murrayc@murrayc.com>
 
+	Fix a addDocuemnt typo.
+
+	* src/main/java/org/glom/web/shared/Documents.java
+	(Documents.addDocuemnt): Rename to addDocument().
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	(OnlineGlomServiceImpl.getDocuments): Adapt.
+	
+2011-07-08  Murray Cumming  <murrayc@murrayc.com>
+
 	Slightly improved log output when connection fails.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java

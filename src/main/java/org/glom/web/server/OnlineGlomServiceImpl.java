@@ -656,7 +656,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		Documents documents = new Documents();
 		for (String documentID : documentMapping.keySet()) {
 			ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			documents.addDocuemnt(documentID, configuredDoc.getDocument().get_database_title());
+			documents.addDocument(documentID, configuredDoc.getDocument().get_database_title());
 		}
 		return documents;
 	}
