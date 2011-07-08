@@ -48,6 +48,14 @@ final class ConfiguredDocument {
 
 		// load the jdbc driver
 		cpds = new ComboPooledDataSource();
+		
+		// We don't support sqlite or self-hosting yet.
+		if(document.get_hosting_mode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
+		  Log.fatal("Error configuring the database connection."
+					+ " Only central PostgreSQL hosting is supported.");
+      // FIXME: Throw exception?
+		}
+		
 		try {
 			cpds.setDriverClass("org.postgresql.Driver");
 		} catch (PropertyVetoException e) {

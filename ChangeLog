@@ -8,6 +8,14 @@
 
 2011-07-08  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument: Warn that sqlite and self-hosting are not supported.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	(ConfiguredDocument.ConfiguredDocument): Check that the hosting mode is 
+	correct, though we should throw an exception too.
+
+2011-07-08  Murray Cumming  <murrayc@murrayc.com>
+
 	Fix a addDocuemnt typo.
 
 	* src/main/java/org/glom/web/shared/Documents.java
