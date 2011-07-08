@@ -1,3 +1,13 @@
+2011-07-08  Murray Cumming  <murrayc@murrayc.com>
+
+	Slightly improved log output when connection fails.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	(ConfiguredDocument.setUsernameAndPassword):
+	We don't know for sure if it' the username/password that's wrong, so 
+	rephrase the message.
+	Also ouput the exception message, though it's generic in this case.
+
 2011-07-07  Ben Konrath  <ben@bagu.org>
 
 	Update project config files for Eclipse 3.7 and use GWT 2.3.0.

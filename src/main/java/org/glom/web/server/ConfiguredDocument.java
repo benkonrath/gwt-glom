@@ -81,7 +81,8 @@ final class ConfiguredDocument {
 			conn = cpds.getConnection();
 			authenticated = true;
 		} catch (SQLException e) {
-			Log.info(getFileName(document.get_file_uri()), "The username or password is not correct.");
+			Log.info(getFileName(document.get_file_uri()), e.getMessage());
+			Log.info(getFileName(document.get_file_uri()), "Connection Failed. Maybe the username or password is not correct.");
 			authenticated = false;
 		} finally {
 			if (conn != null)
