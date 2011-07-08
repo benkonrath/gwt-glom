@@ -65,8 +65,9 @@ final class ConfiguredDocument {
 		}
 
 		// setup the JDBC driver for the current glom document
-		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + "/"
-				+ document.get_connection_database());
+		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() 
+		    + ":" + document.get_connection_port()
+		    + "/" + document.get_connection_database());
 
 		this.document = document;
 	}

@@ -8,6 +8,15 @@
 
 2011-07-08  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument: Set the port number too.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	(ConfiguredDocument.ConfiguredDocument): Get the port number from the 
+	Glom document. Presumably this worked sometimes so far because there is a 
+	default port number.
+
+2011-07-08  Murray Cumming  <murrayc@murrayc.com>
+
 	ConfiguredDocument: Warn that sqlite and self-hosting are not supported.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java
