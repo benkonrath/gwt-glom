@@ -265,7 +265,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 		}
 
-		// confirm the libglom LayoutGroup is not null as per the method's precondition
+		// confirm the libglom LayoutGroup is not null as per the getLayoutGroup method precondition
 		if (libglomLayoutGroup == null) {
 			Log.error(documentID, tableName, "A LayoutGroup was not found. Returning null.");
 			return null;
@@ -277,10 +277,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document, tableName, "list");
 		layoutGroup.setExpectedResultSize(getResultSizeOfSQLQuery(documentID, tableName, fieldsToGet));
 
-		// Set the primary key index for the table and add a LayoutItemField for the primary key to the end of the item
-		// list in the LayoutGroup if it doesn't already contain a primary key.
+		// Set the primary key index for the table
 		int primaryKeyIndex = getPrimaryKeyIndex(fieldsToGet);
 		if (primaryKeyIndex < 0) {
+			// Add a LayoutItemField for the primary key to the end of the item list in the LayoutGroup because it
+			// doesn't already contain a primary key.
 			LayoutItem_Field libglomLayoutItemField = getPrimaryKeyLayoutItemFromFields(document, tableName);
 			layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
 			layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
@@ -391,8 +392,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (!configuredDoc.isAuthenticated())
+		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<GlomField[]>();
+		}
+
 		Document document = configuredDoc.getDocument();
 
 		// Use the default table if the table name hasn't been set or if the table name isn't in the glom document.
