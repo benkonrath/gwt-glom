@@ -1,11 +1,3 @@
-2011-07-08  Ben Konrath  <ben@bagu.org>
-
-	Cleanup comments.
-
-	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also
-	added braces to a one line if statement because the Eclipse formatter
-	was getting confused.
-
 2011-07-08  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Set the port number too.
@@ -41,6 +33,14 @@
 	We don't know for sure if it' the username/password that's wrong, so 
 	rephrase the message.
 	Also ouput the exception message, though it's generic in this case.
+
+2011-07-08  Ben Konrath  <ben@bagu.org>
+
+	Cleanup comments.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also
+	added braces to a one line if statement because the Eclipse formatter
+	was getting confused.
 
 2011-07-07  Ben Konrath  <ben@bagu.org>
 
