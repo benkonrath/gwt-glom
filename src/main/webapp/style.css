@@ -1,5 +1,6 @@
 body
 {
+	font-size: medium;
 	font-family: sans-serif;
 	margin: 1em;
 }
@@ -115,8 +116,9 @@ table.columns
 	width: 100%;
 }
 
-h2.group-title
+.group-title
 {
+	font-weight: bold;
 	font-size: 100%;
 	padding: 0;
 	margin: 0;
@@ -124,7 +126,13 @@ h2.group-title
 	border-bottom: 1px dashed #000;
 }
 
-group p
+group
+{
+	margin-top: 0;
+	margin-bottom: 0.8em;
+}
+
+.details-cell
 {
 	margin-top: 0;
 	margin-bottom: 0.8em;

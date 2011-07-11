@@ -1,3 +1,29 @@
+2011-07-11  Ben Konrath  <ben@bagu.org>
+
+	Add main groups to the details view.
+
+	This makes things look a little nicer in the details view. The next step
+	is to implement the flowtable.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: Inherit only the
+	resources from the standard gwt css theme. Standard.css is now
+	included in OnlineGlom.html so that the online glom css rules have
+	precedence over the gwt theme.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Pass
+	the whole LayoutGroup to the DetailsView instead of just the titles.
+	* src/main/java/org/glom/web/client/ui/DetailsView.java:
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Create the
+	details layout with a helper class (GroupPanel). I might extract this
+	class when I make the full flowtable.
+	* src/main/java/org/glom/web/shared/layout/LayoutItem.java: Add empty
+	string as default so I don't have to worry about NPEs when processing
+	the layout objects.
+	* src/main/webapp/OnlineGlom.html: Add the gwt standard css file (see
+	note beside OnlineGlom.gwt.xml above).
+	* src/main/webapp/style.css: Add default font-size to body to override
+	the font-size set by the standard theme. Don't use h2 tags for
+	group-title. Create new details-cell class.
+
 2011-07-08  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Set the port number too.

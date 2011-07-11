@@ -27,8 +27,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class LayoutItem implements Serializable {
 
-	private String name;
-	private String title;
+	private String name = "";
+	private String title = "";
 
 	public String getTitle() {
 		return title;

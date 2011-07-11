@@ -20,6 +20,8 @@
 package org.glom.web.client.ui;
 
 import org.glom.web.shared.GlomField;
+import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItemField;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -37,14 +39,14 @@ public interface DetailsView extends IsWidget {
 	public void setPresenter(Presenter presenter);
 
 	/**
-	 * @param title
+	 * @param layoutGroup
 	 */
-	public void addLayoutGroup(String title);
+	public void addLayoutGroup(LayoutGroup layoutGroup);
 
 	/**
-	 * @param title
+	 * @param layoutItem
 	 */
-	public void addLayoutField(String title);
+	public void addLayoutField(LayoutItemField layoutItem);
 
 	/**
 	 * 

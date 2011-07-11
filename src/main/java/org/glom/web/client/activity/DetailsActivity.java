@@ -111,35 +111,20 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	}
 
 	private void addLayoutGroups(ArrayList<LayoutGroup> layoutGroups) {
-		for (LayoutGroup layoutGroup : layoutGroups) {
-			addLayoutGroup(layoutGroup, "");
-		}
-	}
-
-	/*
-	 * This is just a temporary method for creating a basic indented layout without the flowtable/spreadtable that Glom
-	 * has.
-	 */
-	private void addLayoutGroup(LayoutGroup layoutGroup, String indent) {
-		if (layoutGroup == null)
-			return;
-
-		// look at each child item
-		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
-		for (LayoutItem layoutItem : layoutItems) {
-
-			if (layoutItem == null)
-				continue;
-
-			String title = layoutItem.getTitle();
-			if (layoutItem instanceof LayoutItemField)
-				detailsView.addLayoutField(indent + title);
-			else if (!title.isEmpty())
-				detailsView.addLayoutGroup(indent + title);
-
-			// recurse into child groups
-			if (layoutItem instanceof LayoutGroup)
-				addLayoutGroup((LayoutGroup) layoutItem, indent + "-- ");
+		// TODO There seems to be two type of details layouts. Check if I'm doing things correctly.
+		if (layoutGroups.size() == 1 && layoutGroups.get(0).getTitle().isEmpty()) {
+			ArrayList<LayoutItem> items = layoutGroups.get(0).getItems();
+			for (LayoutItem layoutItem : items) {
+				if (layoutItem instanceof LayoutGroup) {
+					detailsView.addLayoutGroup((LayoutGroup) layoutItem);
+				} else if (layoutItem instanceof LayoutItemField) {
+					detailsView.addLayoutField((LayoutItemField) layoutItem);
+				}
+			}
+		} else {
+			for (LayoutGroup layoutGroup : layoutGroups) {
+				detailsView.addLayoutGroup(layoutGroup);
+			}
 		}
 	}
 

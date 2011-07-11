@@ -5,12 +5,10 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 
-	<!-- Inherit the default GWT style sheet. You can change -->
-	<!-- the theme of your GWT application by uncommenting -->
-	<!-- any one of the following lines. -->
-	<inherits name='com.google.gwt.user.theme.standard.Standard' />
-	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
+	<!-- Inherit the resources from the default GWT style sheet. We're not inheriting
+		the whole style sheet so that the OnlineGlom style sheet can override the
+		built-in standard.css. See: https://groups.google.com/group/Google-Web-Toolkit/msg/3e630a3059303b19 -->
+	<inherits name='com.google.gwt.user.theme.standard.StandardResources' />
 
 	<!-- Other module inherits -->
 	<inherits name="com.google.gwt.activity.Activity" />
