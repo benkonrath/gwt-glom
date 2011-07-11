@@ -31,7 +31,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 /**
@@ -48,7 +47,6 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		// the table chooser widget
 		HorizontalPanel tableChooser = new HorizontalPanel();
 		tableChooser.setStyleName("tablechooser");
-		tableChooser.add(new Label("Table:"));
 		tableChooser.add(listBox);
 
 		// the back link widget

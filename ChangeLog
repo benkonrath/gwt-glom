@@ -1,5 +1,18 @@
 2011-07-11  Ben Konrath  <ben@bagu.org>
 
+	Remove "Table:" label from table selector.
+
+	This matches a recent change in the Glom UI.
+
+	* mockups/details-contacts.html:
+	* mockups/details-projects.html:
+	* mockups/listview-contacts.html:
+	* mockups/listview-projects.html: Remove the "Table:" label from the
+	mockups as well.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+
+2011-07-11  Ben Konrath  <ben@bagu.org>
+
 	Add main groups to the details view.
 
 	This makes things look a little nicer in the details view. The next step
