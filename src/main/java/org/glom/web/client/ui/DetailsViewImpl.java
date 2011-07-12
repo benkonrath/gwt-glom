@@ -25,6 +25,7 @@ import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
@@ -93,9 +94,12 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 					continue;
 
 				String title = layoutItem.getTitle();
-				if (layoutItem instanceof LayoutItemField)
+				if (layoutItem instanceof LayoutItemField) {
 					dataLabels.add(addDetailsCell(indent + title));
-				else if (layoutItem instanceof LayoutGroup) {
+				} else if (layoutItem instanceof LayoutItemPortal) {
+					// ignore portals for now
+					continue;
+				} else if (layoutItem instanceof LayoutGroup) {
 					// recurse into child groups
 					createLayout((LayoutGroup) layoutItem, indent + "-- ");
 				}

@@ -1,7 +1,22 @@
 2011-07-12  Ben Konrath  <ben@bagu.org>
 
+	Ignore LayoutItemPortals in the details view.
+
+	I added a new DTO for the LayoutItemPortal so that I can ignore it in
+	the client code.
+
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Ignore
+	LayoutItemPortal layout objects.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Create
+	LayoutItemPortal objects when retrieving the details layout.
+	* src/main/java/org/glom/web/shared/layout/LayoutItemPortal.java: New
+	file. This is an empty class and just used to get type information for
+	now.
+
+2011-07-12  Ben Konrath  <ben@bagu.org>
+
 	Use java-libglom 1.17.0.
-	
+
 	* pom.xml:
 
 2011-07-11  Ben Konrath  <ben@bagu.org>

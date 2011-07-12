@@ -60,6 +60,7 @@ import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -841,9 +842,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			org.glom.web.shared.layout.LayoutItem layoutItem = null;
 			org.glom.libglom.LayoutGroup group = org.glom.libglom.LayoutGroup.cast_dynamic(libglomLayoutItem);
 			if (group != null) {
-				// recurse into child groups
-				layoutItem = getLayoutGroup(documentID, tableName, group);
+				// libglomLayoutItem is a LayoutGroup
+				LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
+				if (layoutItemPortal != null) {
+					// group is a LayoutItemPortal
+					layoutItem = new LayoutItemPortal();
+				} else {
+					// group is *not* a LayoutItemPortal
+					// recurse into child groups
+					layoutItem = getLayoutGroup(documentID, tableName, group);
+				}
 			} else {
+				// libglomLayoutItem is *not* a LayoutGroup
 				// create GWT-Glom LayoutItem types based on the the libglom type
 				// TODO add support for other LayoutItems (Text, Image, Button etc.)
 				LayoutItem_Field libglomLayoutField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
