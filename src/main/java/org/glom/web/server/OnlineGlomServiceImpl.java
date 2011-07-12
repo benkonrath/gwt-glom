@@ -226,6 +226,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// set everything we need
 		glomDocument.setTableNames(tableNames);
 		glomDocument.setTableTitles(tableTitles);
+		glomDocument.setTitle(document.get_database_title());
 
 		return glomDocument;
 	}

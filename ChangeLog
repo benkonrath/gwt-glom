@@ -1,5 +1,18 @@
 2011-07-12  Ben Konrath  <ben@bagu.org>
 
+	Set browser title with database and table titles.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	Set the browser title when the table changes and when the activity
+	first starts.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Set
+	title when retrieving document info (the GlomDocument object).
+	* src/main/java/org/glom/web/shared/GlomDocument.java: Add title field
+	with getter and setter methods. Remove unused convenience constructor.
+	Use default code formatting.
+
+2011-07-12  Ben Konrath  <ben@bagu.org>
+
 	Ignore LayoutItemPortals in the details view.
 
 	I added a new DTO for the LayoutItemPortal so that I can ignore it in

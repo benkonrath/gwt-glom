@@ -35,8 +35,10 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.ListBox;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -45,6 +47,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class TableSelectionActivity extends AbstractActivity implements TableSelectionView.Presenter {
 	private final ClientFactory clientFactory;
 	private String documentID;
+	private String documentTitle;
 	private String tableName;
 	private HandlerRegistration changeHandlerRegistration = null;
 
@@ -58,8 +61,6 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 	 */
 	@Override
 	public void start(AcceptsOneWidget containerWidget, final EventBus eventBus) {
-		// FIXME set the window title with the title from the glom document
-		// Window.setTitle("Online Glom - " + documentTitle);
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setPresenter(this);
@@ -69,7 +70,10 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 		changeHandlerRegistration = tableSelector.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				eventBus.fireEvent(new TableChangeEvent(tableSelectionView.getSelectedTable()));
+				ListBox listBox = (ListBox) event.getSource();
+				int selectedIndex = listBox.getSelectedIndex();
+				eventBus.fireEvent(new TableChangeEvent(selectedIndex < 0 ? "" : listBox.getValue(selectedIndex)));
+				Window.setTitle(documentTitle + (selectedIndex < 0 ? "" : ": " + listBox.getItemText(selectedIndex)));
 			}
 		});
 
@@ -88,6 +92,8 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 				}
 
 				tableSelectionView.setSelectedTableName(tableName);
+				documentTitle = result.getTitle();
+				Window.setTitle(documentTitle + ": " + result.getTableTitles().get(result.getDefaultTableIndex()));
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentID, callback);
