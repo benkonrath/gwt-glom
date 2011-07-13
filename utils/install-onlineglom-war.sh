@@ -17,16 +17,24 @@ exit 1
 
 # compile and install the latest version java-libglom
 pushd ~/gnome/sources/java-libglom
-git pull
-jhbuild run make clean
-jhbuild run make
-jhbuild run make install
+jhbuild run make distclean
+jhbuild buildone --force java-libglom
+jhbuild run make check
+if [ $? -gt 0 ]; then
+  exit 1
+fi
+popd
 
 # stop tomcat before we install the jar for tomcat's lib directory
 sudo /etc/init.d/tomcat6 stop
-sudo mv java-libglom-0.1.jar /usr/share/tomcat6/lib/
-sudo chown root:root /usr/share/tomcat6/lib/java-libglom-0.1.jar
-popd
+
+# remove old versions of java-libglom
+sudo rm -rf /usr/share/tomcat6/lib/java-libglom-*.jar
+
+# big hack -- I should probably create a pkg-config file for java-libglom
+JLG_VERSION=$(cat ~/gnome/sources/java-libglom/configure.ac | grep AC_INIT | cut -d '[' -f 3 | cut -d ']' -f 1)
+sudo mv ~/gnome/sources/java-libglom/java-libglom-$JLG_VERSION.jar /usr/share/tomcat6/lib/
+sudo chown root:root /usr/share/tomcat6/lib/java-libglom-$JLG_VERSION.jar
 
 # clean things up and install the war
 sudo rm -rf /var/cache/tomcat6/* /var/lib/tomcat6/webapps/{OnlineGlom,OnlineGlom.war}

@@ -1,5 +1,12 @@
 2011-07-13  Ben Konrath  <ben@bagu.org>
 
+	Update install script for java-libglom version change.
+
+	* utils/install-onlineglom-war.sh: Also exit if 'make check' in
+	java-libglom fails.
+
+2011-07-13  Ben Konrath  <ben@bagu.org>
+
 	Add support sub-group in the details view.
 
 	I also removed the code that special-cased the default details view
