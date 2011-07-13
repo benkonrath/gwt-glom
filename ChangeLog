@@ -1,3 +1,27 @@
+2011-07-13  Ben Konrath  <ben@bagu.org>
+
+	Add support sub-group in the details view.
+
+	I also removed the code that special-cased the default details view
+	layout. See:
+
+	http://mail.gnome.org/archives/glom-devel-list/2011-July/msg00005.html
+
+	I still have to make a proper flowtable.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	Don't special-case default details view layout.
+	* src/main/java/org/glom/web/client/ui/DetailsView.java: Remove
+	addLayoutField() as I'm going to use it.
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Extract
+	GroupPanel to FlowTable class. Remove unimplemented addLayoutField()
+	method.
+	* src/main/java/org/glom/web/client/ui/FlowTable.java: New class
+	extracted from DetailsViewImpl.GroupPanel. Add support for
+	sub-groups.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Set
+	column count when getting the details layout.
+
 2011-07-12  Ben Konrath  <ben@bagu.org>
 
 	Set browser title with database and table titles.

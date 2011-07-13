@@ -23,15 +23,11 @@ import java.util.ArrayList;
 
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItem;
-import org.glom.web.shared.layout.LayoutItemField;
-import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
-import com.google.gwt.user.client.ui.Label;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -39,85 +35,13 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class DetailsViewImpl extends Composite implements DetailsView {
 
-	class GroupPanel extends FlowPanel {
-		FlowPanel groupContents = new FlowPanel();
-		private final ArrayList<InlineLabel> dataLabels = new ArrayList<InlineLabel>();
-
-		public GroupPanel(LayoutGroup layoutGroup) {
-			super();
-			setStyleName("group");
-
-			String groupTitle = layoutGroup.getTitle();
-			if (!groupTitle.isEmpty()) {
-				Label label = new Label(groupTitle);
-				label.setStyleName("group-title");
-				this.add(label);
-			}
-
-			groupContents.setStyleName("group-contents");
-			this.add(groupContents);
-
-			createLayout(layoutGroup, "");
-		}
-
-		private InlineLabel addDetailsCell(String title) {
-
-			InlineLabel detailsLabel = new InlineLabel(title);
-			detailsLabel.setStyleName("details-label");
-
-			InlineLabel detailsData = new InlineLabel();
-			detailsData.setStyleName("details-data");
-
-			FlowPanel fieldPanel = new FlowPanel();
-			fieldPanel.setStyleName("details-cell");
-
-			fieldPanel.add(detailsLabel);
-			fieldPanel.add(detailsData);
-
-			groupContents.add(fieldPanel);
-
-			return detailsData;
-		}
-
-		/*
-		 * This is just a temporary method for creating a basic indented layout without the flowtable.
-		 */
-		public void createLayout(LayoutGroup layoutGroup, String indent) {
-			if (layoutGroup == null)
-				return;
-
-			// look at each child item
-			ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
-			for (LayoutItem layoutItem : layoutItems) {
-
-				if (layoutItem == null)
-					continue;
-
-				String title = layoutItem.getTitle();
-				if (layoutItem instanceof LayoutItemField) {
-					dataLabels.add(addDetailsCell(indent + title));
-				} else if (layoutItem instanceof LayoutItemPortal) {
-					// ignore portals for now
-					continue;
-				} else if (layoutItem instanceof LayoutGroup) {
-					// recurse into child groups
-					createLayout((LayoutGroup) layoutItem, indent + "-- ");
-				}
-			}
-		}
-
-		public ArrayList<InlineLabel> getDataLabels() {
-			return dataLabels;
-		}
-	}
-
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 	private final FlowPanel mainPanel = new FlowPanel();
 	private final ArrayList<InlineLabel> dataLabels = new ArrayList<InlineLabel>();
 
 	public DetailsViewImpl() {
-		// TODO this value should really come from the css file - the body class
+		// TODO this value should really come from the css for the body tag
 		mainPanel.getElement().getStyle().setMargin(1, Unit.EM);
 		initWidget(mainPanel);
 	}
@@ -139,20 +63,9 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 */
 	@Override
 	public void addLayoutGroup(LayoutGroup layoutGroup) {
-		GroupPanel groupPanel = new GroupPanel(layoutGroup);
-		dataLabels.addAll(groupPanel.getDataLabels());
-		mainPanel.add(groupPanel);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.ui.DetailsView#addLayoutField(org.glom.web.shared.layout.LayoutItemField)
-	 */
-	@Override
-	public void addLayoutField(LayoutItemField layoutItem) {
-		// TODO Auto-generated method stub
-		// maybe I won't use this but instead create a LayoutGroup for the LayoutItems not in a LayoutGroup
+		FlowTable flowTable = new FlowTable(layoutGroup);
+		dataLabels.addAll(flowTable.getDataLabels());
+		mainPanel.add(flowTable);
 	}
 
 	/*

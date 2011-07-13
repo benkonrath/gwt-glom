@@ -851,7 +851,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				} else {
 					// group is *not* a LayoutItemPortal
 					// recurse into child groups
-					layoutItem = getLayoutGroup(documentID, tableName, group);
+					LayoutGroup tempLayoutGroup = getLayoutGroup(documentID, tableName, group);
+					tempLayoutGroup.setColumnCount(safeLongToInt(group.get_columns_count()));
+					layoutItem = tempLayoutGroup;
 				}
 			} else {
 				// libglomLayoutItem is *not* a LayoutGroup

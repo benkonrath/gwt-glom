@@ -29,8 +29,6 @@ import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItem;
-import org.glom.web.shared.layout.LayoutItemField;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -86,7 +84,9 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 			@Override
 			public void onSuccess(ArrayList<LayoutGroup> result) {
-				addLayoutGroups(result);
+				for (LayoutGroup layoutGroup : result) {
+					detailsView.addLayoutGroup(layoutGroup);
+				}
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentID, tableName, layoutCallback);
@@ -108,24 +108,6 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());
-	}
-
-	private void addLayoutGroups(ArrayList<LayoutGroup> layoutGroups) {
-		// TODO There seems to be two type of details layouts. Check if I'm doing things correctly.
-		if (layoutGroups.size() == 1 && layoutGroups.get(0).getTitle().isEmpty()) {
-			ArrayList<LayoutItem> items = layoutGroups.get(0).getItems();
-			for (LayoutItem layoutItem : items) {
-				if (layoutItem instanceof LayoutGroup) {
-					detailsView.addLayoutGroup((LayoutGroup) layoutItem);
-				} else if (layoutItem instanceof LayoutItemField) {
-					detailsView.addLayoutField((LayoutItemField) layoutItem);
-				}
-			}
-		} else {
-			for (LayoutGroup layoutGroup : layoutGroups) {
-				detailsView.addLayoutGroup(layoutGroup);
-			}
-		}
 	}
 
 	/*
