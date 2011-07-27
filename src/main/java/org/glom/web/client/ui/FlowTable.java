@@ -57,7 +57,7 @@ class FlowTable extends FlowPanel {
 
 	private InlineLabel addDetailsCell(String title) {
 
-		InlineLabel detailsLabel = new InlineLabel(title);
+		InlineLabel detailsLabel = new InlineLabel(title + ":");
 		detailsLabel.setStyleName("details-label");
 
 		InlineLabel detailsData = new InlineLabel();
