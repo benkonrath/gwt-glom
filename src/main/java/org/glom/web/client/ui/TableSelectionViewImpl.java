@@ -30,7 +30,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 /**
@@ -38,19 +38,15 @@ import com.google.gwt.user.client.ui.ListBox;
  */
 public class TableSelectionViewImpl extends Composite implements TableSelectionView {
 
-	ListBox listBox = new ListBox();
+	ListBox tableChooser = new ListBox();
 	Anchor backLink = new Anchor("Back to List");
 	private Presenter presenter;
 	private HandlerRegistration backLinkHandlerReg;
 
 	public TableSelectionViewImpl() {
-		// the table chooser widget
-		HorizontalPanel tableChooser = new HorizontalPanel();
 		tableChooser.setStyleName("tablechooser");
-		tableChooser.add(listBox);
-
-		// the back link widget
 		backLink.setStyleName("backlink");
+
 		// empty click handler to avoid having to check for if the HandlerRegistration is null in setBackLink()
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
@@ -59,28 +55,28 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		});
 
 		// the main container widget
-		// TODO will probably need to change to different panel type to match the mockups
-		HorizontalPanel panel = new HorizontalPanel();
-		DOM.setElementAttribute(panel.getElement(), "id", "headbox");
-		panel.add(backLink);
-		panel.add(tableChooser);
+		FlowPanel mainPanel = new FlowPanel();
+		DOM.setElementAttribute(mainPanel.getElement(), "id", "headbox");
 
-		initWidget(panel);
+		mainPanel.add(backLink);
+		mainPanel.add(tableChooser);
+
+		initWidget(mainPanel);
 	}
 
 	@Override
 	public void setTableSelection(ArrayList<String> names, ArrayList<String> titles) {
-		listBox.clear();
+		tableChooser.clear();
 		for (int i = 0; i < names.size(); i++) {
-			listBox.addItem(titles.get(i), names.get(i));
+			tableChooser.addItem(titles.get(i), names.get(i));
 		}
 	}
 
 	@Override
 	public void setSelectedTableName(String tableName) {
-		for (int i = 0; i < listBox.getItemCount(); i++) {
-			if (tableName.equals(listBox.getValue(i))) {
-				listBox.setSelectedIndex(i);
+		for (int i = 0; i < tableChooser.getItemCount(); i++) {
+			if (tableName.equals(tableChooser.getValue(i))) {
+				tableChooser.setSelectedIndex(i);
 				break;
 			}
 		}
@@ -89,13 +85,13 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public HasChangeHandlers getTableSelector() {
-		return listBox;
+		return tableChooser;
 	}
 
 	@Override
 	public String getSelectedTable() {
-		int selectedIndex = listBox.getSelectedIndex();
-		return selectedIndex < 0 ? "" : listBox.getValue(selectedIndex);
+		int selectedIndex = tableChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : tableChooser.getValue(selectedIndex);
 	}
 
 	public void setBackLink(final String documentID, final String tableName) {
@@ -110,7 +106,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void clear() {
-		listBox.clear();
+		tableChooser.clear();
 	}
 
 	@Override

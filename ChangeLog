@@ -1,3 +1,18 @@
+2011-08-11  Ben Konrath  <ben@bagu.org>
+
+	Make the TableSelector header match the mockup.
+
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Add a margin to
+	the layout panel. Properly lineup the table selection header with
+	the list and details view.
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Remove the
+	margin around the details view.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Rename listBox variable to tableSelector. Set id for the style sheet.
+	Use a FlowPanel instead of a HorizontalPanel.
+	* src/main/webapp/style.css: Add properties to make the TableSelector
+	box match the mockups.
+
 2011-07-13  Ben Konrath  <ben@bagu.org>
 
 	Update install script for java-libglom version change.

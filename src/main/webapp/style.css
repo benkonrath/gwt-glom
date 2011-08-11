@@ -11,18 +11,23 @@ a
 	color: #333;
 	text-decoration: none;
 }
+
 a:hover
 {
 	color: #666;
 	text-decoration: underline;
 }
 
+/**
+ * Top and Bottom Navigation Boxes
+ */
 #headbox, #footbox
 {
 	background-color: #eee;
 	border: 1px solid #aaa;
 	padding: 0.2em;
 	border-radius: 3px;
+	overflow: hidden;
 }
 
 .backlink
@@ -30,25 +35,30 @@ a:hover
 	float: left;
 	margin: 0.2em 0.5em;
 }
+
+.tablechooser
+{
+	float: right;
+	font-size: 13.3333px;
+	font-family: sans-serif;
+}
+
 .records
 {
 	float: left;
 	margin: 0.2em 0.5em;
 	color: #333;
 }
+
 .details-navigation
 {
 	float: right;
 	margin: 0.2em 0.5em;
 }
+
 .details-navigation a
 {
 	padding-right: 1em;
-}
-
-.tablechooser
-{
-	float: right;
 }
 
 table

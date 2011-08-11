@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -41,8 +40,6 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	private final ArrayList<InlineLabel> dataLabels = new ArrayList<InlineLabel>();
 
 	public DetailsViewImpl() {
-		// TODO this value should really come from the css for the body tag
-		mainPanel.getElement().getStyle().setMargin(1, Unit.EM);
 		initWidget(mainPanel);
 	}
 

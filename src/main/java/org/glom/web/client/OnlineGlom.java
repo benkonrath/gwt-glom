@@ -85,6 +85,10 @@ public class OnlineGlom implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 
+		// TODO This value should really come from the css for the body tag but reading the value using
+		// RootPanel.getBodyElement().getStyle().getMargin() doesn't seem to be working.
+		layoutPanel.getElement().getStyle().setMargin(1, Unit.EM);
+
 		// add the display regions to the main layout panel
 		layoutPanel.add(docSelectionPanel);
 		layoutPanel.add(tableSelectionPanel);
@@ -96,8 +100,8 @@ public class OnlineGlom implements EntryPoint {
 		layoutPanel.getWidgetContainerElement(dataPanel).getStyle().setOverflow(Overflow.VISIBLE);
 
 		// set the layout for the list and details places
-		layoutPanel.setWidgetTopHeight(tableSelectionPanel, 0, Unit.PCT, 10, Unit.PCT);
-		layoutPanel.setWidgetTopHeight(dataPanel, 2, Unit.EM, 100, Unit.PCT);
+		layoutPanel.setWidgetTopHeight(tableSelectionPanel, 0, Unit.PCT, 2.1, Unit.EM);
+		layoutPanel.setWidgetTopHeight(dataPanel, 2.1, Unit.EM, 100, Unit.PCT);
 
 		// hide the display regions for the list and details places because they are not shown by default
 		layoutPanel.setWidgetVisible(tableSelectionPanel, false);
