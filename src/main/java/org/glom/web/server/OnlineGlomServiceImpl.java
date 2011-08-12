@@ -830,6 +830,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		LayoutGroup layoutGroup = new LayoutGroup();
 		layoutGroup.setColumnCount(safeLongToInt(libglomLayoutGroup.get_columns_count()));
+		layoutGroup.setTitle(libglomLayoutGroup.get_title());
 
 		// look at each child item
 		LayoutItemVector layoutItemsVec = libglomLayoutGroup.get_items();
