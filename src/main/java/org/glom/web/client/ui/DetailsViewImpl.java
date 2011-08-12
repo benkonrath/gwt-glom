@@ -60,7 +60,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 */
 	@Override
 	public void addLayoutGroup(LayoutGroup layoutGroup) {
-		FlowTable flowTable = new FlowTable(layoutGroup);
+		FlowTable flowTable = new FlowTable(layoutGroup, false, false);
 		dataLabels.addAll(flowTable.getDataLabels());
 		mainPanel.add(flowTable);
 	}

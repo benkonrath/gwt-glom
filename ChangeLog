@@ -1,5 +1,16 @@
 2011-08-12  Ben Konrath  <ben@bagu.org>
 
+	Add better support for subgroups in the details view.
+
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Update for
+	changed FlowTable constructor.
+	* src/main/java/org/glom/web/client/ui/FlowTable.java: Add better
+	support for subgroups and subgroup-titles.
+	* src/main/webapp/style.css: Add CSS class for subgroups and
+	subgroup-titles.
+
+2011-08-12  Ben Konrath  <ben@bagu.org>
+
 	Return the top level LayoutGroup title.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:

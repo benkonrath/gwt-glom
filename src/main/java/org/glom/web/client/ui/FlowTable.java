@@ -35,27 +35,57 @@ import com.google.gwt.user.client.ui.Label;
  * 
  */
 class FlowTable extends FlowPanel {
-	FlowPanel groupContents = new FlowPanel();
+	FlowPanel groupContents;
 	private final ArrayList<InlineLabel> dataLabels = new ArrayList<InlineLabel>();
 
-	public FlowTable(LayoutGroup layoutGroup) {
+	@SuppressWarnings("unused")
+	private FlowTable() {
+	}
+
+	public FlowTable(LayoutGroup layoutGroup, boolean subGroup, boolean mainTitleSet) {
 		super();
-		setStyleName("group");
+		this.setStyleName(subGroup ? "subgroup" : "group");
 
 		String groupTitle = layoutGroup.getTitle();
 		if (!groupTitle.isEmpty()) {
 			Label label = new Label(groupTitle);
-			label.setStyleName("group-title");
 			this.add(label);
+
+			// the "group-title" class could could be used for the subgroup title if the group title is empty
+			label.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
+			mainTitleSet = true;
+
+			groupContents = new FlowPanel();
+			groupContents.setStyleName("group-contents");
+			this.add(groupContents);
+		} else {
+			// don't make a separate contents panel when the group title has not been set
+			groupContents = this;
 		}
 
-		groupContents.setStyleName("group-contents");
-		this.add(groupContents);
+		// create the appropriate UI element for each child item
+		for (LayoutItem layoutItem : layoutGroup.getItems()) {
 
-		createLayout(layoutGroup, "");
+			if (layoutItem == null)
+				continue;
+
+			String title = layoutItem.getTitle();
+			if (layoutItem instanceof LayoutItemField) {
+				addDetailsCell(title);
+			} else if (layoutItem instanceof LayoutItemPortal) {
+				// TODO implement support for portals
+				continue;
+			} else if (layoutItem instanceof LayoutGroup) {
+				// create a FlowTable for the child group
+				FlowTable flowTable = new FlowTable((LayoutGroup) layoutItem, true, mainTitleSet);
+				groupContents.add(flowTable);
+				dataLabels.addAll(flowTable.getDataLabels());
+			}
+		}
+
 	}
 
-	private InlineLabel addDetailsCell(String title) {
+	private void addDetailsCell(String title) {
 
 		InlineLabel detailsLabel = new InlineLabel(title + ":");
 		detailsLabel.setStyleName("details-label");
@@ -70,37 +100,7 @@ class FlowTable extends FlowPanel {
 		fieldPanel.add(detailsData);
 
 		groupContents.add(fieldPanel);
-
-		return detailsData;
-	}
-
-	/*
-	 * Creates a basic indented layout without the flowtable.
-	 */
-	private void createLayout(LayoutGroup layoutGroup, String indent) {
-		if (layoutGroup == null)
-			return;
-
-		// look at each child item
-		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
-		for (LayoutItem layoutItem : layoutItems) {
-
-			if (layoutItem == null)
-				continue;
-
-			String title = layoutItem.getTitle();
-			if (layoutItem instanceof LayoutItemField) {
-				dataLabels.add(addDetailsCell(indent + title));
-			} else if (layoutItem instanceof LayoutItemPortal) {
-				// ignore portals for now
-				continue;
-			} else if (layoutItem instanceof LayoutGroup) {
-				// create a FlowTable for the child group
-				FlowTable flowTable = new FlowTable((LayoutGroup) layoutItem);
-				groupContents.add(flowTable);
-				dataLabels.addAll(flowTable.getDataLabels());
-			}
-		}
+		dataLabels.add(detailsData);
 	}
 
 	public ArrayList<InlineLabel> getDataLabels() {
