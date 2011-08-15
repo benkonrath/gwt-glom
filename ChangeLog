@@ -1,3 +1,18 @@
+2011-08-14  Ben Konrath  <ben@bagu.org>
+
+	Make the List View appearance match the mockups.
+
+	It doesn't match exactly but it's much better than it was.
+
+	* mockups/listview-contacts.html: Remove unused css classes.
+	* mockups/listview-projects.html: Remove unused css classes.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Display 15
+	rows instead of 20. Rename vPanel to mainPanel. Use FlowPanel (div)
+	for mainPanel instead of VerticalPanel (table). Set style name on
+	CellTable. Set style name on Details column. Right-align Details
+	buttons.
+	* src/main/webapp/style.css: Adjust properties to match the mockups.
+
 2011-08-12  Ben Konrath  <ben@bagu.org>
 
 	Add better support for subgroups in the details view.

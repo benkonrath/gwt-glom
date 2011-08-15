@@ -48,8 +48,8 @@ import com.google.gwt.user.cellview.client.SafeHtmlHeader;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
@@ -89,12 +89,12 @@ public class ListViewImpl extends Composite implements ListView {
 		}
 	}
 
-	final private VerticalPanel vPanel = new VerticalPanel();
+	final private FlowPanel mainPanel = new FlowPanel();
 	final private SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
 	private Presenter presenter;
 
 	public ListViewImpl() {
-		initWidget(vPanel);
+		initWidget(mainPanel);
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class ListViewImpl extends Composite implements ListView {
 		// return object[j]. There's probably a workaround that could be done to fix this but I'm leaving it until
 		// there's a reason to fix it (performance, ease of testing, alternate implementation or otherwise).
 
-		vPanel.clear();
+		mainPanel.clear();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
 		ProvidesKey<GlomField[]> keyProvider = new ProvidesKey<GlomField[]>() {
@@ -121,7 +121,8 @@ public class ListViewImpl extends Composite implements ListView {
 			}
 		};
 
-		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(20, keyProvider);
+		final CellTable<GlomField[]> table = new CellTable<GlomField[]>(15, keyProvider);
+		table.setStyleName("data-list");
 
 		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
 			@Override
@@ -261,6 +262,11 @@ public class ListViewImpl extends Composite implements ListView {
 			}
 		};
 
+		// the style name for the details column is set on the col element
+		table.addColumnStyleName(table.getColumnCount() - 1, "details");
+		// Firefox, Chrome, and Safari only support the span and width attributes of the col element so we need to set
+		// the alignment with code
+		detailsColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		table.addColumn(detailsColumn, "");
 
 		// set row count which is needed for paging
@@ -270,8 +276,8 @@ public class ListViewImpl extends Composite implements ListView {
 		table.addColumnSortHandler(new AsyncHandler(table));
 
 		pager.setDisplay(table);
-		vPanel.add(table);
-		vPanel.add(pager);
+		mainPanel.add(table);
+		mainPanel.add(pager);
 	}
 
 	/*
@@ -281,7 +287,7 @@ public class ListViewImpl extends Composite implements ListView {
 	 */
 	@Override
 	public void clear() {
-		vPanel.clear();
+		mainPanel.clear();
 	}
 
 }

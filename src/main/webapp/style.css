@@ -80,6 +80,7 @@ table.data-list
 	width: 100%;
 	margin-top: 1em;
 }
+
 table.data-list th
 {
 	background-color: #ccc;
@@ -87,18 +88,28 @@ table.data-list th
 	text-align: left;
 	font-weight: normal;
 	padding: 0.2em;
+	color: #000;
 }
+
 table.data-list td
 {
 	background-color: #fff;
 	border: 1px dotted #aaa;
 	padding: 0.2em;
-}
-table.data-list td.details
-{
-	text-align: right;
+	font-size: medium;
+	vertical-align: middle;
 }
 
+/* This is for the details column of the List View.
+   Note: Firefox, Chrome, and Safari only support the span and width
+         attributes of the col element.
+ */
+table.data-list col.details
+{
+
+}
+
+/* TODO: add 'table.data-list td.details' */
 
 /**
  * Details View
