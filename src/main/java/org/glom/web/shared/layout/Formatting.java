@@ -37,6 +37,7 @@ public class Formatting implements Serializable {
 	// @formatter:on
 
 	private HorizontalAlignment horizontalAlignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
+	private int multilineHeightLines = 1;
 
 	public void setHorizontalAlignment(HorizontalAlignment alignment) {
 		horizontalAlignment = alignment;
@@ -45,4 +46,25 @@ public class Formatting implements Serializable {
 	public HorizontalAlignment getHorizontalAlignment() {
 		return horizontalAlignment;
 	}
+
+	/**
+	 * Get the number of lines of text that should be displayed.
+	 * 
+	 * @returns the number of lines of text
+	 */
+	public int getTextFormatMultilineHeightLines() {
+		return multilineHeightLines;
+	}
+
+	/**
+	 * Set the number of lines of text that should be displayed.
+	 * 
+	 * @param value
+	 *            number of lines of text that should be displayed
+	 * @returns the number of lines of text
+	 */
+	public void setTextFormatMultilineHeightLines(int value) {
+		this.multilineHeightLines = value;
+	}
+
 }

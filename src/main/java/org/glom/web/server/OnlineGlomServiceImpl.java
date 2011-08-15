@@ -888,6 +888,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		Formatting formatting = new Formatting();
 		formatting.setHorizontalAlignment(convertToGWTGlomHorizonalAlignment(libglomLayoutField
 				.get_formatting_used_horizontal_alignment()));
+		FieldFormatting libglomFormatting = libglomLayoutField.get_formatting_used();
+		if (libglomFormatting.get_text_format_multiline()) {
+			formatting.setTextFormatMultilineHeightLines(safeLongToInt(libglomFormatting
+					.get_text_format_multiline_height_lines()));
+		}
 		layoutItemField.setFormatting(formatting);
 
 		return layoutItemField;

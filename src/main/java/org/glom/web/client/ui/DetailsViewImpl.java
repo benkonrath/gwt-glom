@@ -26,7 +26,7 @@ import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.Label;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -37,7 +37,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 	private final FlowPanel mainPanel = new FlowPanel();
-	private final ArrayList<InlineLabel> dataLabels = new ArrayList<InlineLabel>();
+	private final ArrayList<Label> dataLabels = new ArrayList<Label>();
 
 	public DetailsViewImpl() {
 		initWidget(mainPanel);
@@ -76,7 +76,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 		}
 
 		for (int i = 0; i < dataLabels.size(); i++) {
-			InlineLabel dataLabel = dataLabels.get(i);
+			Label dataLabel = dataLabels.get(i);
 			dataLabel.setText(glomFields[i] == null ? "" : glomFields[i].getText());
 		}
 	}

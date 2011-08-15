@@ -171,16 +171,19 @@ group
 {
 	margin-top: 0;
 	margin-bottom: 0.8em;
+	overflow: hidden;
 }
 
 .details-data
 {
 	padding: 0 0.25em;
 	color: #333;
+	float: left;
 }
 
 .details-label
 {
 	padding: 0 0.25em;
+	float: left;
 }
 

@@ -21,13 +21,13 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 
 /**
@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Label;
  */
 class FlowTable extends FlowPanel {
 	FlowPanel groupContents;
-	private final ArrayList<InlineLabel> dataLabels = new ArrayList<InlineLabel>();
+	private final ArrayList<Label> dataLabels = new ArrayList<Label>();
 
 	@SuppressWarnings("unused")
 	private FlowTable() {
@@ -69,9 +69,8 @@ class FlowTable extends FlowPanel {
 			if (layoutItem == null)
 				continue;
 
-			String title = layoutItem.getTitle();
 			if (layoutItem instanceof LayoutItemField) {
-				addDetailsCell(title);
+				addDetailsCell((LayoutItemField) layoutItem);
 			} else if (layoutItem instanceof LayoutItemPortal) {
 				// TODO implement support for portals
 				continue;
@@ -85,13 +84,20 @@ class FlowTable extends FlowPanel {
 
 	}
 
-	private void addDetailsCell(String title) {
+	private void addDetailsCell(LayoutItemField layoutItemField) {
 
-		InlineLabel detailsLabel = new InlineLabel(title + ":");
+		// Labels (text in div a element) are being used so that the height of the details-data element can be set for
+		// the multiline height of LayoutItemFeilds. This allows the the data element to display the correct height
+		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
+		// data elements to be changed for right-to-left languages.
+
+		Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
 		detailsLabel.setStyleName("details-label");
 
-		InlineLabel detailsData = new InlineLabel();
+		Label detailsData = new Label();
 		detailsData.setStyleName("details-data");
+		Formatting formatting = layoutItemField.getFormatting();
+		detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
 
 		FlowPanel fieldPanel = new FlowPanel();
 		fieldPanel.setStyleName("details-cell");
@@ -103,7 +109,7 @@ class FlowTable extends FlowPanel {
 		dataLabels.add(detailsData);
 	}
 
-	public ArrayList<InlineLabel> getDataLabels() {
+	public ArrayList<Label> getDataLabels() {
 		return dataLabels;
 	}
 }
