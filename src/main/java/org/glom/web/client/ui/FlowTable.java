@@ -27,6 +27,7 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
@@ -72,8 +73,24 @@ class FlowTable extends FlowPanel {
 			if (layoutItem instanceof LayoutItemField) {
 				addDetailsCell((LayoutItemField) layoutItem);
 			} else if (layoutItem instanceof LayoutItemPortal) {
-				// TODO implement support for portals
-				continue;
+				FlowPanel portalCell = new FlowPanel();
+				portalCell.setStyleName("subgroup");
+				portalCell.setHeight("8em");
+
+				Label portalTitle = new Label("Portal Title"); // TODO: replace temporary title
+				portalTitle.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
+				portalCell.add(portalTitle);
+
+				FlowPanel portalContents = new FlowPanel();
+				portalContents.setStyleName("group-contents"); // using the same style as the group-contents element
+
+				// TODO add proper CellTable
+				Label tempPortalData = new Label("Portal Data");
+				tempPortalData.getElement().getStyle().setFontSize(2, Unit.EM);
+				portalContents.add(tempPortalData);
+
+				portalCell.add(portalContents);
+				groupContents.add(portalCell);
 			} else if (layoutItem instanceof LayoutGroup) {
 				// create a FlowTable for the child group
 				FlowTable flowTable = new FlowTable((LayoutGroup) layoutItem, true, mainTitleSet);
@@ -99,13 +116,13 @@ class FlowTable extends FlowPanel {
 		Formatting formatting = layoutItemField.getFormatting();
 		detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
 
-		FlowPanel fieldPanel = new FlowPanel();
-		fieldPanel.setStyleName("details-cell");
+		FlowPanel detailsCell = new FlowPanel();
+		detailsCell.setStyleName("details-cell");
 
-		fieldPanel.add(detailsLabel);
-		fieldPanel.add(detailsData);
+		detailsCell.add(detailsLabel);
+		detailsCell.add(detailsData);
 
-		groupContents.add(fieldPanel);
+		groupContents.add(detailsCell);
 		dataLabels.add(detailsData);
 	}
 

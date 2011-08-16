@@ -1,3 +1,12 @@
+2011-08-16  Ben Konrath  <ben@bagu.org>
+
+	Create container element for LayoutItemPortal in Details View.
+
+	This will help me develop the layout for the FlowTable.
+
+	* src/main/java/org/glom/web/client/ui/FlowTable.java: Also rename
+	fieldPanel variable to detailsCell.
+
 2011-08-15  Ben Konrath  <ben@bagu.org>
 
 	Set the height of the data element in the Details View.
