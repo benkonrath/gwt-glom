@@ -1,3 +1,19 @@
+2011-08-25  Ben Konrath  <ben@bagu.org>
+
+	Implement the flow table layout in the Details View.
+
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Change
+	FlowTable to Group to account for the renamed class.
+	* src/main/java/org/glom/web/client/ui/details/FlowTable.java: New
+	File. This is a container widget that implements the Glom details view
+	flow table behaviour.
+	* src/main/java/org/glom/web/client/ui/details/Group.java: Moved from
+	org/glom/web/client/ui/FlowTable.java.
+	* src/main/webapp/style.css: Adjust bottom margin of the subgroup-title
+	so that the size of the subgroups are a closer match to the size of
+	the Glom subgroups. This makes the flowtable layout match the layout
+	in Glom for the Music Collection example file.
+
 2011-08-16  Ben Konrath  <ben@bagu.org>
 
 	Create container element for LayoutItemPortal in Details View.

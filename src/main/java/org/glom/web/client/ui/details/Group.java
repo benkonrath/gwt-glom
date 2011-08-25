@@ -17,7 +17,7 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.client.ui.details;
 
 import java.util.ArrayList;
 
@@ -28,29 +28,31 @@ import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- * 
  */
-class FlowTable extends FlowPanel {
-	FlowPanel groupContents;
+public class Group extends Composite {
+	private FlowPanel mainPanel = new FlowPanel();
+	private FlowPanel groupContents; // set in constructor
 	private final ArrayList<Label> dataLabels = new ArrayList<Label>();
+	FlowTable flowtable;// set in constructor
 
 	@SuppressWarnings("unused")
-	private FlowTable() {
+	private Group() {
+		// disable default constructor
 	}
 
-	public FlowTable(LayoutGroup layoutGroup, boolean subGroup, boolean mainTitleSet) {
-		super();
-		this.setStyleName(subGroup ? "subgroup" : "group");
+	public Group(LayoutGroup layoutGroup, boolean subGroup, boolean mainTitleSet) {
+		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
 		String groupTitle = layoutGroup.getTitle();
 		if (!groupTitle.isEmpty()) {
 			Label label = new Label(groupTitle);
-			this.add(label);
+			mainPanel.add(label);
 
 			// the "group-title" class could could be used for the subgroup title if the group title is empty
 			label.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
@@ -58,24 +60,24 @@ class FlowTable extends FlowPanel {
 
 			groupContents = new FlowPanel();
 			groupContents.setStyleName("group-contents");
-			this.add(groupContents);
+			mainPanel.add(groupContents);
 		} else {
 			// don't make a separate contents panel when the group title has not been set
-			groupContents = this;
+			groupContents = mainPanel;
 		}
+
+		flowtable = new FlowTable(layoutGroup.getColumnCount());
+		groupContents.add(flowtable);
 
 		// create the appropriate UI element for each child item
 		for (LayoutItem layoutItem : layoutGroup.getItems()) {
-
-			if (layoutItem == null)
-				continue;
 
 			if (layoutItem instanceof LayoutItemField) {
 				addDetailsCell((LayoutItemField) layoutItem);
 			} else if (layoutItem instanceof LayoutItemPortal) {
 				FlowPanel portalCell = new FlowPanel();
 				portalCell.setStyleName("subgroup");
-				portalCell.setHeight("8em");
+				portalCell.setHeight("12em");
 
 				Label portalTitle = new Label("Portal Title"); // TODO: replace temporary title
 				portalTitle.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
@@ -90,20 +92,20 @@ class FlowTable extends FlowPanel {
 				portalContents.add(tempPortalData);
 
 				portalCell.add(portalContents);
-				groupContents.add(portalCell);
+				flowtable.add(portalCell);
 			} else if (layoutItem instanceof LayoutGroup) {
-				// create a FlowTable for the child group
-				FlowTable flowTable = new FlowTable((LayoutGroup) layoutItem, true, mainTitleSet);
-				groupContents.add(flowTable);
-				dataLabels.addAll(flowTable.getDataLabels());
+				// create a Group for the child group
+				Group group = new Group((LayoutGroup) layoutItem, true, mainTitleSet);
+				flowtable.add(group);
+				dataLabels.addAll(group.getDataLabels());
 			}
 		}
 
+		initWidget(mainPanel);
 	}
 
 	private void addDetailsCell(LayoutItemField layoutItemField) {
-
-		// Labels (text in div a element) are being used so that the height of the details-data element can be set for
+		// Labels (text in div element) are being used so that the height of the details-data element can be set for
 		// the multiline height of LayoutItemFeilds. This allows the the data element to display the correct height
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
 		// data elements to be changed for right-to-left languages.
@@ -122,7 +124,7 @@ class FlowTable extends FlowPanel {
 		detailsCell.add(detailsLabel);
 		detailsCell.add(detailsData);
 
-		groupContents.add(detailsCell);
+		flowtable.add(detailsCell);
 		dataLabels.add(detailsData);
 	}
 

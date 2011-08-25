@@ -21,6 +21,7 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.ui.details.Group;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -60,9 +61,9 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 */
 	@Override
 	public void addLayoutGroup(LayoutGroup layoutGroup) {
-		FlowTable flowTable = new FlowTable(layoutGroup, false, false);
-		dataLabels.addAll(flowTable.getDataLabels());
-		mainPanel.add(flowTable);
+		Group group = new Group(layoutGroup, false, false);
+		dataLabels.addAll(group.getDataLabels());
+		mainPanel.add(group);
 	}
 
 	/*
