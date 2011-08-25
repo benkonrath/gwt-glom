@@ -704,10 +704,33 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	/*
-	 * This method converts a FieldFormatting.HorizontalAlignment to the equivalent ColumnInfo.HorizontalAlignment. The
+	 * This method converts a LayoutItem_Portal.navigation_type from java-libglom to the equivalent
+	 * LayoutItemPortal.NavigationType from Online Glom. This conversion is required because the LayoutItem_Portal
+	 * class from java-libglom can't be used with GWT-RPC. An enum identical to LayoutItem_Portal.navigation_type from
+	 * java-libglom is included in the LayoutItemPortal data transfer object.
+	 */
+	private LayoutItemPortal.NavigationType convertToGWTGlomNavigationType(
+			LayoutItem_Portal.navigation_type navigationType) {
+		switch (navigationType) {
+		case NAVIGATION_NONE:
+			return LayoutItemPortal.NavigationType.NAVIGATION_NONE;
+		case NAVIGATION_AUTOMATIC:
+			return LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC;
+		case NAVIGATION_SPECIFIC:
+			return LayoutItemPortal.NavigationType.NAVIGATION_SPECIFIC;
+		default:
+			Log.error("Recieved an unknown NavigationType: " + LayoutItem_Portal.navigation_type.class.getName() + "."
+					+ navigationType.toString() + ". Returning "
+					+ LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC + ".");
+			return LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC;
+		}
+	}
+
+	/*
+	 * This method converts a FieldFormatting.HorizontalAlignment to the equivalent Formatting.HorizontalAlignment. The
 	 * need for this comes from the fact that the GWT HorizontalAlignment classes can't be used with RPC and there's no
 	 * easy way to use the java-libglom FieldFormatting.HorizontalAlignment enum with RPC. An enum identical to
-	 * FieldFormatting.HorizontalAlignment is included in the ColumnInfo class.
+	 * FieldFormatting.HorizontalAlignment is included in the Formatting class.
 	 */
 	private Formatting.HorizontalAlignment convertToGWTGlomHorizonalAlignment(
 			FieldFormatting.HorizontalAlignment alignment) {
@@ -845,16 +868,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			org.glom.libglom.LayoutGroup group = org.glom.libglom.LayoutGroup.cast_dynamic(libglomLayoutItem);
 			if (group != null) {
 				// libglomLayoutItem is a LayoutGroup
-				LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
-				if (layoutItemPortal != null) {
+				LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
+				if (libglomLayoutItemPortal != null) {
 					// group is a LayoutItemPortal
-					layoutItem = new LayoutItemPortal();
+					LayoutItemPortal layoutItemPortal = new LayoutItemPortal();
+					layoutItemPortal.setNavigationType(convertToGWTGlomNavigationType(libglomLayoutItemPortal
+							.get_navigation_type()));
+					layoutItem = layoutItemPortal;
 				} else {
 					// group is *not* a LayoutItemPortal
 					// recurse into child groups
-					LayoutGroup tempLayoutGroup = getLayoutGroup(documentID, tableName, group);
-					tempLayoutGroup.setColumnCount(safeLongToInt(group.get_columns_count()));
-					layoutItem = tempLayoutGroup;
+					layoutItem = getLayoutGroup(documentID, tableName, group);
 				}
 			} else {
 				// libglomLayoutItem is *not* a LayoutGroup

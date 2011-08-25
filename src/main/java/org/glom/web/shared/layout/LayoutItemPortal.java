@@ -22,11 +22,35 @@ package org.glom.web.shared.layout;
 /**
  * Represents the libglom LayoutItem_Portal class.
  * 
- * TODO Implement.
- * 
  * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class LayoutItemPortal extends LayoutItem {
+
+	// This enum is identical to LayoutItem_Portal.navigation_type in libglom.
+	// @formatter:off
+	public enum NavigationType {
+		NAVIGATION_NONE, /** < No navigation will be offered. */
+		NAVIGATION_AUTOMATIC, /** < The destination related table will be chosen automatically based on the relationship
+									and the visible fields. */
+		NAVIGATION_SPECIFIC	/** < The destination related table will be determined by a specified relationship. */
+	};
+	// @formatter:on
+
+	private NavigationType navigationType = NavigationType.NAVIGATION_AUTOMATIC;
+
+	/**
+	 * Discover what type of navigation should be used when the user activates a related record row.
+	 */
+	public NavigationType getNavigationType() {
+		return navigationType;
+	}
+
+	/**
+	 * Set what type of navigation should be used when the user activates a related record row.
+	 */
+	public void setNavigationType(NavigationType navigationType) {
+		this.navigationType = navigationType;
+	}
 
 }

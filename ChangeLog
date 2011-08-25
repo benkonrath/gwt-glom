@@ -1,5 +1,18 @@
 2011-08-25  Ben Konrath  <ben@bagu.org>
 
+	Add NavigationType enum to LayoutItemPortal DTO.
+
+	This is the start of adding support for Portals to the Details View.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Convert
+	LayoutItem_Portal.navigation_type enum from libglom to
+	LayoutItemPortal.NavigationType enum.
+	* src/main/java/org/glom/web/shared/layout/LayoutItemPortal.java: Add
+	NavigationType enum, field for storing the NavigationType and getter
+	and setter methods.
+
+2011-08-25  Ben Konrath  <ben@bagu.org>
+
 	Implement the flow table layout in the Details View.
 
 	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Change
