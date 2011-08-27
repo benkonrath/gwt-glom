@@ -49,4 +49,6 @@ public interface TableSelectionView extends IsWidget {
 
 	void clear();
 
+	void setDocumentTitle(String documentTitle);
+
 }

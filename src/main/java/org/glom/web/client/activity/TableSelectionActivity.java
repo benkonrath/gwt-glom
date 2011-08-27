@@ -93,6 +93,7 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 
 				tableSelectionView.setSelectedTableName(tableName);
 				documentTitle = result.getTitle();
+				tableSelectionView.setDocumentTitle(documentTitle);
 				Window.setTitle(documentTitle + ": " + result.getTableTitles().get(result.getDefaultTableIndex()));
 			}
 		};

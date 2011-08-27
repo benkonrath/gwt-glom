@@ -31,6 +31,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 /**
@@ -38,6 +39,7 @@ import com.google.gwt.user.client.ui.ListBox;
  */
 public class TableSelectionViewImpl extends Composite implements TableSelectionView {
 
+	Label documentTitleLabel = new Label();
 	ListBox tableChooser = new ListBox();
 	Anchor backLink = new Anchor("Back to List");
 	private Presenter presenter;
@@ -54,12 +56,24 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 			}
 		});
 
+		// headbox with the table selector
+		FlowPanel headbox = new FlowPanel();
+		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
+		headbox.add(backLink);
+		headbox.add(tableChooser);
+
+		// document title
+		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
+		// down when retrieving the document title from the server if an empty string is used.
+		documentTitleLabel.getElement().getStyle().setOpacity(0);
+		documentTitleLabel.setText("A");
+		documentTitleLabel.addStyleName("document-title");
+		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
+
 		// the main container widget
 		FlowPanel mainPanel = new FlowPanel();
-		DOM.setElementAttribute(mainPanel.getElement(), "id", "headbox");
-
-		mainPanel.add(backLink);
-		mainPanel.add(tableChooser);
+		mainPanel.add(documentTitleLabel);
+		mainPanel.add(headbox);
 
 		initWidget(mainPanel);
 	}
@@ -104,9 +118,18 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		});
 	}
 
+	public void setDocumentTitle(String documentTitle) {
+		documentTitleLabel.setText(documentTitle);
+		documentTitleLabel.getElement().getStyle().setOpacity(100);
+	}
+
 	@Override
 	public void clear() {
 		tableChooser.clear();
+		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
+		// down when retrieving the document title from the server if an empty string is used.
+		documentTitleLabel.getElement().getStyle().setOpacity(0);
+		documentTitleLabel.setText("A");
 	}
 
 	@Override

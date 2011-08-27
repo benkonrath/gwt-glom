@@ -24,6 +24,15 @@ a:hover
 	border-radius: 3px;
 }
 
+div#document-title
+{
+	color: #333333;
+	font-weight: bold;
+	font-size: x-large;
+	margin-bottom: 0.5em;
+	margin-left: 0.5em;
+}
+
 .backlink
 {
 	float: left;

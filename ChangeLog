@@ -1,3 +1,25 @@
+2011-08-27  Ben Konrath  <ben@bagu.org>
+
+	Add document title (database name) to top of the browser page.
+
+	I added the document title to the TableSelecitonView but that will
+	change if / when we add a view that doesn't require table selection.
+
+	* mockups/details-contacts.html:
+	* mockups/details-projects.html:
+	* mockups/listview-contacts.html:
+	* mockups/listview-projects.html:
+	* mockups/style.css: Add document title to mockups to keep things
+	consistent.
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Adjust LayoutPanel
+	sizes to account for the document title.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	Set the document title when it has been retrieved from the server.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java: Add
+	and implement setDocumentTitle(String) method.
+	* src/main/webapp/style.css: Add ID for document title style.
+
 2011-08-25  Ben Konrath  <ben@bagu.org>
 
 	Add NavigationType enum to LayoutItemPortal DTO.

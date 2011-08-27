@@ -100,8 +100,12 @@ public class OnlineGlom implements EntryPoint {
 		layoutPanel.getWidgetContainerElement(dataPanel).getStyle().setOverflow(Overflow.VISIBLE);
 
 		// set the layout for the list and details places
-		layoutPanel.setWidgetTopHeight(tableSelectionPanel, 0, Unit.PCT, 2.1, Unit.EM);
-		layoutPanel.setWidgetTopHeight(dataPanel, 2.1, Unit.EM, 100, Unit.PCT);
+		// TODO Figure out a way to make the layout without absolute positioning. Right now changes to the vertical
+		// height of the table selector (i.e. CSS changes that affect the vertical height) require the
+		// tableSelectionSize to be updated.
+		double tableSelectionSize = 4.7;
+		layoutPanel.setWidgetTopHeight(tableSelectionPanel, 0, Unit.PCT, tableSelectionSize, Unit.EM);
+		layoutPanel.setWidgetTopHeight(dataPanel, tableSelectionSize, Unit.EM, 100, Unit.PCT);
 
 		// hide the display regions for the list and details places because they are not shown by default
 		layoutPanel.setWidgetVisible(tableSelectionPanel, false);
