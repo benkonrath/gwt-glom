@@ -705,8 +705,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	/*
 	 * This method converts a LayoutItem_Portal.navigation_type from java-libglom to the equivalent
-	 * LayoutItemPortal.NavigationType from Online Glom. This conversion is required because the LayoutItem_Portal
-	 * class from java-libglom can't be used with GWT-RPC. An enum identical to LayoutItem_Portal.navigation_type from
+	 * LayoutItemPortal.NavigationType from Online Glom. This conversion is required because the LayoutItem_Portal class
+	 * from java-libglom can't be used with GWT-RPC. An enum identical to LayoutItem_Portal.navigation_type from
 	 * java-libglom is included in the LayoutItemPortal data transfer object.
 	 */
 	private LayoutItemPortal.NavigationType convertToGWTGlomNavigationType(
@@ -720,8 +720,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return LayoutItemPortal.NavigationType.NAVIGATION_SPECIFIC;
 		default:
 			Log.error("Recieved an unknown NavigationType: " + LayoutItem_Portal.navigation_type.class.getName() + "."
-					+ navigationType.toString() + ". Returning "
-					+ LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC + ".");
+					+ navigationType.toString() + ". Returning " + LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC
+					+ ".");
 			return LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC;
 		}
 	}
@@ -874,6 +874,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					LayoutItemPortal layoutItemPortal = new LayoutItemPortal();
 					layoutItemPortal.setNavigationType(convertToGWTGlomNavigationType(libglomLayoutItemPortal
 							.get_navigation_type()));
+
+					// copying code from Box_Data_Portal::get_title()
+					String relationshipTitle;
+					if (libglomLayoutItemPortal.get_has_relationship_name()) {
+						relationshipTitle = libglomLayoutItemPortal.get_title_used(""/* parent title - not relevant */);
+					} else {
+						// Note to translators: This text is shown instead of a table title, when the table has not yet
+						// been chosen.
+						relationshipTitle = "Undefined Table";
+					}
+					layoutItemPortal.setTitle(relationshipTitle);
 					layoutItem = layoutItemPortal;
 				} else {
 					// group is *not* a LayoutItemPortal
@@ -892,10 +903,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
 					continue;
 				}
-
+				layoutItem.setTitle(libglomLayoutItem.get_title_or_name());
 			}
 
-			layoutItem.setTitle(libglomLayoutItem.get_title_or_name());
 			layoutGroup.addItem(layoutItem);
 		}
 

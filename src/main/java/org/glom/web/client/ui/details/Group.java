@@ -27,7 +27,6 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -46,6 +45,16 @@ public class Group extends Composite {
 		// disable default constructor
 	}
 
+	/**
+	 * Creates a new widget for a Group or sub-Group.
+	 * 
+	 * @param layoutGroup
+	 *            The DTO that holds the Group or sub-Group layout information
+	 * @param subGroup
+	 *            true if the layoutGroup is a sub-Group, false if it's a Group
+	 * @param mainTitleSet
+	 *            true if the main title for the Group has been set, false if hasn't been set yet
+	 */
 	public Group(LayoutGroup layoutGroup, boolean subGroup, boolean mainTitleSet) {
 		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
@@ -75,24 +84,7 @@ public class Group extends Composite {
 			if (layoutItem instanceof LayoutItemField) {
 				addDetailsCell((LayoutItemField) layoutItem);
 			} else if (layoutItem instanceof LayoutItemPortal) {
-				FlowPanel portalCell = new FlowPanel();
-				portalCell.setStyleName("subgroup");
-				portalCell.setHeight("12em");
-
-				Label portalTitle = new Label("Portal Title"); // TODO: replace temporary title
-				portalTitle.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
-				portalCell.add(portalTitle);
-
-				FlowPanel portalContents = new FlowPanel();
-				portalContents.setStyleName("group-contents"); // using the same style as the group-contents element
-
-				// TODO add proper CellTable
-				Label tempPortalData = new Label("Portal Data");
-				tempPortalData.getElement().getStyle().setFontSize(2, Unit.EM);
-				portalContents.add(tempPortalData);
-
-				portalCell.add(portalContents);
-				flowtable.add(portalCell);
+				flowtable.add(new Portal((LayoutItemPortal) layoutItem, mainTitleSet));
 			} else if (layoutItem instanceof LayoutGroup) {
 				// create a Group for the child group
 				Group group = new Group((LayoutGroup) layoutItem, true, mainTitleSet);

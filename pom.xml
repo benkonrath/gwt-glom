@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>org.glom.libglom</groupId>
 			<artifactId>java-libglom</artifactId>
-			<version>1.17.0</version>
+			<version>1.17.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
