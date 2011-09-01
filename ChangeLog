@@ -1,3 +1,14 @@
+2011-09-01  Ben Konrath  <ben@bagu.org>
+
+	Remove TODO comment for the flow table column width.
+
+	The flow table column width is working correctly and doesn't need to be
+	changed. See this mailing list post for more info:
+
+	https://mail.gnome.org/archives/glom-devel-list/2011-August/msg00017.html
+
+	* src/main/java/org/glom/web/client/ui/details/FlowTable.java:
+
 2011-08-27  Ben Konrath  <ben@bagu.org>
 
 	Add document title (database name) to top of the browser page.

@@ -96,8 +96,7 @@ public class FlowTable extends Composite {
 		for (int i = 0; i < columnCount; i++) {
 			FlowPanel column = new FlowPanel();
 			column.getElement().getStyle().setFloat(Float.LEFT);
-			// The columns widths are evenly distributed but this doens't match how the flow table layout works in Glom.
-			// TODO This might need to be fixed to match Glom.
+			// The columns widths are evenly distributed amongst the number of columns
 			column.getElement().getStyle().setWidth(100 / columnCount, Unit.PCT);
 			columns.add(column);
 			mainPanel.add(column);
