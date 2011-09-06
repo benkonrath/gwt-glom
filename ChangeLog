@@ -1,3 +1,12 @@
+2011-09-06  Ben Konrath  <ben@bagu.org>
+
+	Change the LayoutItemPortal DTO to extend LayoutGroup instead of LayoutItem.
+
+	This fixes the LayoutItemPortal DTO to match the libglom layout object
+	hierarchy.
+
+	* src/main/java/org/glom/web/shared/layout/LayoutItemPortal.java:
+
 2011-09-01  Ben Konrath  <ben@bagu.org>
 
 	Set title of Portals in the Details View.

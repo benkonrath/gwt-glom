@@ -25,7 +25,7 @@ package org.glom.web.shared.layout;
  * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
-public class LayoutItemPortal extends LayoutItem {
+public class LayoutItemPortal extends LayoutGroup {
 
 	// This enum is identical to LayoutItem_Portal.navigation_type in libglom.
 	// @formatter:off
