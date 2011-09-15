@@ -1,3 +1,29 @@
+2011-09-15  Ben Konrath  <ben@bagu.org>
+
+	Breakup the OnlineGlomServiceImpl class to make it more manageable.
+
+	This sets things up to make it easier to add the data retrieval for
+	related lists (portals). No user noticeable changes were made with
+	this commit.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: This
+	class has the code to retrieve the layouts and access the
+	database using the new database helper classes.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Most of the functionality has been removed from this class. This
+	class now represents the public interface for the client side
+	code. It also deals with configuring the servlet and cleaning
+	things up when the servlet is stopped.
+	* src/main/java/org/glom/web/server/Utils.java: Extract a couple
+	of static methods into this utility class.
+	* src/main/java/org/glom/web/server/database/DBAccess.java:
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	These classes have the database retrieval code. The class hierarchy
+	has been setup to make it easy to reuse code for similar
+	functionality.
+
 2011-09-06  Ben Konrath  <ben@bagu.org>
 
 	Create separate classes for list table code and the data provider.
