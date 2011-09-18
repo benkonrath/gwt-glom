@@ -21,7 +21,6 @@ package org.glom.web.client.ui.details;
 
 import java.util.ArrayList;
 
-import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -37,7 +36,8 @@ import com.google.gwt.user.client.ui.Label;
 public class Group extends Composite {
 	private FlowPanel mainPanel = new FlowPanel();
 	private FlowPanel groupContents; // set in constructor
-	private final ArrayList<Label> dataLabels = new ArrayList<Label>();
+	private final ArrayList<Field> fields = new ArrayList<Field>();
+	private final ArrayList<Portal> portals = new ArrayList<Portal>();
 	FlowTable flowtable;// set in constructor
 
 	@SuppressWarnings("unused")
@@ -82,45 +82,34 @@ public class Group extends Composite {
 		for (LayoutItem layoutItem : layoutGroup.getItems()) {
 
 			if (layoutItem instanceof LayoutItemField) {
-				addDetailsCell((LayoutItemField) layoutItem);
+				Field field = new Field((LayoutItemField) layoutItem);
+				flowtable.add(field);
+				fields.add(field);
 			} else if (layoutItem instanceof LayoutItemPortal) {
-				flowtable.add(new Portal((LayoutItemPortal) layoutItem, mainTitleSet));
+				Portal portal = new Portal((LayoutItemPortal) layoutItem, mainTitleSet);
+				flowtable.add(portal);
+				portals.add(portal);
 			} else if (layoutItem instanceof LayoutGroup) {
 				// create a Group for the child group
-				Group group = new Group((LayoutGroup) layoutItem, true, mainTitleSet);
-				flowtable.add(group);
-				dataLabels.addAll(group.getDataLabels());
+				Group childGroup = new Group((LayoutGroup) layoutItem, true, mainTitleSet);
+				flowtable.add(childGroup);
+				fields.addAll(childGroup.getFields());
+				portals.addAll(childGroup.getPortals());
 			}
 		}
 
 		initWidget(mainPanel);
 	}
 
-	private void addDetailsCell(LayoutItemField layoutItemField) {
-		// Labels (text in div element) are being used so that the height of the details-data element can be set for
-		// the multiline height of LayoutItemFeilds. This allows the the data element to display the correct height
-		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
-		// data elements to be changed for right-to-left languages.
-
-		Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
-		detailsLabel.setStyleName("details-label");
-
-		Label detailsData = new Label();
-		detailsData.setStyleName("details-data");
-		Formatting formatting = layoutItemField.getFormatting();
-		detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
-
-		FlowPanel detailsCell = new FlowPanel();
-		detailsCell.setStyleName("details-cell");
-
-		detailsCell.add(detailsLabel);
-		detailsCell.add(detailsData);
-
-		flowtable.add(detailsCell);
-		dataLabels.add(detailsData);
+	public ArrayList<Field> getFields() {
+		return fields;
 	}
 
-	public ArrayList<Label> getDataLabels() {
-		return dataLabels;
+	/**
+	 * @return
+	 */
+	public ArrayList<Portal> getPortals() {
+		return portals;
 	}
+
 }

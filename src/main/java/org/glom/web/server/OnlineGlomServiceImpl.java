@@ -32,6 +32,7 @@ import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.web.client.OnlineGlomService;
+import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
@@ -166,6 +167,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getGlomDocument(java.lang.String)
+	 */
+	@Override
 	public GlomDocument getGlomDocument(String documentID) {
 
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
@@ -176,7 +183,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	}
 
-	public LayoutGroup getListLayout(String documentID, String tableName) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getListViewLayout(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public LayoutGroup getListViewLayout(String documentID, String tableName) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -184,7 +197,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getListViewLayoutGroup(tableName);
 	}
 
-	public ArrayList<GlomField[]> getListData(String documentID, String tableName, int start, int length) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int)
+	 */
+	@Override
+	public ArrayList<GlomField[]> getListViewData(String documentID, String tableName, int start, int length) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<GlomField[]>();
@@ -192,7 +211,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getListViewData(tableName, start, length, false, 0, false);
 	}
 
-	public ArrayList<GlomField[]> getSortedListData(String documentID, String tableName, int start, int length,
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getSortedListViewData(java.lang.String, java.lang.String, int, int,
+	 * int, boolean)
+	 */
+	@Override
+	public ArrayList<GlomField[]> getSortedListViewData(String documentID, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
@@ -201,6 +227,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getListViewData(tableName, start, length, true, sortColumnIndex, isAscending);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDocuments()
+	 */
+	@Override
 	public Documents getDocuments() {
 		Documents documents = new Documents();
 		for (String documentID : documentMapping.keySet()) {
@@ -225,6 +257,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
+	@Override
 	public boolean checkAuthentication(String documentID, String username, String password) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		try {
@@ -238,22 +271,76 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutGroup(java.lang.String, java.lang.String)
+	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public ArrayList<LayoutGroup> getDetailsLayout(String documentID, String tableName) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-
-		// FIXME check for authentication
-
-		return configuredDoc.getDetailsLayoutGroup(tableName);
-	}
-
+	@Override
 	public GlomField[] getDetailsData(String documentID, String tableName, String primaryKeyValue) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
 		return configuredDoc.getDetailsData(tableName, primaryKeyValue);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutAndData(java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
+
+		// FIXME check for authentication
+
+		initalDetailsView.setLayout(configuredDoc.getDetailsLayoutGroup(tableName));
+		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
+
+		return initalDetailsView;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int)
+	 */
+	@Override
+	public ArrayList<GlomField[]> getRelatedListData(String documentID, String tableName, String relationshipName,
+			String foreignKeyValue, int start, int length) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+
+		// FIXME check for authentication
+
+		return configuredDoc.getRelatedListData(tableName, relationshipName, foreignKeyValue, start, length, false, 0,
+				false);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getSortedRelatedListData(java.lang.String, java.lang.String, int, int,
+	 * int, boolean)
+	 */
+	@Override
+	public ArrayList<GlomField[]> getSortedRelatedListData(String documentID, String tableName,
+			String relationshipName, String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+
+		// FIXME check for authentication
+
+		return configuredDoc.getRelatedListData(tableName, relationshipName, foreignKeyValue, start, length, true,
+				sortColumnIndex, ascending);
+	}
+
+	public int getRelatedListRowCount(String documentID, String tableName, String relationshipName,
+			String foreignKeyValue) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+
+		// FIXME check for authentication
+
+		return configuredDoc.getRelatedListRowCount(tableName, relationshipName, foreignKeyValue);
 	}
 
 }

@@ -21,7 +21,7 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
-import org.glom.web.client.ui.DetailsView;
+import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
@@ -45,11 +45,44 @@ public interface OnlineGlomService extends RemoteService {
 	 *            default table
 	 * @return filled in {@link LayoutGroup}
 	 */
-	LayoutGroup getListLayout(String documentID, String tableName);
+	LayoutGroup getListViewLayout(String documentID, String tableName);
 
-	ArrayList<GlomField[]> getListData(String documentID, String tableName, int start, int length);
+	/**
+	 * Retrieves data for a list view table.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param start
+	 *            the start index in the data result set from the SQL query that should be retrieved
+	 * @param length
+	 *            the number of rows of data to retrieve
+	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 */
+	ArrayList<GlomField[]> getListViewData(String documentID, String tableName, int start, int length);
 
-	ArrayList<GlomField[]> getSortedListData(String documentID, String tableName, int start, int length,
+	/**
+	 * Retrieves sorted data for a list view table.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param start
+	 *            the start index in the data result set from the SQL query that should be retrieved
+	 * @param length
+	 *            the number of rows of data to retrieve
+	 * @param sortColumnIndex
+	 *            the index of the column to sort
+	 * @param ascending
+	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
+	 *            should be sorted in descending order
+	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 */
+	ArrayList<GlomField[]> getSortedListViewData(String documentID, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending);
 
 	/**
@@ -84,29 +117,100 @@ public interface OnlineGlomService extends RemoteService {
 	boolean checkAuthentication(String documentID, String username, String password);
 
 	/**
-	 * Gets a {@link LayoutGroup} that represents the layout of the {@link DetailsView} for the provided Glom document
-	 * and table name.
+	 * Gets data for the details view.
+	 * 
+	 * Note: This method is not currently being used. It will be useful when navigation through the details view is
+	 * added by creating a data provider for the details view.
+	 * 
+	 * TODO: Remove above comment when this method is being used.
 	 * 
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
 	 *            default table
-	 * @return a {@link LayoutGroup} the represents the layout of the {@link DetailsView}
-	 */
-	ArrayList<LayoutGroup> getDetailsLayout(String documentID, String tableName);
-
-	/**
-	 * Gets data for the Details View.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param tableName
-	 *            name of the table in the Glom document
 	 * @param primaryKeyValue
 	 *            value of the primary key in the specified Glom table to use in the query
 	 * @return the result of the SQL query as an array of {@link GlomField}s
 	 */
 	GlomField[] getDetailsData(String documentID, String tableName, String primaryKeyValue);
+
+	/**
+	 * Gets a {@link DetailsLayoutAndData} object that contains the layout and data of the details view.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param primaryKeyValue
+	 *            value of the primary key in the specified Glom table to use in the query
+	 * @return a {@link DetailsLayoutAndData} object for the layout and initial data of the details view.
+	 */
+	DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue);
+
+	/**
+	 * Retrieves data for the related list table with the specified relationship name and foreign key value.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param relationshipName
+	 *            name of the relationship to use for setting up the SQL query
+	 * @param start
+	 *            the start index in the data result set from the SQL query that should be retrieved
+	 * @param length
+	 *            the number of rows of data to retrieve
+	 * @param foreignKeyValue
+	 *            the value of the foreign key
+	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 */
+	ArrayList<GlomField[]> getRelatedListData(String documentID, String tableName, String relationshipName,
+			String foreignKeyValue, int start, int length);
+
+	/**
+	 * Retrieves sorted data for the related list table with the specified relationship name and foreign key value.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param relationshipName
+	 *            name of the relationship to use for setting up the SQL query
+	 * @param foreignKeyValue
+	 *            the value of the foreign key
+	 * @param start
+	 *            the start index in the data result set from the SQL query that should be retrieved
+	 * @param length
+	 *            the number of rows of data to retrieve
+	 * @param sortColumnIndex
+	 *            the index of the column to sort
+	 * @param ascending
+	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
+	 *            should be sorted in descending order
+	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 */
+	ArrayList<GlomField[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
+			String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
+
+	/**
+	 * Gets the expected row count for the related list table with the specified relationship name and foreign key
+	 * value.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param relationshipName
+	 *            name of the relationship to use for setting up the SQL query
+	 * @param foreignKeyValue
+	 *            the value of the foreign key
+	 * @return the expected row count
+	 */
+	int getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue);
 
 }

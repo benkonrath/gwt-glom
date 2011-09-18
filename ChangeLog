@@ -1,3 +1,70 @@
+2011-09-18  Ben Konrath  <ben@bagu.org>
+
+	Add related lists to details view.
+
+	The related list table has support for paging and sorting just like the
+	table in the list view.
+
+	* pom.xml: Require java-libglom 1.17.2 for the new methods to build the
+	SQL queries for the related list tables.
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Rename getList methods to getListView and add comments. Remove
+	getDetailsLayout() as it's not used anymore. Add note to getDetailsData() about
+	it being unused. Add methods: getDetailsLayoutAndData(),
+	getSortedRelatedListData(), getRelatedListData(), getRelatedListRowCount()
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	Create the layout and set the data for the fields in one async call
+	instead of two. Create related lists where appropriate.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Changes
+	for method name changes in OnlineGlomService.
+	* src/main/java/org/glom/web/client/ui/DetailsView.java:
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Rename
+	addLayoutGroup() to addGroup(). Add methods to get the DTOs for the
+	visible UI objects.
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Remove
+	tableName from setCellTable(). Create a ListViewTable instead of
+	ListTable.
+	* src/main/java/org/glom/web/client/ui/details/Field.java: New class to
+	represent a data field in the details view.
+	* src/main/java/org/glom/web/client/ui/details/Group.java: Move to code
+	from addDetailsCell() to Field class. Keep track of the Fields and
+	Portals in the details view.
+	* src/main/java/org/glom/web/client/ui/details/Portal.java: Make portal
+	a little bigger to match Glom. Keep track of the LayoutItemPortal DTO
+	and add a method to get it. Add method to set the contents of the
+	portal.
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	New class for related list tables. This class has the data provider
+	for the related list table.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Change to
+	abstract class which is the base class for the ListViewTable and the
+	RelatedListTable.
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	New class for list view tables. This class has the data provider for
+	the list view table.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Add
+	methods for related list tables. Add more information to the
+	LayoutItemField and LayoutItemPortal DTOs.
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	Remove debugging print statement.
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	Remove debugging print statements. Add primary key field to SQL count
+	query.
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	Remove unnecessary LayoutFieldVector parameter from
+	getResultSizeOfSQLQuery() method.
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	New class for related list table database access.
+	* src/main/java/org/glom/web/shared/DetailsLayoutAndData.java: New
+	class that is a wrapper DTO for details view layout and data.
+	* src/main/java/org/glom/web/shared/layout/LayoutItemPortal.java: Add
+	new 'fromField' string to this DTO.
+	* src/main/webapp/style.css: Remove bottom margin and override top
+	margin with 0em.
+
 2011-09-15  Ben Konrath  <ben@bagu.org>
 
 	Breakup the OnlineGlomServiceImpl class to make it more manageable.

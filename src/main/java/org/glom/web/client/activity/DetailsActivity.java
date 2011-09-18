@@ -27,8 +27,14 @@ import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.client.ui.details.Field;
+import org.glom.web.client.ui.details.Portal;
+import org.glom.web.client.ui.details.RelatedListTable;
+import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -42,14 +48,17 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
 	private final String documentID;
 	private final String tableName;
-	private final String primaryKey;
+	private final String primaryKeyValue;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
+
+	ArrayList<Field> fields;
+	ArrayList<Portal> portals;
 
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
-		this.primaryKey = place.getPrimaryKeyValue();
+		this.primaryKeyValue = place.getPrimaryKeyValue();
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
 	}
@@ -75,39 +84,80 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 			}
 		});
 
-		// get the layout for the DetailsView
-		AsyncCallback<ArrayList<LayoutGroup>> layoutCallback = new AsyncCallback<ArrayList<LayoutGroup>>() {
+		// get the layout and data for the DetailsView
+		AsyncCallback<DetailsLayoutAndData> callback = new AsyncCallback<DetailsLayoutAndData>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayout()");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayoutAndData()");
 			}
 
 			@Override
-			public void onSuccess(ArrayList<LayoutGroup> result) {
-				for (LayoutGroup layoutGroup : result) {
-					detailsView.addLayoutGroup(layoutGroup);
+			public void onSuccess(DetailsLayoutAndData result) {
+
+				// create the layout and get the array of layout item fields, data labels and layout item portals
+				for (LayoutGroup layoutGroup : result.getLayout()) {
+					detailsView.addGroup(layoutGroup);
 				}
+				fields = detailsView.getFields();
+				portals = detailsView.getPortals();
+
+				// set the data
+				GlomField[] data = result.getData();
+				if (data == null)
+					return;
+
+				// FIXME create proper client side logging
+				if (data.length != fields.size())
+					System.out.println("Warning: The number of data items doesn't match the number of data fields.");
+
+				for (int i = 0; i < Math.min(fields.size(), data.length); i++) {
+					Field field = fields.get(i);
+					if (data[i] != null) {
+						String dataValue = data[i].getText();
+
+						// set the field data
+						field.setText(dataValue);
+
+						// see if there are any related lists that need to be setup
+						for (Portal portal : portals) {
+							LayoutItemField layoutItemField = field.getLayoutItem();
+							LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
+							if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
+								RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
+										dataValue);
+								portal.setContents(relatedListTable);
+								setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), dataValue);
+							}
+						}
+					}
+				}
+
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayout(documentID, tableName, layoutCallback);
-
-		// get the data from the server
-		AsyncCallback<GlomField[]> callback = new AsyncCallback<GlomField[]>() {
-			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsData()");
-			}
-
-			@Override
-			public void onSuccess(GlomField[] result) {
-				// FIXME there's no guarantee that the layout will be ready for this
-				detailsView.setData(result);
-			}
-		};
-		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentID, tableName, primaryKey, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutAndData(documentID, tableName, primaryKeyValue,
+				callback);
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());
+	}
+
+	// sets the row count for the related list table
+	private void setRowCountForRelatedListTable(final RelatedListTable relatedListTable, String relationshipName,
+			String foreignKeyValue) {
+		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+			public void onFailure(Throwable caught) {
+				// FIXME: need to deal with failure
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getRelatedListRowCount()");
+			}
+
+			@Override
+			public void onSuccess(Integer result) {
+				relatedListTable.setRowCount(result.intValue());
+			}
+		};
+
+		OnlineGlomServiceAsync.Util.getInstance().getRelatedListRowCount(documentID, tableName, relationshipName,
+				foreignKeyValue, callback);
 	}
 
 	/*

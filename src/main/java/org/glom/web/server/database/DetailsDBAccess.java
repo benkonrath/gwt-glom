@@ -71,7 +71,6 @@ public class DetailsDBAccess extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			String query = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey, primaryKeyValue);
-			System.out.println("DETAILS QUERY: " + query);
 			rs = st.executeQuery(query);
 
 			// get the results from the ResultSet

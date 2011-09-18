@@ -141,9 +141,10 @@ table.data-list col.details
 
 }
 
+/* Overrides the table settings from the list view */
 .group table.data-list
 {
-	margin-bottom: 0.8em;
+	margin-top: 0em;
 }
 
 table.columns

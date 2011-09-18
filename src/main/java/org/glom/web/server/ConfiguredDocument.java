@@ -35,7 +35,9 @@ import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.StringVector;
 import org.glom.web.server.database.DetailsDBAccess;
+import org.glom.web.server.database.ListDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
+import org.glom.web.server.database.RelatedListDBAccess;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.Formatting;
@@ -238,6 +240,19 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
+	ArrayList<GlomField[]> getRelatedListData(String tableName, String relationshipName, String foreignKeyValue,
+			int start, int length, boolean useSortClause, int sortColumnIndex, boolean isAscending) {
+		// Validate the table name.
+		tableName = getTableNameToUse(tableName);
+
+		// Create a database access object for the related list
+		RelatedListDBAccess relatedListDBAccess = new RelatedListDBAccess(document, documentID, cpds, tableName,
+				relationshipName);
+
+		// Return the data
+		return relatedListDBAccess.getData(start, length, foreignKeyValue, useSortClause, sortColumnIndex, isAscending);
+	}
+
 	ArrayList<LayoutGroup> getDetailsLayoutGroup(String tableName) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
@@ -268,7 +283,23 @@ final class ConfiguredDocument {
 	}
 
 	/*
-	 * Gets a LayoutGroup DTO for the given table name and libglom LayoutGroup.
+	 * Gets the expected row count for a related list.
+	 */
+	int getRelatedListRowCount(String tableName, String relationshipName, String foreignKeyValue) {
+		// Validate the table name.
+		tableName = getTableNameToUse(tableName);
+
+		// Create a database access object for the related list
+		RelatedListDBAccess relatedListDBAccess = new RelatedListDBAccess(document, documentID, cpds, tableName,
+				relationshipName);
+
+		// Return the row count
+		return relatedListDBAccess.getExpectedResultSize(foreignKeyValue);
+	}
+
+	/*
+	 * Gets a LayoutGroup DTO for the given table name and libglom LayoutGroup. This method can be used for the main
+	 * list view table and for the related list table.
 	 */
 	private LayoutGroup getListLayoutGroup(String tableName, org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		LayoutGroup layoutGroup = new LayoutGroup();
@@ -290,16 +321,25 @@ final class ConfiguredDocument {
 			}
 		}
 
-		ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
-				libglomLayoutGroup);
-		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
+		ListDBAccess listDBAccess = null;
+		LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(libglomLayoutGroup);
+		if (libglomLayoutItemPortal != null) {
+			// libglomLayoutGroup is a related view
+			listDBAccess = new RelatedListDBAccess(document, documentID, cpds, tableName,
+					libglomLayoutItemPortal.get_relationship_name_used());
+			layoutGroup.setExpectedResultSize(listDBAccess.getExpectedResultSize());
+		} else {
+			// libglomLayoutGroup is a list view
+			listDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName, libglomLayoutGroup);
+			layoutGroup.setExpectedResultSize(listDBAccess.getExpectedResultSize());
+		}
 
 		// Set the primary key index for the table
-		int primaryKeyIndex = listViewDBAccess.getPrimaryKeyIndex();
+		int primaryKeyIndex = listDBAccess.getPrimaryKeyIndex();
 		if (primaryKeyIndex < 0) {
 			// Add a LayoutItemField for the primary key to the end of the item list in the LayoutGroup because it
 			// doesn't already contain a primary key.
-			LayoutItem_Field libglomLayoutItemField = listViewDBAccess.getPrimaryKeyLayoutItemField();
+			LayoutItem_Field libglomLayoutItemField = listDBAccess.getPrimaryKeyLayoutItemField();
 			layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
 			layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
 			layoutGroup.setHiddenPrimaryKey(true);
@@ -365,8 +405,9 @@ final class ConfiguredDocument {
 						}
 						layoutItemPortal.setPrimaryKeyIndex(tempLayoutGroup.getPrimaryKeyIndex());
 						layoutItemPortal.setHiddenPrimaryKey(tempLayoutGroup.hasHiddenPrimaryKey());
-						layoutItemPortal.setTableName(libglomLayoutItemPortal.get_from_table());
 						layoutItemPortal.setName(libglomLayoutItemPortal.get_relationship_name_used());
+						layoutItemPortal.setTableName(relationship.get_from_table());
+						layoutItemPortal.setFromField(relationship.get_from_field());
 					}
 
 					// Note: empty layoutItemPortal used if relationship is null
@@ -414,8 +455,9 @@ final class ConfiguredDocument {
 		}
 		layoutItemField.setFormatting(formatting);
 
-		// set title
+		// set title and name
 		layoutItemField.setTitle(libglomLayoutItemField.get_title_or_name());
+		layoutItemField.setName(libglomLayoutItemField.get_name());
 
 		return layoutItemField;
 	}

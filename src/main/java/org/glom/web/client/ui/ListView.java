@@ -36,7 +36,7 @@ public interface ListView extends IsWidget {
 
 	public void setPresenter(Presenter presenter);
 
-	public void setCellTable(final String documentID, final String tableName, LayoutGroup layoutGroup);
+	public void setCellTable(final String documentID, LayoutGroup layoutGroup);
 
 	void clear();
 

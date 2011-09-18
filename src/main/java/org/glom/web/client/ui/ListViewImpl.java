@@ -19,7 +19,7 @@
 
 package org.glom.web.client.ui;
 
-import org.glom.web.client.ui.list.ListTable;
+import org.glom.web.client.ui.list.ListViewTable;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.ui.Composite;
@@ -40,7 +40,7 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentID, final String tableName, LayoutGroup layoutGroup) {
+	public void setCellTable(final String documentID, LayoutGroup layoutGroup) {
 		// This is not really in the MVP style because we're creating a new ListTable (really just a configured
 		// CellTable) for every document and table name change. The issue with creating a re-usable CellTable with
 		// methods like setColumnTitles() and setNumRows() is that the column objects (new Column<GlomField[],
@@ -52,10 +52,10 @@ public class ListViewImpl extends Composite implements ListView {
 
 		mainPanel.clear();
 
-		ListTable listTable = new ListTable(documentID, tableName, layoutGroup, 15);
-		listTable.addOpenButtonColumnn(presenter, "Details");
+		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup);
+		listViewTable.addOpenButtonColumnn(presenter, "Details");
 
-		mainPanel.add(listTable);
+		mainPanel.add(listViewTable);
 	}
 
 	/*

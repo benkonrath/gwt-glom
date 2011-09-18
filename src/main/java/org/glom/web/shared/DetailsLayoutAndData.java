@@ -17,35 +17,37 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.shared;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.glom.web.client.ui.details.Field;
-import org.glom.web.client.ui.details.Portal;
 import org.glom.web.shared.layout.LayoutGroup;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
-
 /**
- * @author Ben Konrath <ben@bagu.org>
+ * Wrapper DTO for details view layout and data.
  * 
+ * @author Ben Konrath <ben@bagu.org>
  */
-public interface DetailsView extends IsWidget {
+@SuppressWarnings("serial")
+public class DetailsLayoutAndData implements Serializable {
+	private ArrayList<LayoutGroup> layout;
+	private GlomField[] data;
 
-	public interface Presenter {
-		void goTo(Place place);
+	public ArrayList<LayoutGroup> getLayout() {
+		return layout;
 	}
 
-	public void setPresenter(Presenter presenter);
+	public void setLayout(ArrayList<LayoutGroup> layout) {
+		this.layout = layout;
+	}
 
-	public void addGroup(LayoutGroup layoutGroup);
+	public GlomField[] getData() {
+		return data;
+	}
 
-	public void clear();
-
-	public ArrayList<Field> getFields();
-
-	public ArrayList<Portal> getPortals();
+	public void setData(GlomField[] data) {
+		this.data = data;
+	}
 
 }

@@ -47,13 +47,14 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class ListTable extends Composite {
+public abstract class ListTable extends Composite {
 
 	private class GlomTextCell extends AbstractCell<GlomField> {
 
@@ -89,18 +90,24 @@ public class ListTable extends Composite {
 
 	final private FlowPanel mainPanel = new FlowPanel();
 	final private SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
-	private CellTable<GlomField[]> cellTable;
-	private String documentID;
-	private String tableName;
+	protected String documentID;
+	protected String tableName;
+	protected CellTable<GlomField[]> cellTable;
+
+	abstract protected AbstractDataProvider<GlomField[]> getDataProvider();
 
 	@SuppressWarnings("unused")
 	private ListTable() {
 		// disable default constructor
 	}
 
-	public ListTable(String documentID, String tableName, LayoutGroup layoutGroup, int numVisibleRows) {
+	public ListTable(String documentID) {
 		this.documentID = documentID;
-		this.tableName = tableName;
+	}
+
+	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows) {
+
+		this.tableName = layoutGroup.getTableName();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
 		ProvidesKey<GlomField[]> keyProvider = new ProvidesKey<GlomField[]>() {
@@ -134,8 +141,8 @@ public class ListTable extends Composite {
 		cellTable.setRowCount(layoutGroup.getExpectedResultSize());
 
 		// create and set the data provider
-		ListTableDataProvider listDataProvider = new ListTableDataProvider(documentID, tableName);
-		listDataProvider.addDataDisplay(cellTable);
+		AbstractDataProvider<GlomField[]> dataProvider = getDataProvider();
+		dataProvider.addDataDisplay(cellTable);
 
 		// add an AsyncHandler to activate sorting for the data provider
 		cellTable.addColumnSortHandler(new AsyncHandler(cellTable));
@@ -252,6 +259,13 @@ public class ListTable extends Composite {
 
 		cellTable.addColumn(openButtonColumn, "");
 
+	}
+
+	/**
+	 * Sets the row count for the pager.
+	 */
+	public void setRowCount(int rowCount) {
+		cellTable.setRowCount(rowCount);
 	}
 
 }

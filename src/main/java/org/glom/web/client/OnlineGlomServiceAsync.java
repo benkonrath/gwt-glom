@@ -21,6 +21,7 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
@@ -51,12 +52,12 @@ public interface OnlineGlomServiceAsync {
 
 	void getGlomDocument(String documentID, AsyncCallback<GlomDocument> callback);
 
-	void getListLayout(String documentID, String tableName, AsyncCallback<LayoutGroup> callback);
+	void getListViewLayout(String documentID, String tableName, AsyncCallback<LayoutGroup> callback);
 
-	void getListData(String documentID, String tableName, int start, int length,
+	void getListViewData(String documentID, String tableName, int start, int length,
 			AsyncCallback<ArrayList<GlomField[]>> callback);
 
-	void getSortedListData(String documentID, String tableName, int start, int length, int columnIndex,
+	void getSortedListViewData(String documentID, String tableName, int start, int length, int sortColumnIndex,
 			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
 
 	void getDocuments(AsyncCallback<Documents> callback);
@@ -65,8 +66,19 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getDetailsLayout(String documentID, String tableName, AsyncCallback<ArrayList<LayoutGroup>> callback);
+	void getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue,
+			AsyncCallback<DetailsLayoutAndData> callback);
 
 	void getDetailsData(String documentID, String tableName, String primaryKeyValue, AsyncCallback<GlomField[]> callback);
+
+	void getRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
+			int start, int length, AsyncCallback<ArrayList<GlomField[]>> callback);
+
+	void getSortedRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
+			int start, int length, int sortColumnIndex, boolean ascending,
+			AsyncCallback<ArrayList<GlomField[]>> callback);
+
+	void getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue,
+			AsyncCallback<Integer> callback);
 
 }

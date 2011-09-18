@@ -21,17 +21,19 @@ package org.glom.web.client.ui.details;
 
 import org.glom.web.shared.layout.LayoutItemPortal;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
 public class Portal extends Composite {
-	private FlowPanel mainPanel = new FlowPanel();
+
+	private FlowPanel contents = new FlowPanel();
+	private LayoutItemPortal layoutItem;
 
 	@SuppressWarnings("unused")
 	private Portal() {
@@ -41,30 +43,39 @@ public class Portal extends Composite {
 	/**
 	 * Creates a new widget for a Portal.
 	 * 
-	 * @param layoutItemPortal
+	 * @param layoutItem
 	 *            The DTO that holds the Portal layout information
 	 * @param mainTitleSet
 	 *            true if the main title for the Group has been set, false if hasn't been set yet
 	 */
 	public Portal(LayoutItemPortal layoutItemPortal, boolean mainTitleSet) {
+		layoutItem = layoutItemPortal;
+
+		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("subgroup");
-		mainPanel.setHeight("12em");
+		mainPanel.setHeight("14em");
 
 		// using the same style as the (sub)group-title and group-contents elements
-		Label portalTitle = new Label(layoutItemPortal.getTitle());
-		portalTitle.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
-		mainPanel.add(portalTitle);
+		Label title = new Label(layoutItem.getTitle());
+		title.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
+		mainPanel.add(title);
 
-		FlowPanel portalContents = new FlowPanel();
-		portalContents.setStyleName("group-contents");
+		contents.setStyleName("group-contents");
 
-		// TODO add proper CellTable
-		Label tempPortalData = new Label("Portal Data");
-		tempPortalData.getElement().getStyle().setFontSize(2, Unit.EM);
-		portalContents.add(tempPortalData);
-
-		mainPanel.add(portalContents);
+		mainPanel.add(contents);
 		initWidget(mainPanel);
+	}
+
+	public void setContents(Widget widget) {
+		contents.clear();
+		contents.add(widget);
+	}
+
+	/**
+	 * @return
+	 */
+	public LayoutItemPortal getLayoutItem() {
+		return layoutItem;
 	}
 
 }

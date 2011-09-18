@@ -102,7 +102,6 @@ public abstract class ListDBAccess extends DBAccess {
 			// memory footprint. Check the difference between this value before and after the query:
 			// Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
 			// Test the execution time at the same time (see the todo item in getLayoutListTable()).
-			System.out.println(query);
 			rs = st.executeQuery(query);
 
 			// get the results from the ResultSet
@@ -131,7 +130,14 @@ public abstract class ListDBAccess extends DBAccess {
 	 * Get the number of rows a query with the table name and layout fields would return. This is needed for the /* list
 	 * view pager.
 	 */
-	protected int getResultSizeOfSQLQuery(LayoutFieldVector fieldsToGet) {
+	protected int getResultSizeOfSQLQuery() {
+
+		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
+		// a primary key.
+		if (getPrimaryKeyIndex() < 0) {
+			fieldsToGet.add(getPrimaryKeyLayoutItemField());
+		}
+
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -146,7 +152,6 @@ public abstract class ListDBAccess extends DBAccess {
 			String query = getCountQuery();
 			// TODO Test execution time of this query with when the number of rows in the table is large (say >
 			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
-			System.out.println(query);
 			rs = st.executeQuery(query);
 
 			// get the number of rows in the query

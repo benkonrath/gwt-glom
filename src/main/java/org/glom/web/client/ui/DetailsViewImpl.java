@@ -21,13 +21,13 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.ui.details.Field;
 import org.glom.web.client.ui.details.Group;
-import org.glom.web.shared.GlomField;
+import org.glom.web.client.ui.details.Portal;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -38,7 +38,8 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 	private final FlowPanel mainPanel = new FlowPanel();
-	private final ArrayList<Label> dataLabels = new ArrayList<Label>();
+	private final ArrayList<Field> fields = new ArrayList<Field>();
+	private final ArrayList<Portal> portals = new ArrayList<Portal>();
 
 	public DetailsViewImpl() {
 		initWidget(mainPanel);
@@ -60,26 +61,11 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 * @see org.glom.web.client.ui.DetailsView#addLayoutGroup(org.glom.web.shared.layout.LayoutGroup)
 	 */
 	@Override
-	public void addLayoutGroup(LayoutGroup layoutGroup) {
+	public void addGroup(LayoutGroup layoutGroup) {
 		Group group = new Group(layoutGroup, false, false);
-		dataLabels.addAll(group.getDataLabels());
+		fields.addAll(group.getFields());
+		portals.addAll(group.getPortals());
 		mainPanel.add(group);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.ui.DetailsView#setData(org.glom.web.shared.GlomField[])
-	 */
-	public void setData(GlomField[] glomFields) {
-		if (glomFields == null) {
-			return;
-		}
-
-		for (int i = 0; i < dataLabels.size(); i++) {
-			Label dataLabel = dataLabels.get(i);
-			dataLabel.setText(glomFields[i] == null ? "" : glomFields[i].getText());
-		}
 	}
 
 	/*
@@ -90,7 +76,28 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@Override
 	public void clear() {
 		mainPanel.clear();
-		dataLabels.clear();
+		fields.clear();
+		portals.clear();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.DetailsView#getFields()
+	 */
+	@Override
+	public ArrayList<Field> getFields() {
+		return fields;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.DetailsView#getPortals()
+	 */
+	@Override
+	public ArrayList<Portal> getPortals() {
+		return portals;
 	}
 
 }

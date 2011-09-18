@@ -61,7 +61,7 @@ public class ListViewDBAccess extends ListDBAccess {
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0)
 			return -1;
-		return getResultSizeOfSQLQuery(fieldsToGet);
+		return getResultSizeOfSQLQuery();
 	}
 
 	/*
