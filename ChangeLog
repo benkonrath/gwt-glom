@@ -1,5 +1,16 @@
 2011-09-20  Ben Konrath  <ben@bagu.org>
 
+	Change the way sort clause is added for primary key when no sort clause is requested.
+
+	The primary key is now added to the LayoutFieldVector (fieldsToGet)
+	before the sort clause is created. When a sort clause is not requested, the
+	sort clause is created by finding the primary key in the LayoutFieldVector
+	(fieldsToGet).
+
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+
+2011-09-20  Ben Konrath  <ben@bagu.org>
+
 	Log error message if no documents are found in the configured directory.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also:

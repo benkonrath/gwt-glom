@@ -32,6 +32,7 @@ import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.web.server.Log;
+import org.glom.web.server.Utils;
 import org.glom.web.shared.GlomField;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -56,6 +57,12 @@ public abstract class ListDBAccess extends DBAccess {
 	protected ArrayList<GlomField[]> getListData(int start, int length, boolean useSortClause, int sortColumnIndex,
 			boolean isAscending) {
 
+		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
+		// a primary key.
+		if (getPrimaryKeyIndex() < 0) {
+			fieldsToGet.add(getPrimaryKeyLayoutItemField());
+		}
+
 		// create a sort clause for the column we've been asked to sort
 		SortClause sortClause = new SortClause();
 		if (useSortClause) {
@@ -68,19 +75,16 @@ public abstract class ListDBAccess extends DBAccess {
 						+ ". Cannot create a sort clause for this column.");
 			}
 		} else {
-			// create a sort clause for the primary key and if we're not asked to sort a specific column
-			LayoutItem_Field primaryKeyLayout = getPrimaryKeyLayoutItemField();
-			Field details = primaryKeyLayout.get_full_field_details();
-			// double check that it's actually a primary_key
-			if (details != null && details.get_primary_key()) {
-				sortClause.addLast(new SortFieldPair(primaryKeyLayout, true)); // ascending
+			// create a sort clause for the primary key if we're not asked to sort a specific column
+			int numItems = Utils.safeLongToInt(fieldsToGet.size());
+			for (int i = 0; i < numItems; i++) {
+				LayoutItem_Field layoutItem = fieldsToGet.get(i);
+				Field details = layoutItem.get_full_field_details();
+				if (details != null && details.get_primary_key()) {
+					sortClause.addLast(new SortFieldPair(layoutItem, true)); // ascending
+					break;
+				}
 			}
-		}
-
-		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
-		// a primary key.
-		if (getPrimaryKeyIndex() < 0) {
-			fieldsToGet.add(getPrimaryKeyLayoutItemField());
 		}
 
 		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
