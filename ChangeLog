@@ -1,3 +1,14 @@
+2011-09-20  Ben Konrath  <ben@bagu.org>
+
+	Log error message if no documents are found in the configured directory.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Also:
+	Extract the glom file extension string to a private static final class
+	variable (mostly as syntactic sugar). Accept a minor formatting change.
+	* src/main/resources/onlineglom.properties: Add '/glomfile' to end of
+	the example glom.document.directory configuration property to make it
+	more clear that it can any directory, not just the home directory.
+
 2011-09-18  Ben Konrath  <ben@bagu.org>
 
 	Add related lists to details view.

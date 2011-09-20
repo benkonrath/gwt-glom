@@ -50,6 +50,8 @@ import com.mchange.v2.c3p0.DataSources;
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 
+	private static final String GLOM_FILE_EXTENSION = ".glom";
+
 	// convenience class to for dealing with the Online Glom configuration file
 	private class OnlineGlomProperties extends Properties {
 		public String getKey(String value) {
@@ -91,13 +93,20 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		// get and check the glom files in the specified directory
-		final String glomFileExtension = ".glom";
 		File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.endsWith(glomFileExtension);
+				return name.endsWith(GLOM_FILE_EXTENSION);
 			}
 		});
+
+		// don't continue if there aren't any Glom files to configure
+		if (glomFiles.length <= 0) {
+			Log.error("Unable to find any Glom documents in the configured directory: " + documentDirName);
+			Log.error("Check the onlineglom.properties file to ensure that 'glom.document.directory' is set to the correct directory.");
+			return;
+		}
+
 		Glom.libglom_init();
 		for (File glomFile : glomFiles) {
 			Document document = new Document();
@@ -139,12 +148,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced with
 			// pluses (+). The space/plus replacement makes the key more friendly for URLs.
-			String documentID = filename.substring(0, glomFile.getName().length() - glomFileExtension.length())
+			String documentID = filename.substring(0, glomFile.getName().length() - GLOM_FILE_EXTENSION.length())
 					.replace(' ', '+');
 			configuredDocument.setDocumentID(documentID);
 			documentMapping.put(documentID, configuredDocument);
-
 		}
+
 	}
 
 	/*
@@ -325,7 +334,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<GlomField[]> getSortedRelatedListData(String documentID, String tableName,
-			String relationshipName, String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending) {
+			String relationshipName, String foreignKeyValue, int start, int length, int sortColumnIndex,
+			boolean ascending) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
