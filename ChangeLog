@@ -1,5 +1,14 @@
 2011-09-20  Ben Konrath  <ben@bagu.org>
 
+	Require java-libglom 1.17.3.
+
+	This picks up the fix for the seg fault problem with the Scenes table
+	in the Openismus Film Manager example.
+
+	* pom.xml:
+
+2011-09-20  Ben Konrath  <ben@bagu.org>
+
 	Change the way sort clause is added for primary key when no sort clause is requested.
 
 	The primary key is now added to the LayoutFieldVector (fieldsToGet)
