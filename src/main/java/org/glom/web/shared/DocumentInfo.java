@@ -22,8 +22,13 @@ package org.glom.web.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * DTO to hold basic information about tables of a Glom document.
+ * 
+ * @author Ben Konrath <ben@bagu.org>
+ */
 @SuppressWarnings("serial")
-public class GlomDocument implements Serializable {
+public class DocumentInfo implements Serializable {
 	private String title;
 	// could consider a LinkedHashMap if we need to support adding or removing tables
 	// order must be consistent between these two arrays
@@ -31,7 +36,7 @@ public class GlomDocument implements Serializable {
 	private ArrayList<String> tableTitles;
 	private int defaultTableIndex;
 
-	public GlomDocument() {
+	public DocumentInfo() {
 	}
 
 	public String getTitle() {

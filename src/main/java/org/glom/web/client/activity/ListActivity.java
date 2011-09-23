@@ -62,7 +62,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.isAuthenticated()");
 			}
 
 			public void onSuccess(Boolean result) {
@@ -86,7 +86,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getLayoutListTable()");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getListViewLayout()");
 			}
 
 			public void onSuccess(LayoutGroup result) {

@@ -38,7 +38,7 @@ import org.glom.web.server.database.DetailsDBAccess;
 import org.glom.web.server.database.ListDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.server.database.RelatedListDBAccess;
-import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -145,8 +145,8 @@ final class ConfiguredDocument {
 	/**
 	 * @return
 	 */
-	GlomDocument getGlomDocument() {
-		GlomDocument glomDocument = new GlomDocument();
+	DocumentInfo getDocumentInfo() {
+		DocumentInfo documentInfo = new DocumentInfo();
 
 		// get arrays of table names and titles, and find the default table index
 		StringVector tablesVec = document.get_table_names();
@@ -164,7 +164,7 @@ final class ConfiguredDocument {
 				tableNames.add(tableName);
 				// JNI is "expensive", the comparison will only be called if we haven't already found the default table
 				if (!foundDefaultTable && tableName.equals(document.get_default_table())) {
-					glomDocument.setDefaultTableIndex(visibleIndex);
+					documentInfo.setDefaultTableIndex(visibleIndex);
 					foundDefaultTable = true;
 				}
 				tableTitles.add(document.get_table_title(tableName));
@@ -173,11 +173,11 @@ final class ConfiguredDocument {
 		}
 
 		// set everything we need
-		glomDocument.setTableNames(tableNames);
-		glomDocument.setTableTitles(tableTitles);
-		glomDocument.setTitle(document.get_database_title());
+		documentInfo.setTableNames(tableNames);
+		documentInfo.setTableTitles(tableTitles);
+		documentInfo.setTitle(document.get_database_title());
 
-		return glomDocument;
+		return documentInfo;
 	}
 
 	/*

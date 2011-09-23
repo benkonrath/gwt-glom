@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
-import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -33,7 +33,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("libGlom")
 public interface OnlineGlomService extends RemoteService {
 
-	GlomDocument getGlomDocument(String documentID);
+	DocumentInfo getDocumentInfo(String documentID);
 
 	/**
 	 * Gets a {@link LayoutGroup} for the given Glom document and table name.

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
-import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -50,7 +50,7 @@ public interface OnlineGlomServiceAsync {
 		}
 	}
 
-	void getGlomDocument(String documentID, AsyncCallback<GlomDocument> callback);
+	void getDocumentInfo(String documentID, AsyncCallback<DocumentInfo> callback);
 
 	void getListViewLayout(String documentID, String tableName, AsyncCallback<LayoutGroup> callback);
 

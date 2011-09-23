@@ -33,8 +33,8 @@ import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DetailsLayoutAndData;
+import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
-import org.glom.web.shared.GlomDocument;
 import org.glom.web.shared.GlomField;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -179,16 +179,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getGlomDocument(java.lang.String)
+	 * @see org.glom.web.client.OnlineGlomService#getDocumentInfo(java.lang.String)
 	 */
 	@Override
-	public GlomDocument getGlomDocument(String documentID) {
+	public DocumentInfo getDocumentInfo(String documentID) {
 
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
-		return configuredDoc.getGlomDocument();
+		return configuredDoc.getDocumentInfo();
 
 	}
 

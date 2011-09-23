@@ -26,7 +26,7 @@ import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.HasSelectableTablePlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.TableSelectionView;
-import org.glom.web.shared.GlomDocument;
+import org.glom.web.shared.DocumentInfo;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -78,13 +78,13 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 		});
 
 		// get the table names, table titles and default table index for the current document
-		AsyncCallback<GlomDocument> callback = new AsyncCallback<GlomDocument>() {
+		AsyncCallback<DocumentInfo> callback = new AsyncCallback<DocumentInfo>() {
 			public void onFailure(Throwable caught) {
 				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getGlomDocument()");
+				System.out.println("AsyncCallback Failed: OnlineGlomService.getDocumentInfo()");
 			}
 
-			public void onSuccess(GlomDocument result) {
+			public void onSuccess(DocumentInfo result) {
 				tableSelectionView.setTableSelection(result.getTableNames(), result.getTableTitles());
 
 				if (tableName == null || tableName.isEmpty()) {
@@ -97,7 +97,7 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 				Window.setTitle(documentTitle + ": " + result.getTableTitles().get(result.getDefaultTableIndex()));
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getGlomDocument(documentID, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, callback);
 
 		// we're done, set the widget
 		containerWidget.setWidget(tableSelectionView.asWidget());
