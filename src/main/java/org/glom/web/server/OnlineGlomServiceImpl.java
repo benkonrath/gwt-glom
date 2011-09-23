@@ -35,7 +35,7 @@ import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -212,10 +212,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public ArrayList<GlomField[]> getListViewData(String documentID, String tableName, int start, int length) {
+	public ArrayList<DataItem[]> getListViewData(String documentID, String tableName, int start, int length) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
-			return new ArrayList<GlomField[]>();
+			return new ArrayList<DataItem[]>();
 		}
 		return configuredDoc.getListViewData(tableName, start, length, false, 0, false);
 	}
@@ -227,11 +227,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * int, boolean)
 	 */
 	@Override
-	public ArrayList<GlomField[]> getSortedListViewData(String documentID, String tableName, int start, int length,
+	public ArrayList<DataItem[]> getSortedListViewData(String documentID, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
-			return new ArrayList<GlomField[]>();
+			return new ArrayList<DataItem[]>();
 		}
 		return configuredDoc.getListViewData(tableName, start, length, true, sortColumnIndex, isAscending);
 	}
@@ -283,7 +283,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public GlomField[] getDetailsData(String documentID, String tableName, String primaryKeyValue) {
+	public DataItem[] getDetailsData(String documentID, String tableName, String primaryKeyValue) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -316,7 +316,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public ArrayList<GlomField[]> getRelatedListData(String documentID, String tableName, String relationshipName,
+	public ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, String relationshipName,
 			String foreignKeyValue, int start, int length) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
@@ -333,7 +333,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * int, boolean)
 	 */
 	@Override
-	public ArrayList<GlomField[]> getSortedRelatedListData(String documentID, String tableName,
+	public ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName,
 			String relationshipName, String foreignKeyValue, int start, int length, int sortColumnIndex,
 			boolean ascending) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);

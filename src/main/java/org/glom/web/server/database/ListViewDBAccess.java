@@ -25,7 +25,7 @@ import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.SortClause;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -45,7 +45,7 @@ public class ListViewDBAccess extends ListDBAccess {
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 	}
 
-	public ArrayList<GlomField[]> getData(int start, int length, boolean useSortClause, int sortColumnIndex,
+	public ArrayList<DataItem[]> getData(int start, int length, boolean useSortClause, int sortColumnIndex,
 			boolean isAscending) {
 
 		return getListData(start, length, useSortClause, sortColumnIndex, isAscending);

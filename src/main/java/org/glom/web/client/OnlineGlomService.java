@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.DocumentInfo;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -59,9 +59,9 @@ public interface OnlineGlomService extends RemoteService {
 	 *            the start index in the data result set from the SQL query that should be retrieved
 	 * @param length
 	 *            the number of rows of data to retrieve
-	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<GlomField[]> getListViewData(String documentID, String tableName, int start, int length);
+	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, int start, int length);
 
 	/**
 	 * Retrieves sorted data for a list view table.
@@ -80,9 +80,9 @@ public interface OnlineGlomService extends RemoteService {
 	 * @param ascending
 	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
 	 *            should be sorted in descending order
-	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<GlomField[]> getSortedListViewData(String documentID, String tableName, int start, int length,
+	ArrayList<DataItem[]> getSortedListViewData(String documentID, String tableName, int start, int length,
 			int sortColumnIndex, boolean isAscending);
 
 	/**
@@ -131,9 +131,9 @@ public interface OnlineGlomService extends RemoteService {
 	 *            default table
 	 * @param primaryKeyValue
 	 *            value of the primary key in the specified Glom table to use in the query
-	 * @return the result of the SQL query as an array of {@link GlomField}s
+	 * @return the result of the SQL query as an array of {@link DataItem}s
 	 */
-	GlomField[] getDetailsData(String documentID, String tableName, String primaryKeyValue);
+	DataItem[] getDetailsData(String documentID, String tableName, String primaryKeyValue);
 
 	/**
 	 * Gets a {@link DetailsLayoutAndData} object that contains the layout and data of the details view.
@@ -165,9 +165,9 @@ public interface OnlineGlomService extends RemoteService {
 	 *            the number of rows of data to retrieve
 	 * @param foreignKeyValue
 	 *            the value of the foreign key
-	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<GlomField[]> getRelatedListData(String documentID, String tableName, String relationshipName,
+	ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, String relationshipName,
 			String foreignKeyValue, int start, int length);
 
 	/**
@@ -191,9 +191,9 @@ public interface OnlineGlomService extends RemoteService {
 	 * @param ascending
 	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
 	 *            should be sorted in descending order
-	 * @return an {@link ArrayList} of {@link GlomField} arrays that represents the requested data
+	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<GlomField[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
+	ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
 			String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
 
 	/**

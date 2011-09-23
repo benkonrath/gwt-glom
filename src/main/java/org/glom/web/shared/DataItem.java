@@ -22,14 +22,14 @@ package org.glom.web.shared;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class GlomField implements Serializable {
+public class DataItem implements Serializable {
 
 	private String text;
 	private boolean bool;
 	private String fgColour;
 	private String bgColour;
 
-	public GlomField() {
+	public DataItem() {
 	}
 
 	// @formatter:off

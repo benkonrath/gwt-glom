@@ -30,7 +30,7 @@ import org.glom.libglom.Field;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.web.server.Log;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -45,7 +45,7 @@ public class DetailsDBAccess extends DBAccess {
 		this.tableName = tableName;
 	}
 
-	public GlomField[] getData(String primaryKeyValue) {
+	public DataItem[] getData(String primaryKeyValue) {
 
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document
 				.get_data_layout_groups("details", tableName));
@@ -62,7 +62,7 @@ public class DetailsDBAccess extends DBAccess {
 			return null;
 		}
 
-		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
+		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;

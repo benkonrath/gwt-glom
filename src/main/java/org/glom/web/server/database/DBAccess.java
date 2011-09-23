@@ -42,7 +42,7 @@ import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.NumericFormat;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -64,20 +64,20 @@ abstract class DBAccess {
 	}
 
 	/*
-	 * Converts data from a ResultSet to an ArrayList of GlomField array suitable for sending back to the client.
+	 * Converts data from a ResultSet to an ArrayList of DataItem array suitable for sending back to the client.
 	 */
-	final protected ArrayList<GlomField[]> convertResultSetToDTO(int length, LayoutFieldVector layoutFields,
-			ResultSet rs) throws SQLException {
+	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, LayoutFieldVector layoutFields, ResultSet rs)
+			throws SQLException {
 
 		// get the data we've been asked for
 		int rowCount = 0;
-		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
+		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
 		while (rs.next() && rowCount <= length) {
 			int layoutFieldsSize = Utils.safeLongToInt(layoutFields.size());
-			GlomField[] rowArray = new GlomField[layoutFieldsSize];
+			DataItem[] rowArray = new DataItem[layoutFieldsSize];
 			for (int i = 0; i < layoutFieldsSize; i++) {
-				// make a new GlomField to set the text and colours
-				rowArray[i] = new GlomField();
+				// make a new DataItem to set the text and colours
+				rowArray[i] = new DataItem();
 
 				// get foreground and background colours
 				LayoutItem_Field field = layoutFields.get(i);
@@ -190,7 +190,7 @@ abstract class DBAccess {
 				}
 			}
 
-			// add the row of GlomFields to the ArrayList we're going to return and update the row count
+			// add the row of DataItems to the ArrayList we're going to return and update the row count
 			rowsList.add(rowArray);
 			rowCount++;
 		}

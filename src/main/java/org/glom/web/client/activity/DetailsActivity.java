@@ -31,7 +31,7 @@ import org.glom.web.client.ui.details.Field;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.client.ui.details.RelatedListTable;
 import org.glom.web.shared.DetailsLayoutAndData;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
@@ -102,7 +102,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				portals = detailsView.getPortals();
 
 				// set the data
-				GlomField[] data = result.getData();
+				DataItem[] data = result.getData();
 				if (data == null)
 					return;
 

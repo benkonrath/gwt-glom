@@ -32,7 +32,7 @@ import org.glom.web.shared.layout.LayoutGroup;
 @SuppressWarnings("serial")
 public class DetailsLayoutAndData implements Serializable {
 	private ArrayList<LayoutGroup> layout;
-	private GlomField[] data;
+	private DataItem[] data;
 
 	public ArrayList<LayoutGroup> getLayout() {
 		return layout;
@@ -42,11 +42,11 @@ public class DetailsLayoutAndData implements Serializable {
 		this.layout = layout;
 	}
 
-	public GlomField[] getData() {
+	public DataItem[] getData() {
 		return data;
 	}
 
-	public void setData(GlomField[] data) {
+	public void setData(DataItem[] data) {
 		this.data = data;
 	}
 

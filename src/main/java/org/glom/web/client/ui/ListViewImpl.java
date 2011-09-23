@@ -43,8 +43,8 @@ public class ListViewImpl extends Composite implements ListView {
 	public void setCellTable(final String documentID, LayoutGroup layoutGroup) {
 		// This is not really in the MVP style because we're creating a new ListTable (really just a configured
 		// CellTable) for every document and table name change. The issue with creating a re-usable CellTable with
-		// methods like setColumnTitles() and setNumRows() is that the column objects (new Column<GlomField[],
-		// GlomField>(new GlomTextCell())) aren't destroyed when the column is removed from the CellTable and
+		// methods like setColumnTitles() and setNumRows() is that the column objects (new Column<DataItem[],
+		// DataItem>(new GlomTextCell())) aren't destroyed when the column is removed from the CellTable and
 		// IndexOutOfBounds exceptions are encountered with invalid array indexes trying access the data in this line:
 		// return object[j]. There's probably a workaround that could be done to fix this but I'm leaving it until
 		// there's a reason to fix it (performance, ease of testing, alternate implementation or otherwise).

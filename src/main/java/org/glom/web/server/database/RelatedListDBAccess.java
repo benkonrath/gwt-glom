@@ -33,7 +33,7 @@ import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
 import org.glom.web.server.Log;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -114,7 +114,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	}
 
-	public ArrayList<GlomField[]> getData(int start, int length, String foreignKeyValue, boolean useSortClause,
+	public ArrayList<DataItem[]> getData(int start, int length, String foreignKeyValue, boolean useSortClause,
 			int sortColumnIndex, boolean isAscending) {
 
 		if (tableName == null || foreignKeyValue == null || foreignKeyValue.isEmpty()) {

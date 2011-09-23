@@ -39,7 +39,7 @@ import org.glom.web.server.database.ListDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.server.database.RelatedListDBAccess;
 import org.glom.web.shared.DocumentInfo;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -215,7 +215,7 @@ final class ConfiguredDocument {
 		return libglomLayoutGroup;
 	}
 
-	ArrayList<GlomField[]> getListViewData(String tableName, int start, int length, boolean useSortClause,
+	ArrayList<DataItem[]> getListViewData(String tableName, int start, int length, boolean useSortClause,
 			int sortColumnIndex, boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
@@ -231,7 +231,7 @@ final class ConfiguredDocument {
 		return listViewDBAccess.getData(start, length, useSortClause, sortColumnIndex, isAscending);
 	}
 
-	GlomField[] getDetailsData(String tableName, String primaryKeyValue) {
+	DataItem[] getDetailsData(String tableName, String primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -240,7 +240,7 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
-	ArrayList<GlomField[]> getRelatedListData(String tableName, String relationshipName, String foreignKeyValue,
+	ArrayList<DataItem[]> getRelatedListData(String tableName, String relationshipName, String foreignKeyValue,
 			int start, int length, boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);

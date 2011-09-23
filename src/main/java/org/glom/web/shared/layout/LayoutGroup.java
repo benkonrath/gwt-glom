@@ -41,7 +41,7 @@ public class LayoutGroup extends LayoutItem implements Serializable {
 	private int primaryKeyIndex = -1;
 
 	// indicates if the primary key is hidden and has been added to the end of the LayoutListFields list and the
-	// database data list (GlomField).
+	// database data list (DataItem).
 	private boolean hiddenPrimaryKey = false;
 
 	private ArrayList<LayoutItem> items = new ArrayList<LayoutItem>();

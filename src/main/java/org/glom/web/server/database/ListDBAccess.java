@@ -33,7 +33,7 @@ import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -54,7 +54,7 @@ public abstract class ListDBAccess extends DBAccess {
 
 	protected abstract String getCountQuery();
 
-	protected ArrayList<GlomField[]> getListData(int start, int length, boolean useSortClause, int sortColumnIndex,
+	protected ArrayList<DataItem[]> getListData(int start, int length, boolean useSortClause, int sortColumnIndex,
 			boolean isAscending) {
 
 		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
@@ -87,7 +87,7 @@ public abstract class ListDBAccess extends DBAccess {
 			}
 		}
 
-		ArrayList<GlomField[]> rowsList = new ArrayList<GlomField[]>();
+		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;

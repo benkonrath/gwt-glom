@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.DocumentInfo;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
@@ -55,10 +55,10 @@ public interface OnlineGlomServiceAsync {
 	void getListViewLayout(String documentID, String tableName, AsyncCallback<LayoutGroup> callback);
 
 	void getListViewData(String documentID, String tableName, int start, int length,
-			AsyncCallback<ArrayList<GlomField[]>> callback);
+			AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getSortedListViewData(String documentID, String tableName, int start, int length, int sortColumnIndex,
-			boolean isAscending, AsyncCallback<ArrayList<GlomField[]>> callback);
+			boolean isAscending, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getDocuments(AsyncCallback<Documents> callback);
 
@@ -69,14 +69,14 @@ public interface OnlineGlomServiceAsync {
 	void getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue,
 			AsyncCallback<DetailsLayoutAndData> callback);
 
-	void getDetailsData(String documentID, String tableName, String primaryKeyValue, AsyncCallback<GlomField[]> callback);
+	void getDetailsData(String documentID, String tableName, String primaryKeyValue, AsyncCallback<DataItem[]> callback);
 
 	void getRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
-			int start, int length, AsyncCallback<ArrayList<GlomField[]>> callback);
+			int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getSortedRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
 			int start, int length, int sortColumnIndex, boolean ascending,
-			AsyncCallback<ArrayList<GlomField[]>> callback);
+			AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue,
 			AsyncCallback<Integer> callback);

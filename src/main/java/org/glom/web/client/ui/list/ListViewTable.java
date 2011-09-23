@@ -22,7 +22,7 @@ package org.glom.web.client.ui.list;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.cellview.client.Column;
@@ -52,22 +52,22 @@ public class ListViewTable extends ListTable {
 	 * @see org.glom.web.client.ui.list.ListTable#getDataProvider()
 	 */
 	@Override
-	protected AsyncDataProvider<GlomField[]> getDataProvider() {
-		AsyncDataProvider<GlomField[]> dataProvider = new AsyncDataProvider<GlomField[]>() {
+	protected AsyncDataProvider<DataItem[]> getDataProvider() {
+		AsyncDataProvider<DataItem[]> dataProvider = new AsyncDataProvider<DataItem[]>() {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void onRangeChanged(HasData<GlomField[]> display) {
+			protected void onRangeChanged(HasData<DataItem[]> display) {
 				// setup the callback object
 				final Range range = display.getVisibleRange();
 				final int start = range.getStart();
-				AsyncCallback<ArrayList<GlomField[]>> callback = new AsyncCallback<ArrayList<GlomField[]>>() {
+				AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
 					public void onFailure(Throwable caught) {
 						// FIXME: need to deal with failure
 						System.out.println("AsyncCallback Failed: OnlineGlomService.getTableData()");
 					}
 
-					public void onSuccess(ArrayList<GlomField[]> result) {
+					public void onSuccess(ArrayList<DataItem[]> result) {
 						updateRowData(start, result);
 					}
 				};
@@ -79,7 +79,7 @@ public class ListViewTable extends ListTable {
 					ColumnSortInfo info = colSortList.get(0);
 
 					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName, start,
-							range.getLength(), cellTable.getColumnIndex((Column<GlomField[], ?>) info.getColumn()),
+							range.getLength(), cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()),
 							info.isAscending(), callback);
 
 				} else {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.ListView;
-import org.glom.web.shared.GlomField;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -56,12 +56,12 @@ import com.google.gwt.view.client.ProvidesKey;
  */
 public abstract class ListTable extends Composite {
 
-	private class GlomTextCell extends AbstractCell<GlomField> {
+	private class GlomTextCell extends AbstractCell<DataItem> {
 
 		// The SafeHtml class is used to escape strings to avoid XSS attacks. This is not strictly
 		// necessary because the values aren't coming from a user but I'm using it anyway as a reminder.
 		@Override
-		public void render(Context context, GlomField value, SafeHtmlBuilder sb) {
+		public void render(Context context, DataItem value, SafeHtmlBuilder sb) {
 			if (value == null) {
 				return;
 			}
@@ -92,9 +92,9 @@ public abstract class ListTable extends Composite {
 	final private SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
 	protected String documentID;
 	protected String tableName;
-	protected CellTable<GlomField[]> cellTable;
+	protected CellTable<DataItem[]> cellTable;
 
-	abstract protected AbstractDataProvider<GlomField[]> getDataProvider();
+	abstract protected AbstractDataProvider<DataItem[]> getDataProvider();
 
 	@SuppressWarnings("unused")
 	private ListTable() {
@@ -110,15 +110,15 @@ public abstract class ListTable extends Composite {
 		this.tableName = layoutGroup.getTableName();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
-		ProvidesKey<GlomField[]> keyProvider = new ProvidesKey<GlomField[]>() {
+		ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
 			@Override
-			public Object getKey(GlomField[] item) {
+			public Object getKey(DataItem[] item) {
 				return item[primaryKeyIndex].getText();
 			}
 		};
 
 		// create the CellTable with the requested number of rows and the key provider
-		cellTable = new CellTable<GlomField[]>(numVisibleRows, keyProvider);
+		cellTable = new CellTable<DataItem[]>(numVisibleRows, keyProvider);
 		cellTable.setStyleName("data-list");
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
@@ -141,7 +141,7 @@ public abstract class ListTable extends Composite {
 		cellTable.setRowCount(layoutGroup.getExpectedResultSize());
 
 		// create and set the data provider
-		AbstractDataProvider<GlomField[]> dataProvider = getDataProvider();
+		AbstractDataProvider<DataItem[]> dataProvider = getDataProvider();
 		dataProvider.addDataDisplay(cellTable);
 
 		// add an AsyncHandler to activate sorting for the data provider
@@ -158,14 +158,14 @@ public abstract class ListTable extends Composite {
 
 	public void addColumn(LayoutItemField layoutItemField) {
 		// create a new column
-		Column<GlomField[], ?> column = null;
+		Column<DataItem[], ?> column = null;
 		final int j = cellTable.getColumnCount();
 
 		switch (layoutItemField.getType()) {
 		case TYPE_BOOLEAN:
 			// The onBrowserEvent method is overridden to ensure the user can't toggle the checkbox. We'll probably
 			// be able to use a CheckboxCell directly when we add support for editing.
-			column = new Column<GlomField[], Boolean>(new CheckboxCell(false, false) {
+			column = new Column<DataItem[], Boolean>(new CheckboxCell(false, false) {
 				@Override
 				public void onBrowserEvent(Context context, Element parent, Boolean value, NativeEvent event,
 						ValueUpdater<Boolean> valueUpdater) {
@@ -179,7 +179,7 @@ public abstract class ListTable extends Composite {
 				}
 			}) {
 				@Override
-				public Boolean getValue(GlomField[] object) {
+				public Boolean getValue(DataItem[] object) {
 					return object[j].getBoolean();
 				}
 			};
@@ -196,9 +196,9 @@ public abstract class ListTable extends Composite {
 		case TYPE_TIME:
 		case TYPE_TEXT:
 			// All of these types are formatted as text in the servlet.
-			column = new Column<GlomField[], GlomField>(new GlomTextCell()) {
+			column = new Column<DataItem[], DataItem>(new GlomTextCell()) {
 				@Override
-				public GlomField getValue(GlomField[] object) {
+				public DataItem getValue(DataItem[] object) {
 					return object[j];
 				}
 			};
@@ -227,7 +227,7 @@ public abstract class ListTable extends Composite {
 
 	public void addOpenButtonColumnn(final ListView.Presenter presenter, final String openButtonLabel) {
 
-		Column<GlomField[], String> openButtonColumn = new Column<GlomField[], String>(new ButtonCell() {
+		Column<DataItem[], String> openButtonColumn = new Column<DataItem[], String>(new ButtonCell() {
 			/*
 			 * (non-Javadoc)
 			 * 
@@ -245,7 +245,7 @@ public abstract class ListTable extends Composite {
 
 		}) {
 			@Override
-			public String getValue(GlomField[] object) {
+			public String getValue(DataItem[] object) {
 				return openButtonLabel;
 			}
 		};
