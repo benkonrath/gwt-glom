@@ -38,8 +38,8 @@ import org.glom.web.server.database.DetailsDBAccess;
 import org.glom.web.server.database.ListDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.server.database.RelatedListDBAccess;
-import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -316,7 +316,7 @@ final class ConfiguredDocument {
 				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutField));
 			} else {
 				Log.info(documentID, tableName,
-						"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
+						"Ignoring unknown list LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
 				continue;
 			}
 		}
@@ -427,7 +427,8 @@ final class ConfiguredDocument {
 					layoutItem = convertToGWTGlomLayoutItemField(libglomLayoutField);
 				} else {
 					Log.info(documentID, tableName,
-							"Ignoring unknown LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
+							"Ignoring unknown details LayoutItem of type " + libglomLayoutItem.get_part_type_name()
+									+ ".");
 					continue;
 				}
 			}

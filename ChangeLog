@@ -1,5 +1,11 @@
 2011-09-23  Ben Konrath  <ben@bagu.org>
 
+	Log which layout (list or details) the ignored item is from.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+
+2011-09-23  Ben Konrath  <ben@bagu.org>
+
 	Remove annotations that turn off code formatting in DataItem.
 
 	* src/main/java/org/glom/web/shared/DataItem.java:
