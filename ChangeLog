@@ -1,5 +1,11 @@
 2011-09-26  Ben Konrath  <ben@bagu.org>
 
+	Accept Eclipse formatting for OnlineGlomServiceAsync.
+
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+
+2011-09-26  Ben Konrath  <ben@bagu.org>
+
 	Don't use the ListDBAccess classes to get the primary key layout information.
 
 	This was causing a bug where the wrong index for the hidden primary key

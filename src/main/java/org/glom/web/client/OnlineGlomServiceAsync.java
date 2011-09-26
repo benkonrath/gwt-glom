@@ -21,10 +21,10 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
-import org.glom.web.shared.DetailsLayoutAndData;
-import org.glom.web.shared.Documents;
-import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.DetailsLayoutAndData;
+import org.glom.web.shared.DocumentInfo;
+import org.glom.web.shared.Documents;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
@@ -75,8 +75,7 @@ public interface OnlineGlomServiceAsync {
 			int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getSortedRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
-			int start, int length, int sortColumnIndex, boolean ascending,
-			AsyncCallback<ArrayList<DataItem[]>> callback);
+			int start, int length, int sortColumnIndex, boolean ascending, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue,
 			AsyncCallback<Integer> callback);
