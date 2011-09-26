@@ -128,12 +128,9 @@ public abstract class ListTable extends Composite {
 			LayoutItem layoutItem = layoutItems.get(i);
 
 			// only add columns for LayoutItemField types
-			if (!(layoutItem instanceof LayoutItemField)) {
-				continue;
+			if (layoutItem instanceof LayoutItemField) {
+				addColumn((LayoutItemField) layoutItem);
 			}
-			LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
-
-			addColumn(layoutItemField);
 
 		}
 

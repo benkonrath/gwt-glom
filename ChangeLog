@@ -1,5 +1,11 @@
 2011-09-26  Ben Konrath  <ben@bagu.org>
 
+	Simplify code that iterates through the LayoutGroup.
+
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
+
+2011-09-26  Ben Konrath  <ben@bagu.org>
+
 	Accept Eclipse formatting for OnlineGlomServiceAsync.
 
 	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
