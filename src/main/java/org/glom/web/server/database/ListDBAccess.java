@@ -48,8 +48,6 @@ public abstract class ListDBAccess extends DBAccess {
 		super(document, documentID, cpds, tableName);
 	}
 
-	public abstract int getExpectedResultSize();
-
 	protected abstract String getSelectQuery(SortClause sortClause);
 
 	protected abstract String getCountQuery();

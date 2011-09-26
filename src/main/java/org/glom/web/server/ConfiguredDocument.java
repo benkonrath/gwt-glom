@@ -35,7 +35,6 @@ import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.StringVector;
 import org.glom.web.server.database.DetailsDBAccess;
-import org.glom.web.server.database.ListDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.server.database.RelatedListDBAccess;
 import org.glom.web.shared.DataItem;
@@ -303,6 +302,7 @@ final class ConfiguredDocument {
 	 */
 	private LayoutGroup getListLayoutGroup(String tableName, org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		LayoutGroup layoutGroup = new LayoutGroup();
+		int primaryKeyIndex = -1;
 
 		// look at each child item
 		LayoutItemVector layoutItemsVec = libglomLayoutGroup.get_items();
@@ -311,9 +311,12 @@ final class ConfiguredDocument {
 			org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
 			// TODO add support for other LayoutItems (Text, Image, Button etc.)
-			LayoutItem_Field libglomLayoutField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
-			if (libglomLayoutField != null) {
-				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutField));
+			LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
+			if (libglomLayoutItemField != null) {
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
+				Field field = libglomLayoutItemField.get_full_field_details();
+				if (field.get_primary_key())
+					primaryKeyIndex = i;
 			} else {
 				Log.info(documentID, tableName,
 						"Ignoring unknown list LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
@@ -321,29 +324,38 @@ final class ConfiguredDocument {
 			}
 		}
 
-		ListDBAccess listDBAccess = null;
+		// set the expected result size for list view tables
 		LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(libglomLayoutGroup);
-		if (libglomLayoutItemPortal != null) {
-			// libglomLayoutGroup is a related view
-			listDBAccess = new RelatedListDBAccess(document, documentID, cpds, tableName,
-					libglomLayoutItemPortal.get_relationship_name_used());
-			layoutGroup.setExpectedResultSize(listDBAccess.getExpectedResultSize());
-		} else {
+		if (libglomLayoutItemPortal == null) {
 			// libglomLayoutGroup is a list view
-			listDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName, libglomLayoutGroup);
-			layoutGroup.setExpectedResultSize(listDBAccess.getExpectedResultSize());
+			ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
+					libglomLayoutGroup);
+			layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
 		}
 
 		// Set the primary key index for the table
-		int primaryKeyIndex = listDBAccess.getPrimaryKeyIndex();
 		if (primaryKeyIndex < 0) {
 			// Add a LayoutItemField for the primary key to the end of the item list in the LayoutGroup because it
 			// doesn't already contain a primary key.
-			LayoutItem_Field libglomLayoutItemField = listDBAccess.getPrimaryKeyLayoutItemField();
-			layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
-			layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
-			layoutGroup.setHiddenPrimaryKey(true);
-
+			Field primaryKey = null;
+			FieldVector fieldsVec = document.get_table_fields(tableName);
+			for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
+				Field field = fieldsVec.get(i);
+				if (field.get_primary_key()) {
+					primaryKey = field;
+					break;
+				}
+			}
+			if (primaryKey != null) {
+				LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
+				libglomLayoutItemField.set_full_field_details(primaryKey);
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
+				layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
+				layoutGroup.setHiddenPrimaryKey(true);
+			} else {
+				Log.error(document.get_database_title(), tableName,
+						"A primary key was not found in the FieldVector for this table. Navigation buttons will not work.");
+			}
 		} else {
 			layoutGroup.setPrimaryKeyIndex(primaryKeyIndex);
 		}

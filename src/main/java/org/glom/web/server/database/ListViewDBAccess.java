@@ -56,7 +56,6 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * 
 	 * @see org.glom.web.server.ListDBAccess#getExpectedResultSize()
 	 */
-	@Override
 	public int getExpectedResultSize() {
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0)

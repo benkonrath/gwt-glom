@@ -289,7 +289,7 @@ abstract class DBAccess {
 	 * 
 	 * @return primary key Field
 	 */
-	public Field getPrimaryKeyField() {
+	protected Field getPrimaryKeyField() {
 		Field primaryKey = null;
 		FieldVector fieldsVec = document.get_table_fields(tableName);
 		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
@@ -307,7 +307,7 @@ abstract class DBAccess {
 	 * 
 	 * @return primary key LayoutItem_Field
 	 */
-	public LayoutItem_Field getPrimaryKeyLayoutItemField() {
+	protected LayoutItem_Field getPrimaryKeyLayoutItemField() {
 		Field primaryKey = getPrimaryKeyField();
 
 		LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();

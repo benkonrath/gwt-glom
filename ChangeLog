@@ -1,3 +1,26 @@
+2011-09-26  Ben Konrath  <ben@bagu.org>
+
+	Don't use the ListDBAccess classes to get the primary key layout information.
+
+	This was causing a bug where the wrong index for the hidden primary key
+	was being sent to the client.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Find the
+	primary key while creating the LayoutGroup DTO. Create a
+	LayoutItemField DTO for hidden primary keys. Don't use the
+	RelatedListDBAccess because it was only used for getting the primary
+	key.
+	* src/main/java/org/glom/web/server/database/DBAccess.java: Change the
+	access modifier from public to protected for getPrimaryKeyField() and
+	getPrimaryKeyLayoutItemField().
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java: Remove
+	abstract method getExpectedResultSize() because RelatedListDBAccess
+	doesn't have enough info to implement it.
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	Remove @Override for getExpectedResultSize().
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	Remove method getExpectedResultSize().
+
 2011-09-23  Ben Konrath  <ben@bagu.org>
 
 	Log which layout (list or details) the ignored item is from.

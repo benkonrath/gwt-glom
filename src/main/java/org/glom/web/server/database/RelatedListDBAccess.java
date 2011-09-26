@@ -249,15 +249,4 @@ public class RelatedListDBAccess extends ListDBAccess {
 				whereClauseToKeyField, foreignKeyValue);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.server.ListDBAccess#getExpectedResultSize()
-	 */
-	@Override
-	public int getExpectedResultSize() {
-		// don't know what the expected size will be without the foreign key
-		return -1;
-	}
-
 }
