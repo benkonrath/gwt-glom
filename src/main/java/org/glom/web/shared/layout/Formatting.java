@@ -21,6 +21,8 @@ package org.glom.web.shared.layout;
 
 import java.io.Serializable;
 
+import org.glom.web.shared.GlomNumericFormat;
+
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
@@ -38,6 +40,9 @@ public class Formatting implements Serializable {
 
 	private HorizontalAlignment horizontalAlignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
 	private int multilineHeightLines = 1;
+	private String textFormatColourForeground;
+	private String textFormatColourBackground;
+	private GlomNumericFormat glomNumericFormat;
 
 	public void setHorizontalAlignment(HorizontalAlignment alignment) {
 		horizontalAlignment = alignment;
@@ -65,6 +70,55 @@ public class Formatting implements Serializable {
 	 */
 	public void setTextFormatMultilineHeightLines(int value) {
 		this.multilineHeightLines = value;
+	}
+
+	/**
+	 * Get the foreground colour to use for text when displaying a field value.
+	 * 
+	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColourForNegatives(boolean)} if that is
+	 * active.
+	 * 
+	 * @returns the text foreground colour in HTML colour format
+	 */
+	public String getTextFormatColourForeground() {
+		return textFormatColourForeground;
+	}
+
+	/**
+	 * Set the foreground colour to use for text when displaying a field value.
+	 * 
+	 * @param colour
+	 *            the text foreground colour in HTML colour format
+	 */
+	public void setTextFormatColourForeground(String colour) {
+		this.textFormatColourForeground = colour;
+	}
+
+	/**
+	 * Get the background colour to use for text when displaying a field value.
+	 * 
+	 * @returns the text background colour in HTML colour format
+	 */
+	public String getTextFormatColourBackground() {
+		return textFormatColourBackground;
+	}
+
+	/**
+	 * Set the background colour to use for text when displaying a field value.
+	 * 
+	 * @param colour
+	 *            a text background colour in HTML colour format
+	 */
+	public void setTextFormatColourBackground(String colour) {
+		this.textFormatColourBackground = colour;
+	}
+
+	public GlomNumericFormat getGlomNumericFormat() {
+		return glomNumericFormat;
+	}
+
+	public void setGlomNumericFormat(GlomNumericFormat glomNumericFormat) {
+		this.glomNumericFormat = glomNumericFormat;
 	}
 
 }

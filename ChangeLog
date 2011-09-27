@@ -1,3 +1,50 @@
+2011-09-27  Ben Konrath  <ben@bagu.org>
+
+	Add field colouring to details view.
+
+	This change re-works how field colouring works. The colour formatting
+	information is now set to the client with the layout information instead of
+	with the data. This eliminates the need to send the same colour strings for
+	data in list view column when colour information is set.
+
+	In order to set an alternate colour for negative numeric values, the
+	number is now sent to client and formatted with the GWT NumberFormat class.
+
+	This change also fixes:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=659752
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: Add the GWT
+	internationalization framework which is needed for client side numeric
+	formatting.
+	* src/main/java/org/glom/web/client/Utils.java: New file for some
+	client static utility methods.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Pass
+	the DataItem object to the Field class. Use a utility method to
+	create the foreignKeyValue string.
+	* src/main/java/org/glom/web/client/ui/details/Field.java: Set
+	alignment and text colours in the constructor. Add setData(DataItem)
+	method. Remove setText(String) method.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Add the
+	colour information to GlomTextCell. Create and use GlomNumberCell for
+	rendering numbers. Use utility method to get the string for the
+	primary key of the key provider. Re-work how the horizontal alignment
+	is set.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Add
+	formatting to layout information. Methods for converting the libglom
+	formatting information were moved from DBAccess.
+	* src/main/java/org/glom/web/server/database/DBAccess.java: Remove
+	numeric formatting (it's now done on the client side). Don't set text
+	colours in DataItem. Move libglom formatting conversion methods to
+	ConfiguredDocument.
+	* src/main/java/org/glom/web/shared/DataItem.java: Remove fields and
+	getters/setters for text colour information.
+	* src/main/java/org/glom/web/shared/GlomNumericFormat.java: New file
+	for transferring the libglom NumericFormat information to the client.
+	* src/main/java/org/glom/web/shared/layout/Formatting.java: Add fields
+	and getters/setters for: GlomNumericFormat, background colour and
+	foreground colour strings.
+
 2011-09-26  Ben Konrath  <ben@bagu.org>
 
 	Simplify code that iterates through the LayoutGroup.

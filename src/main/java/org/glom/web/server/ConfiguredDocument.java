@@ -32,6 +32,7 @@ import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_Portal;
+import org.glom.libglom.NumericFormat;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.StringVector;
 import org.glom.web.server.database.DetailsDBAccess;
@@ -39,6 +40,7 @@ import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.server.database.RelatedListDBAccess;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DocumentInfo;
+import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -313,7 +315,7 @@ final class ConfiguredDocument {
 			// TODO add support for other LayoutItems (Text, Image, Button etc.)
 			LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, true));
 				Field field = libglomLayoutItemField.get_full_field_details();
 				if (field.get_primary_key())
 					primaryKeyIndex = i;
@@ -349,13 +351,14 @@ final class ConfiguredDocument {
 			if (primaryKey != null) {
 				LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
 				libglomLayoutItemField.set_full_field_details(primaryKey);
-				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField));
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, false));
 				layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
 				layoutGroup.setHiddenPrimaryKey(true);
 			} else {
 				Log.error(document.get_database_title(), tableName,
 						"A primary key was not found in the FieldVector for this table. Navigation buttons will not work.");
 			}
+
 		} else {
 			layoutGroup.setPrimaryKeyIndex(primaryKeyIndex);
 		}
@@ -434,9 +437,9 @@ final class ConfiguredDocument {
 				// libglomLayoutItem is *not* a LayoutGroup
 				// create LayoutItem DTOs based on the the libglom type
 				// TODO add support for other LayoutItems (Text, Image, Button etc.)
-				LayoutItem_Field libglomLayoutField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
-				if (libglomLayoutField != null) {
-					layoutItem = convertToGWTGlomLayoutItemField(libglomLayoutField);
+				LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
+				if (libglomLayoutItemField != null) {
+					layoutItem = convertToGWTGlomLayoutItemField(libglomLayoutItemField, true);
 				} else {
 					Log.info(documentID, tableName,
 							"Ignoring unknown details LayoutItem of type " + libglomLayoutItem.get_part_type_name()
@@ -451,26 +454,70 @@ final class ConfiguredDocument {
 		return layoutGroup;
 	}
 
-	private LayoutItemField convertToGWTGlomLayoutItemField(LayoutItem_Field libglomLayoutItemField) {
+	private GlomNumericFormat convertNumbericFormat(NumericFormat libglomNumericFormat) {
+		GlomNumericFormat gnf = new GlomNumericFormat();
+		gnf.setUseAltForegroundColourForNegatives(libglomNumericFormat.getM_alt_foreground_color_for_negatives());
+		gnf.setCurrencyCode(libglomNumericFormat.getM_currency_symbol());
+		gnf.setDecimalPlaces(Utils.safeLongToInt(libglomNumericFormat.getM_decimal_places()));
+		gnf.setDecimalPlacesRestricted(libglomNumericFormat.getM_decimal_places_restricted());
+		gnf.setUseThousandsSeparator(libglomNumericFormat.getM_use_thousands_separator());
+		return gnf;
+	}
+
+	private Formatting convertFormatting(FieldFormatting libglomFormatting) {
+		Formatting formatting = new Formatting();
+
+		// horizontal alignment
+		Formatting.HorizontalAlignment horizontalAlignment;
+		switch (libglomFormatting.get_horizontal_alignment()) {
+		case HORIZONTAL_ALIGNMENT_LEFT:
+			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
+		case HORIZONTAL_ALIGNMENT_RIGHT:
+			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
+		case HORIZONTAL_ALIGNMENT_AUTO:
+		default:
+			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
+		}
+		formatting.setHorizontalAlignment(horizontalAlignment);
+
+		// text colour
+		String foregroundColour = libglomFormatting.get_text_format_color_foreground();
+		if (foregroundColour != null && !foregroundColour.isEmpty())
+			formatting.setTextFormatColourForeground(convertGdkColorToHtmlColour(foregroundColour));
+		String backgroundColour = libglomFormatting.get_text_format_color_background();
+		if (backgroundColour != null && !backgroundColour.isEmpty())
+			formatting.setTextFormatColourBackground(convertGdkColorToHtmlColour(backgroundColour));
+
+		// multiline
+		if (libglomFormatting.get_text_format_multiline()) {
+			formatting.setTextFormatMultilineHeightLines(Utils.safeLongToInt(libglomFormatting
+					.get_text_format_multiline_height_lines()));
+		}
+
+		return formatting;
+	}
+
+	private LayoutItemField convertToGWTGlomLayoutItemField(LayoutItem_Field libglomLayoutItemField,
+			boolean includeFormatting) {
 		LayoutItemField layoutItemField = new LayoutItemField();
 
 		// set type
 		layoutItemField.setType(convertToGWTGlomFieldType(libglomLayoutItemField.get_glom_type()));
 
-		// set formatting
-		Formatting formatting = new Formatting();
-		formatting.setHorizontalAlignment(convertToGWTGlomHorizonalAlignment(libglomLayoutItemField
-				.get_formatting_used_horizontal_alignment()));
-		FieldFormatting libglomFormatting = libglomLayoutItemField.get_formatting_used();
-		if (libglomFormatting.get_text_format_multiline()) {
-			formatting.setTextFormatMultilineHeightLines(Utils.safeLongToInt(libglomFormatting
-					.get_text_format_multiline_height_lines()));
-		}
-		layoutItemField.setFormatting(formatting);
-
 		// set title and name
 		layoutItemField.setTitle(libglomLayoutItemField.get_title_or_name());
 		layoutItemField.setName(libglomLayoutItemField.get_name());
+
+		if (includeFormatting) {
+			FieldFormatting glomFormatting = libglomLayoutItemField.get_formatting_used();
+			Formatting formatting = convertFormatting(glomFormatting);
+
+			// create a GlomNumericFormat DTO for numeric values
+			if (libglomLayoutItemField.get_glom_type() == org.glom.libglom.Field.glom_field_type.TYPE_NUMERIC) {
+				formatting.setGlomNumericFormat(convertNumbericFormat(glomFormatting.getM_numeric_format()));
+			}
+			layoutItemField.setFormatting(formatting);
+		}
 
 		return layoutItemField;
 	}
@@ -506,25 +553,20 @@ final class ConfiguredDocument {
 	}
 
 	/*
-	 * This method converts a FieldFormatting.HorizontalAlignment to the equivalent Formatting.HorizontalAlignment. The
-	 * need for this comes from the fact that the GWT HorizontalAlignment classes can't be used with RPC and there's no
-	 * easy way to use the java-libglom FieldFormatting.HorizontalAlignment enum with RPC. An enum identical to
-	 * FieldFormatting.HorizontalAlignment is included in the Formatting class.
+	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by discarding the least
+	 * significant 8-bits in each channel.
 	 */
-	private Formatting.HorizontalAlignment convertToGWTGlomHorizonalAlignment(
-			FieldFormatting.HorizontalAlignment alignment) {
-		switch (alignment) {
-		case HORIZONTAL_ALIGNMENT_AUTO:
-			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
-		case HORIZONTAL_ALIGNMENT_LEFT:
-			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
-		case HORIZONTAL_ALIGNMENT_RIGHT:
-			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
-		default:
-			Log.error("Recieved an alignment that I don't know about: "
-					+ FieldFormatting.HorizontalAlignment.class.getName() + "." + alignment.toString() + ". Returning "
-					+ Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT.toString() + ".");
-			return Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
+	private String convertGdkColorToHtmlColour(String gdkColor) {
+		if (gdkColor.length() == 13)
+			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
+		else if (gdkColor.length() == 7) {
+			// This shouldn't happen but let's deal with it if it does.
+			Log.warn(documentID,
+					"Expected a 13 character string but received a 7 character string. Returning received string.");
+			return gdkColor;
+		} else {
+			Log.error("Did not receive a 13 or 7 character string. Returning black HTML colour code.");
+			return "#000000";
 		}
 	}
 

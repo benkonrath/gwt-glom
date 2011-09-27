@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.Utils;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
@@ -30,8 +31,8 @@ import org.glom.web.client.ui.DetailsView;
 import org.glom.web.client.ui.details.Field;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.client.ui.details.RelatedListTable;
-import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
@@ -113,20 +114,24 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				for (int i = 0; i < Math.min(fields.size(), data.length); i++) {
 					Field field = fields.get(i);
 					if (data[i] != null) {
-						String dataValue = data[i].getText();
 
 						// set the field data
-						field.setText(dataValue);
+						field.setData(data[i]);
 
 						// see if there are any related lists that need to be setup
 						for (Portal portal : portals) {
 							LayoutItemField layoutItemField = field.getLayoutItem();
 							LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 							if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
+								String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(),
+										data[i]);
+								if (foreignKeyValue == null)
+									continue;
 								RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-										dataValue);
+										foreignKeyValue);
 								portal.setContents(relatedListTable);
-								setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), dataValue);
+								setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(),
+										foreignKeyValue);
 							}
 						}
 					}

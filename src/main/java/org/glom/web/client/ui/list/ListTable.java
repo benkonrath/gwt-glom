@@ -21,12 +21,16 @@ package org.glom.web.client.ui.list;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.Utils;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.ListView;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.GlomNumericFormat;
+import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ButtonCell;
@@ -36,6 +40,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -47,6 +52,7 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 
@@ -56,35 +62,90 @@ import com.google.gwt.view.client.ProvidesKey;
  */
 public abstract class ListTable extends Composite {
 
-	private class GlomTextCell extends AbstractCell<DataItem> {
+	private class GlomTextCell extends AbstractCell<String> {
+		SafeHtml colourCSSProp;
+		SafeHtml backgroundColourCSSProp;
 
-		// The SafeHtml class is used to escape strings to avoid XSS attacks. This is not strictly
-		// necessary because the values aren't coming from a user but I'm using it anyway as a reminder.
+		// TODO Find a way to set the colours on the whole column
+		public GlomTextCell(String foregroundColour, String backgroundColour) {
+			if (foregroundColour != null && !foregroundColour.isEmpty()) {
+				colourCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColour + ";");
+			} else {
+				colourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			}
+			if (backgroundColour != null && !backgroundColour.isEmpty()) {
+				backgroundColourCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColour + ";");
+			} else {
+				backgroundColourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			}
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see com.google.gwt.cell.client.AbstractCell#render(com.google.gwt.cell.client.Cell.Context,
+		 * java.lang.Object, com.google.gwt.safehtml.shared.SafeHtmlBuilder)
+		 */
 		@Override
-		public void render(Context context, DataItem value, SafeHtmlBuilder sb) {
-			if (value == null) {
+		public void render(Context context, String value, SafeHtmlBuilder sb) {
+			if (value == null)
 				return;
-			}
-
-			// get the foreground and background colours if they're set
-			SafeHtml fgcolour = null, bgcolour = null;
-			String colour = value.getFGColour();
-			if (colour == null) {
-				fgcolour = SafeHtmlUtils.fromSafeConstant("");
-			} else {
-				fgcolour = SafeHtmlUtils.fromString("color:" + colour + ";");
-			}
-			colour = value.getBGColour();
-			if (colour == null) {
-				bgcolour = SafeHtmlUtils.fromSafeConstant("");
-			} else {
-				bgcolour = SafeHtmlUtils.fromString("background-color:" + colour + ";");
-			}
 
 			// set the text and colours
-			sb.appendHtmlConstant("<div style=\"" + fgcolour.asString() + bgcolour.asString() + "\">");
-			sb.append(SafeHtmlUtils.fromString(value.getText()));
+			// FIXME this isn't using safe html correctly!
+			sb.appendHtmlConstant("<div style=\"" + colourCSSProp.asString() + backgroundColourCSSProp.asString()
+					+ "\">");
+			sb.append(SafeHtmlUtils.fromString(value));
 			sb.appendHtmlConstant("</div>");
+
+		}
+	}
+
+	private class GlomNumberCell extends AbstractCell<Double> {
+		private SafeHtml colourCSSProp;
+		private SafeHtml backgroundColourCSSProp;
+		private NumberFormat numberFormat;
+		private boolean useAltColourForNegatives;
+
+		// TODO Find a way to set the colours on the whole column
+		public GlomNumberCell(String foregroundColour, String backgroundColour, NumberFormat numberFormat,
+				boolean useAltColourForNegatives) {
+			if (foregroundColour != null && !foregroundColour.isEmpty()) {
+				colourCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColour + ";");
+			} else {
+				colourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			}
+			if (backgroundColour != null && !backgroundColour.isEmpty()) {
+				backgroundColourCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColour + ";");
+			} else {
+				backgroundColourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			}
+			this.numberFormat = numberFormat;
+			this.useAltColourForNegatives = useAltColourForNegatives;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see com.google.gwt.cell.client.AbstractCell#render(com.google.gwt.cell.client.Cell.Context,
+		 * java.lang.Object, com.google.gwt.safehtml.shared.SafeHtmlBuilder)
+		 */
+		@Override
+		public void render(Context context, Double value, SafeHtmlBuilder sb) {
+			if (value == null)
+				return;
+			// set the foreground colour to red if the number is negative and this is requested
+			if (useAltColourForNegatives && value.doubleValue() < 0) {
+				// The default alternative colour in libglom is red.
+				colourCSSProp = SafeHtmlUtils.fromString("color: #FF0000;");
+			}
+
+			// FIXME this isn't using safe html correctly!
+			sb.appendHtmlConstant("<div style=\"" + colourCSSProp.asString() + backgroundColourCSSProp.asString()
+					+ "\">");
+			sb.append(SafeHtmlUtils.fromString(numberFormat.format(value)));
+			sb.appendHtmlConstant("</div>");
+
 		}
 	}
 
@@ -107,13 +168,16 @@ public abstract class ListTable extends Composite {
 
 	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows) {
 
-		this.tableName = layoutGroup.getTableName();
+		tableName = layoutGroup.getTableName();
+		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
+		LayoutItemField primaryKeyLayoutItem = (LayoutItemField) layoutItems.get(primaryKeyIndex);
+		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.getType();
 		ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
 			@Override
-			public Object getKey(DataItem[] item) {
-				return item[primaryKeyIndex].getText();
+			public Object getKey(DataItem[] value) {
+				return Utils.getKeyValueStringForQuery(primaryKeyFieldType, value[primaryKeyIndex]);
 			}
 		};
 
@@ -122,7 +186,6 @@ public abstract class ListTable extends Composite {
 		cellTable.setStyleName("data-list");
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
-		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 		int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();
 		for (int i = 0; i < numItems; i++) {
 			LayoutItem layoutItem = layoutItems.get(i);
@@ -153,11 +216,26 @@ public abstract class ListTable extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public void addColumn(LayoutItemField layoutItemField) {
+	public void addColumn(final LayoutItemField layoutItemField) {
+		// Setup the default alignment of the column.
+		HorizontalAlignmentConstant columnAlignment;
+		Formatting formatting = layoutItemField.getFormatting();
+		switch (formatting.getHorizontalAlignment()) {
+		case HORIZONTAL_ALIGNMENT_LEFT:
+			columnAlignment = HasHorizontalAlignment.ALIGN_LEFT;
+			break;
+		case HORIZONTAL_ALIGNMENT_RIGHT:
+			columnAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
+			break;
+		case HORIZONTAL_ALIGNMENT_AUTO:
+		default:
+			columnAlignment = HasHorizontalAlignment.ALIGN_DEFAULT;
+			break;
+		}
+
 		// create a new column
 		Column<DataItem[], ?> column = null;
 		final int j = cellTable.getColumnCount();
-
 		switch (layoutItemField.getType()) {
 		case TYPE_BOOLEAN:
 			// The onBrowserEvent method is overridden to ensure the user can't toggle the checkbox. We'll probably
@@ -176,12 +254,26 @@ public abstract class ListTable extends Composite {
 				}
 			}) {
 				@Override
-				public Boolean getValue(DataItem[] object) {
-					return object[j].getBoolean();
+				public Boolean getValue(DataItem[] value) {
+					return value[j].getBoolean();
 				}
 			};
-			// Make checkboxes centred in the column.
-			column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			// override the configured horizontal alignment
+			columnAlignment = HasHorizontalAlignment.ALIGN_CENTER;
+			break;
+		case TYPE_NUMERIC:
+			GlomNumericFormat glomNumericFormat = formatting.getGlomNumericFormat();
+			NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
+
+			column = new Column<DataItem[], Double>(new GlomNumberCell(formatting.getTextFormatColourForeground(),
+					formatting.getTextFormatColourBackground(), gwtNumberFormat,
+					glomNumericFormat.getUseAltForegroundColourForNegatives())) {
+				@Override
+				public Double getValue(DataItem[] value) {
+					return value[j].getNumber();
+				}
+			};
+
 			break;
 		default:
 			// use a text rendering cell for types we don't know about but log an error
@@ -189,35 +281,20 @@ public abstract class ListTable extends Composite {
 		case TYPE_DATE:
 		case TYPE_IMAGE:
 		case TYPE_INVALID:
-		case TYPE_NUMERIC:
 		case TYPE_TIME:
 		case TYPE_TEXT:
-			// All of these types are formatted as text in the servlet.
-			column = new Column<DataItem[], DataItem>(new GlomTextCell()) {
+			column = new Column<DataItem[], String>(new GlomTextCell(formatting.getTextFormatColourForeground(),
+					formatting.getTextFormatColourBackground())) {
 				@Override
-				public DataItem getValue(DataItem[] object) {
-					return object[j];
+				public String getValue(DataItem[] value) {
+					return value[j].getText();
 				}
 			};
-
-			// Set the alignment of the text.
-			switch (layoutItemField.getFormatting().getHorizontalAlignment()) {
-			case HORIZONTAL_ALIGNMENT_LEFT:
-				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-				break;
-			case HORIZONTAL_ALIGNMENT_RIGHT:
-				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-				break;
-			case HORIZONTAL_ALIGNMENT_AUTO:
-			default:
-				// TODO: log warning, this shouldn't happen
-				column.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
-				break;
-			}
 			break;
 		}
 
 		// set column properties and add to cell cellTable
+		column.setHorizontalAlignment(columnAlignment);
 		column.setSortable(true);
 		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
@@ -235,7 +312,6 @@ public abstract class ListTable extends Composite {
 			@Override
 			protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
 					ValueUpdater<String> valueUpdater) {
-
 				super.onEnterKeyDown(context, parent, value, event, valueUpdater);
 				presenter.goTo(new DetailsPlace(documentID, tableName, (String) context.getKey()));
 			}

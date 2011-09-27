@@ -26,4 +26,7 @@
 		<when-type-is class="org.glom.web.client.ClientFactory" />
 	</replace-with>
 
+	<!-- Use the GWT internationalization framework -->
+	<inherits name="com.google.gwt.i18n.I18N"/>
+
 </module>

@@ -24,14 +24,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Locale;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
-import org.glom.libglom.FieldFormatting;
 import org.glom.libglom.FieldVector;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroupVector;
@@ -39,7 +36,6 @@ import org.glom.libglom.LayoutItem;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_Portal;
-import org.glom.libglom.NumericFormat;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
@@ -79,18 +75,9 @@ abstract class DBAccess {
 				// make a new DataItem to set the text and colours
 				rowArray[i] = new DataItem();
 
-				// get foreground and background colours
-				LayoutItem_Field field = layoutFields.get(i);
-				FieldFormatting formatting = field.get_formatting_used();
-				String fgcolour = formatting.get_text_format_color_foreground();
-				if (!fgcolour.isEmpty())
-					rowArray[i].setFGColour(convertGdkColorToHtmlColour(fgcolour));
-				String bgcolour = formatting.get_text_format_color_background();
-				if (!bgcolour.isEmpty())
-					rowArray[i].setBGColour(convertGdkColorToHtmlColour(bgcolour));
-
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
+				LayoutItem_Field field = layoutFields.get(i);
 				switch (field.get_glom_type()) {
 				case TYPE_TEXT:
 					String text = rs.getString(i + 1);
@@ -100,60 +87,7 @@ abstract class DBAccess {
 					rowArray[i].setBoolean(rs.getBoolean(i + 1));
 					break;
 				case TYPE_NUMERIC:
-					// Take care of the numeric formatting before converting the number to a string.
-					NumericFormat numFormatGlom = formatting.getM_numeric_format();
-					// There's no isCurrency() method in the glom NumericFormat class so we're assuming that the
-					// number should be formatted as a currency if the currency code string is not empty.
-					String currencyCode = numFormatGlom.getM_currency_symbol();
-					NumberFormat numFormatJava = null;
-					boolean useGlomCurrencyCode = false;
-					if (currencyCode.length() == 3) {
-						// Try to format the currency using the Java Locales system.
-						try {
-							Currency currency = Currency.getInstance(currencyCode);
-							Log.info(documentID, tableName, "A valid ISO 4217 currency code is being used."
-									+ " Overriding the numeric formatting with information from the locale.");
-							int digits = currency.getDefaultFractionDigits();
-							numFormatJava = NumberFormat.getCurrencyInstance(Locale.ROOT);
-							numFormatJava.setCurrency(currency);
-							numFormatJava.setMinimumFractionDigits(digits);
-							numFormatJava.setMaximumFractionDigits(digits);
-						} catch (IllegalArgumentException e) {
-							Log.warn(documentID, tableName, currencyCode + " is not a valid ISO 4217 code."
-									+ " Manually setting currency code with this value.");
-							// The currency code is not this is not an ISO 4217 currency code.
-							// We're going to manually set the currency code and use the glom numeric formatting.
-							useGlomCurrencyCode = true;
-							numFormatJava = convertToJavaNumberFormat(numFormatGlom);
-						}
-					} else if (currencyCode.length() > 0) {
-						Log.warn(documentID, tableName, currencyCode + " is not a valid ISO 4217 code."
-								+ " Manually setting currency code with this value.");
-						// The length of the currency code is > 0 and != 3; this is not an ISO 4217 currency code.
-						// We're going to manually set the currency code and use the glom numeric formatting.
-						useGlomCurrencyCode = true;
-						numFormatJava = convertToJavaNumberFormat(numFormatGlom);
-					} else {
-						// The length of the currency code is 0; the number is not a currency.
-						numFormatJava = convertToJavaNumberFormat(numFormatGlom);
-					}
-
-					// TODO: Do I need to do something with NumericFormat.get_default_precision() from libglom?
-
-					double number = rs.getDouble(i + 1);
-					if (number < 0) {
-						if (formatting.getM_numeric_format().getM_alt_foreground_color_for_negatives())
-							// overrides the set foreground colour
-							rowArray[i].setFGColour(convertGdkColorToHtmlColour(NumericFormat
-									.get_alternative_color_for_negatives()));
-					}
-
-					// Finally convert the number to text using the glom currency string if required.
-					if (useGlomCurrencyCode) {
-						rowArray[i].setText(currencyCode + " " + numFormatJava.format(number));
-					} else {
-						rowArray[i].setText(numFormatJava.format(number));
-					}
+					rowArray[i].setNumber(rs.getDouble(i + 1));
 					break;
 				case TYPE_DATE:
 					Date date = rs.getDate(i + 1);
@@ -320,35 +254,6 @@ abstract class DBAccess {
 		}
 
 		return libglomLayoutItemField;
-	}
-
-	/*
-	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by discarding the least
-	 * significant 8-bits in each channel.
-	 */
-	private String convertGdkColorToHtmlColour(String gdkColor) {
-		if (gdkColor.length() == 13)
-			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
-		else if (gdkColor.length() == 7) {
-			// This shouldn't happen but let's deal with it if it does.
-			Log.warn("Expected a 13 character string but received a 7 character string. Returning received string.");
-			return gdkColor;
-		} else {
-			Log.error("Did not receive a 13 or 7 character string. Returning black HTML colour code.");
-			return "#000000";
-		}
-	}
-
-	private static NumberFormat convertToJavaNumberFormat(NumericFormat numFormatGlom) {
-		// TODO implement locale
-		NumberFormat numFormatJava = NumberFormat.getInstance(Locale.ROOT);
-		if (numFormatGlom.getM_decimal_places_restricted()) {
-			int digits = Utils.safeLongToInt(numFormatGlom.getM_decimal_places());
-			numFormatJava.setMinimumFractionDigits(digits);
-			numFormatJava.setMaximumFractionDigits(digits);
-		}
-		numFormatJava.setGroupingUsed(numFormatGlom.getM_use_thousands_separator());
-		return numFormatJava;
 	}
 
 }

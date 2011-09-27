@@ -26,8 +26,7 @@ public class DataItem implements Serializable {
 
 	private String text;
 	private boolean bool;
-	private String fgColour;
-	private String bgColour;
+	private double number;
 
 	public DataItem() {
 	}
@@ -48,19 +47,12 @@ public class DataItem implements Serializable {
 		this.bool = bool;
 	}
 
-	public String getFGColour() {
-		return fgColour;
+	public double getNumber() {
+		return number;
 	}
 
-	public void setFGColour(String fgColour) {
-		this.fgColour = fgColour;
+	public void setNumber(double number) {
+		this.number = number;
 	}
 
-	public String getBGColour() {
-		return bgColour;
-	}
-
-	public void setBGColour(String bgColour) {
-		this.bgColour = bgColour;
-	}
 }
