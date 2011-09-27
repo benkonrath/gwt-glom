@@ -1,5 +1,19 @@
 2011-09-27  Ben Konrath  <ben@bagu.org>
 
+	Use GWT.log for client-side debugging statements.
+
+	These are optimized out when deployed so I should have used this method
+	in the first place. These statements will eventually be replaced with some sort
+	of notification in the browser.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+
+2011-09-27  Ben Konrath  <ben@bagu.org>
+
 	Put tableselector on the right, back to list link on right.
 
 	The idea is that the table selector is acting like a label for the

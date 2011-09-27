@@ -25,6 +25,7 @@ import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
@@ -63,8 +64,8 @@ public class ListViewTable extends ListTable {
 				final int start = range.getStart();
 				AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
 					public void onFailure(Throwable caught) {
-						// FIXME: need to deal with failure
-						System.out.println("AsyncCallback Failed: OnlineGlomService.getTableData()");
+						// TODO: create a way to notify users of asynchronous callback failures
+						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)ListViewData()");
 					}
 
 					public void onSuccess(ArrayList<DataItem[]> result) {

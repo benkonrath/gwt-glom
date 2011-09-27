@@ -29,6 +29,7 @@ import org.glom.web.client.ui.ListView;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -61,8 +62,8 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		// check if the authentication info has been set for the document
 		AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
 			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.isAuthenticated()");
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated()");
 			}
 
 			public void onSuccess(Boolean result) {
@@ -85,8 +86,8 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		// populate the cell table with data
 		AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
 			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getListViewLayout()");
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getListViewLayout()");
 			}
 
 			public void onSuccess(LayoutGroup result) {
@@ -108,8 +109,8 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 				AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 					@Override
 					public void onFailure(Throwable caught) {
-						// FIXME: need to deal with failure
-						System.out.println("AsyncCallback Failed: OnlineGlomService.checkAuthentication()");
+						// TODO: create a way to notify users of asynchronous callback failures
+						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication()");
 					}
 
 					@Override

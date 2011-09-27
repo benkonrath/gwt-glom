@@ -29,6 +29,7 @@ import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.shared.DocumentInfo;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
@@ -80,8 +81,8 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 		// get the table names, table titles and default table index for the current document
 		AsyncCallback<DocumentInfo> callback = new AsyncCallback<DocumentInfo>() {
 			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getDocumentInfo()");
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDocumentInfo()");
 			}
 
 			public void onSuccess(DocumentInfo result) {

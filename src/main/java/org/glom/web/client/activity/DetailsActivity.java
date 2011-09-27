@@ -38,6 +38,7 @@ import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -88,8 +89,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		// get the layout and data for the DetailsView
 		AsyncCallback<DetailsLayoutAndData> callback = new AsyncCallback<DetailsLayoutAndData>() {
 			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getDetailsLayoutAndData()");
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsLayoutAndData()");
 			}
 
 			@Override
@@ -109,7 +110,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 				// FIXME create proper client side logging
 				if (data.length != fields.size())
-					System.out.println("Warning: The number of data items doesn't match the number of data fields.");
+					GWT.log("Warning: The number of data items doesn't match the number of data fields.");
 
 				for (int i = 0; i < Math.min(fields.size(), data.length); i++) {
 					Field field = fields.get(i);
@@ -151,8 +152,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 			String foreignKeyValue) {
 		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
-				// FIXME: need to deal with failure
-				System.out.println("AsyncCallback Failed: OnlineGlomService.getRelatedListRowCount()");
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getRelatedListRowCount()");
 			}
 
 			@Override
