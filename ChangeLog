@@ -1,5 +1,23 @@
 2011-09-27  Ben Konrath  <ben@bagu.org>
 
+	Put tableselector on the right, back to list link on right.
+
+	The idea is that the table selector is acting like a label for the
+	currently displayed table so it should be placed below the document title. This
+	puts the table title in a similar position to where it is in Glom.
+
+	* mockups/details-contacts.html:
+	* mockups/details-projects.html:
+	* mockups/listview-contacts.html:
+	* mockups/listview-projects.html:
+	* mockups/style.css:
+	Update mockups to match how the interfaces currently look.
+	* src/main/webapp/style.css: Swap positions of backlink with the table
+	selector. Add some space on the left side of the table selector to
+	line things up with the document title.
+
+2011-09-27  Ben Konrath  <ben@bagu.org>
+
 	Add field colouring to details view.
 
 	This change re-works how field colouring works. The colour formatting

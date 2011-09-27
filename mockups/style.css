@@ -35,7 +35,7 @@ div#document-title
 
 .backlink
 {
-	float: left;
+	float: right;
 	margin: 0.2em 0.5em;
 }
 .records
@@ -56,7 +56,8 @@ div#document-title
 
 .tablechooser
 {
-	float: right;
+	float: left;
+	margin-left: 0.5em;
 }
 
 table

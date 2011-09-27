@@ -41,13 +41,14 @@ div#document-title
 
 .backlink
 {
-	float: left;
+	float: right;
 	margin: 0.2em 0.5em;
 }
 
 .tablechooser
 {
-	float: right;
+	float: left;
+	margin-left: 0.5em;
 	font-size: 13.3333px;
 	font-family: sans-serif;
 }
