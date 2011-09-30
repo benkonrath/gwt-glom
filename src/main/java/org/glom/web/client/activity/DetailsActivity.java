@@ -158,11 +158,16 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 			@Override
 			public void onSuccess(Integer result) {
-				// Only set the row count if the data has more rows than the minimum number of rows visible. This
-				// ensures that data with fewer rows than the minimum will not create indexes in the underlying
-				// CellTable that will override the rendering of the empty rows.
-				if (result.intValue() > relatedListTable.getMinNumVisibleRows())
+				if (result.intValue() <= relatedListTable.getMinNumVisibleRows()) {
+					// Set the table row count to the minimum row count if the data row count is less than or equal to
+					// the minimum row count. This ensures that data with fewer rows than the minimum will not create
+					// indexes in the underlying CellTable that will override the rendering of the empty rows.
+					relatedListTable.setRowCount(relatedListTable.getMinNumVisibleRows());
+				} else {
+					// Set the table row count to the data row count if it's larger than the minimum number of rows
+					// visible.
 					relatedListTable.setRowCount(result.intValue());
+				}
 			}
 		};
 

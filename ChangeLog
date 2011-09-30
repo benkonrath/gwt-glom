@@ -1,5 +1,12 @@
 2011-09-30  Ben Konrath  <ben@bagu.org>
 
+	Disable the pager in the list tables when the data row count is less than the minimum.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+
+2011-09-30  Ben Konrath  <ben@bagu.org>
+
 	Add empty rows to the end of related list and list view tables.
 
 	I also extracted the cell rendering classes from the ListTable because
