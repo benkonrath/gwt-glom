@@ -1,3 +1,43 @@
+2011-09-30  Ben Konrath  <ben@bagu.org>
+
+	Add empty rows to the end of related list and list view tables.
+
+	I also extracted the cell rendering classes from the ListTable because
+	the code was becoming a little crazy with all the anonymous inner
+	classes. My plan is to use these cell rendering	classes in the details
+	view as well so this refactor will be needed for that change.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Only
+	set the row count in related list tables if the data has more rows
+	than the minimum number of rows visible.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Only set the
+	row count in list view tables if the data has more rows than the
+	minimum number of rows visible.
+	* src/main/java/org/glom/web/client/ui/cell/BooleanCell.java: New class
+	for rendering TYPE_BOOLEAN cells. The code was extracted from the
+	ListTable class.
+	* src/main/java/org/glom/web/client/ui/cell/NumericCell.java: New class
+	for rendering TYPE_NUMERIC cells. The code was extracted from the
+	ListTable class.
+	* src/main/java/org/glom/web/client/ui/cell/OpenButtonCell.java: New
+	class for rendering cells with buttons in list views. The code was
+	extracted from the ListTable class.
+	* src/main/java/org/glom/web/client/ui/cell/TextCell.java: New class
+	for rendering TYPE_TEXT cells. The code was extracted from the
+	ListTable class.
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	Add empty rows to the end of the data if required. Implement
+	ListTable.getMinNumVisibleRows().
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Extract
+	cell renderer code to public classes. Return null in
+	Column.getValue() for empty rows. Add new abstract method:
+	getMinNumVisibleRows(). Move code to set the row count of the list view
+	table to ListViewImpl.
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java: Add
+	empty rows to the end of the data if required. Implement
+	ListTable.getMinNumVisibleRows().
+
+
 2011-09-27  Ben Konrath  <ben@bagu.org>
 
 	Use GWT.log for client-side debugging statements.

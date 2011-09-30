@@ -41,6 +41,7 @@ import com.google.gwt.view.client.Range;
 public class ListViewTable extends ListTable {
 
 	private static final int NUM_VISIBLE_ROWS = 15;
+	private static final int MIN_NUM_VISIBLE_ROWS = 10;
 
 	public ListViewTable(String documentID, LayoutGroup layoutGroup) {
 		super(documentID);
@@ -69,6 +70,12 @@ public class ListViewTable extends ListTable {
 					}
 
 					public void onSuccess(ArrayList<DataItem[]> result) {
+						// Add empty rows if required.
+						int numEmptyRows = MIN_NUM_VISIBLE_ROWS - result.size();
+						for (int i = 0; i < numEmptyRows; i++) {
+							// A row that has one null item will be rendered as an empty row.
+							result.add(new DataItem[1]);
+						}
 						updateRowData(start, result);
 					}
 				};
@@ -93,6 +100,16 @@ public class ListViewTable extends ListTable {
 		};
 
 		return dataProvider;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.list.ListTable#getMinNumVisibleRows()
+	 */
+	@Override
+	public int getMinNumVisibleRows() {
+		return MIN_NUM_VISIBLE_ROWS;
 	}
 
 }

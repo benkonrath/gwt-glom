@@ -54,6 +54,11 @@ public class ListViewImpl extends Composite implements ListView {
 
 		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup);
 		listViewTable.addOpenButtonColumnn(presenter, "Details");
+		// Only set the row count if the data has more rows than the minimum number of rows visible. This
+		// ensures that data with fewer rows than the minimum will not create indexes in the underlying CellTable that
+		// will override the rendering of the empty rows.
+		if (layoutGroup.getExpectedResultSize() > listViewTable.getMinNumVisibleRows())
+			listViewTable.setRowCount(layoutGroup.getExpectedResultSize());
 
 		mainPanel.add(listViewTable);
 	}

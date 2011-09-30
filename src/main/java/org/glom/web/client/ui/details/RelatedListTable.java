@@ -42,6 +42,7 @@ import com.google.gwt.view.client.Range;
 public class RelatedListTable extends ListTable {
 
 	private static final int NUM_VISIBLE_ROWS = 5;
+	private static final int MIN_NUM_VISIBLE_ROWS = NUM_VISIBLE_ROWS;
 
 	private String foreignKeyValue;
 	private String relationshipName;
@@ -79,6 +80,12 @@ public class RelatedListTable extends ListTable {
 					}
 
 					public void onSuccess(ArrayList<DataItem[]> result) {
+						// Add empty rows if required.
+						int numEmptyRows = MIN_NUM_VISIBLE_ROWS - result.size();
+						for (int i = 0; i < numEmptyRows; i++) {
+							// A row that has one null item will be rendered as an empty row.
+							result.add(new DataItem[1]);
+						}
 						updateRowData(start, result);
 					}
 				};
@@ -104,6 +111,16 @@ public class RelatedListTable extends ListTable {
 		};
 
 		return dataProvider;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.list.ListTable#getMinNumVisibleRows()
+	 */
+	@Override
+	public int getMinNumVisibleRows() {
+		return MIN_NUM_VISIBLE_ROWS;
 	}
 
 }
