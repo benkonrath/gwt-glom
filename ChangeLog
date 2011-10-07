@@ -1,3 +1,17 @@
+2011-10-07  Ben Konrath  <ben@bagu.org>
+
+	Update TableChangeEvent to use newTableName naming convention.
+
+	This makes the class more consistent with GWT naming conventions.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	Update for method name change in TableChangeEvent.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Update
+	for method name change in TableChangeEvent.
+	* src/main/java/org/glom/web/client/event/TableChangeEvent.java: Update
+	newTableName variable and getter method. Make toDebugString()
+	actually work.
+
 2011-09-30  Ben Konrath  <ben@bagu.org>
 
 	Disable the pager in the list tables when the data row count is less than the minimum.

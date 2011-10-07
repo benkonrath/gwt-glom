@@ -27,14 +27,14 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
 	public static Type<TableChangeEventHandler> TYPE = new Type<TableChangeEventHandler>();
-	private final String name;
+	private final String newTableName;
 
-	public TableChangeEvent(String name) {
-		this.name = name;
+	public TableChangeEvent(String newTableName) {
+		this.newTableName = newTableName;
 	}
 
-	public String getTableName() {
-		return name;
+	public String getNewTableName() {
+		return newTableName;
 	}
 
 	@Override
@@ -49,6 +49,8 @@ public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
 
 	@Override
 	public String toDebugString() {
-		return super.toDebugString() + " " + name;
+		String name = this.getClass().getName();
+		name = name.substring(name.lastIndexOf(".") + 1);
+		return "event: " + name + ": " + newTableName;
 	}
 }

@@ -79,7 +79,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ListPlace(documentID, event.getTableName()));
+				goTo(new ListPlace(documentID, event.getNewTableName()));
 			}
 		});
 

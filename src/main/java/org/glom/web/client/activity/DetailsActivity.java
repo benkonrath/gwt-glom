@@ -82,7 +82,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new DetailsPlace(documentID, event.getTableName(), ""));
+				goTo(new DetailsPlace(documentID, event.getNewTableName(), ""));
 			}
 		});
 
