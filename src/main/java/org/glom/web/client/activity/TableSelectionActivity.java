@@ -105,12 +105,23 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 		containerWidget.setWidget(tableSelectionView.asWidget());
 	}
 
-	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method
+	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method and
+	// any time the Place changes after the start method has been called.
 	public void setPlace(HasSelectableTablePlace place) {
-		this.documentID = place.getDocumentID();
-		this.tableName = place.getTableName();
+		documentID = place.getDocumentID();
+		tableName = place.getTableName();
 
 		TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
+
+		// Update the selected table if it's not correct.
+		if (!tableSelectionView.getSelectedTableName().equals(tableName)) {
+			tableSelectionView.setSelectedTableName(tableName);
+		}
+
+		// Update the browser title if document title has already been setup.
+		if (documentTitle != null && !documentTitle.isEmpty()) {
+			Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
+		}
 
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {

@@ -28,6 +28,7 @@ import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldFormatting;
 import org.glom.libglom.FieldVector;
+import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
@@ -439,7 +440,45 @@ final class ConfiguredDocument {
 				// TODO add support for other LayoutItems (Text, Image, Button etc.)
 				LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 				if (libglomLayoutItemField != null) {
-					layoutItem = convertToGWTGlomLayoutItemField(libglomLayoutItemField, true);
+
+					LayoutItemField layoutItemField = convertToGWTGlomLayoutItemField(libglomLayoutItemField, true);
+
+					// Set the full field details with updated field details from the document.
+					libglomLayoutItemField.set_full_field_details(document.get_field(
+							libglomLayoutItemField.get_table_used(tableName), libglomLayoutItemField.get_name()));
+
+					// Determine if the field should have a navigation button and set this in the DTO.
+					Relationship fieldUsedInRelationshipToOne = new Relationship();
+					boolean addNavigation = Glom.layout_field_should_have_navigation(tableName, libglomLayoutItemField,
+							document, fieldUsedInRelationshipToOne);
+					layoutItemField.setAddNavigation(addNavigation);
+
+					// Set the the name of the table to navigate to if navigation should be enabled.
+					if (addNavigation) {
+						// It's not possible to directly check if fieldUsedInRelationshipToOne is
+						// null because of the way that the glom_sharedptr macro works. This workaround accomplishes the
+						// same task.
+						String tableNameUsed;
+						try {
+							Relationship temp = new Relationship();
+							temp.equals(fieldUsedInRelationshipToOne); // this will throw an NPE if
+																		// fieldUsedInRelationshipToOne is null
+							// fieldUsedInRelationshipToOne is *not* null
+							tableNameUsed = fieldUsedInRelationshipToOne.get_to_table();
+
+						} catch (NullPointerException e) {
+							// fieldUsedInRelationshipToOne is null
+							tableNameUsed = libglomLayoutItemField.get_table_used(tableName);
+						}
+
+						// Set the navigation table name only if it's not different than the current table name.
+						if (!tableName.equals(tableNameUsed)) {
+							layoutItemField.setNavigationTableName(tableNameUsed);
+						}
+					}
+
+					layoutItem = layoutItemField;
+
 				} else {
 					Log.info(documentID, tableName,
 							"Ignoring unknown details LayoutItem of type " + libglomLayoutItem.get_part_type_name()

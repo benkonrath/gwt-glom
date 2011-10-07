@@ -39,6 +39,8 @@ import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -50,7 +52,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
 	private final String documentID;
 	private final String tableName;
-	private final String primaryKeyValue;
+	private String primaryKeyValue;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 
@@ -101,6 +103,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				setData(result.getData());
 
 			}
+
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutAndData(documentID, tableName, primaryKeyValue,
 				callback);
@@ -119,8 +122,41 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		}
 
 		// save references to the DetailsCells and the Portals
-		detailsCells = detailsView.getDetailsCells();
+		detailsCells = detailsView.getCells();
 		portals = detailsView.getPortals();
+
+		// Setup click handlers for the navigation buttons
+		for (final DetailsCell detailsCell : detailsCells) {
+			final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
+			if (layoutItemField.getAddNavigation()) {
+				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+
+						String newTableName = tableName;
+						if (layoutItemField.getNavigationTableName() != null) {
+							newTableName = layoutItemField.getNavigationTableName();
+						}
+
+						// Ensure the new table name is valid.
+						if (newTableName != null && !newTableName.isEmpty()) {
+
+							// Go to a new DetailsPlace if the table name has changed.
+							String newPrimaryKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(),
+									detailsCell.getData());
+							if (!newTableName.equals(tableName)) {
+								goTo(new DetailsPlace(documentID, newTableName, newPrimaryKeyValue));
+							} else {
+								primaryKeyValue = newPrimaryKeyValue;
+								refreshData();
+							}
+						}
+
+					}
+				});
+			}
+		}
+
 	}
 
 	/*
@@ -144,7 +180,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 				// see if there are any related lists that need to be setup
 				for (Portal portal : portals) {
-					LayoutItemField layoutItemField = detailsCell.getLayoutItem();
+					LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
 					LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
 						String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(), data[i]);
@@ -158,6 +194,25 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				}
 			}
 		}
+	}
+
+	private void refreshData() {
+
+		// get the data for the DetailsView
+		AsyncCallback<DataItem[]> callback = new AsyncCallback<DataItem[]>() {
+			public void onFailure(Throwable caught) {
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsData()");
+			}
+
+			@Override
+			public void onSuccess(DataItem[] result) {
+				setData(result);
+			}
+		};
+
+		OnlineGlomServiceAsync.Util.getInstance().getDetailsData(documentID, tableName, primaryKeyValue, callback);
+
 	}
 
 	// sets the row count for the related list table

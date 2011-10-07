@@ -36,9 +36,9 @@ import com.google.gwt.user.client.ui.Label;
 public class Group extends Composite {
 	private FlowPanel mainPanel = new FlowPanel();
 	private FlowPanel groupContents; // set in constructor
-	private final ArrayList<DetailsCell> detailsCells = new ArrayList<DetailsCell>();
+	private final ArrayList<DetailsCell> cells = new ArrayList<DetailsCell>();
 	private final ArrayList<Portal> portals = new ArrayList<Portal>();
-	FlowTable flowtable;// set in constructor
+	private FlowTable flowtable; // set in constructor
 
 	@SuppressWarnings("unused")
 	private Group() {
@@ -82,9 +82,9 @@ public class Group extends Composite {
 		for (LayoutItem layoutItem : layoutGroup.getItems()) {
 
 			if (layoutItem instanceof LayoutItemField) {
-				DetailsCell field = new DetailsCell((LayoutItemField) layoutItem);
-				flowtable.add(field);
-				detailsCells.add(field);
+				DetailsCell detailsCell = new DetailsCell((LayoutItemField) layoutItem);
+				flowtable.add(detailsCell);
+				cells.add(detailsCell);
 			} else if (layoutItem instanceof LayoutItemPortal) {
 				Portal portal = new Portal((LayoutItemPortal) layoutItem, mainTitleSet);
 				flowtable.add(portal);
@@ -93,7 +93,7 @@ public class Group extends Composite {
 				// create a Group for the child group
 				Group childGroup = new Group((LayoutGroup) layoutItem, true, mainTitleSet);
 				flowtable.add(childGroup);
-				detailsCells.addAll(childGroup.getDetailsCells());
+				cells.addAll(childGroup.getCells());
 				portals.addAll(childGroup.getPortals());
 			}
 		}
@@ -101,8 +101,8 @@ public class Group extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public ArrayList<DetailsCell> getDetailsCells() {
-		return detailsCells;
+	public ArrayList<DetailsCell> getCells() {
+		return cells;
 	}
 
 	/**

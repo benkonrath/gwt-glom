@@ -33,6 +33,8 @@ public class LayoutItemField extends LayoutItemWithFormatting implements Seriali
 	}
 
 	private GlomFieldType type;
+	private boolean addNavigation;
+	private String navigationTableName = null;
 
 	public GlomFieldType getType() {
 		return type;
@@ -40,6 +42,22 @@ public class LayoutItemField extends LayoutItemWithFormatting implements Seriali
 
 	public void setType(GlomFieldType type) {
 		this.type = type;
+	}
+
+	public boolean getAddNavigation() {
+		return addNavigation;
+	}
+
+	public void setAddNavigation(boolean addNavigation) {
+		this.addNavigation = addNavigation;
+	}
+
+	public String getNavigationTableName() {
+		return navigationTableName;
+	}
+
+	public void setNavigationTableName(String navigationTableName) {
+		this.navigationTableName = navigationTableName;
 	}
 
 }

@@ -38,7 +38,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 	private final FlowPanel mainPanel = new FlowPanel();
-	private final ArrayList<DetailsCell> fields = new ArrayList<DetailsCell>();
+	private final ArrayList<DetailsCell> cells = new ArrayList<DetailsCell>();
 	private final ArrayList<Portal> portals = new ArrayList<Portal>();
 
 	public DetailsViewImpl() {
@@ -58,12 +58,12 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.DetailsView#addLayoutGroup(org.glom.web.shared.layout.LayoutGroup)
+	 * @see org.glom.web.client.ui.DetailsView#addGroup(org.glom.web.shared.layout.LayoutGroup)
 	 */
 	@Override
 	public void addGroup(LayoutGroup layoutGroup) {
 		Group group = new Group(layoutGroup, false, false);
-		fields.addAll(group.getDetailsCells());
+		cells.addAll(group.getCells());
 		portals.addAll(group.getPortals());
 		mainPanel.add(group);
 	}
@@ -76,18 +76,18 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@Override
 	public void clear() {
 		mainPanel.clear();
-		fields.clear();
+		cells.clear();
 		portals.clear();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.DetailsView#getFields()
+	 * @see org.glom.web.client.ui.DetailsView#getCells()
 	 */
 	@Override
-	public ArrayList<DetailsCell> getDetailsCells() {
-		return fields;
+	public ArrayList<DetailsCell> getCells() {
+		return cells;
 	}
 
 	/*

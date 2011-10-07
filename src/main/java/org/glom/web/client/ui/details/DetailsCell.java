@@ -25,22 +25,27 @@ import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutItemField;
 
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 
 /**
- * TODO: Create an interface or abstract class that extends Composite for UI items in the details view. Each item can
- * then individually extend the LayoutItem* class.
+ * Holds a label, data and a navigation button.
  * 
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
 public class DetailsCell extends Composite {
-	private LayoutItemField layoutItem;
+	private LayoutItemField layoutItemField;
 	private Label detailsData = new Label();
+	private DataItem dataItem;
+
+	Button openButton = null;
 
 	public DetailsCell(LayoutItemField layoutItemField) {
 		// Labels (text in div element) are being used so that the height of the details-data element can be set for
@@ -48,12 +53,11 @@ public class DetailsCell extends Composite {
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
 		// data elements to be changed for right-to-left languages.
 
-		layoutItem = layoutItemField;
-		Label detailsLabel = new Label(layoutItem.getTitle() + ":");
+		Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
 		detailsLabel.setStyleName("details-label");
 
 		detailsData.setStyleName("details-data");
-		Formatting formatting = layoutItem.getFormatting();
+		Formatting formatting = layoutItemField.getFormatting();
 
 		// set the height based on the number of lines
 		detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
@@ -86,37 +90,61 @@ public class DetailsCell extends Composite {
 		mainPanel.add(detailsLabel);
 		mainPanel.add(detailsData);
 
+		if (layoutItemField.getAddNavigation()) {
+			openButton = new Button("Open");
+			openButton.setEnabled(false);
+			mainPanel.add(openButton);
+		}
+
+		this.layoutItemField = layoutItemField;
+
 		initWidget(mainPanel);
 	}
 
-	public void setData(DataItem value) {
+	public DataItem getData() {
+		return dataItem;
+	}
 
-		switch (layoutItem.getType()) {
+	public void setData(DataItem dataItem) {
+
+		// FIXME use the cell renderers from the list view to render the inforamtion here
+		switch (layoutItemField.getType()) {
 		case TYPE_BOOLEAN:
-			// FIXME create checkbox like in the list view
-			detailsData.setText(value.getBoolean() ? "TRUE" : "FALSE");
+			detailsData.setText(dataItem.getBoolean() ? "TRUE" : "FALSE");
 			break;
 		case TYPE_NUMERIC:
-			GlomNumericFormat glomNumericFormat = layoutItem.getFormatting().getGlomNumericFormat();
+			GlomNumericFormat glomNumericFormat = layoutItemField.getFormatting().getGlomNumericFormat();
 			NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
 
 			// set the foreground colour to red if the number is negative and this is requested
-			if (glomNumericFormat.getUseAltForegroundColourForNegatives() && value.getNumber() < 0) {
+			if (glomNumericFormat.getUseAltForegroundColourForNegatives() && dataItem.getNumber() < 0) {
 				// The default alternative colour in libglom is red.
 				detailsData.getElement().getStyle().setColor("Red");
 			}
 
-			detailsData.setText(gwtNumberFormat.format(value.getNumber()));
+			detailsData.setText(gwtNumberFormat.format(dataItem.getNumber()));
 			break;
 		case TYPE_TEXT:
-			detailsData.setText(value.getText());
+			detailsData.setText(dataItem.getText());
 		default:
 			break;
 		}
 
+		this.dataItem = dataItem;
+
 	}
 
-	public LayoutItemField getLayoutItem() {
-		return layoutItem;
+	public LayoutItemField getLayoutItemField() {
+		return layoutItemField;
 	}
+
+	public HandlerRegistration setOpenButtonClickHandler(ClickHandler clickHandler) {
+		HandlerRegistration handlerRegistration = null;
+		if (openButton != null) {
+			handlerRegistration = openButton.addClickHandler(clickHandler);
+			openButton.setEnabled(true);
+		}
+		return handlerRegistration;
+	}
+
 }

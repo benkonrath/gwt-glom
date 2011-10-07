@@ -44,7 +44,7 @@ public interface DetailsView extends IsWidget {
 
 	public void clear();
 
-	public ArrayList<DetailsCell> getDetailsCells();
+	public ArrayList<DetailsCell> getCells();
 
 	public ArrayList<Portal> getPortals();
 

@@ -1,5 +1,36 @@
 2011-10-07  Ben Konrath  <ben@bagu.org>
 
+	Add navigation buttons in the details view.
+
+	This isn't finished but I thought I'd commit what I have as it's a
+	pretty good start. I still need to:
+
+	1. Change the style so that it fits better into the current theme
+	2. Adjust the details cell to expand as much as possible.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Add
+	click handlers to navigation buttons in the DetailsCells. Create a
+	refreshData() method to get just the data from the server without the
+	layout.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	Update the tableSelector and browser title when the table name
+	changes without using the tableSelector.
+	* src/main/java/org/glom/web/client/ui/DetailsView.java:
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java: Rename
+	getDetailsCells() to getCells(). Update variable names.
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java: Add
+	method to set click handler on navigation button. Rename a few
+	variables. Add navigation buttons where needed.
+	* src/main/java/org/glom/web/client/ui/details/Group.java: Rename a few
+	variables and methods.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Set the
+	navigation boolean and navigation table as required in the
+	LayoutItemField DTO.
+	* src/main/java/org/glom/web/shared/layout/LayoutItemField.java: Add
+	variables for navigation along with getter/setter methods.
+
+2011-10-07  Ben Konrath  <ben@bagu.org>
+
 	Rename Field to DetailsCell.
 
 	This is a refactor-only commit. No functionality has been added or
