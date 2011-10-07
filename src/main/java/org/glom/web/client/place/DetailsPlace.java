@@ -25,9 +25,9 @@ import com.google.gwt.place.shared.Prefix;
 public class DetailsPlace extends HasSelectableTablePlace {
 	private String primaryKeyValue = "";
 
-	public DetailsPlace(String documentID, String tableName, String primarykey) {
+	public DetailsPlace(String documentID, String tableName, String primarykeyValue) {
 		super(documentID, tableName);
-		this.primaryKeyValue = primarykey;
+		this.primaryKeyValue = primarykeyValue;
 	}
 
 	public String getPrimaryKeyValue() {

@@ -1,5 +1,11 @@
 2011-10-07  Ben Konrath  <ben@bagu.org>
 
+	Use primaryKeyValue naming convention in constructor of DetailsPlace.
+
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java:
+
+2011-10-07  Ben Konrath  <ben@bagu.org>
+
 	Update TableChangeEvent to use newTableName naming convention.
 
 	This makes the class more consistent with GWT naming conventions.
