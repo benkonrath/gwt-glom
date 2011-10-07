@@ -1,5 +1,21 @@
 2011-10-07  Ben Konrath  <ben@bagu.org>
 
+	Update to GWT 2.4.0.
+
+	* .gitignore: Ignore new cache directory.
+	* .settings/com.google.gwt.eclipse.core.prefs: Update Eclipse settting.
+	* pom.xml: Change GWT and maven plugin to 2.4.0.
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: Update doctype for
+	2.4.0.
+	* src/main/java/org/glom/web/client/ClientFactory.java:
+	* src/main/java/org/glom/web/client/ClientFactoryImpl.java:
+	* src/main/java/org/glom/web/client/OnlineGlom.java:
+	Update source for API changes.
+	* utils/build-onlineglom-war.sh: Remove cache directory before the
+	build.
+
+2011-10-07  Ben Konrath  <ben@bagu.org>
+
 	Add navigation buttons in the details view.
 
 	This isn't finished but I thought I'd commit what I have as it's a

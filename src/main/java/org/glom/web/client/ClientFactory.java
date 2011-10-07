@@ -25,8 +25,8 @@ import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.ListView;
 import org.glom.web.client.ui.TableSelectionView;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
 
 public interface ClientFactory {
 

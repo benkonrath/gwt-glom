@@ -29,9 +29,9 @@ import org.glom.web.client.ui.ListViewImpl;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.TableSelectionViewImpl;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
 
 public class ClientFactoryImpl implements ClientFactory {
 	private final EventBus eventBus = new SimpleEventBus();

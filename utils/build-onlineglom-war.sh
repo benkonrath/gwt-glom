@@ -21,6 +21,7 @@ rm --interactive=never -rfv src/main/webapp/WEB-INF/classes/* \
                             src/main/webapp/WEB-INF/deploy/* \
                             src/main/webapp/OnlineGlom/* \
                             src/main/webapp/logs/* \
+                            src/main/gwt-unitCache \
                             target/* target/.generated
 
 echo "done"
