@@ -21,7 +21,7 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
-import org.glom.web.client.ui.details.Field;
+import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Group;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -38,7 +38,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 	private final FlowPanel mainPanel = new FlowPanel();
-	private final ArrayList<Field> fields = new ArrayList<Field>();
+	private final ArrayList<DetailsCell> fields = new ArrayList<DetailsCell>();
 	private final ArrayList<Portal> portals = new ArrayList<Portal>();
 
 	public DetailsViewImpl() {
@@ -63,7 +63,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@Override
 	public void addGroup(LayoutGroup layoutGroup) {
 		Group group = new Group(layoutGroup, false, false);
-		fields.addAll(group.getFields());
+		fields.addAll(group.getDetailsCells());
 		portals.addAll(group.getPortals());
 		mainPanel.add(group);
 	}
@@ -86,7 +86,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 * @see org.glom.web.client.ui.DetailsView#getFields()
 	 */
 	@Override
-	public ArrayList<Field> getFields() {
+	public ArrayList<DetailsCell> getDetailsCells() {
 		return fields;
 	}
 

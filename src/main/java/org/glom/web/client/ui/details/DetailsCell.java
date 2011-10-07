@@ -38,11 +38,11 @@ import com.google.gwt.user.client.ui.Label;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class Field extends Composite {
+public class DetailsCell extends Composite {
 	private LayoutItemField layoutItem;
 	private Label detailsData = new Label();
 
-	public Field(LayoutItemField layoutItemField) {
+	public DetailsCell(LayoutItemField layoutItemField) {
 		// Labels (text in div element) are being used so that the height of the details-data element can be set for
 		// the multiline height of LayoutItemFeilds. This allows the the data element to display the correct height
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and

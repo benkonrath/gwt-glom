@@ -21,7 +21,7 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
-import org.glom.web.client.ui.details.Field;
+import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -44,7 +44,7 @@ public interface DetailsView extends IsWidget {
 
 	public void clear();
 
-	public ArrayList<Field> getFields();
+	public ArrayList<DetailsCell> getDetailsCells();
 
 	public ArrayList<Portal> getPortals();
 

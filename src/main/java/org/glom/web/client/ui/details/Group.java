@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Label;
 public class Group extends Composite {
 	private FlowPanel mainPanel = new FlowPanel();
 	private FlowPanel groupContents; // set in constructor
-	private final ArrayList<Field> fields = new ArrayList<Field>();
+	private final ArrayList<DetailsCell> detailsCells = new ArrayList<DetailsCell>();
 	private final ArrayList<Portal> portals = new ArrayList<Portal>();
 	FlowTable flowtable;// set in constructor
 
@@ -82,9 +82,9 @@ public class Group extends Composite {
 		for (LayoutItem layoutItem : layoutGroup.getItems()) {
 
 			if (layoutItem instanceof LayoutItemField) {
-				Field field = new Field((LayoutItemField) layoutItem);
+				DetailsCell field = new DetailsCell((LayoutItemField) layoutItem);
 				flowtable.add(field);
-				fields.add(field);
+				detailsCells.add(field);
 			} else if (layoutItem instanceof LayoutItemPortal) {
 				Portal portal = new Portal((LayoutItemPortal) layoutItem, mainTitleSet);
 				flowtable.add(portal);
@@ -93,7 +93,7 @@ public class Group extends Composite {
 				// create a Group for the child group
 				Group childGroup = new Group((LayoutGroup) layoutItem, true, mainTitleSet);
 				flowtable.add(childGroup);
-				fields.addAll(childGroup.getFields());
+				detailsCells.addAll(childGroup.getDetailsCells());
 				portals.addAll(childGroup.getPortals());
 			}
 		}
@@ -101,8 +101,8 @@ public class Group extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public ArrayList<Field> getFields() {
-		return fields;
+	public ArrayList<DetailsCell> getDetailsCells() {
+		return detailsCells;
 	}
 
 	/**

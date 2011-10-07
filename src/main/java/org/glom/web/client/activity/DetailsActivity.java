@@ -28,7 +28,7 @@ import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
-import org.glom.web.client.ui.details.Field;
+import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.client.ui.details.RelatedListTable;
 import org.glom.web.shared.DataItem;
@@ -54,7 +54,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 
-	ArrayList<Field> fields;
+	ArrayList<DetailsCell> detailsCells;
 	ArrayList<Portal> portals;
 
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
@@ -118,8 +118,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 			detailsView.addGroup(layoutGroup);
 		}
 
-		// save references to the Fields and the Portals
-		fields = detailsView.getFields();
+		// save references to the DetailsCells and the Portals
+		detailsCells = detailsView.getDetailsCells();
 		portals = detailsView.getPortals();
 	}
 
@@ -132,19 +132,19 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 			return;
 
 		// TODO create proper client side logging
-		if (data.length != fields.size())
-			GWT.log("Warning: The number of data items doesn't match the number of data fields.");
+		if (data.length != detailsCells.size())
+			GWT.log("Warning: The number of data items doesn't match the number of data detailsCells.");
 
-		for (int i = 0; i < Math.min(fields.size(), data.length); i++) {
-			Field field = fields.get(i);
+		for (int i = 0; i < Math.min(detailsCells.size(), data.length); i++) {
+			DetailsCell detailsCell = detailsCells.get(i);
 			if (data[i] != null) {
 
-				// set the field data
-				field.setData(data[i]);
+				// set the DatailsItem
+				detailsCell.setData(data[i]);
 
 				// see if there are any related lists that need to be setup
 				for (Portal portal : portals) {
-					LayoutItemField layoutItemField = field.getLayoutItem();
+					LayoutItemField layoutItemField = detailsCell.getLayoutItem();
 					LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
 						String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(), data[i]);
