@@ -39,7 +39,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.ListBox;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -66,15 +65,17 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setPresenter(this);
 
+		// For table changes with the tableSelector:
 		HasChangeHandlers tableSelector = tableSelectionView.getTableSelector();
-
 		changeHandlerRegistration = tableSelector.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				ListBox listBox = (ListBox) event.getSource();
-				int selectedIndex = listBox.getSelectedIndex();
-				eventBus.fireEvent(new TableChangeEvent(selectedIndex < 0 ? "" : listBox.getValue(selectedIndex)));
-				Window.setTitle(documentTitle + (selectedIndex < 0 ? "" : ": " + listBox.getItemText(selectedIndex)));
+				// Fire an table change event so that other views (e.g. the details view) know about the change and can
+				// update themselves.
+				eventBus.fireEvent(new TableChangeEvent(tableSelectionView.getSelectedTableName()));
+
+				// Update the browser title because there's place change and the setPlace() method will not be called.
+				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		});
 

@@ -1,5 +1,22 @@
 2011-10-07  Ben Konrath  <ben@bagu.org>
 
+	Don't use TableSelectorImpl implementation details in TableSelectorActivity.
+
+	This is part of a change to get navigation buttons in the details view
+	but it should have been done this way from the start.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Update
+	for method name change in TableSelectionView.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	Create TableChangeEvent and set the browser title using the
+	TableSelectionView API.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Change getSelectedTable() to getSelectedTableName(). Add
+	getSelectedTableTitle().
+
+2011-10-07  Ben Konrath  <ben@bagu.org>
+
 	Use primaryKeyValue naming convention in constructor of DetailsPlace.
 
 	* src/main/java/org/glom/web/client/place/DetailsPlace.java:

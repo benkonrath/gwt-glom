@@ -37,11 +37,13 @@ public interface TableSelectionView extends IsWidget {
 
 	HasChangeHandlers getTableSelector();
 
-	String getSelectedTable();
-
-	void setTableSelection(ArrayList<String> tableNames, ArrayList<String> tableTitles);
+	String getSelectedTableName();
 
 	void setSelectedTableName(String tableName);
+
+	String getSelectedTableTitle();
+
+	void setTableSelection(ArrayList<String> tableNames, ArrayList<String> tableTitles);
 
 	void setBackLinkVisible(boolean visible);
 

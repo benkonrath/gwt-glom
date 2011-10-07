@@ -118,7 +118,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 						if (result) {
 							authenticationPopup.hide();
 							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
-									.getSelectedTable()));
+									.getSelectedTableName()));
 						} else {
 							authenticationPopup.setTextFieldsEnabled(true);
 							authenticationPopup.setError();

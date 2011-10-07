@@ -103,7 +103,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public String getSelectedTable() {
+	public String getSelectedTableName() {
 		int selectedIndex = tableChooser.getSelectedIndex();
 		return selectedIndex < 0 ? "" : tableChooser.getValue(selectedIndex);
 	}
@@ -140,5 +140,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public String getSelectedTableTitle() {
+		int selectedIndex = tableChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : tableChooser.getItemText(selectedIndex);
 	}
 }
