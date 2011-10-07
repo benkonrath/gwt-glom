@@ -1,5 +1,15 @@
 2011-10-07  Ben Konrath  <ben@bagu.org>
 
+	Create separate methods for layout and data the details view.
+
+	This is a refactor-only commit. No functionality has been added or
+	removed.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: New
+	private methods: setData(), createLayout().
+
+2011-10-07  Ben Konrath  <ben@bagu.org>
+
 	Don't use TableSelectorImpl implementation details in TableSelectorActivity.
 
 	This is part of a change to get navigation buttons in the details view

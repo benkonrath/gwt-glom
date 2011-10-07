@@ -96,47 +96,9 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 			@Override
 			public void onSuccess(DetailsLayoutAndData result) {
 
-				// create the layout and get the array of layout item fields, data labels and layout item portals
-				for (LayoutGroup layoutGroup : result.getLayout()) {
-					detailsView.addGroup(layoutGroup);
-				}
-				fields = detailsView.getFields();
-				portals = detailsView.getPortals();
+				createLayout(result.getLayout());
 
-				// set the data
-				DataItem[] data = result.getData();
-				if (data == null)
-					return;
-
-				// FIXME create proper client side logging
-				if (data.length != fields.size())
-					GWT.log("Warning: The number of data items doesn't match the number of data fields.");
-
-				for (int i = 0; i < Math.min(fields.size(), data.length); i++) {
-					Field field = fields.get(i);
-					if (data[i] != null) {
-
-						// set the field data
-						field.setData(data[i]);
-
-						// see if there are any related lists that need to be setup
-						for (Portal portal : portals) {
-							LayoutItemField layoutItemField = field.getLayoutItem();
-							LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
-							if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
-								String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(),
-										data[i]);
-								if (foreignKeyValue == null)
-									continue;
-								RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-										foreignKeyValue);
-								portal.setContents(relatedListTable);
-								setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(),
-										foreignKeyValue);
-							}
-						}
-					}
-				}
+				setData(result.getData());
 
 			}
 		};
@@ -145,6 +107,57 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());
+	}
+
+	/*
+	 * Create the layout.
+	 */
+	private void createLayout(ArrayList<LayoutGroup> layout) {
+		// add the groups
+		for (LayoutGroup layoutGroup : layout) {
+			detailsView.addGroup(layoutGroup);
+		}
+
+		// save references to the Fields and the Portals
+		fields = detailsView.getFields();
+		portals = detailsView.getPortals();
+	}
+
+	/*
+	 * Set the data.
+	 */
+	private void setData(DataItem[] data) {
+
+		if (data == null)
+			return;
+
+		// TODO create proper client side logging
+		if (data.length != fields.size())
+			GWT.log("Warning: The number of data items doesn't match the number of data fields.");
+
+		for (int i = 0; i < Math.min(fields.size(), data.length); i++) {
+			Field field = fields.get(i);
+			if (data[i] != null) {
+
+				// set the field data
+				field.setData(data[i]);
+
+				// see if there are any related lists that need to be setup
+				for (Portal portal : portals) {
+					LayoutItemField layoutItemField = field.getLayoutItem();
+					LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
+					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
+						String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(), data[i]);
+						if (foreignKeyValue == null)
+							continue;
+						RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
+								foreignKeyValue);
+						portal.setContents(relatedListTable);
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), foreignKeyValue);
+					}
+				}
+			}
+		}
 	}
 
 	// sets the row count for the related list table
