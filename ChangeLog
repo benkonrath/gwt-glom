@@ -1,5 +1,12 @@
 2011-10-11  Ben Konrath  <ben@bagu.org>
 
+	Use IsWidget interface for FlowTableItem.
+
+	* src/main/java/org/glom/web/client/ui/details/FlowTable.java: Change
+	FlowTableItem.getWidget() to asWidget() from the IsWidget interface.
+
+2011-10-11  Ben Konrath  <ben@bagu.org>
+
 	Remove GWT styling from open button in details view.
 
 	There are still some issues with how the details cell is arranged but

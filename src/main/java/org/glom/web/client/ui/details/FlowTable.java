@@ -28,6 +28,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,7 +46,8 @@ public class FlowTable extends Composite {
 
 	// Represents an item to be inserted into the FlowTable. The primary reason for this class is to cache the vertical
 	// height of the widget being added to the FlowTable.
-	class FlowTableItem {
+	class FlowTableItem implements IsWidget {
+
 		Widget widget;
 		int height;
 
@@ -73,7 +75,13 @@ public class FlowTable extends Composite {
 			return height;
 		}
 
-		Widget getWidget() {
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see com.google.gwt.user.client.ui.IsWidget#asWidget()
+		 */
+		@Override
+		public Widget asWidget() {
 			return widget;
 		}
 	}
@@ -134,8 +142,7 @@ public class FlowTable extends Composite {
 					currentColumnHeight = 0;
 				}
 			}
-			currentColumn.add(item.getWidget()); // adding the widget to the column removes it from its current
-													// container
+			currentColumn.add(item.asWidget()); // adding the widget to the column removes it from its current container
 			currentColumnHeight += item.getHeight();
 		}
 	}
