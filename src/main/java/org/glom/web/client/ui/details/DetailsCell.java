@@ -92,6 +92,7 @@ public class DetailsCell extends Composite {
 
 		if (layoutItemField.getAddNavigation()) {
 			openButton = new Button("Open");
+			openButton.setStyleName("details-navigation");
 			openButton.setEnabled(false);
 			mainPanel.add(openButton);
 		}

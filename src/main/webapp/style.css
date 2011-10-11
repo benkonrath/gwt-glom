@@ -60,12 +60,6 @@ div#document-title
 	color: #333;
 }
 
-.details-navigation
-{
-	float: right;
-	margin: 0.2em 0.5em;
-}
-
 .details-navigation a
 {
 	padding-right: 1em;
@@ -185,6 +179,12 @@ group
 	overflow: hidden;
 }
 
+.details-label
+{
+	padding: 0 0.25em;
+	float: left;
+}
+
 .details-data
 {
 	padding: 0 0.25em;
@@ -192,9 +192,7 @@ group
 	float: left;
 }
 
-.details-label
+button.details-navigation
 {
-	padding: 0 0.25em;
-	float: left;
+	margin-left: 0.5em;
 }
-
