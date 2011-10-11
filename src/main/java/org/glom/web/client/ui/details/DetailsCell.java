@@ -45,7 +45,8 @@ public class DetailsCell extends Composite {
 	private Label detailsData = new Label();
 	private DataItem dataItem;
 
-	Button openButton = null;
+	private Button openButton = null;
+	private HandlerRegistration openButtonHandlerReg = null;
 
 	public DetailsCell(LayoutItemField layoutItemField) {
 		// Labels (text in div element) are being used so that the height of the details-data element can be set for
@@ -108,6 +109,9 @@ public class DetailsCell extends Composite {
 
 	public void setData(DataItem dataItem) {
 
+		if (dataItem == null)
+			return;
+
 		// FIXME use the cell renderers from the list view to render the inforamtion here
 		switch (layoutItemField.getType()) {
 		case TYPE_BOOLEAN:
@@ -133,6 +137,11 @@ public class DetailsCell extends Composite {
 
 		this.dataItem = dataItem;
 
+		// enable the navigation button if it's safe
+		if (openButton != null && openButtonHandlerReg != null && this.dataItem != null) {
+			openButton.setEnabled(true);
+		}
+
 	}
 
 	public LayoutItemField getLayoutItemField() {
@@ -140,12 +149,10 @@ public class DetailsCell extends Composite {
 	}
 
 	public HandlerRegistration setOpenButtonClickHandler(ClickHandler clickHandler) {
-		HandlerRegistration handlerRegistration = null;
 		if (openButton != null) {
-			handlerRegistration = openButton.addClickHandler(clickHandler);
-			openButton.setEnabled(true);
+			openButtonHandlerReg = openButton.addClickHandler(clickHandler);
 		}
-		return handlerRegistration;
+		return openButtonHandlerReg;
 	}
 
 }

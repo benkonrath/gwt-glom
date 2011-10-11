@@ -1,5 +1,14 @@
 2011-10-11  Ben Konrath  <ben@bagu.org>
 
+	Enable the open navigation button when the data has been set.
+
+	This avoids having active buttons that don't do anything when the data
+	has not been set.
+
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+
+2011-10-11  Ben Konrath  <ben@bagu.org>
+
 	Use IsWidget interface for FlowTableItem.
 
 	* src/main/java/org/glom/web/client/ui/details/FlowTable.java: Change
