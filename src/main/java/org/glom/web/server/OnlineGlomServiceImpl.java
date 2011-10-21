@@ -32,10 +32,11 @@ import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.web.client.OnlineGlomService;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
-import org.glom.web.shared.DataItem;
+import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -333,9 +334,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * int, boolean)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName,
-			String relationshipName, String foreignKeyValue, int start, int length, int sortColumnIndex,
-			boolean ascending) {
+	public ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
+			String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -353,4 +353,19 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getRelatedListRowCount(tableName, relationshipName, foreignKeyValue);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getSuitableRecordToViewDetails(java.lang.String, java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName,
+			String relationshipName, String primaryKeyValue) {
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+
+		// FIXME check for authentication
+
+		return configuredDoc.getSuitableRecordToViewDetails(tableName, relationshipName, primaryKeyValue);
+	}
 }

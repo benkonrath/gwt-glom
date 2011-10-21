@@ -26,9 +26,6 @@ import org.glom.libglom.Field;
 import org.glom.libglom.FieldVector;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
-import org.glom.libglom.LayoutItem;
-import org.glom.libglom.LayoutItemVector;
-import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
@@ -39,7 +36,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class RelatedListDBAccess extends ListDBAccess {
 	private String foreignKeyValue = null;
@@ -52,17 +48,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 			String relationshipName) {
 		super(document, documentID, cpds, tableName);
 
-		// find the LayoutItem_Portal for the related list name
-		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
-		// LayoutItem_Portal portal = null;
-		for (int i = 0; i < layoutGroupVec.size(); i++) {
-			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
-			portal = getPortalForRelationship(relationshipName, layoutGroup);
-			if (portal != null) {
-				break;
-			}
-		}
-
+		LayoutItem_Portal portal = getPortal(relationshipName);
 		if (portal == null) {
 			Log.error(documentID, tableName, "Couldn't find LayoutItem_Portal \"" + relationshipName + "\" in table \""
 					+ tableName + "\". " + "Cannot retrive data for the related list.");
@@ -93,6 +79,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 		Relationship relationshipRelated = portal.get_related_relationship();
 		if (relationshipRelated != null) {
+			Log.error(documentID, tableName, "The related relationship " + relationshipRelated.get_name()
+					+ " is not empty but the related relationship code has not been implemented yet.");
+
 			// FIXME port this Glom code to Java
 			// @formatter:off
 			/* 
@@ -112,6 +101,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 		    // @formatter:on
 		}
 
+		// set portal field
+		this.portal = portal;
+
 	}
 
 	public ArrayList<DataItem[]> getData(int start, int length, String foreignKeyValue, boolean useSortClause,
@@ -125,47 +117,6 @@ public class RelatedListDBAccess extends ListDBAccess {
 		this.foreignKeyValue = foreignKeyValue;
 
 		return getListData(start, length, useSortClause, sortColumnIndex, isAscending);
-	}
-
-	private LayoutItem_Portal getPortalForRelationship(String relationshipName, org.glom.libglom.LayoutGroup layoutGroup) {
-
-		if (relationshipName == null)
-			return null;
-
-		LayoutItemVector items = layoutGroup.get_items();
-		for (int i = 0; i < items.size(); i++) {
-			LayoutItem layoutItem = items.get(i);
-
-			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(layoutItem);
-			if (layoutItemField != null) {
-				// the layoutItem is a LayoutItem_Field
-				continue;
-
-			} else {
-				// the layoutItem is not a LayoutItem_Field
-				org.glom.libglom.LayoutGroup subLayoutGroup = org.glom.libglom.LayoutGroup.cast_dynamic(layoutItem);
-				if (subLayoutGroup != null) {
-					// the layoutItem is a LayoutGroup
-					LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(layoutItem);
-					if (layoutItemPortal != null) {
-						// The subGroup is a LayoutItem_Protal
-						if (relationshipName.equals(layoutItemPortal.get_relationship_name_used())) {
-							// yey, we found it!
-							return layoutItemPortal;
-						}
-					} else {
-						// The subGroup is not a LayoutItem_Portal.
-						LayoutItem_Portal retval = getPortalForRelationship(relationshipName, subLayoutGroup);
-						if (retval != null) {
-							return retval;
-						}
-					}
-				}
-			}
-		}
-
-		// the LayoutItem_Portal with relationshipName was not found
-		return null;
 	}
 
 	/*

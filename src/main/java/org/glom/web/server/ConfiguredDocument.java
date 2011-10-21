@@ -39,9 +39,11 @@ import org.glom.libglom.StringVector;
 import org.glom.web.server.database.DetailsDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.server.database.RelatedListDBAccess;
+import org.glom.web.server.database.RelatedListNavigation;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomNumericFormat;
+import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -299,6 +301,16 @@ final class ConfiguredDocument {
 		return relatedListDBAccess.getExpectedResultSize(foreignKeyValue);
 	}
 
+	NavigationRecord getSuitableRecordToViewDetails(String tableName, String relationshipName, String primaryKeyValue) {
+		// Validate the table name.
+		tableName = getTableNameToUse(tableName);
+
+		RelatedListNavigation relatedListNavigation = new RelatedListNavigation(document, documentID, cpds, tableName,
+				relationshipName);
+
+		return relatedListNavigation.getNavigationRecord(primaryKeyValue);
+	}
+
 	/*
 	 * Gets a LayoutGroup DTO for the given table name and libglom LayoutGroup. This method can be used for the main
 	 * list view table and for the related list table.
@@ -424,6 +436,14 @@ final class ConfiguredDocument {
 						layoutItemPortal.setName(libglomLayoutItemPortal.get_relationship_name_used());
 						layoutItemPortal.setTableName(relationship.get_from_table());
 						layoutItemPortal.setFromField(relationship.get_from_field());
+
+						// Set whether or not the related list will need to show the navigation buttons.
+						// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
+						StringBuffer navigationTableName = new StringBuffer();
+						LayoutItem_Field navigationRelationship = new LayoutItem_Field(); // Ignored.
+						libglomLayoutItemPortal.get_suitable_table_to_view_details(navigationTableName,
+								navigationRelationship, document);
+						layoutItemPortal.setAddNavigation(!(navigationTableName.toString().isEmpty()));
 					}
 
 					// Note: empty layoutItemPortal used if relationship is null

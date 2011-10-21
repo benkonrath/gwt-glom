@@ -22,7 +22,6 @@ package org.glom.web.client.ui.list;
 import java.util.ArrayList;
 
 import org.glom.web.client.Utils;
-import org.glom.web.client.ui.ListView;
 import org.glom.web.client.ui.cell.BooleanCell;
 import org.glom.web.client.ui.cell.NumericCell;
 import org.glom.web.client.ui.cell.OpenButtonCell;
@@ -201,10 +200,9 @@ public abstract class ListTable extends Composite {
 		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
 
-	public void addOpenButtonColumnn(ListView.Presenter presenter, final String openButtonLabel) {
+	public void addOpenButtonColumn(final String openButtonLabel, OpenButtonCell openButtonCell) {
 
-		Column<DataItem[], String> openButtonColumn = new Column<DataItem[], String>(new OpenButtonCell(documentID,
-				tableName, presenter)) {
+		Column<DataItem[], String> openButtonColumn = new Column<DataItem[], String>(openButtonCell) {
 			@Override
 			public String getValue(DataItem[] row) {
 				if (row.length == 1 && row[0] == null)

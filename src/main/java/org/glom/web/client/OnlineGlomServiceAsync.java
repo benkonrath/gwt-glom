@@ -25,6 +25,7 @@ import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
+import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
@@ -79,5 +80,8 @@ public interface OnlineGlomServiceAsync {
 
 	void getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue,
 			AsyncCallback<Integer> callback);
+
+	void getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
+			String primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
 }

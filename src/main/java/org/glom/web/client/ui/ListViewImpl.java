@@ -19,13 +19,45 @@
 
 package org.glom.web.client.ui;
 
+import org.glom.web.client.place.DetailsPlace;
+import org.glom.web.client.ui.cell.OpenButtonCell;
 import org.glom.web.client.ui.list.ListViewTable;
 import org.glom.web.shared.layout.LayoutGroup;
 
+import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 public class ListViewImpl extends Composite implements ListView {
+
+	/*
+	 * Cell renderer for Details open buttons.
+	 */
+	private class DetailsButtonCell extends OpenButtonCell {
+		private String documentID;
+		private String tableName;
+
+		public DetailsButtonCell(String documentID, String tableName) {
+			this.documentID = documentID;
+			this.tableName = tableName;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see com.google.gwt.cell.client.ButtonCell#onEnterKeyDown(com.google.gwt.cell.client.Cell.Context,
+		 * com.google.gwt.dom.client.Element, java.lang.String, com.google.gwt.dom.client.NativeEvent,
+		 * com.google.gwt.cell.client.ValueUpdater)
+		 */
+		@Override
+		protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
+				ValueUpdater<String> valueUpdater) {
+			presenter.goTo(new DetailsPlace(documentID, tableName, (String) context.getKey()));
+		}
+
+	}
 
 	final private FlowPanel mainPanel = new FlowPanel();
 	private Presenter presenter;
@@ -53,7 +85,8 @@ public class ListViewImpl extends Composite implements ListView {
 		mainPanel.clear();
 
 		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup);
-		listViewTable.addOpenButtonColumnn(presenter, "Details");
+
+		listViewTable.addOpenButtonColumn("Details", new DetailsButtonCell(documentID, layoutGroup.getTableName()));
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {
 			// Set the table row count to the minimum row count if the data row count is less than or equal to

@@ -219,11 +219,22 @@ abstract class DBAccess {
 	}
 
 	/**
-	 * Gets the primary key Field for this table.
+	 * Gets the primary key Field for the current table name.
 	 * 
 	 * @return primary key Field
 	 */
 	protected Field getPrimaryKeyField() {
+		return getPrimaryKeyFieldForTable(this.tableName);
+	}
+
+	/**
+	 * Gets the primary key Field for the specified table name.
+	 * 
+	 * @param tableName
+	 *            name of table to search for the primary key field
+	 * @return primary key Field
+	 */
+	protected Field getPrimaryKeyFieldForTable(String tableName) {
 		Field primaryKey = null;
 		FieldVector fieldsVec = document.get_table_fields(tableName);
 		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
@@ -254,6 +265,69 @@ abstract class DBAccess {
 		}
 
 		return libglomLayoutItemField;
+	}
+
+	/*
+	 * Find the LayoutItem_Portal for the related list name
+	 */
+	final protected LayoutItem_Portal getPortal(String relationshipName) {
+
+		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
+		// LayoutItem_Portal portal = null;
+		for (int i = 0; i < layoutGroupVec.size(); i++) {
+			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
+			LayoutItem_Portal portal = getPortal(relationshipName, layoutGroup);
+			if (portal != null) {
+				return portal;
+			}
+		}
+
+		// the LayoutItem_Portal with relationshipName was not found
+		return null;
+	}
+
+	/*
+	 * Recursive helper method.
+	 */
+	final private LayoutItem_Portal getPortal(String relationshipName, org.glom.libglom.LayoutGroup layoutGroup) {
+
+		if (relationshipName == null)
+			return null;
+
+		LayoutItemVector items = layoutGroup.get_items();
+		for (int i = 0; i < items.size(); i++) {
+			LayoutItem layoutItem = items.get(i);
+
+			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(layoutItem);
+			if (layoutItemField != null) {
+				// the layoutItem is a LayoutItem_Field
+				continue;
+
+			} else {
+				// the layoutItem is not a LayoutItem_Field
+				org.glom.libglom.LayoutGroup subLayoutGroup = org.glom.libglom.LayoutGroup.cast_dynamic(layoutItem);
+				if (subLayoutGroup != null) {
+					// the layoutItem is a LayoutGroup
+					LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(layoutItem);
+					if (layoutItemPortal != null) {
+						// The subGroup is a LayoutItem_Protal
+						if (relationshipName.equals(layoutItemPortal.get_relationship_name_used())) {
+							// yey, we found it!
+							return layoutItemPortal;
+						}
+					} else {
+						// The subGroup is not a LayoutItem_Portal.
+						LayoutItem_Portal retval = getPortal(relationshipName, subLayoutGroup);
+						if (retval != null) {
+							return retval;
+						}
+					}
+				}
+			}
+		}
+
+		// the LayoutItem_Portal with relationshipName was not found
+		return null;
 	}
 
 }

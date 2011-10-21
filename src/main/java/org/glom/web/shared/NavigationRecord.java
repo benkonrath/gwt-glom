@@ -17,34 +17,32 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui.cell;
+package org.glom.web.shared;
 
-import org.glom.web.client.ui.list.ListTable;
-
-import com.google.gwt.cell.client.ButtonCell;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import java.io.Serializable;
 
 /**
- * Cell renderer for {@link ListTable} open buttons.
- * 
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class OpenButtonCell extends ButtonCell {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.google.gwt.cell.client.ButtonCell#render(com.google.gwt.cell.client.Cell.Context,
-	 * com.google.gwt.safehtml.shared.SafeHtml, com.google.gwt.safehtml.shared.SafeHtmlBuilder)
-	 */
-	@Override
-	public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
-		if (data == null)
-			// The value is from an empty row.
-			sb.appendHtmlConstant("&nbsp;");
-		else
-			super.render(context, data, sb);
+@SuppressWarnings("serial")
+public class NavigationRecord implements Serializable {
+	private String tableName;
+	private String primaryKeyValue;
+
+	public String getTableName() {
+		return tableName;
 	}
 
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public String getPrimaryKeyValue() {
+		return primaryKeyValue;
+	}
+
+	public void setPrimaryKeyValue(String primaryKeyValue) {
+		this.primaryKeyValue = primaryKeyValue;
+	}
 }

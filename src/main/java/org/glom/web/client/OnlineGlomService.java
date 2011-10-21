@@ -21,10 +21,11 @@ package org.glom.web.client;
 
 import java.util.ArrayList;
 
-import org.glom.web.shared.DetailsLayoutAndData;
-import org.glom.web.shared.Documents;
-import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.DetailsLayoutAndData;
+import org.glom.web.shared.DocumentInfo;
+import org.glom.web.shared.Documents;
+import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -212,5 +213,8 @@ public interface OnlineGlomService extends RemoteService {
 	 * @return the expected row count
 	 */
 	int getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue);
+
+	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
+			String primaryKeyValue);
 
 }

@@ -28,17 +28,22 @@ import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.client.ui.cell.OpenButtonCell;
 import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.client.ui.details.RelatedListTable;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
+import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -50,12 +55,50 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @author Ben Konrath <ben@bagu.org>
  */
 public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
+	/*
+	 * Cell renderer for the related list open buttons. Normally this wouldn't be in an Activity class but since it's
+	 * making a call to the server it makes sense for it to be here.
+	 */
+	private class RelatedListOpenButtonCell extends OpenButtonCell {
+
+		private String relationshipName;
+
+		public RelatedListOpenButtonCell(String relationshipName) {
+			this.relationshipName = relationshipName;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see com.google.gwt.cell.client.ButtonCell#onEnterKeyDown(com.google.gwt.cell.client.Cell.Context,
+		 * com.google.gwt.dom.client.Element, java.lang.String, com.google.gwt.dom.client.NativeEvent,
+		 * com.google.gwt.cell.client.ValueUpdater)
+		 */
+		@Override
+		protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
+				ValueUpdater<String> valueUpdater) {
+			AsyncCallback<NavigationRecord> callback = new AsyncCallback<NavigationRecord>() {
+				public void onFailure(Throwable caught) {
+					// TODO: create a way to notify users of asynchronous callback failures
+					GWT.log("AsyncCallback Failed: OnlineGlomService.getSuitableRecordToViewDetails()");
+				}
+
+				@Override
+				public void onSuccess(NavigationRecord result) {
+					processNavgiation(result.getTableName(), result.getPrimaryKeyValue());
+				}
+
+			};
+			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName,
+					relationshipName, (String) context.getKey(), callback);
+		}
+	}
+
 	private final String documentID;
 	private final String tableName;
 	private String primaryKeyValue;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
-
 	ArrayList<DetailsCell> detailsCells;
 	ArrayList<Portal> portals;
 
@@ -97,11 +140,9 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 			@Override
 			public void onSuccess(DetailsLayoutAndData result) {
-
+				// create the layout and set the data
 				createLayout(result.getLayout());
-
 				setData(result.getData());
-
 			}
 
 		};
@@ -133,24 +174,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 					@Override
 					public void onClick(ClickEvent event) {
 
-						String newTableName = tableName;
-						if (layoutItemField.getNavigationTableName() != null) {
-							newTableName = layoutItemField.getNavigationTableName();
-						}
-
-						// Ensure the new table name is valid.
-						if (newTableName != null && !newTableName.isEmpty()) {
-
-							// Go to a new DetailsPlace if the table name has changed.
-							String newPrimaryKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(),
-									detailsCell.getData());
-							if (!newTableName.equals(tableName)) {
-								goTo(new DetailsPlace(documentID, newTableName, newPrimaryKeyValue));
-							} else {
-								primaryKeyValue = newPrimaryKeyValue;
-								refreshData();
-							}
-						}
+						processNavgiation(layoutItemField.getNavigationTableName(),
+								Utils.getKeyValueStringForQuery(layoutItemField.getType(), detailsCell.getData()));
 
 					}
 				});
@@ -182,13 +207,22 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				for (Portal portal : portals) {
 					LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
 					LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
+
 					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
 						String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(), data[i]);
+
 						if (foreignKeyValue == null)
 							continue;
+
 						RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
 								foreignKeyValue);
+						if (layoutItemPortal.getAddNavigation()
+								&& layoutItemPortal.getNavigationType() != LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
+							relatedListTable.addOpenButtonColumn("Open",
+									new RelatedListOpenButtonCell(layoutItemPortal.getName()));
+						}
 						portal.setContents(relatedListTable);
+
 						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), foreignKeyValue);
 					}
 				}
@@ -241,6 +275,41 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 		OnlineGlomServiceAsync.Util.getInstance().getRelatedListRowCount(documentID, tableName, relationshipName,
 				foreignKeyValue, callback);
+	}
+
+	/*
+	 * Process a navigation by either doing: nothing if the navigation isn't valid, refreshing the data for the current
+	 * table with a new primary key, or going to a new table with a new primary key.
+	 */
+	private void processNavgiation(String navigationTableName, String navigationPrimaryKeyValue) {
+
+		// Ensure the new table name is valid.
+		String newTableName;
+		if (navigationTableName != null && !navigationTableName.isEmpty()) {
+			newTableName = navigationTableName;
+		} else {
+			newTableName = tableName;
+		}
+
+		// Only process the navigation if there's a valid primary key value.
+		if (navigationPrimaryKeyValue != null && !navigationPrimaryKeyValue.isEmpty()) {
+			if (!newTableName.equals(tableName)) {
+				// Go to a new DetailsPlace because the table name has changed.
+				goTo(new DetailsPlace(documentID, newTableName, navigationPrimaryKeyValue));
+			} else {
+				// Refresh the details view with the new primary because the table name has not changed.
+				primaryKeyValue = navigationPrimaryKeyValue;
+				refreshData();
+			}
+		} else {
+			// TODO notify the user that navigation isn't possible.
+			// This is what Glom displays:
+			// Frame_Glom::show_ok_dialog(_("No Corresponding Record Exists"),
+			// _("No record with this value exists. Therefore navigation to the related record is not possible."),
+			// *window, Gtk::MESSAGE_WARNING);
+			// TODO: Make it more clear to the user exactly what record, what field, and what value, we are talking
+			// about.
+		}
 	}
 
 	/*

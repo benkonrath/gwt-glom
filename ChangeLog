@@ -1,3 +1,51 @@
+2011-10-21  Ben Konrath  <ben@bagu.org>
+
+	Add navigation buttons to related list tables.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Add new
+	method getSuitableRecordToViewDetails() for getting the table name
+	and primary key value for related list navigation buttons.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Add
+	private cell renderer class to get the navigation information for
+	related list tables from the server. Extract the navigation
+	processing code from the details cell navigation and use it for the
+	related list navigation as well.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Add private
+	cell renderer class for the details open buttons. This was needed
+	because the related list navigation buttons and the list view
+	navigation buttons need to react differently when clicked.
+	* src/main/java/org/glom/web/client/ui/cell/OpenButtonCell.java: Remove
+	the onEnterKeyDown() method because it's now overriden in the
+	subclasses that are specific to the related list tables and the list
+	view tables.
+	* src/main/java/org/glom/web/client/ui/details/Portal.java: Increase
+	the vertical size a little because the buttons add a bit of vertical
+	space to table. This is not a perfect solution because the vertical
+	size of with table fewer than 5 rows will be a little smaller.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Update for
+	changes in how navigation buttons are handled.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Implement
+	getSuitableRecordToViewDetails() using the new RelatedListNavigation
+	database access object.
+	* src/main/java/org/glom/web/server/database/DBAccess.java: Move code
+	to find the portal for a given relationship name from
+	RelatedListDBAccess. Add method to find a primary key field for a
+	given table.
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	Move code to find the portal for a given relationship name to
+	DBAccess.
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	New file: database access object for getting the related list
+	navigation information (the table name and the primary key value).
+	* src/main/java/org/glom/web/shared/NavigationRecord.java: New file:
+	DTO for transferring a table name to navigate to and a primary key
+	value.
+	* src/main/java/org/glom/web/shared/layout/LayoutItemPortal.java: Add
+	boolean and getter/setter to specifies if the related list should add
+	navigation buttons.
+
 2011-10-11  Ben Konrath  <ben@bagu.org>
 
 	Enable the open navigation button when the data has been set.

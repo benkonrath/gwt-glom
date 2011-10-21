@@ -39,6 +39,7 @@ public class LayoutItemPortal extends LayoutGroup {
 
 	private NavigationType navigationType = NavigationType.NAVIGATION_AUTOMATIC;
 	private String fromField;
+	private boolean addNavigation;
 
 	/**
 	 * Discover what type of navigation should be used when the user activates a related record row.
@@ -60,6 +61,14 @@ public class LayoutItemPortal extends LayoutGroup {
 
 	public void setFromField(String fromField) {
 		this.fromField = fromField;
+	}
+
+	public boolean getAddNavigation() {
+		return addNavigation;
+	}
+
+	public void setAddNavigation(boolean addNavigation) {
+		this.addNavigation = addNavigation;
 	}
 
 }
