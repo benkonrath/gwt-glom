@@ -24,7 +24,9 @@ import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -96,6 +98,35 @@ public class Utils {
 			GWT.log("Error: Invalid primary key type for query.");
 			return null;
 		}
-
 	}
+
+	/**
+	 * Get the vertical height with decorations (i.e. CSS) by temporarily adding the widget to the body element of the
+	 * document in a transparent container. This is required because the size information is only available when the
+	 * widget is attached to the DOM.
+	 * 
+	 * This method must be called before the widget is added to its container because it will be removed from any
+	 * container it is already inside. TODO: Fix this problem by saving a reference to its parent and re-addding it
+	 * after the height information has been calculated.
+	 * 
+	 * TODO: Remove duplicate code in FlowTable.FlowTableItem
+	 * 
+	 * @param widget
+	 *            get the height information for this widget
+	 * @return the height of the widget with styling applied
+	 */
+	public static int getWidgetHeight(Widget widget) {
+		Document doc = Document.get();
+		com.google.gwt.dom.client.Element div = doc.createDivElement();
+
+		div.getStyle().setOpacity(0.0);
+		div.appendChild(widget.getElement().<com.google.gwt.user.client.Element> cast());
+
+		doc.getBody().appendChild(div);
+		int height = widget.getOffsetHeight();
+		doc.getBody().removeChild(div);
+
+		return height;
+	}
+
 }

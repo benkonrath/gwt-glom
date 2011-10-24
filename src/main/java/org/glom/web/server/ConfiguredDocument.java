@@ -32,6 +32,7 @@ import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.LayoutItem_Notebook;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.NumericFormat;
 import org.glom.libglom.Relationship;
@@ -46,7 +47,9 @@ import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.layout.LayoutItemNotebook;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -416,7 +419,7 @@ final class ConfiguredDocument {
 				// libglomLayoutItem is a LayoutGroup
 				LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
 				if (libglomLayoutItemPortal != null) {
-					// group is a LayoutItemPortal
+					// group is a LayoutItem_Portal
 					LayoutItemPortal layoutItemPortal = new LayoutItemPortal();
 					Relationship relationship = libglomLayoutItemPortal.get_relationship();
 					if (relationship != null) {
@@ -450,9 +453,22 @@ final class ConfiguredDocument {
 					layoutItem = layoutItemPortal;
 
 				} else {
-					// group is *not* a LayoutItemPortal//
-					// recurse into child groups
-					layoutItem = getDetailsLayoutGroup(tableName, group);
+					// libglomLayoutItem is a LayoutGroup
+					LayoutItem_Notebook libglomLayoutItemNotebook = LayoutItem_Notebook.cast_dynamic(group);
+					if (libglomLayoutItemNotebook != null) {
+						// group is a LayoutItem_Notebook
+						LayoutGroup tempLayoutGroup = getDetailsLayoutGroup(tableName, libglomLayoutItemNotebook);
+						LayoutItemNotebook layoutItemNotebook = new LayoutItemNotebook();
+						for (LayoutItem item : tempLayoutGroup.getItems()) {
+							layoutItemNotebook.addItem(item);
+						}
+						layoutItemNotebook.setName(tableName);
+						layoutItem = layoutItemNotebook;
+					} else {
+						// group is *not* a LayoutItem_Portal or a LayoutItem_Notebook
+						// recurse into child groups
+						layoutItem = getDetailsLayoutGroup(tableName, group);
+					}
 				}
 			} else {
 				// libglomLayoutItem is *not* a LayoutGroup

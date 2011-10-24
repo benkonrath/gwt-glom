@@ -62,7 +62,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 */
 	@Override
 	public void addGroup(LayoutGroup layoutGroup) {
-		Group group = new Group(layoutGroup, false, false);
+		Group group = new Group(layoutGroup);
 		cells.addAll(group.getCells());
 		portals.addAll(group.getPortals());
 		mainPanel.add(group);

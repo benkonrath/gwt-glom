@@ -24,25 +24,35 @@ import java.util.ArrayList;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.layout.LayoutItemNotebook;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
  */
 public class Group extends Composite {
 	private FlowPanel mainPanel = new FlowPanel();
-	private FlowPanel groupContents; // set in constructor
 	private final ArrayList<DetailsCell> cells = new ArrayList<DetailsCell>();
 	private final ArrayList<Portal> portals = new ArrayList<Portal>();
-	private FlowTable flowtable; // set in constructor
 
-	@SuppressWarnings("unused")
-	private Group() {
-		// disable default constructor
+	protected Group() {
+		// can used by sub-classes
+	}
+
+	/**
+	 * Creates a new widget for a main Group in the Details View.
+	 * 
+	 * @param layoutGroup
+	 *            The DTO that holds the Group or sub-Group layout information
+	 */
+	public Group(LayoutGroup layoutGroup) {
+		// is default is a group that is not a sub
+		this(layoutGroup, false, true, true);
 	}
 
 	/**
@@ -52,52 +62,45 @@ public class Group extends Composite {
 	 *            The DTO that holds the Group or sub-Group layout information
 	 * @param subGroup
 	 *            true if the layoutGroup is a sub-Group, false if it's a Group
-	 * @param mainTitleSet
-	 *            true if the main title for the Group has been set, false if hasn't been set yet
+	 * @param groupTitleOrSubgroupTitle
+	 *            true if the 'group-title' CSS property should be used for the LayoutGroup title, false if the
+	 *            'subgroup-title' CSS property should be used for the LayoutGroup title.
+	 * @param setGroupTitle
+	 *            whether or not to add a title label for the Group
 	 */
-	public Group(LayoutGroup layoutGroup, boolean subGroup, boolean mainTitleSet) {
+	private Group(LayoutGroup layoutGroup, boolean subGroup, boolean groupTitleOrSubgroupTitle, boolean setGroupTitle) {
+
 		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
+		FlowPanel groupContents;
 		String groupTitle = layoutGroup.getTitle();
-		if (!groupTitle.isEmpty()) {
+
+		if (setGroupTitle && !groupTitle.isEmpty()) {
 			Label label = new Label(groupTitle);
 			mainPanel.add(label);
 
-			// the "group-title" class could could be used for the subgroup title if the group title is empty
-			label.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
-			mainTitleSet = true;
+			// The 'group-title' class could be used for the subgroup title if the group title is empty
+			if (groupTitleOrSubgroupTitle) {
+				label.setStyleName("group-title");
+				groupTitleOrSubgroupTitle = false;
+			} else {
+				label.setStyleName("subgroup-title");
+			}
 
 			groupContents = new FlowPanel();
 			groupContents.setStyleName("group-contents");
 			mainPanel.add(groupContents);
 		} else {
-			// don't make a separate contents panel when the group title has not been set
+			// Don't make a separate contents panel when the group title is not being set.
 			groupContents = mainPanel;
 		}
 
-		flowtable = new FlowTable(layoutGroup.getColumnCount());
-		groupContents.add(flowtable);
-
-		// create the appropriate UI element for each child item
+		FlowTable flowtable = new FlowTable(layoutGroup.getColumnCount());
 		for (LayoutItem layoutItem : layoutGroup.getItems()) {
-
-			if (layoutItem instanceof LayoutItemField) {
-				DetailsCell detailsCell = new DetailsCell((LayoutItemField) layoutItem);
-				flowtable.add(detailsCell);
-				cells.add(detailsCell);
-			} else if (layoutItem instanceof LayoutItemPortal) {
-				Portal portal = new Portal((LayoutItemPortal) layoutItem, mainTitleSet);
-				flowtable.add(portal);
-				portals.add(portal);
-			} else if (layoutItem instanceof LayoutGroup) {
-				// create a Group for the child group
-				Group childGroup = new Group((LayoutGroup) layoutItem, true, mainTitleSet);
-				flowtable.add(childGroup);
-				cells.addAll(childGroup.getCells());
-				portals.addAll(childGroup.getPortals());
-			}
+			Widget child = createChildWidget(layoutItem, groupTitleOrSubgroupTitle, true);
+			flowtable.add(child);
 		}
-
+		groupContents.add(flowtable);
 		initWidget(mainPanel);
 	}
 
@@ -105,11 +108,68 @@ public class Group extends Composite {
 		return cells;
 	}
 
-	/**
-	 * @return
-	 */
 	public ArrayList<Portal> getPortals() {
 		return portals;
+	}
+
+	/**
+	 * Creates a child widget for the specified LayoutItem and updates the cells and portals field appropriately. This
+	 * can be used by subclasses like {@link Notebook}.
+	 * 
+	 * @param layoutItem
+	 *            The DTO that holds the layout information
+	 * @param groupTitleOrSubgroupTitle
+	 *            true if the 'group-title' CSS property should be used for the LayoutGroup title, false if the
+	 *            'subgroup-title' CSS property should be used for the LayoutGroup title.
+	 * @param setGroupTitle
+	 *            whether or not to add a title label for the Group
+	 */
+	protected Widget createChildWidget(LayoutItem layoutItem, boolean groupTitleOrSubgroupTitle, boolean setGroupTitle) {
+
+		if (layoutItem instanceof LayoutItemField) {
+
+			// create a DetailsCell
+			DetailsCell detailsCell = new DetailsCell((LayoutItemField) layoutItem);
+			cells.add(detailsCell);
+			return detailsCell;
+
+		} else if (layoutItem instanceof LayoutGroup) {
+
+			if (layoutItem instanceof LayoutItemPortal) {
+
+				// create a Portal
+				Portal portal = new Portal((LayoutItemPortal) layoutItem, groupTitleOrSubgroupTitle, setGroupTitle);
+				portals.add(portal);
+				return portal;
+
+			} else if (layoutItem instanceof LayoutItemNotebook) {
+
+				// create a Notebook
+				Notebook notebook = new Notebook((LayoutItemNotebook) layoutItem);
+				cells.addAll(notebook.getCells());
+				portals.addAll(notebook.getPortals());
+				return notebook;
+
+			} else {
+
+				// create a subgroup Group
+				Group subGroup = new Group((LayoutGroup) layoutItem, true, groupTitleOrSubgroupTitle, setGroupTitle);
+				cells.addAll(subGroup.getCells());
+				portals.addAll(subGroup.getPortals());
+				return subGroup;
+			}
+		}
+
+		return null; // This should never happen.
+	}
+
+	/**
+	 * Allows subclasses to access and use the main panel widget.
+	 * 
+	 * @return the main FlowPanel
+	 */
+	protected FlowPanel getMainPanel() {
+		return mainPanel;
 	}
 
 }

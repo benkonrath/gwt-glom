@@ -45,20 +45,28 @@ public class Portal extends Composite {
 	 * 
 	 * @param layoutItem
 	 *            The DTO that holds the Portal layout information
-	 * @param mainTitleSet
-	 *            true if the main title for the Group has been set, false if hasn't been set yet
+	 * @param groupTitleOrSubgroupTitle
+	 *            true if the 'group-title' CSS property should be used for the LayoutGroup title, false if the
+	 *            'subgroup-title' CSS property should be used for the LayoutGroup title.
+	 * @param setTitle
+	 *            true if the title should be set, false otherwise
 	 */
-	public Portal(LayoutItemPortal layoutItemPortal, boolean mainTitleSet) {
+	public Portal(LayoutItemPortal layoutItemPortal, boolean groupTitleOrSubgroupTitle, boolean setTitle) {
 		layoutItem = layoutItemPortal;
 
 		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("subgroup");
-		mainPanel.setHeight("15.8em"); // the .8 is to match the details-cell bottom margin
 
-		// using the same style as the (sub)group-title and group-contents elements
-		Label title = new Label(layoutItem.getTitle());
-		title.setStyleName(mainTitleSet ? "subgroup-title" : "group-title");
-		mainPanel.add(title);
+		if (setTitle == true) {
+			mainPanel.setHeight("15.8em"); // the .8 is to match the details-cell bottom margin
+
+			// using the same style as the (sub)group-title and group-contents elements
+			Label title = new Label(layoutItem.getTitle());
+			title.setStyleName(groupTitleOrSubgroupTitle ? "group-title" : "subgroup-title");
+			mainPanel.add(title);
+		} else {
+			mainPanel.setHeight("14.8em"); // the .8 is to match the details-cell bottom margin
+		}
 
 		contents.setStyleName("group-contents");
 
