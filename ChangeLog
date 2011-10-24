@@ -140,6 +140,14 @@
 	boolean and getter/setter to specifies if the related list should add
 	navigation buttons.
 
+2011-10-24  Murray Cumming  <murrayc@murrayc.com>
+
+	Use the master branch of java-libglom
+
+	* pom.xml: Depend on java-libglom 1.19 instead.
+	
+	This is the master branch. See also the libglom-1-18 branch.
+
 2011-10-11  Ben Konrath  <ben@bagu.org>
 
 	Enable the open navigation button when the data has been set.
