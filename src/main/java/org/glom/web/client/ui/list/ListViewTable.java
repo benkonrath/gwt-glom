@@ -33,6 +33,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
+import com.google.gwt.view.client.RowCountChangeEvent;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -42,6 +43,8 @@ public class ListViewTable extends ListTable {
 
 	private static final int NUM_VISIBLE_ROWS = 15;
 	private static final int MIN_NUM_VISIBLE_ROWS = 10;
+
+	private int numNonEmptyRows = MIN_NUM_VISIBLE_ROWS;
 
 	public ListViewTable(String documentID, LayoutGroup layoutGroup) {
 		super(documentID);
@@ -59,7 +62,7 @@ public class ListViewTable extends ListTable {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void onRangeChanged(HasData<DataItem[]> display) {
+			protected void onRangeChanged(final HasData<DataItem[]> display) {
 				// setup the callback object
 				final Range range = display.getVisibleRange();
 				final int start = range.getStart();
@@ -70,13 +73,21 @@ public class ListViewTable extends ListTable {
 					}
 
 					public void onSuccess(ArrayList<DataItem[]> result) {
+						// keep track of the number of non-empty rows (rows with data)
+						numNonEmptyRows = result.size();
+
 						// Add empty rows if required.
-						int numEmptyRows = MIN_NUM_VISIBLE_ROWS - result.size();
+						int numEmptyRows = MIN_NUM_VISIBLE_ROWS - numNonEmptyRows;
 						for (int i = 0; i < numEmptyRows; i++) {
 							// A row that has one null item will be rendered as an empty row.
 							result.add(new DataItem[1]);
 						}
 						updateRowData(start, result);
+
+						// Note: numNonEmptyRows is not used by the RowCountChangeEvent handler but we need to fire the
+						// event to get ListTable.ListTablePage.createText() to run and update the pager text using
+						// getNumNonEmptyRows().
+						RowCountChangeEvent.fire(display, numNonEmptyRows, true);
 					}
 				};
 
@@ -110,6 +121,16 @@ public class ListViewTable extends ListTable {
 	@Override
 	public int getMinNumVisibleRows() {
 		return MIN_NUM_VISIBLE_ROWS;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.list.ListTable#getNumNonEmptyRows()
+	 */
+	@Override
+	public int getNumNonEmptyRows() {
+		return numNonEmptyRows;
 	}
 
 }

@@ -34,6 +34,7 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -54,11 +55,40 @@ import com.google.gwt.view.client.ProvidesKey;
  */
 public abstract class ListTable extends Composite {
 
+	private class ListTablePager extends SimplePager {
+		public ListTablePager() {
+			super(SimplePager.TextLocation.CENTER);
+		}
+
+		/*
+		 * A custom version of createText to display the correct number of data row when empty rows have been added to
+		 * the CellTable. This method is needed because the row count change event handler
+		 * (AbstractPager.handleRowCountChange()) doesn't use the row count that is sent along with the
+		 * RowCountChangeEvent.
+		 * 
+		 * @see com.google.gwt.user.cellview.client.AbstractPager#handleRowCountChange(int, boolean)
+		 * 
+		 * @see com.google.gwt.user.cellview.client.SimplePager#createText()
+		 */
+		@Override
+		protected String createText() {
+			int numNonEmptyRows = getNumNonEmptyRows();
+			if (numNonEmptyRows < getMinNumVisibleRows()) {
+				NumberFormat formatter = NumberFormat.getFormat("#,###");
+				return formatter.format(1) + "-" + formatter.format(numNonEmptyRows) + " of "
+						+ formatter.format(numNonEmptyRows);
+			} else {
+				return super.createText();
+			}
+		}
+	}
+
 	final private FlowPanel mainPanel = new FlowPanel();
-	final private SimplePager pager = new SimplePager(SimplePager.TextLocation.CENTER);
+	final private ListTablePager pager = new ListTablePager();
 	protected String documentID;
 	protected String tableName;
 	protected CellTable<DataItem[]> cellTable;
+	protected EventBus eventBus;
 
 	abstract protected AbstractDataProvider<DataItem[]> getDataProvider();
 
@@ -237,5 +267,7 @@ public abstract class ListTable extends Composite {
 	 * @return The minimum number of rows that should be displayed.
 	 */
 	public abstract int getMinNumVisibleRows();
+
+	public abstract int getNumNonEmptyRows();
 
 }

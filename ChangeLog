@@ -1,5 +1,22 @@
 2011-10-26  Ben Konrath  <ben@bagu.org>
 
+	Display the correct number of data items in the pager.
+
+	This commit fixes:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=661441
+
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	The implementation is the same for both tables: Keep track of the
+	number of non-empty rows and fire and RowCountChangeEvent after the data has
+	been updated.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Add a
+	custom Pager class that subclasses SimplePager to handle displaying
+	the correct number when empty rows have been added.
+
+2011-10-26  Ben Konrath  <ben@bagu.org>
+
 	Correct error in previous commit.
 
 	* src/main/java/org/glom/web/client/activity/ListActivity.java: Remove
