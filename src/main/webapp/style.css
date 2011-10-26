@@ -196,3 +196,48 @@ button.details-navigation
 {
 	margin-left: 0.5em;
 }
+
+/*
+ * The Notebook in the Detail View.
+ */
+ .gwt-TabLayoutPanel
+{
+	margin-bottom: 0.8em;
+}
+
+.gwt-TabLayoutPanelContentContainer
+{
+	border-color: #aaa;
+	border-style: solid;
+	border-width: 2px 1px 1px;
+	border-radius: 3px;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent
+{
+	border: 0;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent .group-contents
+{
+	padding-left: 0;
+}
+
+/* The unselected tabs */
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab
+{
+	background-color: #aaa;
+	border-radius: 3px 3px 0 0;
+}
+
+/* The selected tab */
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected
+{
+	background-color: #ccc;
+}
+
+/* The tab bar */
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs
+{
+
+}

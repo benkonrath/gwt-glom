@@ -1,5 +1,15 @@
 2011-10-26  Ben Konrath  <ben@bagu.org>
 
+	Add style to Notebook that matches current theme.
+
+	It's not the best style in the world but it's better than the default.
+
+	* src/main/java/org/glom/web/client/ui/details/Notebook.java: Add some
+	padding at the bottom of the child widgets.
+	* src/main/webapp/style.css: Add style for the Notebook.
+
+2011-10-26  Ben Konrath  <ben@bagu.org>
+
 	Move servlet initialization code to overridden init method.
 
 	This is half of the solution to getting proper error messages
