@@ -1,5 +1,22 @@
 2011-10-26  Ben Konrath  <ben@bagu.org>
 
+	Move servlet initialization code to overridden init method.
+
+	This is half of the solution to getting proper error messages
+	displayed when configuration errors occur. Here's the relevant bug:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=662792
+
+	The rest of the solution involves surrounding the init method with a
+	try/catch block and setting a global variable with the error /
+	exception. A new async method should be created to retrieve and display
+	the error message / exception.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Move
+	code from constructor to init method adding exceptions as needed.
+
+2011-10-26  Ben Konrath  <ben@bagu.org>
+
 	Add script to monitor and restart tomcat if required.
 
 	* utils/check-and-recover-tomcat.py: New file.

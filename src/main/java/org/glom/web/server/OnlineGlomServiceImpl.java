@@ -19,6 +19,7 @@
 
 package org.glom.web.server;
 
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -27,6 +28,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Properties;
+
+import javax.servlet.ServletException;
 
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
@@ -68,29 +71,38 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	/*
 	 * This is called when the servlet is started or restarted.
+	 * 
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.GenericServlet#init()
 	 */
-	public OnlineGlomServiceImpl() throws Exception {
-
+	@Override
+	public void init() throws ServletException {
 		// Find the configuration file. See this thread for background info:
 		// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
+		// FIXME move onlineglom.properties to the WEB-INF folder (option number 2 from the stackoverflow question)
 		OnlineGlomProperties config = new OnlineGlomProperties();
 		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("onlineglom.properties");
 		if (is == null) {
 			Log.fatal("onlineglom.properties not found.");
-			throw new IOException();
+			throw new ServletException("onlineglom.properties not found.");
 		}
-		config.load(is);
+		try {
+			config.load(is);
+		} catch (IOException e) {
+			throw new ServletException(e.getMessage(), e);
+		}
 
 		// check if we can read the configured glom file directory
 		String documentDirName = config.getProperty("glom.document.directory");
 		File documentDir = new File(documentDirName);
 		if (!documentDir.isDirectory()) {
 			Log.fatal(documentDirName + " is not a directory.");
-			throw new IOException();
+			throw new ServletException(documentDirName + " is not a directory.");
 		}
 		if (!documentDir.canRead()) {
 			Log.fatal("Can't read the files in : " + documentDirName);
-			throw new IOException();
+			throw new ServletException("Can't read the files in : " + documentDirName);
 		}
 
 		// get and check the glom files in the specified directory
@@ -126,7 +138,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				continue;
 			}
 
-			ConfiguredDocument configuredDocument = new ConfiguredDocument(document);
+			ConfiguredDocument configuredDocument;
+			try {
+				configuredDocument = new ConfiguredDocument(document);
+			} catch (PropertyVetoException e) {
+				throw new ServletException(e.getMessage(), e);
+			}
 			// check if a username and password have been set and work for the current document
 			String filename = glomFile.getName();
 			String key = config.getKey(filename);
@@ -136,15 +153,23 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					// username/password could be set, let's check to see if it works
 					String usernameKey = key.replaceAll(keyArray[2], "username");
 					String passwordKey = key.replaceAll(keyArray[2], "password");
-					configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey),
-							config.getProperty(passwordKey));
+					try {
+						configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey),
+								config.getProperty(passwordKey));
+					} catch (SQLException e) {
+						throw new ServletException(e.getMessage(), e);
+					}
 				}
 			}
 
 			// check the if the global username and password have been set and work with this document
 			if (!configuredDocument.isAuthenticated()) {
-				configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username"),
-						config.getProperty("glom.document.password"));
+				try {
+					configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username"),
+							config.getProperty("glom.document.password"));
+				} catch (SQLException e) {
+					throw new ServletException(e.getMessage(), e);
+				}
 			}
 
 			// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced with
@@ -154,7 +179,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			configuredDocument.setDocumentID(documentID);
 			documentMapping.put(documentID, configuredDocument);
 		}
-
 	}
 
 	/*
@@ -174,7 +198,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				Log.error(documenTitle, "Error cleaning up the ComboPooledDataSource.", e);
 			}
 		}
-
 	}
 
 	/*
