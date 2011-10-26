@@ -1,3 +1,9 @@
+2011-10-26  Ben Konrath  <ben@bagu.org>
+
+	Fix error in TODO comment.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+
 2011-10-24  Ben Konrath  <ben@bagu.org>
 
 	Create Notebook widgets to the details view.

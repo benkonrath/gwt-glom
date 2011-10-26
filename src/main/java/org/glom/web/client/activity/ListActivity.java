@@ -91,8 +91,9 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 			}
 
 			public void onSuccess(LayoutGroup result) {
-				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's the same.
-				listView.setCellTable(documentID, result);
+				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
+				// same.
+				listView.setCellTable(eventBus, documentID, result);
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, callback);
