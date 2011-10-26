@@ -1,5 +1,12 @@
 2011-10-26  Ben Konrath  <ben@bagu.org>
 
+	Correct error in previous commit.
+
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Remove
+	eventBus parameter from listView.setCellTable().
+
+2011-10-26  Ben Konrath  <ben@bagu.org>
+
 	Fix error in TODO comment.
 
 	* src/main/java/org/glom/web/client/activity/ListActivity.java:
