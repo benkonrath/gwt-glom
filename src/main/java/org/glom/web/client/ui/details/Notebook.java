@@ -68,7 +68,8 @@ public class Notebook extends Group {
 		tabPanel.selectTab(0);
 
 		// The height needs to be set of the TabLayoutPanel to work.
-		tabPanel.setHeight(maxChildHeight + "px");
+		// Use the max child height plus a few extra pixels for padding.
+		tabPanel.setHeight((maxChildHeight + 6) + "px");
 
 		FlowPanel mainPanel = getMainPanel();
 		mainPanel.add(tabPanel);
