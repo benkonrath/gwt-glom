@@ -1,3 +1,9 @@
+2011-10-27  Ben Konrath  <ben@bagu.org>
+
+	Require the latest release of java-libglom (1.17.4).
+
+	* pom.xml:
+
 2011-10-26  Ben Konrath  <ben@bagu.org>
 
 	Add style to Notebook that matches current theme.
