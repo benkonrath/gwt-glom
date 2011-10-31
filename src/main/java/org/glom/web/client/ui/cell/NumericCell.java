@@ -38,10 +38,11 @@ public class NumericCell extends AbstractCell<Double> {
 	private SafeHtml backgroundColourCSSProp;
 	private NumberFormat numberFormat;
 	private boolean useAltColourForNegatives;
+	private String currencyCode;
 
 	// TODO Find a way to set the colours on the whole column
 	public NumericCell(String foregroundColour, String backgroundColour, NumberFormat numberFormat,
-			boolean useAltColourForNegatives) {
+			boolean useAltColourForNegatives, String currencyCode) {
 		if (foregroundColour != null && !foregroundColour.isEmpty()) {
 			colourCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColour + ";");
 		} else {
@@ -54,6 +55,7 @@ public class NumericCell extends AbstractCell<Double> {
 		}
 		this.numberFormat = numberFormat;
 		this.useAltColourForNegatives = useAltColourForNegatives;
+		this.currencyCode = currencyCode.isEmpty() ? "" : currencyCode + " ";
 	}
 
 	/*
@@ -78,7 +80,7 @@ public class NumericCell extends AbstractCell<Double> {
 
 		// FIXME this isn't using safe html correctly!
 		sb.appendHtmlConstant("<div style=\"" + colourCSSProp.asString() + backgroundColourCSSProp.asString() + "\">");
-		sb.append(SafeHtmlUtils.fromString(numberFormat.format(value)));
+		sb.append(SafeHtmlUtils.fromString(currencyCode + numberFormat.format(value)));
 		sb.appendHtmlConstant("</div>");
 
 	}
