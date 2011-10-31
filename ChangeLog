@@ -1,3 +1,18 @@
+2011-10-31  Ben Konrath  <ben@bagu.org>
+
+	Don't use GWT numeric formatting to override the glom currency formatting.
+
+	Currencies are now displayed like they are in Glom. See this bug:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=646216
+
+	* src/main/java/org/glom/web/client/Utils.java: Remove GWT currency
+	formatting.
+	* src/main/java/org/glom/web/client/ui/cell/NumericCell.java: Add
+	currency code to constructor and set it when the cell is rendered.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Add the
+	currency code to the constructor of the NumericCell.
+
 2011-10-27  Ben Konrath  <ben@bagu.org>
 
 	Require the latest release of java-libglom (1.17.4).

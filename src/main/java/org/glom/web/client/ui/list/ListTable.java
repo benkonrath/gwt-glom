@@ -188,11 +188,14 @@ public abstract class ListTable extends Composite {
 			break;
 
 		case TYPE_NUMERIC:
+			// create a GWT NumberFormat for the column
 			GlomNumericFormat glomNumericFormat = formatting.getGlomNumericFormat();
 			NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
+
+			// create the actual column
 			column = new Column<DataItem[], Double>(new NumericCell(formatting.getTextFormatColourForeground(),
 					formatting.getTextFormatColourBackground(), gwtNumberFormat,
-					glomNumericFormat.getUseAltForegroundColourForNegatives())) {
+					glomNumericFormat.getUseAltForegroundColourForNegatives(), glomNumericFormat.getCurrencyCode())) {
 				@Override
 				public Double getValue(DataItem[] row) {
 					if (row.length == 1 && row[0] == null)

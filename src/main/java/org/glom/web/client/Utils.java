@@ -35,45 +35,28 @@ import com.google.gwt.user.client.ui.Widget;
 public class Utils {
 
 	public static NumberFormat getNumberFormat(GlomNumericFormat glomNumericFormat) {
-		NumberFormat gwtNumberFormat = null;
 
-		// try to format the currency with the GWT currency support
-		String currencyCode = glomNumericFormat.getCurrencyCode();
-		if (!currencyCode.isEmpty()) {
-			try {
-				gwtNumberFormat = NumberFormat.getCurrencyFormat(currencyCode);
-			} catch (IllegalArgumentException e) {
-				GWT.log("Error creating GWT NumberFormat for currencyCode " + currencyCode
-						+ ". Building NumberFormat with GlomNumericFormat settings.");
-			}
+		StringBuilder pattern = new StringBuilder("0.");
+
+		// add pattern for thousands separator
+		if (glomNumericFormat.getUseThousandsSeparator()) {
+			pattern.insert(0, "#,##");
 		}
 
-		// build our own format pattern based on the GlomNumericFormat if the currency code wasn't set or had an
-		// error
-		if (gwtNumberFormat == null) {
-			StringBuilder pattern = new StringBuilder("0.");
-
-			// add pattern for thousands separator
-			if (glomNumericFormat.getUseThousandsSeparator()) {
-				pattern.insert(0, "#,##");
+		// add pattern for restricted decimal places
+		if (glomNumericFormat.getDecimalPlacesRestricted()) {
+			for (int i = 0; i < glomNumericFormat.getDecimalPlaces(); i++) {
+				pattern.append('0');
 			}
-
-			// add pattern for restricted decimal places
-			if (glomNumericFormat.getDecimalPlacesRestricted()) {
-				for (int i = 0; i < glomNumericFormat.getDecimalPlaces(); i++) {
-					pattern.append('0');
-				}
-			} else {
-				// The default precision in libglom is 15.
-				pattern.append("###############");
-			}
-
-			// TODO use exponential numbers when more than 15 decimal places
-
-			gwtNumberFormat = NumberFormat.getFormat(pattern.toString());
+		} else {
+			// The default precision in libglom is 15.
+			pattern.append("###############");
 		}
 
-		return gwtNumberFormat;
+		// TODO use exponential numbers when more than 15 decimal places
+
+		return NumberFormat.getFormat(pattern.toString());
+
 	}
 
 	/*
