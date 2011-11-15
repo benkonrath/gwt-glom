@@ -1,0 +1,260 @@
+<html>
+<head>
+<style type="text/css">
+
+.details-cell {
+
+}
+
+div#document-title {
+    color: #333333;
+    font-size: x-large;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
+}
+
+#headbox, #footbox {
+    background-color: #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 3px 3px 3px 3px;
+    overflow: hidden;
+    padding: 0.2em;
+}
+
+/* Headbox Contents */
+.tablechooser {
+    float: left;
+    font-family: sans-serif;
+    font-size: 13.3333px;
+    margin-left: 0.5em;
+}
+
+.backlink {
+    float: right;
+    margin: 0.2em 0.5em;
+}
+
+/* Footbox Contents */
+.records {
+    color: #333333;
+    float: left;
+    margin: 0.2em 0.5em;
+}
+
+.details-bottom-navigation {
+    float: right;
+    margin: 0.2em 0.5em;
+}
+
+a {
+    color: #333333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+h2.group-title {
+    border-bottom: 1px dashed #000000;
+    font-size: 100%;
+    margin: 0 0 0.8em;
+    padding: 0;
+}
+
+.subgroup-title {
+    font-size: 100%;
+    font-weight: bold;
+    margin: 0 0 0.6em;
+    padding: 0;
+}
+
+.group {
+    background-color: #EEEEEE;
+    border-radius: 7px 7px 7px 7px;
+    margin: 1em 0;
+    padding: 0.8em;
+}
+
+h2.group-title {
+    border-bottom: 1px dashed #000000;
+    font-size: 100%;
+    margin: 0 0 0.8em;
+    padding: 0;
+}
+
+.group-contents {
+    padding-left: 0.8em;
+}
+
+.details-label {
+    padding-right: 0.5em;
+    padding-top: 3px;
+}
+
+.details-data {
+    padding-bottom: 0.8em;
+}
+
+.details-navigation {
+    padding-left: 0.25em;
+}
+
+.hideextra { font-family: sans-serif; font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow:ellipsis; }
+
+textarea {
+    width: 100%;
+}
+
+input {
+    width: 100%;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+</style>
+</head>
+
+<body >
+
+<div id="document-title">Music Collection</div>
+
+
+<div id="headbox">
+<select class="tablechooser"><option value="albums">Albums</option><option value="artists">Artists</option><option value="publishers">Publishers</option><option selected="selected" value="songs">Songs</option></select>
+<a class="backlink" href="listview-songs.html" style="">Back to List</a>
+</div>
+
+<div class="group">
+  <h2 class="group-title">Overview</h2>
+  <div class="group-contents">
+
+
+<!-- the flowtable: a table -->
+<table style="width: 100%">
+<col width="49%"/>
+<col width="49%"/>
+<tr style="vertical-align: top;">
+
+  <!-- the first column: a table -->
+  <!-- the column gap is set using padding on the td of the flowtable -->
+  <td style="padding-right: 0.5%;">
+  <table>
+     <!-- details cell: a table row -->
+     <tr>
+        <!-- Setting the padding dynamically using GWT could make alignment of the text boxes between groups match Glom. For example using 'padding-right: 34px;' on the details-label. -->
+        <!-- But this an advanced feature that can be implemented later. -->
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Song ID:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top; width: 100%;"><input class="hideextra" value="0"/></td>
+     </tr>
+  </table>
+  </td>
+
+  <!-- the second column -->
+  <td style="padding-left: 0.5%;">
+  <table>
+     
+     <!-- details cell -->
+     <tr>
+      	<!-- Setting the padding dynamically using GWT could make alignment of the text boxes between groups match Glom. For example using 'padding-right: 60px;' on the details-label. -->
+        <!-- But this an advanced feature that can be implemented later. -->
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Name:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top; width: 100%; colspan: 2"><input class="hideextra" value="Thunder Road"/></td>
+     </tr>
+
+  </table>
+  </td>
+
+</tr>
+</table>
+</div>
+</div>
+
+<div class="group">
+  <h2 class="group-title">Details</h2>
+  <div class="group-contents">
+
+<!-- the second flowtable -->
+<table style="width: 100%">
+<col width="49%"/>
+<col width="49%"/>
+<tr style="vertical-align: top;">
+
+  <!-- the first column -->
+  <td style="padding-right: 0.5%;">
+  <div class="subgroup">
+  <div class="subgroup-title">Album</div>
+  <div class="group-contents">
+  <table>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Album ID:</td>
+	<td class="details-data" style="vertical-align: top; width: 100%;"><input class="hideextra" value="0"/></td>
+	<td class="details-navigation" style="vertical-align: top;"><button type="button">Open</button></td>
+     </tr>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Name:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top; width: 100%;"><input class="hideextra" value="Born To Run"/></td>
+     </tr>
+
+  </table>
+  </div>
+  </div>
+  </td>
+
+  <!-- the second column -->
+  <td style="padding-left: 0.5%;">
+  <div class="subgroup">
+  <div class="subgroup-title">Album</div>
+  <div class="group-contents">
+  <table>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Artist ID:</td>
+	<td class="details-data" style="vertical-align: top; width: 100%;"><input class="hideextra" value="0"/></td>
+	<td class="details-navigation" style="vertical-align: top;"><button type="button">Open</button></td>
+     </tr>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Name:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top; width: 100%;"><input class="hideextra" value="Bruce Springsteen"/></td>
+     </tr>
+     
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Comments:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top; width: 100%;"><textarea class="hideextra" rows="5"  style="resize: none;">
+Amazing song!
+
+Rock on!</textarea></td>
+     </tr>
+
+  </table>
+  </div>
+  </div>
+  </td>
+
+</tr>
+</table>
+</div>
+</div>
+
+<div id="footbox">
+		<span class="records">Displaying record 1 of 8</span>
+	
+		<span class="details-bottom-navigation">
+			<a href="">First</a>
+			<a href="">Back</a>
+			<a href="">Forward</a>
+			<a href="">Last</a>
+		</span>
+</div>
+
+</body>
+</html>

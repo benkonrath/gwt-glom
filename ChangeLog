@@ -1,5 +1,15 @@
 2011-11-15  Ben Konrath  <ben@bagu.org>
 
+	Add details view mockup with HTML tables and text entries.
+
+	This is from the attachment on this bug:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=663109
+
+	* mockups/details-view-html-tables-text-entries.html:
+
+2011-11-15  Ben Konrath  <ben@bagu.org>
+
 	Add space between the columns of the flow table.
 
 	This fixes:
