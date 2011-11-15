@@ -22,6 +22,7 @@ package org.glom.web.client.ui.details;
 import java.util.ArrayList;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
@@ -100,12 +101,24 @@ public class FlowTable extends Composite {
 		mainPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 		mainPanel.getElement().getStyle().setWidth(100, Unit.PCT);
 
-		// create the columns
+		// The columns widths are evenly distributed amongst the number of columns with 1% padding between the columns.
+		double columnWidth = (100 - (columnCount - 1)) / columnCount;
 		for (int i = 0; i < columnCount; i++) {
+			// Create the column and set the style.
 			FlowPanel column = new FlowPanel();
-			column.getElement().getStyle().setFloat(Float.LEFT);
-			// The columns widths are evenly distributed amongst the number of columns
-			column.getElement().getStyle().setWidth(100 / columnCount, Unit.PCT);
+			Style columnStyle = column.getElement().getStyle();
+			columnStyle.setFloat(Float.LEFT);
+			columnStyle.setWidth(columnWidth, Unit.PCT);
+
+			// Add space between the columns.
+			// Don't set the left margin on the first column.
+			if (i != 0)
+				columnStyle.setMarginLeft(0.5, Unit.PCT);
+			// Don't set the right margin on the last column.
+			if (i != columnCount - 1)
+				columnStyle.setMarginRight(0.5, Unit.PCT);
+
+			// Keep track of the column and add it to mainPanel.
 			columns.add(column);
 			mainPanel.add(column);
 		}
