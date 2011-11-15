@@ -1,3 +1,9 @@
+2011-11-15  Ben Konrath  <ben@bagu.org>
+
+	Add backup files to the .gitignore.
+
+	* .gitignore: Ignore files that end with ~.
+
 2011-11-09  Ben Konrath  <ben@bagu.org>
 
 	Use latest release of gwt-log.
