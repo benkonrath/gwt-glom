@@ -1,5 +1,18 @@
 2011-11-16  Ben Konrath  <ben@bagu.org>
 
+	Set group titles with name when title is empty.
+
+	This fixes a problem with an empty notebook tab label in the Lesson
+	Planner document. The forth tab in the notebook should be "Internet":
+
+	http://bagu.org:8080/OnlineGlom/#details:document=lesson-planner&table=teachers&value=0
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Use
+	libglom's LayoutItem.get_title_or_name() to fill in the LayoutGroup
+	DTO title.
+
+2011-11-16  Ben Konrath  <ben@bagu.org>
+
 	Remove whitespace from the configured username properties.
 
 	This assumes that usernames won't have whitespace at the beginning
