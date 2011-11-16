@@ -1,5 +1,18 @@
 2011-11-16  Ben Konrath  <ben@bagu.org>
 
+	Rework the fix for empty notebook tab labels.
+
+	Setting the empty group titles with its name caused problems for the
+	details	layout. Instead of using libglom's
+	LayoutItem.get_title_or_name(), the LayoutItem name is explicitly sent
+	to the client when the title is	empty. This allows the Notebook to use
+	the name when the title is empty without affecting anything else.
+
+	* src/main/java/org/glom/web/client/ui/details/Notebook.java:
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+
+2011-11-16  Ben Konrath  <ben@bagu.org>
+
 	Set group titles with name when title is empty.
 
 	This fixes a problem with an empty notebook tab label in the Lesson

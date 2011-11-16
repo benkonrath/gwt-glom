@@ -402,7 +402,11 @@ final class ConfiguredDocument {
 	private LayoutGroup getDetailsLayoutGroup(String tableName, org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		LayoutGroup layoutGroup = new LayoutGroup();
 		layoutGroup.setColumnCount(Utils.safeLongToInt(libglomLayoutGroup.get_columns_count()));
-		layoutGroup.setTitle(libglomLayoutGroup.get_title_or_name());
+		String layoutGroupTitle = libglomLayoutGroup.get_title();
+		if (layoutGroupTitle.isEmpty())
+			layoutGroup.setName(libglomLayoutGroup.get_name());
+		else
+			layoutGroup.setTitle(layoutGroupTitle);
 
 		// look at each child item
 		LayoutItemVector layoutItemsVec = libglomLayoutGroup.get_items();

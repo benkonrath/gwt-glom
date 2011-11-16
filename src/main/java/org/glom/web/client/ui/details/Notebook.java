@@ -61,7 +61,7 @@ public class Notebook extends Group {
 			if (childHeight > maxChildHeight)
 				maxChildHeight = childHeight;
 
-			tabPanel.add(child, layoutItem.getTitle());
+			tabPanel.add(child, layoutItem.getTitle().isEmpty() ? layoutItem.getName() : layoutItem.getTitle());
 		}
 
 		// Set the first tab as the default tab.
