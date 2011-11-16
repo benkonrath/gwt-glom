@@ -154,7 +154,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					String usernameKey = key.replaceAll(keyArray[2], "username");
 					String passwordKey = key.replaceAll(keyArray[2], "password");
 					try {
-						configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey),
+						configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey).trim(),
 								config.getProperty(passwordKey));
 					} catch (SQLException e) {
 						throw new ServletException(e.getMessage(), e);
@@ -165,7 +165,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// check the if the global username and password have been set and work with this document
 			if (!configuredDocument.isAuthenticated()) {
 				try {
-					configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username"),
+					configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username").trim(),
 							config.getProperty("glom.document.password"));
 				} catch (SQLException e) {
 					throw new ServletException(e.getMessage(), e);
