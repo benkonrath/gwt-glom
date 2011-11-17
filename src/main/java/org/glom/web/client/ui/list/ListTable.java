@@ -121,7 +121,11 @@ public abstract class ListTable extends Composite {
 
 		// create the CellTable with the requested number of rows and the key provider
 		cellTable = new CellTable<DataItem[]>(numVisibleRows, keyProvider);
+
+		// set some style
 		cellTable.setStyleName("data-list");
+		cellTable.getElement().getStyle().setProperty("whiteSpace", "nowrap"); // this prevents the header and row text
+																				// from wrapping
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
 		int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();

@@ -64,9 +64,12 @@ public class TextCell extends AbstractCell<String> {
 			return;
 		}
 
-		// set the text and colours
+		// Set the text and some CSS properties for the text.
+		// The overflow and text-overflow properties tell the browser to add an ellipsis when the text overflows the
+		// table cell.
 		// FIXME this isn't using safe html correctly!
-		sb.appendHtmlConstant("<div style=\"" + colourCSSProp.asString() + backgroundColourCSSProp.asString() + "\">");
+		sb.appendHtmlConstant("<div style=\"overflow: hidden; text-overflow: ellipsis; " + colourCSSProp.asString()
+				+ backgroundColourCSSProp.asString() + "\">");
 		sb.append(SafeHtmlUtils.fromString(value));
 		sb.appendHtmlConstant("</div>");
 

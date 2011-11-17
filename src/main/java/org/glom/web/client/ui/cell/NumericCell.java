@@ -78,8 +78,12 @@ public class NumericCell extends AbstractCell<Double> {
 			colourCSSProp = SafeHtmlUtils.fromString("color: #FF0000;");
 		}
 
+		// Convert the number to a string and set some CSS properties on the text.
+		// The overflow and text-overflow properties tell the browser to add an ellipsis when the text overflows the
+		// table cell.
 		// FIXME this isn't using safe html correctly!
-		sb.appendHtmlConstant("<div style=\"" + colourCSSProp.asString() + backgroundColourCSSProp.asString() + "\">");
+		sb.appendHtmlConstant("<div style=\"overflow: hidden; text-overflow: ellipsis; " + colourCSSProp.asString()
+				+ backgroundColourCSSProp.asString() + "\">");
 		sb.append(SafeHtmlUtils.fromString(currencyCode + numberFormat.format(value)));
 		sb.appendHtmlConstant("</div>");
 

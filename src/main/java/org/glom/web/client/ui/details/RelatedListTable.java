@@ -58,6 +58,11 @@ public class RelatedListTable extends ListTable {
 		this.relationshipName = layoutGroup.getName();
 
 		createCellTable(layoutGroup, NUM_VISIBLE_ROWS);
+
+		// This tells the browser that we want to manually specify the column widths and don't want the table to
+		// overflow it's container. Since we're currently not specifying the column widths, the browser will make
+		// equally spaced columns.
+		cellTable.getElement().getStyle().setProperty("tableLayout", "fixed");
 	}
 
 	/*
