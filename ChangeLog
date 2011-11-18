@@ -1,3 +1,9 @@
+2011-11-18  Ben Konrath  <ben@bagu.org>
+
+	Add boolean example to HTML table mockup.
+
+	* mockups/details-view-html-tables-text-entries.html:
+
 2011-11-17  Ben Konrath  <ben@bagu.org>
 
 	Ensure the pager buttons are always visible for related lists.
