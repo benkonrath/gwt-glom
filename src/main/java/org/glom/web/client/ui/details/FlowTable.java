@@ -22,24 +22,20 @@ package org.glom.web.client.ui.details;
 import java.util.ArrayList;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.google.gwt.user.client.ui.HTMLTable.ColumnFormatter;
+import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * A container widget that implements the Glom details view flow table behaviour. Child widgets are arranged using the
  * least vertical space in the specified number of columns.
- * 
- * This class is currently implemented as a {@link Composite} widget. It would be more efficient to subclass
- * {@link Panel} or {@link ComplexPanel} and implement this class at a lower level but we'd loose the ability to easily
- * debug the code. This is something to consider when looking for optimisations.
  * 
  * @author Ben Konrath <ben@bagu.org>
  */
@@ -87,7 +83,7 @@ public class FlowTable extends Composite {
 		}
 	}
 
-	private FlowPanel mainPanel = new FlowPanel();
+	private FlexTable table = new FlexTable();
 	private ArrayList<FlowPanel> columns = new ArrayList<FlowPanel>();
 	private ArrayList<FlowTableItem> items = new ArrayList<FlowTableItem>();
 
@@ -97,33 +93,45 @@ public class FlowTable extends Composite {
 	}
 
 	public FlowTable(int columnCount) {
-		// set the overflow properly so that the columns can be arranged properly
-		mainPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
-		mainPanel.getElement().getStyle().setWidth(100, Unit.PCT);
+		// get the formatters
+		CellFormatter cellFormatter = table.getFlexCellFormatter();
+		ColumnFormatter columnFormatter = table.getColumnFormatter();
+		RowFormatter rowFormater = table.getRowFormatter();
+
+		// align the Cells to the top of the row
+		rowFormater.setVerticalAlign(0, HasVerticalAlignment.ALIGN_TOP);
+
+		// take up all available horizontal space and remove the border
+		table.setWidth("100%");
+		table.getElement().getStyle().setProperty("borderCollapse", "collapse");
+		table.setBorderWidth(0);
 
 		// The columns widths are evenly distributed amongst the number of columns with 1% padding between the columns.
 		double columnWidth = (100 - (columnCount - 1)) / columnCount;
 		for (int i = 0; i < columnCount; i++) {
-			// Create the column and set the style.
+			// create and add a column
 			FlowPanel column = new FlowPanel();
-			Style columnStyle = column.getElement().getStyle();
-			columnStyle.setFloat(Float.LEFT);
-			columnStyle.setWidth(columnWidth, Unit.PCT);
+			table.setWidget(0, i, column);
+
+			// set the column with from the calucation above
+			columnFormatter.setWidth(i, columnWidth + "%");
 
 			// Add space between the columns.
-			// Don't set the left margin on the first column.
+			// Don't set the left padding on the first column.
 			if (i != 0)
-				columnStyle.setMarginLeft(0.5, Unit.PCT);
-			// Don't set the right margin on the last column.
+				cellFormatter.getElement(0, i).getStyle().setPaddingLeft(0.5, Unit.PCT);
+			// Don't set the right padding on the last column.
 			if (i != columnCount - 1)
-				columnStyle.setMarginRight(0.5, Unit.PCT);
+				cellFormatter.getElement(0, i).getStyle().setPaddingRight(0.5, Unit.PCT);
 
-			// Keep track of the column and add it to mainPanel.
+			// TODO The style name should be placed on the column FlexTable when I add it. - Ben
+			cellFormatter.addStyleName(0, i, "group-column");
+
+			// Keep track of the columns so it can be accessed later
 			columns.add(column);
-			mainPanel.add(column);
 		}
 
-		initWidget(mainPanel);
+		initWidget(table);
 	}
 
 	/**

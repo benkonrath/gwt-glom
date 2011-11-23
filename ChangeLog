@@ -1,3 +1,11 @@
+2011-11-23  Ben Konrath  <ben@bagu.org>
+
+	Use an HTML table instead of CSS for the FlowTable layout.
+
+	* src/main/java/org/glom/web/client/ui/details/FlowTable.java: Use
+	GWT's FlexTable to implement the FlowTable.
+	* src/main/webapp/style.css: Adjust CSS for the change to FlexTable.
+
 2011-11-18  Ben Konrath  <ben@bagu.org>
 
 	Add boolean example to HTML table mockup.

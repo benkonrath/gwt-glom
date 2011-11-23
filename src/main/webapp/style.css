@@ -69,12 +69,6 @@ table
 {
 	border-collapse: collapse;
 }
-td
-{
-	vertical-align: top;
-	padding: 0;
-	padding-right: 2em;
-}
 
 /**
  * List View
@@ -120,6 +114,8 @@ table.data-list col.details
  */
 .group
 {
+	font-family: sans-serif;
+	font-size: medium;
 	margin: 1em 0;
 	background-color: #eee;
 	padding: 0.8em;
@@ -142,9 +138,10 @@ table.data-list col.details
 	margin-top: 0em;
 }
 
-table.columns
+.group-column
 {
-	width: 100%;
+	font-family: sans-serif;
+    font-size: medium;
 }
 
 .group-title
