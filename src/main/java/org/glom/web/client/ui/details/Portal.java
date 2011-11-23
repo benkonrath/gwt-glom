@@ -57,16 +57,10 @@ public class Portal extends Composite {
 		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("subgroup");
 
-		if (setTitle == true) {
-			mainPanel.setHeight("15.8em"); // the .8 is to match the details-cell bottom margin
-
-			// using the same style as the (sub)group-title and group-contents elements
-			Label title = new Label(layoutItem.getTitle());
-			title.setStyleName(groupTitleOrSubgroupTitle ? "group-title" : "subgroup-title");
-			mainPanel.add(title);
-		} else {
-			mainPanel.setHeight("14.8em"); // the .8 is to match the details-cell bottom margin
-		}
+		// using the same style as the (sub)group-title and group-contents elements
+		Label title = new Label(layoutItem.getTitle());
+		title.setStyleName(groupTitleOrSubgroupTitle ? "group-title" : "subgroup-title");
+		mainPanel.add(title);
 
 		contents.setStyleName("group-contents");
 

@@ -1,5 +1,15 @@
 2011-11-23  Ben Konrath  <ben@bagu.org>
 
+	Don't explicitly set the height of Portals.
+
+	See comments 6 - 10 of this bug for details:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=662930#c6
+
+	* src/main/java/org/glom/web/client/ui/details/Portal.java:
+
+2011-11-23  Ben Konrath  <ben@bagu.org>
+
 	Use an HTML table instead of CSS for the FlowTable layout.
 
 	* src/main/java/org/glom/web/client/ui/details/FlowTable.java: Use
