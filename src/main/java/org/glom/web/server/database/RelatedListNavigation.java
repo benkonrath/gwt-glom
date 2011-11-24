@@ -30,6 +30,8 @@ import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_Portal;
+import org.glom.libglom.SqlBuilder;
+import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.shared.NavigationRecord;
 
@@ -92,8 +94,8 @@ public class RelatedListNavigation extends DBAccess {
 		fieldsToGet.add(navigationRelationshipItem);
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
-		String relatedTable = portal.get_table_used("" /* not relevant */);
-		Field key_field = getPrimaryKeyFieldForTable(relatedTable);
+		String relatedTableName = portal.get_table_used("" /* not relevant */);
+		Field primaryKey = getPrimaryKeyFieldForTable(relatedTableName);
 
 		NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;
@@ -104,24 +106,36 @@ public class RelatedListNavigation extends DBAccess {
 			// Setup the JDBC driver and get the query.
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			query = Glom.build_sql_select_with_key(relatedTable, fieldsToGet, key_field, primaryKeyValue);
-			rs = st.executeQuery(query);
 
-			// Set the output parameters:
-			navigationRecord.setTableName(navigationTableName);
+			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
+			if (primaryKey.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
+				// FIXME and this too.
+				Value gdaPrimaryKeyValue = new Value(new Double(primaryKeyValue));
 
-			rs.next();
-			String tablePrimaryKeyValue = rs.getString(1);
+				SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKey,
+						gdaPrimaryKeyValue);
+				query = Glom.sqlbuilder_get_full_query(builder);
 
-			// The value is empty when there there is no record to match the key in the related table:
-			// For instance, if an invoice lines record mentions a product id, but the product does not exist in the
-			// products table.
-			if (tablePrimaryKeyValue == null || tablePrimaryKeyValue.isEmpty()) {
-				Log.info(documentID, tableName, "SQL query returned empty primary key for navigation to the "
-						+ navigationTableName + "table.");
-				navigationRecord.setPrimaryKeyValue(null);
+				rs = st.executeQuery(query);
+
+				// Set the output parameters:
+				navigationRecord.setTableName(navigationTableName);
+
+				rs.next();
+				String tablePrimaryKeyValue = rs.getString(1);
+
+				// The value is empty when there there is no record to match the key in the related table:
+				// For instance, if an invoice lines record mentions a product id, but the product does not exist in the
+				// products table.
+				if (tablePrimaryKeyValue == null || tablePrimaryKeyValue.isEmpty()) {
+					Log.info(documentID, tableName, "SQL query returned empty primary key for navigation to the "
+							+ navigationTableName + "table.");
+					navigationRecord.setPrimaryKeyValue(null);
+				} else {
+					navigationRecord.setPrimaryKeyValue(tablePrimaryKeyValue);
+				}
 			} else {
-				navigationRecord.setPrimaryKeyValue(tablePrimaryKeyValue);
+				Log.error(documentID, tableName, "Database quey not executed because primaryKey isn't numeric.");
 			}
 
 		} catch (SQLException e) {

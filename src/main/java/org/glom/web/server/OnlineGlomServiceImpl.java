@@ -179,6 +179,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			configuredDocument.setDocumentID(documentID);
 			documentMapping.put(documentID, configuredDocument);
 		}
+
+		// Allow a fake connection, so sqlbuilder_get_full_query() can work:
+		Glom.set_fake_connection();
 	}
 
 	/*

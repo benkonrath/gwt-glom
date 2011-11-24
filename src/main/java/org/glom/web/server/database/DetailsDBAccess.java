@@ -29,6 +29,8 @@ import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
+import org.glom.libglom.SqlBuilder;
+import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.shared.DataItem;
 
@@ -70,12 +72,26 @@ public class DetailsDBAccess extends DBAccess {
 			// Setup the JDBC driver and get the query.
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			String query = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey, primaryKeyValue);
-			rs = st.executeQuery(query);
 
-			// get the results from the ResultSet
-			// using 2 as a length parameter so we can log a warning if appropriate
-			rowsList = convertResultSetToDTO(2, fieldsToGet, rs);
+			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
+			if (primaryKey.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
+				// FIXME And this too.
+				Value gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(new Double(
+						primaryKeyValue));
+
+				SqlBuilder builder = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey,
+						gdaPrimaryKeyValue);
+				String query = Glom.sqlbuilder_get_full_query(builder);
+
+				rs = st.executeQuery(query);
+
+				// get the results from the ResultSet
+				// using 2 as a length parameter so we can log a warning if appropriate
+				rowsList = convertResultSetToDTO(2, fieldsToGet, rs);
+			} else {
+				Log.error(documentID, tableName, "Database quey not executed because primaryKey isn't numeric.");
+			}
+
 		} catch (SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
@@ -106,5 +122,4 @@ public class DetailsDBAccess extends DBAccess {
 
 		return rowsList.get(0);
 	}
-
 }

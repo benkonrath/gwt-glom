@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
+import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
+import org.glom.libglom.SqlBuilder;
+import org.glom.libglom.SqlExpr;
 import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -71,8 +74,11 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getSelectQuery(SortClause sortClause) {
-		return Glom.build_sql_select_simple(tableName, fieldsToGet, sortClause);
-
+		SqlExpr whereClause = new SqlExpr();// Ignored.
+		Relationship extraJoin = new Relationship(); // Ignored.
+		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
+				sortClause);
+		return Glom.sqlbuilder_get_full_query(builder);
 	}
 
 	/*
@@ -82,7 +88,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getCountQuery() {
-		return Glom.build_sql_select_count_simple(tableName, fieldsToGet);
+		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet);
+		SqlBuilder countBuilder = Glom.build_sql_select_count_rows(builder);
+		return Glom.sqlbuilder_get_full_query(countBuilder);
 	}
-
 }

@@ -1,3 +1,21 @@
+2011-11-24  Ben Konrath  <ben@bagu.org>
+
+	Use newly added java-libglom API to create queries.
+
+	This isn't finished. I still need to stop using Strings for primary key
+	values in the client code.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Tell
+	libglom to use fake connections so that retrieving the query string will
+	work.
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	Use the newly added libglom sql methods and classes to create the
+	query. Add temporary hack to convert primary value strings to Gda
+	Value.
+
 2011-11-23  Ben Konrath  <ben@bagu.org>
 
 	Don't explicitly set the height of Portals.

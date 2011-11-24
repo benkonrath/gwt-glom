@@ -29,6 +29,9 @@ import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
+import org.glom.libglom.SqlBuilder;
+import org.glom.libglom.SqlExpr;
+import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.shared.DataItem;
 
@@ -156,8 +159,25 @@ public class RelatedListDBAccess extends ListDBAccess {
 			return "";
 		}
 
-		return Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClauseToTableName,
-				whereClauseToKeyField, foreignKeyValue, null, sortClause);
+		SqlExpr whereClause = new SqlExpr();
+		// only make attempt to make a where clause if it makes sense to do so
+		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
+
+			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
+			if (whereClauseToKeyField.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
+				// FIXME and this too.
+				Value gdaForeignKeyValue = new Value(new Double(foreignKeyValue));
+				// TODO Do we need this check?:
+				// if (!Conversions::value_is_empty(gda_key_value))
+				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
+						gdaForeignKeyValue);
+
+			}
+		}
+		Relationship extraJoin = new Relationship(); // Ignored.
+		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
+				sortClause);
+		return Glom.sqlbuilder_get_full_query(builder);
 
 	}
 
@@ -184,6 +204,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getCountQuery() {
+
 		if (portal == null) {
 			Log.error(documentID, parentTable,
 					"The Portal has not been found. Cannot build query for the related list.");
@@ -196,8 +217,24 @@ public class RelatedListDBAccess extends ListDBAccess {
 			return "";
 		}
 
-		return Glom.build_sql_select_count_with_where_clause(tableName, fieldsToGet, whereClauseToTableName,
-				whereClauseToKeyField, foreignKeyValue);
+		SqlExpr whereClause = new SqlExpr();
+		// only make attempt to make a where clause if it makes sense to do so
+		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
+			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
+			if (whereClauseToKeyField.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
+				// FIXME and this too.
+				Value gdaForeignKeyValue = new Value(new Double(foreignKeyValue));
+				// TODO Do we need this check?:
+				// if (!Conversions::value_is_empty(gda_key_value))
+				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
+						gdaForeignKeyValue);
+			}
+		}
+
+		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause);
+		SqlBuilder countBuilder = Glom.build_sql_select_count_rows(builder);
+		return Glom.sqlbuilder_get_full_query(countBuilder);
+
 	}
 
 }
