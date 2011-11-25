@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.ui.list.ListTable;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
@@ -45,11 +46,11 @@ public class RelatedListTable extends ListTable {
 	private static final int NUM_VISIBLE_ROWS = 5;
 	private static final int MIN_NUM_VISIBLE_ROWS = NUM_VISIBLE_ROWS;
 
-	private String foreignKeyValue;
+	private PrimaryKeyItem foreignKeyValue;
 	private String relationshipName;
 	private int numNonEmptyRows = MIN_NUM_VISIBLE_ROWS;
 
-	public RelatedListTable(String documentID, LayoutGroup layoutGroup, String foreignKeyValue) {
+	public RelatedListTable(String documentID, LayoutGroup layoutGroup, PrimaryKeyItem foreignKeyValue) {
 		super(documentID);
 
 		// These variables need to be set before the createCellTable() method is called so that the data provider can

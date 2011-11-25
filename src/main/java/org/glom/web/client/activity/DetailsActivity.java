@@ -27,6 +27,7 @@ import org.glom.web.client.Utils;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
+import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.client.ui.cell.OpenButtonCell;
 import org.glom.web.client.ui.details.DetailsCell;
@@ -35,6 +36,7 @@ import org.glom.web.client.ui.details.RelatedListTable;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
@@ -90,13 +92,13 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 			};
 			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName,
-					relationshipName, (String) context.getKey(), callback);
+					relationshipName, (PrimaryKeyItem) context.getKey(), callback);
 		}
 	}
 
 	private final String documentID;
 	private final String tableName;
-	private String primaryKeyValue;
+	private PrimaryKeyItem primaryKeyValue;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 	ArrayList<DetailsCell> detailsCells;
@@ -127,7 +129,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new DetailsPlace(documentID, event.getNewTableName(), ""));
+				// note the empty primary key item
+				goTo(new DetailsPlace(documentID, event.getNewTableName(), new PrimaryKeyItem()));
 			}
 		});
 
@@ -140,9 +143,15 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 			@Override
 			public void onSuccess(DetailsLayoutAndData result) {
-				// create the layout and set the data
-				createLayout(result.getLayout());
-				setData(result.getData());
+				if (result == null) {
+					// The result is null only when the documentID was not found. There's nothing to display without the
+					// documentID.
+					goTo(new DocumentSelectionPlace());
+				} else {
+					// create the layout and set the data
+					createLayout(result.getLayout());
+					setData(result.getData());
+				}
 			}
 
 		};
@@ -173,9 +182,9 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-
-						processNavgiation(layoutItemField.getNavigationTableName(),
-								Utils.getKeyValueStringForQuery(layoutItemField.getType(), detailsCell.getData()));
+						PrimaryKeyItem primaryKeyItem = Utils.getPrimaryKeyItem(layoutItemField.getType(),
+								detailsCell.getData());
+						processNavgiation(layoutItemField.getNavigationTableName(), primaryKeyItem);
 
 					}
 				});
@@ -209,10 +218,10 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 					LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 
 					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
-						String foreignKeyValue = Utils.getKeyValueStringForQuery(layoutItemField.getType(), data[i]);
-
-						if (foreignKeyValue == null)
+						if (data[i] == null)
 							continue;
+
+						PrimaryKeyItem foreignKeyValue = Utils.getPrimaryKeyItem(layoutItemField.getType(), data[i]);
 
 						RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
 								foreignKeyValue);
@@ -251,7 +260,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 	// sets the row count for the related list table
 	private void setRowCountForRelatedListTable(final RelatedListTable relatedListTable, String relationshipName,
-			String foreignKeyValue) {
+			PrimaryKeyItem foreignKeyValue) {
 		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
@@ -281,7 +290,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	 * Process a navigation by either doing: nothing if the navigation isn't valid, refreshing the data for the current
 	 * table with a new primary key, or going to a new table with a new primary key.
 	 */
-	private void processNavgiation(String navigationTableName, String navigationPrimaryKeyValue) {
+	private void processNavgiation(String navigationTableName, PrimaryKeyItem navigationPrimaryKeyValue) {
 
 		// Ensure the new table name is valid.
 		String newTableName;

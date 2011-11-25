@@ -26,6 +26,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
@@ -67,21 +68,23 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue,
+	void getDetailsLayoutAndData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue,
 			AsyncCallback<DetailsLayoutAndData> callback);
 
-	void getDetailsData(String documentID, String tableName, String primaryKeyValue, AsyncCallback<DataItem[]> callback);
+	void getDetailsData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue,
+			AsyncCallback<DataItem[]> callback);
 
-	void getRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
-			int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
+	void getRelatedListData(String documentID, String tableName, String relationshipName,
+			PrimaryKeyItem foreignKeyValue, int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
 
-	void getSortedRelatedListData(String documentID, String tableName, String relationshipName, String foreignKeyValue,
-			int start, int length, int sortColumnIndex, boolean ascending, AsyncCallback<ArrayList<DataItem[]>> callback);
+	void getSortedRelatedListData(String documentID, String tableName, String relationshipName,
+			PrimaryKeyItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending,
+			AsyncCallback<ArrayList<DataItem[]>> callback);
 
-	void getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue,
-			AsyncCallback<Integer> callback);
+	void getRelatedListRowCount(String documentID, String tableName, String relationshipName,
+			PrimaryKeyItem foreignKeyValue, AsyncCallback<Integer> callback);
 
 	void getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
-			String primaryKeyValue, AsyncCallback<NavigationRecord> callback);
+			PrimaryKeyItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
 }

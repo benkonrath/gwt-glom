@@ -40,6 +40,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -310,7 +311,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public DataItem[] getDetailsData(String documentID, String tableName, String primaryKeyValue) {
+	public DataItem[] getDetailsData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -325,12 +326,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String)
 	 */
 	@Override
-	public DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue) {
+	public DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName,
+			PrimaryKeyItem primaryKeyValue) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
+		if (configuredDoc == null)
+			return null;
 
 		// FIXME check for authentication
 
+		DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
 		initalDetailsView.setLayout(configuredDoc.getDetailsLayoutGroup(tableName));
 		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
 
@@ -344,7 +348,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, String relationshipName,
-			String foreignKeyValue, int start, int length) {
+			PrimaryKeyItem foreignKeyValue, int start, int length) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -361,7 +365,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
-			String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending) {
+			PrimaryKeyItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -371,7 +375,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	public int getRelatedListRowCount(String documentID, String tableName, String relationshipName,
-			String foreignKeyValue) {
+			PrimaryKeyItem foreignKeyValue) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -387,7 +391,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName,
-			String relationshipName, String primaryKeyValue) {
+			String relationshipName, PrimaryKeyItem primaryKeyValue) {
 		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication

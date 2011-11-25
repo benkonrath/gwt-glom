@@ -28,7 +28,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class NavigationRecord implements Serializable {
 	private String tableName;
-	private String primaryKeyValue;
+	private PrimaryKeyItem primaryKeyValue;
 
 	public String getTableName() {
 		return tableName;
@@ -38,11 +38,11 @@ public class NavigationRecord implements Serializable {
 		this.tableName = tableName;
 	}
 
-	public String getPrimaryKeyValue() {
+	public PrimaryKeyItem getPrimaryKeyValue() {
 		return primaryKeyValue;
 	}
 
-	public void setPrimaryKeyValue(String primaryKeyValue) {
+	public void setPrimaryKeyValue(PrimaryKeyItem primaryKeyValue) {
 		this.primaryKeyValue = primaryKeyValue;
 	}
 }

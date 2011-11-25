@@ -45,6 +45,7 @@ import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
@@ -238,7 +239,7 @@ final class ConfiguredDocument {
 		return listViewDBAccess.getData(start, length, useSortClause, sortColumnIndex, isAscending);
 	}
 
-	DataItem[] getDetailsData(String tableName, String primaryKeyValue) {
+	DataItem[] getDetailsData(String tableName, PrimaryKeyItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -247,7 +248,7 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
-	ArrayList<DataItem[]> getRelatedListData(String tableName, String relationshipName, String foreignKeyValue,
+	ArrayList<DataItem[]> getRelatedListData(String tableName, String relationshipName, PrimaryKeyItem foreignKeyValue,
 			int start, int length, boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
@@ -292,7 +293,7 @@ final class ConfiguredDocument {
 	/*
 	 * Gets the expected row count for a related list.
 	 */
-	int getRelatedListRowCount(String tableName, String relationshipName, String foreignKeyValue) {
+	int getRelatedListRowCount(String tableName, String relationshipName, PrimaryKeyItem foreignKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -304,7 +305,8 @@ final class ConfiguredDocument {
 		return relatedListDBAccess.getExpectedResultSize(foreignKeyValue);
 	}
 
-	NavigationRecord getSuitableRecordToViewDetails(String tableName, String relationshipName, String primaryKeyValue) {
+	NavigationRecord getSuitableRecordToViewDetails(String tableName, String relationshipName,
+			PrimaryKeyItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 

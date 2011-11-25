@@ -32,7 +32,9 @@ import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
+import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.PrimaryKeyItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -47,7 +49,7 @@ public class DetailsDBAccess extends DBAccess {
 		this.tableName = tableName;
 	}
 
-	public DataItem[] getData(String primaryKeyValue) {
+	public DataItem[] getData(PrimaryKeyItem primaryKeyValue) {
 
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document
 				.get_data_layout_groups("details", tableName));
@@ -73,11 +75,11 @@ public class DetailsDBAccess extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
-			if (primaryKey.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
-				// FIXME And this too.
-				Value gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(new Double(
-						primaryKeyValue));
+			Value gdaPrimaryKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+					primaryKey.get_glom_type(), primaryKeyValue);
+
+			// Only create the query if we've created a Gda Value from the DataItem.
+			if (gdaPrimaryKeyValue != null) {
 
 				SqlBuilder builder = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey,
 						gdaPrimaryKeyValue);
@@ -88,8 +90,6 @@ public class DetailsDBAccess extends DBAccess {
 				// get the results from the ResultSet
 				// using 2 as a length parameter so we can log a warning if appropriate
 				rowsList = convertResultSetToDTO(2, fieldsToGet, rs);
-			} else {
-				Log.error(documentID, tableName, "Database quey not executed because primaryKey isn't numeric.");
 			}
 
 		} catch (SQLException e) {
@@ -115,7 +115,7 @@ public class DetailsDBAccess extends DBAccess {
 			Log.error(documentID, tableName, "The query returned an empty ResultSet. Returning null.");
 			return null;
 		} else if (rowsList.size() > 1 && primaryKeyValue != null && !primaryKeyValue.isEmpty()) {
-			// only log a warning if the result size is greater than 1 and the primaryKeyValue was set
+			// Only log a warning if the result size is greater than 1 and the primaryKeyValue was set.
 			Log.warn(documentID, tableName,
 					"The query did not return the expected unique result. Returning the first result in the set.");
 		}

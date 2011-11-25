@@ -21,6 +21,7 @@ package org.glom.web.client;
 
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.core.client.GWT;
@@ -59,30 +60,6 @@ public class Utils {
 
 	}
 
-	/*
-	 * Can be used for getting the primary key value and the foreign key value string.
-	 */
-	public static String getKeyValueStringForQuery(GlomFieldType fieldType, DataItem dataItem) {
-		switch (fieldType) {
-		case TYPE_NUMERIC:
-			String retval = new Double(dataItem.getNumber()).toString();
-			if (retval.endsWith(".0"))
-				return retval.substring(0, retval.length() - 2);
-			else
-				return retval;
-		case TYPE_TEXT:
-		case TYPE_DATE:
-		case TYPE_TIME:
-		case TYPE_IMAGE:
-			return dataItem.getText();
-		case TYPE_BOOLEAN:
-		case TYPE_INVALID:
-		default:
-			GWT.log("Error: Invalid primary key type for query.");
-			return null;
-		}
-	}
-
 	/**
 	 * Get the vertical height with decorations (i.e. CSS) by temporarily adding the widget to the body element of the
 	 * document in a transparent container. This is required because the size information is only available when the
@@ -110,6 +87,26 @@ public class Utils {
 		doc.getBody().removeChild(div);
 
 		return height;
+	}
+
+	public static PrimaryKeyItem getPrimaryKeyItem(GlomFieldType glomFieldType, DataItem dataItem) {
+		PrimaryKeyItem primaryKeyItem = new PrimaryKeyItem();
+		switch (glomFieldType) {
+		case TYPE_BOOLEAN:
+			primaryKeyItem.setBoolean(dataItem.getBoolean());
+			break;
+		case TYPE_NUMERIC:
+			primaryKeyItem.setNumber(dataItem.getNumber());
+			break;
+		case TYPE_TEXT:
+			primaryKeyItem.setText(new String(dataItem.getText() == null ? "" : dataItem.getText()));
+			break;
+		default:
+			GWT.log("getPrimaryKeyItem(): Unsupported Glom Field Type: " + glomFieldType);
+			break;
+		}
+
+		return primaryKeyItem;
 	}
 
 }

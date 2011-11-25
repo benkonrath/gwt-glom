@@ -21,6 +21,10 @@ package org.glom.web.server;
 
 import java.io.File;
 
+import org.glom.libglom.Field.glom_field_type;
+import org.glom.libglom.Value;
+import org.glom.web.shared.PrimaryKeyItem;
+
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 
@@ -39,8 +43,28 @@ public class Utils {
 		return (int) value;
 	}
 
-	static String getFileName(String fileURI) {
+	public static String getFileName(String fileURI) {
 		String[] splitURI = fileURI.split(File.separator);
 		return splitURI[splitURI.length - 1];
+	}
+
+	// TODO: compare the type from the primary key to the type found in the Glom document
+	public static Value getGdaValueForPrimaryKey(String documentID, String tableName, glom_field_type glomFieldType,
+			PrimaryKeyItem primaryKeyValue) {
+		Value gdaPrimaryKeyValue = null;
+		switch (glomFieldType) {
+		case TYPE_NUMERIC:
+			gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(primaryKeyValue.getNumber());
+			break;
+		case TYPE_TEXT:
+			// TODO How can I validate or escape the text? It could have been created from the URL.
+			gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value("") : new Value(primaryKeyValue.getText());
+			break;
+		default:
+			Log.error(documentID, tableName, "Unsupported Glom Field Type to use as a primary key: " + glomFieldType
+					+ ". Query may not work.");
+			break;
+		}
+		return gdaPrimaryKeyValue;
 	}
 }

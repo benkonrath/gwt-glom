@@ -21,6 +21,7 @@ package org.glom.web.server.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -33,7 +34,9 @@ import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
+import org.glom.web.server.Utils;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.PrimaryKeyItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -64,7 +67,7 @@ public class RelatedListNavigation extends DBAccess {
 	 * 
 	 * This code was ported from Glom: Box_Data_Portal::get_suitable_record_to_view_details()
 	 */
-	public NavigationRecord getNavigationRecord(String primaryKeyValue) {
+	public NavigationRecord getNavigationRecord(PrimaryKeyItem primaryKeyValue) {
 
 		if (portal == null) {
 			Log.error(documentID, tableName,
@@ -107,10 +110,11 @@ public class RelatedListNavigation extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
-			if (primaryKey.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
-				// FIXME and this too.
-				Value gdaPrimaryKeyValue = new Value(new Double(primaryKeyValue));
+			Value gdaPrimaryKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+					primaryKey.get_glom_type(), primaryKeyValue);
+
+			// Only create the query if we've created a Gda Value from the DataItem.
+			if (gdaPrimaryKeyValue != null) {
 
 				SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKey,
 						gdaPrimaryKeyValue);
@@ -122,22 +126,28 @@ public class RelatedListNavigation extends DBAccess {
 				navigationRecord.setTableName(navigationTableName);
 
 				rs.next();
-				String tablePrimaryKeyValue = rs.getString(1);
+				PrimaryKeyItem tablePrimaryKeyValue = new PrimaryKeyItem();
+				ResultSetMetaData rsMetaData = rs.getMetaData();
+				switch (rsMetaData.getColumnType(1)) {
+				case java.sql.Types.NUMERIC:
+					tablePrimaryKeyValue.setNumber(rs.getDouble(1));
+					break;
+				default:
+					Log.warn(documentID, tableName, "Unsupported java.sql.Type: " + rsMetaData.getColumnTypeName(1));
+					break;
+				}
 
 				// The value is empty when there there is no record to match the key in the related table:
 				// For instance, if an invoice lines record mentions a product id, but the product does not exist in the
 				// products table.
-				if (tablePrimaryKeyValue == null || tablePrimaryKeyValue.isEmpty()) {
+				if (tablePrimaryKeyValue.isEmpty()) {
 					Log.info(documentID, tableName, "SQL query returned empty primary key for navigation to the "
-							+ navigationTableName + "table.");
+							+ navigationTableName + "table. Navigation may not work correctly");
 					navigationRecord.setPrimaryKeyValue(null);
 				} else {
 					navigationRecord.setPrimaryKeyValue(tablePrimaryKeyValue);
 				}
-			} else {
-				Log.error(documentID, tableName, "Database quey not executed because primaryKey isn't numeric.");
 			}
-
 		} catch (SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query: " + query, e);
 			// TODO: somehow notify user of problem

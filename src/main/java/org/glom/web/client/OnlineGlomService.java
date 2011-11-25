@@ -26,6 +26,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.PrimaryKeyItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -134,7 +135,7 @@ public interface OnlineGlomService extends RemoteService {
 	 *            value of the primary key in the specified Glom table to use in the query
 	 * @return the result of the SQL query as an array of {@link DataItem}s
 	 */
-	DataItem[] getDetailsData(String documentID, String tableName, String primaryKeyValue);
+	DataItem[] getDetailsData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue);
 
 	/**
 	 * Gets a {@link DetailsLayoutAndData} object that contains the layout and data of the details view.
@@ -148,7 +149,7 @@ public interface OnlineGlomService extends RemoteService {
 	 *            value of the primary key in the specified Glom table to use in the query
 	 * @return a {@link DetailsLayoutAndData} object for the layout and initial data of the details view.
 	 */
-	DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, String primaryKeyValue);
+	DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue);
 
 	/**
 	 * Retrieves data for the related list table with the specified relationship name and foreign key value.
@@ -169,7 +170,7 @@ public interface OnlineGlomService extends RemoteService {
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
 	ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, String relationshipName,
-			String foreignKeyValue, int start, int length);
+			PrimaryKeyItem foreignKeyValue, int start, int length);
 
 	/**
 	 * Retrieves sorted data for the related list table with the specified relationship name and foreign key value.
@@ -195,7 +196,7 @@ public interface OnlineGlomService extends RemoteService {
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
 	ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
-			String foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
+			PrimaryKeyItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
 
 	/**
 	 * Gets the expected row count for the related list table with the specified relationship name and foreign key
@@ -212,9 +213,10 @@ public interface OnlineGlomService extends RemoteService {
 	 *            the value of the foreign key
 	 * @return the expected row count
 	 */
-	int getRelatedListRowCount(String documentID, String tableName, String relationshipName, String foreignKeyValue);
+	int getRelatedListRowCount(String documentID, String tableName, String relationshipName,
+			PrimaryKeyItem foreignKeyValue);
 
 	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
-			String primaryKeyValue);
+			PrimaryKeyItem primaryKeyValue);
 
 }

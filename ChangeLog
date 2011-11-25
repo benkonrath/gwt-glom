@@ -1,3 +1,44 @@
+2011-11-25  Ben Konrath  <ben@bagu.org>
+
+	Don't use Strings to hold primary key values.
+
+	The primary key values are now held in a new data object
+	(PrimaryKeyItem) that holds type information and the primary key value
+	using the correct type.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: Use
+	PrimaryKeyItem instead of String to hold the primary key value.
+	* src/main/java/org/glom/web/client/Utils.java: Remove
+	getKeyValueStringForQuery(). Add getPrimaryKeyItem() which creates a
+	PrimaryKeyItem based on the GlomFieldType and the DataItem.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Use
+	PrimaryKeyItem instead of String to hold the primary key value. Load
+	document selection page when the documentID has not been set correctly.
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java: Re-work
+	DetailsPlace -> URL and URL -> DetailsPlace conversion with
+	PrimaryKeyItem.
+	* src/main/java/org/glom/web/client/place/DocumentSelectionPlace.java:
+	Return empty string for URL instead of "null".
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Use
+	PrimaryKeyItem instead of String to hold primary key values.
+	* src/main/java/org/glom/web/server/Utils.java: New method to convert a
+	PrimaryKeyValue to a Gda Value.
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	Replace temporary database access code that uses the PrimaryKeyValue to
+	Gda Value conversion.
+	* src/main/java/org/glom/web/shared/DataItem.java: Add comment.
+	* src/main/java/org/glom/web/shared/NavigationRecord.java: Use
+	PrimaryKeyItem instead of String.
+	* src/main/java/org/glom/web/shared/PrimaryKeyItem.java: New class to
+	hold primary key values.
+
 2011-11-24  Ben Konrath  <ben@bagu.org>
 
 	Use newly added java-libglom API to create queries.

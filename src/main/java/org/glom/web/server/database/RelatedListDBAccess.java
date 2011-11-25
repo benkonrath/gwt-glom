@@ -33,7 +33,9 @@ import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
+import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.PrimaryKeyItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -41,7 +43,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * @author Ben Konrath <ben@bagu.org>
  */
 public class RelatedListDBAccess extends ListDBAccess {
-	private String foreignKeyValue = null;
+	private PrimaryKeyItem foreignKeyValue = null;
 	private LayoutItem_Portal portal = null;
 	private String parentTable = null;
 	private String whereClauseToTableName = null;
@@ -109,7 +111,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	}
 
-	public ArrayList<DataItem[]> getData(int start, int length, String foreignKeyValue, boolean useSortClause,
+	public ArrayList<DataItem[]> getData(int start, int length, PrimaryKeyItem foreignKeyValue, boolean useSortClause,
 			int sortColumnIndex, boolean isAscending) {
 
 		if (tableName == null || foreignKeyValue == null || foreignKeyValue.isEmpty()) {
@@ -127,7 +129,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * 
 	 * @see org.glom.web.server.ListDBAccess#getExpectedResultSize()
 	 */
-	public int getExpectedResultSize(String foreignKeyValue) {
+	public int getExpectedResultSize(PrimaryKeyItem foreignKeyValue) {
 
 		// Set the foreignKeyValue
 		this.foreignKeyValue = foreignKeyValue;
@@ -162,18 +164,13 @@ public class RelatedListDBAccess extends ListDBAccess {
 		SqlExpr whereClause = new SqlExpr();
 		// only make attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
-
-			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
-			if (whereClauseToKeyField.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
-				// FIXME and this too.
-				Value gdaForeignKeyValue = new Value(new Double(foreignKeyValue));
-				// TODO Do we need this check?:
-				// if (!Conversions::value_is_empty(gda_key_value))
+			Value gdaForeignKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
+			if (gdaForeignKeyValue != null)
 				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
 						gdaForeignKeyValue);
-
-			}
 		}
+
 		Relationship extraJoin = new Relationship(); // Ignored.
 		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
 				sortClause);
@@ -220,15 +217,11 @@ public class RelatedListDBAccess extends ListDBAccess {
 		SqlExpr whereClause = new SqlExpr();
 		// only make attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
-			// FIXME This is only temporary. Change this to use DataItem instead of converting from the String.
-			if (whereClauseToKeyField.get_glom_type() == Field.glom_field_type.TYPE_NUMERIC) {
-				// FIXME and this too.
-				Value gdaForeignKeyValue = new Value(new Double(foreignKeyValue));
-				// TODO Do we need this check?:
-				// if (!Conversions::value_is_empty(gda_key_value))
+			Value gdaForeignKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
+			if (gdaForeignKeyValue != null)
 				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
 						gdaForeignKeyValue);
-			}
 		}
 
 		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause);

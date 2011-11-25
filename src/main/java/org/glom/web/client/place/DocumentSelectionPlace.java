@@ -34,7 +34,7 @@ public class DocumentSelectionPlace extends Place {
 
 		@Override
 		public String getToken(DocumentSelectionPlace place) {
-			return null;
+			return "";
 		}
 	}
 }
