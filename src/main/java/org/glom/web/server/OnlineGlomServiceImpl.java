@@ -126,6 +126,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				throw new Exception(errorMessage);
 			}
 
+			// Check to see if the native library of java libglom is visible to the JVM
+			if (!isNativeLibraryVisibleToJVM())
+				throw new Exception("The java-libglom shared library is not visible to the JVM."
+						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.");
+
 			// intitize libglom
 			Glom.libglom_init(); // can throw an UnsatisfiedLinkError exception
 
@@ -185,6 +190,38 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			configurtionException = e;
 		}
 
+	}
+
+	/**
+	 * Checks if the java-libglom native library is visible to the JVM.
+	 * 
+	 * @return true if the java-libglom native library is visible to the JVM, false if it's not
+	 */
+	private boolean isNativeLibraryVisibleToJVM() {
+		String javaLibraryPath = System.getProperty("java.library.path");
+
+		// Go through all the library paths and check for the java_libglom .so.
+		for (String libDirName : javaLibraryPath.split(":")) {
+			File libDir = new File(libDirName);
+
+			if (!libDir.isDirectory())
+				continue;
+			if (!libDir.canRead())
+				continue;
+
+			File[] libs = libDir.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.matches("libjava_libglom-[0-9]\\.[0-9].+\\.so");
+				}
+			});
+
+			// if at least one directory had the .so, we're done
+			if (libs.length > 0)
+				return true;
+		}
+
+		return false;
 	}
 
 	/*
