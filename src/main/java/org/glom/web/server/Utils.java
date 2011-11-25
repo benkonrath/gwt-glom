@@ -24,6 +24,7 @@ import java.io.File;
 import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Value;
 import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -48,17 +49,35 @@ public class Utils {
 		return splitURI[splitURI.length - 1];
 	}
 
-	// TODO: compare the type from the primary key to the type found in the Glom document
 	public static Value getGdaValueForPrimaryKey(String documentID, String tableName, glom_field_type glomFieldType,
 			PrimaryKeyItem primaryKeyValue) {
 		Value gdaPrimaryKeyValue = null;
 		switch (glomFieldType) {
 		case TYPE_NUMERIC:
-			gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(primaryKeyValue.getNumber());
+			if (primaryKeyValue.getGlomFieldType() == GlomFieldType.TYPE_NUMERIC) {
+				// Only trust the PrimaryKeyItem if the types match
+				gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(primaryKeyValue.getNumber());
+			} else {
+				// Don't use the primary key value when the type from the PrimaryKeyItem doesn't match the type from the
+				// Glom document.
+				gdaPrimaryKeyValue = new Value(); // an emtpy Value
+				Log.info(documentID, tableName, "PrimaryKeyItem type: " + primaryKeyValue.getGlomFieldType()
+						+ " doesn't match the type from the Glom document: " + glomFieldType);
+				Log.info(documentID, tableName, "The value in the PrimaryKeyItem is being ignored.");
+			}
 			break;
 		case TYPE_TEXT:
-			// TODO How can I validate or escape the text? It could have been created from the URL.
-			gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value("") : new Value(primaryKeyValue.getText());
+			if (primaryKeyValue.getGlomFieldType() == GlomFieldType.TYPE_TEXT) {
+				// Only trust the PrimaryKeyItem if the types match
+				gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value("") : new Value(primaryKeyValue.getText());
+			} else {
+				// Don't use the primary key value when the type from the PrimaryKeyItem doesn't match the type from the
+				// Glom document.
+				gdaPrimaryKeyValue = new Value(""); // an emtpy string Value
+				Log.info(documentID, tableName, "PrimaryKeyItem type: " + primaryKeyValue.getGlomFieldType()
+						+ " doesn't match the type from the Glom document: " + glomFieldType);
+				Log.info(documentID, tableName, "The value in the PrimaryKeyItem is being ignored.");
+			}
 			break;
 		default:
 			Log.error(documentID, tableName, "Unsupported Glom Field Type to use as a primary key: " + glomFieldType
