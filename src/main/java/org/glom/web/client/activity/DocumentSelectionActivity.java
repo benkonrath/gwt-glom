@@ -35,21 +35,23 @@ public class DocumentSelectionActivity extends AbstractActivity implements Docum
 
 	// TODO inject with GIN
 	private final ClientFactory clientFactory;
+	private final DocumentSelectionView documentSelectionView;
 
 	public DocumentSelectionActivity(ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
+		this.documentSelectionView = clientFactory.getDocumentSelectionView();
 	}
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		Window.setTitle("Online Glom");
-		final DocumentSelectionView documentSelectionView = clientFactory.getDocumentSelectionView();
+
 		documentSelectionView.setPresenter(this);
 
 		AsyncCallback<Documents> callback = new AsyncCallback<Documents>() {
 			public void onFailure(Throwable caught) {
-				documentSelectionView
-						.setErrorMessage("Unable to communicate with the server. Check the error log for more information.");
+				// Try to get an error message. Most likely this won't work but it's worth a try.
+				getAndSetErrorMessage();
 			}
 
 			public void onSuccess(Documents documents) {
@@ -59,8 +61,7 @@ public class DocumentSelectionActivity extends AbstractActivity implements Docum
 						documentSelectionView.addDocumentLink(documents.getDocumentID(i), documents.getTitle(i));
 					}
 				} else {
-					documentSelectionView
-							.setErrorMessage("Could not find any Glom documents to load. Check the error log for more information.");
+					getAndSetErrorMessage();
 				}
 			}
 		};
@@ -74,4 +75,19 @@ public class DocumentSelectionActivity extends AbstractActivity implements Docum
 		clientFactory.getPlaceController().goTo(place);
 	}
 
+	private void getAndSetErrorMessage() {
+
+		AsyncCallback<String> callback = new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+				documentSelectionView
+						.setErrorMessage("Unable to communicate with the servlet. Check the error log for more information.");
+			}
+
+			public void onSuccess(String errorMessage) {
+				documentSelectionView.setErrorMessage("Configuration Error: " + errorMessage);
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().getConfigurationErrorMessage(callback);
+
+	}
 }

@@ -19,10 +19,8 @@
 
 package org.glom.web.server;
 
-import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -69,6 +67,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	private final Hashtable<String, ConfiguredDocument> documentMapping = new Hashtable<String, ConfiguredDocument>();
+	private Exception configurtionException = null;
 
 	/*
 	 * This is called when the servlet is started or restarted.
@@ -79,110 +78,113 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public void init() throws ServletException {
-		// Find the configuration file. See this thread for background info:
-		// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
-		// FIXME move onlineglom.properties to the WEB-INF folder (option number 2 from the stackoverflow question)
-		OnlineGlomProperties config = new OnlineGlomProperties();
-		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("onlineglom.properties");
-		if (is == null) {
-			Log.fatal("onlineglom.properties not found.");
-			throw new ServletException("onlineglom.properties not found.");
-		}
+
+		// All of the initialisation code is surrounded by a try/catch block so that the servlet can be in an
+		// initialised state and the error message can be retrived by the client code.
 		try {
-			config.load(is);
-		} catch (IOException e) {
-			throw new ServletException(e.getMessage(), e);
-		}
-
-		// check if we can read the configured glom file directory
-		String documentDirName = config.getProperty("glom.document.directory");
-		File documentDir = new File(documentDirName);
-		if (!documentDir.isDirectory()) {
-			Log.fatal(documentDirName + " is not a directory.");
-			throw new ServletException(documentDirName + " is not a directory.");
-		}
-		if (!documentDir.canRead()) {
-			Log.fatal("Can't read the files in : " + documentDirName);
-			throw new ServletException("Can't read the files in : " + documentDirName);
-		}
-
-		// get and check the glom files in the specified directory
-		File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.endsWith(GLOM_FILE_EXTENSION);
+			// Find the configuration file. See this thread for background info:
+			// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
+			// FIXME move onlineglom.properties to the WEB-INF folder (option number 2 from the stackoverflow question)
+			OnlineGlomProperties config = new OnlineGlomProperties();
+			InputStream is = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream("onlineglom.properties");
+			if (is == null) {
+				String errorMessage = "onlineglom.properties not found.";
+				Log.fatal(errorMessage);
+				throw new Exception(errorMessage);
 			}
-		});
+			config.load(is); // can throw an IOException
 
-		// don't continue if there aren't any Glom files to configure
-		if (glomFiles.length <= 0) {
-			Log.error("Unable to find any Glom documents in the configured directory: " + documentDirName);
-			Log.error("Check the onlineglom.properties file to ensure that 'glom.document.directory' is set to the correct directory.");
-			return;
-		}
+			// check if we can read the configured glom file directory
+			String documentDirName = config.getProperty("glom.document.directory");
+			File documentDir = new File(documentDirName);
+			if (!documentDir.isDirectory()) {
+				String errorMessage = documentDirName + " is not a directory.";
+				Log.fatal(errorMessage);
+				throw new Exception(errorMessage);
+			}
+			if (!documentDir.canRead()) {
+				String errorMessage = "Can't read the files in directory " + documentDirName + " .";
+				Log.fatal(errorMessage);
+				throw new Exception(errorMessage);
+			}
 
-		Glom.libglom_init();
-		for (File glomFile : glomFiles) {
-			Document document = new Document();
-			document.set_file_uri("file://" + glomFile.getAbsolutePath());
-			int error = 0;
-			boolean retval = document.load(error);
-			if (retval == false) {
-				String message;
-				if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
-					message = "Could not find file: " + glomFile.getAbsolutePath();
-				} else {
-					message = "An unknown error occurred when trying to load file: " + glomFile.getAbsolutePath();
+			// get and check the glom files in the specified directory
+			File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.endsWith(GLOM_FILE_EXTENSION);
 				}
-				Log.error(message);
-				// continue with for loop because there may be other documents in the directory
-				continue;
+			});
+
+			// don't continue if there aren't any Glom files to configure
+			if (glomFiles.length <= 0) {
+				String errorMessage = "Unable to find any Glom documents in the configured directory "
+						+ documentDirName
+						+ " . Check the onlineglom.properties file to ensure that 'glom.document.directory' is set to the correct directory.";
+				Log.error(errorMessage);
+				throw new Exception(errorMessage);
 			}
 
-			ConfiguredDocument configuredDocument;
-			try {
-				configuredDocument = new ConfiguredDocument(document);
-			} catch (PropertyVetoException e) {
-				throw new ServletException(e.getMessage(), e);
-			}
-			// check if a username and password have been set and work for the current document
-			String filename = glomFile.getName();
-			String key = config.getKey(filename);
-			if (key != null) {
-				String[] keyArray = key.split("\\.");
-				if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
-					// username/password could be set, let's check to see if it works
-					String usernameKey = key.replaceAll(keyArray[2], "username");
-					String passwordKey = key.replaceAll(keyArray[2], "password");
-					try {
+			// intitize libglom
+			Glom.libglom_init(); // can throw an UnsatisfiedLinkError exception
+
+			// Allow a fake connection, so sqlbuilder_get_full_query() can work:
+			Glom.set_fake_connection();
+
+			for (File glomFile : glomFiles) {
+				Document document = new Document();
+				document.set_file_uri("file://" + glomFile.getAbsolutePath());
+				int error = 0;
+				boolean retval = document.load(error);
+				if (retval == false) {
+					String message;
+					if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
+						message = "Could not find file: " + glomFile.getAbsolutePath();
+					} else {
+						message = "An unknown error occurred when trying to load file: " + glomFile.getAbsolutePath();
+					}
+					Log.error(message);
+					// continue with for loop because there may be other documents in the directory
+					continue;
+				}
+
+				ConfiguredDocument configuredDocument = new ConfiguredDocument(document); // can throw a
+																							// PropertyVetoException
+
+				// check if a username and password have been set and work for the current document
+				String filename = glomFile.getName();
+				String key = config.getKey(filename);
+				if (key != null) {
+					String[] keyArray = key.split("\\.");
+					if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
+						// username/password could be set, let's check to see if it works
+						String usernameKey = key.replaceAll(keyArray[2], "username");
+						String passwordKey = key.replaceAll(keyArray[2], "password");
 						configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey).trim(),
-								config.getProperty(passwordKey));
-					} catch (SQLException e) {
-						throw new ServletException(e.getMessage(), e);
+								config.getProperty(passwordKey)); // can throw an SQLException
 					}
 				}
-			}
 
-			// check the if the global username and password have been set and work with this document
-			if (!configuredDocument.isAuthenticated()) {
-				try {
+				// check the if the global username and password have been set and work with this document
+				if (!configuredDocument.isAuthenticated()) {
 					configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username").trim(),
-							config.getProperty("glom.document.password"));
-				} catch (SQLException e) {
-					throw new ServletException(e.getMessage(), e);
+							config.getProperty("glom.document.password")); // can throw an SQLException
 				}
+
+				// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
+				// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
+				String documentID = filename.substring(0, glomFile.getName().length() - GLOM_FILE_EXTENSION.length())
+						.replace(' ', '+');
+				configuredDocument.setDocumentID(documentID);
+				documentMapping.put(documentID, configuredDocument);
 			}
 
-			// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced with
-			// pluses (+). The space/plus replacement makes the key more friendly for URLs.
-			String documentID = filename.substring(0, glomFile.getName().length() - GLOM_FILE_EXTENSION.length())
-					.replace(' ', '+');
-			configuredDocument.setDocumentID(documentID);
-			documentMapping.put(documentID, configuredDocument);
+		} catch (Exception e) {
+			// Don't throw the Exception so that servlet will be initialised and the error message can be retrieved.
+			configurtionException = e;
 		}
 
-		// Allow a fake connection, so sqlbuilder_get_full_query() can work:
-		Glom.set_fake_connection();
 	}
 
 	/*
@@ -202,6 +204,19 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				Log.error(documenTitle, "Error cleaning up the ComboPooledDataSource.", e);
 			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getConfigurationErrorMessage()
+	 */
+	@Override
+	public String getConfigurationErrorMessage() {
+		if (configurtionException == null)
+			return "No configuration errors to report.";
+		else
+			return configurtionException.getMessage();
 	}
 
 	/*
@@ -398,4 +413,5 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		return configuredDoc.getSuitableRecordToViewDetails(tableName, relationshipName, primaryKeyValue);
 	}
+
 }

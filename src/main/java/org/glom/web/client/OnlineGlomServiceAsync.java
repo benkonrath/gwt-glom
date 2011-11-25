@@ -87,4 +87,6 @@ public interface OnlineGlomServiceAsync {
 	void getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
 			PrimaryKeyItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
+	void getConfigurationErrorMessage(AsyncCallback<String> callback);
+
 }

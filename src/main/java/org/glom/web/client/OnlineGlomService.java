@@ -219,4 +219,6 @@ public interface OnlineGlomService extends RemoteService {
 	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
 			PrimaryKeyItem primaryKeyValue);
 
+	String getConfigurationErrorMessage();
+
 }
