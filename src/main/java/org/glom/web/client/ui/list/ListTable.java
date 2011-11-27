@@ -115,7 +115,7 @@ public abstract class ListTable extends Composite {
 				if (row.length == 1 && row[0] == null)
 					// an empty row
 					return null;
-				return Utils.getPrimaryKeyItem(primaryKeyFieldType, row[primaryKeyIndex]);
+				return Utils.getTypedDataItem(primaryKeyFieldType, row[primaryKeyIndex]);
 			}
 		};
 

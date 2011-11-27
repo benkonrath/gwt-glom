@@ -34,7 +34,7 @@ import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -49,7 +49,7 @@ public class DetailsDBAccess extends DBAccess {
 		this.tableName = tableName;
 	}
 
-	public DataItem[] getData(PrimaryKeyItem primaryKeyValue) {
+	public DataItem[] getData(TypedDataItem primaryKeyValue) {
 
 		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document
 				.get_data_layout_groups("details", tableName));

@@ -35,7 +35,7 @@ import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -43,7 +43,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * @author Ben Konrath <ben@bagu.org>
  */
 public class RelatedListDBAccess extends ListDBAccess {
-	private PrimaryKeyItem foreignKeyValue = null;
+	private TypedDataItem foreignKeyValue = null;
 	private LayoutItem_Portal portal = null;
 	private String parentTable = null;
 	private String whereClauseToTableName = null;
@@ -111,7 +111,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	}
 
-	public ArrayList<DataItem[]> getData(int start, int length, PrimaryKeyItem foreignKeyValue, boolean useSortClause,
+	public ArrayList<DataItem[]> getData(int start, int length, TypedDataItem foreignKeyValue, boolean useSortClause,
 			int sortColumnIndex, boolean isAscending) {
 
 		if (tableName == null || foreignKeyValue == null || foreignKeyValue.isEmpty()) {
@@ -129,7 +129,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * 
 	 * @see org.glom.web.server.ListDBAccess#getExpectedResultSize()
 	 */
-	public int getExpectedResultSize(PrimaryKeyItem foreignKeyValue) {
+	public int getExpectedResultSize(TypedDataItem foreignKeyValue) {
 
 		// Set the foreignKeyValue
 		this.foreignKeyValue = foreignKeyValue;

@@ -45,7 +45,7 @@ import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.NavigationRecord;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
@@ -239,7 +239,7 @@ final class ConfiguredDocument {
 		return listViewDBAccess.getData(start, length, useSortClause, sortColumnIndex, isAscending);
 	}
 
-	DataItem[] getDetailsData(String tableName, PrimaryKeyItem primaryKeyValue) {
+	DataItem[] getDetailsData(String tableName, TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -248,7 +248,7 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
-	ArrayList<DataItem[]> getRelatedListData(String tableName, String relationshipName, PrimaryKeyItem foreignKeyValue,
+	ArrayList<DataItem[]> getRelatedListData(String tableName, String relationshipName, TypedDataItem foreignKeyValue,
 			int start, int length, boolean useSortClause, int sortColumnIndex, boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
@@ -293,7 +293,7 @@ final class ConfiguredDocument {
 	/*
 	 * Gets the expected row count for a related list.
 	 */
-	int getRelatedListRowCount(String tableName, String relationshipName, PrimaryKeyItem foreignKeyValue) {
+	int getRelatedListRowCount(String tableName, String relationshipName, TypedDataItem foreignKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -306,7 +306,7 @@ final class ConfiguredDocument {
 	}
 
 	NavigationRecord getSuitableRecordToViewDetails(String tableName, String relationshipName,
-			PrimaryKeyItem primaryKeyValue) {
+			TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 

@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Value;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 /**
@@ -50,33 +50,33 @@ public class Utils {
 	}
 
 	public static Value getGdaValueForPrimaryKey(String documentID, String tableName, glom_field_type glomFieldType,
-			PrimaryKeyItem primaryKeyValue) {
+			TypedDataItem primaryKeyValue) {
 		Value gdaPrimaryKeyValue = null;
 		switch (glomFieldType) {
 		case TYPE_NUMERIC:
 			if (primaryKeyValue.getGlomFieldType() == GlomFieldType.TYPE_NUMERIC) {
-				// Only trust the PrimaryKeyItem if the types match
+				// Only trust the TypedDataItem if the types match
 				gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(primaryKeyValue.getNumber());
 			} else {
-				// Don't use the primary key value when the type from the PrimaryKeyItem doesn't match the type from the
+				// Don't use the primary key value when the type from the TypedDataItem doesn't match the type from the
 				// Glom document.
 				gdaPrimaryKeyValue = new Value(); // an emtpy Value
-				Log.info(documentID, tableName, "PrimaryKeyItem type: " + primaryKeyValue.getGlomFieldType()
+				Log.info(documentID, tableName, "TypedDataItem type: " + primaryKeyValue.getGlomFieldType()
 						+ " doesn't match the type from the Glom document: " + glomFieldType);
-				Log.info(documentID, tableName, "The value in the PrimaryKeyItem is being ignored.");
+				Log.info(documentID, tableName, "The value in the TypedDataItem is being ignored.");
 			}
 			break;
 		case TYPE_TEXT:
 			if (primaryKeyValue.getGlomFieldType() == GlomFieldType.TYPE_TEXT) {
-				// Only trust the PrimaryKeyItem if the types match
+				// Only trust the TypedDataItem if the types match
 				gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value("") : new Value(primaryKeyValue.getText());
 			} else {
-				// Don't use the primary key value when the type from the PrimaryKeyItem doesn't match the type from the
+				// Don't use the primary key value when the type from the TypedDataItem doesn't match the type from the
 				// Glom document.
 				gdaPrimaryKeyValue = new Value(""); // an emtpy string Value
-				Log.info(documentID, tableName, "PrimaryKeyItem type: " + primaryKeyValue.getGlomFieldType()
+				Log.info(documentID, tableName, "TypedDataItem type: " + primaryKeyValue.getGlomFieldType()
 						+ " doesn't match the type from the Glom document: " + glomFieldType);
-				Log.info(documentID, tableName, "The value in the PrimaryKeyItem is being ignored.");
+				Log.info(documentID, tableName, "The value in the TypedDataItem is being ignored.");
 			}
 			break;
 		default:

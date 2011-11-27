@@ -36,7 +36,7 @@ import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.NavigationRecord;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -67,7 +67,7 @@ public class RelatedListNavigation extends DBAccess {
 	 * 
 	 * This code was ported from Glom: Box_Data_Portal::get_suitable_record_to_view_details()
 	 */
-	public NavigationRecord getNavigationRecord(PrimaryKeyItem primaryKeyValue) {
+	public NavigationRecord getNavigationRecord(TypedDataItem primaryKeyValue) {
 
 		if (portal == null) {
 			Log.error(documentID, tableName,
@@ -126,7 +126,7 @@ public class RelatedListNavigation extends DBAccess {
 				navigationRecord.setTableName(navigationTableName);
 
 				rs.next();
-				PrimaryKeyItem tablePrimaryKeyValue = new PrimaryKeyItem();
+				TypedDataItem tablePrimaryKeyValue = new TypedDataItem();
 				ResultSetMetaData rsMetaData = rs.getMetaData();
 				switch (rsMetaData.getColumnType(1)) {
 				case java.sql.Types.NUMERIC:

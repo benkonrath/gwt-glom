@@ -26,7 +26,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
@@ -68,24 +68,24 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getDetailsLayoutAndData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue,
+	void getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue,
 			AsyncCallback<DetailsLayoutAndData> callback);
 
-	void getDetailsData(String documentID, String tableName, PrimaryKeyItem primaryKeyValue,
+	void getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue,
 			AsyncCallback<DataItem[]> callback);
 
 	void getRelatedListData(String documentID, String tableName, String relationshipName,
-			PrimaryKeyItem foreignKeyValue, int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
+			TypedDataItem foreignKeyValue, int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getSortedRelatedListData(String documentID, String tableName, String relationshipName,
-			PrimaryKeyItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending,
+			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending,
 			AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getRelatedListRowCount(String documentID, String tableName, String relationshipName,
-			PrimaryKeyItem foreignKeyValue, AsyncCallback<Integer> callback);
+			TypedDataItem foreignKeyValue, AsyncCallback<Integer> callback);
 
 	void getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
-			PrimaryKeyItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
+			TypedDataItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
 	void getConfigurationErrorMessage(AsyncCallback<String> callback);
 

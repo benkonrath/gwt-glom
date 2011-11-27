@@ -21,7 +21,7 @@ package org.glom.web.client;
 
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.core.client.GWT;
@@ -89,8 +89,8 @@ public class Utils {
 		return height;
 	}
 
-	public static PrimaryKeyItem getPrimaryKeyItem(GlomFieldType glomFieldType, DataItem dataItem) {
-		PrimaryKeyItem primaryKeyItem = new PrimaryKeyItem();
+	public static TypedDataItem getTypedDataItem(GlomFieldType glomFieldType, DataItem dataItem) {
+		TypedDataItem primaryKeyItem = new TypedDataItem();
 		switch (glomFieldType) {
 		case TYPE_BOOLEAN:
 			primaryKeyItem.setBoolean(dataItem.getBoolean());
@@ -102,7 +102,7 @@ public class Utils {
 			primaryKeyItem.setText(new String(dataItem.getText() == null ? "" : dataItem.getText()));
 			break;
 		default:
-			GWT.log("getPrimaryKeyItem(): Unsupported Glom Field Type: " + glomFieldType);
+			GWT.log("getTypedDataItem(): Unsupported Glom Field Type: " + glomFieldType);
 			break;
 		}
 

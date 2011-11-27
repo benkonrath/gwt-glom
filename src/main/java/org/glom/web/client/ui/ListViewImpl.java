@@ -22,7 +22,7 @@ package org.glom.web.client.ui;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.cell.OpenButtonCell;
 import org.glom.web.client.ui.list.ListViewTable;
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.cell.client.ValueUpdater;
@@ -55,7 +55,7 @@ public class ListViewImpl extends Composite implements ListView {
 		@Override
 		protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
 				ValueUpdater<String> valueUpdater) {
-			presenter.goTo(new DetailsPlace(documentID, tableName, (PrimaryKeyItem) context.getKey()));
+			presenter.goTo(new DetailsPlace(documentID, tableName, (TypedDataItem) context.getKey()));
 		}
 
 	}

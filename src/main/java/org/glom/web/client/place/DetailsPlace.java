@@ -19,21 +19,21 @@
 
 package org.glom.web.client.place;
 
-import org.glom.web.shared.PrimaryKeyItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
 public class DetailsPlace extends HasSelectableTablePlace {
-	private PrimaryKeyItem primaryKeyValue;
+	private TypedDataItem primaryKeyValue;
 
-	public DetailsPlace(String documentID, String tableName, PrimaryKeyItem primarykeyValue) {
+	public DetailsPlace(String documentID, String tableName, TypedDataItem primarykeyValue) {
 		super(documentID, tableName);
 		this.primaryKeyValue = primarykeyValue;
 	}
 
-	public PrimaryKeyItem getPrimaryKeyValue() {
+	public TypedDataItem getPrimaryKeyValue() {
 		return primaryKeyValue;
 	}
 
@@ -49,7 +49,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 */
 		@Override
 		public String getToken(DetailsPlace place) {
-			PrimaryKeyItem primaryKeyValue = place.getPrimaryKeyValue();
+			TypedDataItem primaryKeyValue = place.getPrimaryKeyValue();
 			GlomFieldType glomFieldType = primaryKeyValue.getGlomFieldType();
 
 			// create the URL string based on the
@@ -68,7 +68,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				// Unknown types are represented in the URL by an empty string. This means the details view with these
 				// types will run the query with an empty Value item based on the Glom type from the Glom document. The
 				// fir result will be shown.
-				// TODO update the URL location string and the PrimaryKeyItem when this happens
+				// TODO update the URL location string and the TypedDataItem when this happens
 				break;
 			}
 
@@ -88,7 +88,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 
 			// default empty values
 			String documentID = "", tableName = "";
-			PrimaryKeyItem primaryKeyValue = new PrimaryKeyItem();
+			TypedDataItem primaryKeyValue = new TypedDataItem();
 
 			if (tokenArray.length != 3) {
 				// The URL string doesn't match what we're expecting. Just use the initial values for the details place.
@@ -113,7 +113,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				// the text after the 'value='
 				String primaryKeyValueString = tokenArray[2].substring(primaryKeyValueKey.length());
 
-				// Try to create a PrimaryKeyItem from the text. Check if it's a number first.
+				// Try to create a TypedDataItem from the text. Check if it's a number first.
 				try {
 					primaryKeyValue.setNumber(new Double(primaryKeyValueString));
 				} catch (NumberFormatException e) {
