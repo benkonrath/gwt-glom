@@ -426,37 +426,7 @@ final class ConfiguredDocument {
 				LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
 				if (libglomLayoutItemPortal != null) {
 					// group is a LayoutItem_Portal
-					LayoutItemPortal layoutItemPortal = new LayoutItemPortal();
-					Relationship relationship = libglomLayoutItemPortal.get_relationship();
-					if (relationship != null) {
-						layoutItemPortal.setNavigationType(convertToGWTGlomNavigationType(libglomLayoutItemPortal
-								.get_navigation_type()));
-
-						layoutItemPortal.setTitle(libglomLayoutItemPortal.get_title_used("")); // parent title not
-																								// relevant
-						LayoutGroup tempLayoutGroup = getListLayoutGroup(tableName, libglomLayoutItemPortal);
-						for (org.glom.web.shared.layout.LayoutItem item : tempLayoutGroup.getItems()) {
-							// TODO EDITING If the relationship does not allow editing, then mark all these fields as
-							// non-editable. Check relationship.get_allow_edit() to see if it's editable.
-							layoutItemPortal.addItem(item);
-						}
-						layoutItemPortal.setPrimaryKeyIndex(tempLayoutGroup.getPrimaryKeyIndex());
-						layoutItemPortal.setHiddenPrimaryKey(tempLayoutGroup.hasHiddenPrimaryKey());
-						layoutItemPortal.setName(libglomLayoutItemPortal.get_relationship_name_used());
-						layoutItemPortal.setTableName(relationship.get_from_table());
-						layoutItemPortal.setFromField(relationship.get_from_field());
-
-						// Set whether or not the related list will need to show the navigation buttons.
-						// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
-						StringBuffer navigationTableName = new StringBuffer();
-						LayoutItem_Field navigationRelationship = new LayoutItem_Field(); // Ignored.
-						libglomLayoutItemPortal.get_suitable_table_to_view_details(navigationTableName,
-								navigationRelationship, document);
-						layoutItemPortal.setAddNavigation(!(navigationTableName.toString().isEmpty()));
-					}
-
-					// Note: empty layoutItemPortal used if relationship is null
-					layoutItem = layoutItemPortal;
+					layoutItem = createLayoutItemPortalDTO(tableName, libglomLayoutItemPortal);
 
 				} else {
 					// libglomLayoutItem is a LayoutGroup
@@ -533,6 +503,41 @@ final class ConfiguredDocument {
 		}
 
 		return layoutGroup;
+	}
+
+	private LayoutItemPortal createLayoutItemPortalDTO(String tableName,
+			org.glom.libglom.LayoutItem_Portal libglomLayoutItemPortal) {
+		LayoutItemPortal layoutItemPortal = new LayoutItemPortal();
+		Relationship relationship = libglomLayoutItemPortal.get_relationship();
+		if (relationship != null) {
+			layoutItemPortal.setNavigationType(convertToGWTGlomNavigationType(libglomLayoutItemPortal
+					.get_navigation_type()));
+
+			layoutItemPortal.setTitle(libglomLayoutItemPortal.get_title_used("")); // parent title not
+																					// relevant
+			LayoutGroup tempLayoutGroup = getListLayoutGroup(tableName, libglomLayoutItemPortal);
+			for (org.glom.web.shared.layout.LayoutItem item : tempLayoutGroup.getItems()) {
+				// TODO EDITING If the relationship does not allow editing, then mark all these fields as
+				// non-editable. Check relationship.get_allow_edit() to see if it's editable.
+				layoutItemPortal.addItem(item);
+			}
+			layoutItemPortal.setPrimaryKeyIndex(tempLayoutGroup.getPrimaryKeyIndex());
+			layoutItemPortal.setHiddenPrimaryKey(tempLayoutGroup.hasHiddenPrimaryKey());
+			layoutItemPortal.setName(libglomLayoutItemPortal.get_relationship_name_used());
+			layoutItemPortal.setTableName(relationship.get_from_table());
+			layoutItemPortal.setFromField(relationship.get_from_field());
+
+			// Set whether or not the related list will need to show the navigation buttons.
+			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
+			StringBuffer navigationTableName = new StringBuffer();
+			LayoutItem_Field navigationRelationship = new LayoutItem_Field(); // Ignored.
+			libglomLayoutItemPortal.get_suitable_table_to_view_details(navigationTableName, navigationRelationship,
+					document);
+			layoutItemPortal.setAddNavigation(!(navigationTableName.toString().isEmpty()));
+		}
+
+		// Note: An empty LayoutItemPortal is returned if relationship is null.
+		return layoutItemPortal;
 	}
 
 	private GlomNumericFormat convertNumbericFormat(NumericFormat libglomNumericFormat) {

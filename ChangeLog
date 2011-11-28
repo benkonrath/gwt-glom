@@ -1,5 +1,13 @@
 2011-11-28  Ben Konrath  <ben@bagu.org>
 
+	Extract method for creating the LayoutItemPortal DTO.
+
+	Just breaking the code up into smaller chunks.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+
+2011-11-28  Ben Konrath  <ben@bagu.org>
+
 	Add TypedDataItem.
 
 	This should have been added with the refactor. Oops!
