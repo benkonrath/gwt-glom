@@ -45,10 +45,8 @@ public class Portal extends Composite {
 	 * 
 	 * @param layoutItem
 	 *            The DTO that holds the Portal layout information
-	 * @param setTitle
-	 *            true if the title should be set, false otherwise
 	 */
-	public Portal(LayoutItemPortal layoutItemPortal, boolean setTitle) {
+	public Portal(LayoutItemPortal layoutItemPortal) {
 		layoutItem = layoutItemPortal;
 
 		FlowPanel mainPanel = new FlowPanel();

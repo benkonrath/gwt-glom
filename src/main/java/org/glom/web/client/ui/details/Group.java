@@ -126,7 +126,7 @@ public class Group extends Composite {
 			if (layoutItem instanceof LayoutItemPortal) {
 
 				// create a Portal
-				Portal portal = new Portal((LayoutItemPortal) layoutItem, addGroupTitle);
+				Portal portal = new Portal((LayoutItemPortal) layoutItem);
 				portals.add(portal);
 				return portal;
 
