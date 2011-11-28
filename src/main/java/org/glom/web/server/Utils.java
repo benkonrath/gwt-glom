@@ -49,41 +49,80 @@ public class Utils {
 		return splitURI[splitURI.length - 1];
 	}
 
-	public static Value getGdaValueForPrimaryKey(String documentID, String tableName, glom_field_type glomFieldType,
-			TypedDataItem primaryKeyValue) {
-		Value gdaPrimaryKeyValue = null;
-		switch (glomFieldType) {
+	public static Value getGlomTypeGdaValueForTypedDataItem(String documentID, String tableName,
+			glom_field_type glomType, TypedDataItem dataItem) {
+		Value gdaValue = null;
+
+		switch (glomType) {
 		case TYPE_NUMERIC:
-			if (primaryKeyValue.getGlomFieldType() == GlomFieldType.TYPE_NUMERIC) {
-				// Only trust the TypedDataItem if the types match
-				gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value() : new Value(primaryKeyValue.getNumber());
+
+			if (dataItem.isEmpty()) {
+				// No data has been set on the TypedDataItem. Use an empty value.
+				gdaValue = new Value();
+
+			} else if (dataItem.getType() == GlomFieldType.TYPE_NUMERIC) {
+				// non-empty data, numeric type:
+				// Trust the data in the TypedDataItem because the types match.
+				gdaValue = new Value(dataItem.getNumber());
+
+			} else if (dataItem.getType() == GlomFieldType.TYPE_INVALID) {
+				// non-empty data, invalid type:
+				// An invalid type that's not empty indicates that the TypeDataItem has been created from a URL string.
+				// The string will be converted into the Glom type (numeric).
+				try {
+					// non-locale specific string-to-number conversion:
+					// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#valueOf%28java.lang.String%29
+					gdaValue = new Value(Double.parseDouble(dataItem.getText()));
+				} catch (Exception e) {
+					// Use an empty Value when the number conversion doesn't work.
+					gdaValue = new Value();
+				}
+
 			} else {
-				// Don't use the primary key value when the type from the TypedDataItem doesn't match the type from the
-				// Glom document.
-				gdaPrimaryKeyValue = new Value(); // an emtpy Value
-				Log.info(documentID, tableName, "TypedDataItem type: " + primaryKeyValue.getGlomFieldType()
-						+ " doesn't match the type from the Glom document: " + glomFieldType);
-				Log.info(documentID, tableName, "The value in the TypedDataItem is being ignored.");
+				// non-empty data, mis-matched types:
+				// Don't use the data when the type doesn't match the type from the Glom document.
+				Log.warn(documentID, tableName, "The data type: " + dataItem.getType()
+						+ " doesn't match the type from the Glom document: " + glomType + ".");
+				Log.warn(documentID, tableName, "The data item is being ignored.");
+
+				gdaValue = new Value(); // an empty Value
 			}
 			break;
+
 		case TYPE_TEXT:
-			if (primaryKeyValue.getGlomFieldType() == GlomFieldType.TYPE_TEXT) {
-				// Only trust the TypedDataItem if the types match
-				gdaPrimaryKeyValue = primaryKeyValue.isEmpty() ? new Value("") : new Value(primaryKeyValue.getText());
+
+			if (dataItem.isEmpty()) {
+				// No data has been set on the TypedDataItem. Use an empty string value.
+				gdaValue = new Value("");
+
+			} else if (dataItem.getType() == GlomFieldType.TYPE_TEXT) {
+				// non-empty data, text type:
+				// Trust the data in the TypedDataItem because the types match.
+				gdaValue = new Value(dataItem.getText());
+
+			} else if (dataItem.getType() == GlomFieldType.TYPE_INVALID) {
+				// non-empty data, invalid type:
+				// An invalid type that's not empty indicates that primary key value has been created from a URL string.
+				// The string will be converted into the Glom type (text).
+				gdaValue = new Value(dataItem.getText());
 			} else {
-				// Don't use the primary key value when the type from the TypedDataItem doesn't match the type from the
-				// Glom document.
-				gdaPrimaryKeyValue = new Value(""); // an emtpy string Value
-				Log.info(documentID, tableName, "TypedDataItem type: " + primaryKeyValue.getGlomFieldType()
-						+ " doesn't match the type from the Glom document: " + glomFieldType);
-				Log.info(documentID, tableName, "The value in the TypedDataItem is being ignored.");
+				// non-empty data, mis-matched types:
+				// Don't use the primary key value when the type doesn't match the type from the Glom document.
+				Log.warn(documentID, tableName, "The data type: " + dataItem.getType()
+						+ " doesn't match the expected type from the Glom document: " + glomType + ".");
+				Log.warn(documentID, tableName, "The data item is being ignored.");
+				gdaValue = new Value(""); // an emtpy string Value
 			}
 			break;
+
 		default:
-			Log.error(documentID, tableName, "Unsupported Glom Field Type to use as a primary key: " + glomFieldType
-					+ ". Query may not work.");
+			Log.error(documentID, tableName, "Unable to create a Gda Value of type: " + glomType
+					+ " based on data of type: " + dataItem.getType() + ".");
+			Log.warn(documentID, tableName, "The data item is being ignored.");
+			gdaValue = new Value(); // an empty Value
 			break;
 		}
-		return gdaPrimaryKeyValue;
+
+		return gdaValue;
 	}
 }

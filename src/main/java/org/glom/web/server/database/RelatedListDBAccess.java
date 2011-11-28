@@ -164,7 +164,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		SqlExpr whereClause = new SqlExpr();
 		// only make attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
-			Value gdaForeignKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+			Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
 			if (gdaForeignKeyValue != null)
 				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
@@ -217,7 +217,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		SqlExpr whereClause = new SqlExpr();
 		// only make attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
-			Value gdaForeignKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+			Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
 			if (gdaForeignKeyValue != null)
 				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,

@@ -1,3 +1,24 @@
+2011-11-28  Ben Konrath  <ben@bagu.org>
+
+	Create primary key value from URL string using type from Glom document.
+
+	See this bug, comments 19 - 25:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=662376#c19
+
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java: Don't
+	create a TypeDataItem for the primary key here when loading from a
+	URL. Show the same string for the primary key value as was received
+	from the URL string (when loading from a URL).
+	* src/main/java/org/glom/web/server/Utils.java: Update method for
+	creating the Gda Value from the TypeDataItem to properly deal with
+	creating a Gda Value based on the Glom document type for the primary
+	key value string when loading from a URL.
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	Update for changed method name.
+
 2011-11-27  Ben Konrath  <ben@bagu.org>
 
 	Rename PrimaryKeyItem to TypedDataItem.

@@ -110,7 +110,7 @@ public class RelatedListNavigation extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			Value gdaPrimaryKeyValue = Utils.getGdaValueForPrimaryKey(documentID, tableName,
+			Value gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					primaryKey.get_glom_type(), primaryKeyValue);
 
 			// Only create the query if we've created a Gda Value from the DataItem.

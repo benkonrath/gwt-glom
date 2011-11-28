@@ -46,29 +46,52 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 * Creates the URL string that is shown in the browser. This is the bookmarked URL.
 		 * 
 		 * @see com.google.gwt.place.shared.PlaceTokenizer#getToken(com.google.gwt.place.shared.Place)
+		 * @see org.glom.web.server.Utils.getGlomTypeGdaValueForTypedDataItem(String, String, glom_field_type,
+		 *      TypedDataItem)
 		 */
 		@Override
 		public String getToken(DetailsPlace place) {
 			TypedDataItem primaryKeyValue = place.getPrimaryKeyValue();
-			GlomFieldType glomFieldType = primaryKeyValue.getGlomFieldType();
+			GlomFieldType glomFieldType = primaryKeyValue.getType();
 
 			// create the URL string based on the
 			String primaryKeyValueString = "";
 			switch (glomFieldType) {
 			case TYPE_NUMERIC:
-				primaryKeyValueString = new Double(primaryKeyValue.getNumber()).toString();
-				// Remove the trailing point and zero on integers.
+				// non-locale specific number-to-string conversion:
+				// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#toString%28double%29
+				primaryKeyValueString = Double.toString(primaryKeyValue.getNumber());
+				// Remove the trailing point and zero on integers. This just makes URL string look nicer.
 				if (primaryKeyValueString.endsWith(".0"))
 					primaryKeyValueString = primaryKeyValueString.substring(0, primaryKeyValueString.length() - 2);
 				break;
+
 			case TYPE_TEXT:
 				primaryKeyValueString = primaryKeyValue.getText();
 				break;
+
+			case TYPE_INVALID:
+				String urlText = primaryKeyValue.getText();
+				if (!primaryKeyValue.isEmpty() && urlText != null) {
+					// An invalid type that's not empty indicates that primary key value has been created from a URL
+					// string. Use the same string to represent the primary key value on the URL.
+					primaryKeyValueString = urlText;
+					// TODO: Update the primary key value string with the actual Gda Value that was created. The primary
+					// key value could be different if the string-to-number conversion doesn't work.
+				}
+				break;
+
 			default:
-				// Unknown types are represented in the URL by an empty string. This means the details view with these
-				// types will run the query with an empty Value item based on the Glom type from the Glom document. The
-				// fir result will be shown.
-				// TODO update the URL location string and the TypedDataItem when this happens
+				// Unknown types are represented in the URL by an empty string. When loading a page with an unknown from
+				// a URL (bookmark or link), the details view will run the query with an empty Value item based on the
+				// type from the Glom document. The first result from this query will be shown. This means that the
+				// specific record for unknown types are not bookmarkmarkable.
+
+				// Support for bookmarking a new type can be added by adding a case statement for the new type here
+				// and in this method:
+				// org.glom.web.server.Utils.getGlomTypeGdaValueForTypedDataItem()
+
+				// primaryKeyValueString remains empty
 				break;
 			}
 
@@ -81,6 +104,8 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 * directly with the URL string (a bookmark or link).
 		 * 
 		 * @see com.google.gwt.place.shared.PlaceTokenizer#getPlace(java.lang.String)
+		 * @see org.glom.web.server.Utils.getGlomTypeGdaValueForTypedDataItem(String, String, glom_field_type,
+		 *      TypedDataItem)
 		 */
 		@Override
 		public DetailsPlace getPlace(String token) {
@@ -112,14 +137,10 @@ public class DetailsPlace extends HasSelectableTablePlace {
 			if (primaryKeyValueKey.equals(tokenArray[2].substring(0, primaryKeyValueKey.length()))) {
 				// the text after the 'value='
 				String primaryKeyValueString = tokenArray[2].substring(primaryKeyValueKey.length());
+				// Set as unknown because the type of the primary key is not known at this point. A proper primary key
+				// value will be created using the type from the Glom document in the servlet.
+				primaryKeyValue.setUnknown(primaryKeyValueString);
 
-				// Try to create a TypedDataItem from the text. Check if it's a number first.
-				try {
-					primaryKeyValue.setNumber(new Double(primaryKeyValueString));
-				} catch (NumberFormatException e) {
-					// It's not a number, use the string.
-					primaryKeyValue.setText(primaryKeyValueString);
-				}
 			}
 
 			return new DetailsPlace(documentID, tableName, primaryKeyValue);
