@@ -70,15 +70,16 @@ public class DetailsDBAccess extends DBAccess {
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
+		Value gdaPrimaryKeyValue = null;
 		try {
 			// Setup the JDBC driver and get the query.
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			Value gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
+			gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					primaryKey.get_glom_type(), primaryKeyValue);
 
-			// Only create the query if we've created a Gda Value from the DataItem.
+			// Only create the query if we've created a Gda Value from the TypedDataItem.
 			if (gdaPrimaryKeyValue != null) {
 
 				SqlBuilder builder = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey,
@@ -114,8 +115,10 @@ public class DetailsDBAccess extends DBAccess {
 		if (rowsList.size() == 0) {
 			Log.error(documentID, tableName, "The query returned an empty ResultSet. Returning null.");
 			return null;
-		} else if (rowsList.size() > 1 && primaryKeyValue != null && !primaryKeyValue.isEmpty()) {
-			// Only log a warning if the result size is greater than 1 and the primaryKeyValue was set.
+		} else if (rowsList.size() > 1 && !gdaPrimaryKeyValue.is_null()) {
+			// Only log a warning if the result size is greater than 1 and the gdaPrimaryKeyValue is not null. When
+			// gdaPrimaryKeyValue.is_null() is true, the default query for the details view is being executed so we
+			// expect a result set that is larger than one.
 			Log.warn(documentID, tableName,
 					"The query did not return the expected unique result. Returning the first result in the set.");
 		}

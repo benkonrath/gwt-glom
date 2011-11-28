@@ -1,5 +1,11 @@
 2011-11-28  Ben Konrath  <ben@bagu.org>
 
+	Use Gda Value version of primary key to log result too large error.
+
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+
+2011-11-28  Ben Konrath  <ben@bagu.org>
+
 	Don't use TypedDataItem.getText() for Unknown types from the URL.
 
 	* src/main/java/org/glom/web/client/place/DetailsPlace.java:
