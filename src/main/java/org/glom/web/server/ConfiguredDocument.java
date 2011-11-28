@@ -31,6 +31,7 @@ import org.glom.libglom.FieldVector;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItemVector;
+import org.glom.libglom.LayoutItem_CalendarPortal;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_Notebook;
 import org.glom.libglom.LayoutItem_Portal;
@@ -426,7 +427,10 @@ final class ConfiguredDocument {
 				LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
 				if (libglomLayoutItemPortal != null) {
 					// group is a LayoutItem_Portal
-					layoutItem = createLayoutItemPortalDTO(tableName, libglomLayoutItemPortal);
+					LayoutItemPortal layoutItemPortal = createLayoutItemPortalDTO(tableName, libglomLayoutItemPortal);
+					if (layoutItemPortal == null)
+						continue;
+					layoutItem = layoutItemPortal;
 
 				} else {
 					// libglomLayoutItem is a LayoutGroup
@@ -507,6 +511,14 @@ final class ConfiguredDocument {
 
 	private LayoutItemPortal createLayoutItemPortalDTO(String tableName,
 			org.glom.libglom.LayoutItem_Portal libglomLayoutItemPortal) {
+
+		// Ignore LayoutItem_CalendarPortals for now:
+		// https://bugzilla.gnome.org/show_bug.cgi?id=664273
+		LayoutItem_CalendarPortal liblglomLayoutItemCalendarPortal = LayoutItem_CalendarPortal
+				.cast_dynamic(libglomLayoutItemPortal);
+		if (liblglomLayoutItemCalendarPortal != null)
+			return null;
+
 		LayoutItemPortal layoutItemPortal = new LayoutItemPortal();
 		Relationship relationship = libglomLayoutItemPortal.get_relationship();
 		if (relationship != null) {
