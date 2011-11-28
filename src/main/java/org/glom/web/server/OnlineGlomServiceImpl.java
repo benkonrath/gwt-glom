@@ -127,9 +127,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 
 			// Check to see if the native library of java libglom is visible to the JVM
-			if (!isNativeLibraryVisibleToJVM())
-				throw new Exception("The java-libglom shared library is not visible to the JVM."
-						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.");
+			if (!isNativeLibraryVisibleToJVM()) {
+				String errorMessage = "The java-libglom shared library is not visible to the JVM."
+						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.";
+				Log.error(errorMessage);
+				throw new Exception(errorMessage);
+			}
 
 			// intitize libglom
 			Glom.libglom_init(); // can throw an UnsatisfiedLinkError exception

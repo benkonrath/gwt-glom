@@ -1,5 +1,13 @@
 2011-11-28  Ben Konrath  <ben@bagu.org>
 
+	Log an error message when the java-libglom .so is not present.
+
+	The error message was being set in the exception but not logged.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+
+2011-11-28  Ben Konrath  <ben@bagu.org>
+
 	Ignore LayoutItem_CalendarPortals.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Don't
