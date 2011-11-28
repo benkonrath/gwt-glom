@@ -54,7 +54,7 @@ public class Notebook extends Group {
 				// Ignore non-LayoutGroup items. This is what Glom 1.18 does.
 				continue;
 
-			Widget child = createChildWidget(layoutItem, false, false);
+			Widget child = createChildWidget(layoutItem, false);
 
 			// update the maximum value of the child height if required
 			int childHeight = Utils.getWidgetHeight(child);

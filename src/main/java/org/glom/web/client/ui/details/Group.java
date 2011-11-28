@@ -52,7 +52,7 @@ public class Group extends Composite {
 	 */
 	public Group(LayoutGroup layoutGroup) {
 		// is default is a group that is not a sub
-		this(layoutGroup, false, true, true);
+		this(layoutGroup, false, true);
 	}
 
 	/**
@@ -62,13 +62,10 @@ public class Group extends Composite {
 	 *            The DTO that holds the Group or sub-Group layout information
 	 * @param subGroup
 	 *            true if the layoutGroup is a sub-Group, false if it's a Group
-	 * @param groupTitleOrSubgroupTitle
-	 *            true if the 'group-title' CSS property should be used for the LayoutGroup title, false if the
-	 *            'subgroup-title' CSS property should be used for the LayoutGroup title.
 	 * @param setGroupTitle
 	 *            whether or not to add a title label for the Group
 	 */
-	private Group(LayoutGroup layoutGroup, boolean subGroup, boolean groupTitleOrSubgroupTitle, boolean setGroupTitle) {
+	private Group(LayoutGroup layoutGroup, boolean subGroup, boolean setGroupTitle) {
 
 		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
@@ -79,13 +76,7 @@ public class Group extends Composite {
 			Label label = new Label(groupTitle);
 			mainPanel.add(label);
 
-			// The 'group-title' class could be used for the subgroup title if the group title is empty
-			if (groupTitleOrSubgroupTitle) {
-				label.setStyleName("group-title");
-				groupTitleOrSubgroupTitle = false;
-			} else {
-				label.setStyleName("subgroup-title");
-			}
+			label.setStyleName(subGroup ? "subgroup-title" : "group-title");
 
 			groupContents = new FlowPanel();
 			groupContents.setStyleName("group-contents");
@@ -97,7 +88,7 @@ public class Group extends Composite {
 
 		FlowTable flowtable = new FlowTable(layoutGroup.getColumnCount());
 		for (LayoutItem layoutItem : layoutGroup.getItems()) {
-			Widget child = createChildWidget(layoutItem, groupTitleOrSubgroupTitle, true);
+			Widget child = createChildWidget(layoutItem, true);
 			flowtable.add(child);
 		}
 		groupContents.add(flowtable);
@@ -118,13 +109,10 @@ public class Group extends Composite {
 	 * 
 	 * @param layoutItem
 	 *            The DTO that holds the layout information
-	 * @param groupTitleOrSubgroupTitle
-	 *            true if the 'group-title' CSS property should be used for the LayoutGroup title, false if the
-	 *            'subgroup-title' CSS property should be used for the LayoutGroup title.
-	 * @param setGroupTitle
+	 * @param addGroupTitle
 	 *            whether or not to add a title label for the Group
 	 */
-	protected Widget createChildWidget(LayoutItem layoutItem, boolean groupTitleOrSubgroupTitle, boolean setGroupTitle) {
+	protected Widget createChildWidget(LayoutItem layoutItem, boolean addGroupTitle) {
 
 		if (layoutItem instanceof LayoutItemField) {
 
@@ -138,7 +126,7 @@ public class Group extends Composite {
 			if (layoutItem instanceof LayoutItemPortal) {
 
 				// create a Portal
-				Portal portal = new Portal((LayoutItemPortal) layoutItem, groupTitleOrSubgroupTitle, setGroupTitle);
+				Portal portal = new Portal((LayoutItemPortal) layoutItem, addGroupTitle);
 				portals.add(portal);
 				return portal;
 
@@ -153,7 +141,7 @@ public class Group extends Composite {
 			} else {
 
 				// create a subgroup Group
-				Group subGroup = new Group((LayoutGroup) layoutItem, true, groupTitleOrSubgroupTitle, setGroupTitle);
+				Group subGroup = new Group((LayoutGroup) layoutItem, true, addGroupTitle);
 				cells.addAll(subGroup.getCells());
 				portals.addAll(subGroup.getPortals());
 				return subGroup;

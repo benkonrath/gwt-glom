@@ -45,21 +45,17 @@ public class Portal extends Composite {
 	 * 
 	 * @param layoutItem
 	 *            The DTO that holds the Portal layout information
-	 * @param groupTitleOrSubgroupTitle
-	 *            true if the 'group-title' CSS property should be used for the LayoutGroup title, false if the
-	 *            'subgroup-title' CSS property should be used for the LayoutGroup title.
 	 * @param setTitle
 	 *            true if the title should be set, false otherwise
 	 */
-	public Portal(LayoutItemPortal layoutItemPortal, boolean groupTitleOrSubgroupTitle, boolean setTitle) {
+	public Portal(LayoutItemPortal layoutItemPortal, boolean setTitle) {
 		layoutItem = layoutItemPortal;
 
 		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("subgroup");
 
-		// using the same style as the (sub)group-title and group-contents elements
 		Label title = new Label(layoutItem.getTitle());
-		title.setStyleName(groupTitleOrSubgroupTitle ? "group-title" : "subgroup-title");
+		title.setStyleName("subgroup-title");
 		mainPanel.add(title);
 
 		contents.setStyleName("group-contents");
