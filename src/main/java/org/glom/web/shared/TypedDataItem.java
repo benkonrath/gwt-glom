@@ -30,6 +30,7 @@ import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 public class TypedDataItem extends DataItem {
 	private boolean empty = true;
 	private GlomFieldType type = GlomFieldType.TYPE_INVALID;
+	private String unknown = null;
 
 	public TypedDataItem() {
 	}
@@ -82,7 +83,11 @@ public class TypedDataItem extends DataItem {
 	public void setUnknown(String value) {
 		this.empty = false;
 		this.type = GlomFieldType.TYPE_INVALID;
-		super.setText(value);
+		this.unknown = value;
+	}
+
+	public String getUnknown() {
+		return unknown;
 	}
 
 	public GlomFieldType getType() {

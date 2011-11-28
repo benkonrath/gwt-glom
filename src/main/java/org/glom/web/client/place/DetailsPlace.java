@@ -71,7 +71,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				break;
 
 			case TYPE_INVALID:
-				String urlText = primaryKeyValue.getText();
+				String urlText = primaryKeyValue.getUnknown();
 				if (!primaryKeyValue.isEmpty() && urlText != null) {
 					// An invalid type that's not empty indicates that primary key value has been created from a URL
 					// string. Use the same string to represent the primary key value on the URL.

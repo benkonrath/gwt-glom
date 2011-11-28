@@ -72,7 +72,7 @@ public class Utils {
 				try {
 					// non-locale specific string-to-number conversion:
 					// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#valueOf%28java.lang.String%29
-					gdaValue = new Value(Double.parseDouble(dataItem.getText()));
+					gdaValue = new Value(Double.parseDouble(dataItem.getUnknown()));
 				} catch (Exception e) {
 					// Use an empty Value when the number conversion doesn't work.
 					gdaValue = new Value();
@@ -104,7 +104,8 @@ public class Utils {
 				// non-empty data, invalid type:
 				// An invalid type that's not empty indicates that primary key value has been created from a URL string.
 				// The string will be converted into the Glom type (text).
-				gdaValue = new Value(dataItem.getText());
+				gdaValue = new Value(dataItem.getUnknown());
+
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the primary key value when the type doesn't match the type from the Glom document.
