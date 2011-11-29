@@ -1,5 +1,15 @@
 2011-11-29  Ben Konrath  <ben@bagu.org>
 
+	Set TabLayoutPanel height based on calculated height its widgets.
+
+	This is a potential fix for this bug:
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=665133
+
+	* src/main/java/org/glom/web/client/ui/details/Notebook.java:
+
+2011-11-29  Ben Konrath  <ben@bagu.org>
+
 	Align details field labels and data with the Open buttons.
 
 	* src/main/webapp/style.css:

@@ -25,6 +25,8 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemNotebook;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,7 +47,15 @@ public class Notebook extends Group {
 	 * @param layoutItemNotebook
 	 */
 	public Notebook(LayoutItemNotebook layoutItemNotebook) {
-		TabLayoutPanel tabPanel = new TabLayoutPanel(1.6, Unit.EM);
+		// The height of the TabLayoutPanel needs to be set to make the child widgets visible. The height of the tab bar
+		// also needs to be explicitly set. To work around these constraints, we're setting the tab height based on the
+		// tab text and decorations as set in the CSS. The height of the TabLayoutPanel will be set to be the height of
+		// the tab panel plus the height of the decorated tab content panel plus the height of the tallest child widget.
+
+		int tabBarHeight = getDecoratedTabBarHeight();
+		int emptyTabContentHeight = getDecoratedEmptyTabContentHeight();
+
+		TabLayoutPanel tabPanel = new TabLayoutPanel(tabBarHeight, Unit.PX);
 
 		int maxChildHeight = 0;
 		for (LayoutItem layoutItem : layoutItemNotebook.getItems()) {
@@ -61,17 +71,67 @@ public class Notebook extends Group {
 			if (childHeight > maxChildHeight)
 				maxChildHeight = childHeight;
 
+			// Use the name if the title is empty. This avoids having tabs with empty labels.
 			tabPanel.add(child, layoutItem.getTitle().isEmpty() ? layoutItem.getName() : layoutItem.getTitle());
 		}
 
 		// Set the first tab as the default tab.
 		tabPanel.selectTab(0);
 
-		// The height needs to be set of the TabLayoutPanel to work.
-		// Use the max child height plus a few extra pixels for padding.
-		tabPanel.setHeight((maxChildHeight + 6) + "px");
+		// Use the max child height plus the height of the tab bar and the height of an empty content panel.
+		tabPanel.setHeight((tabBarHeight + emptyTabContentHeight + maxChildHeight) + "px");
 
 		initWidget(tabPanel);
+	}
 
+	/*
+	 * Gets the height of the tab bar with decorations. The height is determined by the decorations on the tab label
+	 * text and the padding around the tab labels.
+	 */
+	private int getDecoratedTabBarHeight() {
+		// There's no way to get the tab bar panel from the TabLayoutPanel widget. We have to manually build a widget
+		// with the same structure and CSS class names to get the decorated height.
+
+		// Create the widgets that make up the Tabs panel.
+		SimplePanel tabLayoutPanel = new SimplePanel();
+		tabLayoutPanel.setStyleName("gwt-TabLayoutPanel");
+		SimplePanel tabLayoutPanelTabs = new SimplePanel();
+		tabLayoutPanelTabs.setStyleName("gwt-TabLayoutPanelTabs");
+		SimplePanel tabLayoutPanelTab = new SimplePanel();
+		tabLayoutPanelTab.setStyleName("gwt-TabLayoutPanelTab");
+		SimplePanel tabLayoutPanelTabInner = new SimplePanel();
+		tabLayoutPanelTabInner.setStyleName("gwt-TabLayoutPanelTabInner");
+		Label tabHeightHackLabel = new Label("A");
+
+		// Build the widget structure.
+		tabLayoutPanelTabInner.add(tabHeightHackLabel);
+		tabLayoutPanelTab.add(tabLayoutPanelTabInner);
+		tabLayoutPanelTabs.add(tabLayoutPanelTab);
+		tabLayoutPanel.add(tabLayoutPanelTabs);
+
+		// Return the height
+		return Utils.getWidgetHeight(tabLayoutPanel);
+	}
+
+	/*
+	 * Gets the height of the tab content panel with decorations. The height is determined by the decorations tab
+	 * content panel.
+	 */
+	private int getDecoratedEmptyTabContentHeight() {
+		// There's no way to get the tab content panel from the TabLayoutPanel widget. We have to manually build a
+		// widget with the same structure and CSS class names to get the decorated height.
+
+		// Create the widgets that make up the tab content panel.
+		SimplePanel tabLayoutPanel = new SimplePanel();
+		tabLayoutPanel.setStyleName("gwt-TabLayoutPanel");
+		SimplePanel tabContentPanel = new SimplePanel();
+		tabContentPanel.setStyleName("subgroup");
+		tabContentPanel.addStyleName("gwt-TabLayoutPanelContent");
+
+		// Build the widget structure.
+		tabLayoutPanel.add(tabContentPanel);
+
+		// Return the height
+		return Utils.getWidgetHeight(tabLayoutPanel);
 	}
 }
