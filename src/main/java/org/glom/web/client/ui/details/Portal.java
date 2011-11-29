@@ -24,7 +24,6 @@ import org.glom.web.shared.layout.LayoutItemPortal;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -69,9 +68,9 @@ public class Portal extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public void setContents(Widget widget) {
+	public void setContents(RelatedListTable relatedListTable) {
 		contents.clear();
-		contents.add(widget);
+		contents.add(relatedListTable);
 	}
 
 	public LayoutItemPortal getLayoutItem() {
