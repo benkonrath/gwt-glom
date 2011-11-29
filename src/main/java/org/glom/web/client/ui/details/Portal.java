@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Portal extends Composite {
 
-	private FlowPanel contents = new FlowPanel();
+	private FlowPanel contents;
 	private LayoutItemPortal layoutItem;
 
 	@SuppressWarnings("unused")
@@ -58,11 +58,14 @@ public class Portal extends Composite {
 			Label title = new Label(layoutItem.getTitle());
 			title.setStyleName("subgroup-title");
 			mainPanel.add(title);
+
+			contents = new FlowPanel();
+			contents.setStyleName("group-contents");
+			mainPanel.add(contents);
+		} else {
+			contents = mainPanel;
 		}
 
-		contents.setStyleName("group-contents");
-
-		mainPanel.add(contents);
 		initWidget(mainPanel);
 	}
 
@@ -71,9 +74,6 @@ public class Portal extends Composite {
 		contents.add(widget);
 	}
 
-	/**
-	 * @return
-	 */
 	public LayoutItemPortal getLayoutItem() {
 		return layoutItem;
 	}

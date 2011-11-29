@@ -1,5 +1,11 @@
 2011-11-29  Ben Konrath  <ben@bagu.org>
 
+	Only create a contents panel for Portals when title is being set.
+
+	* src/main/java/org/glom/web/client/ui/details/Portal.java:
+
+2011-11-29  Ben Konrath  <ben@bagu.org>
+
 	Set TabLayoutPanel height based on calculated height its widgets.
 
 	This is a potential fix for this bug:
