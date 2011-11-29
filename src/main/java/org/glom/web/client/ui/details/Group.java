@@ -151,13 +151,4 @@ public class Group extends Composite {
 		return null; // This should never happen.
 	}
 
-	/**
-	 * Allows subclasses to access and use the main panel widget.
-	 * 
-	 * @return the main FlowPanel
-	 */
-	protected FlowPanel getMainPanel() {
-		return mainPanel;
-	}
-
 }

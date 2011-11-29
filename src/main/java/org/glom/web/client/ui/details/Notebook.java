@@ -25,7 +25,6 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemNotebook;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -54,6 +53,7 @@ public class Notebook extends Group {
 				// Ignore non-LayoutGroup items. This is what Glom 1.18 does.
 				continue;
 
+			// child groups of Notebooks shouldn't show their titles
 			Widget child = createChildWidget(layoutItem, false);
 
 			// update the maximum value of the child height if required
@@ -71,8 +71,7 @@ public class Notebook extends Group {
 		// Use the max child height plus a few extra pixels for padding.
 		tabPanel.setHeight((maxChildHeight + 6) + "px");
 
-		FlowPanel mainPanel = getMainPanel();
-		mainPanel.add(tabPanel);
-		initWidget(mainPanel);
+		initWidget(tabPanel);
+
 	}
 }
