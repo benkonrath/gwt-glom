@@ -178,13 +178,15 @@ group
 
 .details-label
 {
-	padding: 0 0.25em;
+	padding-right: 0.5em;
+	padding-top: 0.25em;
 	float: left;
 }
 
 .details-data
 {
-	padding: 0 0.25em;
+	padding-bottom: 0.5em;
+	padding-top: 0.25em;
 	color: #333;
 	float: left;
 }
