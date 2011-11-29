@@ -1,3 +1,13 @@
+2011-11-29  Ben Konrath  <ben@bagu.org>
+
+	Don't add group titles for Portals in Notebooks.
+
+	This reverts the previous patch and fixes a bug I introduced with
+	commit b1753fd27bd2c4ea189c4c353e0ece92dcc66c2c .
+
+	* src/main/java/org/glom/web/client/ui/details/Group.java:
+	* src/main/java/org/glom/web/client/ui/details/Portal.java:
+
 2011-11-28  Ben Konrath  <ben@bagu.org>
 
 	Remove unused boolean argument in Portal constructor.
