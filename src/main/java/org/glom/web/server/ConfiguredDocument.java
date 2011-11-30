@@ -554,11 +554,11 @@ final class ConfiguredDocument {
 
 	private GlomNumericFormat convertNumbericFormat(NumericFormat libglomNumericFormat) {
 		GlomNumericFormat gnf = new GlomNumericFormat();
-		gnf.setUseAltForegroundColourForNegatives(libglomNumericFormat.getM_alt_foreground_color_for_negatives());
-		gnf.setCurrencyCode(libglomNumericFormat.getM_currency_symbol());
-		gnf.setDecimalPlaces(Utils.safeLongToInt(libglomNumericFormat.getM_decimal_places()));
-		gnf.setDecimalPlacesRestricted(libglomNumericFormat.getM_decimal_places_restricted());
-		gnf.setUseThousandsSeparator(libglomNumericFormat.getM_use_thousands_separator());
+		gnf.setUseAltForegroundColourForNegatives(libglomNumericFormat.get_alt_foreground_color_for_negatives());
+		gnf.setCurrencyCode(libglomNumericFormat.get_currency_symbol());
+		gnf.setDecimalPlaces(Utils.safeLongToInt(libglomNumericFormat.get_decimal_places()));
+		gnf.setDecimalPlacesRestricted(libglomNumericFormat.get_decimal_places_restricted());
+		gnf.setUseThousandsSeparator(libglomNumericFormat.get_use_thousands_separator());
 		return gnf;
 	}
 
@@ -612,7 +612,7 @@ final class ConfiguredDocument {
 
 			// create a GlomNumericFormat DTO for numeric values
 			if (libglomLayoutItemField.get_glom_type() == org.glom.libglom.Field.glom_field_type.TYPE_NUMERIC) {
-				formatting.setGlomNumericFormat(convertNumbericFormat(glomFormatting.getM_numeric_format()));
+				formatting.setGlomNumericFormat(convertNumbericFormat(glomFormatting.get_numeric_format()));
 			}
 			layoutItemField.setFormatting(formatting);
 		}

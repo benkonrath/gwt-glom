@@ -1,3 +1,12 @@
+2011-11-30  Ben Konrath  <ben@bagu.org>
+
+	Update for java-libglom API change.
+
+	The getters and setters on FieldFormatting and NumericFormat were
+	changed to remove the 'M'.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+
 2011-11-29  Ben Konrath  <ben@bagu.org>
 
 	Only allow RelatedListTables in Portals.
