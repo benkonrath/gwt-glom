@@ -22,10 +22,11 @@ package org.glom.web.client.ui.details;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.ui.cell.OpenButtonCell;
 import org.glom.web.client.ui.list.ListTable;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.Column;
@@ -50,20 +51,23 @@ public class RelatedListTable extends ListTable {
 	private String relationshipName;
 	private int numNonEmptyRows = MIN_NUM_VISIBLE_ROWS;
 
-	public RelatedListTable(String documentID, LayoutGroup layoutGroup, TypedDataItem foreignKeyValue) {
+	public RelatedListTable(String documentID, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
+			String openButtonLabel, OpenButtonCell openButtonCell) {
+
 		super(documentID);
 
 		// These variables need to be set before the createCellTable() method is called so that the data provider can
 		// use them.
 		this.foreignKeyValue = foreignKeyValue;
-		this.relationshipName = layoutGroup.getName();
+		this.relationshipName = layoutItemPortal.getName();
 
-		createCellTable(layoutGroup, NUM_VISIBLE_ROWS);
+		createCellTable(layoutItemPortal, NUM_VISIBLE_ROWS, openButtonLabel, openButtonCell);
 
 		// This tells the browser that we want to manually specify the column widths and don't want the table to
 		// overflow it's container. Since we're currently not specifying the column widths, the browser will make
 		// equally spaced columns.
 		cellTable.getElement().getStyle().setProperty("tableLayout", "fixed");
+
 	}
 
 	/*

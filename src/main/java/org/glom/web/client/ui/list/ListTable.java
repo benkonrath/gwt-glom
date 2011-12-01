@@ -34,6 +34,7 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -89,6 +90,7 @@ public abstract class ListTable extends Composite {
 	protected String tableName;
 	protected CellTable<DataItem[]> cellTable;
 	protected EventBus eventBus;
+	Column<DataItem[], String> openButtonColumn;
 
 	abstract protected AbstractDataProvider<DataItem[]> getDataProvider();
 
@@ -101,8 +103,8 @@ public abstract class ListTable extends Composite {
 		this.documentID = documentID;
 	}
 
-	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows) {
-
+	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows, String openButtonLabel,
+			OpenButtonCell openButtonCell) {
 		tableName = layoutGroup.getTableName();
 		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 
@@ -139,6 +141,9 @@ public abstract class ListTable extends Composite {
 
 		}
 
+		// add the navigation buttons as the last column
+		addOpenButtonColumn(openButtonLabel, openButtonCell);
+
 		// create and set the data provider
 		AbstractDataProvider<DataItem[]> dataProvider = getDataProvider();
 		dataProvider.addDataDisplay(cellTable);
@@ -155,7 +160,7 @@ public abstract class ListTable extends Composite {
 		initWidget(mainPanel);
 	}
 
-	public void addColumn(final LayoutItemField layoutItemField) {
+	private void addColumn(final LayoutItemField layoutItemField) {
 		// Setup the default alignment of the column.
 		HorizontalAlignmentConstant columnAlignment;
 		Formatting formatting = layoutItemField.getFormatting();
@@ -237,9 +242,9 @@ public abstract class ListTable extends Composite {
 		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
 
-	public void addOpenButtonColumn(final String openButtonLabel, OpenButtonCell openButtonCell) {
+	private void addOpenButtonColumn(final String openButtonLabel, OpenButtonCell openButtonCell) {
 
-		Column<DataItem[], String> openButtonColumn = new Column<DataItem[], String>(openButtonCell) {
+		openButtonColumn = new Column<DataItem[], String>(openButtonCell) {
 			@Override
 			public String getValue(DataItem[] row) {
 				if (row.length == 1 && row[0] == null)
@@ -265,6 +270,12 @@ public abstract class ListTable extends Composite {
 	 */
 	public void setRowCount(int rowCount) {
 		cellTable.setRowCount(rowCount);
+	}
+
+	public void hideNavigationButtons() {
+		if (openButtonColumn != null) {
+			cellTable.setColumnWidth(openButtonColumn, 0, Unit.PX);
+		}
 	}
 
 	/**

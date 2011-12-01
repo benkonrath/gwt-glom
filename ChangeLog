@@ -1,5 +1,31 @@
 2011-12-01  Ben Konrath  <ben@bagu.org>
 
+	Make ListViewTable and RelatedListTable a consistent height.
+
+	The tables are now a consistent height regardless of the contents of
+	the table. A hidden button is added to empty rows to ensure that the
+	height of these rows will match the height of rows with data.
+
+	A navigation button column is now added to every table. The width of
+	the navigation column is set to 0px when a RelatedListTable shouldn't
+	have navigation buttons. This maintains the a consistent row height in
+	tables that don't show the navigation buttons.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Hide
+	navigation column when not needed.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java: Move method
+	arguments for navigation button to constructor of ListViewTable.
+	* src/main/java/org/glom/web/client/ui/cell/OpenButtonCell.java: Render
+	hidden button for empty data rows.
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java: Add method
+	arguments for navigation button to constructor.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java: Always
+	create navigation buttons. Add hideNavigationButtons() method.
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java: Add method
+	arguments for navigation button to constructor.
+
+2011-12-01  Ben Konrath  <ben@bagu.org>
+
 	Use 'visibility: hidden' in Utils.getWidgetHeight().
 
 	This is better choice because hidden elements are invisible, don't

@@ -40,11 +40,14 @@ public class OpenButtonCell extends ButtonCell {
 	 */
 	@Override
 	public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
-		if (data == null)
-			// The value is from an empty row.
-			sb.appendHtmlConstant("&nbsp;");
-		else
+		if (data == null) {
+			// The value is from an empty row when the data is null.
+			// Use a disabled invisible button with a capital letter so that the height of an empty row is the same as
+			// the height of a row with data.
+			sb.appendHtmlConstant("<button type=\"button\" style=\"visibility:hidden;\">B</button>");
+		} else {
 			super.render(context, data, sb);
+		}
 	}
 
 }
