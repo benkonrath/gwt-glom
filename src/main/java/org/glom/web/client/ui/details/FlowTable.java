@@ -21,7 +21,8 @@ package org.glom.web.client.ui.details;
 
 import java.util.ArrayList;
 
-import com.google.gwt.dom.client.Document;
+import org.glom.web.client.Utils;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -54,17 +55,7 @@ public class FlowTable extends Composite {
 		}
 
 		FlowTableItem(Widget widget) {
-			// Get the vertical height with decorations by temporarily adding the widget to the body element of the
-			// document in a transparent container. This is required because the size information is only available when
-			// the widget is attached to the DOM. The size information must be obtained before the widget is added to
-			// column because adding a widget to a container automatically removes it from the previous container.
-			Document doc = Document.get();
-			com.google.gwt.dom.client.Element div = doc.createDivElement();
-			div.getStyle().setOpacity(0.0);
-			div.appendChild(widget.getElement().<com.google.gwt.user.client.Element> cast());
-			doc.getBody().appendChild(div);
-			height = widget.getOffsetHeight();
-			doc.getBody().removeChild(div);
+			height = Utils.getWidgetHeight(widget);
 			this.widget = widget;
 		}
 
@@ -106,7 +97,7 @@ public class FlowTable extends Composite {
 		table.getElement().getStyle().setProperty("borderCollapse", "collapse");
 		table.setBorderWidth(0);
 
-		// The columns widths are evenly distributed amongst the number of columns with 1% padding between the columns.
+		// The column widths are evenly distributed amongst the number of columns with 1% padding between the columns.
 		double columnWidth = (100 - (columnCount - 1)) / columnCount;
 		for (int i = 0; i < columnCount; i++) {
 			// create and add a column

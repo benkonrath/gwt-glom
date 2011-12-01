@@ -1,5 +1,13 @@
 2011-12-01  Ben Konrath  <ben@bagu.org>
 
+	Use Utils.getWidgetHeight() in FlowTable.
+
+	* src/main/java/org/glom/web/client/Utils.java: Remove TODO item about
+	this.
+	* src/main/java/org/glom/web/client/ui/details/FlowTable.java:
+
+2011-12-01  Ben Konrath  <ben@bagu.org>
+
 	Put the details css class name on the correct table column.
 
 	* src/main/java/org/glom/web/client/ui/list/ListTable.java:

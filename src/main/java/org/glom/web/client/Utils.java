@@ -69,8 +69,6 @@ public class Utils {
 	 * container it is already inside. TODO: Fix this problem by saving a reference to its parent and re-addding it
 	 * after the height information has been calculated.
 	 * 
-	 * TODO: Remove duplicate code in FlowTable.FlowTableItem
-	 * 
 	 * @param widget
 	 *            get the height information for this widget
 	 * @return the height of the widget with styling applied
