@@ -249,14 +249,14 @@ public abstract class ListTable extends Composite {
 			}
 		};
 
-		// the style name for the details column is set on the col element
-		cellTable.addColumnStyleName(cellTable.getColumnCount() - 1, "details");
-
 		// Firefox, Chrome, and Safari only support the span and width attributes of the col element so we need to set
 		// the alignment with code
 		openButtonColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
 		cellTable.addColumn(openButtonColumn, "");
+
+		// the style name for the details column is set on the col element
+		cellTable.addColumnStyleName(cellTable.getColumnCount() - 1, "details");
 
 	}
 
