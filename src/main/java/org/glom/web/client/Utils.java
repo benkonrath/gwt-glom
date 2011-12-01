@@ -26,6 +26,7 @@ import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -77,12 +78,15 @@ public class Utils {
 		Document doc = Document.get();
 		com.google.gwt.dom.client.Element div = doc.createDivElement();
 
-		div.getStyle().setOpacity(0.0);
+		// Hidden elements are invisible, don't respond to events and are not part of the tab order. But they will take
+		// up space.
+		div.getStyle().setVisibility(Visibility.HIDDEN);
 		div.appendChild(widget.getElement().<com.google.gwt.user.client.Element> cast());
 
 		doc.getBody().appendChild(div);
 		int height = widget.getOffsetHeight();
 		doc.getBody().removeChild(div);
+		div = null;
 
 		return height;
 	}

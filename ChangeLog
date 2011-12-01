@@ -1,5 +1,16 @@
 2011-12-01  Ben Konrath  <ben@bagu.org>
 
+	Use 'visibility: hidden' in Utils.getWidgetHeight().
+
+	This is better choice because hidden elements are invisible, don't
+	respond to events and are not part of the tab order. They will,
+	however, take up space which is required to be able to calculate the
+	height of the widget.
+
+	* src/main/java/org/glom/web/client/Utils.java:
+
+2011-12-01  Ben Konrath  <ben@bagu.org>
+
 	Use Utils.getWidgetHeight() in FlowTable.
 
 	* src/main/java/org/glom/web/client/Utils.java: Remove TODO item about
