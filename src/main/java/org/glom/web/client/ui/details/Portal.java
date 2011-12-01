@@ -19,6 +19,7 @@
 
 package org.glom.web.client.ui.details;
 
+import org.glom.web.client.Utils;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.user.client.ui.Composite;
@@ -65,9 +66,24 @@ public class Portal extends Composite {
 			contents = mainPanel;
 		}
 
+		mainPanel.setStyleName("portal");
+
+		// Calculate and set the expected height of the portal using the expected height of the RelatedListTable and the
+		// expected height of the Portal container. Height information is needed so that Notebooks can be set to the
+		// appropriate size for the RelatedListTable. The FlowTable also needs the height to be set so that it can
+		// decide how to create the layout.
+		int relatedListTableHeight = RelatedListTable.getExpectedHeight();
+		// Use a temporary label in the main panel so that the margin sizes can be calculated.
+		Label tempLabel = new Label("A");
+		mainPanel.add(tempLabel);
+		int containerHeight = Utils.getWidgetHeight(mainPanel) - Utils.getWidgetHeight(tempLabel);
+		mainPanel.remove(setTitle ? 2 : 0); // removes tempLabel
+		mainPanel.setHeight((relatedListTableHeight + containerHeight) + "px");
+
 		initWidget(mainPanel);
 	}
 
+	// TODO The RelatedListTable should be created in this class
 	public void setContents(RelatedListTable relatedListTable) {
 		contents.clear();
 		contents.add(relatedListTable);

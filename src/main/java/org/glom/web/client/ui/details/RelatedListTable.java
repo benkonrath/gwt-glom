@@ -29,10 +29,17 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
@@ -152,4 +159,53 @@ public class RelatedListTable extends ListTable {
 		return numNonEmptyRows;
 	}
 
+	/**
+	 * Gets the expected height of a RelatedListTable.
+	 * 
+	 * @return the expect height of a RelatedListTable in pixels
+	 */
+	public static int getExpectedHeight() {
+		// TODO Use a real RelatedListTable instead of building one manually. It's probably better to do this when
+		// RelatedListTables are created in Portal instead of DetailsActivity.
+		// TODO Performance: Figure out a way to only have to call this once and the heights are unlikey to change while
+		// app is being used.
+
+		// This table simulates a related list with one row containing a Text cell and a Button cell.
+		SafeHtmlBuilder tableBuilder = new SafeHtmlBuilder();
+		tableBuilder.append(SafeHtmlUtils
+				.fromSafeConstant("<table class=\"data-list\"><thead><tr><th>TH</th><th>BH</th></tr></thead><tbody>"));
+		for (int i = 0; i < NUM_VISIBLE_ROWS; i++) {
+			tableBuilder.append(SafeHtmlUtils
+					.fromSafeConstant("<tr><td>T</td><td><button type=\"button\">B</button></td></tr>"));
+		}
+		tableBuilder.append(SafeHtmlUtils.fromSafeConstant("</tbody></head>"));
+		HTML table = new HTML(tableBuilder.toSafeHtml());
+
+		// The pager
+		SimplePager pager = new SimplePager();
+		pager.addStyleName("pager");
+
+		// Pack the table and pager as they are found in the details view.
+		FlowPanel group = new FlowPanel();
+		group.setStyleName("group");
+		FlowPanel subgroup = new FlowPanel();
+		subgroup.setStyleName("portal");
+		subgroup.add(table);
+		subgroup.add(pager);
+		group.add(subgroup);
+
+		// Calculate the height similar to Utils.getWidgetHeight().
+		Document doc = Document.get();
+		com.google.gwt.dom.client.Element div = doc.createDivElement();
+		div.getStyle().setVisibility(Visibility.HIDDEN);
+		div.appendChild(group.getElement().<com.google.gwt.user.client.Element> cast());
+		doc.getBody().appendChild(div);
+		int relatedListTableHeight = group.getElement().getFirstChildElement().getOffsetHeight();
+
+		// remove the div from the from the document
+		doc.getBody().removeChild(div);
+		div = null;
+
+		return relatedListTableHeight;
+	}
 }

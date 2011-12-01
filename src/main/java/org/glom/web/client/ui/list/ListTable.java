@@ -59,6 +59,7 @@ public abstract class ListTable extends Composite {
 	private class ListTablePager extends SimplePager {
 		public ListTablePager() {
 			super(SimplePager.TextLocation.CENTER);
+			setStyleName("pager");
 		}
 
 		/*

@@ -1,5 +1,22 @@
 2011-12-01  Ben Konrath  <ben@bagu.org>
 
+	Show related list tables in notebooks (again).
+
+	Calculate the height of the related list tables so the Notebook can be
+	set the correct height. The height of the related list table is also needed by
+	FlowTable to be able decide how to create the layout.
+
+	* src/main/java/org/glom/web/client/ui/details/Portal.java: Calculate
+	and set the Portal height based on the height of the related list
+	table and the Portal container.
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	Add method to calculate the height of the related list tables.
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
+	* src/main/webapp/style.css: Add css class for Pager. This is needed to
+	calculate the height of the Pager widget.
+
+2011-12-01  Ben Konrath  <ben@bagu.org>
+
 	Use CellTable API for table property instead of setting style on Element.
 
 	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:

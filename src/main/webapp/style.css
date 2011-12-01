@@ -240,3 +240,8 @@ button.details-navigation
 {
 
 }
+
+table.pager td
+{
+	padding: 4px;
+}
