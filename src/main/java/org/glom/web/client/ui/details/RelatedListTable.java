@@ -58,6 +58,8 @@ public class RelatedListTable extends ListTable {
 	private String relationshipName;
 	private int numNonEmptyRows = MIN_NUM_VISIBLE_ROWS;
 
+	private final static int expectedHeight = initializeExepectedHeight();
+
 	public RelatedListTable(String documentID, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
 			String openButtonLabel, OpenButtonCell openButtonCell) {
 
@@ -165,10 +167,13 @@ public class RelatedListTable extends ListTable {
 	 * @return the expect height of a RelatedListTable in pixels
 	 */
 	public static int getExpectedHeight() {
+		return expectedHeight;
+	}
+
+	// called while class is being initialized
+	private static int initializeExepectedHeight() {
 		// TODO Use a real RelatedListTable instead of building one manually. It's probably better to do this when
 		// RelatedListTables are created in Portal instead of DetailsActivity.
-		// TODO Performance: Figure out a way to only have to call this once and the heights are unlikey to change while
-		// app is being used.
 
 		// This table simulates a related list with one row containing a Text cell and a Button cell.
 		SafeHtmlBuilder tableBuilder = new SafeHtmlBuilder();

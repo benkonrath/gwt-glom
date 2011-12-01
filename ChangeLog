@@ -1,5 +1,13 @@
 2011-12-01  Ben Konrath  <ben@bagu.org>
 
+	Improve performance of related list height calculation.
+
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	Put code to calculate the expected height in a static initializer so
+	that that it's only called once.
+
+2011-12-01  Ben Konrath  <ben@bagu.org>
+
 	Show related list tables in notebooks (again).
 
 	Calculate the height of the related list tables so the Notebook can be
