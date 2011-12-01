@@ -63,10 +63,10 @@ public class RelatedListTable extends ListTable {
 
 		createCellTable(layoutItemPortal, NUM_VISIBLE_ROWS, openButtonLabel, openButtonCell);
 
-		// This tells the browser that we want to manually specify the column widths and don't want the table to
-		// overflow it's container. Since we're currently not specifying the column widths, the browser will make
-		// equally spaced columns.
-		cellTable.getElement().getStyle().setProperty("tableLayout", "fixed");
+		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want
+		// the table to overflow it's container. Browsers will make columns with equal widths since we're currently not
+		// manally specifying the column widths.
+		cellTable.setWidth("100%", true);
 
 	}
 
