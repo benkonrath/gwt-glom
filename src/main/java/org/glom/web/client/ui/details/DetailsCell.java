@@ -141,7 +141,9 @@ public class DetailsCell extends Composite {
 				detailsData.getElement().getStyle().setColor("Red");
 			}
 
-			detailsLabel.setText(gwtNumberFormat.format(dataItem.getNumber()));
+			String currencyCode = glomNumericFormat.getCurrencyCode().isEmpty() ? "" : glomNumericFormat
+					.getCurrencyCode().trim() + " ";
+			detailsLabel.setText(currencyCode + gwtNumberFormat.format(dataItem.getNumber()));
 			detailsData.add(detailsLabel);
 			break;
 		case TYPE_TEXT:

@@ -1,5 +1,11 @@
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
+	Display currency codes in the details view.
+
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+
+2011-12-02  Ben Konrath  <ben@bagu.org>
+
 	Avoid duplicate JNI call.
 
 	JNI is not as efficient as pure Java and this is an easy (and small)
