@@ -81,9 +81,9 @@ public class Utils {
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the data when the type doesn't match the type from the Glom document.
-				Log.warn(documentID, tableName, "The data type: " + dataItem.getType()
+				Log.error(documentID, tableName, "The data type: " + dataItem.getType()
 						+ " doesn't match the type from the Glom document: " + glomType + ".");
-				Log.warn(documentID, tableName, "The data item is being ignored.");
+				Log.error(documentID, tableName, "The data item is being ignored. This is a bug.");
 
 				gdaValue = new Value(); // an empty Value
 			}
@@ -109,9 +109,9 @@ public class Utils {
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the primary key value when the type doesn't match the type from the Glom document.
-				Log.warn(documentID, tableName, "The data type: " + dataItem.getType()
+				Log.error(documentID, tableName, "The data type: " + dataItem.getType()
 						+ " doesn't match the expected type from the Glom document: " + glomType + ".");
-				Log.warn(documentID, tableName, "The data item is being ignored.");
+				Log.error(documentID, tableName, "The data item is being ignored. This is a bug.");
 				gdaValue = new Value(""); // an emtpy string Value
 			}
 			break;
@@ -119,7 +119,7 @@ public class Utils {
 		default:
 			Log.error(documentID, tableName, "Unable to create a Gda Value of type: " + glomType
 					+ " based on data of type: " + dataItem.getType() + ".");
-			Log.warn(documentID, tableName, "The data item is being ignored.");
+			Log.warn(documentID, tableName, "The data item is being ignored. This is a Bug.");
 			gdaValue = new Value(); // an empty Value
 			break;
 		}

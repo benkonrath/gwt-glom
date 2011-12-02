@@ -1,5 +1,12 @@
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
+	Indicate clearly that a mismatched primary key type is a bug.
+
+	* src/main/java/org/glom/web/server/Utils.java: Change log level from
+	warning to error. Add 'This is a bug.' to message.
+
+2011-12-02  Ben Konrath  <ben@bagu.org>
+
 	Update / fix some comments.
 
 	* src/main/java/org/glom/web/client/OnlineGlomService.java: Remove old
