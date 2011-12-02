@@ -1,5 +1,13 @@
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
+	Enable navigation to details view with string primary key from related list.
+
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	Create a text primary key value when return type of result is
+	java.sql.Types.VARCHAR.
+
+2011-12-02  Ben Konrath  <ben@bagu.org>
+
 	Use checkboxes for booleans in the details view.
 
 	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:

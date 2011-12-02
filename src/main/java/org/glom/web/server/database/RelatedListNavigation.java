@@ -132,6 +132,9 @@ public class RelatedListNavigation extends DBAccess {
 				case java.sql.Types.NUMERIC:
 					tablePrimaryKeyValue.setNumber(rs.getDouble(1));
 					break;
+				case java.sql.Types.VARCHAR:
+					tablePrimaryKeyValue.setText(rs.getString(1));
+					break;
 				default:
 					Log.warn(documentID, tableName, "Unsupported java.sql.Type: " + rsMetaData.getColumnTypeName(1));
 					break;
