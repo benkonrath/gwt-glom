@@ -80,7 +80,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// and we add an extra JOIN to mention the second-related table.
 
 		whereClauseToTableName = relationship.get_to_table();
-		whereClauseToKeyField = getFieldInTable(relationship.get_to_field(), relationship.get_to_table());
+		whereClauseToKeyField = getFieldInTable(relationship.get_to_field(), whereClauseToTableName);
 
 		Relationship relationshipRelated = portal.get_related_relationship();
 		if (relationshipRelated != null) {

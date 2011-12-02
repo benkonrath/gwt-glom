@@ -1,5 +1,16 @@
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
+	Avoid duplicate JNI call.
+
+	JNI is not as efficient as pure Java and this is an easy (and small)
+	optimization.
+
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	Use previously retrieved value for whereClauseToTableName instead of
+	getting it again.
+
+2011-12-02  Ben Konrath  <ben@bagu.org>
+
 	Rename a couple of variables in RelatedListNavigation.
 
 	This is a rename-only refactor.
