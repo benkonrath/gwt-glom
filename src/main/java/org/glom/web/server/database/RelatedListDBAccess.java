@@ -148,7 +148,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getSelectQuery(SortClause sortClause) {
-
+		// TODO: combine this method with getCountQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
 					"The Portal has not been found. Cannot build query for the related list.");
@@ -162,7 +162,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		}
 
 		SqlExpr whereClause = new SqlExpr();
-		// only make attempt to make a where clause if it makes sense to do so
+		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
 			Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
@@ -201,7 +201,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getCountQuery() {
-
+		// TODO: combine this method with getSelectQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
 					"The Portal has not been found. Cannot build query for the related list.");
@@ -215,7 +215,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		}
 
 		SqlExpr whereClause = new SqlExpr();
-		// only make attempt to make a where clause if it makes sense to do so
+		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
 			Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);

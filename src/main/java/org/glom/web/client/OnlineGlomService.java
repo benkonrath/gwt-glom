@@ -121,11 +121,6 @@ public interface OnlineGlomService extends RemoteService {
 	/**
 	 * Gets data for the details view.
 	 * 
-	 * Note: This method is not currently being used. It will be useful when navigation through the details view is
-	 * added by creating a data provider for the details view.
-	 * 
-	 * TODO: Remove above comment when this method is being used.
-	 * 
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName

@@ -125,7 +125,7 @@ public class DetailsCell extends Composite {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					// don't let the user change the
+					// don't let users change the checkbox
 					checkBox.setValue(dataItem.getBoolean());
 				}
 			});
