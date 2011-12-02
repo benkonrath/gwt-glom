@@ -29,6 +29,7 @@ import org.glom.web.client.ui.cell.TextCell;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.Formatting;
+import org.glom.web.shared.layout.Formatting.HorizontalAlignment;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -193,6 +194,7 @@ public abstract class ListTable extends Composite {
 					return row[j].getBoolean();
 				}
 			};
+
 			// override the configured horizontal alignment
 			columnAlignment = HasHorizontalAlignment.ALIGN_CENTER;
 			break;
@@ -214,6 +216,10 @@ public abstract class ListTable extends Composite {
 					return row[j].getNumber();
 				}
 			};
+
+			// Align TYPE_NUMERIC with AUTO alignment to the right
+			if (formatting.getHorizontalAlignment() == HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO)
+				columnAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 			break;
 
 		default:
