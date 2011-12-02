@@ -1,11 +1,5 @@
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
-	Align TYPE_NUMERIC with AUTO alignment to the right in list tables.
-
-	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
-
-2011-12-02  Ben Konrath  <ben@bagu.org>
-
 	Display currency codes in the details view.
 
 	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
