@@ -334,7 +334,7 @@ final class ConfiguredDocument {
 			// TODO add support for other LayoutItems (Text, Image, Button etc.)
 			LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, true));
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, false));
 				Field field = libglomLayoutItemField.get_full_field_details();
 				if (field.get_primary_key())
 					primaryKeyIndex = i;
@@ -565,19 +565,6 @@ final class ConfiguredDocument {
 	private Formatting convertFormatting(FieldFormatting libglomFormatting) {
 		Formatting formatting = new Formatting();
 
-		// horizontal alignment
-		Formatting.HorizontalAlignment horizontalAlignment;
-		switch (libglomFormatting.get_horizontal_alignment()) {
-		case HORIZONTAL_ALIGNMENT_LEFT:
-			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
-		case HORIZONTAL_ALIGNMENT_RIGHT:
-			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
-		case HORIZONTAL_ALIGNMENT_AUTO:
-		default:
-			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
-		}
-		formatting.setHorizontalAlignment(horizontalAlignment);
-
 		// text colour
 		String foregroundColour = libglomFormatting.get_text_format_color_foreground();
 		if (foregroundColour != null && !foregroundColour.isEmpty())
@@ -596,7 +583,7 @@ final class ConfiguredDocument {
 	}
 
 	private LayoutItemField convertToGWTGlomLayoutItemField(LayoutItem_Field libglomLayoutItemField,
-			boolean includeFormatting) {
+			boolean forDetailsView) {
 		LayoutItemField layoutItemField = new LayoutItemField();
 
 		// set type
@@ -606,16 +593,26 @@ final class ConfiguredDocument {
 		layoutItemField.setTitle(libglomLayoutItemField.get_title_or_name());
 		layoutItemField.setName(libglomLayoutItemField.get_name());
 
-		if (includeFormatting) {
-			FieldFormatting glomFormatting = libglomLayoutItemField.get_formatting_used();
-			Formatting formatting = convertFormatting(glomFormatting);
+		// convert formatting
+		FieldFormatting glomFormatting = libglomLayoutItemField.get_formatting_used();
+		Formatting formatting = convertFormatting(glomFormatting);
 
-			// create a GlomNumericFormat DTO for numeric values
-			if (libglomLayoutItemField.get_glom_type() == org.glom.libglom.Field.glom_field_type.TYPE_NUMERIC) {
-				formatting.setGlomNumericFormat(convertNumbericFormat(glomFormatting.get_numeric_format()));
-			}
-			layoutItemField.setFormatting(formatting);
+		// set horizontal alignment
+		org.glom.libglom.FieldFormatting.HorizontalAlignment libglomHorizontalAlignment = libglomLayoutItemField
+				.get_formatting_used_horizontal_alignment(forDetailsView); // only returns LEFT or RIGHT
+		Formatting.HorizontalAlignment horizontalAlignment;
+		if (libglomHorizontalAlignment == org.glom.libglom.FieldFormatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT) {
+			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
+		} else {
+			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
 		}
+		formatting.setHorizontalAlignment(horizontalAlignment);
+
+		// create a GlomNumericFormat DTO for numeric values
+		if (libglomLayoutItemField.get_glom_type() == org.glom.libglom.Field.glom_field_type.TYPE_NUMERIC) {
+			formatting.setGlomNumericFormat(convertNumbericFormat(glomFormatting.get_numeric_format()));
+		}
+		layoutItemField.setFormatting(formatting);
 
 		return layoutItemField;
 	}

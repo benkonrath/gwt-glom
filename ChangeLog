@@ -1,5 +1,15 @@
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
+	Properly set the horizontal alignment of fields.
+
+	This fix is for both the list tables and the details view.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Use
+	LayoutItem_WithFormatting.get_formatting_used_horizontal_alignment(boolean)
+	to set the horizontal alignment of fields.
+
+2011-12-02  Ben Konrath  <ben@bagu.org>
+
 	Display currency codes in the details view.
 
 	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
