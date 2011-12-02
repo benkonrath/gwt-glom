@@ -25,10 +25,12 @@ import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutItemField;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -42,7 +44,8 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class DetailsCell extends Composite {
 	private LayoutItemField layoutItemField;
-	private Label detailsData = new Label();
+	private FlowPanel detailsData = new FlowPanel();
+	private Label detailsLabel = new Label();
 	private DataItem dataItem;
 
 	private Button openButton = null;
@@ -66,14 +69,14 @@ public class DetailsCell extends Composite {
 		// set the alignment
 		switch (formatting.getHorizontalAlignment()) {
 		case HORIZONTAL_ALIGNMENT_LEFT:
-			detailsData.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+			detailsLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 			break;
 		case HORIZONTAL_ALIGNMENT_RIGHT:
-			detailsData.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+			detailsLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 			break;
 		case HORIZONTAL_ALIGNMENT_AUTO:
 		default:
-			detailsData.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
+			detailsLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
 			break;
 		}
 
@@ -107,7 +110,8 @@ public class DetailsCell extends Composite {
 		return dataItem;
 	}
 
-	public void setData(DataItem dataItem) {
+	public void setData(final DataItem dataItem) {
+		detailsData.clear();
 
 		if (dataItem == null)
 			return;
@@ -115,7 +119,17 @@ public class DetailsCell extends Composite {
 		// FIXME use the cell renderers from the list view to render the inforamtion here
 		switch (layoutItemField.getType()) {
 		case TYPE_BOOLEAN:
-			detailsData.setText(dataItem.getBoolean() ? "TRUE" : "FALSE");
+			final CheckBox checkBox = new CheckBox();
+			checkBox.setValue(dataItem.getBoolean());
+			checkBox.addClickHandler(new ClickHandler() {
+
+				@Override
+				public void onClick(ClickEvent event) {
+					// don't let the user change the
+					checkBox.setValue(dataItem.getBoolean());
+				}
+			});
+			detailsData.add(checkBox);
 			break;
 		case TYPE_NUMERIC:
 			GlomNumericFormat glomNumericFormat = layoutItemField.getFormatting().getGlomNumericFormat();
@@ -127,10 +141,12 @@ public class DetailsCell extends Composite {
 				detailsData.getElement().getStyle().setColor("Red");
 			}
 
-			detailsData.setText(gwtNumberFormat.format(dataItem.getNumber()));
+			detailsLabel.setText(gwtNumberFormat.format(dataItem.getNumber()));
+			detailsData.add(detailsLabel);
 			break;
 		case TYPE_TEXT:
-			detailsData.setText(dataItem.getText());
+			detailsLabel.setText(dataItem.getText());
+			detailsData.add(detailsLabel);
 		default:
 			break;
 		}

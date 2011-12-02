@@ -1,3 +1,9 @@
+2011-12-02  Ben Konrath  <ben@bagu.org>
+
+	Use checkboxes for booleans in the details view.
+
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+
 2011-12-01  Ben Konrath  <ben@bagu.org>
 
 	Improve performance of related list height calculation.
