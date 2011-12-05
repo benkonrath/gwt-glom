@@ -282,15 +282,6 @@ final class ConfiguredDocument {
 		return layoutGroups;
 	}
 
-	LayoutGroup getListViewLayoutGroup(String tableName) {
-		// Validate the table name.
-		tableName = getTableNameToUse(tableName);
-
-		org.glom.libglom.LayoutGroup libglomLayoutGroup = getValidListViewLayoutGroup(tableName);
-
-		return getListLayoutGroup(tableName, libglomLayoutGroup);
-	}
-
 	/*
 	 * Gets the expected row count for a related list.
 	 */
@@ -317,12 +308,13 @@ final class ConfiguredDocument {
 		return relatedListNavigation.getNavigationRecord(primaryKeyValue);
 	}
 
-	/*
-	 * Gets a LayoutGroup DTO for the given table name and libglom LayoutGroup. This method can be used for the main
-	 * list view table and for the related list table.
-	 */
-	private LayoutGroup getListLayoutGroup(String tableName, org.glom.libglom.LayoutGroup libglomLayoutGroup) {
-		LayoutGroup layoutGroup = new LayoutGroup();
+	LayoutGroup getListViewLayoutGroup(String tableName) {
+		// Validate the table name.
+		tableName = getTableNameToUse(tableName);
+
+		org.glom.libglom.LayoutGroup libglomLayoutGroup = getValidListViewLayoutGroup(tableName);
+
+		LayoutGroup layoutGroup = new LayoutGroup(); // the object that will be returned
 		int primaryKeyIndex = -1;
 
 		// look at each child item
