@@ -88,7 +88,7 @@ public class RelatedListNavigation extends DBAccess {
 		}
 
 		// Get the primary key of that table:
-		Field navigationTablePrimaryKey = getPrimaryKeyFieldForTable(navigationTableName);
+		Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTableName);
 
 		// Build a layout item to get the field's value:
 		navigationRelationshipItem.set_full_field_details(navigationTablePrimaryKey);
@@ -99,7 +99,7 @@ public class RelatedListNavigation extends DBAccess {
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
 		String relatedTableName = portal.get_table_used("" /* not relevant */);
-		Field primaryKeyField = getPrimaryKeyFieldForTable(relatedTableName);
+		Field primaryKeyField = getPrimaryKeyField(relatedTableName);
 
 		NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;

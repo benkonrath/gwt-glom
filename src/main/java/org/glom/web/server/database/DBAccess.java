@@ -219,22 +219,13 @@ abstract class DBAccess {
 	}
 
 	/**
-	 * Gets the primary key Field for the current table name.
-	 * 
-	 * @return primary key Field
-	 */
-	protected Field getPrimaryKeyField() {
-		return getPrimaryKeyFieldForTable(this.tableName);
-	}
-
-	/**
 	 * Gets the primary key Field for the specified table name.
 	 * 
 	 * @param tableName
 	 *            name of table to search for the primary key field
 	 * @return primary key Field
 	 */
-	protected Field getPrimaryKeyFieldForTable(String tableName) {
+	protected Field getPrimaryKeyField(String tableName) {
 		Field primaryKey = null;
 		FieldVector fieldsVec = document.get_table_fields(tableName);
 		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
@@ -255,7 +246,7 @@ abstract class DBAccess {
 	 * @return primary key LayoutItem_Field
 	 */
 	protected LayoutItem_Field getPrimaryKeyLayoutItemField(String tableName) {
-		Field primaryKey = getPrimaryKeyFieldForTable(tableName);
+		Field primaryKey = getPrimaryKeyField(tableName);
 
 		LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
 

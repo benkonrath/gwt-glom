@@ -59,7 +59,7 @@ public class DetailsDBAccess extends DBAccess {
 			return null;
 		}
 
-		Field primaryKey = getPrimaryKeyField();
+		Field primaryKey = getPrimaryKeyField(tableName);
 
 		if (primaryKey == null) {
 			Log.error(documentID, tableName, "Couldn't find primary key in table. Returning null.");
