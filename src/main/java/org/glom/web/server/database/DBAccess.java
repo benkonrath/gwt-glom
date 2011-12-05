@@ -248,19 +248,21 @@ abstract class DBAccess {
 	}
 
 	/**
-	 * Gets the primary key LayoutItem_Field for this table.
+	 * Gets the primary key LayoutItem_Field for the specified table.
 	 * 
+	 * @param tableName
+	 *            name of table to search for the primary key LayoutItem_Field
 	 * @return primary key LayoutItem_Field
 	 */
-	protected LayoutItem_Field getPrimaryKeyLayoutItemField() {
-		Field primaryKey = getPrimaryKeyField();
+	protected LayoutItem_Field getPrimaryKeyLayoutItemField(String tableName) {
+		Field primaryKey = getPrimaryKeyFieldForTable(tableName);
 
 		LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
 
 		if (primaryKey != null) {
 			libglomLayoutItemField.set_full_field_details(primaryKey);
 		} else {
-			Log.error(document.get_database_title(), tableName,
+			Log.error(document.get_database_title(), this.tableName,
 					"A primary key was not found in the FieldVector for this table.");
 		}
 

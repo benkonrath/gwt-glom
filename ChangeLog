@@ -1,3 +1,27 @@
+2011-12-05  Ben Konrath  <ben@bagu.org>
+
+	Properly support related list navigation.
+
+	Navigation from the "Repository Analyzer -> Package Scans ->
+	Dependencies" related table wasn't working because the primary key for
+	related tables wasn't being set properly. This commit fixes the
+	problem.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Don't use
+	getListLayoutGroup() to create the LayoutItemPortal DTO. This method
+	doesn't set the primary key properly for related list tables.
+	* src/main/java/org/glom/web/server/database/DBAccess.java: Add table
+	name parameter to getPrimaryKeyLayoutItemField(). This makes the method
+	useful for getting the primary key for list view tables and for related
+	list tables.
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	Move code to set the primary key for the table from the abstract
+	ListDBAccess class to ListViewDBAccess as it's only correct for list
+	view tables.
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	Properly add primary key to related list tables.
+
 2011-12-02  Ben Konrath  <ben@bagu.org>
 
 	Properly set the horizontal alignment of fields.

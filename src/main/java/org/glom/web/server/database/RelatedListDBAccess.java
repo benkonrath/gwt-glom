@@ -71,7 +71,8 @@ public class RelatedListDBAccess extends ListDBAccess {
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 
 		/*
-		 * The code from the rest of this method was ported from Glom: Base_DB::set_found_set_where_clause_for_portal()
+		 * The code from the rest of this method was inspired by code from Glom:
+		 * Base_DB::set_found_set_where_clause_for_portal()
 		 */
 		Relationship relationship = portal.get_relationship();
 
@@ -81,6 +82,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 		whereClauseToTableName = relationship.get_to_table();
 		whereClauseToKeyField = getFieldInTable(relationship.get_to_field(), whereClauseToTableName);
+
+		// Add primary key
+		fieldsToGet.add(getPrimaryKeyLayoutItemField(this.tableName));
 
 		Relationship relationshipRelated = portal.get_related_relationship();
 		if (relationshipRelated != null) {

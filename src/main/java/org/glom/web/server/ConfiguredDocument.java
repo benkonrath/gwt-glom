@@ -525,19 +525,50 @@ final class ConfiguredDocument {
 			layoutItemPortal.setNavigationType(convertToGWTGlomNavigationType(libglomLayoutItemPortal
 					.get_navigation_type()));
 
-			layoutItemPortal.setTitle(libglomLayoutItemPortal.get_title_used("")); // parent title not
-																					// relevant
-			LayoutGroup tempLayoutGroup = getListLayoutGroup(tableName, libglomLayoutItemPortal);
-			for (org.glom.web.shared.layout.LayoutItem item : tempLayoutGroup.getItems()) {
-				// TODO EDITING If the relationship does not allow editing, then mark all these fields as
-				// non-editable. Check relationship.get_allow_edit() to see if it's editable.
-				layoutItemPortal.addItem(item);
-			}
-			layoutItemPortal.setPrimaryKeyIndex(tempLayoutGroup.getPrimaryKeyIndex());
-			layoutItemPortal.setHiddenPrimaryKey(tempLayoutGroup.hasHiddenPrimaryKey());
+			layoutItemPortal.setTitle(libglomLayoutItemPortal.get_title_used("")); // parent title not relevant
 			layoutItemPortal.setName(libglomLayoutItemPortal.get_relationship_name_used());
 			layoutItemPortal.setTableName(relationship.get_from_table());
 			layoutItemPortal.setFromField(relationship.get_from_field());
+
+			// convert the portal layout items into LayoutItemField DTOs
+			LayoutItemVector layoutItemsVec = libglomLayoutItemPortal.get_items();
+			long numItems = layoutItemsVec.size();
+			for (int i = 0; i < numItems; i++) {
+				org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
+
+				// TODO add support for other LayoutItems (Text, Image, Button etc.)
+				LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
+				if (libglomLayoutItemField != null) {
+					// TODO EDITING If the relationship does not allow editing, then mark all these fields as
+					// non-editable. Check relationship.get_allow_edit() to see if it's editable.
+					layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, false));
+				} else {
+					Log.info(documentID, tableName, "Ignoring unknown related list LayoutItem of type "
+							+ libglomLayoutItem.get_part_type_name() + ".");
+					continue;
+				}
+			}
+
+			// get the primary key for the related list table
+			LayoutItem_Field layoutItemField = new LayoutItem_Field();
+			String toTableName = relationship.get_to_table();
+			String toFieldName = libglomLayoutItemPortal.get_to_field_used();
+			if (!toFieldName.isEmpty() && !toTableName.isEmpty()) {
+
+				// get the LayoutItem_Feild with details from its Field in the document
+				FieldVector fields = document.get_table_fields(toTableName);
+				numItems = fields.size(); // reuse loop variable from above
+				for (int i = 0; i < numItems; i++) {
+					Field field = fields.get(i);
+					// check the names to see if they're the same
+					if (toFieldName.equals(field.get_name())) {
+						layoutItemField.set_full_field_details(field);
+						layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(layoutItemField, false));
+						layoutItemPortal.setPrimaryKeyIndex(layoutItemPortal.getItems().size() - 1);
+						layoutItemPortal.setHiddenPrimaryKey(true); // always hidden in portals
+					}
+				}
+			}
 
 			// Set whether or not the related list will need to show the navigation buttons.
 			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()

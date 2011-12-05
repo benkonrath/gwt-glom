@@ -55,12 +55,6 @@ public abstract class ListDBAccess extends DBAccess {
 	protected ArrayList<DataItem[]> getListData(int start, int length, boolean useSortClause, int sortColumnIndex,
 			boolean isAscending) {
 
-		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
-		// a primary key.
-		if (getPrimaryKeyIndex() < 0) {
-			fieldsToGet.add(getPrimaryKeyLayoutItemField());
-		}
-
 		// create a sort clause for the column we've been asked to sort
 		SortClause sortClause = new SortClause();
 		if (useSortClause) {
@@ -134,12 +128,6 @@ public abstract class ListDBAccess extends DBAccess {
 	 */
 	protected int getResultSizeOfSQLQuery() {
 
-		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
-		// a primary key.
-		if (getPrimaryKeyIndex() < 0) {
-			fieldsToGet.add(getPrimaryKeyLayoutItemField());
-		}
-
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -179,18 +167,4 @@ public abstract class ListDBAccess extends DBAccess {
 		}
 	}
 
-	/**
-	 * Gets the primary key index of this list layout.
-	 * 
-	 * @return index of primary key or -1 if a primary key was not found
-	 */
-	public int getPrimaryKeyIndex() {
-		for (int i = 0; i < fieldsToGet.size(); i++) {
-			LayoutItem_Field layoutItemField = fieldsToGet.get(i);
-			Field field = layoutItemField.get_full_field_details();
-			if (field != null && field.get_primary_key())
-				return i;
-		}
-		return -1;
-	}
 }

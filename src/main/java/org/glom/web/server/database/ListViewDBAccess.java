@@ -22,8 +22,10 @@ package org.glom.web.server.database;
 import java.util.ArrayList;
 
 import org.glom.libglom.Document;
+import org.glom.libglom.Field;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
+import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SqlBuilder;
@@ -46,6 +48,12 @@ public class ListViewDBAccess extends ListDBAccess {
 		LayoutGroupVector tempLayoutGroupVec = new LayoutGroupVector();
 		tempLayoutGroupVec.add(libglomLayoutGroup);
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
+
+		// Add a LayoutItem_Field for the primary key to the end of the LayoutFieldVector if it doesn't already contain
+		// a primary key.
+		if (getPrimaryKeyIndex() < 0) {
+			fieldsToGet.add(getPrimaryKeyLayoutItemField(tableName));
+		}
 	}
 
 	public ArrayList<DataItem[]> getData(int start, int length, boolean useSortClause, int sortColumnIndex,
@@ -63,6 +71,7 @@ public class ListViewDBAccess extends ListDBAccess {
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0)
 			return -1;
+
 		return getResultSizeOfSQLQuery();
 	}
 
@@ -91,5 +100,20 @@ public class ListViewDBAccess extends ListDBAccess {
 		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet);
 		SqlBuilder countBuilder = Glom.build_sql_select_count_rows(builder);
 		return Glom.sqlbuilder_get_full_query(countBuilder);
+	}
+
+	/**
+	 * Gets the primary key index of this list layout.
+	 * 
+	 * @return index of primary key or -1 if a primary key was not found
+	 */
+	private int getPrimaryKeyIndex() {
+		for (int i = 0; i < fieldsToGet.size(); i++) {
+			LayoutItem_Field layoutItemField = fieldsToGet.get(i);
+			Field field = layoutItemField.get_full_field_details();
+			if (tableName.equals(layoutItemField.get_table_used(tableName)) && field != null && field.get_primary_key())
+				return i;
+		}
+		return -1;
 	}
 }
