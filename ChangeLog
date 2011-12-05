@@ -1,5 +1,24 @@
 2011-12-05  Ben Konrath  <ben@bagu.org>
 
+	Add latest mockup with HTML tables.
+
+	Features of this mockup:
+
+	-> HTML table for flowtable
+	-> HTML table for flowtable column
+	-> Example of how related lists would look
+	-> Not using text entries for data items
+
+	The current version of Online Glom doesn't use HTML tables for the
+	flowtable columns.
+
+	This mockup has been sent to the glom-devel mailing list but it's good
+	to have it here as well.
+
+	* mockups/details-view-html-tables.html:
+
+2011-12-05  Ben Konrath  <ben@bagu.org>
+
 	Remove unnecessary getPrimaryKeyField() method.
 
 	getPrimaryKeyFieldForTable(String) has been renamed to

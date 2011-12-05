@@ -1,0 +1,348 @@
+<html>
+<head>
+<style type="text/css">
+
+body {
+    font-family: sans-serif;
+    font-size: medium;
+}
+
+.details-cell {
+
+}
+
+div#document-title {
+    color: #333333;
+    font-size: x-large;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    margin-left: 0.5em;
+}
+
+#headbox, #footbox {
+    background-color: #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 3px 3px 3px 3px;
+    overflow: hidden;
+    padding: 0.2em;
+}
+
+/* Headbox Contents */
+.tablechooser {
+    float: left;
+    font-family: sans-serif;
+    font-size: 13.3333px;
+    margin-left: 0.5em;
+}
+
+.backlink {
+    float: right;
+    margin: 0.2em 0.5em;
+}
+
+/* Footbox Contents */
+.records {
+    color: #333333;
+    float: left;
+    margin: 0.2em 0.5em;
+}
+
+.details-bottom-navigation {
+    float: right;
+    margin: 0.2em 0.5em;
+}
+
+a {
+    color: #333333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+h2.group-title {
+    border-bottom: 1px dashed #000000;
+    font-size: 100%;
+    margin: 0 0 0.8em;
+    padding: 0;
+}
+
+.subgroup-title {
+    font-size: 100%;
+    font-weight: bold;
+    margin: 0 0 0.6em;
+    padding: 0;
+}
+
+.group {
+    background-color: #EEEEEE;
+    border-radius: 7px 7px 7px 7px;
+    margin: 1em 0;
+    padding: 0.8em;
+}
+
+h2.group-title {
+    border-bottom: 1px dashed #000000;
+    font-size: 100%;
+    margin: 0 0 0.8em;
+    padding: 0;
+}
+
+.group-contents {
+    padding-left: 0.8em;
+}
+
+.details-label {
+    padding-right: 0.5em;
+    padding-top: 0.25em;
+}
+
+.details-data {
+    color: #333333;
+    padding-bottom: 0.5em;
+    padding-top: 0.25em
+}
+
+.details-navigation {
+    padding-left: 0.5em;
+}
+
+.hideextra { white-space: nowrap; overflow: hidden; text-overflow:ellipsis; }
+
+textarea {
+    width: 100%;
+}
+
+input {
+    width: 100%;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+
+/**
+ * List View
+ */
+table.data-list
+{
+	width: 100%;
+	margin-top: 1em;
+}
+
+table.data-list th
+{
+	background-color: #ccc;
+	border: 1px solid #000;
+	text-align: left;
+	font-weight: normal;
+	padding: 0.2em;
+	color: #000;
+}
+
+table.data-list td
+{
+	background-color: #fff;
+	border: 1px dotted #aaa;
+	padding: 0.2em;
+	font-size: medium;
+	vertical-align: middle;
+}
+
+/* Overrides the table settings from the list view */
+.group table.data-list
+{
+	margin-top: 0em;
+}
+
+
+
+
+</style>
+</head>
+
+<body >
+
+<div id="document-title">Music Collection</div>
+
+
+<div id="headbox">
+<select class="tablechooser"><option value="albums">Albums</option><option value="artists">Artists</option><option value="publishers">Publishers</option><option selected="selected" value="songs">Songs</option></select>
+<a class="backlink" href="listview-songs.html" style="">Back to List</a>
+</div>
+
+<div class="group">
+  <h2 class="group-title">Overview</h2>
+  <div class="group-contents">
+
+
+<!-- the flowtable: a table -->
+<table style="width: 100%">
+<col width="49%"/>
+<col width="49%"/>
+<tr style="vertical-align: top;">
+
+  <!-- the first column: a table -->
+  <!-- the column gap is set using padding on the td of the flowtable -->
+  <td style="padding-right: 0.5%;">
+  <table>
+     <!-- details cell: a table row -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Song ID:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top;"><div class="hideextra">0</div></td>
+     </tr>
+  </table>
+  </td>
+
+  <!-- the second column -->
+  <td style="padding-left: 0.5%;">
+  <table>
+     
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Name:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top; colspan: 2"><div class="hideextra">Thunder Road</div></td>
+     </tr>
+
+  </table>
+  </td>
+
+</tr>
+</table>
+</div>
+</div>
+
+<div class="group">
+  <h2 class="group-title">Details</h2>
+  <div class="group-contents">
+
+<!-- the second flowtable -->
+<table style="width: 100%">
+<col width="49%"/>
+<col width="49%"/>
+<tr style="vertical-align: top;">
+
+  <!-- the first column -->
+  <td style="padding-right: 0.5%;">
+  <div class="subgroup">
+  <div class="subgroup-title">Album</div>
+  <div class="group-contents">
+  <table>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Album ID:</td>
+	<td class="details-data" style="vertical-align: top;"><div class="hideextra">0</div></td>
+	<td class="details-navigation" style="vertical-align: top; width: 100%;"><button type="button">Open</button></td>
+     </tr>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Name:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top;"><div class="hideextra">Born To Run</div></td>
+     </tr>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Favourite Song:</td>
+	<td class="details-data" colspan="2"  style="vertical-align: top;"><input type="checkbox" checked=""></td>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Artist ID:</td>
+	<td class="details-data" style="vertical-align: top;"><div class="hideextra">0</div></td>
+	<td class="details-navigation" style="vertical-align: top; width: 100%"><button type="button">Open</button></td>
+     </tr>
+
+     </tr>
+
+  </table>
+  </div>
+  </div>
+  </td>
+
+  <!-- the second column -->
+  <td style="padding-left: 0.5%;">
+  <div class="subgroup">
+  <div class="subgroup-title">Album</div>
+  <div class="group-contents">
+  <table>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Artist ID:</td>
+	<td class="details-data" style="vertical-align: top;"><div class="hideextra">0</div></td>
+	<td class="details-navigation" style="vertical-align: top; width: 100%"><button type="button">Open</button></td>
+     </tr>
+
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Name:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top;"><div class="hideextra">Bruce Springsteen</div></td>
+     </tr>
+     
+     <!-- details cell -->
+     <tr>
+	<td class="details-label" style="vertical-align: top; white-space: nowrap;">Comments:</td>
+	<td class="details-data" colspan="2" style="vertical-align: top;"><div style="height: 6em; overflow: auto; white-space: nowrap;">
+Amazing song!<br/>
+<br/>
+Rock on!<div></td>
+     </tr>
+
+  </table>
+  </div>
+  </div>
+  </td>
+
+</tr>
+</table>
+</div>
+</div>
+
+
+<div class="group">
+  <h2 class="group-title">Details (Again)</h2>
+  <div class="group-contents">
+
+
+<!-- the second flowtable -->
+<table style="width: 100%">
+<tr style="vertical-align: top;">
+<td>
+
+        <!-- portal Note: no fixed height! -->
+        <div class="subgroup">
+          <div class="subgroup-title">Package Scans</div>
+          <div class="group-contents"><div><table cellspacing="0" __gwtcellbasedwidgetimpldispatchingfocus="true" __gwtcellbasedwidgetimpldispatchingblur="true" class="data-list" style="white-space: nowrap; table-layout: fixed;"><thead><tr><th class="GARUF5ABFD GARUF5ABDD GARUF5ABDE" colspan="1">Package Scan ID</th><th class="GARUF5ABFD GARUF5ABDE" colspan="1">Package Name</th><th class="GARUF5ABFD GARUF5ABDE" colspan="1">Description</th><th class="GARUF5ABFD GARUF5ABDE" colspan="1">License</th><th class="GARUF5ABFD  GARUF5ABND" colspan="1"></th></tr></thead><colgroup><col><col><col><col class="details"><col></colgroup><tbody style=""><tr class="GARUF5ABPC" onclick=""><td align="left" class="GARUF5ABOC GARUF5ABAD GARUF5ABBD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">0</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">libgcc1</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">Shared version of the support library, a library of internal subroutines that GCC uses to overcome shortcomings of particular machines, or special needs for some languages.</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; "></div></div></td><td align="right" class="GARUF5ABOC GARUF5ABAD GARUF5ABLD"><div tabindex="0" style="outline:none;"><button tabindex="-1" type="button">Open</button></div></td></tr><tr class="GARUF5ABPD" onclick=""><td align="left" class="GARUF5ABOC GARUF5ABAE GARUF5ABBD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">1</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAE"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">busybox</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAE"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">BusyBox combines tiny versions of many common UNIX utilities into a single small executable. It provides minimalist replacements for the most common utilities you would usually find on your desktop system (i.e., ls, cp, mv, mount, tar, etc.). The utilities in BusyBox generally have fewer options than their full-featured GNU cousins; however, the options that are included provide the expected functionality and behave very much like their GNU counterparts.
+
+This package installs: - the BusyBox binary - symlinks for tools included into it that correspond to binaries
+ in essential Debian packages
+- alternatives from packages that don't have anything else - awk, as a reminder that alternatives don't always work as expected
+
+Symlinks to other tools included into BusyBox which correspond to binaries in non-essential Debian packages are provided in separate symlink packages. Those package are split and named according to the corresponding Debian packages.</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAE"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; "></div></div></td><td align="right" class="GARUF5ABOC GARUF5ABAE GARUF5ABLD"><div style="outline:none;"><button tabindex="-1" type="button">Open</button></div></td></tr><tr class="GARUF5ABPC" onclick=""><td align="left" class="GARUF5ABOC GARUF5ABAD GARUF5ABBD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">2</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">gs</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">This dummy package is provided for a smooth transition from the previous gs package (the package name has been changed to gs-gpl). It may safely be removed after installation.</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">GPL2</div></div></td><td align="right" class="GARUF5ABOC GARUF5ABAD GARUF5ABLD"><div style="outline:none;"><button tabindex="-1" type="button">Open</button></div></td></tr><tr class="GARUF5ABPD" onclick=""><td align="left" class="GARUF5ABOC GARUF5ABAE GARUF5ABBD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">3</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAE"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">libhildon-thumbnail-dev</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAE"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">Contains libhildon-thumbnail0 development files.</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAE"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; "></div></div></td><td align="right" class="GARUF5ABOC GARUF5ABAE GARUF5ABLD"><div style="outline:none;"><button tabindex="-1" type="button">Open</button></div></td></tr><tr class="GARUF5ABPC" onclick=""><td align="left" class="GARUF5ABOC GARUF5ABAD GARUF5ABBD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">4</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">libsysfs-dev</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; ">Sysfs is a virtual file system in Linux kernel 2.5+ that provides a tree of system devices. libsysfs provides a stable programming interface to sysfs and eases querying system devices and their attributes.
+
+This package provides everything that is needed for developing own programs using libsysfs: C headers, a static library, documentation and example programs.</div></div></td><td align="left" class="GARUF5ABOC GARUF5ABAD"><div style="outline:none;"><div style="overflow: hidden; text-overflow: ellipsis; "></div></div></td><td align="right" class="GARUF5ABOC GARUF5ABAD GARUF5ABLD"><div style="outline:none;"><button tabindex="-1" type="button">Open</button></div></td></tr></tbody><tbody style="display: none;"><tr><td align="center" colspan="5"><div><div style="width: 100%; height: 100%; padding: 0px; margin: 0px; display: none;"><div style="width: 100%; height: 100%; display: none;"></div></div><div style="width: 100%; height: 100%; padding: 0px; margin: 0px;"><div style="width: 100%; height: 100%;" class="GARUF5ABOD"><img border="0" style="width: 43px; height: 11px; background: url(data:image/gif;base64,R0lGODlhKwALAPEAAP///0tKSqampktKSiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAKwALAAACMoSOCMuW2diD88UKG95W88uF4DaGWFmhZid93pq+pwxnLUnXh8ou+sSz+T64oCAyTBUAACH5BAkKAAAALAAAAAArAAsAAAI9xI4IyyAPYWOxmoTHrHzzmGHe94xkmJifyqFKQ0pwLLgHa82xrekkDrIBZRQab1jyfY7KTtPimixiUsevAAAh+QQJCgAAACwAAAAAKwALAAACPYSOCMswD2FjqZpqW9xv4g8KE7d54XmMpNSgqLoOpgvC60xjNonnyc7p+VKamKw1zDCMR8rp8pksYlKorgAAIfkECQoAAAAsAAAAACsACwAAAkCEjgjLltnYmJS6Bxt+sfq5ZUyoNJ9HHlEqdCfFrqn7DrE2m7Wdj/2y45FkQ13t5itKdshFExC8YCLOEBX6AhQAADsAAAAAAAAAAAA=) no-repeat 0px 0px;" src="http://bagu.org:8080/OnlineGlom/OnlineGlom/clear.cache.gif" onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" class="gwt-Image"></div></div></div></td></tr></tbody><tfoot style="display: none;"><tr><th class="GARUF5ABED GARUF5ABCD  GARUF5ABMD" colspan="5"></th></tr></tfoot></table>
+
+<table cellspacing="0" cellpadding="0" style="font-family: Arial Unicode MS,Arial,sans-serif;font-size: small;"><tbody><tr><td align="left" style="vertical-align: middle; padding: 4px;" class="GARUF5ABJH GARUF5ABKH"><img border="0" style="width: 19px; height: 19px; background: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAABTUlEQVR42r2UO26EQAyGOQtnyVlyllTQcADqUIA4A1Cl5QLQ8H4/Smf/0Xo1M7CskmKRRiPM7w/bY49hvOPZ9/1zXVea55mmaRI73mH/C8RcloW6rqOyLA8LdnyH7hXoYxxH4dS2LfV9f1iw4zt00D+FIR0IzyD6KopCpH8KQj2qqhJpQJwkCYVheIDEcSx26KCH3wE2DAPVdf1w0mFN01AQBGRZ1sMGPfwU0LZtXxDLEciwPM/JdV0BkmH8E/jLKXZ6rRiWpik5jkO2bZ/C7ql2CgxGHeZ5ngAx5AyGIBTYLcxvuV5caESWZZlI8Soy+CuNyj2kw9jB9/0DjPWHBsa4yHXTTxOtEEWRAkOvwe+0+/m4r/oMByLrns7qLfcfbsar7ufmhv5yPlFMnk95IvgnsKNRlaK/ujkwJpg9BmHH+/0aMv97r5m8jHc+v9PgJIofYq0vAAAAAElFTkSuQmCC&quot;) no-repeat scroll 0px 0px transparent;" src="http://bagu.org:8080/OnlineGlom/OnlineGlom/clear.cache.gif" onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" class="gwt-Image"></td><td align="left" style="vertical-align: middle; padding: 4px;" class="GARUF5ABJH GARUF5ABKH"><img border="0" style="width: 19px; height: 19px; background: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAABOElEQVR42r1UO66DMBDkLJwlZ3lneRU0HID6NXAI6NJCjxAS//+n3GRQLMX2Ql5SxNLKsj0z8q5nbRjfGNu2/SzLQtM00TiO+4w19t8RMed5prZtqSgKLbCPc+BeCV2GYaA8z6lpGuq6TgvsQxQ44A/FkA6AnIgawAHPCqEeZVnuaXDkMAylNXDAg6eJ9X1PVVVpInVdk+/7ZNu2dgY80pWE1nX9BUkFp2lKruuSZVl7cDcGD/znFFu1VlEUkeM4+43OxMAD/1AsyzJN6N9i92v+qfVKkkRK8UgMjwC+ZFThIRXoed6hmMBrBka7cB6DBYIgYMWAB491v3huLp04jjVbPG7F9+o996voyTP3C3MDf9qfKCYMDMHnjhCOxz7OpaK/+jnQJug9IYQZ68c3ZH76r5kijG+OGyVGL0Z2EQ8bAAAAAElFTkSuQmCC&quot;) no-repeat scroll 0px 0px transparent;" src="http://bagu.org:8080/OnlineGlom/OnlineGlom/clear.cache.gif" onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" class="gwt-Image"></td><td align="left" style="vertical-align: middle;" class="GARUF5ABLH"><div class="gwt-HTML">1-5 of 1,178</div></td><td align="left" style="vertical-align: middle; padding: 4px;" class="GARUF5ABJH"><img border="0" style="width: 19px; height: 19px; background: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAB80lEQVR42r2UPU/bUBSG+S39K5AgAWJF6tINCRbYqq4dqi5IzAx0r8rAUnVLMA1RAyr5IKQJ+YBgO47jGGNRUJPh7X0v8ZUviULFUEtHV/ee9zw+vuccz8z8j8frh58tx8eV2cPltStX7nn+75Dgbu7a7qNcs5ApWEgXe0gVXLlyz3P6qZsO8u8+Nq66OMxbOKrd47g1RK45GNlQGs8PT01QR/1EUBA8vGq1XRj5zggyVBDuj5tDBaQZeQfUM24MxvvIFk38aAy0bD5sf1JABRZGHfWMG8uqfunAOL/V3k5gIjmP9c13+F4Jn/hEduch6i1Hz871bk9+lk3tbiKbTSSlrbx+g69HDS1LGuMYr2Cd7g2yBTMmHIzBEskkFpaWsfslpRWGcYxXMFtsWPYIEL8fCVLAeSwsLuNbri1B9DPOjsO6vcDPlcZhUWaJkfFT942qVojcmQXGK1g/CFcrdRuZ2m+tHeKfubbxFumSr/kyoud+iTjGaxVtW57ssUmZvd/aEa3wR1U48hsFB4ybOIvVegdG+SbWZwPs7qX05o1AQke954eTp8BxAzF7Ng5KfS27p5+eLnpSR/3U+eRlshEzouRpAc1ePDy2gFi55zn92qU/9+ewxZg0211UGx1ULiy5NsUs8vzZP8Y0MKv1YsBLn78yFAmErQgG1AAAAABJRU5ErkJggg==&quot;) no-repeat scroll 0px 0px transparent;" src="http://bagu.org:8080/OnlineGlom/OnlineGlom/clear.cache.gif" onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" class="gwt-Image"></td><td align="left" style="vertical-align: middle; padding: 4px;" class="GARUF5ABJH"><img border="0" style="width: 19px; height: 19px; background: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAB90lEQVR42r1UPU/bUBTlt/SvtAkSrViRunTrjFhQp1bqUNYO7dihY4dMLAxtgpGJShDEIYYm5AOC7fgrxqRQpDAc3nmJXzGOQsVQS1dX9/ie4/fuh+fm/scTDobfbDfCqRXg5MyXnjHxfxeJL5+dOQOYTRu6YaNUC1A0fOkZE+d75s0Wii7X2qcetqo2tpt/UOneYKczmtiNNOJb+xaYx/ypQnF8/aTb86FV+xORv8a40kljWtUF88nLiLEe5ZqFn+0RPn9dTxFpCSaFhTGP+eRlTtU6caEdXkhCLj+PlTfvUT6+VmLTMO1wiFbXTZ/ODy9290xL1eZpLi9t6eUrlIwgi9UCJUge+Uqs752jbFjqGgkxl89j4cUiNipWBiv8qMuPk0e+EnNEwLYnX5MkRZ7H2w+fMtjC80Vs1iPJc+6KeUEc7RxkxXKTa2lmnMG+73vjrtdtkK/EBvHw9VHLgd68kkdPrrS8+g564ypVM2LbzTGmi5n7JXjkpzras0M5Ywnx45dCaljvYskcaoYL8qbuYqPVFyf5jUKxnhKiFYqmmjEpZJ6D+WE0nL4Frh+L3XOweTC4twUj1Wn6Ui2UecyfuZ8sJgdRFy0vCdHxkI6kZ0yc71NFf+jP4Yg16fQ8NNp9HB3b0nfELhJ/8I8xS5jderTAY59bcTDi/IIty2YAAAAASUVORK5CYII=&quot;) no-repeat scroll 0px 0px transparent;" src="http://bagu.org:8080/OnlineGlom/OnlineGlom/clear.cache.gif" onload="this.__gwtLastUnhandledEvent=&quot;load&quot;;" class="gwt-Image"></td></tr></tbody></table></div></div></div>
+</td>
+</tr></table>
+
+</div></div>
+
+
+
+
+<div id="footbox">
+		<span class="records">Displaying record 1 of 8</span>
+	
+		<span class="details-bottom-navigation">
+			<a href="">First</a>
+			<a href="">Back</a>
+			<a href="">Forward</a>
+			<a href="">Last</a>
+		</span>
+</div>
+
+</body>
+</html>
