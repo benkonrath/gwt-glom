@@ -1,5 +1,13 @@
 2011-12-05  Ben Konrath  <ben@bagu.org>
 
+	Rename a couple of variables in RelatedListNavigation.
+
+	This is a rename-only refactor.
+
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+
+2011-12-05  Ben Konrath  <ben@bagu.org>
+
 	Move getListLayoutGroup() into getListViewLayoutGroup().
 
 	This removes getListLayoutGroup(). It was only being called by

@@ -98,7 +98,7 @@ public class RelatedListNavigation extends DBAccess {
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
 		String relatedTableName = portal.get_table_used("" /* not relevant */);
-		Field relatedPrimaryKey = getPrimaryKeyFieldForTable(relatedTableName);
+		Field primaryKeyField = getPrimaryKeyFieldForTable(relatedTableName);
 
 		NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;
@@ -110,14 +110,14 @@ public class RelatedListNavigation extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			Value gdaRelatedPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
-					relatedPrimaryKey.get_glom_type(), primaryKeyValue);
+			Value gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
+					primaryKeyField.get_glom_type(), primaryKeyValue);
 
 			// Only create the query if we've created a Gda Value from the DataItem.
-			if (gdaRelatedPrimaryKeyValue != null) {
+			if (gdaPrimaryKeyValue != null) {
 
-				SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet, relatedPrimaryKey,
-						gdaRelatedPrimaryKeyValue);
+				SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKeyField,
+						gdaPrimaryKeyValue);
 				query = Glom.sqlbuilder_get_full_query(builder);
 
 				rs = st.executeQuery(query);
