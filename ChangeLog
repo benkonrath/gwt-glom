@@ -1,5 +1,14 @@
 2011-12-05  Ben Konrath  <ben@bagu.org>
 
+	Add type checking to navigation primary key value creation.
+
+	Create navigation primary key only if the expected type from the Glom
+	document matches the type returned by the SQL query.
+
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+
+2011-12-05  Ben Konrath  <ben@bagu.org>
+
 	Rename a couple of variables in RelatedListNavigation.
 
 	This is a rename-only refactor.

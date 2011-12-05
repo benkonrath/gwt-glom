@@ -27,6 +27,7 @@ import java.sql.Statement;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
+import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutItem_Field;
@@ -126,29 +127,42 @@ public class RelatedListNavigation extends DBAccess {
 				navigationRecord.setTableName(navigationTableName);
 
 				rs.next();
-				TypedDataItem tablePrimaryKeyValue = new TypedDataItem();
+				TypedDataItem navigationTablePrimaryKeyValue = new TypedDataItem();
 				ResultSetMetaData rsMetaData = rs.getMetaData();
-				switch (rsMetaData.getColumnType(1)) {
-				case java.sql.Types.NUMERIC:
-					tablePrimaryKeyValue.setNumber(rs.getDouble(1));
+				int queryReturnValueType = rsMetaData.getColumnType(1);
+				switch (navigationTablePrimaryKey.get_glom_type()) {
+				case TYPE_NUMERIC:
+					if (queryReturnValueType == java.sql.Types.NUMERIC) {
+						navigationTablePrimaryKeyValue.setNumber(rs.getDouble(1));
+					} else {
+						logNavigationTablePrimaryKeyTypeMismatchError(Field.glom_field_type.TYPE_NUMERIC,
+								rsMetaData.getColumnTypeName(1));
+					}
 					break;
-				case java.sql.Types.VARCHAR:
-					tablePrimaryKeyValue.setText(rs.getString(1));
+				case TYPE_TEXT:
+					if (queryReturnValueType == java.sql.Types.VARCHAR) {
+						navigationTablePrimaryKeyValue.setText(rs.getString(1));
+					} else {
+						logNavigationTablePrimaryKeyTypeMismatchError(Field.glom_field_type.TYPE_TEXT,
+								rsMetaData.getColumnTypeName(1));
+					}
 					break;
 				default:
-					Log.warn(documentID, tableName, "Unsupported java.sql.Type: " + rsMetaData.getColumnTypeName(1));
+					Log.error(documentID, tableName, "Unsupported java.sql.Type: " + rsMetaData.getColumnTypeName(1));
+					Log.error(documentID, tableName,
+							"The navigation table primary key value will not be created. This is a bug.");
 					break;
 				}
 
 				// The value is empty when there there is no record to match the key in the related table:
 				// For instance, if an invoice lines record mentions a product id, but the product does not exist in the
 				// products table.
-				if (tablePrimaryKeyValue.isEmpty()) {
+				if (navigationTablePrimaryKeyValue.isEmpty()) {
 					Log.info(documentID, tableName, "SQL query returned empty primary key for navigation to the "
 							+ navigationTableName + "table. Navigation may not work correctly");
 					navigationRecord.setPrimaryKeyValue(null);
 				} else {
-					navigationRecord.setPrimaryKeyValue(tablePrimaryKeyValue);
+					navigationRecord.setPrimaryKeyValue(navigationTablePrimaryKeyValue);
 				}
 			}
 		} catch (SQLException e) {
@@ -171,5 +185,12 @@ public class RelatedListNavigation extends DBAccess {
 		}
 
 		return navigationRecord;
+	}
+
+	private void logNavigationTablePrimaryKeyTypeMismatchError(glom_field_type glomType, String queryReturnValueTypeName) {
+		Log.error(documentID, tableName, "The expected type from the Glom document: " + glomType
+				+ " doesn't match the type returned by the SQL query: " + queryReturnValueTypeName + ".");
+		Log.error(documentID, tableName, "The navigation table primary key value will not be created. This is a bug.");
+
 	}
 }
