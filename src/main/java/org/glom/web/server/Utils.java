@@ -81,10 +81,7 @@ public class Utils {
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the data when the type doesn't match the type from the Glom document.
-				Log.error(documentID, tableName, "The data type: " + dataItem.getType()
-						+ " doesn't match the type from the Glom document: " + glomType + ".");
-				Log.error(documentID, tableName, "The data item is being ignored. This is a bug.");
-
+				logTypeMismatchError(documentID, tableName, glomType, dataItem);
 				gdaValue = new Value(); // an empty Value
 			}
 			break;
@@ -109,9 +106,7 @@ public class Utils {
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the primary key value when the type doesn't match the type from the Glom document.
-				Log.error(documentID, tableName, "The data type: " + dataItem.getType()
-						+ " doesn't match the expected type from the Glom document: " + glomType + ".");
-				Log.error(documentID, tableName, "The data item is being ignored. This is a bug.");
+				logTypeMismatchError(documentID, tableName, glomType, dataItem);
 				gdaValue = new Value(""); // an emtpy string Value
 			}
 			break;
@@ -126,4 +121,32 @@ public class Utils {
 
 		return gdaValue;
 	}
+
+	private static void logTypeMismatchError(String documentID, String tableName, glom_field_type glomType,
+			TypedDataItem dataItem) {
+
+		String dataItemString;
+		switch (dataItem.getType()) {
+		case TYPE_BOOLEAN:
+			dataItemString = Boolean.toString(dataItem.getBoolean());
+			break;
+		case TYPE_NUMERIC:
+			dataItemString = Double.toString(dataItem.getNumber());
+			break;
+		case TYPE_INVALID:
+			dataItemString = dataItem.getUnknown();
+			break;
+		case TYPE_TEXT:
+			dataItemString = dataItem.getText();
+			break;
+		default:
+			dataItemString = "";
+			break;
+		}
+
+		Log.error(documentID, tableName, "The data with type: " + dataItem.getType() + " and value: " + dataItemString
+				+ " doesn't match the expected type from the Glom document: " + glomType + ".");
+		Log.error(documentID, tableName, "The data item is being ignored. This is a bug.");
+	}
+
 }

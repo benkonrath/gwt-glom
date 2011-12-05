@@ -1,5 +1,12 @@
 2011-12-05  Ben Konrath  <ben@bagu.org>
 
+	Add string representation of TypedDataItem value to conversion error message.
+
+	* src/main/java/org/glom/web/server/Utils.java: Logging the error
+	message was extracted into its own method to avoid duplication.
+
+2011-12-05  Ben Konrath  <ben@bagu.org>
+
 	Add type checking to navigation primary key value creation.
 
 	Create navigation primary key only if the expected type from the Glom
