@@ -346,13 +346,9 @@ final class ConfiguredDocument {
 		}
 
 		// set the expected result size for list view tables
-		LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(libglomLayoutGroup);
-		if (libglomLayoutItemPortal == null) {
-			// libglomLayoutGroup is a list view
-			ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
-					libglomLayoutGroup);
-			layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
-		}
+		ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
+				libglomLayoutGroup);
+		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
 
 		// Set the primary key index for the table
 		if (primaryKeyIndex < 0) {

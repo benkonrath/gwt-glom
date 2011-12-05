@@ -1,5 +1,14 @@
 2011-12-05  Ben Konrath  <ben@bagu.org>
 
+	Remove check for LayoutItem_Portal in list table method.
+
+	This check is no longer necessary because the method isn't being used
+	to create the LayoutItemPortal DTO.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+
+2011-12-05  Ben Konrath  <ben@bagu.org>
+
 	Properly support related list navigation.
 
 	Navigation from the "Repository Analyzer -> Package Scans ->
