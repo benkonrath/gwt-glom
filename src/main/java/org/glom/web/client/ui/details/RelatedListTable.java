@@ -62,7 +62,7 @@ public class RelatedListTable extends ListTable {
 	private final static int expectedHeight = initializeExepectedHeight();
 
 	public RelatedListTable(String documentID, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
-			String openButtonLabel, OpenButtonCell openButtonCell) {
+			OpenButtonCell openButtonCell) {
 
 		super(documentID);
 
@@ -71,7 +71,7 @@ public class RelatedListTable extends ListTable {
 		this.foreignKeyValue = foreignKeyValue;
 		this.relationshipName = layoutItemPortal.getName();
 
-		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, openButtonLabel, openButtonCell);
+		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, "Open", openButtonCell);
 
 		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want
 		// the table to overflow it's container. Browsers will make columns with equal widths since we're currently not

@@ -48,10 +48,9 @@ public class ListViewTable extends ListTable {
 
 	private int numNonEmptyRows = 0;
 
-	public ListViewTable(String documentID, LayoutGroup layoutGroup, String navigationButtonLabel,
-			OpenButtonCell navigationButtonCell) {
+	public ListViewTable(String documentID, LayoutGroup layoutGroup, OpenButtonCell navigationButtonCell) {
 		super(documentID);
-		createCellTable(layoutGroup, MAX_TABLE_ROWS, navigationButtonLabel, navigationButtonCell);
+		createCellTable(layoutGroup, MAX_TABLE_ROWS, "Details", navigationButtonCell);
 	}
 
 	/*

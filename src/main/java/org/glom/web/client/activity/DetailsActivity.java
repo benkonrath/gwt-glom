@@ -224,7 +224,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 						TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getType(), data[i]);
 
 						RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-								foreignKeyValue, "Open", new RelatedListOpenButtonCell(layoutItemPortal.getName()));
+								foreignKeyValue, new RelatedListOpenButtonCell(layoutItemPortal.getName()));
 
 						if (!layoutItemPortal.getAddNavigation()
 								|| layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {

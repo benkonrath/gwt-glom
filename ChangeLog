@@ -1,5 +1,14 @@
 2011-12-12  Ben Konrath <ben@bagu.org>
 
+	Remove unnecessary String argument in RelatedListTable and ListViewTable.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+
+2011-12-12  Ben Konrath <ben@bagu.org>
+
 	Update variable names and comments.
 
 	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:

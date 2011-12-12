@@ -85,8 +85,8 @@ public class ListViewImpl extends Composite implements ListView {
 
 		mainPanel.clear();
 
-		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup, "Details", new DetailsButtonCell(
-				documentID, layoutGroup.getTableName()));
+		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup, new DetailsButtonCell(documentID,
+				layoutGroup.getTableName()));
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {
 			// Set the table row count to the minimum row count if the data row count is less than or equal to
