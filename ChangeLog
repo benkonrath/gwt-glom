@@ -1,5 +1,12 @@
 2011-12-12  Ben Konrath <ben@bagu.org>
 
+	Update variable names and comments.
+
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+
+2011-12-12  Ben Konrath <ben@bagu.org>
+
 	Properly initialize numNonEmptyRows variable to zero.
 
 	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:

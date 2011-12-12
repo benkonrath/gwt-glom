@@ -51,8 +51,9 @@ import com.google.gwt.view.client.RowCountChangeEvent;
  */
 public class RelatedListTable extends ListTable {
 
-	private static final int NUM_VISIBLE_ROWS = 5;
-	private static final int MIN_NUM_VISIBLE_ROWS = NUM_VISIBLE_ROWS;
+	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
+	private static final int MAX_TABLE_ROWS = 5;
+	private static final int MIN_TABLE_ROWS = MAX_TABLE_ROWS;
 
 	private TypedDataItem foreignKeyValue;
 	private String relationshipName;
@@ -70,7 +71,7 @@ public class RelatedListTable extends ListTable {
 		this.foreignKeyValue = foreignKeyValue;
 		this.relationshipName = layoutItemPortal.getName();
 
-		createCellTable(layoutItemPortal, NUM_VISIBLE_ROWS, openButtonLabel, openButtonCell);
+		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, openButtonLabel, openButtonCell);
 
 		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want
 		// the table to overflow it's container. Browsers will make columns with equal widths since we're currently not
@@ -104,7 +105,7 @@ public class RelatedListTable extends ListTable {
 						// keep track of the number of non-empty rows (rows with data)
 						numNonEmptyRows = result.size();
 						// Add empty rows if required.
-						int numEmptyRows = MIN_NUM_VISIBLE_ROWS - numNonEmptyRows;
+						int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
 						for (int i = 0; i < numEmptyRows; i++) {
 							// A row that has one null item will be rendered as an empty row.
 							result.add(new DataItem[1]);
@@ -148,7 +149,7 @@ public class RelatedListTable extends ListTable {
 	 */
 	@Override
 	public int getMinNumVisibleRows() {
-		return MIN_NUM_VISIBLE_ROWS;
+		return MIN_TABLE_ROWS;
 	}
 
 	/*
@@ -179,7 +180,7 @@ public class RelatedListTable extends ListTable {
 		SafeHtmlBuilder tableBuilder = new SafeHtmlBuilder();
 		tableBuilder.append(SafeHtmlUtils
 				.fromSafeConstant("<table class=\"data-list\"><thead><tr><th>TH</th><th>BH</th></tr></thead><tbody>"));
-		for (int i = 0; i < NUM_VISIBLE_ROWS; i++) {
+		for (int i = 0; i < MAX_TABLE_ROWS; i++) {
 			tableBuilder.append(SafeHtmlUtils
 					.fromSafeConstant("<tr><td>T</td><td><button type=\"button\">B</button></td></tr>"));
 		}

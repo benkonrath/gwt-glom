@@ -42,15 +42,16 @@ import com.google.gwt.view.client.RowCountChangeEvent;
  */
 public class ListViewTable extends ListTable {
 
-	private static final int NUM_VISIBLE_ROWS = 15;
-	private static final int MIN_NUM_VISIBLE_ROWS = 10;
+	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
+	private static final int MAX_TABLE_ROWS = 15;
+	private static final int MIN_TABLE_ROWS = 10;
 
 	private int numNonEmptyRows = 0;
 
 	public ListViewTable(String documentID, LayoutGroup layoutGroup, String navigationButtonLabel,
 			OpenButtonCell navigationButtonCell) {
 		super(documentID);
-		createCellTable(layoutGroup, NUM_VISIBLE_ROWS, navigationButtonLabel, navigationButtonCell);
+		createCellTable(layoutGroup, MAX_TABLE_ROWS, navigationButtonLabel, navigationButtonCell);
 	}
 
 	/*
@@ -79,7 +80,7 @@ public class ListViewTable extends ListTable {
 						numNonEmptyRows = result.size();
 
 						// Add empty rows if required.
-						int numEmptyRows = MIN_NUM_VISIBLE_ROWS - numNonEmptyRows;
+						int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
 						for (int i = 0; i < numEmptyRows; i++) {
 							// A row that has one null item will be rendered as an empty row.
 							result.add(new DataItem[1]);
@@ -122,7 +123,7 @@ public class ListViewTable extends ListTable {
 	 */
 	@Override
 	public int getMinNumVisibleRows() {
-		return MIN_NUM_VISIBLE_ROWS;
+		return MIN_TABLE_ROWS;
 	}
 
 	/*
