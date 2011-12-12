@@ -56,7 +56,7 @@ public class RelatedListTable extends ListTable {
 
 	private TypedDataItem foreignKeyValue;
 	private String relationshipName;
-	private int numNonEmptyRows = MIN_NUM_VISIBLE_ROWS;
+	private int numNonEmptyRows = 0;
 
 	private final static int expectedHeight = initializeExepectedHeight();
 

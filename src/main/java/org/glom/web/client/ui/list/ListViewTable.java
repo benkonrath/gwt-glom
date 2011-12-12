@@ -45,7 +45,7 @@ public class ListViewTable extends ListTable {
 	private static final int NUM_VISIBLE_ROWS = 15;
 	private static final int MIN_NUM_VISIBLE_ROWS = 10;
 
-	private int numNonEmptyRows = MIN_NUM_VISIBLE_ROWS;
+	private int numNonEmptyRows = 0;
 
 	public ListViewTable(String documentID, LayoutGroup layoutGroup, String navigationButtonLabel,
 			OpenButtonCell navigationButtonCell) {
