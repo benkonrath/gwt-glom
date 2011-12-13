@@ -20,7 +20,7 @@
 package org.glom.web.client.ui;
 
 import org.glom.web.client.place.DetailsPlace;
-import org.glom.web.client.ui.cell.OpenButtonCell;
+import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.list.ListViewTable;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -36,11 +36,11 @@ public class ListViewImpl extends Composite implements ListView {
 	/*
 	 * Cell renderer for Details open buttons.
 	 */
-	private class DetailsButtonCell extends OpenButtonCell {
+	private class ListViewNavigationButtonCell extends NavigationButtonCell {
 		private String documentID;
 		private String tableName;
 
-		public DetailsButtonCell(String documentID, String tableName) {
+		public ListViewNavigationButtonCell(String documentID, String tableName) {
 			this.documentID = documentID;
 			this.tableName = tableName;
 		}
@@ -85,7 +85,7 @@ public class ListViewImpl extends Composite implements ListView {
 
 		mainPanel.clear();
 
-		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup, new DetailsButtonCell(documentID,
+		ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup, new ListViewNavigationButtonCell(documentID,
 				layoutGroup.getTableName()));
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {

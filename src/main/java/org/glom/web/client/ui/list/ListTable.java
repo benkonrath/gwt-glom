@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.client.Utils;
 import org.glom.web.client.ui.cell.BooleanCell;
 import org.glom.web.client.ui.cell.NumericCell;
-import org.glom.web.client.ui.cell.OpenButtonCell;
+import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.cell.TextCell;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
@@ -91,7 +91,7 @@ public abstract class ListTable extends Composite {
 	protected String tableName;
 	protected CellTable<DataItem[]> cellTable;
 	protected EventBus eventBus;
-	Column<DataItem[], String> openButtonColumn;
+	Column<DataItem[], String> navigationButtonColumn;
 
 	abstract protected AbstractDataProvider<DataItem[]> getDataProvider();
 
@@ -104,8 +104,8 @@ public abstract class ListTable extends Composite {
 		this.documentID = documentID;
 	}
 
-	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows, String openButtonLabel,
-			OpenButtonCell openButtonCell) {
+	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows, String navigationButtonLabel,
+			NavigationButtonCell navigationButtonCell) {
 		tableName = layoutGroup.getTableName();
 		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 
@@ -143,7 +143,7 @@ public abstract class ListTable extends Composite {
 		}
 
 		// add the navigation buttons as the last column
-		addOpenButtonColumn(openButtonLabel, openButtonCell);
+		addNavigationButtonColumn(navigationButtonLabel, navigationButtonCell);
 
 		// create and set the data provider
 		AbstractDataProvider<DataItem[]> dataProvider = getDataProvider();
@@ -243,23 +243,23 @@ public abstract class ListTable extends Composite {
 		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
 
-	private void addOpenButtonColumn(final String openButtonLabel, OpenButtonCell openButtonCell) {
+	private void addNavigationButtonColumn(final String navigationButtonLabel, NavigationButtonCell navigationButtonCell) {
 
-		openButtonColumn = new Column<DataItem[], String>(openButtonCell) {
+		navigationButtonColumn = new Column<DataItem[], String>(navigationButtonCell) {
 			@Override
 			public String getValue(DataItem[] row) {
 				if (row.length == 1 && row[0] == null)
 					// an empty row
 					return null;
-				return openButtonLabel;
+				return navigationButtonLabel;
 			}
 		};
 
 		// Firefox, Chrome, and Safari only support the span and width attributes of the col element so we need to set
 		// the alignment with code
-		openButtonColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		navigationButtonColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-		cellTable.addColumn(openButtonColumn, "");
+		cellTable.addColumn(navigationButtonColumn, "");
 
 		// the style name for the details column is set on the col element
 		cellTable.addColumnStyleName(cellTable.getColumnCount() - 1, "details");
@@ -274,8 +274,8 @@ public abstract class ListTable extends Composite {
 	}
 
 	public void hideNavigationButtons() {
-		if (openButtonColumn != null) {
-			cellTable.setColumnWidth(openButtonColumn, 0, Unit.PX);
+		if (navigationButtonColumn != null) {
+			cellTable.setColumnWidth(navigationButtonColumn, 0, Unit.PX);
 		}
 	}
 

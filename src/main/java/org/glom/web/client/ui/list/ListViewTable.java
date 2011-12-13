@@ -22,7 +22,7 @@ package org.glom.web.client.ui.list;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
-import org.glom.web.client.ui.cell.OpenButtonCell;
+import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -48,7 +48,7 @@ public class ListViewTable extends ListTable {
 
 	private int numNonEmptyRows = 0;
 
-	public ListViewTable(String documentID, LayoutGroup layoutGroup, OpenButtonCell navigationButtonCell) {
+	public ListViewTable(String documentID, LayoutGroup layoutGroup, NavigationButtonCell navigationButtonCell) {
 		super(documentID);
 		createCellTable(layoutGroup, MAX_TABLE_ROWS, "Details", navigationButtonCell);
 	}

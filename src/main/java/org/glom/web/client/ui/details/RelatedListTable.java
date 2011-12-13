@@ -22,7 +22,7 @@ package org.glom.web.client.ui.details;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
-import org.glom.web.client.ui.cell.OpenButtonCell;
+import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.list.ListTable;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
@@ -62,7 +62,7 @@ public class RelatedListTable extends ListTable {
 	private final static int expectedHeight = initializeExepectedHeight();
 
 	public RelatedListTable(String documentID, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
-			OpenButtonCell openButtonCell) {
+			NavigationButtonCell navigationButtonCell) {
 
 		super(documentID);
 
@@ -71,7 +71,7 @@ public class RelatedListTable extends ListTable {
 		this.foreignKeyValue = foreignKeyValue;
 		this.relationshipName = layoutItemPortal.getName();
 
-		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, "Open", openButtonCell);
+		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, "Open", navigationButtonCell);
 
 		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want
 		// the table to overflow it's container. Browsers will make columns with equal widths since we're currently not

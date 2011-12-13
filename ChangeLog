@@ -1,3 +1,20 @@
+2011-12-13  Ben Konrath <ben@bagu.org>
+
+	Change OpenButton nomenclature to NavigationButton.
+
+	Using NavigtionButton makes things more generic. Classes, methods and
+	variables have been changed.
+
+	This is a rename-only refactor.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/cell/NavigationButtonCell.java:
+	Renamed from OpenButtonCell.
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+
 2011-12-12  Ben Konrath <ben@bagu.org>
 
 	Remove unnecessary String argument in RelatedListTable and ListViewTable.

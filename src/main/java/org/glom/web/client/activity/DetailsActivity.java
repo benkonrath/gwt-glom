@@ -29,7 +29,7 @@ import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.ui.DetailsView;
-import org.glom.web.client.ui.cell.OpenButtonCell;
+import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.client.ui.details.RelatedListTable;
@@ -61,11 +61,11 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	 * Cell renderer for the related list open buttons. Normally this wouldn't be in an Activity class but since it's
 	 * making a call to the server it makes sense for it to be here.
 	 */
-	private class RelatedListOpenButtonCell extends OpenButtonCell {
+	private class RelatedListNavigationButtonCell extends NavigationButtonCell {
 
 		private String relationshipName;
 
-		public RelatedListOpenButtonCell(String relationshipName) {
+		public RelatedListNavigationButtonCell(String relationshipName) {
 			this.relationshipName = relationshipName;
 		}
 
@@ -224,7 +224,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 						TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getType(), data[i]);
 
 						RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-								foreignKeyValue, new RelatedListOpenButtonCell(layoutItemPortal.getName()));
+								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getName()));
 
 						if (!layoutItemPortal.getAddNavigation()
 								|| layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {

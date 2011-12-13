@@ -31,7 +31,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class OpenButtonCell extends ButtonCell {
+public class NavigationButtonCell extends ButtonCell {
 	/*
 	 * (non-Javadoc)
 	 * 
