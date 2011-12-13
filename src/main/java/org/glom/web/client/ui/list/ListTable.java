@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Openismus GmbH
+ * Copyright (c) 2011 Ben Konrath <ben@bagu.org>
  *
  * This file is part of GWT-Glom.
  *
@@ -23,8 +24,8 @@ import java.util.ArrayList;
 
 import org.glom.web.client.Utils;
 import org.glom.web.client.ui.cell.BooleanCell;
-import org.glom.web.client.ui.cell.NumericCell;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
+import org.glom.web.client.ui.cell.NumericCell;
 import org.glom.web.client.ui.cell.TextCell;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
@@ -34,9 +35,13 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -45,6 +50,7 @@ import com.google.gwt.user.cellview.client.SafeHtmlHeader;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.view.client.AbstractDataProvider;
@@ -288,5 +294,47 @@ public abstract class ListTable extends Composite {
 	public abstract int getMinNumVisibleRows();
 
 	public abstract int getNumNonEmptyRows();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.google.gwt.user.client.ui.Widget#onLoad()
+	 */
+	@Override
+	protected void onLoad() {
+
+		/*
+		 * Set the width of the navigation button column to be as small as possible.
+		 */
+		// The navigationButtonColumn width will be null if it hasn't been set. This indicates that the column width
+		// hasn't been disabled with the hideNavigationButtons() method or been set with this method. The width of the
+		// navigation button column shouldn't be changed once it's set.
+		if (navigationButtonColumn != null && cellTable.getColumnWidth(navigationButtonColumn) == null) {
+
+			// Use the NavigationButtonCell to get the button HTML and find the width. I'm doing this because the
+			// CellTable widget is highly dynamic and there's no way to guarantee that we can access the navigation
+			// button HTML by using the actual CellTable.
+			String buttonLabel = navigationButtonColumn.getValue(new DataItem[2]); // a hack to get the button label
+			SafeHtmlBuilder buttonBuilder = new SafeHtmlBuilder();
+			navigationButtonColumn.getCell().render(null, buttonLabel, buttonBuilder);
+			Element navigationButton = new HTML(buttonBuilder.toSafeHtml()).getElement().getFirstChildElement();
+
+			// Calculate the width similar to Utils.getWidgetHeight().
+			Document doc = Document.get();
+			navigationButton.getStyle().setVisibility(Visibility.HIDDEN);
+			doc.getBody().appendChild(navigationButton);
+			int buttonWidth = navigationButton.getOffsetWidth();
+
+			// remove the div from the from the document
+			doc.getBody().removeChild(navigationButton);
+			navigationButton = null;
+
+			// set the width
+			if (buttonWidth > 0) {
+				cellTable.setColumnWidth(navigationButtonColumn, buttonWidth + 6, Unit.PX);
+				navigationButtonColumn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			}
+		}
+	}
 
 }
