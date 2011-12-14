@@ -46,13 +46,17 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent;
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent.LoadingState;
 import com.google.gwt.user.cellview.client.SafeHtmlHeader;
 import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 
@@ -98,6 +102,7 @@ public abstract class ListTable extends Composite {
 	protected CellTable<DataItem[]> cellTable;
 	protected EventBus eventBus;
 	Column<DataItem[], String> navigationButtonColumn;
+	private int cellTableBodyHeight = 0;
 
 	abstract protected AbstractDataProvider<DataItem[]> getDataProvider();
 
@@ -162,6 +167,63 @@ public abstract class ListTable extends Composite {
 		pager.setDisplay(cellTable);
 		mainPanel.add(cellTable);
 		mainPanel.add(pager);
+
+		/*
+		 * Update the height of the loading indicator widget to match the body of the CellTable so that the pager widget
+		 * doesn't bounce up and down while paging. This code also ensures that loading indicator GIF is in the centre
+		 * of the table.
+		 * 
+		 * TODO: Make this work with related lists in Notebooks. These related list tables will have the original bouncy
+		 * behaviour because CellTable.getBodyHeight() of a related list table in an unselected notebook tab returns 0.
+		 * 
+		 * TODO: Fix the bounce when paging to the first or last page that doesn't fall on a natural page boundary. This
+		 * happens in the first and last page when dataSize % pageSize != 0.
+		 */
+		cellTable.addLoadingStateChangeHandler(new LoadingStateChangeEvent.Handler() {
+
+			@Override
+			public void onLoadingStateChanged(LoadingStateChangeEvent event) {
+				// LoadingState.LOADED means the data has been received but not necessarily rendered.
+				if (event.getLoadingState() == LoadingState.LOADED) {
+					new Timer() {
+
+						@Override
+						public void run() {
+							if (cellTable.isAttached()) {
+								int bodyHeight = cellTable.getBodyHeight();
+								/*
+								 * Modify the indicator widget only if body height is bigger than the body height that
+								 * has already been set. This is just a safety check for the case where the timer isn't
+								 * long enough and the body height is calculated to be smaller than its full size. In
+								 * practice this is not expected to happen.
+								 * 
+								 * Since cellTableBodyHeight is initialised to 0, the indicator widget will not be
+								 * modified when the body height cannot be calculated (e.g. when a related list table is
+								 * in an unselected notebook tab).
+								 */
+								if (bodyHeight > cellTableBodyHeight) {
+									Widget loadingIndicator = cellTable.getLoadingIndicator();
+
+									// Set the margin of the parent div to zero.
+									Element parent = loadingIndicator.getElement().getParentElement();
+									parent.getStyle().setMargin(0, Unit.PX);
+
+									// Set the height of the table cell that holds the loading indicator GIF.
+									Element cell = parent.getParentElement().getParentElement().getParentElement();
+									cell.getStyle().setPadding(0, Unit.PX);
+									cell.getStyle().setHeight(bodyHeight, Unit.PX);
+
+									// save the new body height
+									cellTableBodyHeight = bodyHeight;
+
+								}
+							}
+						}
+					}.schedule(200); // 200 ms should be enough
+				}
+
+			}
+		});
 
 		// initialize composite widget
 		initWidget(mainPanel);

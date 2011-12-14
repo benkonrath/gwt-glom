@@ -1,5 +1,14 @@
 2011-12-14  Ben Konrath <ben@bagu.org>
 
+	Fix bouncy CellTable while paging.
+
+	This doesn't currently work with related list tables in unselected
+	Notebook tabs.
+
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java
+
+2011-12-14  Ben Konrath <ben@bagu.org>
+
 	Revamp the appearance of the document selection page.
 
 	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
