@@ -1,5 +1,11 @@
 2011-12-14  Ben Konrath <ben@bagu.org>
 
+	Specify the font for document selection links.
+
+	* src/main/webapp/style.css:
+
+2011-12-14  Ben Konrath <ben@bagu.org>
+
 	Fix bouncy CellTable while paging.
 
 	This doesn't currently work with related list tables in unselected
