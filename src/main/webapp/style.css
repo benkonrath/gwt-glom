@@ -245,3 +245,26 @@ table.pager td
 {
 	padding: 4px;
 }
+
+#documentSelectionPanel
+{
+	border-color: #777777;
+	border-radius: 6px;
+	border-style: solid;
+	border-width: 2px;
+	margin: 3em auto;
+	padding: 3em 0em 3em 3em;
+	width: 28em;
+}
+
+a.documentLink
+{
+	font-size: medium;
+	font-weight: bold;
+	margin-left: 1em;
+}
+
+table.documentLinkTable td
+{
+	padding-bottom: 0.25em;
+}

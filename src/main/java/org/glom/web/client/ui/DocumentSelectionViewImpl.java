@@ -28,6 +28,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -40,14 +41,19 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 	private static DocumentSelectionViewImplUiBinder uiBinder = GWT.create(DocumentSelectionViewImplUiBinder.class);
 	@UiField
 	VerticalPanel documentLinks;
+	@UiField
+	HTMLPanel documentSelectionPanel;
 	private Presenter presenter;
 
 	public DocumentSelectionViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		documentSelectionPanel.getElement().setId("documentSelectionPanel");
+		documentLinks.addStyleName("documentLinkTable");
 	}
 
 	public void addDocumentLink(final String documentID, final String title) {
 		Anchor link = new Anchor(title);
+		link.setStyleName("documentLink");
 		link.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

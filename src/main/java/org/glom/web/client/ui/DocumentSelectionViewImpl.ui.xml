@@ -7,26 +7,20 @@
 		font-size: 2em;
 		font-weight: bold;
 		color: #777777;
-		margin: 40px 0px 20px;
-		text-align: center;
-		}
-
-		.links {
-		font-size: 2em;
-		font-weight: bold;
-		color: #777777;
+		margin: 0 0 1em 0;
+		text-align: left;
 		}
 
 		.info {
-		font-size: 1em;
+		font-size: x-small;
 		font-weight: bold;
-		color: #777777;
-		margin: 20px 0px 40px;
+		color: #525252;
+		margin: 3em 0 0 0;
 		}
 
 	</ui:style>
 
-	<g:HTMLPanel>
+	<g:HTMLPanel ui:field="documentSelectionPanel">
 
 		<div class="{style.title}">
 			<img style="vertical-align:middle;" src="glom.png" />
@@ -34,14 +28,12 @@
 		</div>
 
 		<div>
-			<g:VerticalPanel addStyleNames="{style.links}" ui:field="documentLinks" verticalAlignment="ALIGN_MIDDLE" spacing="10" />
+			<g:VerticalPanel ui:field="documentLinks" verticalAlignment="ALIGN_MIDDLE" spacing="10" />
 		</div>
 
 		<div class="{style.info}">
-			You can build and run Online Glom by following
-			<a href="http://www.glom.org/wiki/index.php?title=Development/OnlineGlom">these instructions</a>
-			.
-		</div>
+			Instructions for building Online Glom can be found on the
+			<a href="http://www.glom.org/wiki/index.php?title=Development/OnlineGlom">Glom wiki</a>.</div>
 
 	</g:HTMLPanel>
 </ui:UiBinder>
