@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Openismus GmbH
+ * Copyright (C) 2011 Ben Konrath <ben@bagu.org>
  *
  * This file is part of GWT-Glom.
  *
@@ -19,16 +20,23 @@
 
 package org.glom.web.client.ui.details;
 
+import java.io.UnsupportedEncodingException;
+
 import org.glom.web.client.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutItemField;
 
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
@@ -147,8 +155,46 @@ public class DetailsCell extends Composite {
 			detailsData.add(detailsLabel);
 			break;
 		case TYPE_TEXT:
-			detailsLabel.setText(dataItem.getText());
-			detailsData.add(detailsLabel);
+			String text = dataItem.getText();
+			// Deal with multiline text differently than single line text.
+			if (layoutItemField.getFormatting().getTextFormatMultilineHeightLines() > 1) {
+				detailsData.getElement().getStyle().setOverflow(Overflow.AUTO);
+				try {
+					// Convert '\n' to <br/> escaping the data so that it won't be rendered as HTML.
+					String utf8NewLine = new String(new byte[] { 0x0A }, "UTF8");
+					String[] lines = text.split(utf8NewLine);
+					SafeHtmlBuilder sb = new SafeHtmlBuilder();
+					for (String line : lines) {
+						sb.append(SafeHtmlUtils.fromString(line));
+						sb.append(SafeHtmlUtils.fromSafeConstant("<br/>"));
+					}
+
+					// Manually add the HTML to the detailsData container.
+					DivElement div = Document.get().createDivElement();
+					div.setInnerHTML(sb.toSafeHtml().asString());
+					detailsData.getElement().appendChild(div);
+
+					// Expand the width of detailsData if a vertical scrollbar has been placed on the inside of the
+					// detailsData container.
+					int scrollBarWidth = detailsData.getOffsetWidth() - div.getOffsetWidth();
+					if (scrollBarWidth > 0) {
+						// A vertical scrollbar is on the inside.
+						detailsData.setWidth((detailsData.getOffsetWidth() + scrollBarWidth + 4) + "px");
+					}
+
+					// TODO Add horizontal scroll bars when detailsData expands beyond its container.
+
+				} catch (UnsupportedEncodingException e) {
+					// If the new String() line throws an exception, don't try to add the <br/> tags. This is unlikely
+					// to happen but we should do something if it does.
+					detailsLabel.setText(text);
+					detailsData.add(detailsLabel);
+				}
+
+			} else {
+				detailsLabel.setText(text);
+				detailsData.add(detailsLabel);
+			}
 		default:
 			break;
 		}

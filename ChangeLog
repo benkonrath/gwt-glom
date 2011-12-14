@@ -1,5 +1,13 @@
 2011-12-14  Ben Konrath <ben@bagu.org>
 
+	Replace \n with <br/> for multiline text in the details view.
+
+	Vertical scrollbars are added when needed as well.
+
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+
+2011-12-14  Ben Konrath <ben@bagu.org>
+
 	Specify the font for document selection links.
 
 	* src/main/webapp/style.css:
