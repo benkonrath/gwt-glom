@@ -80,7 +80,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public void init() throws ServletException {
 
 		// All of the initialisation code is surrounded by a try/catch block so that the servlet can be in an
-		// initialised state and the error message can be retrived by the client code.
+		// initialised state and the error message can be retrieved by the client code.
 		try {
 			// Find the configuration file. See this thread for background info:
 			// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
@@ -134,8 +134,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				throw new Exception(errorMessage);
 			}
 
-			// intitize libglom
-			Glom.libglom_init(); // can throw an UnsatisfiedLinkError exception
+			// This initialisation method can throw an UnsatisfiedLinkError if the java-libglom native library isn't
+			// available. But since we're checking for the error condition above, the UnsatisfiedLinkError will never be
+			// thrown.
+			Glom.libglom_init();
 
 			// Allow a fake connection, so sqlbuilder_get_full_query() can work:
 			Glom.set_fake_connection();
