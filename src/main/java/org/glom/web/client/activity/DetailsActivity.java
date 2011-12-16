@@ -87,7 +87,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 				@Override
 				public void onSuccess(NavigationRecord result) {
-					processNavgiation(result.getTableName(), result.getPrimaryKeyValue());
+					processNavigation(result.getTableName(), result.getPrimaryKeyValue());
 				}
 
 			};
@@ -184,7 +184,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 					public void onClick(ClickEvent event) {
 						TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getType(),
 								detailsCell.getData());
-						processNavgiation(layoutItemField.getNavigationTableName(), primaryKeyItem);
+						processNavigation(layoutItemField.getNavigationTableName(), primaryKeyItem);
 
 					}
 				});
@@ -290,7 +290,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	 * Process a navigation by either doing: nothing if the navigation isn't valid, refreshing the data for the current
 	 * table with a new primary key, or going to a new table with a new primary key.
 	 */
-	private void processNavgiation(String navigationTableName, TypedDataItem navigationPrimaryKeyValue) {
+	private void processNavigation(String navigationTableName, TypedDataItem navigationPrimaryKeyValue) {
 
 		// Ensure the new table name is valid.
 		String newTableName;

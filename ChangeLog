@@ -1,5 +1,12 @@
 2011-12-16  Murray Cumming  <murrayc@murrayc.com>
 
+	Fix a Navgiation->Navigation typo in the code.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	Rename processNavgiation() to processNavigation().
+
+2011-12-16  Murray Cumming  <murrayc@murrayc.com>
+
 	Fix a seperator->separator typo in the code.
 
 	* src/main/java/org/glom/web/client/place/DetailsPlace.java
