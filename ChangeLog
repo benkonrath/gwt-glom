@@ -1,3 +1,12 @@
+2011-12-16  Murray Cumming  <murrayc@murrayc.com>
+
+	Fix a seperator->separator typo in the code.
+
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java
+	* src/main/java/org/glom/web/client/place/ListPlace.java: Just a 
+	misspelling.
+
 2011-12-15  Ben Konrath <ben@bagu.org>
 
 	Cleanup some comments.

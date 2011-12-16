@@ -33,12 +33,12 @@ public class ListPlace extends HasSelectableTablePlace {
 
 		@Override
 		public String getToken(ListPlace place) {
-			return documentKey + place.getDocumentID() + seperator + tableKey + place.getTableName();
+			return documentKey + place.getDocumentID() + separator + tableKey + place.getTableName();
 		}
 
 		@Override
 		public ListPlace getPlace(String token) {
-			String[] tokenArray = token.split(seperator);
+			String[] tokenArray = token.split(separator);
 
 			if (tokenArray.length != 2)
 				return new ListPlace("", "");

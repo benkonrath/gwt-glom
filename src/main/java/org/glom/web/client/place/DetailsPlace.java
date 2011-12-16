@@ -95,7 +95,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				break;
 			}
 
-			return documentKey + place.getDocumentID() + seperator + tableKey + place.getTableName() + seperator
+			return documentKey + place.getDocumentID() + separator + tableKey + place.getTableName() + separator
 					+ primaryKeyValueKey + primaryKeyValueString;
 		}
 
@@ -109,7 +109,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 */
 		@Override
 		public DetailsPlace getPlace(String token) {
-			String[] tokenArray = token.split(seperator);
+			String[] tokenArray = token.split(separator);
 
 			// default empty values
 			String documentID = "", tableName = "";

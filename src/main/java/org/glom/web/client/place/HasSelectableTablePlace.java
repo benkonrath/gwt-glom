@@ -48,7 +48,7 @@ public abstract class HasSelectableTablePlace extends Place {
 	public static class Tokenizer {
 		protected final String documentKey = "document=";
 		protected final String tableKey = "table=";
-		protected final String seperator = "&";
+		protected final String separator = "&";
 	}
 
 }
