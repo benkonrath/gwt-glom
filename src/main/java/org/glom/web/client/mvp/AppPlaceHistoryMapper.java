@@ -33,7 +33,7 @@ import com.google.gwt.place.shared.WithTokenizers;
  * 
  * This code is mostly from AppPlaceHistoryMapper.java in the hellomvp GWT example:
  * 
- * https://code.google.com/webtoolkit/doc/2.2/DevGuideMvpActivitiesAndPlaces.html
+ * https://code.google.com/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
  */
 @WithTokenizers({ ListPlace.Tokenizer.class, DocumentSelectionPlace.Tokenizer.class, DetailsPlace.Tokenizer.class })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
