@@ -19,6 +19,8 @@
 
 package org.glom.web.client.place;
 
+import java.util.HashMap;
+
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
@@ -40,7 +42,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 	@Prefix("details")
 	public static class Tokenizer extends HasSelectableTablePlace.Tokenizer implements PlaceTokenizer<DetailsPlace> {
 
-		private final String primaryKeyValueKey = "value=";
+		private final String primaryKeyValueKey = "value";
 
 		/**
 		 * Creates the URL string that is shown in the browser. This is the bookmarked URL.
@@ -95,8 +97,11 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				break;
 			}
 
-			return documentKey + place.getDocumentID() + separator + tableKey + place.getTableName() + separator
-					+ primaryKeyValueKey + primaryKeyValueString;
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put(documentKey, place.getDocumentID());
+			params.put(tableKey, place.getTableName());
+			params.put(primaryKeyValueKey, primaryKeyValueString);
+			return buildParamsToken(params);
 		}
 
 		/**
@@ -109,38 +114,36 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 */
 		@Override
 		public DetailsPlace getPlace(String token) {
-			String[] tokenArray = token.split(separator);
-
 			// default empty values
-			String documentID = "", tableName = "";
+			String documentID = "", tableName = "", primaryKeyValueString ="";
 			TypedDataItem primaryKeyValue = new TypedDataItem();
-
-			if (tokenArray.length != 3) {
-				// The URL string doesn't match what we're expecting. Just use the initial values for the details place.
-				// TODO Shouldn't this just go to the document selection place?
+			
+			HashMap<String, String> params = getTokenParams(token);
+			
+			if (params == null) {
 				return new DetailsPlace(documentID, tableName, primaryKeyValue);
 			}
-
-			// Get the document ID string.
-			// TODO else go to the document selection place?
-			if (documentKey.equals(tokenArray[0].substring(0, documentKey.length()))) {
-				documentID = tokenArray[0].substring(documentKey.length());
+	                
+			if (params.get(documentKey) != null) {
+				documentID = params.get(documentKey);
+			}
+	        
+			if (params.get(tableKey) != null) {
+				tableName = params.get(tableKey);
 			}
 
-			// Get the table name string.
-			// An empty table name will load the default table so it's ok if this key isn't found
-			if (tableKey.equals(tokenArray[1].substring(0, tableKey.length()))) {
-				tableName = tokenArray[1].substring(tableKey.length());
-			}
-
-			// Get the primary key value.
-			if (primaryKeyValueKey.equals(tokenArray[2].substring(0, primaryKeyValueKey.length()))) {
-				// the text after the 'value='
-				String primaryKeyValueString = tokenArray[2].substring(primaryKeyValueKey.length());
+			if (params.get(primaryKeyValueKey) != null) {
+				primaryKeyValueString = params.get(primaryKeyValueKey);
 				// Set as unknown because the type of the primary key is not known at this point. A proper primary key
 				// value will be created using the type from the Glom document in the servlet.
 				primaryKeyValue.setUnknown(primaryKeyValueString);
+			}
 
+			
+			if ((documentID == "") || (tableName == "") || (primaryKeyValueString == "")) {
+				// The URL string doesn't match what we're expecting. Just use the initial values for the details place.
+				// TODO Shouldn't this just go to the document selection place?
+				return new DetailsPlace(documentID, tableName, primaryKeyValue);
 			}
 
 			return new DetailsPlace(documentID, tableName, primaryKeyValue);

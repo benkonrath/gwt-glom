@@ -19,6 +19,8 @@
 
 package org.glom.web.client.place;
 
+import java.util.HashMap;
+
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
@@ -33,24 +35,34 @@ public class ListPlace extends HasSelectableTablePlace {
 
 		@Override
 		public String getToken(ListPlace place) {
-			return documentKey + place.getDocumentID() + separator + tableKey + place.getTableName();
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put(documentKey, place.getDocumentID());
+			params.put(tableKey, place.getTableName());
+			return buildParamsToken(params);
 		}
 
 		@Override
 		public ListPlace getPlace(String token) {
-			String[] tokenArray = token.split(separator);
-
-			if (tokenArray.length != 2)
-				return new ListPlace("", "");
-
 			String documentID = "", tableName = "";
-
-			if (documentKey.equals(tokenArray[0].substring(0, documentKey.length()))) {
-				documentID = tokenArray[0].substring(documentKey.length());
+			
+			HashMap<String, String> params = getTokenParams(token);
+			
+			if (params == null) {
+				return new ListPlace("", "");
 			}
-
-			if (tableKey.equals(tokenArray[1].substring(0, tableKey.length()))) {
-				tableName = tokenArray[1].substring(tableKey.length());
+	                
+			if (params.get(documentKey) != null) {
+				documentID = params.get(documentKey);
+			}
+	        
+			if (params.get(tableKey) != null) {
+				tableName = params.get(tableKey);
+			}
+			
+			if ((documentID == "") || (tableName == "")) {
+				// The URL string doesn't match what we're expecting. Just use the initial values for the details place.
+				// TODO Shouldn't this just go to the document selection place?
+				return new ListPlace("", "");
 			}
 
 			return new ListPlace(documentID, tableName);

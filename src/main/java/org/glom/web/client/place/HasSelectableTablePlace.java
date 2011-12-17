@@ -19,6 +19,11 @@
 
 package org.glom.web.client.place;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.gwt.place.shared.Place;
 
 /**
@@ -46,9 +51,50 @@ public abstract class HasSelectableTablePlace extends Place {
 	}
 
 	public static class Tokenizer {
-		protected final String documentKey = "document=";
-		protected final String tableKey = "table=";
-		protected final String separator = "&";
+		protected final String documentKey = "document";
+		protected final String tableKey = "table";
+		private final String separator = "&";
+		private final String equals = "=";
+		
+		/** Get a HashMap of parameter names and values from the history token.
+		 * This can parse tokens built by buildParamsToken().
+		 * 
+		 * @param historyToken The historyToken provided to getPlace().
+		 * @return A HasMap of names to values.
+		 */
+		protected HashMap<String, String> getTokenParams(final String historyToken) {
+			final String[] arStr = historyToken.substring(0, historyToken.length()).split(separator);
+			final HashMap<String, String> params = new HashMap<String, String>();
+			for (int i = 0; i < arStr.length; i++) {
+				final String[] substr = arStr[i].split(equals);
+				params.put(substr[0], substr[1]);
+			}
+
+			return params;
+		}
+		
+		/** Build a history token based on a HashMap of parameter names and values.
+		 * This can later be parsed by getTokenParams().
+		 * 
+		 * @param params A HashMap of names and values.
+		 * @return A history string for use by getToken() implementation.
+		 */
+		protected String buildParamsToken(final HashMap<String, String> params) {
+			String token = "";
+			for (Iterator<Entry<String, String>> it = params.entrySet().iterator(); it.hasNext();) {
+				Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
+			    String key = entry.getKey();
+			    String value = entry.getValue();
+			    
+			    if (token != "") {
+			    	token += separator;
+			    }
+			    
+			    token += key + equals + value;
+			}
+			
+			return token;
+		}
 	}
 
 }

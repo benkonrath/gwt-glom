@@ -1,3 +1,23 @@
+2011-12-17  Murray Cumming  <murrayc@murayc.com>
+
+	History token building/handling: Improve use of token parameters.
+
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java 
+	(HasSelectableTablePlace.Tokenizer): Add getTokenParams(String)
+	and buildParamsToken(HashMap), for use by derived classes.
+	Make the separator private because it is no longer be needed.
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java
+	(DetailsPlace.Tokenizer.getToken): Use buildParamsToken()
+	instead of manual string concatenation.
+	(DetailsPlace.Tokenizer.getPlace): Use getTokenParams() instead 
+	of hardcoded indices and awkward splitting code.
+	* src/main/java/org/glom/web/client/place/ListPlace.java
+	(ListPlace.Tokenizer.getToken): Use buildParamsToken()
+	instead of manual string concatenation.
+	(ListPlace.Tokenizer.getPlace): Use getTokenParams() instead 
+	of hardcoded indices and awkward splitting code.
+	This should fix bug #666420
+
 2011-12-16  Murray Cumming  <murrayc@murrayc.com>
 
 	Fix a Navgiation->Navigation typo in the code.
