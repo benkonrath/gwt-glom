@@ -67,7 +67,23 @@ public abstract class HasSelectableTablePlace extends Place {
 			final HashMap<String, String> params = new HashMap<String, String>();
 			for (int i = 0; i < arStr.length; i++) {
 				final String[] substr = arStr[i].split(equals);
-				params.put(substr[0], substr[1]);
+				if (substr.length != 2) {
+					continue;
+				}
+				
+				String key = "";
+				String value = "";
+				if(!substr[0].isEmpty()) {
+					key = substr[0];
+				}
+				
+				if(!substr[1].isEmpty()) {
+					value = substr[1];
+				} 
+
+				if(!key.isEmpty() && !value.isEmpty()) {
+					params.put(key, value);
+				}
 			}
 
 			return params;
@@ -85,6 +101,8 @@ public abstract class HasSelectableTablePlace extends Place {
 				Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
 			    String key = entry.getKey();
 			    String value = entry.getValue();
+			    if(key.isEmpty() || value.isEmpty())
+			    	continue;
 			    
 			    if (token != "") {
 			    	token += separator;

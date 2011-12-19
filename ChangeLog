@@ -1,3 +1,11 @@
+2011-12-19  Murray Cumming  <murrayc@murrayc.com>
+
+	Avoid a crash in parsing of token parameters.
+
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.j
+	ava: getTokenParams(): Do not crash if a parameter has a key but no 
+	value, and ignore parameters with neither.
+
 2011-12-17  Murray Cumming  <murrayc@murayc.com>
 
 	History token building/handling: Improve use of token parameters.
