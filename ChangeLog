@@ -1,3 +1,16 @@
+2011-12-20  Murray Cumming  <murrayc@murrayc.com>
+
+	Allow choosing the translation in the .properties file.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	init(): Read a glom.document.locale value from the configuration file 
+	and call Glom's TransatableItem::set_current_locale() method.
+	* src/main/resources/onlineglom.properties: Add a commented-out 
+	example of this new setting.
+
+	It would be better to add &lang=de_DE to the URL, but the current 
+	libglom API does not allow us to do this easily. I am working on that.
+
 2011-12-19  Murray Cumming  <murrayc@murrayc.com>
 
 	Avoid a crash in parsing of token parameters.

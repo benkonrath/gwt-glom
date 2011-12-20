@@ -32,6 +32,7 @@ import javax.servlet.ServletException;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
+import org.glom.libglom.TranslatableItem;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
@@ -55,7 +56,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	private static final String GLOM_FILE_EXTENSION = ".glom";
 
-	// convenience class to for dealing with the Online Glom configuration file
+	// convenience class for dealing with the Online Glom configuration file
 	private class OnlineGlomProperties extends Properties {
 		public String getKey(String value) {
 			for (String key : stringPropertyNames()) {
@@ -132,6 +133,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.";
 				Log.error(errorMessage);
 				throw new Exception(errorMessage);
+			}
+			
+			// Check for a specified default locale,
+			// for table titles, field titles, etc:
+			String localeID = config.getProperty("glom.document.locale").trim();
+			
+			if(!localeID.isEmpty()) {
+				TranslatableItem.set_current_locale(localeID);
 			}
 
 			// This initialisation method can throw an UnsatisfiedLinkError if the java-libglom native library isn't
