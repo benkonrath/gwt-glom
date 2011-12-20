@@ -1,5 +1,14 @@
 2011-12-20  Murray Cumming  <murrayc@murrayc.com>
 
+	Rename onlineglom.properties to onlineglom.properties.sample.
+
+	* src/main/resources/onlineglom.properties: Rename to:
+	* src/main/resources/onlineglom.properties.sample:
+	* src/main/resources/README: And add this file explaining that people
+	should rename it back when deploying.
+
+2011-12-20  Murray Cumming  <murrayc@murrayc.com>
+
 	Allow choosing the translation in the .properties file.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
