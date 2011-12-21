@@ -134,13 +134,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				Log.error(errorMessage);
 				throw new Exception(errorMessage);
 			}
-			
+
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
-			String localeID = config.getProperty("glom.document.locale").trim();
-			
-			if(!localeID.isEmpty()) {
-				TranslatableItem.set_current_locale(localeID);
+			String localeID = config.getProperty("glom.document.locale");
+
+			if (localeID != null && !localeID.isEmpty()) {
+				TranslatableItem.set_current_locale(localeID.trim());
 			}
 
 			// This initialisation method can throw an UnsatisfiedLinkError if the java-libglom native library isn't
@@ -266,6 +266,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public String getConfigurationErrorMessage() {
 		if (configurtionException == null)
 			return "No configuration errors to report.";
+		else if (configurtionException.getMessage() == null)
+			return configurtionException.toString();
 		else
 			return configurtionException.getMessage();
 	}
