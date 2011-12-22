@@ -1,5 +1,14 @@
 2011-12-22  Ben Konrath  <ben@bagu.org>
 
+	Fix another bug with related list navigation.
+
+	I've tested all the navigation buttons in all of the related lists
+	so things should be good now.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+
+2011-12-22  Ben Konrath  <ben@bagu.org>
+
 	Fix a crasher when refreshing the list view with the default table.
 
 	This crash will also happen when loading the list view with the default

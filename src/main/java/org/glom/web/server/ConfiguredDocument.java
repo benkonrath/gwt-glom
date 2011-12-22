@@ -540,8 +540,7 @@ final class ConfiguredDocument {
 			// get the primary key for the related list table
 			LayoutItem_Field layoutItemField = new LayoutItem_Field();
 			String toTableName = relationship.get_to_table();
-			String toFieldName = libglomLayoutItemPortal.get_to_field_used();
-			if (!toFieldName.isEmpty() && !toTableName.isEmpty()) {
+			if (!toTableName.isEmpty()) {
 
 				// get the LayoutItem_Feild with details from its Field in the document
 				FieldVector fields = document.get_table_fields(toTableName);
@@ -549,11 +548,12 @@ final class ConfiguredDocument {
 				for (int i = 0; i < numItems; i++) {
 					Field field = fields.get(i);
 					// check the names to see if they're the same
-					if (toFieldName.equals(field.get_name())) {
+					if (field.get_primary_key()) {
 						layoutItemField.set_full_field_details(field);
 						layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(layoutItemField, false));
 						layoutItemPortal.setPrimaryKeyIndex(layoutItemPortal.getItems().size() - 1);
 						layoutItemPortal.setHiddenPrimaryKey(true); // always hidden in portals
+						break;
 					}
 				}
 			}
