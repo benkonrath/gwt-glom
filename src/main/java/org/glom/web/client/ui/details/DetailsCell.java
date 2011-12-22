@@ -159,9 +159,11 @@ public class DetailsCell extends Composite {
 			// Deal with multiline text differently than single line text.
 			if (layoutItemField.getFormatting().getTextFormatMultilineHeightLines() > 1) {
 				detailsData.getElement().getStyle().setOverflow(Overflow.AUTO);
+				// Convert '\n' to <br/> escaping the data so that it won't be rendered as HTML.
 				try {
-					// Convert '\n' to <br/> escaping the data so that it won't be rendered as HTML.
-					String utf8NewLine = new String(new byte[] { 0x0A }, "UTF8");
+					// JavaScript requires the charsetName to be "UTF-8". CharsetName values that work in Java (such as
+					// "UTF8") will not work when compiled to JavaScript.
+					String utf8NewLine = new String(new byte[] { 0x0A }, "UTF-8");
 					String[] lines = text.split(utf8NewLine);
 					SafeHtmlBuilder sb = new SafeHtmlBuilder();
 					for (String line : lines) {
