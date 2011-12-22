@@ -1,3 +1,9 @@
+2011-01-02  Murray Cumming  <murrayc@murrayc.com>
+
+	Use the latest java-libglom version.
+
+	* pom.xml: Use java-libglom 1.19.2 instead of 1.19.1.
+
 2012-01-01  Murray Cumming  <murrayc@murrayc.com>
 
 	GwtTestOnlineGlom: Test a little more.
