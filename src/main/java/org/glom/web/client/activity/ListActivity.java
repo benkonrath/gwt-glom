@@ -23,6 +23,7 @@ import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
+import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ListView;
@@ -55,6 +56,9 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 
 	@Override
 	public void start(AcceptsOneWidget panel, final EventBus eventBus) {
+		if (documentID.isEmpty())
+			goTo(new DocumentSelectionPlace());
+
 		// register this class as the presenter
 		listView.setPresenter(this);
 

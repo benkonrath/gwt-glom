@@ -120,6 +120,9 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	 */
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		if (documentID.isEmpty())
+			goTo(new DocumentSelectionPlace());
+
 		// register this class as the presenter
 		detailsView.setPresenter(this);
 

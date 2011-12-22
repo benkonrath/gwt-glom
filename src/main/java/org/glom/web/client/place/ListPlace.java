@@ -43,25 +43,26 @@ public class ListPlace extends HasSelectableTablePlace {
 
 		@Override
 		public ListPlace getPlace(String token) {
-			String documentID = "", tableName = "";
-			
+			// default empty values
+			String documentID = "";
+			String tableName = ""; // an empty value represents the default table
+
 			HashMap<String, String> params = getTokenParams(token);
-			
+
 			if (params == null) {
 				return new ListPlace("", "");
 			}
-	                
+
 			if (params.get(documentKey) != null) {
 				documentID = params.get(documentKey);
 			}
-	        
+
 			if (params.get(tableKey) != null) {
 				tableName = params.get(tableKey);
 			}
-			
-			if ((documentID == "") || (tableName == "")) {
-				// The URL string doesn't match what we're expecting. Just use the initial values for the details place.
-				// TODO Shouldn't this just go to the document selection place?
+
+			if ((documentID.isEmpty())) {
+				// The documentID was not retrieved from the URL. Use empty values for the list place.
 				return new ListPlace("", "");
 			}
 

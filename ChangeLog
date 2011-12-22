@@ -1,3 +1,21 @@
+2011-12-22  Ben Konrath  <ben@bagu.org>
+
+	Fix a crasher when refreshing the list view with the default table.
+
+	This crash will also happen when loading the list view with the default
+	table from a link or bookmark.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java: Go
+	to the main document selection page when the document id hasn't been
+	set.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Go to
+	the main document selection page when the document id hasn't been
+	set.
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java: Use empty
+	values for the details place when the document id hasn't been set.
+	* src/main/java/org/glom/web/client/place/ListPlace.java: Use empty
+	values for the list place when the document id hasn't been set.
+
 2011-12-21  Ben Konrath  <ben@bagu.org>
 
 	Protect against NPE when glom.document.locale is not in config.

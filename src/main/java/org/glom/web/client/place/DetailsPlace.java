@@ -115,35 +115,35 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		@Override
 		public DetailsPlace getPlace(String token) {
 			// default empty values
-			String documentID = "", tableName = "", primaryKeyValueString ="";
+			String documentID = "";
+			String tableName = ""; // an empty value represents the default table
+
 			TypedDataItem primaryKeyValue = new TypedDataItem();
-			
+
 			HashMap<String, String> params = getTokenParams(token);
-			
+
 			if (params == null) {
-				return new DetailsPlace(documentID, tableName, primaryKeyValue);
+				return new DetailsPlace("", "", primaryKeyValue);
 			}
-	                
+
 			if (params.get(documentKey) != null) {
 				documentID = params.get(documentKey);
 			}
-	        
+
 			if (params.get(tableKey) != null) {
 				tableName = params.get(tableKey);
 			}
 
 			if (params.get(primaryKeyValueKey) != null) {
-				primaryKeyValueString = params.get(primaryKeyValueKey);
+				String primaryKeyValueString = params.get(primaryKeyValueKey);
 				// Set as unknown because the type of the primary key is not known at this point. A proper primary key
 				// value will be created using the type from the Glom document in the servlet.
 				primaryKeyValue.setUnknown(primaryKeyValueString);
 			}
 
-			
-			if ((documentID == "") || (tableName == "") || (primaryKeyValueString == "")) {
-				// The URL string doesn't match what we're expecting. Just use the initial values for the details place.
-				// TODO Shouldn't this just go to the document selection place?
-				return new DetailsPlace(documentID, tableName, primaryKeyValue);
+			if (documentID.isEmpty()) {
+				// The documentID was not retrieved from the URL. Use empty values for the details place.
+				return new DetailsPlace("", "", primaryKeyValue);
 			}
 
 			return new DetailsPlace(documentID, tableName, primaryKeyValue);
