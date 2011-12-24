@@ -369,7 +369,7 @@ public abstract class ListTable extends Composite {
 		 * Set the width of the navigation button column to be as small as possible.
 		 */
 		// The navigationButtonColumn width will be null if it hasn't been set. This indicates that the column width
-		// hasn't been disabled with the hideNavigationButtons() method or been set with this method. The width of the
+		// hasn't been disabled with the hideNavigationButtons() or been set with this method. The width of the
 		// navigation button column shouldn't be changed once it's set.
 		if (navigationButtonColumn != null && cellTable.getColumnWidth(navigationButtonColumn) == null) {
 
