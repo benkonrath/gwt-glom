@@ -22,12 +22,15 @@ package org.glom.web.client.ui.details;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -38,12 +41,24 @@ public class SingleLineText extends Composite {
 	HandlerRegistration resizeHandlerReg;
 
 	public SingleLineText(String text) {
-		Label dataLabel = new Label();
-		Style labelStyle = dataLabel.getElement().getStyle();
-		labelStyle.setOverflow(Overflow.HIDDEN);
-		labelStyle.setProperty("textOverflow", "ellipsis");
-		dataLabel.setText(text);
-		initWidget(dataLabel);
+		Widget dataWidget;
+		if (text.startsWith("http://") || text.startsWith("ftp://")) {
+			dataWidget = new Anchor(text, text, "_blank");
+			dataWidget.setStyleName("dataLink");
+		} else if (text.startsWith("www.")) {
+			dataWidget = new Anchor(text, "http://" + text, "_blank");
+			dataWidget.setStyleName("dataLink");
+		} else {
+			Label dataLabel = new Label();
+			dataLabel.setText(text);
+			dataWidget = dataLabel;
+		}
+
+		Style style = dataWidget.getElement().getStyle();
+		style.setOverflow(Overflow.HIDDEN);
+		style.setProperty("textOverflow", "ellipsis");
+
+		initWidget(dataWidget);
 	}
 
 	/*
@@ -89,6 +104,6 @@ public class SingleLineText extends Composite {
 		int newWidth = parentWidth - labelWidth - 2;
 		// Don't set negative widths.
 		if (newWidth >= 0)
-			setWidth(newWidth + "px");
+			getElement().getParentElement().getStyle().setWidth(newWidth, Unit.PX);
 	}
 }
