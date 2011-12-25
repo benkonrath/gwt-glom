@@ -269,3 +269,11 @@ table.documentLinkTable td
 {
 	padding-bottom: 0.25em;
 }
+
+a.dataLink
+{
+	font-weight: normal;
+	color: #333333;
+    font-family: sans-serif;
+    font-size: medium;
+}
