@@ -191,8 +191,8 @@ public class DetailsCell extends Composite {
 				}
 
 			} else {
-				detailsLabel.setText(text);
-				detailsData.add(detailsLabel);
+				SingleLineText textPanel = new SingleLineText(text);
+				detailsData.add(textPanel);
 			}
 		default:
 			break;
