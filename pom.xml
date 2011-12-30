@@ -38,7 +38,7 @@
 			is available for compiling and testing but will not be packaged in the war. 
 			More information about this deploying servlets that use jni jars can be found 
 			in the "JNI Based Applications" section of the Tomcat 6 release notes:
-			http://tomcat.apache.org/tomcat-6.0-doc/RELEASE-NOTES.txt -->
+			http://tomcat.apache.org/tomcat-7.0-doc/RELEASE-NOTES.txt -->
 		<dependency>
 			<groupId>org.glom.libglom</groupId>
 			<artifactId>java-libglom</artifactId>
