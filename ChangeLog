@@ -1,5 +1,12 @@
 2011-12-30  Murray Cumming  <murrayc@murrayc.com>
 
+	Added a test for DetailsPlace.
+
+	* src/test/java/org/glom/web/client/place/DetailsPlaceTest.java:
+	Test the getPlace() token parsing.
+
+2011-12-30  Murray Cumming  <murrayc@murrayc.com>
+
 	Added a first unit test.
 
 	* pom.xml: Add a test goal, and a dependency on junit in that scope.
