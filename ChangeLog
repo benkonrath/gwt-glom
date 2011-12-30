@@ -1,5 +1,14 @@
 2011-12-30  Murray Cumming  <murrayc@murrayc.com>
 
+	DetailsPlace test: Also test getToken() and recreation via getPlace().
+
+	* src/test/java/org/glom/web/client/place/DetailsPlaceTest.java:
+	testGetPlaceParameters(): Get the tokens from the DetailsPlace and 
+	recreate it, testing the recreated DetailsPlace for the same parameter
+	values.
+
+2011-12-30  Murray Cumming  <murrayc@murrayc.com>
+
 	Use the surefire-report plugin.
 
 	* pom.xml: This generates a HTML report about the tests in 
