@@ -1,5 +1,13 @@
 2011-12-30  Murray Cumming  <murrayc@murrayc.com>
 
+	Use the surefire-report plugin.
+
+	* pom.xml: This generates a HTML report about the tests in 
+	target/site/surefire-report.html
+	when you do mvn surefire-report:report. It seems to be popular/normal.
+
+2011-12-30  Murray Cumming  <murrayc@murrayc.com>
+
 	Added a test for DetailsPlace.
 
 	* src/test/java/org/glom/web/client/place/DetailsPlaceTest.java:
