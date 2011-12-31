@@ -1,19 +1,21 @@
 package org.glom.web.shared;
 
-import junit.framework.TestCase;
-import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.Assert;
 
-public class DataItemTest extends TestCase {
+public class DataItemTest {
 
 	public DataItemTest() {
 	}
 
+	@Test
 	public void testBoolean() {
 		DataItem item = new DataItem();
 		item.setBoolean(true);
 		Assert.assertTrue(item.getBoolean());
 	}
 
+	@Test
 	public void testNumber() {
 		DataItem item = new DataItem();
 		final double val = 123.456;
@@ -21,6 +23,7 @@ public class DataItemTest extends TestCase {
 		Assert.assertTrue(item.getNumber() == val);
 	}
 
+	@Test
 	public void testText() {
 		DataItem item = new DataItem();
 		final String val = "abc";

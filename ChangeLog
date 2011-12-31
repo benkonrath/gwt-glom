@@ -1,5 +1,18 @@
 2011-12-31  Murray Cumming  <murrayc@murrayc.com>
 
+	Tests: Use junit4-style syntax instead of junit3-style.
+
+	* src/test/java/org/glom/web/client/place/DetailsPlaceTest.java:
+	* src/test/java/org/glom/web/client/place/ListPlaceTest.java:
+	* src/test/java/org/glom/web/shared/DataItemTest.java:
+	Use the @Test annotation rather than relying on the test*() prefix.
+	Also no longer implement TestCase, to avoid triggering support for 
+	the junit3-way, which stops the annotations from working.
+	Change the imports from import junit.framework.* to 
+	import org.junit.*, which is apparently the new way.
+
+2011-12-31  Murray Cumming  <murrayc@murrayc.com>
+
 	Added a test for ListPlace token parsing and creation.
 
 	* src/test/java/org/glom/web/client/place/ListPlaceTest.java:

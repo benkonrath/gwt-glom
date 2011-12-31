@@ -1,13 +1,14 @@
 package org.glom.web.client.place;
 
-import junit.framework.TestCase;
-import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.Assert;
 
-public class DetailsPlaceTest extends TestCase {
+public class DetailsPlaceTest {
 
 	public DetailsPlaceTest() {
 	}
 
+	@Test
 	public void testGetPlaceNoParameters() {
 		checkTokenWithoutParameters("");
 		checkTokenWithoutParameters("something");
@@ -15,6 +16,7 @@ public class DetailsPlaceTest extends TestCase {
 		checkTokenWithoutParameters("value1=123");
 	}
 
+	@Test
 	public void testGetPlaceParameters() {
 		// Create a DetailsPlace, testing getPlace():
 		final String documentId = "somedocument";
@@ -60,7 +62,7 @@ public class DetailsPlaceTest extends TestCase {
 		Assert.assertTrue(place.getPrimaryKeyValue() != null);
 		Assert.assertTrue(place.getPrimaryKeyValue().isEmpty());
 		Assert.assertEquals(null, place.getPrimaryKeyValue().getUnknown());
-		Assert.assertEquals(0.0, place.getPrimaryKeyValue().getNumber());
+		Assert.assertEquals(0.0, place.getPrimaryKeyValue().getNumber(), 0.0);
 		Assert.assertEquals(null, place.getPrimaryKeyValue().getText());
 	}
 

@@ -1,13 +1,14 @@
 package org.glom.web.client.place;
 
-import junit.framework.TestCase;
-import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.Assert;
 
-public class ListPlaceTest extends TestCase {
+public class ListPlaceTest {
 
 	public ListPlaceTest() {
 	}
 
+	@Test
 	public void testGetPlaceNoParameters() {
 		checkTokenWithoutParameters("");
 		checkTokenWithoutParameters("something");
@@ -15,6 +16,7 @@ public class ListPlaceTest extends TestCase {
 		checkTokenWithoutParameters("value1=123");
 	}
 
+	@Test
 	public void testGetPlaceParameters() {
 		// Create a ListPlace, testing getPlace():
 		final String documentId = "somedocument";
