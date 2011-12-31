@@ -1,3 +1,12 @@
+2011-12-31  Murray Cumming  <murrayc@murrayc.com>
+
+	Added a test for ListPlace token parsing and creation.
+
+	* src/test/java/org/glom/web/client/place/ListPlaceTest.java:
+	This is much the same as DetailsPlaceTest.
+
+	I wonder how we could test the other parts of the *Place API.
+
 2011-12-30  Murray Cumming  <murrayc@murrayc.com>
 
 	DetailsPlace test: Also test getToken() and recreation via getPlace().
