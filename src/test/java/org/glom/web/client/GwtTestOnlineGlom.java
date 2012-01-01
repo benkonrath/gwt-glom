@@ -53,11 +53,11 @@ public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 		app = new OnlineGlom();
 		app.onModuleLoad();
 
-		/* TODO: For instance,
  		// Some pre-assertions
-		assertFalse(app.dialogBox.isShowing());
- 		assertEquals("", app.errorLabel.getText());
-		*/
+		assertTrue(app.docSelectionPanel.isVisible());
+		assertFalse(app.dataPanel.isVisible());
+		assertFalse(app.tableSelectionPanel.isVisible());
+ 		//TODO: For instance: assertEquals("", app.docSelectionPanel.getText());
 	}
 
 }

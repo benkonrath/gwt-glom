@@ -46,11 +46,15 @@ import com.google.web.bindery.event.shared.EventBus;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class OnlineGlom implements EntryPoint {
+
+	/* Some of these are protected, rather than private,
+	 * so that GwtTestOnlineGlom can access them.
+	 */
 	private Place defaultPlace = new DocumentSelectionPlace();
 	private LayoutPanel layoutPanel = RootLayoutPanel.get();
-	private SimplePanel docSelectionPanel = new SimplePanel();
-	private SimplePanel dataPanel = new SimplePanel();
-	private SimplePanel tableSelectionPanel = new SimplePanel();
+	protected SimplePanel docSelectionPanel = new SimplePanel();
+	protected SimplePanel dataPanel = new SimplePanel();
+	protected SimplePanel tableSelectionPanel = new SimplePanel();
 
 	AcceptsOneWidget docSelectionDisplay = new AcceptsOneWidget() {
 		@Override

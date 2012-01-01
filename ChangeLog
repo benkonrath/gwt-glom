@@ -1,5 +1,21 @@
 2012-01-01  Murray Cumming  <murrayc@murrayc.com>
 
+	GwtTestOnlineGlom: Test a little more.
+
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Make the panels
+	protected rather than private, as suggested by the gwt-test-utils
+	maintianer here:
+	http://stackoverflow.com/questions/7931724/gwt-testcase-simulating-clicking-a-button-on-my-page
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java
+	Test the initial visibility of the panels.
+
+	However, this is not a very useful test.
+	And I wonder how we should generally test using this idea for an
+	activity/places app like ours where the real changes happen implicitly
+	based on the history token/URL.
+
+2012-01-01  Murray Cumming  <murrayc@murrayc.com>
+
 	Slight modification to *Mapper comments.
 
 	* src/main/java/org/glom/web/client/mvp/DataActivityMapper.java
