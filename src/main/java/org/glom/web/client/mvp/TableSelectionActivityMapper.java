@@ -36,7 +36,7 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	private TableSelectionActivity tableSelectionActivity;
 
 	/**
-	 * AppActivityMapper associates each Place with its corresponding {@link Activity}
+	 * ActivityMapper associates each Place with its corresponding {@link Activity}
 	 * 
 	 * @param clientFactory
 	 *            Factory to be passed to activities
@@ -46,7 +46,7 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	}
 
 	/**
-	 * Map each Place to its corresponding Activity. This would be a great use for GIN.
+	 * Map each Place to its corresponding Activity.
 	 */
 	@Override
 	public Activity getActivity(Place place) {

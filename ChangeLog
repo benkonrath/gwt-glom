@@ -1,5 +1,20 @@
 2012-01-01  Murray Cumming  <murrayc@murrayc.com>
 
+	Slight modification to *Mapper comments.
+
+	* src/main/java/org/glom/web/client/mvp/DataActivityMapper.java
+	(DataActivityMapper)
+	* src/main/java/org/glom/web/client/mvp/DocumentSelectionActivityMa
+	pper.java
+	* src/main/java/org/glom/web/client/mvp/TableSelectionActivityMappe
+	r.java
+	Remove comments mentioning GIN because they are just copied from 
+	the example code and are apparently not helpful:
+	http://groups.google.com/group/google-web-toolkit/msg/82f0098b20669a73
+	Also change the mention of a class that is only in the example code.
+
+2012-01-01  Murray Cumming  <murrayc@murrayc.com>
+
 	GwtTestOnlineGlom test: Minor changes.
 
 	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:

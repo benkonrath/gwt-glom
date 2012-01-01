@@ -38,7 +38,7 @@ public class DataActivityMapper implements ActivityMapper {
 	private ClientFactory clientFactory;
 
 	/**
-	 * AppActivityMapper associates each Place with its corresponding {@link Activity}
+	 * ActivityMapper associates each Place with its corresponding {@link Activity}
 	 * 
 	 * @param clientFactory
 	 *            Factory to be passed to activities
@@ -48,11 +48,10 @@ public class DataActivityMapper implements ActivityMapper {
 	}
 
 	/**
-	 * Map each Place to its corresponding Activity. This would be a great use for GIN.
+	 * Map each Place to its corresponding Activity.
 	 */
 	@Override
 	public Activity getActivity(Place place) {
-		// This is begging for GIN
 		if (place instanceof ListPlace)
 			return new ListActivity((ListPlace) place, clientFactory);
 		if (place instanceof DetailsPlace)
