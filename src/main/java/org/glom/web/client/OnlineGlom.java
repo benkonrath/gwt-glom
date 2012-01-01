@@ -111,6 +111,10 @@ public class OnlineGlom implements EntryPoint {
 		layoutPanel.setWidgetVisible(tableSelectionPanel, false);
 		layoutPanel.setWidgetVisible(dataPanel, false);
 
+		// We might, in future, use different ClientFactory implementations to create different views
+		// for different browser types (such as mobile), so we use GWT.create() to have deferred binding.
+		// See http://code.google.com/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
+		// which describes how to do this via our OnlineGlom.gwt.xml file.
 		ClientFactory clientFactory = GWT.create(ClientFactory.class);
 		EventBus eventBus = clientFactory.getEventBus();
 		PlaceController placeController = clientFactory.getPlaceController();
