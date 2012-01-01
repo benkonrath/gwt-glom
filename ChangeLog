@@ -1,3 +1,19 @@
+2012-01-01  Murray Cumming  <murrayc@murrayc.com>
+
+	Tests: Added the beginnings of a test using gwt-test-utils.
+
+	* pom.xml: Add dependencies on gwt-test-utils and easymock.
+	* src/test/resources/META-INF/gwt-test-utils.properties: Add this file
+	which tells gwt-test-utils what class will be tested.
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	Add a simple (but empty) test case. One class, used by the OnlineGlom
+	class, is mocked so that it can be created. However, I am not sure 
+	why only this class needs to be mocked.
+
+	Note that mockito seems more popular, and clearer, than easymock,
+	but I have not got that working yet. It might be a matter of the 
+	mockito version.
+
 2011-12-31  Murray Cumming  <murrayc@murrayc.com>
 
 	Tests: Use junit4-style syntax instead of junit3-style.
