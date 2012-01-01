@@ -13,15 +13,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import org.glom.web.client.mvp.AppPlaceHistoryMapper;
 import org.easymock.EasyMock;
 
 public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 
 	/** Tell gwt-test-utils to use this mock when trying to create this class via GWT.create() in OnlineGlom.
-         * TODO: Why does only this class need to be mocked?
          */
 	@Mock
-	private org.glom.web.client.mvp.AppPlaceHistoryMapper mockAppPlaceHistoryMapper;
+	private AppPlaceHistoryMapper mockAppPlaceHistoryMapper;
 
 	private OnlineGlom app;
 

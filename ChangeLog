@@ -1,5 +1,14 @@
 2012-01-01  Murray Cumming  <murrayc@murrayc.com>
 
+	GwtTestOnlineGlom test: Minor changes.
+
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	Avoid the long qualified class name and modify the comment 
+	because it is now obvious to me that the mocked class is the only
+	custom one created via GWT.create().
+
+2012-01-01  Murray Cumming  <murrayc@murrayc.com>
+
 	Tests: Added the beginnings of a test using gwt-test-utils.
 
 	* pom.xml: Add dependencies on gwt-test-utils and easymock.
