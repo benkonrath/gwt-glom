@@ -14,6 +14,8 @@
 	but I have not got that working yet. It might be a matter of the 
 	mockito version.
 
+	This test is run during mvn integration-test.
+
 2011-12-31  Murray Cumming  <murrayc@murrayc.com>
 
 	Tests: Use junit4-style syntax instead of junit3-style.
