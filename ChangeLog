@@ -1,5 +1,19 @@
 2012-01-02  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlom: Make clientFactory a (protected) member, and test it a bit.
+
+	* src/main/java/org/glom/web/client/OnlineGlom.java: Make clientFactory
+	a class member instead of a local variable in the method.
+	This lets us use it to get the view instances, for use in tests.
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	beforeOnlineGlom(): Test some more details of the initial view.
+	Again, this is not very useful.
+
+	To really test gwt-glom we will need to start a local postgresql 
+	instance with local data, like the Glom tests in C++.
+
+2012-01-02  Murray Cumming  <murrayc@murrayc.com>
+
 	pom.xml: Mention the LGPL license.
 
 	* pom.xml: Add a licenses section.

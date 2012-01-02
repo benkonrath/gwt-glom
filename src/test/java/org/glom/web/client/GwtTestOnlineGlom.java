@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import org.glom.web.client.mvp.AppPlaceHistoryMapper;
+import org.glom.web.client.ui.DocumentSelectionView;
 import org.easymock.EasyMock;
 
 public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
@@ -52,7 +53,13 @@ public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 	public void beforeOnlineGlom() {
 		app = new OnlineGlom();
 		app.onModuleLoad();
-
+		
+		assertNotNull(app.clientFactory);
+		DocumentSelectionView view = app.clientFactory.getDocumentSelectionView();
+		assertNotNull(view);
+		assertNotNull(view.asWidget());
+		assertTrue(view.asWidget().isVisible());
+		
  		// Some pre-assertions
 		assertTrue(app.docSelectionPanel.isVisible());
 		assertFalse(app.dataPanel.isVisible());
