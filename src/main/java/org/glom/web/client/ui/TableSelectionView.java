@@ -28,12 +28,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 /**
  * @author Ben Konrath <ben@bagu.org>
  */
-public interface TableSelectionView extends IsWidget {
-	public interface Presenter {
-		void goTo(Place place);
-	}
-
-	void setPresenter(Presenter presenter);
+public interface TableSelectionView extends View {
 
 	HasChangeHandlers getTableSelector();
 
@@ -48,8 +43,6 @@ public interface TableSelectionView extends IsWidget {
 	void setBackLinkVisible(boolean visible);
 
 	void setBackLink(final String documentID, final String tableName);
-
-	void clear();
 
 	void setDocumentTitle(String documentTitle);
 

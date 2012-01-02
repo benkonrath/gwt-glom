@@ -26,6 +26,7 @@ import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.HasSelectableTablePlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.TableSelectionView;
+import org.glom.web.client.ui.View;
 import org.glom.web.shared.DocumentInfo;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -44,7 +45,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class TableSelectionActivity extends AbstractActivity implements TableSelectionView.Presenter {
+public class TableSelectionActivity extends AbstractActivity implements View.Presenter {
 	private final ClientFactory clientFactory;
 	private String documentID;
 	private String documentTitle;
@@ -163,7 +164,7 @@ public class TableSelectionActivity extends AbstractActivity implements TableSel
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.TableSelectionView.Presenter#goTo(com.google.gwt.place.shared.Place)
+	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	@Override
 	public void goTo(Place place) {

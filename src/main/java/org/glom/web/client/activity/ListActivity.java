@@ -27,6 +27,7 @@ import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ListView;
+import org.glom.web.client.ui.View;
 import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -38,7 +39,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ListActivity extends AbstractActivity implements ListView.Presenter {
+public class ListActivity extends AbstractActivity implements View.Presenter {
 
 	private final String documentID;
 	private final String tableName;
@@ -166,7 +167,7 @@ public class ListActivity extends AbstractActivity implements ListView.Presenter
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.ListView.Presenter#goTo(com.google.gwt.place.shared.Place)
+	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	public void goTo(Place place) {
 		clientFactory.getPlaceController().goTo(place);

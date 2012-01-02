@@ -28,16 +28,7 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public interface ListView extends IsWidget {
-
-	public interface Presenter {
-		void goTo(Place place);
-	}
-
-	public void setPresenter(Presenter presenter);
+public interface ListView extends View {
 
 	public void setCellTable(final String documentID, LayoutGroup layoutGroup);
-
-	void clear();
-
 }

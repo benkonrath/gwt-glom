@@ -22,6 +22,7 @@ package org.glom.web.client.activity;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.ui.DocumentSelectionView;
+import org.glom.web.client.ui.View;
 import org.glom.web.shared.Documents;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -31,7 +32,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class DocumentSelectionActivity extends AbstractActivity implements DocumentSelectionView.Presenter {
+public class DocumentSelectionActivity extends AbstractActivity implements View.Presenter {
 
 	// TODO inject with GIN
 	private final ClientFactory clientFactory;

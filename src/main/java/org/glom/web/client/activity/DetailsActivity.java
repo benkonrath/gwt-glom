@@ -29,6 +29,7 @@ import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.client.ui.View;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
@@ -56,7 +57,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 /**
  * @author Ben Konrath <ben@bagu.org>
  */
-public class DetailsActivity extends AbstractActivity implements DetailsView.Presenter {
+public class DetailsActivity extends AbstractActivity implements View.Presenter {
 	/*
 	 * Cell renderer for the related list open buttons. Normally this wouldn't be in an Activity class but since it's
 	 * making a call to the server it makes sense for it to be here.
@@ -347,7 +348,7 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.DetailsView.Presenter#goTo(com.google.gwt.place.shared.Place)
+	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	@Override
 	public void goTo(Place place) {

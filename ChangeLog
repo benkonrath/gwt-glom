@@ -1,5 +1,31 @@
 2012-01-02  Murray Cumming  <murrayc@murrayc.com>
 
+	Move the *View::Presenter types, and some API into one base View.
+
+	* src/main/java/org/glom/web/client/ui/DetailsView.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java: Move
+	Presenter, setPresenter() and clear() into a shared base interface,
+	to avoid the unnecessary duplicate Presenter types and to more clearly
+	show how the *Views share the same structure, even if they are not 
+	used polymorphically.
+
+	* src/main/java/org/glom/web/client/ui/DetailsViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.ja
+	va:
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActiv
+	ity.java:
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: Adapt.
+
+	Feel free to revert this if there is a good reason for the duplicate
+	types.
+
+2012-01-02  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlom: Make clientFactory a (protected) member, and test it a bit.
 
 	* src/main/java/org/glom/web/client/OnlineGlom.java: Make clientFactory

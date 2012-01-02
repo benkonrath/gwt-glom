@@ -48,7 +48,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.DetailsView#setPresenter(org.glom.web.client.ui.DetailsView.Presenter)
+	 * @see org.glom.web.client.ui.View#setPresenter(org.glom.web.client.ui.View.Presenter)
 	 */
 	@Override
 	public void setPresenter(Presenter presenter) {

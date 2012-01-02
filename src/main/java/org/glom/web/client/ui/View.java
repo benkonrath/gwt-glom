@@ -19,12 +19,6 @@
 
 package org.glom.web.client.ui;
 
-import java.util.ArrayList;
-
-import org.glom.web.client.ui.details.DetailsCell;
-import org.glom.web.client.ui.details.Portal;
-import org.glom.web.shared.layout.LayoutGroup;
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -32,12 +26,13 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public interface DetailsView extends View {
+public interface View extends IsWidget {
 
-	public void addGroup(LayoutGroup layoutGroup);
+	public interface Presenter {
+		void goTo(Place place);
+	}
 
-	public ArrayList<DetailsCell> getCells();
-
-	public ArrayList<Portal> getPortals();
-
+	public void setPresenter(Presenter presenter);
+	
+	void clear();
 }

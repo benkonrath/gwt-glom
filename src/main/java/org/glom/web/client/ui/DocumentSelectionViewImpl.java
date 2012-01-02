@@ -83,4 +83,8 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	@Override
+	public void clear() {
+	}
 }
