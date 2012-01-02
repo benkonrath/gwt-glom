@@ -10,6 +10,14 @@
 	<version>1.0-SNAPSHOT</version>
 	<name>OnlineGlom</name>
 
+	<licenses>
+		<license>
+			<name>LGPL v3</name>
+			<distribution>repo and manual</distribution>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+		</license>
+	</licenses>
+
 	<!-- gwt-test-utils is not in the regular maven repository: -->
 	<repositories>
 		<repository>

@@ -1,5 +1,13 @@
 2012-01-02  Murray Cumming  <murrayc@murrayc.com>
 
+	pom.xml: Mention the LGPL license.
+
+	* pom.xml: Add a licenses section.
+	* COPYING.LESSER: Move this to COPYING, which
+	previously contained the GPL. But gwt-glom is all LGPL.
+
+2012-01-02  Murray Cumming  <murrayc@murrayc.com>
+
 	Add project information to README and pom.xml.
 
 	* README: Add a brief description and mention some mvn
