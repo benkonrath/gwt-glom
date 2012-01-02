@@ -1,3 +1,12 @@
+2012-01-02  Murray Cumming  <murrayc@murrayc.com>
+
+	Add project information to README and pom.xml.
+
+	* README: Add a brief description and mention some mvn
+	commands.
+	* pom.xml: This extra information shows up in mvn site
+	generated pages.
+
 2011-01-02  Murray Cumming  <murrayc@murrayc.com>
 
 	Use the latest java-libglom version.

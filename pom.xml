@@ -199,4 +199,14 @@
 		</plugins>
 	</reporting>
 
+	<description>gwt-glom (OnlineGlom) is a web UI for Glom database systems.
+See http://www.glom.org
+</description>
+	<scm>
+		<url>http://gitorious.org/online-glom</url>
+	</scm>
+	<issueManagement>
+		<system>Bugzilla</system>
+		<url>https://bugzilla.gnome.org/browse.cgi?product=Glom</url>
+	</issueManagement>
 </project>

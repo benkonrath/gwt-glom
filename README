@@ -1,6 +1,24 @@
-Documentation is on the glom wiki:
+gwt-glom is a web UI for Glom database systems.
+See http://www.glom.org
 
+Building:
+
+You will need to install mvn (maven), 
+but maven will download other dependencies automatically.
+
+To build the .war package, do:
+  mvn clean package
+
+To see test reports, and other stuff, by doing:
+  mvn site
+and then viewing target/site/index.html in your browser.
+
+
+More documentation is on the glom wiki:
 http://www.glom.org/wiki/index.php?title=Development/OnlineGlom
+
+
+Notes:
 
 We are using the default GWT compilation option of compiling the Java code to
 obfuscated JavaScript. The reason for this is covered by this snippet from the
