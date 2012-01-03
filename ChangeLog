@@ -1,3 +1,13 @@
+2012-01-03  Murray Cumming  <murrayc@murrayc.com>
+
+	*View: Remove unused imports.
+
+	* src/main/java/org/glom/web/client/ui/DetailsView.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	Remove unused imports, as suggested by Eclipse.
+
 2012-01-02  Murray Cumming  <murrayc@murrayc.com>
 
 	Move the *View::Presenter types, and some API into one base View.

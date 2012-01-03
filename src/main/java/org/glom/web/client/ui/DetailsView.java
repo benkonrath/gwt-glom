@@ -25,9 +25,6 @@ import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
 import org.glom.web.shared.layout.LayoutGroup;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
-
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 

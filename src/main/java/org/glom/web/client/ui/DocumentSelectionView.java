@@ -19,11 +19,7 @@
 
 package org.glom.web.client.ui;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
-
 public interface DocumentSelectionView extends View {
-
 
 	void addDocumentLink(String documentID, String title);
 
