@@ -22,9 +22,7 @@ package org.glom.web.shared;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 /**
- * This specialisation of DataItem is used to hold can a primary key item.
- * 
- * @author Ben Konrath <ben@bagu.org>
+ * This specialization of DataItem can hold a primary key item.
  */
 @SuppressWarnings("serial")
 public class TypedDataItem extends DataItem {

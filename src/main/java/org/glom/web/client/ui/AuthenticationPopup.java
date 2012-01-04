@@ -31,8 +31,7 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class AuthenticationPopup extends DecoratedPopupPanel {
 	private TextBox usernameTextBox = new TextBox();

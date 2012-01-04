@@ -28,9 +28,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 /**
  * Cell renderer for {@link GlomFieldType} TYPE_TEXT.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class TextCell extends AbstractCell<String> {
 	SafeHtml colourCSSProp;

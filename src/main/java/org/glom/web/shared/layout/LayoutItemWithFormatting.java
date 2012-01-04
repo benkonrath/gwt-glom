@@ -22,8 +22,7 @@ package org.glom.web.shared.layout;
 import java.io.Serializable;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 @SuppressWarnings("serial")
 public abstract class LayoutItemWithFormatting extends LayoutItem implements Serializable {

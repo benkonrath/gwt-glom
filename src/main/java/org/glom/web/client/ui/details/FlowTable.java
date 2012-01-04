@@ -37,8 +37,6 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * A container widget that implements the Glom details view flow table behaviour. Child widgets are arranged using the
  * least vertical space in the specified number of columns.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 public class FlowTable extends Composite {
 

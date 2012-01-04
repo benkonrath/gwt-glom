@@ -42,8 +42,7 @@ import org.glom.web.shared.TypedDataItem;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class RelatedListNavigation extends DBAccess {
 

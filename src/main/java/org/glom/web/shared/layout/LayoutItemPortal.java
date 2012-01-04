@@ -21,8 +21,6 @@ package org.glom.web.shared.layout;
 
 /**
  * Represents the libglom LayoutItem_Portal class.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class LayoutItemPortal extends LayoutGroup {

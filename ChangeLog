@@ -1,5 +1,13 @@
 2012-01-04  Murray Cumming  <murrayc@murrayc.com>
 
+	Remove all javadoc author tags.
+
+	Because they are awkward and meaningless when many people touch
+	many files.
+	See https://gitorious.org/online-glom/gwt-glom/commit/7628b732cb90cbc6d5635420a75568504e8b3655#comment_81164
+ 
+2012-01-04  Murray Cumming  <murrayc@murrayc.com>
+
 	Revert the COPYING.LESSER to COPYING rename.
 
 	Apparently both should be there if it is LGPL.

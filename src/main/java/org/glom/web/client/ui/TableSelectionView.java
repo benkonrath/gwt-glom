@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ *
  */
 public interface TableSelectionView extends View {
 

@@ -24,7 +24,6 @@ import java.io.Serializable;
 /**
  * This Data Transfer Object (DTO) is used to send a data item between the client and the server.
  * 
- * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class DataItem implements Serializable {

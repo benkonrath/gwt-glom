@@ -27,9 +27,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 /**
  * Cell renderer for {@link ListTable} open buttons.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class NavigationButtonCell extends ButtonCell {
 	/*

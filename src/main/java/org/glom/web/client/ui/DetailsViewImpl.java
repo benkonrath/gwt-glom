@@ -30,7 +30,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
  * 
  */
 public class DetailsViewImpl extends Composite implements DetailsView {

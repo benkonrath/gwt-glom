@@ -46,9 +46,6 @@ import com.google.gwt.user.client.ui.Label;
 
 /**
  * Holds a label, data and a navigation button.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class DetailsCell extends Composite {
 	private LayoutItemField layoutItemField;

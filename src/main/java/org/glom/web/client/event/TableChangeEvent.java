@@ -22,8 +22,7 @@ package org.glom.web.client.event;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
 	public static Type<TableChangeEventHandler> TYPE = new Type<TableChangeEventHandler>();

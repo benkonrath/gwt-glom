@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ *
  */
 public class Group extends Composite {
 	private FlowPanel mainPanel = new FlowPanel();

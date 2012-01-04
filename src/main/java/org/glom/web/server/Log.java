@@ -22,8 +22,6 @@ package org.glom.web.server;
 /**
  * A class that wraps methods in com.allen_sauer.gwt.log.client.Log to add the calling method name from the servlet to
  * log messages.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 public class Log {
 

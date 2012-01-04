@@ -22,8 +22,7 @@ package org.glom.web.client.ui;
 import org.glom.web.shared.layout.LayoutGroup;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public interface ListView extends View {
 

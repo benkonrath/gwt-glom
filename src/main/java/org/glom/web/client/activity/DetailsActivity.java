@@ -55,7 +55,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ *
  */
 public class DetailsActivity extends AbstractActivity implements View.Presenter {
 	/*

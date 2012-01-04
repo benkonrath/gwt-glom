@@ -61,7 +61,6 @@ import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
  * 
  */
 public abstract class ListTable extends Composite {

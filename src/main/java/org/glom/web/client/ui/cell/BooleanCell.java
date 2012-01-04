@@ -31,9 +31,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 /**
  * Cell renderer for {@link GlomFieldType} TYPE_BOOLEAN.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class BooleanCell extends CheckboxCell {
 

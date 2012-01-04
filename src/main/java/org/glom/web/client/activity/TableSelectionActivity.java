@@ -42,8 +42,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class TableSelectionActivity extends AbstractActivity implements View.Presenter {
 	private final ClientFactory clientFactory;

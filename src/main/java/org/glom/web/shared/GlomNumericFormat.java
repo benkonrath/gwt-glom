@@ -22,7 +22,6 @@ package org.glom.web.shared;
 import java.io.Serializable;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
  * 
  */
 @SuppressWarnings("serial")

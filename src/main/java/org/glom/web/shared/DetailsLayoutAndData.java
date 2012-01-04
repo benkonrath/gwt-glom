@@ -26,8 +26,6 @@ import org.glom.web.shared.layout.LayoutGroup;
 
 /**
  * Wrapper DTO for details view layout and data.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class DetailsLayoutAndData implements Serializable {

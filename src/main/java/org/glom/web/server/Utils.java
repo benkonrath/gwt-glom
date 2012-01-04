@@ -27,8 +27,7 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class Utils {
 

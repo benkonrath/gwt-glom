@@ -46,8 +46,7 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RowCountChangeEvent;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class RelatedListTable extends ListTable {
 

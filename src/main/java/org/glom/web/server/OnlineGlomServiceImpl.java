@@ -48,8 +48,6 @@ import com.mchange.v2.c3p0.DataSources;
 /**
  * The servlet class for setting up the server side of Online Glom. The public methods in this class are the methods
  * that can be called by the client side code.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {

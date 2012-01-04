@@ -21,9 +21,6 @@ package org.glom.web.shared.layout;
 
 /**
  * Represents the libglom LayoutItem_Notebook class.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
  */
 @SuppressWarnings("serial")
 public class LayoutItemNotebook extends LayoutGroup {

@@ -31,8 +31,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class Utils {
 

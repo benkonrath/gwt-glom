@@ -23,8 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class Documents implements Serializable {

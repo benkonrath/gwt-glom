@@ -57,11 +57,9 @@ import org.glom.web.shared.layout.LayoutItemPortal;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
- * A class to hold configuration information for a given Glom document. This class is used to retrieve layout
- * information from libglom and data from the underlying PostgreSQL database.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
+ * A class to hold configuration information for a given Glom document.
+ * This class retrieves layout information from libglom and data from 
+ * the underlying PostgreSQL database.
  */
 final class ConfiguredDocument {
 

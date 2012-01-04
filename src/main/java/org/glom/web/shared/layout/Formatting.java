@@ -24,8 +24,7 @@ import java.io.Serializable;
 import org.glom.web.shared.GlomNumericFormat;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class Formatting implements Serializable {

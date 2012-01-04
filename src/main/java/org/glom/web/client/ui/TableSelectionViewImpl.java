@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ *
  */
 public class TableSelectionViewImpl extends Composite implements TableSelectionView {
 

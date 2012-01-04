@@ -29,9 +29,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 /**
  * Cell renderer for {@link GlomFieldType} TYPE_NUMERIC.
- * 
- * @author Ben Konrath <ben@bagu.org>
- * 
  */
 public class NumericCell extends AbstractCell<Double> {
 	private SafeHtml colourCSSProp;

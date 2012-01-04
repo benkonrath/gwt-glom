@@ -31,8 +31,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class Notebook extends Group {
 

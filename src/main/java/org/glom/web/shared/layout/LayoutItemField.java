@@ -23,8 +23,6 @@ import java.io.Serializable;
 
 /**
  * Represents the libglom LayoutItem_Field class.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class LayoutItemField extends LayoutItemWithFormatting implements Serializable {

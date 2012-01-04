@@ -26,8 +26,7 @@ import org.glom.web.client.ui.details.Portal;
 import org.glom.web.shared.layout.LayoutGroup;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public interface DetailsView extends View {
 

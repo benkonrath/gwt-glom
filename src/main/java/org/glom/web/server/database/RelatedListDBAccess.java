@@ -40,7 +40,7 @@ import org.glom.web.shared.TypedDataItem;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ *
  */
 public class RelatedListDBAccess extends ListDBAccess {
 	private TypedDataItem foreignKeyValue = null;

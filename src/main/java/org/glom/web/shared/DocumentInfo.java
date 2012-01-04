@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 /**
  * DTO to hold basic information about tables of a Glom document.
- * 
- * @author Ben Konrath <ben@bagu.org>
  */
 @SuppressWarnings("serial")
 public class DocumentInfo implements Serializable {

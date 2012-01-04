@@ -22,8 +22,7 @@ package org.glom.web.client.event;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public interface TableChangeEventHandler extends EventHandler {
 	/**

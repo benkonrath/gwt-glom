@@ -23,8 +23,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public interface View extends IsWidget {
 

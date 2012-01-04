@@ -28,8 +28,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class DocumentSelectionActivityMapper implements ActivityMapper {
 

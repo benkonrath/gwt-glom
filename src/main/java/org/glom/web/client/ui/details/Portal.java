@@ -27,8 +27,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public class Portal extends Composite {
 
