@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Openismus GmbH
+ * Copyright (C) 2012 Openismus GmbH
  *
  * This file is part of GWT-Glom.
  *
