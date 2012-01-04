@@ -1,3 +1,9 @@
+2012-01-02  Murray Cumming  <murrayc@murrayc.com>
+
+	Revert the COPYING.LESSER to COPYING rename.
+
+	Apparently both should be there if it is LGPL.
+
 2012-01-03  Murray Cumming  <murrayc@murrayc.com>
 
 	*View: Remove unused imports.
