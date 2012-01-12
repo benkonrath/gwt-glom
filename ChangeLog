@@ -1,5 +1,89 @@
 2012-01-12  Murray Cumming  <murrayc@murrayc.com>
 
+	Add a search box.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Add a TextBox for the text of a quick find.
+	Add getQuickFindBox(), to get the widget, and getQuickFindText() to 
+	get the text.
+	setBackLink(): Add a String quickFind parameter.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	(TableSelectionView): Add getQuickFindBox() and getQuickFindText()
+	to the base interface, because that is how TableSelectionViewImpl is used.
+	* src/main/webapp/style.css: Add style for the search box and its label.
+
+	* src/main/java/org/glom/web/client/event/QuickFindChangeEvent.java:
+	* src/main/java/org/glom/web/client/event/QuickFindChangeEventHandler.java:
+	Add these files, based on the existing TableChangeEvent and 
+	TableChangeEventHandlers.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	start(): Handle QuickFindChangeEvent, passing its quickFind text to
+	a ListPlace() that the user should be taken to.
+	* src/main/java/org/glom/web/client/activity/ListActivity.java
+	start(): Handle it here too and adapt the TableChangeEvent handler to 
+	pass the extra "" quickFind parameter to ListPlace.
+	* src/main/java/org/glom/web/client/place/ListPlace.java: 
+	Constructor: Take an extra String quickFind parameter and store it, 
+	returning it from a new  getQuickFind() method.
+	getToken(): Put the quickFind text in the URL token.
+	getPlace(): Parse the quickFind text from the URL token.
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.ja
+	va: addDocumentLink(): Pass an extra "" quickFind parameter to the 
+	ListPlace constructor.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: start(): Add a Change handler for the TableSelectionView's
+	TextBox (via its base HasChangeHandlers interface), firing the new 
+	QuickFindChangeEvent.
+	setPlace(): Adapt the call to TableSelectionView.setbackLink(), to 
+	pass the extra "" quickFind parameter.
+
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	setCellTable(): Add a String quickFind parameter and pass it to 
+	the ListViewTable() constructor.
+	* src/main/java/org/glom/web/client/ui/ListView.java: Change 
+	setCellTable() in the base interface, because that is how ListViewImpl
+	is used.
+
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
+	Add a String quickFind member variable.
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	Constructor: Add a String quickFind parameter, storing it in the
+	base ListTable's member variable.
+	onRangeChanged(): Pass quickFind to the 
+	OnlineGlomServiceAsync.getSortedListViewData() and 
+	OnlineGlomServiceAsync.getListViewData() methods.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	getListViewData(), getSortedListViewData(): Add a String quickFind 
+	parameter, passing it to ConfiguredDocument.getListViewData().
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	Change getListViewData(), getSortedListViewData() in the base interface,
+	because that is how OnlineGlomServiceImpl is used, via this:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	Change getListViewData(), getSortedListViewData() here too.
+	This class can apparently be used to asynchronously call methods on 
+	OnlineGlomService, and GWT seems to implement that after recognizing 
+	just the *Async name convention and the extra AsyncCallback parameters.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	getListViewData(): Add a String quickFind parameter, and pass it to 
+	ListViewDBAccess.getData().
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java
+	getListData(): Add a String quickFind parameter and pass it to 
+	getSelectQuery().
+	getSelectQuery(): Add a String quickFind parameter.
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java
+	getSelectQuery(): Add a String quickFind parameter and use it with 
+	Glom.get_find_where_clause_quick() to pass a where_clause to 
+	Glom.build_sql_select_with_where_clause(), to actually filter the 
+	list view results.
+	getData(): Add a String quickFind parameter, passing it to getListData().
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.ja
+	va: getData(): Pass an empty string to getListData() for the 
+	quickFind parameter.
+
+2012-01-12  Murray Cumming  <murrayc@murrayc.com>
+
 	ListTable: Minor change.
 
 	* src/main/java/org/glom/web/client/ui/list/ListTable.java

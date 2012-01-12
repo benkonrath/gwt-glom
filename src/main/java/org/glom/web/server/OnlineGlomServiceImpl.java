@@ -306,12 +306,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName, final int start, final int length) {
+	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName,
+			final String quickFind, final int start, final int length) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
 		}
-		return configuredDoc.getListViewData(tableName, start, length, false, 0, false);
+		return configuredDoc.getListViewData(tableName, quickFind, start, length, false, 0, false);
 	}
 
 	/*
@@ -322,13 +323,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<DataItem[]> getSortedListViewData(final String documentID, final String tableName,
+			final String quickFind,
 			final int start, final int length,
 			final int sortColumnIndex, final boolean isAscending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
 		}
-		return configuredDoc.getListViewData(tableName, start, length, true, sortColumnIndex, isAscending);
+		return configuredDoc.getListViewData(tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
 	}
 
 	/*

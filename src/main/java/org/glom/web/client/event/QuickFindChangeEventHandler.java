@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Openismus GmbH
+ * Copyright (C) 2012 Openismus GmbH
  *
  * This file is part of GWT-Glom.
  *
@@ -17,14 +17,16 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.ui;
+package org.glom.web.client.event;
 
-import org.glom.web.shared.layout.LayoutGroup;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
  *
  */
-public interface ListView extends View {
-
-	public void setCellTable(final String documentID, LayoutGroup layoutGroup, String quickFind);
+public interface QuickFindChangeEventHandler extends EventHandler {
+	/**
+	 * @param event
+	 */
+	void onQuickFindChange(QuickFindChangeEvent event);
 }

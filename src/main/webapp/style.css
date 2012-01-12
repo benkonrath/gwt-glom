@@ -53,6 +53,23 @@ div#document-title
 	font-family: sans-serif;
 }
 
+.searchlabel
+{
+	float: left;
+	margin-left: 0.5em;
+	font-size: 13.3333px;
+	font-family: sans-serif;
+}
+
+.searchtextbox
+{
+	float: left;
+	margin-left: 0.5em;
+	font-size: 13.3333px;
+	font-family: sans-serif;
+}
+
+
 .records
 {
 	float: left;

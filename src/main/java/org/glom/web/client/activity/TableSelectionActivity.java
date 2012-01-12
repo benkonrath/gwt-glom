@@ -21,6 +21,7 @@ package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.event.QuickFindChangeEvent;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.HasSelectableTablePlace;
@@ -49,7 +50,8 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String documentID;
 	private String documentTitle;
 	private String tableName;
-	private HandlerRegistration changeHandlerRegistration = null;
+	private HandlerRegistration tableChangeHandlerRegistration = null;
+	private HandlerRegistration quickFindChangeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
 	public TableSelectionActivity(final ClientFactory clientFactory) {
@@ -66,8 +68,8 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		tableSelectionView.setPresenter(this);
 
 		// For table changes with the tableSelector:
-		HasChangeHandlers tableSelector = tableSelectionView.getTableSelector();
-		changeHandlerRegistration = tableSelector.addChangeHandler(new ChangeHandler() {
+		final HasChangeHandlers tableSelector = tableSelectionView.getTableSelector();
+		tableChangeHandlerRegistration = tableSelector.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(final ChangeEvent event) {
 				// Fire a table change event so that other views (e.g. the details view) know about the change and can
@@ -76,6 +78,21 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 				// Update the browser title because there's place change and the setPlace() method will not be called.
 				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
+			}
+		});
+
+		// For table changes with the tableSelector:
+		final HasChangeHandlers quickFindBox = tableSelectionView.getQuickFindBox();
+		quickFindChangeHandlerRegistration = quickFindBox.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(final ChangeEvent event) {
+				// Fire a quickfind change event so that other views (e.g. the details view) know about the change and
+				// can
+				// update themselves.
+				eventBus.fireEvent(new QuickFindChangeEvent(tableSelectionView.getQuickFindText()));
+
+				// Update the browser title because there's place change and the setPlace() method will not be called.
+				// TODO? Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		});
 
@@ -128,7 +145,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {
 			tableSelectionView.setBackLinkVisible(true);
-			tableSelectionView.setBackLink(documentID, tableName);
+			tableSelectionView.setBackLink(documentID, tableName, ""); // TODO: quickfind?
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}
@@ -136,9 +153,15 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	private void clearView() {
 		clientFactory.getTableSelectionView().clear();
-		if (changeHandlerRegistration != null) {
-			changeHandlerRegistration.removeHandler();
-			changeHandlerRegistration = null;
+
+		if (tableChangeHandlerRegistration != null) {
+			tableChangeHandlerRegistration.removeHandler();
+			tableChangeHandlerRegistration = null;
+		}
+
+		if (quickFindChangeHandlerRegistration != null) {
+			quickFindChangeHandlerRegistration.removeHandler();
+			quickFindChangeHandlerRegistration = null;
 		}
 	}
 

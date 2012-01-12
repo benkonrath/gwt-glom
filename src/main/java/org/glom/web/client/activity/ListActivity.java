@@ -21,6 +21,8 @@ package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.event.QuickFindChangeEvent;
+import org.glom.web.client.event.QuickFindChangeEventHandler;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DocumentSelectionPlace;
@@ -43,6 +45,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 
 	private final String documentID;
 	private final String tableName;
+	private final String quickFind;
 	private final ClientFactory clientFactory;
 	private final ListView listView;
 	private final AuthenticationPopup authenticationPopup;
@@ -50,6 +53,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	public ListActivity(final ListPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
+		this.quickFind = place.getQuickFind();
 		this.clientFactory = clientFactory;
 		listView = clientFactory.getListView();
 		authenticationPopup = clientFactory.getAuthenticationPopup();
@@ -86,7 +90,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ListPlace(documentID, event.getNewTableName()));
+				goTo(new ListPlace(documentID, event.getNewTableName(), ""));
 			}
 		});
 
@@ -102,10 +106,21 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
-				listView.setCellTable(documentID, result);
+				listView.setCellTable(documentID, result, quickFind);
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, callback);
+
+		// TODO: Avoid the code duplication with DetailsActivity.
+		// set the change handler for the quickfind text widget
+		eventBus.addHandler(QuickFindChangeEvent.TYPE, new QuickFindChangeEventHandler() {
+			@Override
+			public void onQuickFindChange(final QuickFindChangeEvent event) {
+				// We switch to the List view, to show search results.
+				// TODO: Show the details view if there is only one result.
+				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
+			}
+		});
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(listView.asWidget());

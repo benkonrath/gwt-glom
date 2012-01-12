@@ -47,8 +47,10 @@ public class ListViewTable extends ListTable {
 
 	private int numNonEmptyRows = 0;
 
-	public ListViewTable(final String documentID, final LayoutGroup layoutGroup, final NavigationButtonCell navigationButtonCell) {
+	public ListViewTable(final String documentID, final LayoutGroup layoutGroup,
+			final NavigationButtonCell navigationButtonCell, final String quickFind) {
 		super(documentID);
+		this.quickFind = quickFind;
 		createCellTable(layoutGroup, MAX_TABLE_ROWS, "Details", navigationButtonCell);
 	}
 
@@ -101,13 +103,13 @@ public class ListViewTable extends ListTable {
 					final ColumnSortInfo info = colSortList.get(0);
 
 					// TODO: Just make the sort field an optional parameter instead of having two methods?
-					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName,
+					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName, quickFind,
 							start, range.getLength(),
 							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()),
 							info.isAscending(), callback);
 
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getListViewData(documentID, tableName, start,
+					OnlineGlomServiceAsync.Util.getInstance().getListViewData(documentID, tableName, quickFind, start,
 							range.getLength(), callback);
 
 				}

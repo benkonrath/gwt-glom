@@ -30,6 +30,7 @@ import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.SqlExpr;
+import org.glom.libglom.Value;
 import org.glom.web.shared.DataItem;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -55,11 +56,11 @@ public class ListViewDBAccess extends ListDBAccess {
 		}
 	}
 
-	public ArrayList<DataItem[]> getData(final int start, final int length,
+	public ArrayList<DataItem[]> getData(final String quickFind, final int start, final int length,
 			final boolean useSortClause, final int sortColumnIndex,
 			final boolean isAscending) {
 
-		return getListData(start, length, useSortClause, sortColumnIndex, isAscending);
+		return getListData(quickFind, start, length, useSortClause, sortColumnIndex, isAscending);
 	}
 
 	/*
@@ -82,8 +83,9 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(final SortClause sortClause) {
-		final SqlExpr whereClause = new SqlExpr();// Ignored.
+	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
+		final Value quickFindValue = new Value(quickFind);
+		final SqlExpr whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
 		final Relationship extraJoin = new Relationship(); // Ignored.
 		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
 				sortClause);

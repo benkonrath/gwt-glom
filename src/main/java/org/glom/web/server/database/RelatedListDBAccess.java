@@ -125,7 +125,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// Set the foreignKeyValue
 		this.foreignKeyValue = foreignKeyValue;
 
-		return getListData(start, length, useSortClause, sortColumnIndex, isAscending);
+		return getListData("" /* quickFind */, start, length, useSortClause, sortColumnIndex, isAscending);
 	}
 
 	/*
@@ -151,7 +151,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(SortClause sortClause) {
+	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
 		// TODO: combine this method with getCountQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
@@ -165,7 +165,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 			return "";
 		}
 
-		SqlExpr whereClause = new SqlExpr();
+		SqlExpr whereClause = new SqlExpr(); // Note that we ignore quickFind.
 		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
 			final Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,

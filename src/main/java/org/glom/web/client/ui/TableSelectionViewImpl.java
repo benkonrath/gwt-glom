@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 
 /**
  *
@@ -41,12 +42,18 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	Label documentTitleLabel = new Label();
 	ListBox tableChooser = new ListBox();
+
+	Label searchLabel = new Label("Search");
+	TextBox searchTextBox = new TextBox();
+
 	Anchor backLink = new Anchor("Back to List");
 	private Presenter presenter;
 	private HandlerRegistration backLinkHandlerReg;
 
 	public TableSelectionViewImpl() {
 		tableChooser.setStyleName("tablechooser");
+		searchLabel.setStyleName("searchlabel"); // TODO: This is tedious.
+		searchTextBox.setStyleName("searchtextbox"); // TODO: This is tedious.
 		backLink.setStyleName("backlink");
 
 		// empty click handler to avoid having to check for if the HandlerRegistration is null in setBackLink()
@@ -61,6 +68,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
 		headbox.add(backLink);
 		headbox.add(tableChooser);
+		headbox.add(searchLabel);
+		headbox.add(searchTextBox);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -109,12 +118,12 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setBackLink(final String documentID, final String tableName) {
+	public void setBackLink(final String documentID, final String tableName, final String quickFind) {
 		backLinkHandlerReg.removeHandler();
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID, tableName));
+				presenter.goTo(new ListPlace(documentID, tableName, ""));
 			}
 		});
 	}
@@ -148,5 +157,15 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	public String getSelectedTableTitle() {
 		final int selectedIndex = tableChooser.getSelectedIndex();
 		return selectedIndex < 0 ? "" : tableChooser.getItemText(selectedIndex);
+	}
+
+	@Override
+	public HasChangeHandlers getQuickFindBox() {
+		return searchTextBox;
+	}
+
+	@Override
+	public String getQuickFindText() {
+		return searchTextBox.getText();
 	}
 }

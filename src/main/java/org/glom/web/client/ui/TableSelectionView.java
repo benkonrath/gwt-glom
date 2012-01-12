@@ -41,9 +41,16 @@ public interface TableSelectionView extends View {
 
 	void setTableSelection(ArrayList<String> tableNames, ArrayList<String> tableTitles);
 
+	/**
+	 * Allow the Activity to respond to changes to this widget.
+	 */
+	HasChangeHandlers getQuickFindBox();
+
+	String getQuickFindText();
+
 	void setBackLinkVisible(boolean visible);
 
-	void setBackLink(final String documentID, final String tableName);
+	void setBackLink(final String documentID, final String tableName, String quickFind);
 
 	void setDocumentTitle(String documentTitle);
 

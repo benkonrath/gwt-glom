@@ -24,10 +24,13 @@ import java.util.ArrayList;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.Utils;
+import org.glom.web.client.event.QuickFindChangeEvent;
+import org.glom.web.client.event.QuickFindChangeEventHandler;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.DocumentSelectionPlace;
+import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.client.ui.View;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
@@ -163,6 +166,16 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutAndData(documentID, tableName, primaryKeyValue,
 				callback);
+
+		// set the change handler for the quickfind text widget
+		eventBus.addHandler(QuickFindChangeEvent.TYPE, new QuickFindChangeEventHandler() {
+			@Override
+			public void onQuickFindChange(final QuickFindChangeEvent event) {
+				// We switch to the List view, to show search results.
+				// TODO: Show the details view if there is only one result.
+				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
+			}
+		});
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(detailsView.asWidget());

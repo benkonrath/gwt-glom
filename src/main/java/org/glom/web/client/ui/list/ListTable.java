@@ -98,6 +98,7 @@ public abstract class ListTable extends Composite {
 	final private ListTablePager pager = new ListTablePager();
 	protected String documentID;
 	protected String tableName;
+	protected String quickFind;
 	protected CellTable<DataItem[]> cellTable;
 	protected EventBus eventBus;
 	Column<DataItem[], String> navigationButtonColumn;
@@ -117,7 +118,7 @@ public abstract class ListTable extends Composite {
 	protected void createCellTable(final LayoutGroup layoutGroup, final int numVisibleRows,
 			final String navigationButtonLabel,
 			final NavigationButtonCell navigationButtonCell) {
-		tableName = layoutGroup.getTableName();
+		tableName = layoutGroup.getTableName(); //TODO: Is this in the regular libglom API, or is it a gwt-glom hack? murrayc
 		final ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();

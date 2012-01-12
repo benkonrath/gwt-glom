@@ -63,7 +63,7 @@ public interface OnlineGlomService extends RemoteService {
 	 *            the number of rows of data to retrieve
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, int start, int length);
+	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, String quickFind, int start, int length);
 
 	/**
 	 * Retrieves sorted data for a list view table.
@@ -84,8 +84,9 @@ public interface OnlineGlomService extends RemoteService {
 	 *            should be sorted in descending order
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<DataItem[]> getSortedListViewData(String documentID, String tableName, int start, int length,
-			int sortColumnIndex, boolean isAscending);
+
+	ArrayList<DataItem[]> getSortedListViewData(String documentID, String tableName, String quickFind, int start,
+			int length, int sortColumnIndex, boolean isAscending);
 
 	/**
 	 * Gets a list of Glom documents found in the configured directory.

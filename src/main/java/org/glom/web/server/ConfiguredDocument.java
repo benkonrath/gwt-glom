@@ -222,7 +222,7 @@ final class ConfiguredDocument {
 		return libglomLayoutGroup;
 	}
 
-	ArrayList<DataItem[]> getListViewData(String tableName, final int start, final int length,
+	ArrayList<DataItem[]> getListViewData(String tableName, final String quickFind, final int start, final int length,
 			final boolean useSortClause,
 			final int sortColumnIndex, final boolean isAscending) {
 		// Validate the table name.
@@ -236,7 +236,7 @@ final class ConfiguredDocument {
 				libglomLayoutGroup);
 
 		// Return the data.
-		return listViewDBAccess.getData(start, length, useSortClause, sortColumnIndex, isAscending);
+		return listViewDBAccess.getData(quickFind, start, length, useSortClause, sortColumnIndex, isAscending);
 	}
 
 	DataItem[] getDetailsData(String tableName, final TypedDataItem primaryKeyValue) {

@@ -26,18 +26,27 @@ import com.google.gwt.place.shared.Prefix;
 
 public class ListPlace extends HasSelectableTablePlace {
 
-	public ListPlace(String documentID, String tableName) {
+	private final String quickFind;
+
+	public ListPlace(final String documentID, final String tableName, final String quickFind) {
 		super(documentID, tableName);
+		this.quickFind = quickFind;
+	}
+
+	public String getQuickFind() {
+		return quickFind;
 	}
 
 	@Prefix("list")
 	public static class Tokenizer extends HasSelectableTablePlace.Tokenizer implements PlaceTokenizer<ListPlace> {
+		protected final String quickFindKey = "quickfind";
 
 		@Override
 		public String getToken(final ListPlace place) {
 			final HashMap<String, String> params = new HashMap<String, String>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
+			params.put(quickFindKey, place.getQuickFind());
 			return buildParamsToken(params);
 		}
 
@@ -46,11 +55,12 @@ public class ListPlace extends HasSelectableTablePlace {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
+			String quickFind = "";
 
 			final HashMap<String, String> params = getTokenParams(token);
 
 			if (params == null) {
-				return new ListPlace("", "");
+				return new ListPlace("", "", "");
 			}
 
 			if (params.get(documentKey) != null) {
@@ -61,12 +71,16 @@ public class ListPlace extends HasSelectableTablePlace {
 				tableName = params.get(tableKey);
 			}
 
-			if ((documentID.isEmpty())) {
-				// The documentID was not retrieved from the URL. Use empty values for the list place.
-				return new ListPlace("", "");
+			if (params.get(quickFindKey) != null) {
+				quickFind = params.get(quickFindKey);
 			}
 
-			return new ListPlace(documentID, tableName);
+			if ((documentID.isEmpty())) {
+				// The documentID was not retrieved from the URL. Use empty values for the list place.
+				return new ListPlace("", "", "");
+			}
+
+			return new ListPlace(documentID, tableName, quickFind);
 		}
 	}
 
