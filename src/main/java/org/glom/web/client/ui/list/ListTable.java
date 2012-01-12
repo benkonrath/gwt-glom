@@ -114,7 +114,8 @@ public abstract class ListTable extends Composite {
 		this.documentID = documentID;
 	}
 
-	public void createCellTable(final LayoutGroup layoutGroup, final int numVisibleRows, final String navigationButtonLabel,
+	protected void createCellTable(final LayoutGroup layoutGroup, final int numVisibleRows,
+			final String navigationButtonLabel,
 			final NavigationButtonCell navigationButtonCell) {
 		tableName = layoutGroup.getTableName();
 		final ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();

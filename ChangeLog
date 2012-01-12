@@ -1,5 +1,12 @@
 2012-01-12  Murray Cumming  <murrayc@murrayc.com>
 
+	ListTable: Minor change.
+
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java
+	createCellTable(): Make this protected instead of public.
+
+2012-01-12  Murray Cumming  <murrayc@murrayc.com>
+
 	Many files: Use final for the parameters and use the @override attribute.
 
 2012-01-22  Ben Konrath <ben@bagu.org>
