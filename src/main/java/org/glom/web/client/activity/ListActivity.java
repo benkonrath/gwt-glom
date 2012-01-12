@@ -47,7 +47,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	private final ListView listView;
 	private final AuthenticationPopup authenticationPopup;
 
-	public ListActivity(ListPlace place, ClientFactory clientFactory) {
+	public ListActivity(final ListPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
 		this.clientFactory = clientFactory;
@@ -56,7 +56,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	}
 
 	@Override
-	public void start(AcceptsOneWidget panel, final EventBus eventBus) {
+	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 		if (documentID.isEmpty())
 			goTo(new DocumentSelectionPlace());
 
@@ -65,13 +65,15 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 
 		// TODO this should really be it's own Place/Activity
 		// check if the authentication info has been set for the document
-		AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated()");
 			}
 
-			public void onSuccess(Boolean result) {
+			@Override
+			public void onSuccess(final Boolean result) {
 				if (!result) {
 					setUpAuthClickHandler(eventBus);
 					authenticationPopup.center();
@@ -89,13 +91,15 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 		});
 
 		// populate the cell table with data
-		AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.getListViewLayout()");
 			}
 
-			public void onSuccess(LayoutGroup result) {
+			@Override
+			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
 				listView.setCellTable(documentID, result);
@@ -110,17 +114,17 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	private void setUpAuthClickHandler(final EventBus eventBus) {
 		authenticationPopup.setClickOkHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				authenticationPopup.setTextFieldsEnabled(false);
-				AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+				final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
 						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication()");
 					}
 
 					@Override
-					public void onSuccess(Boolean result) {
+					public void onSuccess(final Boolean result) {
 						if (result) {
 							authenticationPopup.hide();
 							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
@@ -169,7 +173,8 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	 * 
 	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
-	public void goTo(Place place) {
+	@Override
+	public void goTo(final Place place) {
 		clientFactory.getPlaceController().goTo(place);
 	}
 

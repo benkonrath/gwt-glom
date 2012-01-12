@@ -83,11 +83,11 @@ public abstract class ListTable extends Composite {
 		 */
 		@Override
 		protected String createText() {
-			int numNonEmptyRows = getNumNonEmptyRows();
+			final int numNonEmptyRows = getNumNonEmptyRows();
 			if (numNonEmptyRows < getMinNumVisibleRows()) {
-				NumberFormat formatter = NumberFormat.getFormat("#,###");
+				final NumberFormat formatter = NumberFormat.getFormat("#,###");
 				return formatter.format(1) + "-" + formatter.format(numNonEmptyRows) + " of "
-						+ formatter.format(numNonEmptyRows);
+				+ formatter.format(numNonEmptyRows);
 			} else {
 				return super.createText();
 			}
@@ -110,21 +110,21 @@ public abstract class ListTable extends Composite {
 		// disable default constructor
 	}
 
-	public ListTable(String documentID) {
+	public ListTable(final String documentID) {
 		this.documentID = documentID;
 	}
 
-	public void createCellTable(LayoutGroup layoutGroup, int numVisibleRows, String navigationButtonLabel,
-			NavigationButtonCell navigationButtonCell) {
+	public void createCellTable(final LayoutGroup layoutGroup, final int numVisibleRows, final String navigationButtonLabel,
+			final NavigationButtonCell navigationButtonCell) {
 		tableName = layoutGroup.getTableName();
-		ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
+		final ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
-		LayoutItemField primaryKeyLayoutItem = (LayoutItemField) layoutItems.get(primaryKeyIndex);
+		final LayoutItemField primaryKeyLayoutItem = (LayoutItemField) layoutItems.get(primaryKeyIndex);
 		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.getType();
-		ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
+		final ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
 			@Override
-			public Object getKey(DataItem[] row) {
+			public Object getKey(final DataItem[] row) {
 				if (row.length == 1 && row[0] == null)
 					// an empty row
 					return null;
@@ -138,12 +138,12 @@ public abstract class ListTable extends Composite {
 		// set some style
 		cellTable.setStyleName("data-list");
 		cellTable.getElement().getStyle().setProperty("whiteSpace", "nowrap"); // this prevents the header and row text
-																				// from wrapping
+		// from wrapping
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
-		int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();
+		final int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();
 		for (int i = 0; i < numItems; i++) {
-			LayoutItem layoutItem = layoutItems.get(i);
+			final LayoutItem layoutItem = layoutItems.get(i);
 
 			// only add columns for LayoutItemField types
 			if (layoutItem instanceof LayoutItemField) {
@@ -156,7 +156,7 @@ public abstract class ListTable extends Composite {
 		addNavigationButtonColumn(navigationButtonLabel, navigationButtonCell);
 
 		// create and set the data provider
-		AbstractDataProvider<DataItem[]> dataProvider = getDataProvider();
+		final AbstractDataProvider<DataItem[]> dataProvider = getDataProvider();
 		dataProvider.addDataDisplay(cellTable);
 
 		// add an AsyncHandler to activate sorting for the data provider
@@ -181,7 +181,7 @@ public abstract class ListTable extends Composite {
 		cellTable.addLoadingStateChangeHandler(new LoadingStateChangeEvent.Handler() {
 
 			@Override
-			public void onLoadingStateChanged(LoadingStateChangeEvent event) {
+			public void onLoadingStateChanged(final LoadingStateChangeEvent event) {
 				// LoadingState.LOADED means the data has been received but not necessarily rendered.
 				if (event.getLoadingState() == LoadingState.LOADED) {
 					new Timer() {
@@ -189,7 +189,7 @@ public abstract class ListTable extends Composite {
 						@Override
 						public void run() {
 							if (cellTable.isAttached()) {
-								int bodyHeight = cellTable.getBodyHeight();
+								final int bodyHeight = cellTable.getBodyHeight();
 								/*
 								 * Modify the indicator widget only if body height is bigger than the body height that
 								 * has already been set. This is just a safety check for the case where the timer isn't
@@ -201,14 +201,14 @@ public abstract class ListTable extends Composite {
 								 * in an unselected notebook tab).
 								 */
 								if (bodyHeight > cellTableBodyHeight) {
-									Widget loadingIndicator = cellTable.getLoadingIndicator();
+									final Widget loadingIndicator = cellTable.getLoadingIndicator();
 
 									// Set the margin of the parent div to zero.
-									Element parent = loadingIndicator.getElement().getParentElement();
+									final Element parent = loadingIndicator.getElement().getParentElement();
 									parent.getStyle().setMargin(0, Unit.PX);
 
 									// Set the height of the table cell that holds the loading indicator GIF.
-									Element cell = parent.getParentElement().getParentElement().getParentElement();
+									final Element cell = parent.getParentElement().getParentElement().getParentElement();
 									cell.getStyle().setPadding(0, Unit.PX);
 									cell.getStyle().setHeight(bodyHeight, Unit.PX);
 
@@ -231,7 +231,7 @@ public abstract class ListTable extends Composite {
 	private void addColumn(final LayoutItemField layoutItemField) {
 		// Setup the default alignment of the column.
 		HorizontalAlignmentConstant columnAlignment;
-		Formatting formatting = layoutItemField.getFormatting();
+		final Formatting formatting = layoutItemField.getFormatting();
 		switch (formatting.getHorizontalAlignment()) {
 		case HORIZONTAL_ALIGNMENT_LEFT:
 			columnAlignment = HasHorizontalAlignment.ALIGN_LEFT;
@@ -253,7 +253,7 @@ public abstract class ListTable extends Composite {
 		case TYPE_BOOLEAN:
 			column = new Column<DataItem[], Boolean>(new BooleanCell()) {
 				@Override
-				public Boolean getValue(DataItem[] row) {
+				public Boolean getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null)
 						// an empty row
 						return null;
@@ -266,15 +266,15 @@ public abstract class ListTable extends Composite {
 
 		case TYPE_NUMERIC:
 			// create a GWT NumberFormat for the column
-			GlomNumericFormat glomNumericFormat = formatting.getGlomNumericFormat();
-			NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
+			final GlomNumericFormat glomNumericFormat = formatting.getGlomNumericFormat();
+			final NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
 
 			// create the actual column
 			column = new Column<DataItem[], Double>(new NumericCell(formatting.getTextFormatColourForeground(),
 					formatting.getTextFormatColourBackground(), gwtNumberFormat,
 					glomNumericFormat.getUseAltForegroundColourForNegatives(), glomNumericFormat.getCurrencyCode())) {
 				@Override
-				public Double getValue(DataItem[] row) {
+				public Double getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null)
 						// an empty row
 						return null;
@@ -294,7 +294,7 @@ public abstract class ListTable extends Composite {
 			column = new Column<DataItem[], String>(new TextCell(formatting.getTextFormatColourForeground(),
 					formatting.getTextFormatColourBackground())) {
 				@Override
-				public String getValue(DataItem[] row) {
+				public String getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null)
 						// an empty row
 						return null;
@@ -310,11 +310,11 @@ public abstract class ListTable extends Composite {
 		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
 
-	private void addNavigationButtonColumn(final String navigationButtonLabel, NavigationButtonCell navigationButtonCell) {
+	private void addNavigationButtonColumn(final String navigationButtonLabel, final NavigationButtonCell navigationButtonCell) {
 
 		navigationButtonColumn = new Column<DataItem[], String>(navigationButtonCell) {
 			@Override
-			public String getValue(DataItem[] row) {
+			public String getValue(final DataItem[] row) {
 				if (row.length == 1 && row[0] == null)
 					// an empty row
 					return null;
@@ -336,7 +336,7 @@ public abstract class ListTable extends Composite {
 	/**
 	 * Sets the row count for the pager.
 	 */
-	public void setRowCount(int rowCount) {
+	public void setRowCount(final int rowCount) {
 		cellTable.setRowCount(rowCount);
 	}
 
@@ -375,16 +375,16 @@ public abstract class ListTable extends Composite {
 			// Use the NavigationButtonCell to get the button HTML and find the width. I'm doing this because the
 			// CellTable widget is highly dynamic and there's no way to guarantee that we can access the navigation
 			// button HTML by using the actual CellTable.
-			String buttonLabel = navigationButtonColumn.getValue(new DataItem[2]); // a hack to get the button label
-			SafeHtmlBuilder buttonBuilder = new SafeHtmlBuilder();
+			final String buttonLabel = navigationButtonColumn.getValue(new DataItem[2]); // a hack to get the button label
+			final SafeHtmlBuilder buttonBuilder = new SafeHtmlBuilder();
 			navigationButtonColumn.getCell().render(null, buttonLabel, buttonBuilder);
 			Element navigationButton = new HTML(buttonBuilder.toSafeHtml()).getElement().getFirstChildElement();
 
 			// Calculate the width similar to Utils.getWidgetHeight().
-			Document doc = Document.get();
+			final Document doc = Document.get();
 			navigationButton.getStyle().setVisibility(Visibility.HIDDEN);
 			doc.getBody().appendChild(navigationButton);
-			int buttonWidth = navigationButton.getOffsetWidth();
+			final int buttonWidth = navigationButton.getOffsetWidth();
 
 			// remove the div from the from the document
 			doc.getBody().removeChild(navigationButton);

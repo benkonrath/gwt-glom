@@ -43,7 +43,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public abstract class ListDBAccess extends DBAccess {
 	protected LayoutFieldVector fieldsToGet;
 
-	protected ListDBAccess(Document document, String documentID, ComboPooledDataSource cpds, String tableName) {
+	protected ListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds, final String tableName) {
 		super(document, documentID, cpds, tableName);
 	}
 
@@ -51,14 +51,15 @@ public abstract class ListDBAccess extends DBAccess {
 
 	protected abstract String getCountQuery();
 
-	protected ArrayList<DataItem[]> getListData(int start, int length, boolean useSortClause, int sortColumnIndex,
-			boolean isAscending) {
+	protected ArrayList<DataItem[]> getListData(final int start, final int length, final boolean useSortClause,
+			final int sortColumnIndex,
+			final boolean isAscending) {
 
 		// create a sort clause for the column we've been asked to sort
-		SortClause sortClause = new SortClause();
+		final SortClause sortClause = new SortClause();
 		if (useSortClause) {
-			org.glom.libglom.LayoutItem item = fieldsToGet.get(sortColumnIndex);
-			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
+			final org.glom.libglom.LayoutItem item = fieldsToGet.get(sortColumnIndex);
+			final LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
 			if (layoutItemField != null)
 				sortClause.addLast(new SortFieldPair(layoutItemField, isAscending));
 			else {
@@ -67,10 +68,10 @@ public abstract class ListDBAccess extends DBAccess {
 			}
 		} else {
 			// create a sort clause for the primary key if we're not asked to sort a specific column
-			int numItems = Utils.safeLongToInt(fieldsToGet.size());
+			final int numItems = Utils.safeLongToInt(fieldsToGet.size());
 			for (int i = 0; i < numItems; i++) {
-				LayoutItem_Field layoutItem = fieldsToGet.get(i);
-				Field details = layoutItem.get_full_field_details();
+				final LayoutItem_Field layoutItem = fieldsToGet.get(i);
+				final Field details = layoutItem.get_full_field_details();
 				if (details != null && details.get_primary_key()) {
 					sortClause.addLast(new SortFieldPair(layoutItem, true)); // ascending
 					break;
@@ -91,7 +92,7 @@ public abstract class ListDBAccess extends DBAccess {
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			st.setFetchSize(length);
-			String query = getSelectQuery(sortClause) + " OFFSET " + start;
+			final String query = getSelectQuery(sortClause) + " OFFSET " + start;
 			// TODO Test memory usage before and after we execute the query that would result in a large ResultSet.
 			// We need to ensure that the JDBC driver is in fact returning a cursor based result set that has a low
 			// memory footprint. Check the difference between this value before and after the query:
@@ -101,7 +102,7 @@ public abstract class ListDBAccess extends DBAccess {
 
 			// get the results from the ResultSet
 			rowsList = convertResultSetToDTO(length, fieldsToGet, rs);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
 		} finally {
@@ -113,7 +114,7 @@ public abstract class ListDBAccess extends DBAccess {
 					st.close();
 				if (conn != null)
 					conn.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
@@ -138,7 +139,7 @@ public abstract class ListDBAccess extends DBAccess {
 			conn = cpds.getConnection();
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			String query = getCountQuery();
+			final String query = getCountQuery();
 			// TODO Test execution time of this query with when the number of rows in the table is large (say >
 			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
 			rs = st.executeQuery(query);
@@ -147,7 +148,7 @@ public abstract class ListDBAccess extends DBAccess {
 			rs.next();
 			return rs.getInt(1);
 
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			Log.error(documentID, tableName, "Error calculating number of rows in the query.", e);
 			return -1;
 		} finally {
@@ -159,7 +160,7 @@ public abstract class ListDBAccess extends DBAccess {
 					st.close();
 				if (conn != null)
 					conn.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}

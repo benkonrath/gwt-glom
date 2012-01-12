@@ -37,10 +37,10 @@ public class ListViewImpl extends Composite implements ListView {
 	 * Cell renderer for Details open buttons.
 	 */
 	private class ListViewNavigationButtonCell extends NavigationButtonCell {
-		private String documentID;
-		private String tableName;
+		private final String documentID;
+		private final String tableName;
 
-		public ListViewNavigationButtonCell(String documentID, String tableName) {
+		public ListViewNavigationButtonCell(final String documentID, final String tableName) {
 			this.documentID = documentID;
 			this.tableName = tableName;
 		}
@@ -53,8 +53,8 @@ public class ListViewImpl extends Composite implements ListView {
 		 * com.google.gwt.cell.client.ValueUpdater)
 		 */
 		@Override
-		protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
-				ValueUpdater<String> valueUpdater) {
+		protected void onEnterKeyDown(final Context context, final Element parent, final String value, final NativeEvent event,
+				final ValueUpdater<String> valueUpdater) {
 			presenter.goTo(new DetailsPlace(documentID, tableName, (TypedDataItem) context.getKey()));
 		}
 

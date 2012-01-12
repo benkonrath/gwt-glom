@@ -52,12 +52,12 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		// empty click handler to avoid having to check for if the HandlerRegistration is null in setBackLink()
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 			}
 		});
 
 		// headbox with the table selector
-		FlowPanel headbox = new FlowPanel();
+		final FlowPanel headbox = new FlowPanel();
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
 		headbox.add(backLink);
 		headbox.add(tableChooser);
@@ -71,7 +71,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
 
 		// the main container widget
-		FlowPanel mainPanel = new FlowPanel();
+		final FlowPanel mainPanel = new FlowPanel();
 		mainPanel.add(documentTitleLabel);
 		mainPanel.add(headbox);
 
@@ -79,7 +79,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setTableSelection(ArrayList<String> names, ArrayList<String> titles) {
+	public void setTableSelection(final ArrayList<String> names, final ArrayList<String> titles) {
 		tableChooser.clear();
 		for (int i = 0; i < names.size(); i++) {
 			tableChooser.addItem(titles.get(i), names.get(i));
@@ -87,7 +87,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setSelectedTableName(String tableName) {
+	public void setSelectedTableName(final String tableName) {
 		for (int i = 0; i < tableChooser.getItemCount(); i++) {
 			if (tableName.equals(tableChooser.getValue(i))) {
 				tableChooser.setSelectedIndex(i);
@@ -104,21 +104,23 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public String getSelectedTableName() {
-		int selectedIndex = tableChooser.getSelectedIndex();
+		final int selectedIndex = tableChooser.getSelectedIndex();
 		return selectedIndex < 0 ? "" : tableChooser.getValue(selectedIndex);
 	}
 
+	@Override
 	public void setBackLink(final String documentID, final String tableName) {
 		backLinkHandlerReg.removeHandler();
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				presenter.goTo(new ListPlace(documentID, tableName));
 			}
 		});
 	}
 
-	public void setDocumentTitle(String documentTitle) {
+	@Override
+	public void setDocumentTitle(final String documentTitle) {
 		documentTitleLabel.setText(documentTitle);
 		documentTitleLabel.getElement().getStyle().setOpacity(100);
 	}
@@ -133,18 +135,18 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setBackLinkVisible(boolean visible) {
+	public void setBackLinkVisible(final boolean visible) {
 		backLink.setVisible(visible);
 	}
 
 	@Override
-	public void setPresenter(Presenter presenter) {
+	public void setPresenter(final Presenter presenter) {
 		this.presenter = presenter;
 	}
 
 	@Override
 	public String getSelectedTableTitle() {
-		int selectedIndex = tableChooser.getSelectedIndex();
+		final int selectedIndex = tableChooser.getSelectedIndex();
 		return selectedIndex < 0 ? "" : tableChooser.getItemText(selectedIndex);
 	}
 }

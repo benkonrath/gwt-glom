@@ -47,7 +47,7 @@ public class ListViewTable extends ListTable {
 
 	private int numNonEmptyRows = 0;
 
-	public ListViewTable(String documentID, LayoutGroup layoutGroup, NavigationButtonCell navigationButtonCell) {
+	public ListViewTable(final String documentID, final LayoutGroup layoutGroup, final NavigationButtonCell navigationButtonCell) {
 		super(documentID);
 		createCellTable(layoutGroup, MAX_TABLE_ROWS, "Details", navigationButtonCell);
 	}
@@ -59,7 +59,7 @@ public class ListViewTable extends ListTable {
 	 */
 	@Override
 	protected AsyncDataProvider<DataItem[]> getDataProvider() {
-		AsyncDataProvider<DataItem[]> dataProvider = new AsyncDataProvider<DataItem[]>() {
+		final AsyncDataProvider<DataItem[]> dataProvider = new AsyncDataProvider<DataItem[]>() {
 
 			@SuppressWarnings("unchecked")
 			@Override
@@ -67,18 +67,20 @@ public class ListViewTable extends ListTable {
 				// setup the callback object
 				final Range range = display.getVisibleRange();
 				final int start = range.getStart();
-				AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
-					public void onFailure(Throwable caught) {
+				final AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
+					@Override
+					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
 						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)ListViewData()");
 					}
 
-					public void onSuccess(ArrayList<DataItem[]> result) {
+					@Override
+					public void onSuccess(final ArrayList<DataItem[]> result) {
 						// keep track of the number of non-empty rows (rows with data)
 						numNonEmptyRows = result.size();
 
 						// Add empty rows if required.
-						int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
+						final int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
 						for (int i = 0; i < numEmptyRows; i++) {
 							// A row that has one null item will be rendered as an empty row.
 							result.add(new DataItem[1]);
@@ -93,13 +95,15 @@ public class ListViewTable extends ListTable {
 				};
 
 				// get data from the server
-				ColumnSortList colSortList = cellTable.getColumnSortList();
+				final ColumnSortList colSortList = cellTable.getColumnSortList();
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
-					ColumnSortInfo info = colSortList.get(0);
+					final ColumnSortInfo info = colSortList.get(0);
 
-					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName, start,
-							range.getLength(), cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()),
+					// TODO: Just make the sort field an optional parameter instead of having two methods?
+					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName,
+							start, range.getLength(),
+							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()),
 							info.isAscending(), callback);
 
 				} else {

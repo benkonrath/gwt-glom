@@ -64,9 +64,9 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	 */
 	private class RelatedListNavigationButtonCell extends NavigationButtonCell {
 
-		private String relationshipName;
+		private final String relationshipName;
 
-		public RelatedListNavigationButtonCell(String relationshipName) {
+		public RelatedListNavigationButtonCell(final String relationshipName) {
 			this.relationshipName = relationshipName;
 		}
 
@@ -78,16 +78,17 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		 * com.google.gwt.cell.client.ValueUpdater)
 		 */
 		@Override
-		protected void onEnterKeyDown(Context context, Element parent, String value, NativeEvent event,
-				ValueUpdater<String> valueUpdater) {
-			AsyncCallback<NavigationRecord> callback = new AsyncCallback<NavigationRecord>() {
-				public void onFailure(Throwable caught) {
+		protected void onEnterKeyDown(final Context context, final Element parent, final String value, final NativeEvent event,
+				final ValueUpdater<String> valueUpdater) {
+			final AsyncCallback<NavigationRecord> callback = new AsyncCallback<NavigationRecord>() {
+				@Override
+				public void onFailure(final Throwable caught) {
 					// TODO: create a way to notify users of asynchronous callback failures
 					GWT.log("AsyncCallback Failed: OnlineGlomService.getSuitableRecordToViewDetails()");
 				}
 
 				@Override
-				public void onSuccess(NavigationRecord result) {
+				public void onSuccess(final NavigationRecord result) {
 					processNavigation(result.getTableName(), result.getPrimaryKeyValue());
 				}
 
@@ -105,7 +106,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	ArrayList<DetailsCell> detailsCells;
 	ArrayList<Portal> portals;
 
-	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
+	public DetailsActivity(final DetailsPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
 		this.primaryKeyValue = place.getPrimaryKeyValue();
@@ -120,7 +121,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	 * com.google.gwt.event.shared.EventBus)
 	 */
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 		if (documentID.isEmpty())
 			goTo(new DocumentSelectionPlace());
 
@@ -139,14 +140,15 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		});
 
 		// get the layout and data for the DetailsView
-		AsyncCallback<DetailsLayoutAndData> callback = new AsyncCallback<DetailsLayoutAndData>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<DetailsLayoutAndData> callback = new AsyncCallback<DetailsLayoutAndData>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsLayoutAndData()");
 			}
 
 			@Override
-			public void onSuccess(DetailsLayoutAndData result) {
+			public void onSuccess(final DetailsLayoutAndData result) {
 				if (result == null) {
 					// The result is null only when the documentID was not found. There's nothing to display without the
 					// documentID.
@@ -169,9 +171,9 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	/*
 	 * Create the layout.
 	 */
-	private void createLayout(ArrayList<LayoutGroup> layout) {
+	private void createLayout(final ArrayList<LayoutGroup> layout) {
 		// add the groups
-		for (LayoutGroup layoutGroup : layout) {
+		for (final LayoutGroup layoutGroup : layout) {
 			detailsView.addGroup(layoutGroup);
 		}
 
@@ -185,8 +187,8 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			if (layoutItemField.getAddNavigation()) {
 				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
 					@Override
-					public void onClick(ClickEvent event) {
-						TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getType(),
+					public void onClick(final ClickEvent event) {
+						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getType(),
 								detailsCell.getData());
 						processNavigation(layoutItemField.getNavigationTableName(), primaryKeyItem);
 
@@ -200,7 +202,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	/*
 	 * Set the data.
 	 */
-	private void setData(DataItem[] data) {
+	private void setData(final DataItem[] data) {
 
 		if (data == null)
 			return;
@@ -210,24 +212,24 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			GWT.log("Warning: The number of data items doesn't match the number of data detailsCells.");
 
 		for (int i = 0; i < Math.min(detailsCells.size(), data.length); i++) {
-			DetailsCell detailsCell = detailsCells.get(i);
+			final DetailsCell detailsCell = detailsCells.get(i);
 			if (data[i] != null) {
 
 				// set the DatailsItem
 				detailsCell.setData(data[i]);
 
 				// see if there are any related lists that need to be setup
-				for (Portal portal : portals) {
-					LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
-					LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
+				for (final Portal portal : portals) {
+					final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
+					final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 
 					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
 						if (data[i] == null)
 							continue;
 
-						TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getType(), data[i]);
+						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getType(), data[i]);
 
-						RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
+						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
 								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getName()));
 
 						if (!layoutItemPortal.getAddNavigation()
@@ -246,14 +248,15 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	private void refreshData() {
 
 		// get the data for the DetailsView
-		AsyncCallback<DataItem[]> callback = new AsyncCallback<DataItem[]>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<DataItem[]> callback = new AsyncCallback<DataItem[]>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsData()");
 			}
 
 			@Override
-			public void onSuccess(DataItem[] result) {
+			public void onSuccess(final DataItem[] result) {
 				setData(result);
 			}
 		};
@@ -263,16 +266,17 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	}
 
 	// sets the row count for the related list table
-	private void setRowCountForRelatedListTable(final RelatedListTable relatedListTable, String relationshipName,
-			TypedDataItem foreignKeyValue) {
-		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
-			public void onFailure(Throwable caught) {
+	private void setRowCountForRelatedListTable(final RelatedListTable relatedListTable, final String relationshipName,
+			final TypedDataItem foreignKeyValue) {
+		final AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.getRelatedListRowCount()");
 			}
 
 			@Override
-			public void onSuccess(Integer result) {
+			public void onSuccess(final Integer result) {
 				if (result.intValue() <= relatedListTable.getMinNumVisibleRows()) {
 					// Set the table row count to the minimum row count if the data row count is less than or equal to
 					// the minimum row count. This ensures that data with fewer rows than the minimum will not create
@@ -294,7 +298,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	 * Process a navigation by either doing: nothing if the navigation isn't valid, refreshing the data for the current
 	 * table with a new primary key, or going to a new table with a new primary key.
 	 */
-	private void processNavigation(String navigationTableName, TypedDataItem navigationPrimaryKeyValue) {
+	private void processNavigation(final String navigationTableName, final TypedDataItem navigationPrimaryKeyValue) {
 
 		// Ensure the new table name is valid.
 		String newTableName;
@@ -351,7 +355,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	@Override
-	public void goTo(Place place) {
+	public void goTo(final Place place) {
 		clientFactory.getPlaceController().goTo(place);
 	}
 

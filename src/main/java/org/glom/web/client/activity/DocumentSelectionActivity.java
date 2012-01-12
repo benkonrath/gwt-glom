@@ -38,24 +38,26 @@ public class DocumentSelectionActivity extends AbstractActivity implements View.
 	private final ClientFactory clientFactory;
 	private final DocumentSelectionView documentSelectionView;
 
-	public DocumentSelectionActivity(ClientFactory clientFactory) {
+	public DocumentSelectionActivity(final ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 		this.documentSelectionView = clientFactory.getDocumentSelectionView();
 	}
 
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 		Window.setTitle("Online Glom");
 
 		documentSelectionView.setPresenter(this);
 
-		AsyncCallback<Documents> callback = new AsyncCallback<Documents>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<Documents> callback = new AsyncCallback<Documents>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// Try to get an error message. Most likely this won't work but it's worth a try.
 				getAndSetErrorMessage();
 			}
 
-			public void onSuccess(Documents documents) {
+			@Override
+			public void onSuccess(final Documents documents) {
 				documentSelectionView.clearHyperLinks();
 				if (documents.getCount() > 0) {
 					for (int i = 0; i < documents.getCount(); i++) {
@@ -72,19 +74,21 @@ public class DocumentSelectionActivity extends AbstractActivity implements View.
 	}
 
 	@Override
-	public void goTo(Place place) {
+	public void goTo(final Place place) {
 		clientFactory.getPlaceController().goTo(place);
 	}
 
 	private void getAndSetErrorMessage() {
 
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<String> callback = new AsyncCallback<String>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				documentSelectionView
 						.setErrorMessage("Unable to communicate with the servlet. Check the error log for more information.");
 			}
 
-			public void onSuccess(String errorMessage) {
+			@Override
+			public void onSuccess(final String errorMessage) {
 				documentSelectionView.setErrorMessage("Configuration Error: " + errorMessage);
 			}
 		};

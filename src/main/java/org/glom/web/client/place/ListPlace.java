@@ -34,20 +34,20 @@ public class ListPlace extends HasSelectableTablePlace {
 	public static class Tokenizer extends HasSelectableTablePlace.Tokenizer implements PlaceTokenizer<ListPlace> {
 
 		@Override
-		public String getToken(ListPlace place) {
-			HashMap<String, String> params = new HashMap<String, String>();
+		public String getToken(final ListPlace place) {
+			final HashMap<String, String> params = new HashMap<String, String>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
 			return buildParamsToken(params);
 		}
 
 		@Override
-		public ListPlace getPlace(String token) {
+		public ListPlace getPlace(final String token) {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
 
-			HashMap<String, String> params = getTokenParams(token);
+			final HashMap<String, String> params = getTokenParams(token);
 
 			if (params == null) {
 				return new ListPlace("", "");

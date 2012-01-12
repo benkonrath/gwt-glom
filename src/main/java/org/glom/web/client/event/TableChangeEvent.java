@@ -28,7 +28,7 @@ public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
 	public static Type<TableChangeEventHandler> TYPE = new Type<TableChangeEventHandler>();
 	private final String newTableName;
 
-	public TableChangeEvent(String newTableName) {
+	public TableChangeEvent(final String newTableName) {
 		this.newTableName = newTableName;
 	}
 
@@ -42,7 +42,7 @@ public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
 	}
 
 	@Override
-	protected void dispatch(TableChangeEventHandler handler) {
+	protected void dispatch(final TableChangeEventHandler handler) {
 		handler.onTableChange(this);
 	}
 

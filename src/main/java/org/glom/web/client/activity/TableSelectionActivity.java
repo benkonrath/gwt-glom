@@ -52,7 +52,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private HandlerRegistration changeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
-	public TableSelectionActivity(ClientFactory clientFactory) {
+	public TableSelectionActivity(final ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 	}
 
@@ -60,7 +60,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	 * Invoked by the ActivityManager to start a new Activity
 	 */
 	@Override
-	public void start(AcceptsOneWidget containerWidget, final EventBus eventBus) {
+	public void start(final AcceptsOneWidget containerWidget, final EventBus eventBus) {
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setPresenter(this);
@@ -69,7 +69,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		HasChangeHandlers tableSelector = tableSelectionView.getTableSelector();
 		changeHandlerRegistration = tableSelector.addChangeHandler(new ChangeHandler() {
 			@Override
-			public void onChange(ChangeEvent event) {
+			public void onChange(final ChangeEvent event) {
 				// Fire a table change event so that other views (e.g. the details view) know about the change and can
 				// update themselves.
 				eventBus.fireEvent(new TableChangeEvent(tableSelectionView.getSelectedTableName()));
@@ -80,13 +80,15 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		});
 
 		// get the table names, table titles and default table index for the current document
-		AsyncCallback<DocumentInfo> callback = new AsyncCallback<DocumentInfo>() {
-			public void onFailure(Throwable caught) {
+		final AsyncCallback<DocumentInfo> callback = new AsyncCallback<DocumentInfo>() {
+			@Override
+			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.getDocumentInfo()");
 			}
 
-			public void onSuccess(DocumentInfo result) {
+			@Override
+			public void onSuccess(final DocumentInfo result) {
 				tableSelectionView.setTableSelection(result.getTableNames(), result.getTableTitles());
 
 				if (tableName == null || tableName.isEmpty()) {
@@ -107,11 +109,11 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method and
 	// any time the Place changes after the start method has been called.
-	public void setPlace(HasSelectableTablePlace place) {
+	public void setPlace(final HasSelectableTablePlace place) {
 		documentID = place.getDocumentID();
 		tableName = place.getTableName();
 
-		TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
+		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
 		// Update the selected table if it's not correct.
 		if (!tableSelectionView.getSelectedTableName().equals(tableName)) {
@@ -166,7 +168,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	@Override
-	public void goTo(Place place) {
+	public void goTo(final Place place) {
 		clientFactory.getPlaceController().goTo(place);
 	}
 

@@ -56,8 +56,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 	// convenience class for dealing with the Online Glom configuration file
 	private class OnlineGlomProperties extends Properties {
-		public String getKey(String value) {
-			for (String key : stringPropertyNames()) {
+		public String getKey(final String value) {
+			for (final String key : stringPropertyNames()) {
 				if (getProperty(key).trim().equals(value))
 					return key;
 			}
@@ -84,41 +84,41 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// Find the configuration file. See this thread for background info:
 			// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
 			// FIXME move onlineglom.properties to the WEB-INF folder (option number 2 from the stackoverflow question)
-			OnlineGlomProperties config = new OnlineGlomProperties();
-			InputStream is = Thread.currentThread().getContextClassLoader()
+			final OnlineGlomProperties config = new OnlineGlomProperties();
+			final InputStream is = Thread.currentThread().getContextClassLoader()
 					.getResourceAsStream("onlineglom.properties");
 			if (is == null) {
-				String errorMessage = "onlineglom.properties not found.";
+				final String errorMessage = "onlineglom.properties not found.";
 				Log.fatal(errorMessage);
 				throw new Exception(errorMessage);
 			}
 			config.load(is); // can throw an IOException
 
 			// check if we can read the configured glom file directory
-			String documentDirName = config.getProperty("glom.document.directory");
-			File documentDir = new File(documentDirName);
+			final String documentDirName = config.getProperty("glom.document.directory");
+			final File documentDir = new File(documentDirName);
 			if (!documentDir.isDirectory()) {
-				String errorMessage = documentDirName + " is not a directory.";
+				final String errorMessage = documentDirName + " is not a directory.";
 				Log.fatal(errorMessage);
 				throw new Exception(errorMessage);
 			}
 			if (!documentDir.canRead()) {
-				String errorMessage = "Can't read the files in directory " + documentDirName + " .";
+				final String errorMessage = "Can't read the files in directory " + documentDirName + " .";
 				Log.fatal(errorMessage);
 				throw new Exception(errorMessage);
 			}
 
 			// get and check the glom files in the specified directory
-			File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
+			final File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
 				@Override
-				public boolean accept(File dir, String name) {
+				public boolean accept(final File dir, final String name) {
 					return name.endsWith(GLOM_FILE_EXTENSION);
 				}
 			});
 
 			// don't continue if there aren't any Glom files to configure
 			if (glomFiles.length <= 0) {
-				String errorMessage = "Unable to find any Glom documents in the configured directory "
+				final String errorMessage = "Unable to find any Glom documents in the configured directory "
 						+ documentDirName
 						+ " . Check the onlineglom.properties file to ensure that 'glom.document.directory' is set to the correct directory.";
 				Log.error(errorMessage);
@@ -127,7 +127,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// Check to see if the native library of java libglom is visible to the JVM
 			if (!isNativeLibraryVisibleToJVM()) {
-				String errorMessage = "The java-libglom shared library is not visible to the JVM."
+				final String errorMessage = "The java-libglom shared library is not visible to the JVM."
 						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.";
 				Log.error(errorMessage);
 				throw new Exception(errorMessage);
@@ -135,7 +135,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
-			String localeID = config.getProperty("glom.document.locale");
+			final String localeID = config.getProperty("glom.document.locale");
 
 			if (localeID != null && !localeID.isEmpty()) {
 				TranslatableItem.set_current_locale(localeID.trim());
@@ -149,11 +149,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// Allow a fake connection, so sqlbuilder_get_full_query() can work:
 			Glom.set_fake_connection();
 
-			for (File glomFile : glomFiles) {
-				Document document = new Document();
+			for (final File glomFile : glomFiles) {
+				final Document document = new Document();
 				document.set_file_uri("file://" + glomFile.getAbsolutePath());
-				int error = 0;
-				boolean retval = document.load(error);
+				final int error = 0;
+				final boolean retval = document.load(error);
 				if (retval == false) {
 					String message;
 					if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
@@ -166,18 +166,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					continue;
 				}
 
-				ConfiguredDocument configuredDocument = new ConfiguredDocument(document); // can throw a
-																							// PropertyVetoException
+				final ConfiguredDocument configuredDocument = new ConfiguredDocument(document); // can throw a
+				// PropertyVetoException
 
 				// check if a username and password have been set and work for the current document
-				String filename = glomFile.getName();
-				String key = config.getKey(filename);
+				final String filename = glomFile.getName();
+				final String key = config.getKey(filename);
 				if (key != null) {
-					String[] keyArray = key.split("\\.");
+					final String[] keyArray = key.split("\\.");
 					if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
 						// username/password could be set, let's check to see if it works
-						String usernameKey = key.replaceAll(keyArray[2], "username");
-						String passwordKey = key.replaceAll(keyArray[2], "password");
+						final String usernameKey = key.replaceAll(keyArray[2], "username");
+						final String passwordKey = key.replaceAll(keyArray[2], "password");
 						configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey).trim(),
 								config.getProperty(passwordKey)); // can throw an SQLException
 					}
@@ -191,13 +191,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 				// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
 				// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
-				String documentID = filename.substring(0, glomFile.getName().length() - GLOM_FILE_EXTENSION.length())
+				final String documentID = filename.substring(0, glomFile.getName().length() - GLOM_FILE_EXTENSION.length())
 						.replace(' ', '+');
 				configuredDocument.setDocumentID(documentID);
 				documentMapping.put(documentID, configuredDocument);
 			}
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// Don't throw the Exception so that servlet will be initialised and the error message can be retrieved.
 			configurtionException = e;
 		}
@@ -210,20 +210,20 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @return true if the java-libglom native library is visible to the JVM, false if it's not
 	 */
 	private boolean isNativeLibraryVisibleToJVM() {
-		String javaLibraryPath = System.getProperty("java.library.path");
+		final String javaLibraryPath = System.getProperty("java.library.path");
 
 		// Go through all the library paths and check for the java_libglom .so.
-		for (String libDirName : javaLibraryPath.split(":")) {
-			File libDir = new File(libDirName);
+		for (final String libDirName : javaLibraryPath.split(":")) {
+			final File libDir = new File(libDirName);
 
 			if (!libDir.isDirectory())
 				continue;
 			if (!libDir.canRead())
 				continue;
 
-			File[] libs = libDir.listFiles(new FilenameFilter() {
+			final File[] libs = libDir.listFiles(new FilenameFilter() {
 				@Override
-				public boolean accept(File dir, String name) {
+				public boolean accept(final File dir, final String name) {
 					return name.matches("libjava_libglom-[0-9]\\.[0-9].+\\.so");
 				}
 			});
@@ -245,11 +245,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public void destroy() {
 		Glom.libglom_deinit();
 
-		for (String documenTitle : documentMapping.keySet()) {
-			ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
+		for (final String documenTitle : documentMapping.keySet()) {
+			final ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
 			try {
 				DataSources.destroy(configuredDoc.getCpds());
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				Log.error(documenTitle, "Error cleaning up the ComboPooledDataSource.", e);
 			}
 		}
@@ -276,9 +276,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDocumentInfo(java.lang.String)
 	 */
 	@Override
-	public DocumentInfo getDocumentInfo(String documentID) {
+	public DocumentInfo getDocumentInfo(final String documentID) {
 
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
@@ -292,8 +292,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getListViewLayout(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public LayoutGroup getListViewLayout(String documentID, String tableName) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public LayoutGroup getListViewLayout(final String documentID, final String tableName) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
@@ -306,8 +306,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getListViewData(String documentID, String tableName, int start, int length) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName, final int start, final int length) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
 		}
@@ -321,9 +321,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * int, boolean)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getSortedListViewData(String documentID, String tableName, int start, int length,
-			int sortColumnIndex, boolean isAscending) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public ArrayList<DataItem[]> getSortedListViewData(final String documentID, final String tableName,
+			final int start, final int length,
+			final int sortColumnIndex, final boolean isAscending) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
 		}
@@ -337,9 +338,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public Documents getDocuments() {
-		Documents documents = new Documents();
-		for (String documentID : documentMapping.keySet()) {
-			ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		final Documents documents = new Documents();
+		for (final String documentID : documentMapping.keySet()) {
+			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 			documents.addDocument(documentID, configuredDoc.getDocument().get_database_title());
 		}
 		return documents;
@@ -350,7 +351,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * 
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
 	 */
-	public boolean isAuthenticated(String documentID) {
+	@Override
+	public boolean isAuthenticated(final String documentID) {
 		return documentMapping.get(documentID).isAuthenticated();
 	}
 
@@ -361,11 +363,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String)
 	 */
 	@Override
-	public boolean checkAuthentication(String documentID, String username, String password) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public boolean checkAuthentication(final String documentID, final String username, final String password) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		try {
 			return configuredDoc.setUsernameAndPassword(username, password);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
@@ -377,8 +379,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public DataItem[] getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public DataItem[] getDetailsData(final String documentID, final String tableName, final TypedDataItem primaryKeyValue) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
@@ -392,15 +394,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String)
 	 */
 	@Override
-	public DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName,
-			TypedDataItem primaryKeyValue) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
+			final TypedDataItem primaryKeyValue) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null)
 			return null;
 
 		// FIXME check for authentication
 
-		DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
+		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
 		initalDetailsView.setLayout(configuredDoc.getDetailsLayoutGroup(tableName));
 		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
 
@@ -413,9 +415,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, String relationshipName,
-			TypedDataItem foreignKeyValue, int start, int length) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName, final String relationshipName,
+			final TypedDataItem foreignKeyValue, final int start, final int length) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
@@ -430,9 +432,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * int, boolean)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
-			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName, final String relationshipName,
+			final TypedDataItem foreignKeyValue, final int start, final int length, final int sortColumnIndex, final boolean ascending) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
@@ -440,9 +442,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				sortColumnIndex, ascending);
 	}
 
-	public int getRelatedListRowCount(String documentID, String tableName, String relationshipName,
-			TypedDataItem foreignKeyValue) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	@Override
+	public int getRelatedListRowCount(final String documentID, final String tableName, final String relationshipName,
+			final TypedDataItem foreignKeyValue) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
@@ -456,9 +459,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName,
-			String relationshipName, TypedDataItem primaryKeyValue) {
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
+			final String relationshipName, final TypedDataItem primaryKeyValue) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 

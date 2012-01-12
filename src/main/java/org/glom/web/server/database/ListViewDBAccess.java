@@ -39,12 +39,12 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class ListViewDBAccess extends ListDBAccess {
 
-	public ListViewDBAccess(Document document, String documentID, ComboPooledDataSource cpds, String tableName,
-			org.glom.libglom.LayoutGroup libglomLayoutGroup) {
+	public ListViewDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds, final String tableName,
+			final org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		super(document, documentID, cpds, tableName);
 
 		// Convert the libglom LayoutGroup object into a LayoutFieldVector suitable for SQL queries.
-		LayoutGroupVector tempLayoutGroupVec = new LayoutGroupVector();
+		final LayoutGroupVector tempLayoutGroupVec = new LayoutGroupVector();
 		tempLayoutGroupVec.add(libglomLayoutGroup);
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 
@@ -55,8 +55,9 @@ public class ListViewDBAccess extends ListDBAccess {
 		}
 	}
 
-	public ArrayList<DataItem[]> getData(int start, int length, boolean useSortClause, int sortColumnIndex,
-			boolean isAscending) {
+	public ArrayList<DataItem[]> getData(final int start, final int length,
+			final boolean useSortClause, final int sortColumnIndex,
+			final boolean isAscending) {
 
 		return getListData(start, length, useSortClause, sortColumnIndex, isAscending);
 	}
@@ -81,10 +82,10 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(SortClause sortClause) {
-		SqlExpr whereClause = new SqlExpr();// Ignored.
-		Relationship extraJoin = new Relationship(); // Ignored.
-		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
+	protected String getSelectQuery(final SortClause sortClause) {
+		final SqlExpr whereClause = new SqlExpr();// Ignored.
+		final Relationship extraJoin = new Relationship(); // Ignored.
+		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
 				sortClause);
 		return Glom.sqlbuilder_get_full_query(builder);
 	}
@@ -96,8 +97,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getCountQuery() {
-		SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet);
-		SqlBuilder countBuilder = Glom.build_sql_select_count_rows(builder);
+		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet);
+		final SqlBuilder countBuilder = Glom.build_sql_select_count_rows(builder);
 		return Glom.sqlbuilder_get_full_query(countBuilder);
 	}
 
@@ -108,8 +109,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	private int getPrimaryKeyIndex() {
 		for (int i = 0; i < fieldsToGet.size(); i++) {
-			LayoutItem_Field layoutItemField = fieldsToGet.get(i);
-			Field field = layoutItemField.get_full_field_details();
+			final LayoutItem_Field layoutItemField = fieldsToGet.get(i);
+			final Field field = layoutItemField.get_full_field_details();
 			if (tableName.equals(layoutItemField.get_table_used(tableName)) && field != null && field.get_primary_key())
 				return i;
 		}
