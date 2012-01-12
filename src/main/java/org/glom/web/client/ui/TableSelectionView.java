@@ -28,6 +28,9 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
  */
 public interface TableSelectionView extends View {
 
+	/**
+	 * Allow the Activity to respond to changes to this widget.
+	 */
 	HasChangeHandlers getTableSelector();
 
 	String getSelectedTableName();

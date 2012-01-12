@@ -70,7 +70,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		changeHandlerRegistration = tableSelector.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {
-				// Fire an table change event so that other views (e.g. the details view) know about the change and can
+				// Fire a table change event so that other views (e.g. the details view) know about the change and can
 				// update themselves.
 				eventBus.fireEvent(new TableChangeEvent(tableSelectionView.getSelectedTableName()));
 
