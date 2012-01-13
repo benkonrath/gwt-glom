@@ -1,5 +1,12 @@
 2012-01-13  Murray Cumming  <murrayc@murrayc.com>
 
+	Documents: Add some final keywords.
+
+	* src/main/java/org/glom/web/shared/Documents.java: Eclipse suggested
+	this.
+
+2012-01-13  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlomServiceImpl: Add to overview comments.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:

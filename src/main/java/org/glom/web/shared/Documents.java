@@ -23,26 +23,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO: Can't we have a list of pairs instead, avoiding the custom class?
  */
 @SuppressWarnings("serial")
 public class Documents implements Serializable {
-	private ArrayList<String> documentIDs = new ArrayList<String>();
-	private ArrayList<String> titles = new ArrayList<String>();
+	private final ArrayList<String> documentIDs = new ArrayList<String>();
+	private final ArrayList<String> titles = new ArrayList<String>();
 
 	public Documents() {
 	}
 
-	public void addDocument(String documentID, String title) {
+	public void addDocument(final String documentID, final String title) {
 		documentIDs.add(documentID);
 		titles.add(title);
 	}
 
-	public String getDocumentID(int index) {
+	public String getDocumentID(final int index) {
 		return documentIDs.get(index);
 	}
 
-	public String getTitle(int index) {
+	public String getTitle(final int index) {
 		return titles.get(index);
 	}
 
