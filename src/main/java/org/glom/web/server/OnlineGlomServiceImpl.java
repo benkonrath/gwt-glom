@@ -46,8 +46,17 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
 
 /**
- * The servlet class for setting up the server side of Online Glom. The public methods in this class are the methods
- * that can be called by the client side code.
+ * This is the servlet class for setting up the server side of Online Glom.
+ * The client side can call the public methods in this class via OnlineGlom
+ * 
+ * For instance, it loads all the available documents and provide a list -
+ * see getDocuments().
+ * It then provides information from each document. For instance, see
+ * getListViewLayout().
+ * 
+ * TODO: Watch for changes to the .glom files, to reload new versions
+ * and to load newly-added files.
+ * TODO: Watch for changes to the properties (configuration)?
  */
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {

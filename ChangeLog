@@ -1,3 +1,11 @@
+2012-01-13  Murray Cumming  <murrayc@murrayc.com>
+
+	OnlineGlomServiceImpl: Add to overview comments.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Note that this is where all the document are loaded. They are not 
+	loaded freshly for each page.
+
 2012-01-12  Murray Cumming  <murrayc@murrayc.com>
 
 	Add a search box.
