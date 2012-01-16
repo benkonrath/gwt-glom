@@ -50,6 +50,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String documentID;
 	private String documentTitle;
 	private String tableName;
+	private String localeID;
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
 
@@ -118,7 +119,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				Window.setTitle(documentTitle + ": " + result.getTableTitles().get(result.getDefaultTableIndex()));
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
 
 		// we're done, set the widget
 		containerWidget.setWidget(tableSelectionView.asWidget());
@@ -129,6 +130,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	public void setPlace(final HasSelectableTablePlace place) {
 		documentID = place.getDocumentID();
 		tableName = place.getTableName();
+		localeID = place.getLocaleID();
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
@@ -145,7 +147,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {
 			tableSelectionView.setBackLinkVisible(true);
-			tableSelectionView.setBackLink(documentID, tableName, ""); // TODO: quickfind?
+			tableSelectionView.setBackLink(documentID, tableName, localeID, ""); // TODO: quickfind?
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}

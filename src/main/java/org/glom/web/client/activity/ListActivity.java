@@ -45,14 +45,16 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 
 	private final String documentID;
 	private final String tableName;
+	private final String localeID;
 	private final String quickFind;
 	private final ClientFactory clientFactory;
 	private final ListView listView;
 	private final AuthenticationPopup authenticationPopup;
 
 	public ListActivity(final ListPlace place, final ClientFactory clientFactory) {
-		this.documentID = place.getDocumentID();
+		this.documentID = place.getDocumentID(); // TODO: Just store the place?
 		this.tableName = place.getTableName();
+		this.localeID = place.getLocaleID();
 		this.quickFind = place.getQuickFind();
 		this.clientFactory = clientFactory;
 		listView = clientFactory.getListView();
@@ -90,7 +92,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ListPlace(documentID, event.getNewTableName(), ""));
+				goTo(new ListPlace(documentID, event.getNewTableName(), localeID, ""));
 			}
 		});
 
@@ -106,10 +108,10 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
-				listView.setCellTable(documentID, result, quickFind);
+				listView.setCellTable(documentID, result, localeID, quickFind);
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, localeID, callback);
 
 		// TODO: Avoid the code duplication with DetailsActivity.
 		// set the change handler for the quickfind text widget
@@ -118,7 +120,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onQuickFindChange(final QuickFindChangeEvent event) {
 				// We switch to the List view, to show search results.
 				// TODO: Show the details view if there is only one result.
-				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
+				goTo(new ListPlace(documentID, tableName, localeID, event.getNewQuickFindText()));
 			}
 		});
 

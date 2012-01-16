@@ -52,15 +52,16 @@ public interface OnlineGlomServiceAsync {
 		}
 	}
 
-	void getDocumentInfo(String documentID, AsyncCallback<DocumentInfo> callback);
+	void getDocumentInfo(String documentID, String localeID, AsyncCallback<DocumentInfo> callback);
 
-	void getListViewLayout(String documentID, String tableName, AsyncCallback<LayoutGroup> callback);
+	void getListViewLayout(String documentID, String tableName, final String localeID,
+			AsyncCallback<LayoutGroup> callback);
 
 	void getListViewData(String documentID, String tableName, String quickFind, int start, int length,
 			AsyncCallback<ArrayList<DataItem[]>> callback);
 
-	void getSortedListViewData(String documentID, String tableName, String quickFind, int start, int length, int sortColumnIndex,
-			boolean isAscending, AsyncCallback<ArrayList<DataItem[]>> callback);
+	void getSortedListViewData(String documentID, String tableName, String quickFind, int start, int length,
+			int sortColumnIndex, boolean isAscending, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getDocuments(AsyncCallback<Documents> callback);
 
@@ -68,7 +69,7 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue,
+	void getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue, String localeID,
 			AsyncCallback<DetailsLayoutAndData> callback);
 
 	void getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue,

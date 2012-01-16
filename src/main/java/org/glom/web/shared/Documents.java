@@ -23,22 +23,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * TODO: Can't we have a list of pairs instead, avoiding the custom class?
+ * TODO: Can't we have a list of pairs of DocumentInfo instead, avoiding the custom class?
  */
 @SuppressWarnings("serial")
 public class Documents implements Serializable {
-	//These should not be final, because that prevents them from being
-	//serializable, which breaks things. murrayc.
-	//TODO: Test that.
+	// These should not be final, because that prevents them from being
+	// serializable, which breaks things. murrayc.
+	// TODO: Test that.
 	private ArrayList<String> documentIDs = new ArrayList<String>();
 	private ArrayList<String> titles = new ArrayList<String>();
+	private ArrayList<String> defaultLocaleIDs = new ArrayList<String>();
 
 	public Documents() {
 	}
 
-	public void addDocument(final String documentID, final String title) {
+	public void addDocument(final String documentID, final String title, final String defaultLocaleID) {
 		documentIDs.add(documentID);
 		titles.add(title);
+		defaultLocaleIDs.add(defaultLocaleID);
 	}
 
 	public String getDocumentID(final int index) {
@@ -47,6 +49,10 @@ public class Documents implements Serializable {
 
 	public String getTitle(final int index) {
 		return titles.get(index);
+	}
+
+	public String getDefaultLocaleID(final int index) {
+		return defaultLocaleIDs.get(index);
 	}
 
 	public int getCount() {

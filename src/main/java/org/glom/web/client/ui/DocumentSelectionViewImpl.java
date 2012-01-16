@@ -51,18 +51,20 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 		documentLinks.addStyleName("documentLinkTable");
 	}
 
-	public void addDocumentLink(final String documentID, final String title) {
-		Anchor link = new Anchor(title);
+	@Override
+	public void addDocumentLink(final String documentID, final String title, final String localeID) {
+		final Anchor link = new Anchor(title);
 		link.setStyleName("documentLink");
 		link.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID, "", ""));
+			public void onClick(final ClickEvent event) {
+				presenter.goTo(new ListPlace(documentID, "", localeID, ""));
 			}
 		});
 		documentLinks.add(link);
 	}
 
+	@Override
 	public void clearHyperLinks() {
 		documentLinks.clear();
 	}
@@ -72,18 +74,19 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 	 * 
 	 * @see org.glom.web.client.ui.DocumentSelectionView#setErrorMessage(java.lang.String)
 	 */
-	public void setErrorMessage(String message) {
+	@Override
+	public void setErrorMessage(final String message) {
 		clearHyperLinks();
-		Label label = new Label(message);
+		final Label label = new Label(message);
 		label.getElement().getStyle().setColor("Red");
 		documentLinks.add(label);
 	}
 
 	@Override
-	public void setPresenter(Presenter presenter) {
+	public void setPresenter(final Presenter presenter) {
 		this.presenter = presenter;
 	}
-	
+
 	@Override
 	public void clear() {
 	}

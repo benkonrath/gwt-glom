@@ -39,10 +39,12 @@ public class ListViewImpl extends Composite implements ListView {
 	private class ListViewNavigationButtonCell extends NavigationButtonCell {
 		private final String documentID;
 		private final String tableName;
+		private final String localeID;
 
-		public ListViewNavigationButtonCell(final String documentID, final String tableName) {
+		public ListViewNavigationButtonCell(final String documentID, final String tableName, final String localeID) {
 			this.documentID = documentID;
 			this.tableName = tableName;
+			this.localeID = localeID;
 		}
 
 		/*
@@ -53,9 +55,9 @@ public class ListViewImpl extends Composite implements ListView {
 		 * com.google.gwt.cell.client.ValueUpdater)
 		 */
 		@Override
-		protected void onEnterKeyDown(final Context context, final Element parent, final String value, final NativeEvent event,
-				final ValueUpdater<String> valueUpdater) {
-			presenter.goTo(new DetailsPlace(documentID, tableName, (TypedDataItem) context.getKey()));
+		protected void onEnterKeyDown(final Context context, final Element parent, final String value,
+				final NativeEvent event, final ValueUpdater<String> valueUpdater) {
+			presenter.goTo(new DetailsPlace(documentID, tableName, localeID, (TypedDataItem) context.getKey()));
 		}
 
 	}
@@ -68,12 +70,13 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setPresenter(Presenter presenter) {
+	public void setPresenter(final Presenter presenter) {
 		this.presenter = presenter;
 	}
 
 	@Override
-	public void setCellTable(final String documentID, final LayoutGroup layoutGroup, final String quickFind) {
+	public void setCellTable(final String documentID, final LayoutGroup layoutGroup, final String localeID,
+			final String quickFind) {
 		// This is not really in the MVP style because we're creating a new ListTable (really just a configured
 		// CellTable) for every document and table name change. The issue with creating a re-usable CellTable with
 		// methods like setColumnTitles() and setNumRows() is that the column objects (new Column<DataItem[],
@@ -85,8 +88,8 @@ public class ListViewImpl extends Composite implements ListView {
 
 		mainPanel.clear();
 
-		final ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup, new ListViewNavigationButtonCell(documentID,
-				layoutGroup.getTableName()), quickFind);
+		final ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup,
+				new ListViewNavigationButtonCell(documentID, layoutGroup.getTableName(), localeID), quickFind);
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {
 			// Set the table row count to the minimum row count if the data row count is less than or equal to

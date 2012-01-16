@@ -28,10 +28,11 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
 public class DetailsPlace extends HasSelectableTablePlace {
-	private TypedDataItem primaryKeyValue;
+	private final TypedDataItem primaryKeyValue;
 
-	public DetailsPlace(String documentID, String tableName, TypedDataItem primarykeyValue) {
-		super(documentID, tableName);
+	public DetailsPlace(final String documentID, final String tableName, final String localeID,
+			final TypedDataItem primarykeyValue) {
+		super(documentID, tableName, localeID);
 		this.primaryKeyValue = primarykeyValue;
 	}
 
@@ -52,9 +53,9 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 *      TypedDataItem)
 		 */
 		@Override
-		public String getToken(DetailsPlace place) {
-			TypedDataItem primaryKeyValue = place.getPrimaryKeyValue();
-			GlomFieldType glomFieldType = primaryKeyValue.getType();
+		public String getToken(final DetailsPlace place) {
+			final TypedDataItem primaryKeyValue = place.getPrimaryKeyValue();
+			final GlomFieldType glomFieldType = primaryKeyValue.getType();
 
 			// create the URL string based on the
 			String primaryKeyValueString = "";
@@ -73,7 +74,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				break;
 
 			case TYPE_INVALID:
-				String urlText = primaryKeyValue.getUnknown();
+				final String urlText = primaryKeyValue.getUnknown();
 				if (!primaryKeyValue.isEmpty() && urlText != null) {
 					// An invalid type that's not empty indicates that primary key value has been created from a URL
 					// string. Use the same string to represent the primary key value on the URL.
@@ -97,9 +98,10 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				break;
 			}
 
-			HashMap<String, String> params = new HashMap<String, String>();
+			final HashMap<String, String> params = new HashMap<String, String>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
+			params.put(localeKey, place.getLocaleID());
 			params.put(primaryKeyValueKey, primaryKeyValueString);
 			return buildParamsToken(params);
 		}
@@ -113,17 +115,18 @@ public class DetailsPlace extends HasSelectableTablePlace {
 		 *      TypedDataItem)
 		 */
 		@Override
-		public DetailsPlace getPlace(String token) {
+		public DetailsPlace getPlace(final String token) {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
+			String localeID = "";
 
-			TypedDataItem primaryKeyValue = new TypedDataItem();
+			final TypedDataItem primaryKeyValue = new TypedDataItem();
 
-			HashMap<String, String> params = getTokenParams(token);
+			final HashMap<String, String> params = getTokenParams(token);
 
 			if (params == null) {
-				return new DetailsPlace("", "", primaryKeyValue);
+				return new DetailsPlace("", "", "", primaryKeyValue);
 			}
 
 			if (params.get(documentKey) != null) {
@@ -134,8 +137,12 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				tableName = params.get(tableKey);
 			}
 
+			if (params.get(localeKey) != null) {
+				localeID = params.get(localeKey);
+			}
+
 			if (params.get(primaryKeyValueKey) != null) {
-				String primaryKeyValueString = params.get(primaryKeyValueKey);
+				final String primaryKeyValueString = params.get(primaryKeyValueKey);
 				// Set as unknown because the type of the primary key is not known at this point. A proper primary key
 				// value will be created using the type from the Glom document in the servlet.
 				primaryKeyValue.setUnknown(primaryKeyValueString);
@@ -143,10 +150,10 @@ public class DetailsPlace extends HasSelectableTablePlace {
 
 			if (documentID.isEmpty()) {
 				// The documentID was not retrieved from the URL. Use empty values for the details place.
-				return new DetailsPlace("", "", primaryKeyValue);
+				return new DetailsPlace("", "", localeID, primaryKeyValue);
 			}
 
-			return new DetailsPlace(documentID, tableName, primaryKeyValue);
+			return new DetailsPlace(documentID, tableName, localeID, primaryKeyValue);
 		}
 	}
 

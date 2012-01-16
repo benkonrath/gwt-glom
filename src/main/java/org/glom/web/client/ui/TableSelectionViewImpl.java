@@ -118,12 +118,13 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setBackLink(final String documentID, final String tableName, final String quickFind) {
+	public void setBackLink(final String documentID, final String tableName, final String localeID,
+			final String quickFind) {
 		backLinkHandlerReg.removeHandler();
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID, tableName, ""));
+				presenter.goTo(new ListPlace(documentID, tableName, localeID, ""));
 			}
 		});
 	}

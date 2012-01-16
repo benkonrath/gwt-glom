@@ -81,8 +81,8 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		 * com.google.gwt.cell.client.ValueUpdater)
 		 */
 		@Override
-		protected void onEnterKeyDown(final Context context, final Element parent, final String value, final NativeEvent event,
-				final ValueUpdater<String> valueUpdater) {
+		protected void onEnterKeyDown(final Context context, final Element parent, final String value,
+				final NativeEvent event, final ValueUpdater<String> valueUpdater) {
 			final AsyncCallback<NavigationRecord> callback = new AsyncCallback<NavigationRecord>() {
 				@Override
 				public void onFailure(final Throwable caught) {
@@ -104,6 +104,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	private final String documentID;
 	private final String tableName;
 	private TypedDataItem primaryKeyValue;
+	private final String localeID;
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 	ArrayList<DetailsCell> detailsCells;
@@ -113,6 +114,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
 		this.primaryKeyValue = place.getPrimaryKeyValue();
+		this.localeID = place.getLocaleID();
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
 	}
@@ -138,7 +140,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
 				// note the empty primary key item
-				goTo(new DetailsPlace(documentID, event.getNewTableName(), new TypedDataItem()));
+				goTo(new DetailsPlace(documentID, event.getNewTableName(), localeID, new TypedDataItem()));
 			}
 		});
 
@@ -165,7 +167,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutAndData(documentID, tableName, primaryKeyValue,
-				callback);
+				localeID, callback);
 
 		// set the change handler for the quickfind text widget
 		eventBus.addHandler(QuickFindChangeEvent.TYPE, new QuickFindChangeEventHandler() {
@@ -173,7 +175,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			public void onQuickFindChange(final QuickFindChangeEvent event) {
 				// We switch to the List view, to show search results.
 				// TODO: Show the details view if there is only one result.
-				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
+				goTo(new ListPlace(documentID, tableName, localeID, event.getNewQuickFindText()));
 			}
 		});
 
@@ -240,7 +242,8 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 						if (data[i] == null)
 							continue;
 
-						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getType(), data[i]);
+						final TypedDataItem foreignKeyValue = Utils
+								.getTypedDataItem(layoutItemField.getType(), data[i]);
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
 								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getName()));
@@ -325,7 +328,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		if (navigationPrimaryKeyValue != null && !navigationPrimaryKeyValue.isEmpty()) {
 			if (!newTableName.equals(tableName)) {
 				// Go to a new DetailsPlace because the table name has changed.
-				goTo(new DetailsPlace(documentID, newTableName, navigationPrimaryKeyValue));
+				goTo(new DetailsPlace(documentID, newTableName, localeID, navigationPrimaryKeyValue));
 			} else {
 				// Refresh the details view with the new primary because the table name has not changed.
 				primaryKeyValue = navigationPrimaryKeyValue;

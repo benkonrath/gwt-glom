@@ -35,19 +35,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("libGlom")
 public interface OnlineGlomService extends RemoteService {
 
-	DocumentInfo getDocumentInfo(String documentID);
+	DocumentInfo getDocumentInfo(String documentID, String localeID);
 
-	/**
-	 * Gets a {@link LayoutGroup} for the given Glom document and table name.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param tableName
-	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
-	 *            default table
-	 * @return filled in {@link LayoutGroup}
-	 */
-	LayoutGroup getListViewLayout(String documentID, String tableName);
+	LayoutGroup getListViewLayout(String documentID, String tableName, final String localeID);
 
 	/**
 	 * Retrieves data for a list view table.
@@ -145,7 +135,8 @@ public interface OnlineGlomService extends RemoteService {
 	 *            value of the primary key in the specified Glom table to use in the query
 	 * @return a {@link DetailsLayoutAndData} object for the layout and initial data of the details view.
 	 */
-	DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue);
+	DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue,
+			final String localeID);
 
 	/**
 	 * Retrieves data for the related list table with the specified relationship name and foreign key value.

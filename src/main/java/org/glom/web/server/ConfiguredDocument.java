@@ -57,9 +57,8 @@ import org.glom.web.shared.layout.LayoutItemPortal;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
- * A class to hold configuration information for a given Glom document.
- * This class retrieves layout information from libglom and data from
- * the underlying PostgreSQL database.
+ * A class to hold configuration information for a given Glom document. This class retrieves layout information from
+ * libglom and data from the underlying PostgreSQL database.
  */
 final class ConfiguredDocument {
 
@@ -67,6 +66,7 @@ final class ConfiguredDocument {
 	private ComboPooledDataSource cpds;
 	private boolean authenticated = false;
 	private String documentID;
+	private String localeID;
 
 	@SuppressWarnings("unused")
 	private ConfiguredDocument() {
@@ -149,10 +149,18 @@ final class ConfiguredDocument {
 		this.documentID = documentID;
 	}
 
+	String getDefaultLocaleID() {
+		return localeID;
+	}
+
+	void setDefaultLocaleID(final String localeID) {
+		this.localeID = localeID;
+	}
+
 	/**
 	 * @return
 	 */
-	DocumentInfo getDocumentInfo() {
+	DocumentInfo getDocumentInfo(final String localeID) {
 		final DocumentInfo documentInfo = new DocumentInfo();
 
 		// get arrays of table names and titles, and find the default table index
@@ -174,7 +182,7 @@ final class ConfiguredDocument {
 					documentInfo.setDefaultTableIndex(visibleIndex);
 					foundDefaultTable = true;
 				}
-				tableTitles.add(document.get_table_title(tableName));
+				tableTitles.add(document.get_table_title(tableName, localeID));
 				visibleIndex++;
 			}
 		}
@@ -223,8 +231,7 @@ final class ConfiguredDocument {
 	}
 
 	ArrayList<DataItem[]> getListViewData(String tableName, final String quickFind, final int start, final int length,
-			final boolean useSortClause,
-			final int sortColumnIndex, final boolean isAscending) {
+			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -248,8 +255,9 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
-	ArrayList<DataItem[]> getRelatedListData(String tableName, final String relationshipName, final TypedDataItem foreignKeyValue,
-			final int start, final int length, final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
+	ArrayList<DataItem[]> getRelatedListData(String tableName, final String relationshipName,
+			final TypedDataItem foreignKeyValue, final int start, final int length, final boolean useSortClause,
+			final int sortColumnIndex, final boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -261,7 +269,7 @@ final class ConfiguredDocument {
 		return relatedListDBAccess.getData(start, length, foreignKeyValue, useSortClause, sortColumnIndex, isAscending);
 	}
 
-	ArrayList<LayoutGroup> getDetailsLayoutGroup(String tableName) {
+	ArrayList<LayoutGroup> getDetailsLayoutGroup(String tableName, final String localeID) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -275,7 +283,7 @@ final class ConfiguredDocument {
 			if (libglomLayoutGroup == null)
 				continue;
 
-			layoutGroups.add(getDetailsLayoutGroup(tableName, libglomLayoutGroup));
+			layoutGroups.add(getDetailsLayoutGroup(tableName, libglomLayoutGroup, localeID));
 		}
 
 		return layoutGroups;
@@ -301,13 +309,13 @@ final class ConfiguredDocument {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
-		final RelatedListNavigation relatedListNavigation = new RelatedListNavigation(document, documentID, cpds, tableName,
-				relationshipName);
+		final RelatedListNavigation relatedListNavigation = new RelatedListNavigation(document, documentID, cpds,
+				tableName, relationshipName);
 
 		return relatedListNavigation.getNavigationRecord(primaryKeyValue);
 	}
 
-	LayoutGroup getListViewLayoutGroup(String tableName) {
+	LayoutGroup getListViewLayoutGroup(String tableName, final String localeID) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
@@ -325,7 +333,7 @@ final class ConfiguredDocument {
 			// TODO add support for other LayoutItems (Text, Image, Button etc.)
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, false));
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, localeID, false));
 				final Field field = libglomLayoutItemField.get_full_field_details();
 				if (field.get_primary_key())
 					primaryKeyIndex = i;
@@ -357,7 +365,7 @@ final class ConfiguredDocument {
 			if (primaryKey != null) {
 				final LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
 				libglomLayoutItemField.set_full_field_details(primaryKey);
-				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, false));
+				layoutGroup.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, localeID, false));
 				layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
 				layoutGroup.setHiddenPrimaryKey(true);
 			} else {
@@ -389,10 +397,11 @@ final class ConfiguredDocument {
 	 * @return {@link LayoutGroup} object that represents the layout for the specified {@link
 	 * org.glom.libglom.LayoutGroup}
 	 */
-	private LayoutGroup getDetailsLayoutGroup(final String tableName, final org.glom.libglom.LayoutGroup libglomLayoutGroup) {
+	private LayoutGroup getDetailsLayoutGroup(final String tableName,
+			final org.glom.libglom.LayoutGroup libglomLayoutGroup, final String localeID) {
 		final LayoutGroup layoutGroup = new LayoutGroup();
 		layoutGroup.setColumnCount(Utils.safeLongToInt(libglomLayoutGroup.get_columns_count()));
-		final String layoutGroupTitle = libglomLayoutGroup.get_title();
+		final String layoutGroupTitle = libglomLayoutGroup.get_title(localeID);
 		if (layoutGroupTitle.isEmpty())
 			layoutGroup.setName(libglomLayoutGroup.get_name());
 		else
@@ -414,7 +423,8 @@ final class ConfiguredDocument {
 				final LayoutItem_Portal libglomLayoutItemPortal = LayoutItem_Portal.cast_dynamic(group);
 				if (libglomLayoutItemPortal != null) {
 					// group is a LayoutItem_Portal
-					final LayoutItemPortal layoutItemPortal = createLayoutItemPortalDTO(tableName, libglomLayoutItemPortal);
+					final LayoutItemPortal layoutItemPortal = createLayoutItemPortalDTO(tableName,
+							libglomLayoutItemPortal, localeID);
 					if (layoutItemPortal == null)
 						continue;
 					layoutItem = layoutItemPortal;
@@ -424,7 +434,8 @@ final class ConfiguredDocument {
 					final LayoutItem_Notebook libglomLayoutItemNotebook = LayoutItem_Notebook.cast_dynamic(group);
 					if (libglomLayoutItemNotebook != null) {
 						// group is a LayoutItem_Notebook
-						final LayoutGroup tempLayoutGroup = getDetailsLayoutGroup(tableName, libglomLayoutItemNotebook);
+						final LayoutGroup tempLayoutGroup = getDetailsLayoutGroup(tableName, libglomLayoutItemNotebook,
+								localeID);
 						final LayoutItemNotebook layoutItemNotebook = new LayoutItemNotebook();
 						for (final LayoutItem item : tempLayoutGroup.getItems()) {
 							layoutItemNotebook.addItem(item);
@@ -434,7 +445,7 @@ final class ConfiguredDocument {
 					} else {
 						// group is *not* a LayoutItem_Portal or a LayoutItem_Notebook
 						// recurse into child groups
-						layoutItem = getDetailsLayoutGroup(tableName, group);
+						layoutItem = getDetailsLayoutGroup(tableName, group, localeID);
 					}
 				}
 			} else {
@@ -444,7 +455,8 @@ final class ConfiguredDocument {
 				final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 				if (libglomLayoutItemField != null) {
 
-					final LayoutItemField layoutItemField = convertToGWTGlomLayoutItemField(libglomLayoutItemField, true);
+					final LayoutItemField layoutItemField = convertToGWTGlomLayoutItemField(libglomLayoutItemField,
+							localeID, true);
 
 					// Set the full field details with updated field details from the document.
 					libglomLayoutItemField.set_full_field_details(document.get_field(
@@ -452,8 +464,8 @@ final class ConfiguredDocument {
 
 					// Determine if the field should have a navigation button and set this in the DTO.
 					final Relationship fieldUsedInRelationshipToOne = new Relationship();
-					final boolean addNavigation = Glom.layout_field_should_have_navigation(tableName, libglomLayoutItemField,
-							document, fieldUsedInRelationshipToOne);
+					final boolean addNavigation = Glom.layout_field_should_have_navigation(tableName,
+							libglomLayoutItemField, document, fieldUsedInRelationshipToOne);
 					layoutItemField.setAddNavigation(addNavigation);
 
 					// Set the the name of the table to navigate to if navigation should be enabled.
@@ -485,7 +497,7 @@ final class ConfiguredDocument {
 				} else {
 					Log.info(documentID, tableName,
 							"Ignoring unknown details LayoutItem of type " + libglomLayoutItem.get_part_type_name()
-							+ ".");
+									+ ".");
 					continue;
 				}
 			}
@@ -497,7 +509,7 @@ final class ConfiguredDocument {
 	}
 
 	private LayoutItemPortal createLayoutItemPortalDTO(final String tableName,
-			final org.glom.libglom.LayoutItem_Portal libglomLayoutItemPortal) {
+			final org.glom.libglom.LayoutItem_Portal libglomLayoutItemPortal, final String localeID) {
 
 		// Ignore LayoutItem_CalendarPortals for now:
 		// https://bugzilla.gnome.org/show_bug.cgi?id=664273
@@ -512,7 +524,8 @@ final class ConfiguredDocument {
 			layoutItemPortal.setNavigationType(convertToGWTGlomNavigationType(libglomLayoutItemPortal
 					.get_navigation_type()));
 
-			layoutItemPortal.setTitle(libglomLayoutItemPortal.get_title_used("")); // parent title not relevant
+			layoutItemPortal.setTitle(libglomLayoutItemPortal.get_title_used("", localeID)); // parent title not
+																								// relevant
 			layoutItemPortal.setName(libglomLayoutItemPortal.get_relationship_name_used());
 			layoutItemPortal.setTableName(relationship.get_from_table());
 			layoutItemPortal.setFromField(relationship.get_from_field());
@@ -528,7 +541,7 @@ final class ConfiguredDocument {
 				if (libglomLayoutItemField != null) {
 					// TODO EDITING If the relationship does not allow editing, then mark all these fields as
 					// non-editable. Check relationship.get_allow_edit() to see if it's editable.
-					layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, false));
+					layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(libglomLayoutItemField, localeID, false));
 				} else {
 					Log.info(documentID, tableName, "Ignoring unknown related list LayoutItem of type "
 							+ libglomLayoutItem.get_part_type_name() + ".");
@@ -549,7 +562,7 @@ final class ConfiguredDocument {
 					// check the names to see if they're the same
 					if (field.get_primary_key()) {
 						layoutItemField.set_full_field_details(field);
-						layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(layoutItemField, false));
+						layoutItemPortal.addItem(convertToGWTGlomLayoutItemField(layoutItemField, localeID, false));
 						layoutItemPortal.setPrimaryKeyIndex(layoutItemPortal.getItems().size() - 1);
 						layoutItemPortal.setHiddenPrimaryKey(true); // always hidden in portals
 						break;
@@ -601,14 +614,14 @@ final class ConfiguredDocument {
 	}
 
 	private LayoutItemField convertToGWTGlomLayoutItemField(final LayoutItem_Field libglomLayoutItemField,
-			final boolean forDetailsView) {
+			final String localeID, final boolean forDetailsView) {
 		final LayoutItemField layoutItemField = new LayoutItemField();
 
 		// set type
 		layoutItemField.setType(convertToGWTGlomFieldType(libglomLayoutItemField.get_glom_type()));
 
 		// set title and name
-		layoutItemField.setTitle(libglomLayoutItemField.get_title_or_name());
+		layoutItemField.setTitle(libglomLayoutItemField.get_title_or_name(localeID));
 		layoutItemField.setName(libglomLayoutItemField.get_name());
 
 		// convert formatting

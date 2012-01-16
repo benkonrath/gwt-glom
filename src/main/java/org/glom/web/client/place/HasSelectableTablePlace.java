@@ -32,12 +32,14 @@ import com.google.gwt.place.shared.Place;
  */
 public abstract class HasSelectableTablePlace extends Place {
 
-	private String documentID;
-	private String tableName;
+	private final String documentID;
+	private final String tableName;
+	private final String localeID;
 
-	public HasSelectableTablePlace(String documentID, String tableName) {
+	public HasSelectableTablePlace(final String documentID, final String tableName, final String localeID) {
 		this.documentID = documentID;
 		this.tableName = tableName;
+		this.localeID = localeID;
 	}
 
 	public String getDocumentID() {
@@ -48,16 +50,23 @@ public abstract class HasSelectableTablePlace extends Place {
 		return tableName;
 	}
 
+	public String getLocaleID() {
+		return localeID;
+	}
+
 	public static class Tokenizer {
 		protected final String documentKey = "document";
 		protected final String tableKey = "table";
+		protected final String localeKey = "lang";
 		private final String separator = "&";
 		private final String equals = "=";
-		
-		/** Get a HashMap of parameter names and values from the history token.
-		 * This can parse tokens built by buildParamsToken().
+
+		/**
+		 * Get a HashMap of parameter names and values from the history token. This can parse tokens built by
+		 * buildParamsToken().
 		 * 
-		 * @param historyToken The historyToken provided to getPlace().
+		 * @param historyToken
+		 *            The historyToken provided to getPlace().
 		 * @return A HasMap of names to values.
 		 */
 		protected HashMap<String, String> getTokenParams(final String historyToken) {
@@ -68,47 +77,49 @@ public abstract class HasSelectableTablePlace extends Place {
 				if (substr.length != 2) {
 					continue;
 				}
-				
+
 				String key = "";
 				String value = "";
-				if(!substr[0].isEmpty()) {
+				if (!substr[0].isEmpty()) {
 					key = substr[0];
 				}
-				
-				if(!substr[1].isEmpty()) {
-					value = substr[1];
-				} 
 
-				if(!key.isEmpty() && !value.isEmpty()) {
+				if (!substr[1].isEmpty()) {
+					value = substr[1];
+				}
+
+				if (!key.isEmpty() && !value.isEmpty()) {
 					params.put(key, value);
 				}
 			}
 
 			return params;
 		}
-		
-		/** Build a history token based on a HashMap of parameter names and values.
-		 * This can later be parsed by getTokenParams().
+
+		/**
+		 * Build a history token based on a HashMap of parameter names and values. This can later be parsed by
+		 * getTokenParams().
 		 * 
-		 * @param params A HashMap of names and values.
+		 * @param params
+		 *            A HashMap of names and values.
 		 * @return A history string for use by getToken() implementation.
 		 */
 		protected String buildParamsToken(final HashMap<String, String> params) {
 			String token = "";
-			for (Iterator<Entry<String, String>> it = params.entrySet().iterator(); it.hasNext();) {
-				Map.Entry<String, String> entry = (Map.Entry<String, String>) it.next();
-			    String key = entry.getKey();
-			    String value = entry.getValue();
-			    if(key.isEmpty() || value.isEmpty())
-			    	continue;
-			    
-			    if (token != "") {
-			    	token += separator;
-			    }
-			    
-			    token += key + equals + value;
+			for (final Iterator<Entry<String, String>> it = params.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry<String, String> entry = it.next();
+				final String key = entry.getKey();
+				final String value = entry.getValue();
+				if (key.isEmpty() || value.isEmpty())
+					continue;
+
+				if (token != "") {
+					token += separator;
+				}
+
+				token += key + equals + value;
 			}
-			
+
 			return token;
 		}
 	}

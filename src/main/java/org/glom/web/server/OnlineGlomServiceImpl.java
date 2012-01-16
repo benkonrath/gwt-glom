@@ -32,7 +32,6 @@ import javax.servlet.ServletException;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
-import org.glom.libglom.TranslatableItem;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
@@ -46,17 +45,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
 
 /**
- * This is the servlet class for setting up the server side of Online Glom.
- * The client side can call the public methods in this class via OnlineGlom
+ * This is the servlet class for setting up the server side of Online Glom. The client side can call the public methods
+ * in this class via OnlineGlom
  * 
- * For instance, it loads all the available documents and provide a list -
- * see getDocuments().
- * It then provides information from each document. For instance, see
- * getListViewLayout().
+ * For instance, it loads all the available documents and provide a list - see getDocuments(). It then provides
+ * information from each document. For instance, see getListViewLayout().
  * 
- * TODO: Watch for changes to the .glom files, to reload new versions
- * and to load newly-added files.
- * TODO: Watch for changes to the properties (configuration)?
+ * TODO: Watch for changes to the .glom files, to reload new versions and to load newly-added files. TODO: Watch for
+ * changes to the properties (configuration)?
  */
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
@@ -144,11 +140,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
-			final String localeID = config.getProperty("glom.document.locale");
-
-			if (localeID != null && !localeID.isEmpty()) {
-				TranslatableItem.set_current_locale(localeID.trim());
-			}
+			final String globalLocaleID = config.getProperty("glom.document.locale");
 
 			// This initialisation method can throw an UnsatisfiedLinkError if the java-libglom native library isn't
 			// available. But since we're checking for the error condition above, the UnsatisfiedLinkError will never be
@@ -198,10 +190,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							config.getProperty("glom.document.password")); // can throw an SQLException
 				}
 
+				if (globalLocaleID != null && !globalLocaleID.isEmpty()) {
+					configuredDocument.setDefaultLocaleID(globalLocaleID.trim());
+				}
+
 				// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
 				// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
-				final String documentID = filename.substring(0, glomFile.getName().length() - GLOM_FILE_EXTENSION.length())
-						.replace(' ', '+');
+				final String documentID = filename.substring(0,
+						glomFile.getName().length() - GLOM_FILE_EXTENSION.length()).replace(' ', '+');
 				configuredDocument.setDocumentID(documentID);
 				documentMapping.put(documentID, configuredDocument);
 			}
@@ -285,13 +281,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDocumentInfo(java.lang.String)
 	 */
 	@Override
-	public DocumentInfo getDocumentInfo(final String documentID) {
+	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
 
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
-		return configuredDoc.getDocumentInfo();
+		return configuredDoc.getDocumentInfo(localeID);
 
 	}
 
@@ -301,12 +297,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getListViewLayout(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public LayoutGroup getListViewLayout(final String documentID, final String tableName) {
+	public LayoutGroup getListViewLayout(final String documentID, final String tableName, final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
 
-		return configuredDoc.getListViewLayoutGroup(tableName);
+		return configuredDoc.getListViewLayoutGroup(tableName, localeID);
 	}
 
 	/*
@@ -332,9 +328,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<DataItem[]> getSortedListViewData(final String documentID, final String tableName,
-			final String quickFind,
-			final int start, final int length,
-			final int sortColumnIndex, final boolean isAscending) {
+			final String quickFind, final int start, final int length, final int sortColumnIndex,
+			final boolean isAscending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
@@ -352,7 +347,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final Documents documents = new Documents();
 		for (final String documentID : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			documents.addDocument(documentID, configuredDoc.getDocument().get_database_title());
+			documents.addDocument(documentID, configuredDoc.getDocument().get_database_title(),
+					configuredDoc.getDefaultLocaleID());
 		}
 		return documents;
 	}
@@ -390,7 +386,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public DataItem[] getDetailsData(final String documentID, final String tableName, final TypedDataItem primaryKeyValue) {
+	public DataItem[] getDetailsData(final String documentID, final String tableName,
+			final TypedDataItem primaryKeyValue) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -406,7 +403,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
-			final TypedDataItem primaryKeyValue) {
+			final TypedDataItem primaryKeyValue, final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null)
 			return null;
@@ -414,7 +411,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// FIXME check for authentication
 
 		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
-		initalDetailsView.setLayout(configuredDoc.getDetailsLayoutGroup(tableName));
+		initalDetailsView.setLayout(configuredDoc.getDetailsLayoutGroup(tableName, localeID));
 		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
 
 		return initalDetailsView;
@@ -426,8 +423,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName, final String relationshipName,
-			final TypedDataItem foreignKeyValue, final int start, final int length) {
+	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
+			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -443,8 +440,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * int, boolean)
 	 */
 	@Override
-	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName, final String relationshipName,
-			final TypedDataItem foreignKeyValue, final int start, final int length, final int sortColumnIndex, final boolean ascending) {
+	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName,
+			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length,
+			final int sortColumnIndex, final boolean ascending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication

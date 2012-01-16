@@ -1,5 +1,56 @@
 2012-01-17  Murray Cumming  <murrayc@murrayc.com>
 
+	Allow use of translations via, for instance, &lang=de in the URL.
+
+	* pom.xml: Use the unstable java-libglom 1.21 version.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	init(): Instead of calling TranslatableItem.set_current_locale() 
+	(now removed), call ConfiguredDocument.setDefaultLocaleID().
+	However, this is only for default locales, which are not needed to 
+	change the locale in the URL.
+	getDocumentInfo(), getListViewLayout(), getSortedListViewData(),
+	getDetailsData(), getDetailsLayoutAndData(), getRelatedListData(),
+	getSortedRelatedListData(): Add a localeID parameter, so we can get the 
+	layout for a particular locale.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Add get/setDefaultLocaleID().
+	getDocumentInfo(), getListViewData(), getRelatedListData(),
+	getDetailsLayoutGroup(), getListViewLayoutGroup(),
+	createLayoutItemPortalDTO(), convertToGWTGlomLayoutItemField(): Add a 
+	localeID parameter, so we can get the layout for a particular locale.
+
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java:
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java:
+	* src/main/java/org/glom/web/client/place/ListPlace.java:
+	Parse and construct a lang parameter too.
+
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java:
+	start(): Pass the defaultLocaleID to addDocumentLink(). It is then
+	passed to subsequent methods and constructors.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	Store the localeID from the *Place and pass it to other constructors
+	and methods, such as OnlineGlomServiceAsync.getDetailsLayoutAndData().
+
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	Take localeID parameters and pass them to subsequent constructors and 
+	methods, so that the layout is always retrieved for that locale.
+
+	This is rather repetitive.
+
+	Note that "" means the original (default) locale of the Glom document,
+	which is usually English.	
+
+2012-01-17  Murray Cumming  <murrayc@murrayc.com>
+
 	Documents: Remove final keyword to fix startup configuration.
 
 	* src/main/java/org/glom/web/shared/Documents.java: Remove the

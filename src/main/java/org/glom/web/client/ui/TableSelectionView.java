@@ -50,7 +50,7 @@ public interface TableSelectionView extends View {
 
 	void setBackLinkVisible(boolean visible);
 
-	void setBackLink(final String documentID, final String tableName, String quickFind);
+	void setBackLink(final String documentID, final String tableName, final String localeID, String quickFind);
 
 	void setDocumentTitle(String documentTitle);
 
