@@ -169,4 +169,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	public String getQuickFindText() {
 		return searchTextBox.getText();
 	}
+	
+	@Override
+	public void setQuickFindText(final String quickFind) {
+		searchTextBox.setText(quickFind);
+	}
 }

@@ -51,6 +51,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String documentTitle;
 	private String tableName;
 	private String localeID;
+	private String quickFind;
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
 
@@ -132,6 +133,13 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		tableName = place.getTableName();
 		localeID = place.getLocaleID();
 
+		try {
+			final ListPlace asPlace = (ListPlace) place;
+			quickFind = asPlace.getQuickFind();
+		} catch (final ClassCastException ex) {
+			quickFind = "";
+		}
+
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
 		// Update the selected table if it's not correct.
@@ -151,6 +159,9 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}
+
+		// Show the quickFind text that was specified by the URL token:
+		tableSelectionView.setQuickFindText(quickFind);
 	}
 
 	private void clearView() {

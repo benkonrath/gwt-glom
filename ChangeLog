@@ -1,5 +1,16 @@
 2012-01-17  Murray Cumming  <murrayc@murrayc.com>
 
+	Search box: Show the search text from the URL token.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Add setQuickFindText().
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: setPlace(): Store the queryText if the place is a ListPlace, 
+	and call TableSelectionView.setQuickFindText().
+
+2012-01-17  Murray Cumming  <murrayc@murrayc.com>
+
 	Allow use of translations via, for instance, &lang=de in the URL.
 
 	* pom.xml: Use the unstable java-libglom 1.21 version.

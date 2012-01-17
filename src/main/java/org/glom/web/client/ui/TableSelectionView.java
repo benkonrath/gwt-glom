@@ -47,6 +47,8 @@ public interface TableSelectionView extends View {
 	HasChangeHandlers getQuickFindBox();
 
 	String getQuickFindText();
+	
+	void setQuickFindText(final String quickFind);
 
 	void setBackLinkVisible(boolean visible);
 
