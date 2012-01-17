@@ -1,3 +1,12 @@
+2012-01-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Documents: Remove final keyword to fix startup configuration.
+
+	* src/main/java/org/glom/web/shared/Documents.java: Remove the
+	final keywords on the private member variables because that breaks
+	the startup, apparently (there are warnings) because it stops them
+	from being serialized. I added these in the previous commit.
+
 2012-01-13  Murray Cumming  <murrayc@murrayc.com>
 
 	Documents: Add some final keywords.

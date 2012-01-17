@@ -27,8 +27,11 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("serial")
 public class Documents implements Serializable {
-	private final ArrayList<String> documentIDs = new ArrayList<String>();
-	private final ArrayList<String> titles = new ArrayList<String>();
+	//These should not be final, because that prevents them from being
+	//serializable, which breaks things. murrayc.
+	//TODO: Test that.
+	private ArrayList<String> documentIDs = new ArrayList<String>();
+	private ArrayList<String> titles = new ArrayList<String>();
 
 	public Documents() {
 	}
