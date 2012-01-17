@@ -47,13 +47,20 @@ public interface TableSelectionView extends View {
 	HasChangeHandlers getQuickFindBox();
 
 	String getQuickFindText();
-	
+
 	void setQuickFindText(final String quickFind);
+
+	HasChangeHandlers getLocaleSelector();
+
+	void setLocaleList(ArrayList<String> names, ArrayList<String> titles);
+
+	String getSelectedLocale();
+
+	void setSelectedLocale(final String localeID);
 
 	void setBackLinkVisible(boolean visible);
 
 	void setBackLink(final String documentID, final String tableName, final String localeID, String quickFind);
 
 	void setDocumentTitle(String documentTitle);
-
 }

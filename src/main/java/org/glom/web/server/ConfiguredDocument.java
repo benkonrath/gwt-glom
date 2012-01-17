@@ -192,6 +192,19 @@ final class ConfiguredDocument {
 		documentInfo.setTableTitles(tableTitles);
 		documentInfo.setTitle(document.get_database_title());
 
+		// Fetch arrays of locale IDs and titles:
+		final StringVector localesVec = document.get_translation_available_locales();
+		final int numLocales = Utils.safeLongToInt(localesVec.size());
+		final ArrayList<String> localeIDs = new ArrayList<String>(numLocales);
+		final ArrayList<String> localeTitles = new ArrayList<String>(numLocales);
+		for (int i = 0; i < numLocales; i++) {
+			final String this_localeID = localesVec.get(i);
+			localeIDs.add(this_localeID);
+			localeTitles.add(this_localeID); // TODO
+		}
+		documentInfo.setLocaleIDs(localeIDs);
+		documentInfo.setLocaleTitles(localeTitles);
+
 		return documentInfo;
 	}
 

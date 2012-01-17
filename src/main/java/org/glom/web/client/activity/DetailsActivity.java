@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.Utils;
+import org.glom.web.client.event.LocaleChangeEvent;
+import org.glom.web.client.event.LocaleChangeEventHandler;
 import org.glom.web.client.event.QuickFindChangeEvent;
 import org.glom.web.client.event.QuickFindChangeEventHandler;
 import org.glom.web.client.event.TableChangeEvent;
@@ -176,6 +178,15 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 				// We switch to the List view, to show search results.
 				// TODO: Show the details view if there is only one result.
 				goTo(new ListPlace(documentID, tableName, localeID, event.getNewQuickFindText()));
+			}
+		});
+
+		// Set the change handler for the table selection widget
+		eventBus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
+			@Override
+			public void onLocaleChange(final LocaleChangeEvent event) {
+				// note the empty primary key item
+				goTo(new DetailsPlace(documentID, tableName, event.getNewLocaleID(), new TypedDataItem()));
 			}
 		});
 

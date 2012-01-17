@@ -21,6 +21,7 @@ package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.QuickFindChangeEvent;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DetailsPlace;
@@ -54,6 +55,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String quickFind;
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
+	private HandlerRegistration localeChangeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
 	public TableSelectionActivity(final ClientFactory clientFactory) {
@@ -83,7 +85,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			}
 		});
 
-		// For table changes with the tableSelector:
+		// For quick find changes with the quick find box:
 		final HasChangeHandlers quickFindBox = tableSelectionView.getQuickFindBox();
 		quickFindChangeHandlerRegistration = quickFindBox.addChangeHandler(new ChangeHandler() {
 			@Override
@@ -95,6 +97,17 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 				// Update the browser title because there's place change and the setPlace() method will not be called.
 				// TODO? Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
+			}
+		});
+
+		// For locale changes with the localeSelector:
+		final HasChangeHandlers localeSelector = tableSelectionView.getLocaleSelector();
+		localeChangeHandlerRegistration = localeSelector.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(final ChangeEvent event) {
+				// Fire a locale change event so that other views (e.g. the details view) know about the change and can
+				// update themselves.
+				eventBus.fireEvent(new LocaleChangeEvent(tableSelectionView.getSelectedLocale()));
 			}
 		});
 
@@ -115,6 +128,9 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				}
 
 				tableSelectionView.setSelectedTableName(tableName);
+
+				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
+
 				documentTitle = result.getTitle();
 				tableSelectionView.setDocumentTitle(documentTitle);
 				Window.setTitle(documentTitle + ": " + result.getTableTitles().get(result.getDefaultTableIndex()));
@@ -162,6 +178,9 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 		// Show the quickFind text that was specified by the URL token:
 		tableSelectionView.setQuickFindText(quickFind);
+
+		// Show the current locale:
+		tableSelectionView.setSelectedLocale(localeID);
 	}
 
 	private void clearView() {
@@ -175,6 +194,11 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		if (quickFindChangeHandlerRegistration != null) {
 			quickFindChangeHandlerRegistration.removeHandler();
 			quickFindChangeHandlerRegistration = null;
+		}
+
+		if (localeChangeHandlerRegistration != null) {
+			localeChangeHandlerRegistration.removeHandler();
+			localeChangeHandlerRegistration = null;
 		}
 	}
 

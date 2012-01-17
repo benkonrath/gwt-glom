@@ -34,6 +34,9 @@ public class DocumentInfo implements Serializable {
 	private ArrayList<String> tableTitles;
 	private int defaultTableIndex;
 
+	private ArrayList<String> localeIDs;
+	private ArrayList<String> localeTitles;
+
 	public DocumentInfo() {
 	}
 
@@ -41,7 +44,7 @@ public class DocumentInfo implements Serializable {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -49,7 +52,7 @@ public class DocumentInfo implements Serializable {
 		return tableNames;
 	}
 
-	public void setTableNames(ArrayList<String> tableNames) {
+	public void setTableNames(final ArrayList<String> tableNames) {
 		this.tableNames = tableNames;
 	}
 
@@ -57,7 +60,7 @@ public class DocumentInfo implements Serializable {
 		return tableTitles;
 	}
 
-	public void setTableTitles(ArrayList<String> tableTitles) {
+	public void setTableTitles(final ArrayList<String> tableTitles) {
 		this.tableTitles = tableTitles;
 	}
 
@@ -65,8 +68,24 @@ public class DocumentInfo implements Serializable {
 		return defaultTableIndex;
 	}
 
-	public void setDefaultTableIndex(int defaultTable) {
+	public void setDefaultTableIndex(final int defaultTable) {
 		this.defaultTableIndex = defaultTable;
+	}
+
+	public ArrayList<String> getLocaleIDs() {
+		return localeIDs;
+	}
+
+	public void setLocaleIDs(final ArrayList<String> localeIDs) {
+		this.localeIDs = localeIDs;
+	}
+
+	public ArrayList<String> getLocaleTitles() {
+		return localeTitles;
+	}
+
+	public void setLocaleTitles(final ArrayList<String> localeTitles) {
+		this.localeTitles = localeTitles;
 	}
 
 }

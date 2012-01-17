@@ -46,6 +46,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	Label searchLabel = new Label("Search");
 	TextBox searchTextBox = new TextBox();
 
+	ListBox localeChooser = new ListBox();
+
 	Anchor backLink = new Anchor("Back to List");
 	private Presenter presenter;
 	private HandlerRegistration backLinkHandlerReg;
@@ -54,6 +56,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		tableChooser.setStyleName("tablechooser");
 		searchLabel.setStyleName("searchlabel"); // TODO: This is tedious.
 		searchTextBox.setStyleName("searchtextbox"); // TODO: This is tedious.
+		localeChooser.setStyleName("localechooser"); // TODO: This is tedious.
 		backLink.setStyleName("backlink");
 
 		// empty click handler to avoid having to check for if the HandlerRegistration is null in setBackLink()
@@ -70,6 +73,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		headbox.add(tableChooser);
 		headbox.add(searchLabel);
 		headbox.add(searchTextBox);
+		headbox.add(localeChooser);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -169,9 +173,39 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	public String getQuickFindText() {
 		return searchTextBox.getText();
 	}
-	
+
 	@Override
 	public void setQuickFindText(final String quickFind) {
 		searchTextBox.setText(quickFind);
+	}
+
+	@Override
+	public HasChangeHandlers getLocaleSelector() {
+		return localeChooser;
+	}
+
+	@Override
+	public void setLocaleList(final ArrayList<String> ids, final ArrayList<String> titles) {
+		localeChooser.clear();
+		for (int i = 0; i < ids.size(); i++) {
+			localeChooser.addItem(titles.get(i), ids.get(i));
+		}
+	}
+
+	@Override
+	public String getSelectedLocale() {
+		final int selectedIndex = localeChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : localeChooser.getValue(selectedIndex);
+	}
+
+	@Override
+	public void setSelectedLocale(final String localeID) {
+		for (int i = 0; i < localeChooser.getItemCount(); i++) {
+			if (localeID.equals(localeChooser.getValue(i))) {
+				localeChooser.setSelectedIndex(i);
+				break;
+			}
+		}
+
 	}
 }
