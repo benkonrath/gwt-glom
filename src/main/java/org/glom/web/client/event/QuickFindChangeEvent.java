@@ -28,8 +28,8 @@ public class QuickFindChangeEvent extends GwtEvent<QuickFindChangeEventHandler> 
 	public static Type<QuickFindChangeEventHandler> TYPE = new Type<QuickFindChangeEventHandler>();
 	private final String newQuickFindText;
 
-	public QuickFindChangeEvent(final String newTableName) {
-		this.newQuickFindText = newTableName;
+	public QuickFindChangeEvent(final String newQuickFindText) {
+		this.newQuickFindText = newQuickFindText;
 	}
 
 	public String getNewQuickFindText() {
