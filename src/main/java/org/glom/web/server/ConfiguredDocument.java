@@ -23,6 +23,7 @@ import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
@@ -200,7 +201,19 @@ final class ConfiguredDocument {
 		for (int i = 0; i < numLocales; i++) {
 			final String this_localeID = localesVec.get(i);
 			localeIDs.add(this_localeID);
-			localeTitles.add(this_localeID); // TODO
+
+			// Use java.util.Locale to get a title for the locale:
+			final String[] locale_parts = this_localeID.split("_");
+			String locale_lang = this_localeID;
+			if (locale_parts.length > 0)
+				locale_lang = locale_parts[0];
+			String locale_country = "";
+			if (locale_parts.length > 1)
+				locale_country = locale_parts[1];
+
+			final Locale locale = new Locale(locale_lang, locale_country);
+			final String title = locale.getDisplayName(locale);
+			localeTitles.add(title);
 		}
 		documentInfo.setLocaleIDs(localeIDs);
 		documentInfo.setLocaleTitles(localeTitles);
