@@ -56,7 +56,6 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		tableChooser.setStyleName("tablechooser");
 		searchLabel.setStyleName("searchlabel"); // TODO: This is tedious.
 		searchTextBox.setStyleName("searchtextbox"); // TODO: This is tedious.
-		localeChooser.setStyleName("localechooser"); // TODO: This is tedious.
 		backLink.setStyleName("backlink");
 
 		// empty click handler to avoid having to check for if the HandlerRegistration is null in setBackLink()
@@ -66,14 +65,10 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 			}
 		});
 
-		// headbox with the table selector
-		final FlowPanel headbox = new FlowPanel();
-		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
-		headbox.add(backLink);
-		headbox.add(tableChooser);
-		headbox.add(searchLabel);
-		headbox.add(searchTextBox);
-		headbox.add(localeChooser);
+    final FlowPanel titlebox = new FlowPanel();
+		DOM.setElementAttribute(titlebox.getElement(), "id", "titlebox");
+		titlebox.add(documentTitleLabel);
+		titlebox.add(localeChooser);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -83,9 +78,19 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		documentTitleLabel.addStyleName("document-title");
 		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
 
+		localeChooser.setStyleName("localechooser"); // TODO: This is tedious.
+
+	  // headbox with the table selector
+		final FlowPanel headbox = new FlowPanel();
+		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
+		headbox.add(tableChooser);
+		headbox.add(searchLabel);
+		headbox.add(searchTextBox);
+		headbox.add(backLink);
+		
 		// the main container widget
 		final FlowPanel mainPanel = new FlowPanel();
-		mainPanel.add(documentTitleLabel);
+		mainPanel.add(titlebox);
 		mainPanel.add(headbox);
 
 		initWidget(mainPanel);

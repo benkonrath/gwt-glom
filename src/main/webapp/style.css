@@ -18,6 +18,11 @@ a:hover
 	text-decoration: underline;
 }
 
+#titlebox
+{
+	overflow: hidden;
+}
+
 /**
  * Top and Bottom Navigation Boxes
  */
@@ -32,12 +37,22 @@ a:hover
 
 div#document-title
 {
+	float: left;
 	color: #333333;
 	font-weight: bold;
 	font-size: x-large;
 	margin-bottom: 0.5em;
-	margin-left: 0.5em;
 }
+
+
+.localechooser
+{
+	float: right;
+	margin-left: 0.5em;
+	font-size: 13.3333px;
+	font-family: sans-serif;
+}
+
 
 .backlink
 {
@@ -68,7 +83,6 @@ div#document-title
 	font-size: 13.3333px;
 	font-family: sans-serif;
 }
-
 
 .records
 {

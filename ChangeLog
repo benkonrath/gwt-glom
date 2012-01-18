@@ -1,5 +1,15 @@
 2012-01-18  Murray Cumming  <murrayc@murrayc.com>
 
+	Improve the placement of the locales drop-down.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	Put the title and locales drop-down in a div (gwt.FlowTable).
+	* src/main/webapp/style.css: Add magic css properties to make this work.
+	Also remove the left margin from the title so that it lines up with the 
+	headerbox below it.
+
+2012-01-18  Murray Cumming  <murrayc@murrayc.com>
+
 	locales selector: Show human-readable locale titles.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java
