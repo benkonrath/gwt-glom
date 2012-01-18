@@ -1,5 +1,14 @@
 2012-01-18  Murray Cumming  <murrayc@murrayc.com>
 
+	locales drop-down: Do not lose the drop-down selection.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java (TableSelectionActivity.fillView): Set the selected locale
+	after changing the drop-down items (though we do not really need
+	to change them just because the locale changes.)
+
+2012-01-18  Murray Cumming  <murrayc@murrayc.com>
+
 	locales drop-down: Change the tables list when this changes.
 
 	* src/main/java/org/glom/web/client/activity/TableSelectionActivity

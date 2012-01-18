@@ -141,6 +141,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				tableSelectionView.setSelectedTableName(tableName);
 
 				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
+				tableSelectionView.setSelectedLocale(localeID);
 
 				documentTitle = result.getTitle();
 				tableSelectionView.setDocumentTitle(documentTitle);
