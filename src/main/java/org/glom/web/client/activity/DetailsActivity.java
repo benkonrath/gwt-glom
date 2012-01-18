@@ -186,7 +186,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			@Override
 			public void onLocaleChange(final LocaleChangeEvent event) {
 				// note the empty primary key item
-				goTo(new DetailsPlace(documentID, tableName, event.getNewLocaleID(), new TypedDataItem()));
+				goTo(new DetailsPlace(documentID, tableName, event.getNewLocaleID(), primaryKeyValue));
 			}
 		});
 

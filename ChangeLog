@@ -1,5 +1,13 @@
 2012-01-18  Murray Cumming  <murrayc@murrayc.com>
 
+	locales drop-down: Do not lose the primary key.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	start(): onLocaleChange(): Pass the current primary key value, 
+	instead of an empty value.
+
+2012-01-18  Murray Cumming  <murrayc@murrayc.com>
+
 	locales drop-down: Do not lose the drop-down selection.
 
 	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
