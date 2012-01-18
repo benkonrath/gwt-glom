@@ -1,5 +1,12 @@
 2012-01-18  Murray Cumming  <murrayc@murrayc.com>
 
+	locales drop-down: Show the correct selected locale when the URL changes.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: setPlace(): Move some code into fillView().
+
+2012-01-18  Murray Cumming  <murrayc@murrayc.com>
+
 	locales drop-down: Do not lose the primary key.
 
 	* src/main/java/org/glom/web/client/activity/DetailsActivity.java

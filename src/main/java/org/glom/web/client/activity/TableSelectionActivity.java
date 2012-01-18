@@ -145,10 +145,13 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 				documentTitle = result.getTitle();
 				tableSelectionView.setDocumentTitle(documentTitle);
-				Window.setTitle(documentTitle + ": " + result.getTableTitles().get(result.getDefaultTableIndex()));
+				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
+
+		// Show the quickFind text that was specified by the URL token:
+		tableSelectionView.setQuickFindText(quickFind);
 	}
 
 	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method and
@@ -172,11 +175,6 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			tableSelectionView.setSelectedTableName(tableName);
 		}
 
-		// Update the browser title if document title has already been setup.
-		if (documentTitle != null && !documentTitle.isEmpty()) {
-			Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
-		}
-
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {
 			tableSelectionView.setBackLinkVisible(true);
@@ -185,11 +183,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			tableSelectionView.setBackLinkVisible(false);
 		}
 
-		// Show the quickFind text that was specified by the URL token:
-		tableSelectionView.setQuickFindText(quickFind);
-
-		// Show the current locale:
-		tableSelectionView.setSelectedLocale(localeID);
+		fillView(tableSelectionView);
 	}
 
 	private void clearView() {
