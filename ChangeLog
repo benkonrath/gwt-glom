@@ -1,5 +1,16 @@
 2012-01-18  Murray Cumming  <murrayc@murrayc.com>
 
+	locales drop-down: Change the tables list when this changes.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: TableSelectionActivity.start(): Move the async table titles
+	retrieval into a private fillView() method and also call this when 
+	the chosen locale changes.
+	Note that the document title is not actually translatable yet, but
+	that is a problem that I should fix soon in libglom.
+
+2012-01-18  Murray Cumming  <murrayc@murrayc.com>
+
 	Improve the placement of the locales drop-down.
 
 	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java

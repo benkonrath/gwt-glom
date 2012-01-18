@@ -105,12 +105,23 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		localeChangeHandlerRegistration = localeSelector.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(final ChangeEvent event) {
+				// Show the translated version of the document title and the table names:
+				localeID = tableSelectionView.getSelectedLocale();
+				fillView(tableSelectionView);
+
 				// Fire a locale change event so that other views (e.g. the details view) know about the change and can
 				// update themselves.
-				eventBus.fireEvent(new LocaleChangeEvent(tableSelectionView.getSelectedLocale()));
+				eventBus.fireEvent(new LocaleChangeEvent(localeID));
 			}
 		});
 
+		fillView(tableSelectionView);
+
+		// we're done, set the widget
+		containerWidget.setWidget(tableSelectionView.asWidget());
+	}
+
+	private void fillView(final TableSelectionView tableSelectionView) {
 		// get the table names, table titles and default table index for the current document
 		final AsyncCallback<DocumentInfo> callback = new AsyncCallback<DocumentInfo>() {
 			@Override
@@ -137,9 +148,6 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
-
-		// we're done, set the widget
-		containerWidget.setWidget(tableSelectionView.asWidget());
 	}
 
 	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method and
