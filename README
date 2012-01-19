@@ -1,10 +1,22 @@
 gwt-glom is a web UI for Glom database systems.
 See http://www.glom.org
 
-Building:
+** Source Code:
+
+gwt-glom is in git:
+http://gitorious.org/online-glom/gwt-glom
+
+** Building:
 
 You will need to install mvn (maven), 
-but maven will download other dependencies automatically.
+Maven will download other Java dependencies automatically.
+
+However, you must separately install the shared library part of java-libglom.
+for instance, for Ubuntu via the libjava-libglom-java package 
+from the PPA for stable releases:
+  https://launchpad.net/~openismus-team/+archive/ppa
+or from the PPA for unstable releases:
+  https://launchpad.net/~openismus-team/+archive/openismus-glom-unstable/+packages
 
 To build the .war package, do:
   mvn clean package
@@ -18,7 +30,7 @@ More documentation is on the glom wiki:
 http://www.glom.org/wiki/index.php?title=Development/OnlineGlom
 
 
-Notes:
+*** Notes:
 
 We are using the default GWT compilation option of compiling the Java code to
 obfuscated JavaScript. The reason for this is covered by this snippet from the
