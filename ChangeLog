@@ -1,5 +1,16 @@
 2012-01-19  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlomServiceImpl: Get .glom files recursively.
+
+	* pom.xml: Depend on commons-io from org.apache.commons.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	init(): Use org.apache.commons.io.FileUtils.listFiles() to get the 
+	files recursively, and with the easier filter for the extension.
+	Use org.apache.commons.io.FilenameUtils.removeExtension() to 
+	simplify that code too.
+
+2012-01-19  Murray Cumming  <murrayc@murrayc.com>
+
 	README: Mention that you must install java-libglom packages separately.
 
 	But then it works, because java-libglom is now in the central maven 

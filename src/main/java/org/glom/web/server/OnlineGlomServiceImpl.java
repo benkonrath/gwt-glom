@@ -25,10 +25,13 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
@@ -57,7 +60,7 @@ import com.mchange.v2.c3p0.DataSources;
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 
-	private static final String GLOM_FILE_EXTENSION = ".glom";
+	private static final String GLOM_FILE_EXTENSION = "glom";
 
 	// convenience class for dealing with the Online Glom configuration file
 	private class OnlineGlomProperties extends Properties {
@@ -114,15 +117,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 
 			// get and check the glom files in the specified directory
-			final File[] glomFiles = documentDir.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(final File dir, final String name) {
-					return name.endsWith(GLOM_FILE_EXTENSION);
-				}
-			});
+			// TODO: Test this:
+			final String[] extensions = { GLOM_FILE_EXTENSION };
+			@SuppressWarnings("unchecked")
+			final List<File> glomFiles = (List<File>) FileUtils
+					.listFiles(documentDir, extensions, true /* recursive */);
 
 			// don't continue if there aren't any Glom files to configure
-			if (glomFiles.length <= 0) {
+			if (glomFiles.size() <= 0) {
 				final String errorMessage = "Unable to find any Glom documents in the configured directory "
 						+ documentDirName
 						+ " . Check the onlineglom.properties file to ensure that 'glom.document.directory' is set to the correct directory.";
@@ -196,8 +198,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 				// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
 				// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
-				final String documentID = filename.substring(0,
-						glomFile.getName().length() - GLOM_FILE_EXTENSION.length()).replace(' ', '+');
+				final String documentID = FilenameUtils.removeExtension(filename).replace(' ', '+');
 				configuredDocument.setDocumentID(documentID);
 				documentMapping.put(documentID, configuredDocument);
 			}
