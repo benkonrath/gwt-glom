@@ -71,7 +71,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	private final Hashtable<String, ConfiguredDocument> documentMapping = new Hashtable<String, ConfiguredDocument>();
-	private Exception configurtionException = null;
+	private Exception configurationException = null;
 
 	/*
 	 * This is called when the servlet is started or restarted.
@@ -204,7 +204,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		} catch (final Exception e) {
 			// Don't throw the Exception so that servlet will be initialised and the error message can be retrieved.
-			configurtionException = e;
+			configurationException = e;
 		}
 
 	}
@@ -267,12 +267,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public String getConfigurationErrorMessage() {
-		if (configurtionException == null)
+		if (configurationException == null)
 			return "No configuration errors to report.";
-		else if (configurtionException.getMessage() == null)
-			return configurtionException.toString();
+		else if (configurationException.getMessage() == null)
+			return configurationException.toString();
 		else
-			return configurtionException.getMessage();
+			return configurationException.getMessage();
 	}
 
 	/*
