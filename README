@@ -30,6 +30,15 @@ More documentation is on the glom wiki:
 http://www.glom.org/wiki/index.php?title=Development/OnlineGlom
 
 
+*** Building the source tarball ***
+
+To build a source tarball, do:
+  mvn assembly:assembly
+
+This uses the maven-assembly-plugin, which is configured (in pom.xml) to use 
+our assembly.xml file.
+
+
 *** Notes:
 
 We are using the default GWT compilation option of compiling the Java code to

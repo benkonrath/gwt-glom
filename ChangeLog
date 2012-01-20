@@ -1,3 +1,11 @@
+2012-01-20  Murray Cumming  <murrayc@murrayc.com>
+
+	Build a source tarball with mvn assembly:assembly
+
+	* assembly.xml: Add this file.
+	* pom.xml: Use the maven-assembly-plugin and tell it to use 
+	our assembly.xml file.
+
 2012-01-19  Murray Cumming  <murrayc@murrayc.com>
 
 	OnlineGlomServiceImpl: Get .glom files recursively.
