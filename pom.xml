@@ -7,7 +7,7 @@
 	<groupId>org.glom.web</groupId>
 	<artifactId>gwt-glom</artifactId>
 	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.21.1</version>
 	<name>OnlineGlom</name>
 
 	<licenses>
@@ -165,11 +165,12 @@
 
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>2.2.2</version>
 				<configuration>
 					<descriptors>
 						<descriptor>assembly.xml</descriptor>
 					</descriptors>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 

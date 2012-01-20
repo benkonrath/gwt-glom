@@ -33,7 +33,7 @@ http://www.glom.org/wiki/index.php?title=Development/OnlineGlom
 *** Building the source tarball ***
 
 To build a source tarball, do:
-  mvn assembly:assembly
+  mvn assembly:single
 
 This uses the maven-assembly-plugin, which is configured (in pom.xml) to use 
 our assembly.xml file.

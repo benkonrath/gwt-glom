@@ -1,6 +1,6 @@
 2012-01-20  Murray Cumming  <murrayc@murrayc.com>
 
-	Build a source tarball with mvn assembly:assembly
+	Build a source tarball with mvn assembly:single
 
 	* assembly.xml: Add this file.
 	* pom.xml: Use the maven-assembly-plugin and tell it to use 
