@@ -1,5 +1,9 @@
 2012-01-23  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument: Rename the localedID private member variable.
+
+2012-01-23  Murray Cumming  <murrayc@murrayc.com>
+
 	Adapt to the latest java-libglom API from git master.
 
 	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
