@@ -67,7 +67,7 @@ final class ConfiguredDocument {
 	private ComboPooledDataSource cpds;
 	private boolean authenticated = false;
 	private String documentID;
-	private String localeID;
+	private String defaultLocaleID;
 
 	@SuppressWarnings("unused")
 	private ConfiguredDocument() {
@@ -151,11 +151,11 @@ final class ConfiguredDocument {
 	}
 
 	String getDefaultLocaleID() {
-		return localeID;
+		return defaultLocaleID;
 	}
 
 	void setDefaultLocaleID(final String localeID) {
-		this.localeID = localeID;
+		this.defaultLocaleID = localeID;
 	}
 
 	/**

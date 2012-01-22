@@ -1,3 +1,7 @@
+2012-01-22  Murray Cumming  <murrayc@murrayc.com>
+
+	ConfiguredDocument: Rename the localedID private member variable.
+
 2012-01-20  Murray Cumming  <murrayc@murrayc.com>
 
 	Build a source tarball with mvn assembly:single
