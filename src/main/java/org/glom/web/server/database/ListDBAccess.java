@@ -61,7 +61,7 @@ public abstract class ListDBAccess extends DBAccess {
 			final org.glom.libglom.LayoutItem item = fieldsToGet.get(sortColumnIndex);
 			final LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
 			if (layoutItemField != null)
-				sortClause.addLast(new SortFieldPair(layoutItemField, isAscending));
+				sortClause.add(new SortFieldPair(layoutItemField, isAscending));
 			else {
 				Log.error(documentID, tableName, "Error getting LayoutItem_Field for column index " + sortColumnIndex
 						+ ". Cannot create a sort clause for this column.");
@@ -73,7 +73,7 @@ public abstract class ListDBAccess extends DBAccess {
 				final LayoutItem_Field layoutItem = fieldsToGet.get(i);
 				final Field details = layoutItem.get_full_field_details();
 				if (details != null && details.get_primary_key()) {
-					sortClause.addLast(new SortFieldPair(layoutItem, true)); // ascending
+					sortClause.add(new SortFieldPair(layoutItem, true)); // ascending
 					break;
 				}
 			}

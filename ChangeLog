@@ -1,5 +1,13 @@
 2012-01-23  Murray Cumming  <murrayc@murrayc.com>
 
+	Adapt to the latest java-libglom API from git master.
+
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	libglom now uses only Vector instead of List, which uses add() instead of
+	addLast(). 
+
+2012-01-23  Murray Cumming  <murrayc@murrayc.com>
+
 	Add and fill a Reports drop-down list box.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
