@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.TextBox;
 public class TableSelectionViewImpl extends Composite implements TableSelectionView {
 
 	Label documentTitleLabel = new Label();
-	ListBox tableChooser = new ListBox();
+	ListBox tablesChooser = new ListBox();
 
 	Label searchLabel = new Label("Search");
 	TextBox searchTextBox = new TextBox();
@@ -50,14 +50,14 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	Label reportLabel = new Label("Reports");
 	ListBox reportChooser = new ListBox();
 
-	ListBox localeChooser = new ListBox();
+	ListBox localesChooser = new ListBox();
 
 	Anchor backLink = new Anchor("Back to List");
 	private Presenter presenter;
 	private HandlerRegistration backLinkHandlerReg;
 
 	public TableSelectionViewImpl() {
-		tableChooser.setStyleName("tablechooser");
+		tablesChooser.setStyleName("tableschooser");
 		searchLabel.setStyleName("searchlabel"); // TODO: This is tedious.
 		searchTextBox.setStyleName("searchtextbox"); // TODO: This is tedious.
 		backLink.setStyleName("backlink");
@@ -72,9 +72,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		final FlowPanel titlebox = new FlowPanel();
 		DOM.setElementAttribute(titlebox.getElement(), "id", "titlebox");
 		titlebox.add(documentTitleLabel);
+
 		titlebox.add(reportLabel);
 		titlebox.add(reportChooser);
-		titlebox.add(localeChooser);
+
+		titlebox.add(localesChooser);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -87,12 +89,12 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		reportLabel.setStyleName("reportlabel"); // TODO: This is tedious.
 		reportChooser.setStyleName("reportchooser"); // TODO: This is tedious.
 
-		localeChooser.setStyleName("localechooser"); // TODO: This is tedious.
+		localeChoosers.setStyleName("localechooser"); // TODO: This is tedious.
 
 		// headbox with the table selector
 		final FlowPanel headbox = new FlowPanel();
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
-		headbox.add(tableChooser);
+		headbox.add(tablesChooser);
 		headbox.add(searchLabel);
 		headbox.add(searchTextBox);
 		headbox.add(backLink);
@@ -107,17 +109,17 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setTableSelection(final ArrayList<String> names, final ArrayList<String> titles) {
-		tableChooser.clear();
+		tablesChooser.clear();
 		for (int i = 0; i < names.size(); i++) {
-			tableChooser.addItem(titles.get(i), names.get(i));
+			tablesChooser.addItem(titles.get(i), names.get(i));
 		}
 	}
 
 	@Override
 	public void setSelectedTableName(final String tableName) {
-		for (int i = 0; i < tableChooser.getItemCount(); i++) {
-			if (tableName.equals(tableChooser.getValue(i))) {
-				tableChooser.setSelectedIndex(i);
+		for (int i = 0; i < tablesChooser.getItemCount(); i++) {
+			if (tableName.equals(tablesChooser.getValue(i))) {
+				tablesChooser.setSelectedIndex(i);
 				break;
 			}
 		}
@@ -126,13 +128,13 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public HasChangeHandlers getTableSelector() {
-		return tableChooser;
+		return tablesChooser;
 	}
 
 	@Override
 	public String getSelectedTableName() {
-		final int selectedIndex = tableChooser.getSelectedIndex();
-		return selectedIndex < 0 ? "" : tableChooser.getValue(selectedIndex);
+		final int selectedIndex = tablesChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : tablesChooser.getValue(selectedIndex);
 	}
 
 	@Override
@@ -155,7 +157,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void clear() {
-		tableChooser.clear();
+		tablesChooser.clear();
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
 		// down when retrieving the document title from the server if an empty string is used.
 		documentTitleLabel.getElement().getStyle().setOpacity(0);
@@ -174,8 +176,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public String getSelectedTableTitle() {
-		final int selectedIndex = tableChooser.getSelectedIndex();
-		return selectedIndex < 0 ? "" : tableChooser.getItemText(selectedIndex);
+		final int selectedIndex = tablesChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : tablesChooser.getItemText(selectedIndex);
 	}
 
 	@Override
@@ -195,28 +197,28 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public HasChangeHandlers getLocaleSelector() {
-		return localeChooser;
+		return localesChooser;
 	}
 
 	@Override
 	public void setLocaleList(final ArrayList<String> ids, final ArrayList<String> titles) {
-		localeChooser.clear();
+		localesChooser.clear();
 		for (int i = 0; i < ids.size(); i++) {
-			localeChooser.addItem(titles.get(i), ids.get(i));
+			localesChooser.addItem(titles.get(i), ids.get(i));
 		}
 	}
 
 	@Override
 	public String getSelectedLocale() {
-		final int selectedIndex = localeChooser.getSelectedIndex();
-		return selectedIndex < 0 ? "" : localeChooser.getValue(selectedIndex);
+		final int selectedIndex = localesChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : localesChooser.getValue(selectedIndex);
 	}
 
 	@Override
 	public void setSelectedLocale(final String localeID) {
-		for (int i = 0; i < localeChooser.getItemCount(); i++) {
-			if (localeID.equals(localeChooser.getValue(i))) {
-				localeChooser.setSelectedIndex(i);
+		for (int i = 0; i < localesChooser.getItemCount(); i++) {
+			if (localeID.equals(localesChooser.getValue(i))) {
+				localesChooser.setSelectedIndex(i);
 				break;
 			}
 		}

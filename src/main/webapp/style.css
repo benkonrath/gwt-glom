@@ -45,7 +45,7 @@ div#document-title
 }
 
 
-.localechooser
+.localeschooser
 {
 	float: right;
 	margin-left: 0.5em;
@@ -60,7 +60,7 @@ div#document-title
 	margin: 0.2em 0.5em;
 }
 
-.tablechooser
+.tableschooser
 {
 	float: left;
 	margin-left: 0.5em;
