@@ -1,5 +1,14 @@
 2012-01-23  Murray Cumming  <murrayc@murrayc.com>
 
+	Some simple renaming.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	* src/main/webapp/style.css: Rename, tableChooser to tablesChooser. Likewise
+	for localeChooser. This seems more appropriate and is less ambiguous 
+	particularly in the .css file.
+
+2012-01-23  Murray Cumming  <murrayc@murrayc.com>
+
 	ConfiguredDocument: Rename the localedID private member variable.
 
 2012-01-23  Murray Cumming  <murrayc@murrayc.com>
