@@ -1,3 +1,20 @@
+2012-01-23  Murray Cumming  <murrayc@murrayc.com>
+
+	Add and fill a Reports drop-down list box.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Aded getReports():
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Added getReports(document, table, localeID), calling 
+	ConfiguredDocument.getReports().
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Added setReportsList() and a list widget.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java (TableSelectionActivity.fillView(): Fill the view's reports list.
+
 2012-01-22  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Rename the localedID private member variable.

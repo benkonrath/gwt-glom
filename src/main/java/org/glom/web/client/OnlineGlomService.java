@@ -26,6 +26,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -108,6 +109,19 @@ public interface OnlineGlomService extends RemoteService {
 	 * @return true if username and password are correct, false otherwise
 	 */
 	boolean checkAuthentication(String documentID, String username, String password);
+
+	/**
+	 * Get a list of reports for the specified table.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document.
+	 * @param localeID
+	 *            The locale for the table titles.
+	 * @return The names and titles of the table's reports.
+	 */
+	Reports getReportsList(String documentID, String tableName, String localeID);
 
 	/**
 	 * Gets data for the details view.
@@ -207,5 +221,4 @@ public interface OnlineGlomService extends RemoteService {
 			TypedDataItem primaryKeyValue);
 
 	String getConfigurationErrorMessage();
-
 }

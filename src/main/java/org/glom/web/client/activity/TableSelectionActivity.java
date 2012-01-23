@@ -30,6 +30,7 @@ import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
 import org.glom.web.shared.DocumentInfo;
+import org.glom.web.shared.Reports;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -150,6 +151,21 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
 
+		// get the reports list for the current table:
+		final AsyncCallback<Reports> callback_report = new AsyncCallback<Reports>() {
+			@Override
+			public void onFailure(final Throwable caught) {
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportsList()");
+			}
+
+			@Override
+			public void onSuccess(final Reports result) {
+				tableSelectionView.setReportList(result);
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().getReportsList(documentID, tableName, localeID, callback_report);
+
 		// Show the quickFind text that was specified by the URL token:
 		tableSelectionView.setQuickFindText(quickFind);
 	}
@@ -169,11 +185,6 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		}
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
-
-		// Update the selected table if it's not correct.
-		if (!tableSelectionView.getSelectedTableName().equals(tableName)) {
-			tableSelectionView.setSelectedTableName(tableName);
-		}
 
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {

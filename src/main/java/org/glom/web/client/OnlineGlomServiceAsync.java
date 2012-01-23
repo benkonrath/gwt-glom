@@ -26,6 +26,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -69,6 +70,8 @@ public interface OnlineGlomServiceAsync {
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
+	void getReportsList(String documentID, String tableName, String localeID, AsyncCallback<Reports> callback);
+
 	void getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue, String localeID,
 			AsyncCallback<DetailsLayoutAndData> callback);
 
@@ -89,5 +92,4 @@ public interface OnlineGlomServiceAsync {
 			TypedDataItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
 	void getConfigurationErrorMessage(AsyncCallback<String> callback);
-
 }

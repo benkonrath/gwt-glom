@@ -41,6 +41,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -379,6 +380,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getReportsList(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Reports getReportsList(final String documentID, final String tableName, final String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		return configuredDoc.getReports(tableName, localeID);
 	}
 
 	/*

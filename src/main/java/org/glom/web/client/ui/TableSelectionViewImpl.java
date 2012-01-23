@@ -22,6 +22,7 @@ package org.glom.web.client.ui;
 import java.util.ArrayList;
 
 import org.glom.web.client.place.ListPlace;
+import org.glom.web.shared.Reports;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -46,6 +47,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	Label searchLabel = new Label("Search");
 	TextBox searchTextBox = new TextBox();
 
+	Label reportLabel = new Label("Reports");
+	ListBox reportChooser = new ListBox();
+
 	ListBox localeChooser = new ListBox();
 
 	Anchor backLink = new Anchor("Back to List");
@@ -65,9 +69,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 			}
 		});
 
-    final FlowPanel titlebox = new FlowPanel();
+		final FlowPanel titlebox = new FlowPanel();
 		DOM.setElementAttribute(titlebox.getElement(), "id", "titlebox");
 		titlebox.add(documentTitleLabel);
+		titlebox.add(reportLabel);
+		titlebox.add(reportChooser);
 		titlebox.add(localeChooser);
 
 		// document title
@@ -78,16 +84,19 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		documentTitleLabel.addStyleName("document-title");
 		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
 
+		reportLabel.setStyleName("reportlabel"); // TODO: This is tedious.
+		reportChooser.setStyleName("reportchooser"); // TODO: This is tedious.
+
 		localeChooser.setStyleName("localechooser"); // TODO: This is tedious.
 
-	  // headbox with the table selector
+		// headbox with the table selector
 		final FlowPanel headbox = new FlowPanel();
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
 		headbox.add(tableChooser);
 		headbox.add(searchLabel);
 		headbox.add(searchTextBox);
 		headbox.add(backLink);
-		
+
 		// the main container widget
 		final FlowPanel mainPanel = new FlowPanel();
 		mainPanel.add(titlebox);
@@ -212,5 +221,13 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 			}
 		}
 
+	}
+
+	@Override
+	public void setReportList(final Reports reports) {
+		reportChooser.clear();
+		for (int i = 0; i < reports.getCount(); i++) {
+			reportChooser.addItem(reports.getName(i), reports.getTitle(i));
+		}
 	}
 }
