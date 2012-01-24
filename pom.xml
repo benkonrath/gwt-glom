@@ -52,13 +52,13 @@
 			therefore must not be included in each war. Instead the java-libglom jar 
 			must be placed in $CATALINA_HOME/lib. Scope provided ensures that the jar 
 			is available for compiling and testing but will not be packaged in the war. 
-			More information about this deploying servlets that use jni jars can be found 
+			More information about deploying servlets that use jni jars can be found 
 			in the "JNI Based Applications" section of the Tomcat release notes:
 			http://tomcat.apache.org/tomcat-7.0-doc/RELEASE-NOTES.txt -->
 		<dependency>
 			<groupId>org.glom.libglom</groupId>
 			<artifactId>java-libglom</artifactId>
-			<version>1.21.1</version>
+			<version>1.21.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

@@ -192,7 +192,7 @@ abstract class DBAccess {
 							layoutItemField.set_full_field_details(field);
 							layoutItemFields.add(layoutItemField);
 						} else {
-							Log.warn(document.get_database_title(), tableName,
+							Log.warn(document.get_database_title_original(), tableName,
 									"LayoutItem_Field " + layoutItemField.get_layout_display_name()
 											+ " not found in document field list.");
 						}
@@ -252,7 +252,7 @@ abstract class DBAccess {
 		if (primaryKey != null) {
 			libglomLayoutItemField.set_full_field_details(primaryKey);
 		} else {
-			Log.error(document.get_database_title(), this.tableName,
+			Log.error(document.get_database_title_original(), this.tableName,
 					"A primary key was not found in the FieldVector for this table.");
 		}
 

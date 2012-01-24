@@ -1,5 +1,20 @@
 2012-01-24  Murray Cumming  <murrayc@murrayc.com>
 
+	Update to the latest java-libglom API.
+
+	* pom.xml: Require java-libglom 1.21.4.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	getDocumentInfo(), getListViewLayoutGroup():
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getDocuments():
+	* src/main/java/org/glom/web/server/database/DBAccess.java
+	getFieldsToShowForSQLQueryAddGroup(),
+	getPrimaryKeyLayoutItemField(): Replace get_database_title()
+	with either get_database_title_original() or 
+	get_database_title(localeID).
+
+2012-01-24  Murray Cumming  <murrayc@murrayc.com>
+
 	ConfiguredDocument: Avoid a null pointer exception.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java
