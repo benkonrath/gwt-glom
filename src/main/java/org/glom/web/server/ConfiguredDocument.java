@@ -193,7 +193,7 @@ final class ConfiguredDocument {
 		// set everything we need
 		documentInfo.setTableNames(tableNames);
 		documentInfo.setTableTitles(tableTitles);
-		documentInfo.setTitle(document.get_database_title());
+		documentInfo.setTitle(document.get_database_title(localeID));
 
 		// Fetch arrays of locale IDs and titles:
 		final StringVector localesVec = document.get_translation_available_locales();
@@ -397,7 +397,7 @@ final class ConfiguredDocument {
 				layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
 				layoutGroup.setHiddenPrimaryKey(true);
 			} else {
-				Log.error(document.get_database_title(), tableName,
+				Log.error(document.get_database_title_original(), tableName,
 						"A primary key was not found in the FieldVector for this table. Navigation buttons will not work.");
 			}
 

@@ -349,8 +349,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final Documents documents = new Documents();
 		for (final String documentID : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			documents.addDocument(documentID, configuredDoc.getDocument().get_database_title(),
-					configuredDoc.getDefaultLocaleID());
+			final String localeID = configuredDoc.getDefaultLocaleID();
+			final Document glomDocument = configuredDoc.getDocument();
+			if(glomDocument == null) {
+				final String errorMessage = "getDocuments(): getDocument() failed.";
+				Log.fatal(errorMessage);
+				//TODO: throw new Exception(errorMessage);
+			}
+
+			documents.addDocument(documentID, glomDocument.get_database_title(localeID),
+					localeID);
 		}
 		return documents;
 	}
