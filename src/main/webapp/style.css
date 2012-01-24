@@ -44,6 +44,21 @@ div#document-title
 	margin-bottom: 0.5em;
 }
 
+.reportslabel
+{
+	float: right;
+	margin-left: 0.5em;
+	font-size: 13.3333px;
+	font-family: sans-serif;
+}
+
+.reportschooser
+{
+	float: right;
+	margin-left: 0.5em;
+	font-size: 13.3333px;
+	font-family: sans-serif;
+}
 
 .localeschooser
 {

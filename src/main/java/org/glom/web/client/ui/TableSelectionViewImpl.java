@@ -73,10 +73,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		DOM.setElementAttribute(titlebox.getElement(), "id", "titlebox");
 		titlebox.add(documentTitleLabel);
 
-		titlebox.add(reportLabel);
-		titlebox.add(reportChooser);
-
 		titlebox.add(localesChooser);
+		titlebox.add(reportChooser);
+		titlebox.add(reportLabel);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -86,8 +85,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		documentTitleLabel.addStyleName("document-title");
 		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
 
-		reportLabel.setStyleName("reportlabel"); // TODO: This is tedious.
-		reportChooser.setStyleName("reportchooser"); // TODO: This is tedious.
+		reportLabel.setStyleName("reportslabel"); // TODO: This is tedious.
+		reportChooser.setStyleName("reportschooser"); // TODO: This is tedious.
 
 		localesChooser.setStyleName("localeschooser"); // TODO: This is tedious.
 
