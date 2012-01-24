@@ -89,7 +89,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		reportLabel.setStyleName("reportlabel"); // TODO: This is tedious.
 		reportChooser.setStyleName("reportchooser"); // TODO: This is tedious.
 
-		localeChoosers.setStyleName("localechooser"); // TODO: This is tedious.
+		localesChooser.setStyleName("localechooser"); // TODO: This is tedious.
 
 		// headbox with the table selector
 		final FlowPanel headbox = new FlowPanel();
