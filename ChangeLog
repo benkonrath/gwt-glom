@@ -1,5 +1,34 @@
 2012-01-24  Murray Cumming  <murrayc@murrayc.com>
 
+	Improve null/empty String checks. 
+
+	* pom.xml: Add a dependency on commons-lang, to use
+	org.apache.commons.lang.StringUtils.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	Use StringUtils.isEmpty().
+
+	* src/main/java/org/glom/web/client/StringUtils.java: Add a tiny
+	StringUtils class with a static isEmpty() function because we 
+	cannot use org.apache.commons.lang.StringUtils in client-side
+	GWT code because it (apparently) cannot be compiled to javascript.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	* src/main/java/org/glom/web/client/activity/ListActivity.java
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java
+	* src/main/java/org/glom/web/client/place/ListPlace.java
+	* src/main/java/org/glom/web/client/ui/cell/NumericCell.java
+	* src/main/java/org/glom/web/client/ui/cell/TextCell.java
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java
+	* src/main/java/org/glom/web/client/ui/details/Group.java
+	* src/main/java/org/glom/web/client/ui/details/Notebook.java: Use 
+	our StringUtils.isEmpty() function.
+
+2012-01-24  Murray Cumming  <murrayc@murrayc.com>
+
 	Update to the latest java-libglom API.
 
 	* pom.xml: Require java-libglom 1.21.4.

@@ -22,6 +22,7 @@ package org.glom.web.client.ui.details;
 
 import java.io.UnsupportedEncodingException;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
@@ -87,10 +88,10 @@ public class DetailsCell extends Composite {
 
 		// set the text foreground and background colours
 		String foregroundColour = formatting.getTextFormatColourForeground();
-		if (foregroundColour != null && !foregroundColour.isEmpty())
+		if (!StringUtils.isEmpty(foregroundColour))
 			detailsData.getElement().getStyle().setColor(foregroundColour);
 		String backgroundColour = formatting.getTextFormatColourBackground();
-		if (backgroundColour != null && !backgroundColour.isEmpty())
+		if (!StringUtils.isEmpty(backgroundColour))
 			detailsData.getElement().getStyle().setBackgroundColor(backgroundColour);
 
 		FlowPanel mainPanel = new FlowPanel();
@@ -146,7 +147,7 @@ public class DetailsCell extends Composite {
 				detailsData.getElement().getStyle().setColor("Red");
 			}
 
-			String currencyCode = glomNumericFormat.getCurrencyCode().isEmpty() ? "" : glomNumericFormat
+			final String currencyCode = StringUtils.isEmpty(glomNumericFormat.getCurrencyCode()) ? "" : glomNumericFormat
 					.getCurrencyCode().trim() + " ";
 			detailsLabel.setText(currencyCode + gwtNumberFormat.format(dataItem.getNumber()));
 			detailsData.add(detailsLabel);

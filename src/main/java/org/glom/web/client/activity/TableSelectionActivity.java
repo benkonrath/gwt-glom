@@ -19,6 +19,7 @@
 
 package org.glom.web.client.activity;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.event.LocaleChangeEvent;
@@ -134,7 +135,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			public void onSuccess(final DocumentInfo result) {
 				tableSelectionView.setTableSelection(result.getTableNames(), result.getTableTitles());
 
-				if (tableName == null || tableName.isEmpty()) {
+				if (StringUtils.isEmpty(tableName)) {
 					tableName = result.getTableNames().get(result.getDefaultTableIndex());
 				}
 

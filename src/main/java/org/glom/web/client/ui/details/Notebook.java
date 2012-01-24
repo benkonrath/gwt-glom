@@ -19,6 +19,7 @@
 
 package org.glom.web.client.ui.details;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
@@ -71,7 +72,7 @@ public class Notebook extends Group {
 				maxChildHeight = childHeight;
 
 			// Use the name if the title is empty. This avoids having tabs with empty labels.
-			tabPanel.add(child, layoutItem.getTitle().isEmpty() ? layoutItem.getName() : layoutItem.getTitle());
+			tabPanel.add(child, StringUtils.isEmpty(layoutItem.getTitle()) ? layoutItem.getName() : layoutItem.getTitle());
 		}
 
 		// Set the first tab as the default tab.

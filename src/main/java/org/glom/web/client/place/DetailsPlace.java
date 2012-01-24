@@ -21,6 +21,7 @@ package org.glom.web.client.place;
 
 import java.util.HashMap;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
@@ -148,7 +149,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 				primaryKeyValue.setUnknown(primaryKeyValueString);
 			}
 
-			if (documentID.isEmpty()) {
+			if (StringUtils.isEmpty(documentID)) {
 				// The documentID was not retrieved from the URL. Use empty values for the details place.
 				return new DetailsPlace("", "", localeID, primaryKeyValue);
 			}

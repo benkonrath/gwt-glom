@@ -19,6 +19,7 @@
 
 package org.glom.web.client.ui.cell;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -35,12 +36,12 @@ public class TextCell extends AbstractCell<String> {
 
 	// TODO Find a way to set the colours on the whole column
 	public TextCell(String foregroundColour, String backgroundColour) {
-		if (foregroundColour != null && !foregroundColour.isEmpty()) {
+		if (!StringUtils.isEmpty(foregroundColour)) {
 			colourCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColour + ";");
 		} else {
 			colourCSSProp = SafeHtmlUtils.fromSafeConstant("");
 		}
-		if (backgroundColour != null && !backgroundColour.isEmpty()) {
+		if (!StringUtils.isEmpty(backgroundColour)) {
 			backgroundColourCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColour + ";");
 		} else {
 			backgroundColourCSSProp = SafeHtmlUtils.fromSafeConstant("");

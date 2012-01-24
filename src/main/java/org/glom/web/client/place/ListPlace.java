@@ -21,6 +21,8 @@ package org.glom.web.client.place;
 
 import java.util.HashMap;
 
+import org.glom.web.client.StringUtils;
+
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
@@ -81,7 +83,7 @@ public class ListPlace extends HasSelectableTablePlace {
 				quickFind = params.get(quickFindKey);
 			}
 
-			if ((documentID.isEmpty())) {
+			if (StringUtils.isEmpty(documentID)) {
 				// The documentID was not retrieved from the URL. Use empty values for the list place.
 				return new ListPlace("", "", localeID, "");
 			}
