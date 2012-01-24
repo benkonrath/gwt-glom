@@ -120,7 +120,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// get and check the glom files in the specified directory
 			// TODO: Test this:
 			final String[] extensions = { GLOM_FILE_EXTENSION };
-			@SuppressWarnings("unchecked")
 			final List<File> glomFiles = (List<File>) FileUtils
 					.listFiles(documentDir, extensions, true /* recursive */);
 
@@ -351,14 +350,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 			final String localeID = configuredDoc.getDefaultLocaleID();
 			final Document glomDocument = configuredDoc.getDocument();
-			if(glomDocument == null) {
+			if (glomDocument == null) {
 				final String errorMessage = "getDocuments(): getDocument() failed.";
 				Log.fatal(errorMessage);
-				//TODO: throw new Exception(errorMessage);
+				// TODO: throw new Exception(errorMessage);
 			}
 
-			documents.addDocument(documentID, glomDocument.get_database_title(localeID),
-					localeID);
+			documents.addDocument(documentID, glomDocument.get_database_title(localeID), localeID);
 		}
 		return documents;
 	}
