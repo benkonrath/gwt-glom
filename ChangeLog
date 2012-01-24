@@ -1,3 +1,11 @@
+2012-01-24  Murray Cumming  <murrayc@murrayc.com>
+
+	ConfiguredDocument: Avoid a null pointer exception.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	Initialize localeID to "" to avoid returning a null String which 
+	causes a crash in java-libglom's swing-generated code.
+
 2012-01-23  Murray Cumming  <murrayc@murrayc.com>
 
 	Some simple renaming.

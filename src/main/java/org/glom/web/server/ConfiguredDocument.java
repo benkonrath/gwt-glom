@@ -68,8 +68,8 @@ final class ConfiguredDocument {
 	private Document document;
 	private ComboPooledDataSource cpds;
 	private boolean authenticated = false;
-	private String documentID;
-	private String defaultLocaleID;
+	private String documentID = "";
+	private String defaultLocaleID = "";
 
 	@SuppressWarnings("unused")
 	private ConfiguredDocument() {
