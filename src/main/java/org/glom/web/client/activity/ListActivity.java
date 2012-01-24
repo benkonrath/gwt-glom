@@ -19,6 +19,7 @@
 
 package org.glom.web.client.activity;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.event.LocaleChangeEvent;
@@ -65,7 +66,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 
 	@Override
 	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-		if (documentID.isEmpty())
+		if (StringUtils.isEmpty(documentID))
 			goTo(new DocumentSelectionPlace());
 
 		// register this class as the presenter

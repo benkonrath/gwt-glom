@@ -32,6 +32,7 @@ import javax.servlet.ServletException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
@@ -192,7 +193,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 							config.getProperty("glom.document.password")); // can throw an SQLException
 				}
 
-				if (globalLocaleID != null && !globalLocaleID.isEmpty()) {
+				if (!StringUtils.isEmpty(globalLocaleID)) {
 					configuredDocument.setDefaultLocaleID(globalLocaleID.trim());
 				}
 

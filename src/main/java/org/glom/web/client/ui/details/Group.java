@@ -21,6 +21,7 @@ package org.glom.web.client.ui.details;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
@@ -72,7 +73,7 @@ public class Group extends Composite {
 		FlowPanel groupContents;
 		String groupTitle = layoutGroup.getTitle();
 
-		if (setGroupTitle && !groupTitle.isEmpty()) {
+		if (setGroupTitle && !StringUtils.isEmpty(groupTitle)) {
 			Label label = new Label(groupTitle);
 			mainPanel.add(label);
 

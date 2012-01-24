@@ -21,6 +21,7 @@ package org.glom.web.server.database;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldVector;
@@ -167,7 +168,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 		SqlExpr whereClause = new SqlExpr(); // Note that we ignore quickFind.
 		// only attempt to make a where clause if it makes sense to do so
-		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
+		if (!StringUtils.isEmpty(whereClauseToTableName)) {
 			final Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
 			if (gdaForeignKeyValue != null)
@@ -184,7 +185,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	private Field getFieldInTable(final String fieldName, final String tableName) {
 
-		if (tableName.isEmpty() || fieldName.isEmpty())
+		if (StringUtils.isEmpty(tableName))
 			return null;
 
 		final FieldVector fields = document.get_table_fields(tableName);

@@ -21,6 +21,7 @@ package org.glom.web.client.activity;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.Utils;
@@ -103,10 +104,10 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		}
 	}
 
-	private final String documentID;
-	private final String tableName;
+	private String documentID = "";
+	private String tableName = "";
 	private TypedDataItem primaryKeyValue;
-	private final String localeID;
+	private String localeID = "";
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 	ArrayList<DetailsCell> detailsCells;
@@ -129,7 +130,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	 */
 	@Override
 	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-		if (documentID.isEmpty())
+		if (StringUtils.isEmpty(documentID))
 			goTo(new DocumentSelectionPlace());
 
 		// register this class as the presenter
@@ -329,7 +330,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 
 		// Ensure the new table name is valid.
 		String newTableName;
-		if (navigationTableName != null && !navigationTableName.isEmpty()) {
+		if (!StringUtils.isEmpty(navigationTableName)) {
 			newTableName = navigationTableName;
 		} else {
 			newTableName = tableName;

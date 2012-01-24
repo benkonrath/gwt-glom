@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.glom.web.client.StringUtils;
+
 import com.google.gwt.place.shared.Place;
 
 /**
@@ -80,15 +82,15 @@ public abstract class HasSelectableTablePlace extends Place {
 
 				String key = "";
 				String value = "";
-				if (!substr[0].isEmpty()) {
+				if (!StringUtils.isEmpty(substr[0])) {
 					key = substr[0];
 				}
 
-				if (!substr[1].isEmpty()) {
+				if (!StringUtils.isEmpty(substr[1])) {
 					value = substr[1];
 				}
 
-				if (!key.isEmpty() && !value.isEmpty()) {
+				if (!StringUtils.isEmpty(key) && !StringUtils.isEmpty(value)) {
 					params.put(key, value);
 				}
 			}
@@ -110,7 +112,7 @@ public abstract class HasSelectableTablePlace extends Place {
 				final Map.Entry<String, String> entry = it.next();
 				final String key = entry.getKey();
 				final String value = entry.getValue();
-				if (key.isEmpty() || value.isEmpty())
+				if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value))
 					continue;
 
 				if (token != "") {

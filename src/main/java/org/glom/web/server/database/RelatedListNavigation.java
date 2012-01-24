@@ -25,6 +25,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.Field.glom_field_type;
@@ -80,7 +81,7 @@ public class RelatedListNavigation extends DBAccess {
 		portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem, document);
 
 		String navigationTableName = navigationTableNameSB.toString();
-		if (navigationTableName.isEmpty()) {
+		if (StringUtils.isEmpty(navigationTableName)) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot cannot be determined because the navigation table name is empty.");
 			return null;

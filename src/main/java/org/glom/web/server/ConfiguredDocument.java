@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldFormatting;
@@ -430,7 +431,7 @@ final class ConfiguredDocument {
 		final LayoutGroup layoutGroup = new LayoutGroup();
 		layoutGroup.setColumnCount(Utils.safeLongToInt(libglomLayoutGroup.get_columns_count()));
 		final String layoutGroupTitle = libglomLayoutGroup.get_title(localeID);
-		if (layoutGroupTitle.isEmpty())
+		if (StringUtils.isEmpty(layoutGroupTitle))
 			layoutGroup.setName(libglomLayoutGroup.get_name());
 		else
 			layoutGroup.setTitle(layoutGroupTitle);
@@ -580,7 +581,7 @@ final class ConfiguredDocument {
 			// get the primary key for the related list table
 			final LayoutItem_Field layoutItemField = new LayoutItem_Field();
 			final String toTableName = relationship.get_to_table();
-			if (!toTableName.isEmpty()) {
+			if (!StringUtils.isEmpty(toTableName)) {
 
 				// get the LayoutItem_Feild with details from its Field in the document
 				final FieldVector fields = document.get_table_fields(toTableName);
@@ -604,7 +605,7 @@ final class ConfiguredDocument {
 			final LayoutItem_Field navigationRelationship = new LayoutItem_Field(); // Ignored.
 			libglomLayoutItemPortal.get_suitable_table_to_view_details(navigationTableName, navigationRelationship,
 					document);
-			layoutItemPortal.setAddNavigation(!(navigationTableName.toString().isEmpty()));
+			layoutItemPortal.setAddNavigation(!StringUtils.isEmpty(navigationTableName.toString()));
 		}
 
 		// Note: An empty LayoutItemPortal is returned if relationship is null.
@@ -626,10 +627,10 @@ final class ConfiguredDocument {
 
 		// text colour
 		final String foregroundColour = libglomFormatting.get_text_format_color_foreground();
-		if (foregroundColour != null && !foregroundColour.isEmpty())
+		if (!StringUtils.isEmpty(foregroundColour))
 			formatting.setTextFormatColourForeground(convertGdkColorToHtmlColour(foregroundColour));
 		final String backgroundColour = libglomFormatting.get_text_format_color_background();
-		if (backgroundColour != null && !backgroundColour.isEmpty())
+		if (!StringUtils.isEmpty(backgroundColour))
 			formatting.setTextFormatColourBackground(convertGdkColorToHtmlColour(backgroundColour));
 
 		// multiline
@@ -757,7 +758,7 @@ final class ConfiguredDocument {
 	 * @return The table name to use.
 	 */
 	private String getTableNameToUse(final String tableName) {
-		if (tableName == null || tableName.isEmpty() || !document.get_table_is_known(tableName)) {
+		if (StringUtils.isEmpty(tableName) || !document.get_table_is_known(tableName)) {
 			return document.get_default_table();
 		}
 		return tableName;
