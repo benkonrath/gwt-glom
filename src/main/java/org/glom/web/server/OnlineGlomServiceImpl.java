@@ -120,7 +120,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// get and check the glom files in the specified directory
 			// TODO: Test this:
 			final String[] extensions = { GLOM_FILE_EXTENSION };
-			@SuppressWarnings("unchecked")
 			final List<File> glomFiles = (List<File>) FileUtils
 					.listFiles(documentDir, extensions, true /* recursive */);
 
