@@ -1,3 +1,32 @@
+2012-01-26  Murray Cumming  <murrayc@murrayc.com>
+
+	Internationalize the UI strings.
+
+	* pom.xml: gwt-maven-plugin: Add the i18n goal and specify a 
+	<i18nConstantsBundle>, removing the unused <i18nMessagesBundle>.
+	* src/main/resources/org/glom/web/client/Messages.properties: Remove this
+	because it is unused. Messages are apparently strings that can have 
+	parameters, but we do not need that yet, so Contants will be enough for now.
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: Add extend-property lines
+	to say that we support the en and de locales.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+	The original English strings.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_de.properties:
+	Some German translations of the English strings.
+	The i18n goal then uses the .properties file to generate an 
+	OnlineGlomConstants.java file in target/ and somehow GWT.create() magically
+	returns an implementation that returns the translated strings.
+	The documentation suggests putting these in src/java/*/client/, but it seems
+	best to put it in src/resources/*/client/.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Instantiate OnlineGlomConstants via GWT.create() and use it to get the strings
+	instead of hard-coding them.
+	Note that we cannot import OnlineGlomConstants because it does not exist yet,
+	but that does not seem to stop the build, though it confuses Eclipse.
+	
+	You can see the translated string by adding ?locale=de to the URL, like so:
+	http://127.0.0.1:8888/OnlineGlom.html?gwt.codesvr=127.0.0.1:9997?locale=de#list:document=film_manager
+
 2012-01-24  Murray Cumming  <murrayc@murrayc.com>
 
 	Improve null/empty String checks. 

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import org.glom.web.client.place.ListPlace;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
@@ -40,15 +41,20 @@ import com.google.gwt.user.client.ui.TextBox;
  */
 public class TableSelectionViewImpl extends Composite implements TableSelectionView {
 
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+	
 	Label documentTitleLabel = new Label();
 	ListBox tablesChooser = new ListBox();
 
-	Label searchLabel = new Label("Search");
+	Label searchLabel = new Label(constants.search());
 	TextBox searchTextBox = new TextBox();
 
 	ListBox localesChooser = new ListBox();
 
-	Anchor backLink = new Anchor("Back to List");
+	Anchor backLink = new Anchor(constants.backToList());
 	private Presenter presenter;
 	private HandlerRegistration backLinkHandlerReg;
 

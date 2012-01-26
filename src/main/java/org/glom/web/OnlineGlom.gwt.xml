@@ -28,5 +28,7 @@
 
 	<!-- Use the GWT internationalization framework -->
 	<inherits name="com.google.gwt.i18n.I18N"/>
+	<extend-property name="locale" values="en"/>
+	<extend-property name="locale" values="de"/>
 
 </module>
