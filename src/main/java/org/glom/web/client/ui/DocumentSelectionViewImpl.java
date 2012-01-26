@@ -52,13 +52,13 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 	}
 
 	@Override
-	public void addDocumentLink(final String documentID, final String title, final String localeID) {
+	public void addDocumentLink(final String documentID, final String title) {
 		final Anchor link = new Anchor(title);
 		link.setStyleName("documentLink");
 		link.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID, "", localeID, ""));
+				presenter.goTo(new ListPlace(documentID, "", ""));
 			}
 		});
 		documentLinks.add(link);

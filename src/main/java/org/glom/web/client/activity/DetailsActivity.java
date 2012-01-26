@@ -107,7 +107,6 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	private String documentID = "";
 	private String tableName = "";
 	private TypedDataItem primaryKeyValue;
-	private String localeID = "";
 	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 	ArrayList<DetailsCell> detailsCells;
@@ -117,7 +116,6 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
 		this.primaryKeyValue = place.getPrimaryKeyValue();
-		this.localeID = place.getLocaleID();
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
 	}
@@ -143,7 +141,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
 				// note the empty primary key item
-				goTo(new DetailsPlace(documentID, event.getNewTableName(), localeID, new TypedDataItem()));
+				goTo(new DetailsPlace(documentID, event.getNewTableName(), new TypedDataItem()));
 			}
 		});
 
@@ -169,6 +167,8 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			}
 
 		};
+		
+		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutAndData(documentID, tableName, primaryKeyValue,
 				localeID, callback);
 
@@ -178,7 +178,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			public void onQuickFindChange(final QuickFindChangeEvent event) {
 				// We switch to the List view, to show search results.
 				// TODO: Show the details view if there is only one result.
-				goTo(new ListPlace(documentID, tableName, localeID, event.getNewQuickFindText()));
+				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
 			}
 		});
 
@@ -187,7 +187,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			@Override
 			public void onLocaleChange(final LocaleChangeEvent event) {
 				// note the empty primary key item
-				goTo(new DetailsPlace(documentID, tableName, event.getNewLocaleID(), primaryKeyValue));
+				goTo(new DetailsPlace(documentID, tableName, primaryKeyValue));
 			}
 		});
 
@@ -340,7 +340,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		if (navigationPrimaryKeyValue != null && !navigationPrimaryKeyValue.isEmpty()) {
 			if (!newTableName.equals(tableName)) {
 				// Go to a new DetailsPlace because the table name has changed.
-				goTo(new DetailsPlace(documentID, newTableName, localeID, navigationPrimaryKeyValue));
+				goTo(new DetailsPlace(documentID, newTableName, navigationPrimaryKeyValue));
 			} else {
 				// Refresh the details view with the new primary because the table name has not changed.
 				primaryKeyValue = navigationPrimaryKeyValue;

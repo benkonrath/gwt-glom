@@ -31,9 +31,9 @@ import com.google.gwt.place.shared.Prefix;
 public class DetailsPlace extends HasSelectableTablePlace {
 	private final TypedDataItem primaryKeyValue;
 
-	public DetailsPlace(final String documentID, final String tableName, final String localeID,
+	public DetailsPlace(final String documentID, final String tableName,
 			final TypedDataItem primarykeyValue) {
-		super(documentID, tableName, localeID);
+		super(documentID, tableName);
 		this.primaryKeyValue = primarykeyValue;
 	}
 
@@ -102,7 +102,6 @@ public class DetailsPlace extends HasSelectableTablePlace {
 			final HashMap<String, String> params = new HashMap<String, String>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
-			params.put(localeKey, place.getLocaleID());
 			params.put(primaryKeyValueKey, primaryKeyValueString);
 			return buildParamsToken(params);
 		}
@@ -120,14 +119,13 @@ public class DetailsPlace extends HasSelectableTablePlace {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
-			String localeID = "";
 
 			final TypedDataItem primaryKeyValue = new TypedDataItem();
 
 			final HashMap<String, String> params = getTokenParams(token);
 
 			if (params == null) {
-				return new DetailsPlace("", "", "", primaryKeyValue);
+				return new DetailsPlace("", "", primaryKeyValue);
 			}
 
 			if (params.get(documentKey) != null) {
@@ -136,10 +134,6 @@ public class DetailsPlace extends HasSelectableTablePlace {
 
 			if (params.get(tableKey) != null) {
 				tableName = params.get(tableKey);
-			}
-
-			if (params.get(localeKey) != null) {
-				localeID = params.get(localeKey);
 			}
 
 			if (params.get(primaryKeyValueKey) != null) {
@@ -151,10 +145,10 @@ public class DetailsPlace extends HasSelectableTablePlace {
 
 			if (StringUtils.isEmpty(documentID)) {
 				// The documentID was not retrieved from the URL. Use empty values for the details place.
-				return new DetailsPlace("", "", localeID, primaryKeyValue);
+				return new DetailsPlace("", "", primaryKeyValue);
 			}
 
-			return new DetailsPlace(documentID, tableName, localeID, primaryKeyValue);
+			return new DetailsPlace(documentID, tableName, primaryKeyValue);
 		}
 	}
 

@@ -36,12 +36,10 @@ public abstract class HasSelectableTablePlace extends Place {
 
 	private final String documentID;
 	private final String tableName;
-	private final String localeID;
 
-	public HasSelectableTablePlace(final String documentID, final String tableName, final String localeID) {
+	public HasSelectableTablePlace(final String documentID, final String tableName) {
 		this.documentID = documentID;
 		this.tableName = tableName;
-		this.localeID = localeID;
 	}
 
 	public String getDocumentID() {
@@ -52,14 +50,9 @@ public abstract class HasSelectableTablePlace extends Place {
 		return tableName;
 	}
 
-	public String getLocaleID() {
-		return localeID;
-	}
-
 	public static class Tokenizer {
 		protected final String documentKey = "document";
 		protected final String tableKey = "table";
-		protected final String localeKey = "lang";
 		private final String separator = "&";
 		private final String equals = "=";
 

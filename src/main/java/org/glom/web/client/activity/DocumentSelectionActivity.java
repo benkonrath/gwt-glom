@@ -62,7 +62,7 @@ public class DocumentSelectionActivity extends AbstractActivity implements View.
 				if (documents.getCount() > 0) {
 					for (int i = 0; i < documents.getCount(); i++) {
 						documentSelectionView
-								.addDocumentLink(documents.getDocumentID(i), documents.getTitle(i), "" /* localeID */);
+								.addDocumentLink(documents.getDocumentID(i), documents.getTitle(i));
 						// TODO: Get default locale.
 					}
 				} else {

@@ -86,7 +86,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 		localesChooser.setStyleName("localeschooser"); // TODO: This is tedious.
 
-	  // headbox with the table selector
+		// headbox with the table selector
 		final FlowPanel headbox = new FlowPanel();
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
 		headbox.add(tablesChooser);
@@ -133,13 +133,13 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setBackLink(final String documentID, final String tableName, final String localeID,
+	public void setBackLink(final String documentID, final String tableName,
 			final String quickFind) {
 		backLinkHandlerReg.removeHandler();
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				presenter.goTo(new ListPlace(documentID, tableName, localeID, ""));
+				presenter.goTo(new ListPlace(documentID, tableName, ""));
 			}
 		});
 	}

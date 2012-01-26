@@ -21,7 +21,7 @@ package org.glom.web.client.ui;
 
 public interface DocumentSelectionView extends View {
 
-	void addDocumentLink(String documentID, String title, String localeID);
+	void addDocumentLink(String documentID, String title);
 
 	void clearHyperLinks();
 

@@ -1,5 +1,33 @@
 2012-01-26  Murray Cumming  <murrayc@murrayc.com>
 
+	Use the ?locale= query param instead of the &lang= token param. 
+
+	* src/main/java/org/glom/web/client/place/ListPlace.java
+	* src/main/java/org/glom/web/client/place/DetailsPlace.java
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java
+	Remove the lang token key and value.
+	
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	When the user selects a different locale from the chooser, use 
+	Window.Location.assign() to change the URL, which then causes a reload.
+	
+	* src/main/java/org/glom/web/client/Utils.java: Added getCurrentLocaleID().
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java
+	* src/main/java/org/glom/web/client/activity/ListActivity.java
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionView.java
+	* src/main/java/org/glom/web/client/ui/DocumentSelectionViewImpl.java:
+	* src/main/java/org/glom/web/client/ui/ListView.java:
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+
+	Remove localeID member variables and method/constructor parameters, instead
+	using Utils.getCurrentLocaleID() when we need a localID to pass to 
+	OnlineGlomService.
+
+2012-01-26  Murray Cumming  <murrayc@murrayc.com>
+
 	Internationalize the UI strings.
 
 	* pom.xml: gwt-maven-plugin: Add the i18n goal and specify a 

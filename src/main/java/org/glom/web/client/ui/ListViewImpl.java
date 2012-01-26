@@ -39,12 +39,10 @@ public class ListViewImpl extends Composite implements ListView {
 	private class ListViewNavigationButtonCell extends NavigationButtonCell {
 		private final String documentID;
 		private final String tableName;
-		private final String localeID;
 
-		public ListViewNavigationButtonCell(final String documentID, final String tableName, final String localeID) {
+		public ListViewNavigationButtonCell(final String documentID, final String tableName) {
 			this.documentID = documentID;
 			this.tableName = tableName;
-			this.localeID = localeID;
 		}
 
 		/*
@@ -57,7 +55,7 @@ public class ListViewImpl extends Composite implements ListView {
 		@Override
 		protected void onEnterKeyDown(final Context context, final Element parent, final String value,
 				final NativeEvent event, final ValueUpdater<String> valueUpdater) {
-			presenter.goTo(new DetailsPlace(documentID, tableName, localeID, (TypedDataItem) context.getKey()));
+			presenter.goTo(new DetailsPlace(documentID, tableName, (TypedDataItem) context.getKey()));
 		}
 
 	}
@@ -75,7 +73,7 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentID, final LayoutGroup layoutGroup, final String localeID,
+	public void setCellTable(final String documentID, final LayoutGroup layoutGroup,
 			final String quickFind) {
 		// This is not really in the MVP style because we're creating a new ListTable (really just a configured
 		// CellTable) for every document and table name change. The issue with creating a re-usable CellTable with
@@ -89,7 +87,7 @@ public class ListViewImpl extends Composite implements ListView {
 		mainPanel.clear();
 
 		final ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup,
-				new ListViewNavigationButtonCell(documentID, layoutGroup.getTableName(), localeID), quickFind);
+				new ListViewNavigationButtonCell(documentID, layoutGroup.getTableName()), quickFind);
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {
 			// Set the table row count to the minimum row count if the data row count is less than or equal to
