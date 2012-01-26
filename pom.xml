@@ -138,6 +138,7 @@
 				<executions>
 					<execution>
 						<goals>
+							<goal>i18n</goal>
 							<goal>compile</goal>
 							<goal>test</goal>
 						</goals>
@@ -148,7 +149,9 @@
 				<configuration>
 					<runTarget>OnlineGlom.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
-					<i18nMessagesBundle>org.glom.web.client.Messages</i18nMessagesBundle>
+					<i18nConstantsBundles>
+					  <i18nConstantsBundle>org.glom.web.client.ui.OnlineGlomConstants</i18nConstantsBundle>
+					</i18nConstantsBundles>
 				</configuration>
 			</plugin>
 
