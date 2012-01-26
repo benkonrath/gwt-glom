@@ -1,5 +1,18 @@
 2012-01-26  Murray Cumming  <murrayc@murrayc.com>
 
+	Prevent a crash when no locale is specified in the URL.
+
+	* src/main/java/org/glom/web/client/Utils.java: getCurrentLocaleID():
+	Avoid returning a null string, obtained from 
+	Window.Location.getParameter(). This caused a crash when it was
+	later passed to libglom's API.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	init(), getDocumentInfo(), getListViewLayout(), getDocuments(),
+	getDetailsLayoutAndData(): Use StringUtils.defaultString() to
+	guard against future null strings.
+
+2012-01-26  Murray Cumming  <murrayc@murrayc.com>
+
 	Use the ?locale= query param instead of the &lang= token param. 
 
 	* src/main/java/org/glom/web/client/place/ListPlace.java

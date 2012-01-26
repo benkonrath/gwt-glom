@@ -143,7 +143,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
-			final String globalLocaleID = config.getProperty("glom.document.locale");
+			final String globalLocaleID = StringUtils.defaultString(config.getProperty("glom.document.locale"));
 
 			// This initialisation method can throw an UnsatisfiedLinkError if the java-libglom native library isn't
 			// available. But since we're checking for the error condition above, the UnsatisfiedLinkError will never be
@@ -289,7 +289,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getDocumentInfo(localeID);
+		return configuredDoc.getDocumentInfo(StringUtils.defaultString(localeID));
 
 	}
 
@@ -304,7 +304,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getListViewLayoutGroup(tableName, localeID);
+		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
 	}
 
 	/*
@@ -349,16 +349,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final Documents documents = new Documents();
 		for (final String documentID : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			final String localeID = configuredDoc.getDefaultLocaleID();
+			final String localeID = StringUtils.defaultString(configuredDoc.getDefaultLocaleID());
 			final Document glomDocument = configuredDoc.getDocument();
-			if(glomDocument == null) {
+			if (glomDocument == null) {
 				final String errorMessage = "getDocuments(): getDocument() failed.";
 				Log.fatal(errorMessage);
-				//TODO: throw new Exception(errorMessage);
+				// TODO: throw new Exception(errorMessage);
 			}
 
-			documents.addDocument(documentID, glomDocument.get_database_title(localeID),
-					localeID);
+			documents.addDocument(documentID, glomDocument.get_database_title(localeID), localeID);
 		}
 		return documents;
 	}
@@ -421,7 +420,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// FIXME check for authentication
 
 		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
-		initalDetailsView.setLayout(configuredDoc.getDetailsLayoutGroup(tableName, localeID));
+		initalDetailsView
+				.setLayout(configuredDoc.getDetailsLayoutGroup(tableName, StringUtils.defaultString(localeID)));
 		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
 
 		return initalDetailsView;
