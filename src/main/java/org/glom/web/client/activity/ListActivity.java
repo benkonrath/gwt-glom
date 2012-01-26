@@ -22,6 +22,7 @@ package org.glom.web.client.activity;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.Utils;
 import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.LocaleChangeEventHandler;
 import org.glom.web.client.event.QuickFindChangeEvent;
@@ -48,7 +49,6 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 
 	private final String documentID;
 	private final String tableName;
-	private final String localeID;
 	private final String quickFind;
 	private final ClientFactory clientFactory;
 	private final ListView listView;
@@ -57,7 +57,6 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	public ListActivity(final ListPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID(); // TODO: Just store the place?
 		this.tableName = place.getTableName();
-		this.localeID = place.getLocaleID();
 		this.quickFind = place.getQuickFind();
 		this.clientFactory = clientFactory;
 		listView = clientFactory.getListView();
@@ -95,7 +94,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ListPlace(documentID, event.getNewTableName(), localeID, ""));
+				goTo(new ListPlace(documentID, event.getNewTableName(), ""));
 			}
 		});
 
@@ -111,9 +110,11 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
-				listView.setCellTable(documentID, result, localeID, quickFind);
+				listView.setCellTable(documentID, result, quickFind);
 			}
 		};
+		
+		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, localeID, callback);
 
 		// TODO: Avoid the code duplication with DetailsActivity.
@@ -123,7 +124,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onQuickFindChange(final QuickFindChangeEvent event) {
 				// We switch to the List view, to show search results.
 				// TODO: Show the details view if there is only one result.
-				goTo(new ListPlace(documentID, tableName, localeID, event.getNewQuickFindText()));
+				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
 			}
 		});
 
@@ -132,7 +133,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			@Override
 			public void onLocaleChange(final LocaleChangeEvent event) {
 				// note the empty primary key item
-				goTo(new ListPlace(documentID, tableName, event.getNewLocaleID(), quickFind));
+				goTo(new ListPlace(documentID, tableName, quickFind));
 			}
 		});
 

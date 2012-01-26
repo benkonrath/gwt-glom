@@ -22,6 +22,7 @@ package org.glom.web.client.activity;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.Utils;
 import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.QuickFindChangeEvent;
 import org.glom.web.client.event.TableChangeEvent;
@@ -40,6 +41,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -53,7 +55,6 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String documentID;
 	private String documentTitle;
 	private String tableName;
-	private String localeID;
 	private String quickFind;
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
@@ -108,8 +109,11 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			@Override
 			public void onChange(final ChangeEvent event) {
 				// Show the translated version of the document title and the table names:
-				localeID = tableSelectionView.getSelectedLocale();
+				final String localeID = tableSelectionView.getSelectedLocale();
 				fillView(tableSelectionView);
+				
+				final String newURL = Window.Location.createUrlBuilder().setParameter(LocaleInfo.getLocaleQueryParam(), localeID).buildString();
+				Window.Location.assign(newURL);
 
 				// Fire a locale change event so that other views (e.g. the details view) know about the change and can
 				// update themselves.
@@ -143,6 +147,8 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				tableSelectionView.setSelectedTableName(tableName);
 
 				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
+				
+				final String localeID = Utils.getCurrentLocaleID();
 				tableSelectionView.setSelectedLocale(localeID);
 
 				documentTitle = result.getTitle();
@@ -150,6 +156,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		};
+		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
 
 		// get the reports list for the current table:
@@ -176,7 +183,6 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	public void setPlace(final HasSelectableTablePlace place) {
 		documentID = place.getDocumentID();
 		tableName = place.getTableName();
-		localeID = place.getLocaleID();
 
 		try {
 			final ListPlace asPlace = (ListPlace) place;
@@ -190,7 +196,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
 		if (place instanceof DetailsPlace) {
 			tableSelectionView.setBackLinkVisible(true);
-			tableSelectionView.setBackLink(documentID, tableName, localeID, ""); // TODO: quickfind?
+			tableSelectionView.setBackLink(documentID, tableName, ""); // TODO: quickfind?
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}

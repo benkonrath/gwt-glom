@@ -27,7 +27,9 @@ import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -108,6 +110,26 @@ public class Utils {
 		}
 
 		return primaryKeyItem;
+	}
+	
+	public static String getCurrentLocaleName() {
+		String localeID = LocaleInfo.getCurrentLocale().getLocaleName();
+		if(localeID == "default")
+		{
+			localeID = ""; //This is how libglom refers to the default locale.
+		}
+		
+		if(StringUtils.isEmpty(localeID))
+		{
+			// LocaleInfo.getCurrentLocale() returns "default" even if a real locale was specified in the URL,
+			// if the locale is not specified as supported in our OnlineGlom.gwt.xml file,
+			// but people could use locales in .glom files that we have not thought of,
+			// so we should allow their use by getting the query parameter value directly:
+			final String paramValue = Window.Location.getParameter(LocaleInfo.getLocaleQueryParam());
+			localeID = paramValue;
+		}
+		
+		return localeID;
 	}
 
 }

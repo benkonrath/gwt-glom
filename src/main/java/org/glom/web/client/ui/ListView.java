@@ -26,5 +26,5 @@ import org.glom.web.shared.layout.LayoutGroup;
  */
 public interface ListView extends View {
 
-	public void setCellTable(final String documentID, LayoutGroup layoutGroup, String localeID, String quickFind);
+	public void setCellTable(final String documentID, LayoutGroup layoutGroup, String quickFind);
 }

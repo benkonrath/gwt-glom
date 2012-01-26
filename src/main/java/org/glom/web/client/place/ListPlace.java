@@ -30,8 +30,8 @@ public class ListPlace extends HasSelectableTablePlace {
 
 	private final String quickFind;
 
-	public ListPlace(final String documentID, final String tableName, final String localeID, final String quickFind) {
-		super(documentID, tableName, localeID);
+	public ListPlace(final String documentID, final String tableName, final String quickFind) {
+		super(documentID, tableName);
 		this.quickFind = quickFind;
 	}
 
@@ -48,7 +48,6 @@ public class ListPlace extends HasSelectableTablePlace {
 			final HashMap<String, String> params = new HashMap<String, String>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
-			params.put(localeKey, place.getLocaleID());
 			params.put(quickFindKey, place.getQuickFind());
 			return buildParamsToken(params);
 		}
@@ -58,13 +57,12 @@ public class ListPlace extends HasSelectableTablePlace {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
-			String localeID = "";
 			String quickFind = "";
 
 			final HashMap<String, String> params = getTokenParams(token);
 
 			if (params == null) {
-				return new ListPlace("", "", "", "");
+				return new ListPlace("", "", "");
 			}
 
 			if (params.get(documentKey) != null) {
@@ -75,20 +73,16 @@ public class ListPlace extends HasSelectableTablePlace {
 				tableName = params.get(tableKey);
 			}
 
-			if (params.get(localeKey) != null) {
-				localeID = params.get(localeKey);
-			}
-
 			if (params.get(quickFindKey) != null) {
 				quickFind = params.get(quickFindKey);
 			}
 
 			if (StringUtils.isEmpty(documentID)) {
 				// The documentID was not retrieved from the URL. Use empty values for the list place.
-				return new ListPlace("", "", localeID, "");
+				return new ListPlace("", "", "");
 			}
 
-			return new ListPlace(documentID, tableName, localeID, quickFind);
+			return new ListPlace(documentID, tableName, quickFind);
 		}
 	}
 
