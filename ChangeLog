@@ -1,5 +1,12 @@
 2012-01-26  Murray Cumming  <murrayc@murrayc.com>
 
+	Tell Eclipse about the generated java files.
+
+	* .classpath: This lets it find OnlineGlomConstants.java.
+	It would be nice if Eclipse just used the maven build files.
+
+2012-01-26  Murray Cumming  <murrayc@murrayc.com>
+
 	Prevent a crash when no locale is specified in the URL.
 
 	* src/main/java/org/glom/web/client/Utils.java: getCurrentLocaleID():
