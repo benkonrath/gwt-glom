@@ -112,7 +112,7 @@ public class Utils {
 		return primaryKeyItem;
 	}
 	
-	public static String getCurrentLocaleName() {
+	public static String getCurrentLocaleID() {
 		String localeID = LocaleInfo.getCurrentLocale().getLocaleName();
 		if(localeID == "default")
 		{
