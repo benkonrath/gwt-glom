@@ -37,9 +37,9 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Utils {
 
-	public static NumberFormat getNumberFormat(GlomNumericFormat glomNumericFormat) {
+	public static NumberFormat getNumberFormat(final GlomNumericFormat glomNumericFormat) {
 
-		StringBuilder pattern = new StringBuilder("0.");
+		final StringBuilder pattern = new StringBuilder("0.");
 
 		// add pattern for thousands separator
 		if (glomNumericFormat.getUseThousandsSeparator()) {
@@ -75,8 +75,8 @@ public class Utils {
 	 *            get the height information for this widget
 	 * @return the height of the widget with styling applied
 	 */
-	public static int getWidgetHeight(Widget widget) {
-		Document doc = Document.get();
+	public static int getWidgetHeight(final Widget widget) {
+		final Document doc = Document.get();
 		com.google.gwt.dom.client.Element div = doc.createDivElement();
 
 		// Hidden elements are invisible, don't respond to events and are not part of the tab order. But they will take
@@ -85,15 +85,15 @@ public class Utils {
 		div.appendChild(widget.getElement().<com.google.gwt.user.client.Element> cast());
 
 		doc.getBody().appendChild(div);
-		int height = widget.getOffsetHeight();
+		final int height = widget.getOffsetHeight();
 		doc.getBody().removeChild(div);
 		div = null;
 
 		return height;
 	}
 
-	public static TypedDataItem getTypedDataItem(GlomFieldType glomFieldType, DataItem dataItem) {
-		TypedDataItem primaryKeyItem = new TypedDataItem();
+	public static TypedDataItem getTypedDataItem(final GlomFieldType glomFieldType, final DataItem dataItem) {
+		final TypedDataItem primaryKeyItem = new TypedDataItem();
 		switch (glomFieldType) {
 		case TYPE_BOOLEAN:
 			primaryKeyItem.setBoolean(dataItem.getBoolean());
