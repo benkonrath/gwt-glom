@@ -1,5 +1,14 @@
 2012-01-27  Murray Cumming  <murrayc@murrayc.com>
 
+	TableSelectionViewImpl: Put the search label and entry in a div.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Put the search widgets in a FlowTable so that the CSS can be used to
+	style them while keeping them together.
+	* src/main/webapp/style.css: Mention the new div.
+
+2012-01-27  Murray Cumming  <murrayc@murrayc.com>
+
 	Translate more strings in more locales.
 
 	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:

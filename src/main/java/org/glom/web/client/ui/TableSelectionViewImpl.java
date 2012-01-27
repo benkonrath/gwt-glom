@@ -100,8 +100,13 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		final FlowPanel headbox = new FlowPanel();
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
 		headbox.add(tablesChooser);
-		headbox.add(searchLabel);
-		headbox.add(searchTextBox);
+		
+		final FlowPanel searchbox = new FlowPanel();
+		DOM.setElementAttribute(searchbox.getElement(), "id", "searchbox");
+		searchbox.add(searchLabel);
+		searchbox.add(searchTextBox);
+		headbox.add(searchbox);
+
 		headbox.add(backLink);
 
 		// the main container widget
