@@ -1,3 +1,10 @@
+2012-01-27  Murray Cumming  <murrayc@murrayc.com>
+
+	OnlineGlomServiceImpl: Avoid (unlikely) null object dereferences.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: get*():
+	Check the ConfiguredDocument* for null before using it.
+
 2012-01-26  Murray Cumming  <murrayc@murrayc.com>
 
 	Tell Eclipse about the generated java files.

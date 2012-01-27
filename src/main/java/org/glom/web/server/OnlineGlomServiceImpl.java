@@ -253,6 +253,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		for (final String documenTitle : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
+			if(configuredDoc == null)
+				continue;
+
 			try {
 				DataSources.destroy(configuredDoc.getCpds());
 			} catch (final SQLException e) {
@@ -284,7 +287,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
 
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		
+		//Avoid dereferencing a null object:
+		if(configuredDoc == null)
+			return new DocumentInfo();
 
 		// FIXME check for authentication
 
@@ -300,6 +307,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public LayoutGroup getListViewLayout(final String documentID, final String tableName, final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return new LayoutGroup();
 
 		// FIXME check for authentication
 
@@ -332,6 +341,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			final String quickFind, final int start, final int length, final int sortColumnIndex,
 			final boolean isAscending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return new ArrayList<DataItem[]>();
+		
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
 		}
@@ -348,14 +360,18 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final Documents documents = new Documents();
 		for (final String documentID : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			final String localeID = StringUtils.defaultString(configuredDoc.getDefaultLocaleID());
+			if(configuredDoc == null)
+				continue;
+
 			final Document glomDocument = configuredDoc.getDocument();
 			if (glomDocument == null) {
 				final String errorMessage = "getDocuments(): getDocument() failed.";
 				Log.fatal(errorMessage);
 				// TODO: throw new Exception(errorMessage);
+				continue;
 			}
 
+			final String localeID = StringUtils.defaultString(configuredDoc.getDefaultLocaleID());	
 			documents.addDocument(documentID, glomDocument.get_database_title(localeID), localeID);
 		}
 		return documents;
@@ -368,7 +384,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public boolean isAuthenticated(final String documentID) {
-		return documentMapping.get(documentID).isAuthenticated();
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return false;
+							
+		return configuredDoc.isAuthenticated();
 	}
 
 	/*
@@ -380,6 +400,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public boolean checkAuthentication(final String documentID, final String username, final String password) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+		{
+			Log.error(documentID, "The document could not be found for this ID: " + documentID);
+			return false;
+		}
+
 		try {
 			return configuredDoc.setUsernameAndPassword(username, password);
 		} catch (final SQLException e) {
@@ -397,6 +423,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public DataItem[] getDetailsData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return new DataItem[0];
 
 		// FIXME check for authentication
 
@@ -453,6 +481,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return new ArrayList<DataItem[]>();
 
 		// FIXME check for authentication
 
@@ -464,6 +494,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public int getRelatedListRowCount(final String documentID, final String tableName, final String relationshipName,
 			final TypedDataItem foreignKeyValue) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return 0;
 
 		// FIXME check for authentication
 
@@ -480,6 +512,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
 			final String relationshipName, final TypedDataItem primaryKeyValue) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return new NavigationRecord();
 
 		// FIXME check for authentication
 
