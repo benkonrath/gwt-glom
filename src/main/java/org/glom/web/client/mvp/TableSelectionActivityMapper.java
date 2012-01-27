@@ -21,7 +21,7 @@ package org.glom.web.client.mvp;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.activity.TableSelectionActivity;
-import org.glom.web.client.place.HasSelectableTablePlace;
+import org.glom.web.client.place.HasTablePlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -51,8 +51,8 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	public Activity getActivity(Place place) {
 		// We're not creating new TableSelectionActivity objects for each place because we want the ListBox to keep the
 		// table name when the Details button is clicked.
-		if (place instanceof HasSelectableTablePlace) {
-			tableSelectionActivity.setPlace((HasSelectableTablePlace) place);
+		if (place instanceof HasTablePlace) {
+			tableSelectionActivity.setPlace((HasTablePlace) place);
 			return tableSelectionActivity;
 		}
 

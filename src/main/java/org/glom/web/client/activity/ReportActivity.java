@@ -30,10 +30,9 @@ import org.glom.web.client.event.QuickFindChangeEventHandler;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DocumentSelectionPlace;
-import org.glom.web.client.place.HasRecordsPlace;
-import org.glom.web.client.place.ListPlace;
+import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
-import org.glom.web.client.ui.ListView;
+import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.View;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -46,21 +45,23 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ListActivity extends AbstractActivity implements View.Presenter {
+public class ReportActivity extends AbstractActivity implements View.Presenter {
 
 	private final String documentID;
 	private final String tableName;
+	private final String reportName;
 	private final String quickFind;
 	private final ClientFactory clientFactory;
-	private final ListView listView;
+	private final ReportView reportView;
 	private final AuthenticationPopup authenticationPopup;
 
-	public ListActivity(final HasRecordsPlace place, final ClientFactory clientFactory) {
+	public ReportActivity(final ReportPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID(); // TODO: Just store the place?
 		this.tableName = place.getTableName();
 		this.quickFind = place.getQuickFind();
+		this.reportName = place.getReportName();
 		this.clientFactory = clientFactory;
-		listView = clientFactory.getListView();
+		reportView = clientFactory.getReportView();
 		authenticationPopup = clientFactory.getAuthenticationPopup();
 	}
 
@@ -70,7 +71,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			goTo(new DocumentSelectionPlace());
 
 		// register this class as the presenter
-		listView.setPresenter(this);
+		reportView.setPresenter(this);
 
 		// TODO this should really be it's own Place/Activity
 		// check if the authentication info has been set for the document
@@ -95,7 +96,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ListPlace(documentID, event.getNewTableName(), ""));
+				goTo(new ReportPlace(documentID, event.getNewTableName(), reportName, ""));
 			}
 		});
 
@@ -111,12 +112,12 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
-				listView.setCellTable(documentID, result, quickFind);
+				//reportView.setCellTable(documentID, result, reportName, quickFind);
 			}
 		};
 		
 		final String localeID = Utils.getCurrentLocaleID();
-		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, localeID, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getReportLayout(documentID, tableName, reportName, localeID, callback);
 
 		// TODO: Avoid the code duplication with DetailsActivity.
 		// set the change handler for the quickfind text widget
@@ -125,7 +126,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			public void onQuickFindChange(final QuickFindChangeEvent event) {
 				// We switch to the List view, to show search results.
 				// TODO: Show the details view if there is only one result.
-				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
+				goTo(new ReportPlace(documentID, tableName, reportName, event.getNewQuickFindText()));
 			}
 		});
 
@@ -134,12 +135,12 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 			@Override
 			public void onLocaleChange(final LocaleChangeEvent event) {
 				// note the empty primary key item
-				goTo(new ListPlace(documentID, tableName, quickFind));
+				goTo(new ReportPlace(documentID, tableName, reportName, quickFind));
 			}
 		});
 
 		// indicate that the view is ready to be displayed
-		panel.setWidget(listView.asWidget());
+		panel.setWidget(reportView.asWidget());
 	}
 
 	private void setUpAuthClickHandler(final EventBus eventBus) {
@@ -176,7 +177,7 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	private void clearView() {
 		authenticationPopup.hide();
 		authenticationPopup.clear();
-		listView.clear();
+		reportView.clear();
 	}
 
 	/*

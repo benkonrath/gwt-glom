@@ -1,5 +1,29 @@
 2012-01-27  Murray Cumming  <murrayc@murrayc.com>
 
+	Add a (empty) Report Place, View, and Activity.
+
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java:
+	Rename to:
+	* src/main/java/org/glom/web/client/place/HasTablePlace.java
+	* src/main/java/org/glom/web/client/place/ListPlace.java: Move some of
+	this into a superclass:
+	* src/main/java/org/glom/web/client/place/HasRecordsPlace.java
+	and also use it as the base of this new ReportPlace:
+	* src/main/java/org/glom/web/client/place/ReportPlace.java
+
+	* src/main/java/org/glom/web/client/ui/ReportView.java
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	Add these, containing mostly boiler-plate for now.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Add API to get the LayoutGroup for the report.
+
+2012-01-27  Murray Cumming  <murrayc@murrayc.com>
+
 	TableSelectionViewImpl: Put the search label and entry in a div.
 
 	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:

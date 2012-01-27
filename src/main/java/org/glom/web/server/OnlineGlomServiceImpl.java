@@ -316,6 +316,20 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
 	}
 
+	/* (non-Javadoc)
+	 * @see org.glom.web.client.OnlineGlomService#getReportLayout(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public LayoutGroup getReportLayout(String documentID, String tableName, String reportName, String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if(configuredDoc == null)
+			return new LayoutGroup();
+
+		// FIXME check for authentication
+
+		return configuredDoc.getReportLayoutGroup(StringUtils.defaultString(tableName), StringUtils.defaultString(reportName), StringUtils.defaultString(localeID));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

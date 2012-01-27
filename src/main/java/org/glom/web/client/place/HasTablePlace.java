@@ -32,12 +32,12 @@ import com.google.gwt.place.shared.Place;
  * Super type for Place objects (bookmarkable URLs) that display the TableSelectionView.
  * 
  */
-public abstract class HasSelectableTablePlace extends Place {
+public abstract class HasTablePlace extends Place {
 
 	private final String documentID;
 	private final String tableName;
 
-	public HasSelectableTablePlace(final String documentID, final String tableName) {
+	public HasTablePlace(final String documentID, final String tableName) {
 		this.documentID = documentID;
 		this.tableName = tableName;
 	}

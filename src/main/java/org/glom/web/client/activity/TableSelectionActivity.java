@@ -27,7 +27,8 @@ import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.QuickFindChangeEvent;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DetailsPlace;
-import org.glom.web.client.place.HasSelectableTablePlace;
+import org.glom.web.client.place.HasRecordsPlace;
+import org.glom.web.client.place.HasTablePlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
@@ -180,12 +181,12 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method and
 	// any time the Place changes after the start method has been called.
-	public void setPlace(final HasSelectableTablePlace place) {
+	public void setPlace(final HasTablePlace place) {
 		documentID = place.getDocumentID();
 		tableName = place.getTableName();
 
 		try {
-			final ListPlace asPlace = (ListPlace) place;
+			final HasRecordsPlace asPlace = (HasRecordsPlace) place;
 			quickFind = asPlace.getQuickFind();
 		} catch (final ClassCastException ex) {
 			quickFind = "";

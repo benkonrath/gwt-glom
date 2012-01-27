@@ -350,6 +350,17 @@ final class ConfiguredDocument {
 
 		final org.glom.libglom.LayoutGroup libglomLayoutGroup = getValidListViewLayoutGroup(tableName);
 
+		return getLayoutGroupFromLiblomLayoutGroup(tableName, libglomLayoutGroup, localeID);
+	}
+
+	/**
+	 * @param tableName
+	 * @param libglomLayoutGroup
+	 * @param localeID
+	 * @return
+	 */
+	private LayoutGroup getLayoutGroupFromLiblomLayoutGroup(String tableName, final org.glom.libglom.LayoutGroup libglomLayoutGroup,
+			final String localeID) {
 		final LayoutGroup layoutGroup = new LayoutGroup(); // the object that will be returned
 		int primaryKeyIndex = -1;
 
@@ -409,6 +420,42 @@ final class ConfiguredDocument {
 		layoutGroup.setTableName(tableName);
 
 		return layoutGroup;
+	}
+	
+	/*
+	 * Gets the layout group for the list view using the defined layout list in the document or the table fields if
+	 * there's no defined layout group for the list view.
+	 */
+	private org.glom.libglom.LayoutGroup getValidReportLayoutGroup(final String tableName, final String reportName) {
+		final Report report = document.get_report(tableName, reportName);
+		if(report != null) {
+			return report.getM_layout_group();
+		} else {
+			// a report layout group is *not* defined; we are going make a libglom layout group from the list of fields
+			Log.info(documentID, tableName,
+					"The report layout is not defined for this table. Displaying a list layout based on the field list.");
+
+			org.glom.libglom.LayoutGroup libglomLayoutGroup = null;
+			final FieldVector fieldsVec = document.get_table_fields(tableName);
+			libglomLayoutGroup = new org.glom.libglom.LayoutGroup();
+			for (int i = 0; i < fieldsVec.size(); i++) {
+				final Field field = fieldsVec.get(i);
+				final LayoutItem_Field layoutItemField = new LayoutItem_Field();
+				layoutItemField.set_full_field_details(field);
+				libglomLayoutGroup.add_item(layoutItemField);
+			}
+		
+			return libglomLayoutGroup;
+		}
+	}
+	
+	public LayoutGroup getReportLayoutGroup(String tableName, final String reportName, final String localeID) {
+		// Validate the table name.
+		tableName = getTableNameToUse(tableName);
+
+		final org.glom.libglom.LayoutGroup libglomLayoutGroup = getValidReportLayoutGroup(tableName, reportName);
+
+		return getLayoutGroupFromLiblomLayoutGroup(tableName, libglomLayoutGroup, localeID);
 	}
 
 	/*

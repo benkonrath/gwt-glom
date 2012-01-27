@@ -28,7 +28,7 @@ import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
-public class DetailsPlace extends HasSelectableTablePlace {
+public class DetailsPlace extends HasTablePlace {
 	private final TypedDataItem primaryKeyValue;
 
 	public DetailsPlace(final String documentID, final String tableName,
@@ -42,7 +42,7 @@ public class DetailsPlace extends HasSelectableTablePlace {
 	}
 
 	@Prefix("details")
-	public static class Tokenizer extends HasSelectableTablePlace.Tokenizer implements PlaceTokenizer<DetailsPlace> {
+	public static class Tokenizer extends HasTablePlace.Tokenizer implements PlaceTokenizer<DetailsPlace> {
 
 		private final String primaryKeyValueKey = "value";
 
