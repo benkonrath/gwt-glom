@@ -22,6 +22,7 @@ package org.glom.web.client.ui.list;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -41,6 +42,11 @@ import com.google.gwt.view.client.RowCountChangeEvent;
  */
 public class ListViewTable extends ListTable {
 
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+	
 	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
 	private static final int MAX_TABLE_ROWS = 15;
 	private static final int MIN_TABLE_ROWS = 10;
@@ -51,7 +57,7 @@ public class ListViewTable extends ListTable {
 			final NavigationButtonCell navigationButtonCell, final String quickFind) {
 		super(documentID);
 		this.quickFind = quickFind;
-		createCellTable(layoutGroup, MAX_TABLE_ROWS, "Details", navigationButtonCell);
+		createCellTable(layoutGroup, MAX_TABLE_ROWS, constants.details(), navigationButtonCell);
 	}
 
 	/*

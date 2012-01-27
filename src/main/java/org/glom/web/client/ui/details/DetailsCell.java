@@ -24,11 +24,13 @@ import java.io.UnsupportedEncodingException;
 
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
+import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutItemField;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -49,6 +51,12 @@ import com.google.gwt.user.client.ui.Label;
  * Holds a label, data and a navigation button.
  */
 public class DetailsCell extends Composite {
+	
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+		
 	private LayoutItemField layoutItemField;
 	private FlowPanel detailsData = new FlowPanel();
 	private Label detailsLabel = new Label();
@@ -101,7 +109,7 @@ public class DetailsCell extends Composite {
 		mainPanel.add(detailsData);
 
 		if (layoutItemField.getAddNavigation()) {
-			openButton = new Button("Open");
+			openButton = new Button(constants.open());
 			openButton.setStyleName("details-navigation");
 			openButton.setEnabled(false);
 			mainPanel.add(openButton);

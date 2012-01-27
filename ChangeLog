@@ -1,5 +1,23 @@
 2012-01-27  Murray Cumming  <murrayc@murrayc.com>
 
+	Translate more strings in more locales.
+
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	Translate the "Details" and "Open" string too.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_es.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_sl.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_zh_CN.properties:
+	Add these new locales as placeholders though they currently contain English.
+
+2012-01-27  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlomServiceImpl: Avoid (unlikely) null object dereferences.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: get*():

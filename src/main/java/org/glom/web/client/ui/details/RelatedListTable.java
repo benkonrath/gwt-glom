@@ -22,6 +22,7 @@ package org.glom.web.client.ui.details;
 import java.util.ArrayList;
 
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.list.ListTable;
 import org.glom.web.shared.DataItem;
@@ -50,6 +51,11 @@ import com.google.gwt.view.client.RowCountChangeEvent;
  */
 public class RelatedListTable extends ListTable {
 
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+
 	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
 	private static final int MAX_TABLE_ROWS = 5;
 	private static final int MIN_TABLE_ROWS = MAX_TABLE_ROWS;
@@ -70,7 +76,7 @@ public class RelatedListTable extends ListTable {
 		this.foreignKeyValue = foreignKeyValue;
 		this.relationshipName = layoutItemPortal.getName();
 
-		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, "Open", navigationButtonCell);
+		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, constants.open(), navigationButtonCell);
 
 		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want
 		// the table to overflow it's container. Browsers will make columns with equal widths since we're currently not
