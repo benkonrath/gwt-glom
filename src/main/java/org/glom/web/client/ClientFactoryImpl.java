@@ -80,7 +80,9 @@ public class ClientFactoryImpl implements ClientFactory {
 		return detailsView;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.glom.web.client.ClientFactory#getReportView()
 	 */
 	@Override

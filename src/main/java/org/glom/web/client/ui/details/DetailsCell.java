@@ -51,12 +51,12 @@ import com.google.gwt.user.client.ui.Label;
  * Holds a label, data and a navigation button.
  */
 public class DetailsCell extends Composite {
-	
+
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
-		
+
 	private LayoutItemField layoutItemField;
 	private FlowPanel detailsData = new FlowPanel();
 	private Label detailsLabel = new Label();
@@ -155,8 +155,8 @@ public class DetailsCell extends Composite {
 				detailsData.getElement().getStyle().setColor("Red");
 			}
 
-			final String currencyCode = StringUtils.isEmpty(glomNumericFormat.getCurrencyCode()) ? "" : glomNumericFormat
-					.getCurrencyCode().trim() + " ";
+			final String currencyCode = StringUtils.isEmpty(glomNumericFormat.getCurrencyCode()) ? ""
+					: glomNumericFormat.getCurrencyCode().trim() + " ";
 			detailsLabel.setText(currencyCode + gwtNumberFormat.format(dataItem.getNumber()));
 			detailsData.add(detailsLabel);
 			break;

@@ -101,11 +101,13 @@ public class RelatedListTable extends ListTable {
 				final Range range = display.getVisibleRange();
 				final int start = range.getStart();
 				AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
+					@Override
 					public void onFailure(Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
 						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)RelatedListData()");
 					}
 
+					@Override
 					public void onSuccess(ArrayList<DataItem[]> result) {
 						// keep track of the number of non-empty rows (rows with data)
 						numNonEmptyRows = result.size();

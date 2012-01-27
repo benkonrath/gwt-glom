@@ -40,8 +40,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class ListViewDBAccess extends ListDBAccess {
 
-	public ListViewDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds, final String tableName,
-			final org.glom.libglom.LayoutGroup libglomLayoutGroup) {
+	public ListViewDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			final String tableName, final org.glom.libglom.LayoutGroup libglomLayoutGroup) {
 		super(document, documentID, cpds, tableName);
 
 		// Convert the libglom LayoutGroup object into a LayoutFieldVector suitable for SQL queries.
@@ -57,8 +57,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	}
 
 	public ArrayList<DataItem[]> getData(final String quickFind, final int start, final int length,
-			final boolean useSortClause, final int sortColumnIndex,
-			final boolean isAscending) {
+			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
 
 		return getListData(quickFind, start, length, useSortClause, sortColumnIndex, isAscending);
 	}
@@ -87,8 +86,8 @@ public class ListViewDBAccess extends ListDBAccess {
 		final Value quickFindValue = new Value(quickFind);
 		final SqlExpr whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
 		final Relationship extraJoin = new Relationship(); // Ignored.
-		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
-				sortClause);
+		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
+				extraJoin, sortClause);
 		return Glom.sqlbuilder_get_full_query(builder);
 	}
 

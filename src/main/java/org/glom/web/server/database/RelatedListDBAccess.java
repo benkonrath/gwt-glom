@@ -50,8 +50,8 @@ public class RelatedListDBAccess extends ListDBAccess {
 	private String whereClauseToTableName = null;
 	private Field whereClauseToKeyField = null;
 
-	public RelatedListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds, final String tableName,
-			final String relationshipName) {
+	public RelatedListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			final String tableName, final String relationshipName) {
 		super(document, documentID, cpds, tableName);
 
 		final LayoutItem_Portal portal = getPortal(relationshipName);
@@ -116,8 +116,8 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	}
 
-	public ArrayList<DataItem[]> getData(final int start, final int length, final TypedDataItem foreignKeyValue, final boolean useSortClause,
-			final int sortColumnIndex, final boolean isAscending) {
+	public ArrayList<DataItem[]> getData(final int start, final int length, final TypedDataItem foreignKeyValue,
+			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
 
 		if (tableName == null || foreignKeyValue == null || foreignKeyValue.isEmpty()) {
 			return null;
@@ -177,8 +177,8 @@ public class RelatedListDBAccess extends ListDBAccess {
 		}
 
 		final Relationship extraJoin = new Relationship(); // Ignored.
-		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, extraJoin,
-				sortClause);
+		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
+				extraJoin, sortClause);
 		return Glom.sqlbuilder_get_full_query(builder);
 
 	}

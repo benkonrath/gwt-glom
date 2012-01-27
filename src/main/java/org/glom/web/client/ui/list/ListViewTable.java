@@ -46,7 +46,7 @@ public class ListViewTable extends ListTable {
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
-	
+
 	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
 	private static final int MAX_TABLE_ROWS = 15;
 	private static final int MIN_TABLE_ROWS = 10;
@@ -111,8 +111,8 @@ public class ListViewTable extends ListTable {
 					// TODO: Just make the sort field an optional parameter instead of having two methods?
 					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName, quickFind,
 							start, range.getLength(),
-							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()),
-							info.isAscending(), callback);
+							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()), info.isAscending(),
+							callback);
 
 				} else {
 					OnlineGlomServiceAsync.Util.getInstance().getListViewData(documentID, tableName, quickFind, start,

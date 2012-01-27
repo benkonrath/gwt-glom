@@ -47,15 +47,15 @@ import com.google.web.bindery.event.shared.EventBus;
  */
 public class OnlineGlom implements EntryPoint {
 
-	/* Some of these are protected, rather than private,
-	 * so that GwtTestOnlineGlom can access them.
+	/*
+	 * Some of these are protected, rather than private, so that GwtTestOnlineGlom can access them.
 	 */
 	private Place defaultPlace = new DocumentSelectionPlace();
 	private LayoutPanel layoutPanel = RootLayoutPanel.get();
 	protected SimplePanel docSelectionPanel = new SimplePanel();
 	protected SimplePanel dataPanel = new SimplePanel();
 	protected SimplePanel tableSelectionPanel = new SimplePanel();
-	
+
 	protected ClientFactory clientFactory;
 
 	AcceptsOneWidget docSelectionDisplay = new AcceptsOneWidget() {

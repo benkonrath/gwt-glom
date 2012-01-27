@@ -19,9 +19,9 @@
 
 package org.glom.web.client.activity;
 
-import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.QuickFindChangeEvent;
@@ -112,8 +112,9 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				// Show the translated version of the document title and the table names:
 				final String localeID = tableSelectionView.getSelectedLocale();
 				fillView(tableSelectionView);
-				
-				final String newURL = Window.Location.createUrlBuilder().setParameter(LocaleInfo.getLocaleQueryParam(), localeID).buildString();
+
+				final String newURL = Window.Location.createUrlBuilder()
+						.setParameter(LocaleInfo.getLocaleQueryParam(), localeID).buildString();
 				Window.Location.assign(newURL);
 
 				// Fire a locale change event so that other views (e.g. the details view) know about the change and can
@@ -148,7 +149,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				tableSelectionView.setSelectedTableName(tableName);
 
 				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
-				
+
 				final String localeID = Utils.getCurrentLocaleID();
 				tableSelectionView.setSelectedLocale(localeID);
 

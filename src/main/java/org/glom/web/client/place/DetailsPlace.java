@@ -31,8 +31,7 @@ import com.google.gwt.place.shared.Prefix;
 public class DetailsPlace extends HasTablePlace {
 	private final TypedDataItem primaryKeyValue;
 
-	public DetailsPlace(final String documentID, final String tableName,
-			final TypedDataItem primarykeyValue) {
+	public DetailsPlace(final String documentID, final String tableName, final TypedDataItem primarykeyValue) {
 		super(documentID, tableName);
 		this.primaryKeyValue = primarykeyValue;
 	}

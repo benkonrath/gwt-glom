@@ -87,7 +87,7 @@ public abstract class ListTable extends Composite {
 			if (numNonEmptyRows < getMinNumVisibleRows()) {
 				final NumberFormat formatter = NumberFormat.getFormat("#,###");
 				return formatter.format(1) + "-" + formatter.format(numNonEmptyRows) + " of "
-				+ formatter.format(numNonEmptyRows);
+						+ formatter.format(numNonEmptyRows);
 			} else {
 				return super.createText();
 			}
@@ -116,9 +116,9 @@ public abstract class ListTable extends Composite {
 	}
 
 	protected void createCellTable(final LayoutGroup layoutGroup, final int numVisibleRows,
-			final String navigationButtonLabel,
-			final NavigationButtonCell navigationButtonCell) {
-		tableName = layoutGroup.getTableName(); //TODO: Is this in the regular libglom API, or is it a gwt-glom hack? murrayc
+			final String navigationButtonLabel, final NavigationButtonCell navigationButtonCell) {
+		tableName = layoutGroup.getTableName(); // TODO: Is this in the regular libglom API, or is it a gwt-glom hack?
+												// murrayc
 		final ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
@@ -210,7 +210,8 @@ public abstract class ListTable extends Composite {
 									parent.getStyle().setMargin(0, Unit.PX);
 
 									// Set the height of the table cell that holds the loading indicator GIF.
-									final Element cell = parent.getParentElement().getParentElement().getParentElement();
+									final Element cell = parent.getParentElement().getParentElement()
+											.getParentElement();
 									cell.getStyle().setPadding(0, Unit.PX);
 									cell.getStyle().setHeight(bodyHeight, Unit.PX);
 
@@ -312,7 +313,8 @@ public abstract class ListTable extends Composite {
 		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
 
-	private void addNavigationButtonColumn(final String navigationButtonLabel, final NavigationButtonCell navigationButtonCell) {
+	private void addNavigationButtonColumn(final String navigationButtonLabel,
+			final NavigationButtonCell navigationButtonCell) {
 
 		navigationButtonColumn = new Column<DataItem[], String>(navigationButtonCell) {
 			@Override
@@ -377,7 +379,8 @@ public abstract class ListTable extends Composite {
 			// Use the NavigationButtonCell to get the button HTML and find the width. I'm doing this because the
 			// CellTable widget is highly dynamic and there's no way to guarantee that we can access the navigation
 			// button HTML by using the actual CellTable.
-			final String buttonLabel = navigationButtonColumn.getValue(new DataItem[2]); // a hack to get the button label
+			final String buttonLabel = navigationButtonColumn.getValue(new DataItem[2]); // a hack to get the button
+																							// label
 			final SafeHtmlBuilder buttonBuilder = new SafeHtmlBuilder();
 			navigationButtonColumn.getCell().render(null, buttonLabel, buttonBuilder);
 			Element navigationButton = new HTML(buttonBuilder.toSafeHtml()).getElement().getFirstChildElement();

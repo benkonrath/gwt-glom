@@ -23,7 +23,7 @@ import com.google.gwt.place.shared.Prefix;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- *
+ * 
  */
 public abstract class HasRecordsPlace extends HasTablePlace {
 
@@ -42,10 +42,9 @@ public abstract class HasRecordsPlace extends HasTablePlace {
 		return quickFind;
 	}
 
-
 	@Prefix("list")
 	public static class Tokenizer extends HasTablePlace.Tokenizer {
 		protected final String quickFindKey = "quickfind";
 	}
-		
+
 }

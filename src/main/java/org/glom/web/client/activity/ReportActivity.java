@@ -112,12 +112,13 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
-				//reportView.setCellTable(documentID, result, reportName, quickFind);
+				// reportView.setCellTable(documentID, result, reportName, quickFind);
 			}
 		};
-		
+
 		final String localeID = Utils.getCurrentLocaleID();
-		OnlineGlomServiceAsync.Util.getInstance().getReportLayout(documentID, tableName, reportName, localeID, callback);
+		OnlineGlomServiceAsync.Util.getInstance()
+				.getReportLayout(documentID, tableName, reportName, localeID, callback);
 
 		// TODO: Avoid the code duplication with DetailsActivity.
 		// set the change handler for the quickfind text widget

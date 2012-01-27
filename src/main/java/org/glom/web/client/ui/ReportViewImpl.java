@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 public class ReportViewImpl extends Composite implements ReportView {
 
-
 	final private FlowPanel mainPanel = new FlowPanel();
 	@SuppressWarnings("unused")
 	private Presenter presenter;
@@ -37,6 +36,7 @@ public class ReportViewImpl extends Composite implements ReportView {
 	public void setPresenter(final Presenter presenter) {
 		this.presenter = presenter;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
