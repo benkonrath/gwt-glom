@@ -192,9 +192,8 @@ abstract class DBAccess {
 							layoutItemField.set_full_field_details(field);
 							layoutItemFields.add(layoutItemField);
 						} else {
-							Log.warn(document.get_database_title_original(), tableName,
-									"LayoutItem_Field " + layoutItemField.get_layout_display_name()
-											+ " not found in document field list.");
+							Log.warn(document.get_database_title_original(), tableName, "LayoutItem_Field "
+									+ layoutItemField.get_layout_display_name() + " not found in document field list.");
 						}
 						break;
 					}

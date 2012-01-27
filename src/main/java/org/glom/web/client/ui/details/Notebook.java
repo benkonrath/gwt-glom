@@ -72,7 +72,8 @@ public class Notebook extends Group {
 				maxChildHeight = childHeight;
 
 			// Use the name if the title is empty. This avoids having tabs with empty labels.
-			tabPanel.add(child, StringUtils.isEmpty(layoutItem.getTitle()) ? layoutItem.getName() : layoutItem.getTitle());
+			tabPanel.add(child,
+					StringUtils.isEmpty(layoutItem.getTitle()) ? layoutItem.getName() : layoutItem.getTitle());
 		}
 
 		// Set the first tab as the default tab.

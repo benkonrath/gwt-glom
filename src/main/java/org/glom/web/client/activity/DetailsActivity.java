@@ -21,9 +21,9 @@ package org.glom.web.client.activity;
 
 import java.util.ArrayList;
 
-import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.LocaleChangeEventHandler;
@@ -167,7 +167,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 			}
 
 		};
-		
+
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getDetailsLayoutAndData(documentID, tableName, primaryKeyValue,
 				localeID, callback);

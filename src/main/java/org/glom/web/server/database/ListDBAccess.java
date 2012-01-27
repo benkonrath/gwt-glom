@@ -43,7 +43,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public abstract class ListDBAccess extends DBAccess {
 	protected LayoutFieldVector fieldsToGet;
 
-	protected ListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds, final String tableName) {
+	protected ListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			final String tableName) {
 		super(document, documentID, cpds, tableName);
 	}
 
@@ -51,9 +52,8 @@ public abstract class ListDBAccess extends DBAccess {
 
 	protected abstract String getCountQuery();
 
-	protected ArrayList<DataItem[]> getListData(final String quickFind, final int start, final int length, final boolean useSortClause,
-			final int sortColumnIndex,
-			final boolean isAscending) {
+	protected ArrayList<DataItem[]> getListData(final String quickFind, final int start, final int length,
+			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
 
 		// create a sort clause for the column we've been asked to sort
 		final SortClause sortClause = new SortClause();

@@ -32,6 +32,6 @@ public interface View extends IsWidget {
 	}
 
 	public void setPresenter(Presenter presenter);
-	
+
 	void clear();
 }

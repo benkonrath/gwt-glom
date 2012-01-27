@@ -45,7 +45,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
-	
+
 	Label documentTitleLabel = new Label();
 	ListBox tablesChooser = new ListBox();
 
@@ -90,7 +90,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		final FlowPanel headbox = new FlowPanel();
 		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
 		headbox.add(tablesChooser);
-		
+
 		final FlowPanel searchbox = new FlowPanel();
 		DOM.setElementAttribute(searchbox.getElement(), "id", "searchbox");
 		searchbox.add(searchLabel);
@@ -98,7 +98,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		headbox.add(searchbox);
 
 		headbox.add(backLink);
-		
+
 		// the main container widget
 		final FlowPanel mainPanel = new FlowPanel();
 		mainPanel.add(titlebox);
@@ -138,8 +138,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
-	public void setBackLink(final String documentID, final String tableName,
-			final String quickFind) {
+	public void setBackLink(final String documentID, final String tableName, final String quickFind) {
 		backLinkHandlerReg.removeHandler();
 		backLinkHandlerReg = backLink.addClickHandler(new ClickHandler() {
 			@Override
