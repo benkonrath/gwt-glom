@@ -23,6 +23,11 @@ a:hover
 	overflow: hidden;
 }
 
+#searchbox
+{
+	overflow: hidden;
+}
+
 /**
  * Top and Bottom Navigation Boxes
  */
