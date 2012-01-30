@@ -1,3 +1,17 @@
+2012-01-30  Murray Cumming  <murrayc@murrayc.com>
+
+	Translations: Try to translate the strings.
+
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_de.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_es.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_sl.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_zh_CN.properties:
+	Take the Open translation from GTK+'s .po files.
+	Take the Details translation from Glom's po files.
+	I have added the other strings to Glom so we can get translations that way:
+	http://git.gnome.org/browse/glom/commit/?id=c3cefe607428a84bdf8de1b04e8bef6f70b04564
+	
 2012-01-27  Murray Cumming  <murrayc@murrayc.com>
 
 	TableSelectionViewImpl: Put the search label and entry in a div.
