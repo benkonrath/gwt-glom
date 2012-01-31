@@ -1,5 +1,14 @@
 2012-01-31  Murray Cumming  <murrayc@murrayc.com>
 
+	Make ReportPlace usable.
+
+	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+	Mention ReportPlace.
+	* src/main/java/org/glom/web/client/place/ReportPlace.java:
+	Correct the @prefix annotation.
+
+2012-01-31  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlomService: Return report HTML rather than the LayoutGroup.
 
 	* src/main/java/org/glom/web/client/OnlineGlomService.java:

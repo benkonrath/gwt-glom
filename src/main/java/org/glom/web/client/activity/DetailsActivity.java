@@ -137,6 +137,7 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		// TODO here's where we should check for database authentication - see ListActivity.start() for how to do this
 
 		// set the change handler for the table selection widget
+		// TODO: Why don't we just use goTo() in the TableSelectionActivity that fired this event?
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
 			@Override
 			public void onTableChange(final TableChangeEvent event) {

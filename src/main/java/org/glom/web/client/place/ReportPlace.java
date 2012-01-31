@@ -39,7 +39,7 @@ public class ReportPlace extends HasRecordsPlace {
 		return reportName;
 	}
 
-	@Prefix("list")
+	@Prefix("report")
 	public static class Tokenizer extends HasRecordsPlace.Tokenizer implements PlaceTokenizer<ReportPlace> {
 		protected final String reportKey = "report";
 

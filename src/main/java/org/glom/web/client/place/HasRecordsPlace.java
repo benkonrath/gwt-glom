@@ -19,7 +19,6 @@
 
 package org.glom.web.client.place;
 
-import com.google.gwt.place.shared.Prefix;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -33,7 +32,7 @@ public abstract class HasRecordsPlace extends HasTablePlace {
 	 * @param documentID
 	 * @param tableName
 	 */
-	public HasRecordsPlace(String documentID, String tableName, String quickFind) {
+	public HasRecordsPlace(final String documentID, final String tableName, final String quickFind) {
 		super(documentID, tableName);
 		this.quickFind = quickFind;
 	}
@@ -42,7 +41,6 @@ public abstract class HasRecordsPlace extends HasTablePlace {
 		return quickFind;
 	}
 
-	@Prefix("list")
 	public static class Tokenizer extends HasTablePlace.Tokenizer {
 		protected final String quickFindKey = "quickfind";
 	}
