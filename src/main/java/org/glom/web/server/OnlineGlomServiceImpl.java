@@ -288,7 +288,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
 
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// Avoid dereferencing a null object:
 		if (configuredDoc == null)
@@ -316,6 +316,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
 	}
 
+	// TODO: Specify the foundset (via a where clause) and maybe a default sort order.
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -323,15 +324,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String)
 	 */
 	@Override
-	public LayoutGroup getReportLayout(String documentID, String tableName, String reportName, String localeID) {
+	public String getReportHTML(final String documentID, final String tableName, final String reportName,
+			final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null)
-			return new LayoutGroup();
+			return "";
 
 		// FIXME check for authentication
 
-		return configuredDoc.getReportLayoutGroup(StringUtils.defaultString(tableName),
-				StringUtils.defaultString(reportName), StringUtils.defaultString(localeID));
+		configuredDoc.getReportLayoutGroup(StringUtils.defaultString(tableName), StringUtils.defaultString(reportName));
+		final String reportHtml = ""; // TODO: Generate some HTML for the report layout.
+		return reportHtml;
 	}
 
 	/*

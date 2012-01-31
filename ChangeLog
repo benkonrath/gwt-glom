@@ -1,3 +1,21 @@
+2012-01-31  Murray Cumming  <murrayc@murrayc.com>
+
+	OnlineGlomService: Return report HTML rather than the LayoutGroup.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Change getReportLayout() to getReportHMTL() because we will not need to 
+	parse or render the report layout on the client side.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	getReportLayout(): Return the libglom LayoutGroup type because we will
+	not need to convert to a shared type, because this will not be used on
+	the client side.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	Adapted.
+
+	Note that there is still no implementation for this.
+
 2012-01-30  Murray Cumming  <murrayc@murrayc.com>
 
 	Translations: Try to translate the strings.

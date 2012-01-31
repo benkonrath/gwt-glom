@@ -19,9 +19,9 @@
 
 package org.glom.web.client.activity;
 
-import org.glom.web.client.StringUtils;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.LocaleChangeEventHandler;
@@ -34,7 +34,6 @@ import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.View;
-import org.glom.web.shared.layout.LayoutGroup;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -101,15 +100,15 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		});
 
 		// populate the cell table with data
-		final AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+		final AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getListViewLayout()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportHTML()");
 			}
 
 			@Override
-			public void onSuccess(final LayoutGroup result) {
+			public void onSuccess(final String result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
 				// reportView.setCellTable(documentID, result, reportName, quickFind);
@@ -117,8 +116,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		};
 
 		final String localeID = Utils.getCurrentLocaleID();
-		OnlineGlomServiceAsync.Util.getInstance()
-				.getReportLayout(documentID, tableName, reportName, localeID, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, localeID, callback);
 
 		// TODO: Avoid the code duplication with DetailsActivity.
 		// set the change handler for the quickfind text widget

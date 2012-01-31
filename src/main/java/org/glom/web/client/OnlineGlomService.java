@@ -40,7 +40,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	LayoutGroup getListViewLayout(String documentID, String tableName, final String localeID);
 
-	LayoutGroup getReportLayout(String documentID, String tableName, String reportName, String localeID);
+	String getReportHTML(String documentID, String tableName, String reportName, String localeID);
 
 	/**
 	 * Retrieves data for a list view table.

@@ -58,8 +58,8 @@ public interface OnlineGlomServiceAsync {
 	void getListViewLayout(String documentID, String tableName, final String localeID,
 			AsyncCallback<LayoutGroup> callback);
 
-	void getReportLayout(String documentID, String tableName, String reportName, String localeID,
-			AsyncCallback<LayoutGroup> callback);
+	void getReportHTML(String documentID, String tableName, String reportName, String localeID,
+			AsyncCallback<String> callback);
 
 	void getListViewData(String documentID, String tableName, String quickFind, int start, int length,
 			AsyncCallback<ArrayList<DataItem[]>> callback);

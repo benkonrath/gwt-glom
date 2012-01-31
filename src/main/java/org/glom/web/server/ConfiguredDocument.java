@@ -359,7 +359,7 @@ final class ConfiguredDocument {
 	 * @param localeID
 	 * @return
 	 */
-	private LayoutGroup getLayoutGroupFromLiblomLayoutGroup(String tableName,
+	private LayoutGroup getLayoutGroupFromLiblomLayoutGroup(final String tableName,
 			final org.glom.libglom.LayoutGroup libglomLayoutGroup, final String localeID) {
 		final LayoutGroup layoutGroup = new LayoutGroup(); // the object that will be returned
 		int primaryKeyIndex = -1;
@@ -426,7 +426,7 @@ final class ConfiguredDocument {
 	 * Gets the layout group for the list view using the defined layout list in the document or the table fields if
 	 * there's no defined layout group for the list view.
 	 */
-	private org.glom.libglom.LayoutGroup getValidReportLayoutGroup(final String tableName, final String reportName) {
+	public org.glom.libglom.LayoutGroup getReportLayoutGroup(final String tableName, final String reportName) {
 		final Report report = document.get_report(tableName, reportName);
 		if (report != null) {
 			return report.getM_layout_group();
@@ -447,15 +447,6 @@ final class ConfiguredDocument {
 
 			return libglomLayoutGroup;
 		}
-	}
-
-	public LayoutGroup getReportLayoutGroup(String tableName, final String reportName, final String localeID) {
-		// Validate the table name.
-		tableName = getTableNameToUse(tableName);
-
-		final org.glom.libglom.LayoutGroup libglomLayoutGroup = getValidReportLayoutGroup(tableName, reportName);
-
-		return getLayoutGroupFromLiblomLayoutGroup(tableName, libglomLayoutGroup, localeID);
 	}
 
 	/*
