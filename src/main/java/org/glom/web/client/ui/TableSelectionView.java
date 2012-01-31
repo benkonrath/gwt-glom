@@ -66,5 +66,9 @@ public interface TableSelectionView extends View {
 
 	void setDocumentTitle(String documentTitle);
 
+	HasChangeHandlers getReportSelector();
+
 	void setReportList(Reports reports);
+
+	String getSelectedReport();
 }

@@ -24,4 +24,6 @@ package org.glom.web.client.ui;
  */
 public interface ReportView extends View {
 
+	public void setReportHTML(final String html);
+
 }

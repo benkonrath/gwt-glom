@@ -30,6 +30,7 @@ import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.HasRecordsPlace;
 import org.glom.web.client.place.HasTablePlace;
 import org.glom.web.client.place.ListPlace;
+import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
 import org.glom.web.shared.DocumentInfo;
@@ -60,6 +61,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
 	private HandlerRegistration localeChangeHandlerRegistration = null;
+	private HandlerRegistration reportChangeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
 	public TableSelectionActivity(final ClientFactory clientFactory) {
@@ -120,6 +122,15 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				// Fire a locale change event so that other views (e.g. the details view) know about the change and can
 				// update themselves.
 				eventBus.fireEvent(new LocaleChangeEvent(localeID));
+			}
+		});
+
+		// For report choices with the reportSelector:
+		final HasChangeHandlers reportSelector = tableSelectionView.getReportSelector();
+		reportChangeHandlerRegistration = reportSelector.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(final ChangeEvent event) {
+				goTo(new ReportPlace(documentID, tableName, tableSelectionView.getSelectedReport(), quickFind));
 			}
 		});
 
@@ -222,6 +233,11 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		if (localeChangeHandlerRegistration != null) {
 			localeChangeHandlerRegistration.removeHandler();
 			localeChangeHandlerRegistration = null;
+		}
+
+		if (reportChangeHandlerRegistration != null) {
+			reportChangeHandlerRegistration.removeHandler();
+			reportChangeHandlerRegistration = null;
 		}
 	}
 

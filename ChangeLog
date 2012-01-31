@@ -1,5 +1,23 @@
 2012-01-31  Murray Cumming  <murrayc@murrayc.com>
 
+	Implement navigation to report places.
+
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Do not bother to handle all events here.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Added getSelectedReport().
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: start(): When handling a change to the reports chooser,
+	call getSelectedReport() and goTo() its ReportPlace.
+	* src/main/java/org/glom/web/client/ui/ReportView.java
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java:
+	Added setReportHTML() which puts the html in a gwt HTML widget.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getReportHTML(): Return "TODO" just to show that this works.
+
+2012-01-31  Murray Cumming  <murrayc@murrayc.com>
+
 	Make ReportPlace usable.
 
 	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:

@@ -58,7 +58,7 @@ public class ReportPlace extends HasRecordsPlace {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
-			String reportName = "";
+			final String reportName = "";
 			String quickFind = "";
 
 			final HashMap<String, String> params = getTokenParams(token);

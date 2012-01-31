@@ -23,12 +23,7 @@ import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
-import org.glom.web.client.event.LocaleChangeEvent;
-import org.glom.web.client.event.LocaleChangeEventHandler;
-import org.glom.web.client.event.QuickFindChangeEvent;
-import org.glom.web.client.event.QuickFindChangeEventHandler;
 import org.glom.web.client.event.TableChangeEvent;
-import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
@@ -91,15 +86,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		};
 		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 
-		// set the change handler for the table selection widget
-		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
-			@Override
-			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ReportPlace(documentID, event.getNewTableName(), reportName, ""));
-			}
-		});
-
-		// populate the cell table with data
+		// populate the report part:
 		final AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(final Throwable caught) {
@@ -109,34 +96,12 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 
 			@Override
 			public void onSuccess(final String result) {
-				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
-				// same.
-				// reportView.setCellTable(documentID, result, reportName, quickFind);
+				reportView.setReportHTML(result);
 			}
 		};
 
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, localeID, callback);
-
-		// TODO: Avoid the code duplication with DetailsActivity.
-		// set the change handler for the quickfind text widget
-		eventBus.addHandler(QuickFindChangeEvent.TYPE, new QuickFindChangeEventHandler() {
-			@Override
-			public void onQuickFindChange(final QuickFindChangeEvent event) {
-				// We switch to the List view, to show search results.
-				// TODO: Show the details view if there is only one result.
-				goTo(new ReportPlace(documentID, tableName, reportName, event.getNewQuickFindText()));
-			}
-		});
-
-		// Set the change handler for the table selection widget
-		eventBus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
-			@Override
-			public void onLocaleChange(final LocaleChangeEvent event) {
-				// note the empty primary key item
-				goTo(new ReportPlace(documentID, tableName, reportName, quickFind));
-			}
-		});
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(reportView.asWidget());

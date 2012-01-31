@@ -53,8 +53,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	Label searchLabel = new Label(constants.search());
 	TextBox searchTextBox = new TextBox();
 
-	Label reportLabel = new Label("Reports");
-	ListBox reportChooser = new ListBox();
+	Label reportsLabel = new Label("Reports");
+	ListBox reportsChooser = new ListBox();
 
 	ListBox localesChooser = new ListBox();
 
@@ -80,8 +80,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		titlebox.add(documentTitleLabel);
 
 		titlebox.add(localesChooser);
-		titlebox.add(reportChooser);
-		titlebox.add(reportLabel);
+		titlebox.add(reportsChooser);
+		titlebox.add(reportsLabel);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -91,8 +91,8 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		documentTitleLabel.addStyleName("document-title");
 		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
 
-		reportLabel.setStyleName("reportslabel"); // TODO: This is tedious.
-		reportChooser.setStyleName("reportschooser"); // TODO: This is tedious.
+		reportsLabel.setStyleName("reportslabel"); // TODO: This is tedious.
+		reportsChooser.setStyleName("reportschooser"); // TODO: This is tedious.
 
 		localesChooser.setStyleName("localeschooser"); // TODO: This is tedious.
 
@@ -235,10 +235,21 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
+	public HasChangeHandlers getReportSelector() {
+		return reportsChooser;
+	}
+
+	@Override
+	public String getSelectedReport() {
+		final int selectedIndex = reportsChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : reportsChooser.getValue(selectedIndex);
+	}
+
+	@Override
 	public void setReportList(final Reports reports) {
-		reportChooser.clear();
+		reportsChooser.clear();
 		for (int i = 0; i < reports.getCount(); i++) {
-			reportChooser.addItem(reports.getName(i), reports.getTitle(i));
+			reportsChooser.addItem(reports.getName(i), reports.getTitle(i));
 		}
 	}
 }

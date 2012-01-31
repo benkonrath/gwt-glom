@@ -21,15 +21,19 @@ package org.glom.web.client.ui;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 public class ReportViewImpl extends Composite implements ReportView {
 
 	final private FlowPanel mainPanel = new FlowPanel();
+	final private HTML htmlWidget = new HTML();
+
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 
 	public ReportViewImpl() {
 		initWidget(mainPanel);
+		mainPanel.add(htmlWidget);
 	}
 
 	@Override
@@ -47,4 +51,9 @@ public class ReportViewImpl extends Composite implements ReportView {
 		mainPanel.clear();
 	}
 
+	@Override
+	public void setReportHTML(final String html) {
+
+		htmlWidget.setHTML(html); // TODO: Use SafeHTML?
+	}
 }

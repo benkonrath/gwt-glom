@@ -333,7 +333,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// FIXME check for authentication
 
 		configuredDoc.getReportLayoutGroup(StringUtils.defaultString(tableName), StringUtils.defaultString(reportName));
-		final String reportHtml = ""; // TODO: Generate some HTML for the report layout.
+		final String reportHtml = "<b>TODO</b>"; // TODO: Generate some HTML for the report layout.
 		return reportHtml;
 	}
 
