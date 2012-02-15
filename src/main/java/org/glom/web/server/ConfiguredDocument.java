@@ -429,7 +429,7 @@ final class ConfiguredDocument {
 	public org.glom.libglom.LayoutGroup getReportLayoutGroup(final String tableName, final String reportName) {
 		final Report report = document.get_report(tableName, reportName);
 		if (report != null) {
-			return report.getM_layout_group();
+			return report.get_layout_group();
 		} else {
 			// a report layout group is *not* defined; we are going make a libglom layout group from the list of fields
 			Log.info(documentID, tableName,
