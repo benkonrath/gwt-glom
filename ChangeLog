@@ -1,3 +1,10 @@
+2012-02-15  Murray Cumming  <murrayc@murrayc.com>
+
+	Depend on jasperreports.
+
+	* pom.xml: Add the dependency. My plan is to use this on the 
+	server side.
+
 2012-01-31  Murray Cumming  <murrayc@murrayc.com>
 
 	Implement navigation to report places.
