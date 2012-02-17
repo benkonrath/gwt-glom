@@ -19,16 +19,27 @@
 
 package org.glom.web.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRHtmlExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -45,7 +56,6 @@ import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
 
@@ -333,8 +343,46 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// FIXME check for authentication
 
 		configuredDoc.getReportLayoutGroup(StringUtils.defaultString(tableName), StringUtils.defaultString(reportName));
-		final String reportHtml = "<b>TODO</b>"; // TODO: Generate some HTML for the report layout.
-		return reportHtml;
+		//final String reportHtml = "<b>TODO</b>"; // TODO: Generate some HTML for the report layout.
+		
+		JasperDesign design = new JasperDesign();
+		design.setName(reportName); //TODO: Actually, we want the title.
+		
+		JasperReport report;
+		try {
+			report = JasperCompileManager.compileReport(design);
+		} catch (JRException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "debug: Failed to Generate HTML 1";
+		}
+		
+		HashMap<String, Object> map = new HashMap<String, Object>(); //TODO: Use real data.
+		JasperPrint print;
+		try {
+			print = JasperFillManager.fillReport(report, map);
+		} catch (JRException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "debug: Failed to Generate HTML 2";
+		}
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		
+		//We use this because there is no JasperExportManager.exportReportToHtmlStream() method.
+		//JasperExportManager.exportReportToXmlStream(print, output);
+		try {
+			JRHtmlExporter exporter = new JRHtmlExporter();
+			exporter.setParameter(JRHtmlExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRHtmlExporterParameter.OUTPUT_STREAM, output);
+			exporter.exportReport();
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "debug: Failed to Generate HTML 3";
+		}
+		
+		return output.toString();
 	}
 
 	/*
