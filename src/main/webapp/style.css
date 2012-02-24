@@ -206,10 +206,8 @@ button.details-navigation
 
 .gwt-TabLayoutPanelContentContainer
 {
-	border-color: #aaa;
-	border-style: solid;
-	border-width: 2px 1px 1px;
-	border-radius: 3px;
+	border: none;
+	border-bottom: 1px solid rgba(120, 120, 120, 0.2);
 }
 
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContent
@@ -225,20 +223,45 @@ button.details-navigation
 /* The unselected tabs */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab
 {
-	background-color: #aaa;
-	border-radius: 3px 3px 0 0;
+	background-color: #d4d4d4;
+	border-radius: 2px 2px 0 0;
+	top: 1px;
+	border: 1px solid #aaa;
+	border-bottom: none;
+	background: -moz-linear-gradient(center top, #d4d4d4 90%,#eeeeee 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.9, #d4d4d4),color-stop(1, #eeeeee));
+
 }
 
 /* The selected tab */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected
 {
-	background-color: #ccc;
+	background-color: #eee;
+	z-index: 10;
+	border: 1px solid #787878;
+	border-bottom: none;
+	top: 1px;
+	background: -moz-linear-gradient(center top, #d4d4d4 0%,#eeeeee 10%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #d4d4d4),color-stop(0.1, #eeeeee));
+}
+
+/* The selected inner tab */
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected .gwt-TabLayoutPanelTabInner {
+	position: relative;
+	margin-top: 1px;
+	top: -1px;
 }
 
 /* The tab bar */
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs
 {
+	border-bottom: 1px solid #787878;
+}
 
+/* The first tab */
+.gwt-TabLayoutPanel .firstTab {
+	/* Uncomment this line to remove the left margin from the first tab. */
+	/* margin-left: 0px; */
 }
 
 table.pager td
