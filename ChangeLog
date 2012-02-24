@@ -1,3 +1,9 @@
+2012-02-24  Ben Konrath  <ben@bagu.org>
+
+	Improve the tabs in the Notebook widget.
+
+	Bug #670728
+
 2012-01-30  Murray Cumming  <murrayc@murrayc.com>
 
 	Translations: Try to translate the strings.

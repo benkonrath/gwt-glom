@@ -25,6 +25,7 @@ import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemNotebook;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -79,6 +80,13 @@ public class Notebook extends Group {
 		// Set the first tab as the default tab.
 		tabPanel.selectTab(0);
 
+		// Add a CSS class name for the first tab.
+		if (tabPanel.getWidgetCount() > 0) {
+			Element element = tabPanel.getElement().getFirstChildElement().getNextSiblingElement().getFirstChildElement()
+					.getFirstChildElement();
+			element.addClassName("firstTab");
+		}
+
 		// Use the max child height plus the height of the tab bar and the height of an empty content panel.
 		tabPanel.setHeight((tabBarHeight + emptyTabContentHeight + maxChildHeight) + "px");
 
@@ -100,6 +108,7 @@ public class Notebook extends Group {
 		tabLayoutPanelTabs.setStyleName("gwt-TabLayoutPanelTabs");
 		SimplePanel tabLayoutPanelTab = new SimplePanel();
 		tabLayoutPanelTab.setStyleName("gwt-TabLayoutPanelTab");
+		tabLayoutPanelTab.addStyleName("gwt-TabLayoutPanelTab-selected");
 		SimplePanel tabLayoutPanelTabInner = new SimplePanel();
 		tabLayoutPanelTabInner.setStyleName("gwt-TabLayoutPanelTabInner");
 		Label tabHeightHackLabel = new Label("A");
