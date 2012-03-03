@@ -169,7 +169,7 @@ public class DetailsCell extends Composite {
 					String[] lines = text.split(utf8NewLine);
 					SafeHtmlBuilder sb = new SafeHtmlBuilder();
 					for (String line : lines) {
-						sb.append(SafeHtmlUtils.fromString(line));
+						sb.append(SafeHtmlUtils.fromString(line.replaceAll("\"\"", "\"")));
 						sb.append(SafeHtmlUtils.fromSafeConstant("<br/>"));
 					}
 
