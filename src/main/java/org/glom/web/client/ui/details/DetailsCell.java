@@ -154,6 +154,8 @@ public class DetailsCell extends Composite {
 			detailsLabel.setText(currencyCode + gwtNumberFormat.format(dataItem.getNumber()));
 			detailsData.add(detailsLabel);
 			break;
+		case TYPE_DATE:
+		case TYPE_TIME:
 		case TYPE_TEXT:
 			String text = dataItem.getText();
 			// Deal with multiline text differently than single line text.
