@@ -1,3 +1,11 @@
+2012-03-03  Ben Konrath  <ben@bagu.org>
+
+	Display date and time in details view.
+
+	https://bugzilla.gnome.org/show_bug.cgi?id=671257
+
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+
 2012-02-24  Ben Konrath  <ben@bagu.org>
 
 	Improve the tabs in the Notebook widget.
