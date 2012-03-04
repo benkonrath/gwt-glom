@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,9 +38,16 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignBand;
+import net.sf.jasperreports.engine.design.JRDesignExpression;
+import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JRDesignSection;
+import net.sf.jasperreports.engine.design.JRDesignStaticText;
+import net.sf.jasperreports.engine.design.JRDesignTextField;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -47,7 +55,11 @@ import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
+import org.glom.libglom.LayoutItemVector;
+import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.SortClause;
 import org.glom.web.client.OnlineGlomService;
+import org.glom.web.server.database.ListViewDBAccess;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
@@ -56,6 +68,7 @@ import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
 
@@ -342,47 +355,126 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		configuredDoc.getReportLayoutGroup(StringUtils.defaultString(tableName), StringUtils.defaultString(reportName));
-		//final String reportHtml = "<b>TODO</b>"; // TODO: Generate some HTML for the report layout.
-		
-		JasperDesign design = new JasperDesign();
-		design.setName(reportName); //TODO: Actually, we want the title.
-		
+		final org.glom.libglom.LayoutGroup layout_group = configuredDoc.getReportLayoutGroup(
+				StringUtils.defaultString(tableName), StringUtils.defaultString(reportName));
+
+		final ListViewDBAccess listViewDBAccess = new ListViewDBAccess(configuredDoc.getDocument(),
+				configuredDoc.getDocumentID(), configuredDoc.getCpds(), tableName, layout_group);
+
+		final JasperDesign design = new JasperDesign();
+		design.setName(reportName); // TODO: Actually, we want the title.
+
+		final JRDesignBand titleBand = new JRDesignBand();
+		JRDesignStaticText staticTitle = new JRDesignStaticText();
+		staticTitle.setText("debug: test report title text");
+		titleBand.addElement(staticTitle);
+		design.setTitle(titleBand);
+
+		final JRDesignBand detailBand = new JRDesignBand();
+		staticTitle = new JRDesignStaticText();
+		staticTitle.setText("debug: test report detail text");
+		detailBand.addElement(staticTitle);
+
+		final JRDesignQuery query = new JRDesignQuery();
+		query.setText(listViewDBAccess.getSelectQuery("", new SortClause())); // TODO: quickfind and sort clause.
+		design.setQuery(query);
+
+		final LayoutItemVector layoutItemsVec = layout_group.get_items();
+		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
+		for (int i = 0; i < numItems; i++) {
+			final org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
+
+			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
+			if (libglomLayoutItemField != null) {
+				final JRDesignField field = new JRDesignField();
+				field.setName(libglomLayoutItemField.get_name());
+
+				Class<?> klass = null;
+				switch (libglomLayoutItemField.get_glom_type()) {
+				case TYPE_TEXT:
+					klass = java.lang.String.class;
+					break;
+				case TYPE_BOOLEAN:
+					klass = java.lang.Boolean.class;
+					break;
+				case TYPE_NUMERIC:
+					klass = java.lang.Double.class;
+					break;
+				case TYPE_DATE:
+					klass = java.util.Date.class;
+					break;
+				case TYPE_TIME:
+					klass = java.sql.Time.class;
+					break;
+				case TYPE_IMAGE:
+					klass = java.sql.Blob.class; // TODO: This does not work.
+					break;
+				}
+
+				field.setValueClass(klass);
+				try {
+					design.addField(field);
+				} catch (final JRException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+
+				final JRDesignExpression expression = new JRDesignExpression();
+				expression.setText("$F{" + libglomLayoutItemField.get_name() + "}"); // TODO: Where is this format
+																						// documented?
+				final JRDesignTextField textField = new JRDesignTextField();
+				textField.setExpression(expression);
+				detailBand.addElement(textField);
+			}
+		}
+
+		((JRDesignSection) design.getDetailSection()).addBand(detailBand);
+
 		JasperReport report;
 		try {
 			report = JasperCompileManager.compileReport(design);
-		} catch (JRException e1) {
+		} catch (final JRException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return "debug: Failed to Generate HTML 1";
 		}
-		
-		HashMap<String, Object> map = new HashMap<String, Object>(); //TODO: Use real data.
+
+		Connection connection;
+		try {
+			connection = configuredDoc.getCpds().getConnection();
+		} catch (final SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			return "Connection Failed";
+		}
+
 		JasperPrint print;
 		try {
-			print = JasperFillManager.fillReport(report, map);
-		} catch (JRException e1) {
+			final HashMap<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("ReportTitle", reportName); // TODO: Use the title, not the name.
+			print = JasperFillManager.fillReport(report, parameters, connection);
+		} catch (final JRException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return "debug: Failed to Generate HTML 2";
 		}
-		
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		
-		//We use this because there is no JasperExportManager.exportReportToHtmlStream() method.
-		//JasperExportManager.exportReportToXmlStream(print, output);
+
+		final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+		// We use this because there is no JasperExportManager.exportReportToHtmlStream() method.
+		// JasperExportManager.exportReportToXmlStream(print, output);
 		try {
-			JRHtmlExporter exporter = new JRHtmlExporter();
+			final JRXhtmlExporter exporter = new JRXhtmlExporter();
 			exporter.setParameter(JRHtmlExporterParameter.JASPER_PRINT, print);
 			exporter.setParameter(JRHtmlExporterParameter.OUTPUT_STREAM, output);
 			exporter.exportReport();
-		} catch (JRException e) {
+		} catch (final JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "debug: Failed to Generate HTML 3";
 		}
-		
-		return output.toString();
+
+		return "DEBUGSTART" + output.toString() + "DEBUGEND";
 	}
 
 	/*
