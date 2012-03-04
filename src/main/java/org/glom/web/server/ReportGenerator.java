@@ -31,6 +31,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
+import net.sf.jasperreports.engine.design.JRDesignGroup;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
@@ -46,8 +47,10 @@ import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroup;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
+import org.glom.libglom.LayoutItem_GroupBy;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
+import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
@@ -60,6 +63,7 @@ public class ReportGenerator {
 
 	final int height = 30;
 	LayoutFieldVector fieldsToGet = new LayoutFieldVector();
+	SortClause sortClause = new SortClause();
 
 	/**
 	 * @param tableName
@@ -93,7 +97,6 @@ public class ReportGenerator {
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
 		// but let's be sure:
 		final String quickFind = ""; // TODO
-		final SortClause sortClause = new SortClause(); // TODO
 		SqlExpr whereClause;
 		if (StringUtils.isEmpty(quickFind)) {
 			whereClause = new SqlExpr();
@@ -108,7 +111,7 @@ public class ReportGenerator {
 		final String sqlQuery = Glom.sqlbuilder_get_full_query(builder);
 
 		final JRDesignQuery query = new JRDesignQuery();
-		query.setText(sqlQuery); // TODO: quickfind and sort clause.
+		query.setText(sqlQuery); // TODO: Extra sort clause to sort the rows within the groups.
 		design.setQuery(query);
 
 		JasperReport report;
@@ -156,11 +159,11 @@ public class ReportGenerator {
 	 * @param layout_group
 	 * @param design
 	 * @param height
-	 * @param detailBand
+	 * @param parentBand
 	 * @param x
 	 */
 	private int addToReport(final org.glom.libglom.LayoutGroup layout_group, final JasperDesign design,
-			final JRDesignBand detailBand, int x) {
+			final JRDesignBand parentBand, int x) {
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -169,77 +172,154 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				fieldsToGet.add(libglomLayoutItemField);
-
-				final String fieldName = libglomLayoutItemField.get_name();
-				// System.out.print("fieldName=" + fieldName + "\n");
-
-				// Tell the JasperDesign about the database field that will be in the SQL query,
-				// specified later:
-				final JRDesignField field = new JRDesignField();
-				field.setName(fieldName); // TODO: Related fields.
-
-				// Choose a suitable java class type for the SQL field:
-				Class<?> klass = null;
-				switch (libglomLayoutItemField.get_glom_type()) {
-				case TYPE_TEXT:
-					klass = java.lang.String.class;
-					break;
-				case TYPE_BOOLEAN:
-					klass = java.lang.Boolean.class;
-					break;
-				case TYPE_NUMERIC:
-					klass = java.lang.Double.class;
-					break;
-				case TYPE_DATE:
-					klass = java.util.Date.class;
-					break;
-				case TYPE_TIME:
-					klass = java.sql.Time.class;
-					break;
-				case TYPE_IMAGE:
-					klass = java.sql.Blob.class; // TODO: This does not work.
-					break;
-				}
-				field.setValueClass(klass);
-
-				try {
-					design.addField(field);
-				} catch (final JRException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-
-				// Tell the JasperDesign to show an instance of the field:
-				final JRDesignTextField textField = new JRDesignTextField();
-
-				// Make sure this field starts at the right of the previous field,
-				// because JasperReports uses absolute positioning.
-				textField.setY(0);
-				textField.setX(x);
-
-				// An arbitrary width, because we must specify _some_ width:
-				final int width = 100; // Points, as specified later.
-				textField.setWidth(width); // No data will be shown without this.
-				x += width;
-
-				// This only stretches vertically, but that is better than
-				// nothing.
-				textField.setStretchWithOverflow(true);
-				textField.setHeight(height); // We must specify _some_ height.
-
-				// TODO: Where is this format documented?
-				final JRDesignExpression expression = new JRDesignExpression();
-				expression.setText("$F{" + fieldName + "}");
-
-				textField.setExpression(expression);
-				detailBand.addElement(textField);
+				x = addFieldToBand(design, parentBand, x, libglomLayoutItemField);
 			} else if (libglomLayoutGroup != null) {
+				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
+				if (libglomGroupBy != null) {
+					final LayoutItem_Field fieldGroupBy = libglomGroupBy.get_field_group_by();
+					if (fieldGroupBy == null)
+						continue;
+
+					final String fieldName = addField(design, fieldGroupBy);
+
+					// We must sort by the group field,
+					// so that JasperReports can start a new group when its value changes.
+					// Note that this is not like a SQL GROUP BY.
+					final SortFieldPair pair = new SortFieldPair();
+					pair.setFirst(fieldGroupBy);
+					pair.setSecond(true); // Ascending.
+					sortClause.add(pair);
+
+					final JRDesignGroup group = new JRDesignGroup();
+					group.setName(fieldName);
+
+					final JRDesignExpression expression = new JRDesignExpression();
+					expression.setText("$F{" + fieldName + "}");
+					group.setExpression(expression);
+
+					final JRDesignBand headerBand = new JRDesignBand();
+					headerBand.setHeight(height);
+					((JRDesignSection) group.getGroupHeaderSection()).addBand(headerBand);
+
+					final JRDesignBand footerBand = new JRDesignBand();
+					footerBand.setHeight(height);
+					((JRDesignSection) group.getGroupFooterSection()).addBand(footerBand);
+
+					try {
+						design.addGroup(group);
+					} catch (final JRException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					// Show the group-by field:
+					final int groupX = addFieldToBand(design, headerBand, x, fieldGroupBy);
+
+					// Show the secondary fields:
+					final LayoutGroup groupSecondaries = libglomGroupBy.get_group_secondary_fields();
+					if (groupSecondaries != null)
+						addToReport(groupSecondaries, design, headerBand, groupX);
+				}
+
 				// Recurse into sub-groups:
-				x = addToReport(libglomLayoutGroup, design, detailBand, x);
+				x = addToReport(libglomLayoutGroup, design, parentBand, x);
 			}
 		}
 
 		return x;
+	}
+
+	/**
+	 * @param design
+	 * @param parentBand
+	 * @param x
+	 * @param libglomLayoutItemField
+	 * @return
+	 */
+	private int addFieldToBand(final JasperDesign design, final JRDesignBand parentBand, int x,
+			final LayoutItem_Field libglomLayoutItemField) {
+		final String fieldName = addField(design, libglomLayoutItemField);
+
+		// Tell the JasperDesign to show an instance of the field:
+		final JRDesignTextField textField = new JRDesignTextField();
+
+		// Make sure this field starts at the right of the previous field,
+		// because JasperReports uses absolute positioning.
+		textField.setY(0);
+		textField.setX(x);
+
+		// An arbitrary width, because we must specify _some_ width:
+		final int width = 100; // Points, as specified later.
+		textField.setWidth(width); // No data will be shown without this.
+		x += width;
+
+		// This only stretches vertically, but that is better than
+		// nothing.
+		textField.setStretchWithOverflow(true);
+		textField.setHeight(height); // We must specify _some_ height.
+
+		// TODO: Where is this format documented?
+		final JRDesignExpression expression = new JRDesignExpression();
+		expression.setText("$F{" + fieldName + "}");
+
+		textField.setExpression(expression);
+		parentBand.addElement(textField);
+		return x;
+	}
+
+	/**
+	 * @param design
+	 * @param libglomLayoutItemField
+	 * @return
+	 */
+	private String addField(final JasperDesign design, final LayoutItem_Field libglomLayoutItemField) {
+		fieldsToGet.add(libglomLayoutItemField);
+
+		final String fieldName = libglomLayoutItemField.get_name();
+		// System.out.print("fieldName=" + fieldName + "\n");
+
+		// Tell the JasperDesign about the database field that will be in the SQL query,
+		// specified later:
+		final JRDesignField field = new JRDesignField();
+		field.setName(fieldName); // TODO: Related fields.
+		field.setValueClass(getClassTypeForGlomType(libglomLayoutItemField));
+
+		try {
+			design.addField(field);
+		} catch (final JRException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		return fieldName;
+	}
+
+	/**
+	 * @param libglomLayoutItemField
+	 * @return
+	 */
+	private Class<?> getClassTypeForGlomType(final LayoutItem_Field libglomLayoutItemField) {
+		// Choose a suitable java class type for the SQL field:
+		Class<?> klass = null;
+		switch (libglomLayoutItemField.get_glom_type()) {
+		case TYPE_TEXT:
+			klass = java.lang.String.class;
+			break;
+		case TYPE_BOOLEAN:
+			klass = java.lang.Boolean.class;
+			break;
+		case TYPE_NUMERIC:
+			klass = java.lang.Double.class;
+			break;
+		case TYPE_DATE:
+			klass = java.util.Date.class;
+			break;
+		case TYPE_TIME:
+			klass = java.sql.Time.class;
+			break;
+		case TYPE_IMAGE:
+			klass = java.sql.Blob.class; // TODO: This does not work.
+			break;
+		}
+		return klass;
 	}
 }
