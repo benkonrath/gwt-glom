@@ -83,7 +83,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	public String getSelectQuery(final String quickFind, final SortClause sortClause) {
+	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
 		// but let's be sure:
 		SqlExpr whereClause;

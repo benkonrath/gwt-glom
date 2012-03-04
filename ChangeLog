@@ -1,5 +1,16 @@
 2012-03-04  Murray Cumming  <murrayc@murrayc.com>
 
+	Actually show some data with JasperReports.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: 
+	getReportHTML(): Move most code into a ReportGenerator class.
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Recurse into sub-groups, adding fields to the JasperDesign's details
+	band. Note that we must set an arbitrary width and height, or it just
+	will not show any data.
+
+2012-03-04  Murray Cumming  <murrayc@murrayc.com>
+
 	Reports Chooser: Show the titles, not the names.
 
 	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
