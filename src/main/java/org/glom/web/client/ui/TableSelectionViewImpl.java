@@ -249,7 +249,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	public void setReportList(final Reports reports) {
 		reportsChooser.clear();
 		for (int i = 0; i < reports.getCount(); i++) {
-			reportsChooser.addItem(reports.getName(i), reports.getTitle(i));
+			reportsChooser.addItem(reports.getTitle(i), reports.getName(i));
 		}
 	}
 }

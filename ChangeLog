@@ -1,5 +1,17 @@
 2012-03-04  Murray Cumming  <murrayc@murrayc.com>
 
+	Reports Chooser: Show the titles, not the names.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	(TableSelectionViewImpl.setReportList): Show the titles in the UI,
+	and the names as the values.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	(ConfiguredDocument.getReportLayoutGroup): Do not return a default
+	group now that we provide the report name, so it should always 
+	succeed.
+
+2012-03-04  Murray Cumming  <murrayc@murrayc.com>
+
 	ListViewDbAccess.getSelectQuery(): Avoid using empty quickfind strings.
 
 	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java

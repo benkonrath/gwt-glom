@@ -431,21 +431,8 @@ final class ConfiguredDocument {
 		if (report != null) {
 			return report.get_layout_group();
 		} else {
-			// a report layout group is *not* defined; we are going make a libglom layout group from the list of fields
-			Log.info(documentID, tableName,
-					"The report layout is not defined for this table. Displaying a list layout based on the field list.");
-
-			org.glom.libglom.LayoutGroup libglomLayoutGroup = null;
-			final FieldVector fieldsVec = document.get_table_fields(tableName);
-			libglomLayoutGroup = new org.glom.libglom.LayoutGroup();
-			for (int i = 0; i < fieldsVec.size(); i++) {
-				final Field field = fieldsVec.get(i);
-				final LayoutItem_Field layoutItemField = new LayoutItem_Field();
-				layoutItemField.set_full_field_details(field);
-				libglomLayoutGroup.add_item(layoutItemField);
-			}
-
-			return libglomLayoutGroup;
+			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
+			return new org.glom.libglom.LayoutGroup();
 		}
 	}
 
