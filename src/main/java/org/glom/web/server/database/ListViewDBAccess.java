@@ -21,6 +21,7 @@ package org.glom.web.server.database;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.Glom;
@@ -83,8 +84,16 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
-		final Value quickFindValue = new Value(quickFind);
-		final SqlExpr whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
+		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
+		// but let's be sure:
+		SqlExpr whereClause;
+		if (StringUtils.isEmpty(quickFind)) {
+			whereClause = new SqlExpr();
+		} else {
+			final Value quickFindValue = new Value(quickFind);
+			whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
+		}
+
 		final Relationship extraJoin = new Relationship(); // Ignored.
 		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
 				extraJoin, sortClause);

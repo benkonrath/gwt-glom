@@ -1,3 +1,13 @@
+2012-03-04  Murray Cumming  <murrayc@murrayc.com>
+
+	ListViewDbAccess.getSelectQuery(): Avoid using empty quickfind strings.
+
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java
+	ListViewDBAccess.getSelectQuery(): Do not create a where clause for 
+	an empty quickfind string. I also corrected libglom to create only 
+	empty where clauses for empty quickfind strings, but this avoids the
+	need for that fix.
+
 2012-02-24  Ben Konrath  <ben@bagu.org>
 
 	Improve the tabs in the Notebook widget.
