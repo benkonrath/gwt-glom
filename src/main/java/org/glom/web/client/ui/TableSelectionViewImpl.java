@@ -53,7 +53,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	Label searchLabel = new Label(constants.search());
 	TextBox searchTextBox = new TextBox();
 
-	Label reportsLabel = new Label("Reports");
+	Label reportsLabel = new Label(constants.reports());
 	ListBox reportsChooser = new ListBox();
 
 	ListBox localesChooser = new ListBox();

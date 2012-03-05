@@ -1,3 +1,12 @@
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
+	Translate the Reports label.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	Get the "Reports" label string from the constants.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.pro
+	perties: Add Reports to the constants.
+
 2012-03-03  Ben Konrath  <ben@bagu.org>
 
 	Display date and time in details view.
