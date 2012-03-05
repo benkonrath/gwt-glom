@@ -28,6 +28,7 @@ import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ReportView;
+import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -99,6 +100,9 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 				reportView.setReportHTML(result);
 			}
 		};
+
+		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
+		tableSelectionView.setSelectedReport(reportName);
 
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, localeID, callback);

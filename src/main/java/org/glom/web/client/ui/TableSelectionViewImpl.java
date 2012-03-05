@@ -246,8 +246,26 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	}
 
 	@Override
+	public void setSelectedReport(final String reportName) {
+		for (int i = 0; i < reportsChooser.getItemCount(); i++) {
+			if (reportName.equals(reportsChooser.getValue(i))) {
+				reportsChooser.setSelectedIndex(i);
+				break;
+			}
+		}
+
+	}
+
+	@Override
 	public void setReportList(final Reports reports) {
 		reportsChooser.clear();
+
+		// Add a first item as a default for the combobox.
+		// Otherwise a report will be chosen already,
+		// so the user will not be able to choose that report to go to that page.
+		// TODO: Think of a better UI for this.
+		reportsChooser.addItem("-", "");
+
 		for (int i = 0; i < reports.getCount(); i++) {
 			reportsChooser.addItem(reports.getTitle(i), reports.getName(i));
 		}

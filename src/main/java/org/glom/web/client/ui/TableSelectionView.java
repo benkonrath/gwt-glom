@@ -71,4 +71,6 @@ public interface TableSelectionView extends View {
 	void setReportList(Reports reports);
 
 	String getSelectedReport();
+
+	void setSelectedReport(String reportName);
 }

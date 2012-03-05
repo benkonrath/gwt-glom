@@ -1,5 +1,18 @@
 2012-03-05  Murray Cumming  <murrayc@murrayc.com>
 
+	Reports drop-down list: Some improvement.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Adedd setSelectedReport(),
+	setReportList(): Add a blank line so that the user can select the 
+	first one.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Show the current report by calling setSelectedReport().
+	This does not seem to work yet.
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
 	DetailsActivity, ListActivity: Move some variables into a base class.
 
 	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
