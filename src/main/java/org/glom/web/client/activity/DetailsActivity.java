@@ -35,7 +35,6 @@ import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.DetailsView;
-import org.glom.web.client.ui.View;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
@@ -48,7 +47,6 @@ import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemPortal;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -56,14 +54,13 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 /**
  *
  */
-public class DetailsActivity extends AbstractActivity implements View.Presenter {
+public class DetailsActivity extends HasTableActivity {
 	/*
 	 * Cell renderer for the related list open buttons. Normally this wouldn't be in an Activity class but since it's
 	 * making a call to the server it makes sense for it to be here.
@@ -104,19 +101,14 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 		}
 	}
 
-	private String documentID = "";
-	private String tableName = "";
 	private TypedDataItem primaryKeyValue;
-	private final ClientFactory clientFactory;
 	private final DetailsView detailsView;
 	ArrayList<DetailsCell> detailsCells;
 	ArrayList<Portal> portals;
 
 	public DetailsActivity(final DetailsPlace place, final ClientFactory clientFactory) {
-		this.documentID = place.getDocumentID();
-		this.tableName = place.getTableName();
+		super(place, clientFactory);
 		this.primaryKeyValue = place.getPrimaryKeyValue();
-		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
 	}
 
@@ -376,16 +368,6 @@ public class DetailsActivity extends AbstractActivity implements View.Presenter 
 	@Override
 	public void onStop() {
 		detailsView.clear();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
-	 */
-	@Override
-	public void goTo(final Place place) {
-		clientFactory.getPlaceController().goTo(place);
 	}
 
 }

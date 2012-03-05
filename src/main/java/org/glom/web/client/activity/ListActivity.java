@@ -32,36 +32,25 @@ import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.HasRecordsPlace;
 import org.glom.web.client.place.ListPlace;
-import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.ListView;
-import org.glom.web.client.ui.View;
 import org.glom.web.shared.layout.LayoutGroup;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ListActivity extends AbstractActivity implements View.Presenter {
+public class ListActivity extends HasTableActivity {
 
-	private final String documentID;
-	private final String tableName;
 	private final String quickFind;
-	private final ClientFactory clientFactory;
 	private final ListView listView;
-	private final AuthenticationPopup authenticationPopup;
 
 	public ListActivity(final HasRecordsPlace place, final ClientFactory clientFactory) {
-		this.documentID = place.getDocumentID(); // TODO: Just store the place?
-		this.tableName = place.getTableName();
+		super(place, clientFactory);
 		this.quickFind = place.getQuickFind();
-		this.clientFactory = clientFactory;
-		listView = clientFactory.getListView();
-		authenticationPopup = clientFactory.getAuthenticationPopup();
+		this.listView = clientFactory.getListView();
 	}
 
 	@Override
@@ -197,16 +186,6 @@ public class ListActivity extends AbstractActivity implements View.Presenter {
 	@Override
 	public void onStop() {
 		clearView();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
-	 */
-	@Override
-	public void goTo(final Place place) {
-		clientFactory.getPlaceController().goTo(place);
 	}
 
 }

@@ -1,5 +1,15 @@
 2012-03-05  Murray Cumming  <murrayc@murrayc.com>
 
+	DetailsActivity, ListActivity: Move some variables into a base class.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/activity/HasTableActivity.java:
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Move 
+	the clientFactory, documentID, tableName and authenticationPopup into
+	a base class, to avoid duplication.
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
 	Translate the Reports label.
 
 	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
