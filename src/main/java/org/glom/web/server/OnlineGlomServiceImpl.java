@@ -345,7 +345,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return "Connection Failed";
 		}
 
-		final ReportGenerator generator = new ReportGenerator();
+		final ReportGenerator generator = new ReportGenerator(StringUtils.defaultString(localeID));
 		return generator.generateReport(configuredDoc.getDocument(), tableName, reportName, connection, layout_group);
 	}
 

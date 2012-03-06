@@ -1,3 +1,16 @@
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Add a header band to show the field titles.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getReportHTML(): Pass the localeId to the ReportGenerator 
+	constructor.
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	constructor: Take the localeID so we can get translated field
+	titles.
+	generateReport(), addToReport(), addFieldToBand(): Add field 
+	titles in a column header band.
+
 2012-03-05  Murray Cumming  <murrayc@murrayc.com>
 
 	Reports drop-down list: Some improvement.

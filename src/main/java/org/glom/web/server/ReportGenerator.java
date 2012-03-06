@@ -64,6 +64,11 @@ public class ReportGenerator {
 	final int height = 30;
 	LayoutFieldVector fieldsToGet = new LayoutFieldVector();
 	SortClause sortClause = new SortClause();
+	String localeID;
+
+	ReportGenerator(final String localeID) {
+		this.localeID = StringUtils.defaultString(localeID);
+	}
 
 	/**
 	 * @param tableName
@@ -88,10 +93,14 @@ public class ReportGenerator {
 		final JRDesignBand detailBand = new JRDesignBand();
 		detailBand.setHeight(height + 20);
 
+		final JRDesignBand headerBand = new JRDesignBand();
+		headerBand.setHeight(height + 20);
+
 		fieldsToGet = new LayoutFieldVector();
 		final int x = 0;
-		addToReport(layout_group, design, detailBand, x);
+		addToReport(layout_group, design, detailBand, headerBand, x);
 
+		design.setColumnHeader(headerBand);
 		((JRDesignSection) design.getDetailSection()).addBand(detailBand);
 
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
@@ -163,7 +172,7 @@ public class ReportGenerator {
 	 * @param x
 	 */
 	private int addToReport(final org.glom.libglom.LayoutGroup layout_group, final JasperDesign design,
-			final JRDesignBand parentBand, int x) {
+			final JRDesignBand parentBand, final JRDesignBand headerBand, int x) {
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -172,7 +181,7 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				x = addFieldToBand(design, parentBand, x, libglomLayoutItemField);
+				x = addFieldToBand(design, parentBand, headerBand, x, libglomLayoutItemField);
 			} else if (libglomLayoutGroup != null) {
 				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 				if (libglomGroupBy != null) {
@@ -193,13 +202,14 @@ public class ReportGenerator {
 					final JRDesignGroup group = new JRDesignGroup();
 					group.setName(fieldName);
 
+					// Show the field value:
 					final JRDesignExpression expression = new JRDesignExpression();
 					expression.setText("$F{" + fieldName + "}");
 					group.setExpression(expression);
 
-					final JRDesignBand headerBand = new JRDesignBand();
-					headerBand.setHeight(height);
-					((JRDesignSection) group.getGroupHeaderSection()).addBand(headerBand);
+					final JRDesignBand groupBand = new JRDesignBand();
+					groupBand.setHeight(height);
+					((JRDesignSection) group.getGroupHeaderSection()).addBand(groupBand);
 
 					final JRDesignBand footerBand = new JRDesignBand();
 					footerBand.setHeight(height);
@@ -213,16 +223,16 @@ public class ReportGenerator {
 					}
 
 					// Show the group-by field:
-					final int groupX = addFieldToBand(design, headerBand, x, fieldGroupBy);
+					final int groupX = addFieldToBand(design, groupBand, headerBand, x, fieldGroupBy);
 
 					// Show the secondary fields:
 					final LayoutGroup groupSecondaries = libglomGroupBy.get_group_secondary_fields();
 					if (groupSecondaries != null)
-						addToReport(groupSecondaries, design, headerBand, groupX);
+						addToReport(groupSecondaries, design, groupBand, headerBand, groupX);
 				}
 
 				// Recurse into sub-groups:
-				x = addToReport(libglomLayoutGroup, design, parentBand, x);
+				x = addToReport(libglomLayoutGroup, design, parentBand, headerBand, x);
 			}
 		}
 
@@ -236,20 +246,30 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private int addFieldToBand(final JasperDesign design, final JRDesignBand parentBand, int x,
-			final LayoutItem_Field libglomLayoutItemField) {
+	private int addFieldToBand(final JasperDesign design, final JRDesignBand parentBand, final JRDesignBand headerBand,
+			int x, final LayoutItem_Field libglomLayoutItemField) {
 		final String fieldName = addField(design, libglomLayoutItemField);
 
-		// Tell the JasperDesign to show an instance of the field:
+		// An arbitrary width, because we must specify _some_ width:
+		final int width = 100; // Points, as specified later.
+
+		// Show the field title:
+		final JRDesignStaticText textFieldColumn = new JRDesignStaticText();
+		textFieldColumn.setText(libglomLayoutItemField.get_title(this.localeID));
+		textFieldColumn.setY(0);
+		textFieldColumn.setX(x);
+		textFieldColumn.setWidth(width); // No data will be shown without this.
+		// textFieldColumn.setStretchWithOverflow(true);
+		textFieldColumn.setHeight(height); // We must specify _some_ height.
+		headerBand.addElement(textFieldColumn);
+
+		// Show an instance of the field (the field value):
 		final JRDesignTextField textField = new JRDesignTextField();
 
 		// Make sure this field starts at the right of the previous field,
 		// because JasperReports uses absolute positioning.
 		textField.setY(0);
 		textField.setX(x);
-
-		// An arbitrary width, because we must specify _some_ width:
-		final int width = 100; // Points, as specified later.
 		textField.setWidth(width); // No data will be shown without this.
 		x += width;
 
