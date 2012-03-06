@@ -1,5 +1,9 @@
 2012-03-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportGenerator: Do not show nulls.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Make the title font larger.
 
 2012-03-06  Murray Cumming  <murrayc@murrayc.com>

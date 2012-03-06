@@ -97,6 +97,7 @@ public class ReportGenerator {
 		normalStyle.setDefault(true);
 		normalStyle.setFontName("DejaVu Sans");
 		normalStyle.setFontSize(12);
+		normalStyle.setBlankWhenNull(true); // Avoid "null" appearing in reports.
 		boldStyle.setName("Sans_Bold");
 		boldStyle.setFontName("DejaVu Sans");
 		boldStyle.setFontSize(12);
