@@ -423,20 +423,6 @@ final class ConfiguredDocument {
 	}
 
 	/*
-	 * Gets the layout group for the list view using the defined layout list in the document or the table fields if
-	 * there's no defined layout group for the list view.
-	 */
-	public org.glom.libglom.LayoutGroup getReportLayoutGroup(final String tableName, final String reportName) {
-		final Report report = document.get_report(tableName, reportName);
-		if (report != null) {
-			return report.get_layout_group();
-		} else {
-			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
-			return new org.glom.libglom.LayoutGroup();
-		}
-	}
-
-	/*
 	 * Gets a recursively defined Details LayoutGroup DTO for the specified libglom LayoutGroup object. This is used for
 	 * getting layout information for the details view.
 	 * 

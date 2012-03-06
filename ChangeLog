@@ -1,3 +1,16 @@
+2012-03-06  Murray Cumming  <murrayc@localhost.localdomain>
+
+	ReportGenerator: Take the Report itself instead of the name and group.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	Remove getReportLayoutGroup().
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getReportHTML(): Pass the report instead
+	of its name and layout group.
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	generateReport(): Use the report object to use the title 
+	instead of the name.
+
 2012-03-06  Murray Cumming  <murrayc@murrayc.com>
 
 	ReportGenerator: Remove designBand parameters.

@@ -51,6 +51,7 @@ import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_GroupBy;
 import org.glom.libglom.Relationship;
+import org.glom.libglom.Report;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.SqlBuilder;
@@ -80,16 +81,13 @@ public class ReportGenerator {
 	}
 
 	/**
-	 * @param tableName
-	 * @param reportName
-	 * @param configuredDoc
-	 * @param layout_group
-	 * @return
 	 */
-	public String generateReport(final Document document, final String tableName, final String reportName,
-			final Connection connection, final org.glom.libglom.LayoutGroup layout_group) {
+	public String generateReport(final Document document, final String tableName, final Report report,
+			final Connection connection) {
 
-		design.setName(reportName); // TODO: Actually, we want the title.
+		final org.glom.libglom.LayoutGroup layout_group = report.get_layout_group();
+
+		design.setName(report.get_title(localeID)); // TODO: Actually, we want the title.
 
 		normalStyle.setName("Sans_Normal");
 		normalStyle.setDefault(true);
@@ -110,7 +108,13 @@ public class ReportGenerator {
 		final JRDesignBand titleBand = new JRDesignBand();
 		titleBand.setHeight(height);
 		final JRDesignStaticText staticTitle = new JRDesignStaticText();
-		staticTitle.setText("debug: test report title text");
+		staticTitle.setText(report.get_title(localeID));
+		staticTitle.setY(0);
+		staticTitle.setX(0);
+		staticTitle.setWidth(width * 5); // No data will be shown without this.
+		// staticTitle.setStretchWithOverflow(true);
+		staticTitle.setHeight(height); // We must specify _some_ height.
+		staticTitle.setStyle(boldStyle);
 		titleBand.addElement(staticTitle);
 		design.setTitle(titleBand);
 
@@ -147,9 +151,9 @@ public class ReportGenerator {
 		query.setText(sqlQuery); // TODO: Extra sort clause to sort the rows within the groups.
 		design.setQuery(query);
 
-		JasperReport report;
+		JasperReport jasperreport;
 		try {
-			report = JasperCompileManager.compileReport(design);
+			jasperreport = JasperCompileManager.compileReport(design);
 		} catch (final JRException ex) {
 			ex.printStackTrace();
 			return "Failed to Generate HTML: compileReport() failed.";
@@ -158,8 +162,8 @@ public class ReportGenerator {
 		JasperPrint print;
 		try {
 			final HashMap<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("ReportTitle", reportName); // TODO: Use the title, not the name.
-			print = JasperFillManager.fillReport(report, parameters, connection);
+			parameters.put("ReportTitle", report.get_title(localeID)); // TODO: Use the title, not the name.
+			print = JasperFillManager.fillReport(jasperreport, parameters, connection);
 		} catch (final JRException ex) {
 			ex.printStackTrace();
 			return "Failed to Generate HTML: fillReport() failed.";
@@ -325,8 +329,8 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private int addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand,
-			int x, final LayoutItem_Field libglomLayoutItemField) {
+	private int addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand, int x,
+			final LayoutItem_Field libglomLayoutItemField) {
 		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:

@@ -37,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
+import org.glom.libglom.Report;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
@@ -331,10 +332,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null)
 			return "";
 
+		final Document glomDocument = configuredDoc.getDocument();
+		if (glomDocument == null) {
+			final String errorMessage = "getReportHTML(): getDocument() failed.";
+			Log.fatal(errorMessage);
+			// TODO: throw new Exception(errorMessage);
+			return "";
+		}
+
 		// FIXME check for authentication
 
-		final org.glom.libglom.LayoutGroup layout_group = configuredDoc.getReportLayoutGroup(
-				StringUtils.defaultString(tableName), StringUtils.defaultString(reportName));
+		final Report report = glomDocument.get_report(tableName, reportName);
+		if (report == null) {
+			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
+			return "";
+		}
 
 		Connection connection;
 		try {
@@ -346,7 +358,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		final ReportGenerator generator = new ReportGenerator(StringUtils.defaultString(localeID));
-		return generator.generateReport(configuredDoc.getDocument(), tableName, reportName, connection, layout_group);
+		return generator.generateReport(glomDocument, tableName, report, connection);
 	}
 
 	/*
