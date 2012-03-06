@@ -1,5 +1,14 @@
 2012-03-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportGenerator: Correct the title positions and use some bold style.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Break the code up into reusable functions, correct the placement of 
+	titles, and use normal/bold styles as in the reports in the desktop 
+	version.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Add a header band to show the field titles.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
