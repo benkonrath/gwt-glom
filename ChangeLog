@@ -1,4 +1,8 @@
-2012-03-06  Murray Cumming  <murrayc@localhost.localdomain>
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Put field titles inside groups, if there are groups.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
 
 	ReportGenerator: Take the Report itself instead of the name and group.
 

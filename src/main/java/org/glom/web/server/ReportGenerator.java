@@ -126,7 +126,7 @@ public class ReportGenerator {
 
 		fieldsToGet = new LayoutFieldVector();
 		final int x = 0;
-		addToReport(layout_group, detailBand, headerBand, x);
+		addToReport(layout_group, detailBand, x, headerBand, 0);
 
 		design.setColumnHeader(headerBand);
 		((JRDesignSection) design.getDetailSection()).addBand(detailBand);
@@ -196,10 +196,12 @@ public class ReportGenerator {
 	 * @param layout_group
 	 * @param parentBand
 	 * @param x
+	 * @param fieldTitlesY
+	 *            TODO
 	 * @param height
 	 */
-	private int addToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand,
-			final JRDesignBand headerBand, int x) {
+	private int addToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand, int x,
+			final JRDesignBand headerBand, final int fieldTitlesY) {
 
 		/**
 		 * If this is a vertical group then we will layout the fields out vertically instead of horizontally.
@@ -209,6 +211,10 @@ public class ReportGenerator {
 		 * .cast_dynamic(layout_group); final boolean isVertical = (verticalGroup != null);
 		 */
 
+		// Where we put the field titles depends on whether we are in a group-by:
+		JRDesignBand fieldTitlesBand = headerBand;
+		int thisFieldTitlesY = fieldTitlesY; // If they are in a group title the they must be lower.
+
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -217,7 +223,7 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				x = addFieldToDetailBand(parentBand, headerBand, x, libglomLayoutItemField);
+				x = addFieldToDetailBand(parentBand, headerBand, x, libglomLayoutItemField, thisFieldTitlesY);
 			} else if (libglomLayoutGroup != null) {
 				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 				if (libglomGroupBy != null) {
@@ -251,8 +257,16 @@ public class ReportGenerator {
 
 					// Show the group-by field:
 					final JRDesignBand groupBand = new JRDesignBand();
-					groupBand.setHeight(height);
+
+					// TODO: Use height instead of height*2 if there are no child fields,
+					// for instance if the only child is a sub group-by.
+					groupBand.setHeight(height * 2); // Enough height for the title and the field titles.
 					((JRDesignSection) group.getGroupHeaderSection()).addBand(groupBand);
+
+					// Put the field titles inside the group-by instead of just at the top of the page.
+					// (or instead of just in the parent group-by):
+					fieldTitlesBand = groupBand;
+					thisFieldTitlesY = height;
 
 					/*
 					 * final JRDesignBand footerBand = new JRDesignBand(); footerBand.setHeight(height);
@@ -272,7 +286,7 @@ public class ReportGenerator {
 
 					// TODO: Automatically place it below the text, though that needs us to know how much height the
 					// text really needs.
-					line.setY(height - lineheight - 10);
+					line.setY(height - 15);
 
 					// TODO: Make it as wide as needed by the details band.
 					line.setWidth(groupX);
@@ -281,7 +295,7 @@ public class ReportGenerator {
 				}
 
 				// Recurse into sub-groups:
-				x = addToReport(libglomLayoutGroup, parentBand, headerBand, x);
+				x = addToReport(libglomLayoutGroup, parentBand, x, fieldTitlesBand, thisFieldTitlesY);
 			}
 		}
 
@@ -327,14 +341,17 @@ public class ReportGenerator {
 	 * @param parentBand
 	 * @param x
 	 * @param libglomLayoutItemField
+	 * @param fieldTitlesY
+	 *            TODO
 	 * @return
 	 */
 	private int addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand, int x,
-			final LayoutItem_Field libglomLayoutItemField) {
+			final LayoutItem_Field libglomLayoutItemField, final int fieldTitlesY) {
 		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, libglomLayoutItemField, false);
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, fieldTitlesY, libglomLayoutItemField,
+				false);
 		textFieldColumn.setStyle(boldStyle);
 		headerBand.addElement(textFieldColumn);
 
@@ -351,7 +368,7 @@ public class ReportGenerator {
 		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, libglomLayoutItemField, true);
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, 0, libglomLayoutItemField, true);
 
 		// Instead, the field value will be bold, because here it is like a title.
 		textFieldColumn.setStyle(normalStyle);
@@ -395,11 +412,13 @@ public class ReportGenerator {
 
 	/**
 	 * @param x
+	 * @param y
+	 *            TODO
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private JRDesignStaticText createFieldTitleElement(final int x, final LayoutItem_Field libglomLayoutItemField,
-			final boolean withColon) {
+	private JRDesignStaticText createFieldTitleElement(final int x, final int y,
+			final LayoutItem_Field libglomLayoutItemField, final boolean withColon) {
 		final JRDesignStaticText textFieldColumn = new JRDesignStaticText();
 
 		String title = StringUtils.defaultString(libglomLayoutItemField.get_title(this.localeID));
@@ -409,7 +428,7 @@ public class ReportGenerator {
 			title += ":";
 
 		textFieldColumn.setText(title);
-		textFieldColumn.setY(0);
+		textFieldColumn.setY(y);
 		textFieldColumn.setX(x);
 		textFieldColumn.setWidth(width); // No data will be shown without this.
 		// textFieldColumn.setStretchWithOverflow(true);
