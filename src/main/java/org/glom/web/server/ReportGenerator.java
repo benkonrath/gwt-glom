@@ -73,6 +73,7 @@ public class ReportGenerator {
 	String localeID;
 
 	final JasperDesign design = new JasperDesign();
+	JRDesignStyle titleStyle = new JRDesignStyle();
 	JRDesignStyle normalStyle = new JRDesignStyle();
 	JRDesignStyle boldStyle = new JRDesignStyle();
 
@@ -89,6 +90,9 @@ public class ReportGenerator {
 
 		design.setName(report.get_title(localeID)); // TODO: Actually, we want the title.
 
+		titleStyle.setName("Sans_Title");
+		titleStyle.setFontName("DejaVu Sans");
+		titleStyle.setFontSize(24);
 		normalStyle.setName("Sans_Normal");
 		normalStyle.setDefault(true);
 		normalStyle.setFontName("DejaVu Sans");
@@ -98,6 +102,7 @@ public class ReportGenerator {
 		boldStyle.setFontSize(12);
 		boldStyle.setBold(true);
 		try {
+			design.addStyle(titleStyle);
 			design.addStyle(normalStyle);
 			design.addStyle(boldStyle);
 		} catch (final JRException ex) {
@@ -114,7 +119,7 @@ public class ReportGenerator {
 		staticTitle.setWidth(width * 5); // No data will be shown without this.
 		// staticTitle.setStretchWithOverflow(true);
 		staticTitle.setHeight(height); // We must specify _some_ height.
-		staticTitle.setStyle(boldStyle);
+		staticTitle.setStyle(titleStyle);
 		titleBand.addElement(staticTitle);
 		design.setTitle(titleBand);
 
