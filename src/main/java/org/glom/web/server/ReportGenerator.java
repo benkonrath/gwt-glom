@@ -71,6 +71,7 @@ public class ReportGenerator {
 	SortClause sortClause = new SortClause();
 	String localeID;
 
+	final JasperDesign design = new JasperDesign();
 	JRDesignStyle normalStyle = new JRDesignStyle();
 	JRDesignStyle boldStyle = new JRDesignStyle();
 
@@ -88,7 +89,6 @@ public class ReportGenerator {
 	public String generateReport(final Document document, final String tableName, final String reportName,
 			final Connection connection, final org.glom.libglom.LayoutGroup layout_group) {
 
-		final JasperDesign design = new JasperDesign();
 		design.setName(reportName); // TODO: Actually, we want the title.
 
 		normalStyle.setName("Sans_Normal");
@@ -122,7 +122,7 @@ public class ReportGenerator {
 
 		fieldsToGet = new LayoutFieldVector();
 		final int x = 0;
-		addToReport(layout_group, design, detailBand, headerBand, x);
+		addToReport(layout_group, detailBand, headerBand, x);
 
 		design.setColumnHeader(headerBand);
 		((JRDesignSection) design.getDetailSection()).addBand(detailBand);
@@ -190,13 +190,21 @@ public class ReportGenerator {
 
 	/**
 	 * @param layout_group
-	 * @param design
-	 * @param height
 	 * @param parentBand
 	 * @param x
+	 * @param height
 	 */
-	private int addToReport(final org.glom.libglom.LayoutGroup layout_group, final JasperDesign design,
-			final JRDesignBand parentBand, final JRDesignBand headerBand, int x) {
+	private int addToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand,
+			final JRDesignBand headerBand, int x) {
+
+		/**
+		 * If this is a vertical group then we will layout the fields out vertically instead of horizontally.
+		 */
+		/*
+		 * TODO: final org.glom.libglom.LayoutItem_VerticalGroup verticalGroup = LayoutItem_VerticalGroup
+		 * .cast_dynamic(layout_group); final boolean isVertical = (verticalGroup != null);
+		 */
+
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -205,7 +213,7 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				x = addFieldToDetailBand(design, parentBand, headerBand, x, libglomLayoutItemField);
+				x = addFieldToDetailBand(parentBand, headerBand, x, libglomLayoutItemField);
 			} else if (libglomLayoutGroup != null) {
 				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 				if (libglomGroupBy != null) {
@@ -213,7 +221,7 @@ public class ReportGenerator {
 					if (fieldGroupBy == null)
 						continue;
 
-					final String fieldName = addField(design, fieldGroupBy);
+					final String fieldName = addField(fieldGroupBy);
 
 					// We must sort by the group field,
 					// so that JasperReports can start a new group when its value changes.
@@ -247,12 +255,12 @@ public class ReportGenerator {
 					 * ((JRDesignSection) group.getGroupFooterSection()).addBand(footerBand);
 					 */
 
-					int groupX = addFieldToGroupBand(design, groupBand, x, fieldGroupBy);
+					int groupX = addFieldToGroupBand(groupBand, x, fieldGroupBy);
 
 					// Show the secondary fields:
 					final LayoutGroup groupSecondaries = libglomGroupBy.get_group_secondary_fields();
 					if (groupSecondaries != null)
-						groupX = addSecondaryFieldsToGroupBand(groupSecondaries, design, groupBand, groupX);
+						groupX = addSecondaryFieldsToGroupBand(groupSecondaries, groupBand, groupX);
 
 					final JRDesignLine line = new JRDesignLine();
 					final int lineheight = 1;
@@ -269,7 +277,7 @@ public class ReportGenerator {
 				}
 
 				// Recurse into sub-groups:
-				x = addToReport(libglomLayoutGroup, design, parentBand, headerBand, x);
+				x = addToReport(libglomLayoutGroup, parentBand, headerBand, x);
 			}
 		}
 
@@ -277,7 +285,7 @@ public class ReportGenerator {
 	}
 
 	private int addSecondaryFieldsToGroupBand(final org.glom.libglom.LayoutGroup layout_group,
-			final JasperDesign design, final JRDesignBand groupBand, int x) {
+			final JRDesignBand groupBand, int x) {
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -286,13 +294,13 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				x = addFieldToGroupBand(design, groupBand, x, libglomLayoutItemField);
+				x = addFieldToGroupBand(groupBand, x, libglomLayoutItemField);
 			} else if (libglomLayoutGroup != null) {
 				// We do not expect LayoutItem_GroupBy in the secondary fields:
 				// final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 
 				// Recurse into sub-groups:
-				x = addSecondaryFieldsToGroupBand(libglomLayoutGroup, design, groupBand, x);
+				x = addSecondaryFieldsToGroupBand(libglomLayoutGroup, groupBand, x);
 			}
 		}
 
@@ -312,15 +320,14 @@ public class ReportGenerator {
 	}
 
 	/**
-	 * @param design
 	 * @param parentBand
 	 * @param x
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private int addFieldToDetailBand(final JasperDesign design, final JRDesignBand parentBand,
-			final JRDesignBand headerBand, int x, final LayoutItem_Field libglomLayoutItemField) {
-		final String fieldName = addField(design, libglomLayoutItemField);
+	private int addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand,
+			int x, final LayoutItem_Field libglomLayoutItemField) {
+		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, libglomLayoutItemField, false);
@@ -336,9 +343,8 @@ public class ReportGenerator {
 		return x;
 	}
 
-	private int addFieldToGroupBand(final JasperDesign design, final JRDesignBand parentBand, int x,
-			final LayoutItem_Field libglomLayoutItemField) {
-		final String fieldName = addField(design, libglomLayoutItemField);
+	private int addFieldToGroupBand(final JRDesignBand parentBand, int x, final LayoutItem_Field libglomLayoutItemField) {
+		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, libglomLayoutItemField, true);
@@ -408,11 +414,10 @@ public class ReportGenerator {
 	}
 
 	/**
-	 * @param design
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private String addField(final JasperDesign design, final LayoutItem_Field libglomLayoutItemField) {
+	private String addField(final LayoutItem_Field libglomLayoutItemField) {
 		fieldsToGet.add(libglomLayoutItemField);
 
 		final String fieldName = libglomLayoutItemField.get_name();

@@ -1,5 +1,13 @@
 2012-03-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportGenerator: Remove designBand parameters.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Make designBand a class member instead of passing it to all
+	methods.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Add lines, a bit like in the desktop version.
 
 	* src/main/java/org/glom/web/server/ReportGenerator.java
