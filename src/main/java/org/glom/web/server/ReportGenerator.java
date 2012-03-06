@@ -32,6 +32,7 @@ import net.sf.jasperreports.engine.design.JRDesignBand;
 import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import net.sf.jasperreports.engine.design.JRDesignGroup;
+import net.sf.jasperreports.engine.design.JRDesignLine;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JRDesignSection;
 import net.sf.jasperreports.engine.design.JRDesignStaticText;
@@ -246,12 +247,25 @@ public class ReportGenerator {
 					 * ((JRDesignSection) group.getGroupFooterSection()).addBand(footerBand);
 					 */
 
-					final int groupX = addFieldToGroupBand(design, groupBand, x, fieldGroupBy);
+					int groupX = addFieldToGroupBand(design, groupBand, x, fieldGroupBy);
 
 					// Show the secondary fields:
 					final LayoutGroup groupSecondaries = libglomGroupBy.get_group_secondary_fields();
 					if (groupSecondaries != null)
-						addSecondaryFieldsToGroupBand(groupSecondaries, design, groupBand, groupX);
+						groupX = addSecondaryFieldsToGroupBand(groupSecondaries, design, groupBand, groupX);
+
+					final JRDesignLine line = new JRDesignLine();
+					final int lineheight = 1;
+					line.setX(0);
+
+					// TODO: Automatically place it below the text, though that needs us to know how much height the
+					// text really needs.
+					line.setY(height - lineheight - 10);
+
+					// TODO: Make it as wide as needed by the details band.
+					line.setWidth(groupX);
+					line.setHeight(lineheight);
+					groupBand.addElement(line);
 				}
 
 				// Recurse into sub-groups:
