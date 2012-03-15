@@ -282,7 +282,7 @@ public class ReportGenerator {
 					int groupX = addFieldToGroupBand(groupBand, x, fieldGroupBy);
 
 					// Show the secondary fields:
-					final LayoutGroup groupSecondaries = libglomGroupBy.get_group_secondary_fields();
+					final LayoutGroup groupSecondaries = libglomGroupBy.get_secondary_fields();
 					if (groupSecondaries != null)
 						groupX = addSecondaryFieldsToGroupBand(groupSecondaries, groupBand, groupX);
 
