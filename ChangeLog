@@ -1,5 +1,11 @@
 2012-04-12  Murray Cumming  <murrayc@murrayc.com>
 
+	Use the latest java-libglom version.
+
+	* pom.xml: Use java-libglom 1.21.8.
+
+2012-04-12  Murray Cumming  <murrayc@murrayc.com>
+
 	Translations: Add Esperanto.
 
 	* src/main/java/org/glom/web/OnlineGlom.gwt.xml
