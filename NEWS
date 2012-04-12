@@ -1,3 +1,13 @@
+1.21.8 (unstable):
+
+* Use the latest java-libglom.
+  (Murray Cumming)
+
+1.21.4.* (unstable):
+
+* Many changes that were not noted in NEWS.
+  See the ChangeLog
+
 1.21.1 (unstable):
 
 * The first gwt-glom release.
