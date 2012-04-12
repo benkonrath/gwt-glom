@@ -1,3 +1,9 @@
+2012-04-12  Murray Cumming  <murrayc@murrayc.com>
+
+	Use the latest java-libglom version.
+
+	* pom.xml: Use java-libglom 1.21.8.
+
 2012-03-15  Murray Cumming  <murrayc@murrayc.com>
 
 	Adapt to the java-libglom 1.21.7 API. 
