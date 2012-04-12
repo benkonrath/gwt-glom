@@ -28,7 +28,6 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
-import org.glom.libglom.FieldFormatting;
 import org.glom.libglom.FieldVector;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
@@ -633,7 +632,7 @@ final class ConfiguredDocument {
 		return gnf;
 	}
 
-	private Formatting convertFormatting(final FieldFormatting libglomFormatting) {
+	private Formatting convertFormatting(final org.glom.libglom.Formatting libglomFormatting) {
 		final Formatting formatting = new Formatting();
 
 		// text colour
@@ -665,14 +664,14 @@ final class ConfiguredDocument {
 		layoutItemField.setName(libglomLayoutItemField.get_name());
 
 		// convert formatting
-		final FieldFormatting glomFormatting = libglomLayoutItemField.get_formatting_used();
+		final org.glom.libglom.Formatting glomFormatting = libglomLayoutItemField.get_formatting_used();
 		final Formatting formatting = convertFormatting(glomFormatting);
 
 		// set horizontal alignment
-		final org.glom.libglom.FieldFormatting.HorizontalAlignment libglomHorizontalAlignment = libglomLayoutItemField
+		final org.glom.libglom.Formatting.HorizontalAlignment libglomHorizontalAlignment = libglomLayoutItemField
 				.get_formatting_used_horizontal_alignment(forDetailsView); // only returns LEFT or RIGHT
 		Formatting.HorizontalAlignment horizontalAlignment;
-		if (libglomHorizontalAlignment == org.glom.libglom.FieldFormatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT) {
+		if (libglomHorizontalAlignment == org.glom.libglom.Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT) {
 			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT;
 		} else {
 			horizontalAlignment = Formatting.HorizontalAlignment.HORIZONTAL_ALIGNMENT_RIGHT;
@@ -691,7 +690,7 @@ final class ConfiguredDocument {
 	/*
 	 * This method converts a Field.glom_field_type to the equivalent ColumnInfo.FieldType. The need for this comes from
 	 * the fact that the GWT FieldType classes can't be used with RPC and there's no easy way to use the java-libglom
-	 * Field.glom_field_type enum with RPC. An enum identical to FieldFormatting.glom_field_type is included in the
+	 * Field.glom_field_type enum with RPC. An enum identical to Formatting.glom_field_type is included in the
 	 * ColumnInfo class.
 	 */
 	private LayoutItemField.GlomFieldType convertToGWTGlomFieldType(final Field.glom_field_type type) {

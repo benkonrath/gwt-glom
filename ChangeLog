@@ -1,5 +1,12 @@
 2012-04-12  Murray Cumming  <murrayc@murrayc.com>
 
+	Adapt to the java-libglom 1.21.8 API.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	java-libglom's FieldFormatting is now Formatting.
+
+2012-04-12  Murray Cumming  <murrayc@murrayc.com>
+
 	Use the latest java-libglom version.
 
 	* pom.xml: Use java-libglom 1.21.8.
