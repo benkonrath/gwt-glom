@@ -1,3 +1,11 @@
+2012-04-12  Murray Cumming  <murrayc@murrayc.com>
+
+	Translations: Add Esperanto.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_eo.
+	properties: Add this translation because someone took the time to make it.
+
 2012-03-15  Murray Cumming  <murrayc@murrayc.com>
 
 	Use the latest java-libglom version.

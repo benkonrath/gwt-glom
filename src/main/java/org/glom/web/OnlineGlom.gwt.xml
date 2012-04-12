@@ -30,6 +30,7 @@
 	<inherits name="com.google.gwt.i18n.I18N"/>
 	<extend-property name="locale" values="cs"/>
 	<extend-property name="locale" values="en"/>
+	<extend-property name="locale" values="eo"/>
 	<extend-property name="locale" values="de"/>
 	<extend-property name="locale" values="es"/>
 	<extend-property name="locale" values="sl"/>
