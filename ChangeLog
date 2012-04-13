@@ -1,5 +1,13 @@
 2012-04-13  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportGenerator: Try to avoid some problems.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	addField(): Try to avoid duplicates, and avoid using a null
+	class type.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
 	Reports: Use quickFind.
 
 	* src/main/java/org/glom/web/client/OnlineGlomService.java;

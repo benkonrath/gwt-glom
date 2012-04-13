@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
 import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
+import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroup;
@@ -146,11 +147,16 @@ public class ReportGenerator {
 			final Value quickFindValue = new Value(quickFind);
 			whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
 		}
-
-		final Relationship extraJoin = new Relationship(); // Ignored.
-		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
+		
+		String sqlQuery = "";
+		if(!fieldsToGet.isEmpty()) {
+			final Relationship extraJoin = new Relationship(); // Ignored.
+			final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
 				extraJoin, sortClause);
-		final String sqlQuery = Glom.sqlbuilder_get_full_query(builder);
+			sqlQuery = Glom.sqlbuilder_get_full_query(builder);
+		} else {
+			Log.info("generateReport(): fieldsToGet is empty.");
+		}
 
 		final JRDesignQuery query = new JRDesignQuery();
 		query.setText(sqlQuery); // TODO: Extra sort clause to sort the rows within the groups.
@@ -237,6 +243,9 @@ public class ReportGenerator {
 						continue;
 
 					final String fieldName = addField(fieldGroupBy);
+					if(StringUtils.isEmpty(fieldName)) {
+						continue;
+					}
 
 					// We must sort by the group field,
 					// so that JasperReports can start a new group when its value changes.
@@ -446,16 +455,38 @@ public class ReportGenerator {
 	 * @return
 	 */
 	private String addField(final LayoutItem_Field libglomLayoutItemField) {
-		fieldsToGet.add(libglomLayoutItemField);
 
 		final String fieldName = libglomLayoutItemField.get_name();
+		
+		// Avoid an unnamed field:
+		if(StringUtils.isEmpty(fieldName)) {
+			Log.info("addField(): Ignoring LayoutItem_Field with no field name");
+			return fieldName;
+		}
+		
+		// Avoid adding duplicate fields,
+		// because JasperDesign.addField() throws a "Duplicate declaration of field" exception.
+		for(int i = 0; i < fieldsToGet.size(); ++ i) {
+			final LayoutItem_Field thisField = fieldsToGet.get(i);
+			if(thisField.equals(libglomLayoutItemField))
+				return fieldName;
+		}
+
+		fieldsToGet.add(libglomLayoutItemField);
+
 		// System.out.print("fieldName=" + fieldName + "\n");
 
 		// Tell the JasperDesign about the database field that will be in the SQL query,
 		// specified later:
 		final JRDesignField field = new JRDesignField();
 		field.setName(fieldName); // TODO: Related fields.
-		field.setValueClass(getClassTypeForGlomType(libglomLayoutItemField));
+		
+		Class<?> klass = getClassTypeForGlomType(libglomLayoutItemField);
+		if(klass != null) {
+			field.setValueClass(klass);
+		} else {
+			Log.info("getClassTypeForGlomType() returned null");
+		}
 
 		try {
 			design.addField(field);
@@ -473,7 +504,9 @@ public class ReportGenerator {
 	private Class<?> getClassTypeForGlomType(final LayoutItem_Field libglomLayoutItemField) {
 		// Choose a suitable java class type for the SQL field:
 		Class<?> klass = null;
-		switch (libglomLayoutItemField.get_glom_type()) {
+
+		glom_field_type glom_type = libglomLayoutItemField.get_glom_type();
+		switch (glom_type) {
 		case TYPE_TEXT:
 			klass = java.lang.String.class;
 			break;
@@ -491,6 +524,11 @@ public class ReportGenerator {
 			break;
 		case TYPE_IMAGE:
 			klass = java.sql.Blob.class; // TODO: This does not work.
+			break;
+		case TYPE_INVALID:
+			Log.info("getClassTypeForGlomType() returning null for TYPE_INVALID glom type. Field name=" + libglomLayoutItemField.get_layout_display_name());
+		default:
+			Log.info("getClassTypeForGlomType() returning null for glom type: " + glom_type + ". Field name=" + libglomLayoutItemField.get_layout_display_name());
 			break;
 		}
 		return klass;
