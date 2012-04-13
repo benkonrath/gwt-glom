@@ -1,5 +1,12 @@
 2012-04-13  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportPlace: Actually use the report name.
+
+	* src/main/java/org/glom/web/client/place/ReportPlace.java
+	getPlace(): Do not assign the report name to the quickfind.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
 	Show java.library.path when complaining.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
