@@ -1,5 +1,18 @@
 2012-04-13  Murray Cumming  <murrayc@murrayc.com>
 
+	Reports: Use quickFind.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java;
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	getReportHTML(): Add a quickFind parameter.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Pass the quickFind parameter.
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	generateReport(): Take a quickFind parameter.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportPlace: Actually use the report name.
 
 	* src/main/java/org/glom/web/client/place/ReportPlace.java

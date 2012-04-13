@@ -327,7 +327,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String)
 	 */
 	@Override
-	public String getReportHTML(final String documentID, final String tableName, final String reportName,
+	public String getReportHTML(final String documentID, final String tableName, final String reportName, final String quickFind, 
 			final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null)
@@ -358,8 +358,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return "Connection Failed";
 		}
 
+		// TODO: Use quickFind
 		final ReportGenerator generator = new ReportGenerator(StringUtils.defaultString(localeID));
-		return generator.generateReport(glomDocument, tableName, report, connection);
+		return generator.generateReport(glomDocument, tableName, report, connection, quickFind);
 	}
 
 	/*

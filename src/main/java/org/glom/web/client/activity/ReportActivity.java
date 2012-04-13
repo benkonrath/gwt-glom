@@ -105,7 +105,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		tableSelectionView.setSelectedReport(reportName);
 
 		final String localeID = Utils.getCurrentLocaleID();
-		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, localeID, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, quickFind, localeID, callback);
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(reportView.asWidget());

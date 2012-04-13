@@ -84,7 +84,7 @@ public class ReportGenerator {
 	/**
 	 */
 	public String generateReport(final Document document, final String tableName, final Report report,
-			final Connection connection) {
+			final Connection connection, final String quickFind) {
 
 		final org.glom.libglom.LayoutGroup layout_group = report.get_layout_group();
 
@@ -139,7 +139,6 @@ public class ReportGenerator {
 
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
 		// but let's be sure:
-		final String quickFind = ""; // TODO
 		SqlExpr whereClause;
 		if (StringUtils.isEmpty(quickFind)) {
 			whereClause = new SqlExpr();
