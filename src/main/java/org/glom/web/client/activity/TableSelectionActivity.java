@@ -58,6 +58,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String documentTitle;
 	private String tableName;
 	private String quickFind;
+	private String reportName;
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
 	private HandlerRegistration localeChangeHandlerRegistration = null;
@@ -183,6 +184,10 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			@Override
 			public void onSuccess(final Reports result) {
 				tableSelectionView.setReportList(result);
+				
+				// Show the selected report name again:
+				// TODO: Avoid duplication in ReportActivity.
+				tableSelectionView.setSelectedReport(reportName);
 			}
 		};
 		OnlineGlomServiceAsync.Util.getInstance().getReportsList(documentID, tableName, localeID, callback_report);
@@ -212,6 +217,10 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			tableSelectionView.setBackLink(documentID, tableName, ""); // TODO: quickfind?
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
+		}
+		
+		if (place instanceof ReportPlace) {
+			reportName = ((ReportPlace)place).getReportName();
 		}
 
 		fillView(tableSelectionView);

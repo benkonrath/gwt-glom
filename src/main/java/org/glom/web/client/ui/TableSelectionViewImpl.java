@@ -21,6 +21,7 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.shared.Reports;
 
@@ -225,6 +226,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedLocale(final String localeID) {
+		if(StringUtils.isEmpty(localeID)) {
+			//TODO: Make sure none are selected: localesChooser.setSelectedIndex();
+			return;
+		}
+		
 		for (int i = 0; i < localesChooser.getItemCount(); i++) {
 			if (localeID.equals(localesChooser.getValue(i))) {
 				localesChooser.setSelectedIndex(i);
@@ -247,6 +253,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedReport(final String reportName) {
+		if(StringUtils.isEmpty(reportName)) {
+			//TODO: Make sure none are selected: reportsChooser.setSelectedIndex();
+			return;
+		}
+		
 		for (int i = 0; i < reportsChooser.getItemCount(); i++) {
 			if (reportName.equals(reportsChooser.getValue(i))) {
 				reportsChooser.setSelectedIndex(i);

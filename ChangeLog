@@ -1,5 +1,17 @@
 2012-04-13  Murray Cumming  <murrayc@murrayc.com>
 
+	Really show the selected Report name.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity:
+	setPlace(): Store the reportName here, if it is that kind of Place.
+	fillView(): Set the selected Report after filling the list of reports.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	setSelectedLocale(), setSelectedReport(): Avoid possible uses of
+	null Strings, though we need some way to unselect all ListBox items
+	in that case.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Try to avoid some problems.
 
 	* src/main/java/org/glom/web/server/ReportGenerator.java
