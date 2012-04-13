@@ -138,7 +138,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// Check to see if the native library of java libglom is visible to the JVM
 			if (!isNativeLibraryVisibleToJVM()) {
 				final String errorMessage = "The java-libglom shared library is not visible to the JVM."
-						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.";
+						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library."
+						+ "\n: java.library.path: " + System.getProperty("java.library.path");
 				Log.error(errorMessage);
 				throw new Exception(errorMessage);
 			}

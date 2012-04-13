@@ -1,3 +1,11 @@
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
+	Show java.library.path when complaining.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	init(): When telling us to check java.library.path, show the
+	current value.
+
 2012-04-12  Murray Cumming  <murrayc@murrayc.com>
 
 	Adapt to the java-libglom 1.21.8 API.
