@@ -48,12 +48,11 @@ public class ReportViewImpl extends Composite implements ReportView {
 	 */
 	@Override
 	public void clear() {
-		mainPanel.clear();
+		htmlWidget.setHTML("");
 	}
 
 	@Override
 	public void setReportHTML(final String html) {
-
 		htmlWidget.setHTML(html); // TODO: Use SafeHTML?
 	}
 }
