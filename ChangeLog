@@ -1,5 +1,14 @@
 2012-04-17  Murray Cumming  <murrayc@murrayc.com>
 
+	Locales drop-down: Show that we use English by default.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	fillView(): When we use English, just because that is the default, when
+	no locale is specified, show that in the Locales drop-down instead of 
+	just showing the first item.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
 	Unselect the Report/Locale/Table combo item when appropriate.
 
 	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:

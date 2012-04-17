@@ -169,14 +169,23 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
 
-				final String localeID = Utils.getCurrentLocaleID();
-				tableSelectionView.setSelectedLocale(localeID);
+				//Show what locale is currently being used:
+				String localeIDForCombo = Utils.getCurrentLocaleID();
+				
+				//Indicate that we use English if no other locale has been specified by either
+				//the URL or the configuration.
+				//Alternatively we could also show the locale in the URL, even if it is en.
+				if(StringUtils.isEmpty(localeIDForCombo)) {
+					localeIDForCombo = "en";
+				}
+				tableSelectionView.setSelectedLocale(localeIDForCombo);
 
 				documentTitle = result.getTitle();
 				tableSelectionView.setDocumentTitle(documentTitle);
 				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		};
+
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
 
