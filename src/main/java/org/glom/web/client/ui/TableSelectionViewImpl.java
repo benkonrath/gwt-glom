@@ -128,6 +128,16 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedTableName(final String tableName) {
+		if(StringUtils.isEmpty(tableName)) {
+			//Make sure none are selected:
+			//TODO: Find a better way to do this.
+			for (int i = 0; i < tablesChooser.getItemCount(); i++) {
+				tablesChooser.setItemSelected(i, false);
+			}
+
+			return;
+		}
+		
 		for (int i = 0; i < tablesChooser.getItemCount(); i++) {
 			if (tableName.equals(tablesChooser.getValue(i))) {
 				tablesChooser.setSelectedIndex(i);
@@ -227,7 +237,12 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	@Override
 	public void setSelectedLocale(final String localeID) {
 		if(StringUtils.isEmpty(localeID)) {
-			//TODO: Make sure none are selected: localesChooser.setSelectedIndex();
+			//Make sure none are selected:
+			//TODO: Find a better way to do this.
+			for (int i = 0; i < localesChooser.getItemCount(); i++) {
+				localesChooser.setItemSelected(i, false);
+			}
+
 			return;
 		}
 		
@@ -254,7 +269,12 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	@Override
 	public void setSelectedReport(final String reportName) {
 		if(StringUtils.isEmpty(reportName)) {
-			//TODO: Make sure none are selected: reportsChooser.setSelectedIndex();
+			//Make sure none are selected:
+			//TODO: Find a better way to do this.
+			for (int i = 0; i < reportsChooser.getItemCount(); i++) {
+				reportsChooser.setItemSelected(i, false);
+			}
+
 			return;
 		}
 		

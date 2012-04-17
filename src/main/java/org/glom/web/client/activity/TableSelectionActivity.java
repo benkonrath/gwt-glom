@@ -226,6 +226,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			tableSelectionView.setBackLinkVisible(false);
 		}
 		
+		reportName = "";
 		if (place instanceof ReportPlace) {
 			reportName = ((ReportPlace)place).getReportName();
 		}

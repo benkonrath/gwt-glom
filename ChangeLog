@@ -1,5 +1,17 @@
 2012-04-17  Murray Cumming  <murrayc@murrayc.com>
 
+	Unselect the Report/Locale/Table combo item when appropriate.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	setPlace(): clear reportName if this is not a ReportPlace.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	setSelectedTableName(), setSelectedLocale(), setSelectedReport():
+	When the provided name is empty, unselect all items, so that none are
+	indicated. This uses a for loop because I cannot find a single method
+	to do this.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
 	Report: Give the user a way to get back to the list.
 
 	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
