@@ -1,5 +1,13 @@
 2012-04-17  Murray Cumming  <murrayc@murrayc.com>
 
+	Report: Give the user a way to get back to the list.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	start(), setPlace(): Show the Back To List link on reports, and also 
+	interpret selecting the empty report item as back to list.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
 	Style: Remove overflow:hidden from searchbox
 
 	* src/main/webapp/style.css: Because this pushes the Back To Link

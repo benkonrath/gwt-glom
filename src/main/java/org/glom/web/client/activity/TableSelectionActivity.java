@@ -131,7 +131,14 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		reportChangeHandlerRegistration = reportSelector.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(final ChangeEvent event) {
-				goTo(new ReportPlace(documentID, tableName, tableSelectionView.getSelectedReport(), quickFind));
+				final String reportName = tableSelectionView.getSelectedReport();
+				if(StringUtils.isEmpty(reportName)) {
+					// Interpret selecting no report as requesting the list view.
+					goTo(new ListPlace(documentID, tableName, quickFind));
+				} else {
+					// Show the selected report:
+					goTo(new ReportPlace(documentID, tableName, reportName, quickFind));
+				}
 			}
 		});
 
@@ -211,8 +218,8 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
-		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
-		if (place instanceof DetailsPlace) {
+		// Show the 'back to list' link if we're at a DetailsPlace or a ReportPlace.
+		if (place instanceof DetailsPlace || place instanceof ReportPlace) {
 			tableSelectionView.setBackLinkVisible(true);
 			tableSelectionView.setBackLink(documentID, tableName, ""); // TODO: quickfind?
 		} else if (place instanceof ListPlace) {
