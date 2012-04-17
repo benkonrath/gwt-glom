@@ -1,3 +1,11 @@
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Style: Remove overflow:hidden from searchbox
+
+	* src/main/webapp/style.css: Because this pushes the Back To Link
+	label/link on to the next row, which is then hidden due to the 
+	hard-coded (in ems) height.
+
 2012-04-13  Murray Cumming  <murrayc@murrayc.com>
 
 	Really show the selected Report name.
