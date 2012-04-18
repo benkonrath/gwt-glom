@@ -448,7 +448,7 @@ public class ReportGenerator {
 		
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos_result, libglomLayoutItemField,
-				false);
+				true);
 		textFieldColumn.setStyle(boldStyle);
 		parentBand.addElement(textFieldColumn);
 		pos_result.x += width;
