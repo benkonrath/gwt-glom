@@ -92,7 +92,7 @@ public class ReportGenerator {
 	final JasperDesign design = new JasperDesign();
 	JRDesignStyle titleStyle = new JRDesignStyle();
 	JRDesignStyle normalStyle = new JRDesignStyle();
-	JRDesignStyle boldStyle = new JRDesignStyle();
+	JRDesignStyle fieldTitleStyle = new JRDesignStyle();
 
 	ReportGenerator(final String localeID) {
 		this.localeID = StringUtils.defaultString(localeID);
@@ -115,14 +115,14 @@ public class ReportGenerator {
 		normalStyle.setFontName("DejaVu Sans");
 		normalStyle.setFontSize(12);
 		normalStyle.setBlankWhenNull(true); // Avoid "null" appearing in reports.
-		boldStyle.setName("Sans_Bold");
-		boldStyle.setFontName("DejaVu Sans");
-		boldStyle.setFontSize(12);
-		boldStyle.setBold(true);
+		fieldTitleStyle.setName("Sans_Bold");
+		fieldTitleStyle.setFontName("DejaVu Sans");
+		fieldTitleStyle.setFontSize(12);
+		fieldTitleStyle.setBold(true);
 		try {
 			design.addStyle(titleStyle);
 			design.addStyle(normalStyle);
-			design.addStyle(boldStyle);
+			design.addStyle(fieldTitleStyle);
 		} catch (final JRException ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
@@ -417,7 +417,7 @@ public class ReportGenerator {
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(new Position(x, fieldTitlesY), libglomLayoutItemField,
 				false);
-		textFieldColumn.setStyle(boldStyle);
+		textFieldColumn.setStyle(fieldTitleStyle);
 		headerBand.addElement(textFieldColumn);
 
 		// Show an instance of the field (the field value):
@@ -449,7 +449,7 @@ public class ReportGenerator {
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos_result, libglomLayoutItemField,
 				true);
-		textFieldColumn.setStyle(boldStyle);
+		textFieldColumn.setStyle(fieldTitleStyle);
 		parentBand.addElement(textFieldColumn);
 		pos_result.x += width;
 
@@ -482,7 +482,7 @@ public class ReportGenerator {
 		// Show an instance of the field (the field value):
 		final JRDesignTextField textField = createFieldValueElement(pos, fieldName);
 		parentBand.addElement(textField);
-		textField.setStyle(boldStyle);
+		textField.setStyle(fieldTitleStyle);
 
 		pos.x += width;
 		return pos.x;
