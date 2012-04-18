@@ -119,6 +119,8 @@ public class ReportGenerator {
 		fieldTitleStyle.setFontName("DejaVu Sans");
 		fieldTitleStyle.setFontSize(12);
 		fieldTitleStyle.setBold(true);
+		fieldTitleStyle.setBlankWhenNull(true); // Avoid "null" appearing in reports when this is used for a GroupBy
+												// title.
 		try {
 			design.addStyle(titleStyle);
 			design.addStyle(normalStyle);

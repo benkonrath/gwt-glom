@@ -1,5 +1,14 @@
 2012-04-18  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportGenerator: Avoid showing null for group by titles.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	generateReport(): Use setBlankWhenNull() on the field title
+	style too, because this is used for values in group by
+	sections.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Add a colon to titles in vertical groups.
 
 	* src/main/java/org/glom/web/server/ReportGenerator.java
