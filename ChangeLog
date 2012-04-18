@@ -1,3 +1,13 @@
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports: Support vertical groups, roughly.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	addToReport(): Rename to addGroupToReport() and, if necessary,
+	call the new addVerticalGroupToReport() method.
+	createFieldValueElement(): Let the caller specify the Y position
+	too.
+
 2012-04-17  Murray Cumming  <murrayc@murrayc.com>
 
 	Reports: Allow a second report to be shown.
