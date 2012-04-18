@@ -65,13 +65,13 @@ import org.glom.libglom.Value;
  * 
  */
 public class ReportGenerator {
-	
+
 	private class Position {
 		public Position(final int x, final int y) {
 			this.x = x;
 			this.y = y;
 		}
-		
+
 		public Position(final Position pos) {
 			this.x = pos.x;
 			this.y = pos.y;
@@ -165,12 +165,12 @@ public class ReportGenerator {
 			final Value quickFindValue = new Value(quickFind);
 			whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
 		}
-		
+
 		String sqlQuery = "";
-		if(!fieldsToGet.isEmpty()) {
+		if (!fieldsToGet.isEmpty()) {
 			final Relationship extraJoin = new Relationship(); // Ignored.
 			final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
-				extraJoin, sortClause);
+					extraJoin, sortClause);
 			sqlQuery = Glom.sqlbuilder_get_full_query(builder);
 		} else {
 			Log.info("generateReport(): fieldsToGet is empty.");
@@ -221,7 +221,9 @@ public class ReportGenerator {
 		return output.toString();
 	}
 
-	/** A  vertical group lays the fields out vertically instead of horizontally, with titles to the left.
+	/**
+	 * A vertical group lays the fields out vertically instead of horizontally, with titles to the left.
+	 * 
 	 * @param layout_group
 	 * @param parentBand
 	 * @param x
@@ -229,9 +231,10 @@ public class ReportGenerator {
 	 *            TODO
 	 * @param height
 	 */
-	private Position addVerticalGroupToReport(final org.glom.libglom.LayoutItem_VerticalGroup layout_group, final JRDesignBand parentBand, final Position pos) {
+	private Position addVerticalGroupToReport(final org.glom.libglom.LayoutItem_VerticalGroup layout_group,
+			final JRDesignBand parentBand, final Position pos) {
 		Position pos_result = new Position(pos);
-		
+
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -242,18 +245,18 @@ public class ReportGenerator {
 				pos_result = addFieldToDetailBandVertical(parentBand, pos_result, libglomLayoutItemField);
 				pos_result.x = pos.x;
 			} else {
-				
-			    // TODO: Handle other item types.
+
+				// TODO: Handle other item types.
 
 				// Recurse into sub-groups:
-				//TODO: x = addGroupToReport(libglomLayoutGroup, parentBand, x, fieldTitlesBand, thisFieldTitlesY);
+				// TODO: x = addGroupToReport(libglomLayoutGroup, parentBand, x, fieldTitlesBand, thisFieldTitlesY);
 			}
 		}
 
 		pos_result.x += width * 2;
 		return pos_result;
 	}
-	
+
 	/**
 	 * @param layout_group
 	 * @param parentBand
@@ -262,19 +265,20 @@ public class ReportGenerator {
 	 *            TODO
 	 * @param height
 	 */
-	private Position addGroupToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand, int x,
-			final JRDesignBand headerBand, final int fieldTitlesY) {
+	private Position addGroupToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand,
+			final int x, final JRDesignBand headerBand, final int fieldTitlesY) {
 
 		Position pos_result = new Position(x, 0);
-		
-		/** * If this is a vertical group then we will lay the fields out vertically instead of horizontally.
+
+		/**
+		 * * If this is a vertical group then we will lay the fields out vertically instead of horizontally.
 		 */
-		final org.glom.libglom.LayoutItem_VerticalGroup verticalGroup = LayoutItem_VerticalGroup.cast_dynamic(layout_group);
-		if(verticalGroup != null)
-		{
+		final org.glom.libglom.LayoutItem_VerticalGroup verticalGroup = LayoutItem_VerticalGroup
+				.cast_dynamic(layout_group);
+		if (verticalGroup != null) {
 			return addVerticalGroupToReport(verticalGroup, parentBand, pos_result);
 		}
-		
+
 		// Where we put the field titles depends on whether we are in a group-by:
 		JRDesignBand fieldTitlesBand = headerBand;
 		int thisFieldTitlesY = fieldTitlesY; // If they are in a group title then they must be lower.
@@ -287,7 +291,8 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				pos_result = addFieldToDetailBand(parentBand, headerBand, pos_result.x, libglomLayoutItemField, thisFieldTitlesY, pos_result.y);
+				pos_result = addFieldToDetailBand(parentBand, headerBand, pos_result.x, libglomLayoutItemField,
+						thisFieldTitlesY, pos_result.y);
 			} else if (libglomLayoutGroup != null) {
 				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 				if (libglomGroupBy != null) {
@@ -296,7 +301,7 @@ public class ReportGenerator {
 						continue;
 
 					final String fieldName = addField(fieldGroupBy);
-					if(StringUtils.isEmpty(fieldName)) {
+					if (StringUtils.isEmpty(fieldName)) {
 						continue;
 					}
 
@@ -362,7 +367,8 @@ public class ReportGenerator {
 				}
 
 				// Recurse into sub-groups:
-				pos_result = addGroupToReport(libglomLayoutGroup, parentBand, pos_result.x, fieldTitlesBand, thisFieldTitlesY);
+				pos_result = addGroupToReport(libglomLayoutGroup, parentBand, pos_result.x, fieldTitlesBand,
+						thisFieldTitlesY);
 			}
 		}
 
@@ -417,8 +423,8 @@ public class ReportGenerator {
 		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(new Position(x, fieldTitlesY), libglomLayoutItemField,
-				false);
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(new Position(x, fieldTitlesY),
+				libglomLayoutItemField, false);
 		textFieldColumn.setStyle(fieldTitleStyle);
 		headerBand.addElement(textFieldColumn);
 
@@ -429,7 +435,7 @@ public class ReportGenerator {
 
 		return new Position(x + width, 0);
 	}
-	
+
 	/**
 	 * @param parentBand
 	 * @param x
@@ -438,19 +444,18 @@ public class ReportGenerator {
 	 *            TODO
 	 * @return
 	 */
-	private Position addFieldToDetailBandVertical(final JRDesignBand parentBand, Position pos,
+	private Position addFieldToDetailBandVertical(final JRDesignBand parentBand, final Position pos,
 			final LayoutItem_Field libglomLayoutItemField) {
 		final String fieldName = addField(libglomLayoutItemField);
 
-		Position pos_result = new Position(pos);
-		
+		final Position pos_result = new Position(pos);
+
 		// Make the band high enough if necessary:
-		if(parentBand.getHeight() < (pos_result.y + height))
+		if (parentBand.getHeight() < (pos_result.y + height))
 			parentBand.setHeight(pos_result.y + height + 20);
-		
+
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos_result, libglomLayoutItemField,
-				true);
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos_result, libglomLayoutItemField, true);
 		textFieldColumn.setStyle(fieldTitleStyle);
 		parentBand.addElement(textFieldColumn);
 		pos_result.x += width;
@@ -461,17 +466,18 @@ public class ReportGenerator {
 		parentBand.addElement(textField);
 
 		pos_result.x += width;
-		
+
 		pos_result.y += height;
 
 		return pos_result;
 	}
 
-	private int addFieldToGroupBand(final JRDesignBand parentBand, int x, final LayoutItem_Field libglomLayoutItemField) {
+	private int addFieldToGroupBand(final JRDesignBand parentBand, final int x,
+			final LayoutItem_Field libglomLayoutItemField) {
 		final String fieldName = addField(libglomLayoutItemField);
 
-		Position pos = new Position(x, 0);
-		
+		final Position pos = new Position(x, 0);
+
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos, libglomLayoutItemField, true);
 
@@ -548,18 +554,18 @@ public class ReportGenerator {
 	private String addField(final LayoutItem_Field libglomLayoutItemField) {
 
 		final String fieldName = libglomLayoutItemField.get_name();
-		
+
 		// Avoid an unnamed field:
-		if(StringUtils.isEmpty(fieldName)) {
+		if (StringUtils.isEmpty(fieldName)) {
 			Log.info("addField(): Ignoring LayoutItem_Field with no field name");
 			return fieldName;
 		}
-		
+
 		// Avoid adding duplicate fields,
 		// because JasperDesign.addField() throws a "Duplicate declaration of field" exception.
-		for(int i = 0; i < fieldsToGet.size(); ++ i) {
+		for (int i = 0; i < fieldsToGet.size(); ++i) {
 			final LayoutItem_Field thisField = fieldsToGet.get(i);
-			if(thisField.equals(libglomLayoutItemField))
+			if (thisField.equals(libglomLayoutItemField))
 				return fieldName;
 		}
 
@@ -571,9 +577,9 @@ public class ReportGenerator {
 		// specified later:
 		final JRDesignField field = new JRDesignField();
 		field.setName(fieldName); // TODO: Related fields.
-		
-		Class<?> klass = getClassTypeForGlomType(libglomLayoutItemField);
-		if(klass != null) {
+
+		final Class<?> klass = getClassTypeForGlomType(libglomLayoutItemField);
+		if (klass != null) {
 			field.setValueClass(klass);
 		} else {
 			Log.info("getClassTypeForGlomType() returned null");
@@ -596,7 +602,7 @@ public class ReportGenerator {
 		// Choose a suitable java class type for the SQL field:
 		Class<?> klass = null;
 
-		glom_field_type glom_type = libglomLayoutItemField.get_glom_type();
+		final glom_field_type glom_type = libglomLayoutItemField.get_glom_type();
 		switch (glom_type) {
 		case TYPE_TEXT:
 			klass = java.lang.String.class;
@@ -617,9 +623,11 @@ public class ReportGenerator {
 			klass = java.sql.Blob.class; // TODO: This does not work.
 			break;
 		case TYPE_INVALID:
-			Log.info("getClassTypeForGlomType() returning null for TYPE_INVALID glom type. Field name=" + libglomLayoutItemField.get_layout_display_name());
+			Log.info("getClassTypeForGlomType() returning null for TYPE_INVALID glom type. Field name="
+					+ libglomLayoutItemField.get_layout_display_name());
 		default:
-			Log.info("getClassTypeForGlomType() returning null for glom type: " + glom_type + ". Field name=" + libglomLayoutItemField.get_layout_display_name());
+			Log.info("getClassTypeForGlomType() returning null for glom type: " + glom_type + ". Field name="
+					+ libglomLayoutItemField.get_layout_display_name());
 			break;
 		}
 		return klass;
