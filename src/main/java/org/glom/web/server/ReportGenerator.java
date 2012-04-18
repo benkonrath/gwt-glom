@@ -21,6 +21,7 @@ package org.glom.web.server;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import net.sf.jasperreports.engine.JRException;
@@ -45,6 +46,7 @@ import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field.glom_field_type;
+import org.glom.libglom.Formatting;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroup;
@@ -52,6 +54,7 @@ import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_GroupBy;
 import org.glom.libglom.LayoutItem_VerticalGroup;
+import org.glom.libglom.NumericFormat;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.Report;
 import org.glom.libglom.SortClause;
@@ -317,7 +320,7 @@ public class ReportGenerator {
 					group.setName(fieldName);
 
 					// Show the field value:
-					final JRDesignExpression expression = createFieldExpression(fieldName);
+					final JRDesignExpression expression = createFieldExpression(fieldGroupBy);
 					group.setExpression(expression);
 
 					try {
@@ -399,11 +402,13 @@ public class ReportGenerator {
 	}
 
 	/**
-	 * @param fieldName
+	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private JRDesignExpression createFieldExpression(final String fieldName) {
+	private JRDesignExpression createFieldExpression(final LayoutItem_Field libglomLayoutItemField) {
 		final JRDesignExpression expression = new JRDesignExpression();
+
+		final String fieldName = libglomLayoutItemField.get_name(); // TODO: Is this enough for related fields?
 
 		// TODO: Where is this format documented?
 		expression.setText("$F{" + fieldName + "}");
@@ -420,7 +425,7 @@ public class ReportGenerator {
 	 */
 	private Position addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand, final int x,
 			final LayoutItem_Field libglomLayoutItemField, final int fieldTitlesY, final int fieldY) {
-		final String fieldName = addField(libglomLayoutItemField);
+		addField(libglomLayoutItemField);
 
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(new Position(x, fieldTitlesY),
@@ -429,7 +434,7 @@ public class ReportGenerator {
 		headerBand.addElement(textFieldColumn);
 
 		// Show an instance of the field (the field value):
-		final JRDesignTextField textField = createFieldValueElement(new Position(x, 0), fieldName);
+		final JRDesignTextField textField = createFieldValueElement(new Position(x, 0), libglomLayoutItemField);
 		textField.setStyle(normalStyle);
 		parentBand.addElement(textField);
 
@@ -446,7 +451,7 @@ public class ReportGenerator {
 	 */
 	private Position addFieldToDetailBandVertical(final JRDesignBand parentBand, final Position pos,
 			final LayoutItem_Field libglomLayoutItemField) {
-		final String fieldName = addField(libglomLayoutItemField);
+		addField(libglomLayoutItemField);
 
 		final Position pos_result = new Position(pos);
 
@@ -461,7 +466,7 @@ public class ReportGenerator {
 		pos_result.x += width;
 
 		// Show an instance of the field (the field value):
-		final JRDesignTextField textField = createFieldValueElement(pos_result, fieldName);
+		final JRDesignTextField textField = createFieldValueElement(pos_result, libglomLayoutItemField);
 		textField.setStyle(normalStyle);
 		parentBand.addElement(textField);
 
@@ -474,7 +479,7 @@ public class ReportGenerator {
 
 	private int addFieldToGroupBand(final JRDesignBand parentBand, final int x,
 			final LayoutItem_Field libglomLayoutItemField) {
-		final String fieldName = addField(libglomLayoutItemField);
+		addField(libglomLayoutItemField);
 
 		final Position pos = new Position(x, 0);
 
@@ -488,7 +493,7 @@ public class ReportGenerator {
 		pos.x += width;
 
 		// Show an instance of the field (the field value):
-		final JRDesignTextField textField = createFieldValueElement(pos, fieldName);
+		final JRDesignTextField textField = createFieldValueElement(pos, libglomLayoutItemField);
 		parentBand.addElement(textField);
 		textField.setStyle(fieldTitleStyle);
 
@@ -498,10 +503,10 @@ public class ReportGenerator {
 
 	/**
 	 * @param x
-	 * @param fieldName
+	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private JRDesignTextField createFieldValueElement(final Position pos, final String fieldName) {
+	private JRDesignTextField createFieldValueElement(final Position pos, final LayoutItem_Field libglomLayoutItemField) {
 		final JRDesignTextField textField = new JRDesignTextField();
 
 		// Make sure this field starts at the right of the previous field,
@@ -515,9 +520,22 @@ public class ReportGenerator {
 		textField.setStretchWithOverflow(true);
 		textField.setHeight(height); // We must specify _some_ height.
 
-		final JRDesignExpression expression = createFieldExpression(fieldName);
-
+		final JRDesignExpression expression = createFieldExpression(libglomLayoutItemField);
 		textField.setExpression(expression);
+
+		// Numeric formatting:
+		if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_NUMERIC) {
+
+			final Formatting formatting = libglomLayoutItemField.get_formatting_used();
+			final NumericFormat numericFormat = formatting.get_numeric_format();
+
+			final DecimalFormat format = new DecimalFormat();
+			format.setMaximumFractionDigits((int) numericFormat.get_decimal_places());
+			format.setGroupingUsed(numericFormat.get_use_thousands_separator());
+
+			// TODO: Use numericFormat.get_currency_symbol(), possibly via format.setCurrency().
+			textField.setPattern(format.toPattern());
+		}
 		return textField;
 	}
 
@@ -553,7 +571,7 @@ public class ReportGenerator {
 	 */
 	private String addField(final LayoutItem_Field libglomLayoutItemField) {
 
-		final String fieldName = libglomLayoutItemField.get_name();
+		final String fieldName = libglomLayoutItemField.get_name(); // TODO: Is this enough for related fields?
 
 		// Avoid an unnamed field:
 		if (StringUtils.isEmpty(fieldName)) {
@@ -591,6 +609,7 @@ public class ReportGenerator {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+
 		return fieldName;
 	}
 

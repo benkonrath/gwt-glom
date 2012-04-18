@@ -1,5 +1,17 @@
 2012-04-18  Murray Cumming  <murrayc@murrayc.com>
 
+	ReportGenerator: Use the correct numeric formatting.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	createFieldExpression(), createFieldValueElement(): Take the
+	whole LayoutItem_Field instead of just the field name, so
+	we have access to the formatting.
+	createFieldValueElement(): Use JRTextField.setPattern() to
+	specify the numeric formatting, with the help of a 
+	regular DecimalFormat.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Avoid showing null for group by titles.
 
 	* src/main/java/org/glom/web/server/ReportGenerator.java
