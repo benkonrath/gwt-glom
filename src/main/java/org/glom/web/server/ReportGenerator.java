@@ -71,6 +71,11 @@ public class ReportGenerator {
 			this.x = x;
 			this.y = y;
 		}
+		
+		public Position(final Position pos) {
+			this.x = pos.x;
+			this.y = pos.y;
+		}
 
 		public int x = 0;
 		public int y = 0;
@@ -222,7 +227,9 @@ public class ReportGenerator {
 	 *            TODO
 	 * @param height
 	 */
-	private Position addVerticalGroupToReport(final org.glom.libglom.LayoutItem_VerticalGroup layout_group, final JRDesignBand parentBand, int x, int y) {
+	private Position addVerticalGroupToReport(final org.glom.libglom.LayoutItem_VerticalGroup layout_group, final JRDesignBand parentBand, final Position pos) {
+		Position pos_result = new Position(pos);
+		
 		final LayoutItemVector layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
@@ -230,8 +237,8 @@ public class ReportGenerator {
 
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				final Position pos = addFieldToDetailBandVertical(parentBand, x, y, libglomLayoutItemField);
-				y = pos.y;
+				pos_result = addFieldToDetailBandVertical(parentBand, pos_result, libglomLayoutItemField);
+				pos_result.x = pos.x;
 			} else {
 				
 			    // TODO: Handle other item types.
@@ -241,7 +248,8 @@ public class ReportGenerator {
 			}
 		}
 
-		return new Position(x + width * 2, y);
+		pos_result.x += width * 2;
+		return pos_result;
 	}
 	
 	/**
@@ -255,14 +263,14 @@ public class ReportGenerator {
 	private Position addGroupToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand, int x,
 			final JRDesignBand headerBand, final int fieldTitlesY) {
 
-		int y = 0;
+		Position pos_result = new Position(x, 0);
 		
 		/** * If this is a vertical group then we will lay the fields out vertically instead of horizontally.
 		 */
 		final org.glom.libglom.LayoutItem_VerticalGroup verticalGroup = LayoutItem_VerticalGroup.cast_dynamic(layout_group);
 		if(verticalGroup != null)
 		{
-			return addVerticalGroupToReport(verticalGroup, parentBand, x, y);
+			return addVerticalGroupToReport(verticalGroup, parentBand, pos_result);
 		}
 		
 		// Where we put the field titles depends on whether we are in a group-by:
@@ -277,7 +285,7 @@ public class ReportGenerator {
 			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
 			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
 			if (libglomLayoutItemField != null) {
-				x = addFieldToDetailBand(parentBand, headerBand, x, libglomLayoutItemField, thisFieldTitlesY, 0 /* fieldY */);
+				pos_result = addFieldToDetailBand(parentBand, headerBand, pos_result.x, libglomLayoutItemField, thisFieldTitlesY, pos_result.y);
 			} else if (libglomLayoutGroup != null) {
 				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 				if (libglomGroupBy != null) {
@@ -352,13 +360,11 @@ public class ReportGenerator {
 				}
 
 				// Recurse into sub-groups:
-				final Position pos = addGroupToReport(libglomLayoutGroup, parentBand, x, fieldTitlesBand, thisFieldTitlesY);
-				x = pos.x;
-				y = pos.y;
+				pos_result = addGroupToReport(libglomLayoutGroup, parentBand, pos_result.x, fieldTitlesBand, thisFieldTitlesY);
 			}
 		}
 
-		return new Position(x, 0);
+		return pos_result;
 	}
 
 	private int addSecondaryFieldsToGroupBand(final org.glom.libglom.LayoutGroup layout_group,
@@ -404,23 +410,22 @@ public class ReportGenerator {
 	 *            TODO
 	 * @return
 	 */
-	private int addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand, int x,
+	private Position addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand, final int x,
 			final LayoutItem_Field libglomLayoutItemField, final int fieldTitlesY, final int fieldY) {
 		final String fieldName = addField(libglomLayoutItemField);
 
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, fieldTitlesY, libglomLayoutItemField,
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(new Position(x, fieldTitlesY), libglomLayoutItemField,
 				false);
 		textFieldColumn.setStyle(boldStyle);
 		headerBand.addElement(textFieldColumn);
 
 		// Show an instance of the field (the field value):
-		final JRDesignTextField textField = createFieldValueElement(x, 0, fieldName);
+		final JRDesignTextField textField = createFieldValueElement(new Position(x, 0), fieldName);
 		textField.setStyle(normalStyle);
 		parentBand.addElement(textField);
 
-		x += width;
-		return x;
+		return new Position(x + width, 0);
 	}
 	
 	/**
@@ -431,50 +436,56 @@ public class ReportGenerator {
 	 *            TODO
 	 * @return
 	 */
-	private Position addFieldToDetailBandVertical(final JRDesignBand parentBand, int x, final int y,
+	private Position addFieldToDetailBandVertical(final JRDesignBand parentBand, Position pos,
 			final LayoutItem_Field libglomLayoutItemField) {
 		final String fieldName = addField(libglomLayoutItemField);
 
+		Position pos_result = new Position(pos);
+		
 		// Make the band high enough if necessary:
-		if(parentBand.getHeight() < (y + height))
-			parentBand.setHeight(y + height + 20);
+		if(parentBand.getHeight() < (pos_result.y + height))
+			parentBand.setHeight(pos_result.y + height + 20);
 		
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, y, libglomLayoutItemField,
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos_result, libglomLayoutItemField,
 				false);
 		textFieldColumn.setStyle(boldStyle);
 		parentBand.addElement(textFieldColumn);
-		x += width;
+		pos_result.x += width;
 
 		// Show an instance of the field (the field value):
-		final JRDesignTextField textField = createFieldValueElement(x, y, fieldName);
+		final JRDesignTextField textField = createFieldValueElement(pos_result, fieldName);
 		textField.setStyle(normalStyle);
 		parentBand.addElement(textField);
 
-		x += width;
+		pos_result.x += width;
+		
+		pos_result.y += height;
 
-		return new Position(x, y + height);
+		return pos_result;
 	}
 
 	private int addFieldToGroupBand(final JRDesignBand parentBand, int x, final LayoutItem_Field libglomLayoutItemField) {
 		final String fieldName = addField(libglomLayoutItemField);
 
+		Position pos = new Position(x, 0);
+		
 		// Show the field title:
-		final JRDesignStaticText textFieldColumn = createFieldTitleElement(x, 0, libglomLayoutItemField, true);
+		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos, libglomLayoutItemField, true);
 
 		// Instead, the field value will be bold, because here it is like a title.
 		textFieldColumn.setStyle(normalStyle);
 
 		parentBand.addElement(textFieldColumn);
-		x += width;
+		pos.x += width;
 
 		// Show an instance of the field (the field value):
-		final JRDesignTextField textField = createFieldValueElement(x, 0, fieldName);
+		final JRDesignTextField textField = createFieldValueElement(pos, fieldName);
 		parentBand.addElement(textField);
 		textField.setStyle(boldStyle);
 
-		x += width;
-		return x;
+		pos.x += width;
+		return pos.x;
 	}
 
 	/**
@@ -482,13 +493,13 @@ public class ReportGenerator {
 	 * @param fieldName
 	 * @return
 	 */
-	private JRDesignTextField createFieldValueElement(final int x, final int y, final String fieldName) {
+	private JRDesignTextField createFieldValueElement(final Position pos, final String fieldName) {
 		final JRDesignTextField textField = new JRDesignTextField();
 
 		// Make sure this field starts at the right of the previous field,
 		// because JasperReports uses absolute positioning.
-		textField.setY(y);
-		textField.setX(x);
+		textField.setY(pos.y);
+		textField.setX(pos.x);
 		textField.setWidth(width); // No data will be shown without this.
 
 		// This only stretches vertically, but that is better than
@@ -509,7 +520,7 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private JRDesignStaticText createFieldTitleElement(final int x, final int y,
+	private JRDesignStaticText createFieldTitleElement(final Position pos,
 			final LayoutItem_Field libglomLayoutItemField, final boolean withColon) {
 		final JRDesignStaticText textFieldColumn = new JRDesignStaticText();
 
@@ -520,8 +531,8 @@ public class ReportGenerator {
 			title += ":";
 
 		textFieldColumn.setText(title);
-		textFieldColumn.setY(y);
-		textFieldColumn.setX(x);
+		textFieldColumn.setY(pos.y);
+		textFieldColumn.setX(pos.x);
 		textFieldColumn.setWidth(width); // No data will be shown without this.
 		// textFieldColumn.setStretchWithOverflow(true);
 		textFieldColumn.setHeight(height); // We must specify _some_ height.
