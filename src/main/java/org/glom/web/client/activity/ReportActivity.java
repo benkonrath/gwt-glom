@@ -104,6 +104,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setSelectedReport(reportName);
 
+		reportView.setWaitingText("Generating the report..."); //This is cleared by setReportHTML().
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, quickFind, localeID, callback);
 

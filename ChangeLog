@@ -1,5 +1,17 @@
 2012-04-19  Murray Cumming  <murrayc@murrayc.com>
 
+	Reports: Show a message while waiting for the report.
+
+	* src/main/java/org/glom/web/client/ui/ReportView.java
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java:
+	Add setWaitingText(), to show a message saying that we are 
+	waiting for the report to be ready.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Call setWaitingText() before calling the async
+	report generation.
+
+2012-04-19  Murray Cumming  <murrayc@murrayc.com>
+
 	ReportGenerator: Specify date and time formats.
 
 	* src/main/java/org/glom/web/server/ReportGenerator.java:

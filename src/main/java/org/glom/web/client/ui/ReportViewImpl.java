@@ -22,10 +22,12 @@ package org.glom.web.client.ui;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 
 public class ReportViewImpl extends Composite implements ReportView {
 
 	final private FlowPanel mainPanel = new FlowPanel();
+	final private Label waitingLabel = new Label();
 	final private HTML htmlWidget = new HTML();
 
 	@SuppressWarnings("unused")
@@ -33,12 +35,14 @@ public class ReportViewImpl extends Composite implements ReportView {
 
 	public ReportViewImpl() {
 		initWidget(mainPanel);
+		mainPanel.add(waitingLabel);
 		mainPanel.add(htmlWidget);
 	}
 
 	@Override
 	public void setPresenter(final Presenter presenter) {
-		this.presenter = presenter;
+		this.presenter =
+				presenter;
 	}
 
 	/*
@@ -48,11 +52,18 @@ public class ReportViewImpl extends Composite implements ReportView {
 	 */
 	@Override
 	public void clear() {
+		waitingLabel.setText("");
 		htmlWidget.setHTML("");
 	}
 
 	@Override
 	public void setReportHTML(final String html) {
+		waitingLabel.setText(""); //Because we are not waiting anymore.
 		htmlWidget.setHTML(html); // TODO: Use SafeHTML?
+	}
+
+	@Override
+	public void setWaitingText(final String text) {
+		waitingLabel.setText(text);
 	}
 }
