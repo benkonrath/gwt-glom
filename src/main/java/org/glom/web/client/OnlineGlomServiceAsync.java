@@ -26,6 +26,7 @@ import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -57,6 +58,9 @@ public interface OnlineGlomServiceAsync {
 	void getListViewLayout(String documentID, String tableName, final String localeID,
 			AsyncCallback<LayoutGroup> callback);
 
+	void getReportHTML(String documentID, String tableName, String reportName, String quickFind, String localeID,
+			AsyncCallback<String> callback);
+
 	void getListViewData(String documentID, String tableName, String quickFind, int start, int length,
 			AsyncCallback<ArrayList<DataItem[]>> callback);
 
@@ -68,6 +72,8 @@ public interface OnlineGlomServiceAsync {
 	void isAuthenticated(String documentID, AsyncCallback<Boolean> callback);
 
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
+
+	void getReportsList(String documentID, String tableName, String localeID, AsyncCallback<Reports> callback);
 
 	void getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue, String localeID,
 			AsyncCallback<DetailsLayoutAndData> callback);
@@ -89,5 +95,4 @@ public interface OnlineGlomServiceAsync {
 			TypedDataItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
 	void getConfigurationErrorMessage(AsyncCallback<String> callback);
-
 }

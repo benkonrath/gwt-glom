@@ -23,34 +23,47 @@ import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
-import org.glom.web.client.event.LocaleChangeEvent;
-import org.glom.web.client.event.LocaleChangeEventHandler;
-import org.glom.web.client.event.QuickFindChangeEvent;
-import org.glom.web.client.event.QuickFindChangeEventHandler;
 import org.glom.web.client.event.TableChangeEvent;
-import org.glom.web.client.event.TableChangeEventHandler;
 import org.glom.web.client.place.DocumentSelectionPlace;
-import org.glom.web.client.place.HasRecordsPlace;
-import org.glom.web.client.place.ListPlace;
-import org.glom.web.client.ui.ListView;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.client.place.ReportPlace;
+import org.glom.web.client.ui.AuthenticationPopup;
+import org.glom.web.client.ui.OnlineGlomConstants;
+import org.glom.web.client.ui.ReportView;
+import org.glom.web.client.ui.TableSelectionView;
+import org.glom.web.client.ui.View;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ListActivity extends HasTableActivity {
+public class ReportActivity extends AbstractActivity implements View.Presenter {
 
+	private final String documentID;
+	private final String tableName;
+	private final String reportName;
 	private final String quickFind;
-	private final ListView listView;
+	private final ClientFactory clientFactory;
+	private final ReportView reportView;
+	private final AuthenticationPopup authenticationPopup;
+	
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
-	public ListActivity(final HasRecordsPlace place, final ClientFactory clientFactory) {
-		super(place, clientFactory);
+	public ReportActivity(final ReportPlace place, final ClientFactory clientFactory) {
+		this.documentID = place.getDocumentID(); // TODO: Just store the place?
+		this.tableName = place.getTableName();
 		this.quickFind = place.getQuickFind();
-		this.listView = clientFactory.getListView();
+		this.reportName = place.getReportName();
+		this.clientFactory = clientFactory;
+		reportView = clientFactory.getReportView();
+		authenticationPopup = clientFactory.getAuthenticationPopup();
 	}
 
 	@Override
@@ -59,7 +72,7 @@ public class ListActivity extends HasTableActivity {
 			goTo(new DocumentSelectionPlace());
 
 		// register this class as the presenter
-		listView.setPresenter(this);
+		reportView.setPresenter(this);
 
 		// TODO this should really be it's own Place/Activity
 		// check if the authentication info has been set for the document
@@ -80,55 +93,29 @@ public class ListActivity extends HasTableActivity {
 		};
 		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 
-		// set the change handler for the table selection widget
-		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
-			@Override
-			public void onTableChange(final TableChangeEvent event) {
-				goTo(new ListPlace(documentID, event.getNewTableName(), ""));
-			}
-		});
-
-		// populate the cell table with data
-		final AsyncCallback<LayoutGroup> callback = new AsyncCallback<LayoutGroup>() {
+		// populate the report part:
+		final AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getListViewLayout()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportHTML()");
 			}
 
 			@Override
-			public void onSuccess(final LayoutGroup result) {
-				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
-				// same.
-				listView.setCellTable(documentID, result, quickFind);
+			public void onSuccess(final String result) {
+				reportView.setReportHTML(result);
 			}
 		};
 
+		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
+		tableSelectionView.setSelectedReport(reportName);
+
+		reportView.setWaitingText(constants.generatingReport()); //This is cleared by setReportHTML().
 		final String localeID = Utils.getCurrentLocaleID();
-		OnlineGlomServiceAsync.Util.getInstance().getListViewLayout(documentID, tableName, localeID, callback);
-
-		// TODO: Avoid the code duplication with DetailsActivity.
-		// set the change handler for the quickfind text widget
-		eventBus.addHandler(QuickFindChangeEvent.TYPE, new QuickFindChangeEventHandler() {
-			@Override
-			public void onQuickFindChange(final QuickFindChangeEvent event) {
-				// We switch to the List view, to show search results.
-				// TODO: Show the details view if there is only one result.
-				goTo(new ListPlace(documentID, tableName, event.getNewQuickFindText()));
-			}
-		});
-
-		// Set the change handler for the table selection widget
-		eventBus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
-			@Override
-			public void onLocaleChange(final LocaleChangeEvent event) {
-				// note the empty primary key item
-				goTo(new ListPlace(documentID, tableName, quickFind));
-			}
-		});
+		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, quickFind, localeID, callback);
 
 		// indicate that the view is ready to be displayed
-		panel.setWidget(listView.asWidget());
+		panel.setWidget(reportView.asWidget());
 	}
 
 	private void setUpAuthClickHandler(final EventBus eventBus) {
@@ -165,7 +152,7 @@ public class ListActivity extends HasTableActivity {
 	private void clearView() {
 		authenticationPopup.hide();
 		authenticationPopup.clear();
-		listView.clear();
+		reportView.clear();
 	}
 
 	/*
@@ -186,6 +173,16 @@ public class ListActivity extends HasTableActivity {
 	@Override
 	public void onStop() {
 		clearView();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
+	 */
+	@Override
+	public void goTo(final Place place) {
+		clientFactory.getPlaceController().goTo(place);
 	}
 
 }

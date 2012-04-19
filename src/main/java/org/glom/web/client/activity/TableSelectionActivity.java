@@ -27,11 +27,14 @@ import org.glom.web.client.event.LocaleChangeEvent;
 import org.glom.web.client.event.QuickFindChangeEvent;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DetailsPlace;
-import org.glom.web.client.place.HasSelectableTablePlace;
+import org.glom.web.client.place.HasRecordsPlace;
+import org.glom.web.client.place.HasTablePlace;
 import org.glom.web.client.place.ListPlace;
+import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
 import org.glom.web.shared.DocumentInfo;
+import org.glom.web.shared.Reports;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -55,9 +58,11 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 	private String documentTitle;
 	private String tableName;
 	private String quickFind;
+	private String reportName;
 	private HandlerRegistration tableChangeHandlerRegistration = null;
 	private HandlerRegistration quickFindChangeHandlerRegistration = null;
 	private HandlerRegistration localeChangeHandlerRegistration = null;
+	private HandlerRegistration reportChangeHandlerRegistration = null;
 
 	// This activity isn't properly configured until the List or Details Place is set with the appropriate methods
 	public TableSelectionActivity(final ClientFactory clientFactory) {
@@ -121,6 +126,22 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			}
 		});
 
+		// For report choices with the reportSelector:
+		final HasChangeHandlers reportSelector = tableSelectionView.getReportSelector();
+		reportChangeHandlerRegistration = reportSelector.addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(final ChangeEvent event) {
+				final String reportName = tableSelectionView.getSelectedReport();
+				if(StringUtils.isEmpty(reportName)) {
+					// Interpret selecting no report as requesting the list view.
+					goTo(new ListPlace(documentID, tableName, quickFind));
+				} else {
+					// Show the selected report:
+					goTo(new ReportPlace(documentID, tableName, reportName, quickFind));
+				}
+			}
+		});
+
 		fillView(tableSelectionView);
 
 		// we're done, set the widget
@@ -148,16 +169,44 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
 
-				final String localeID = Utils.getCurrentLocaleID();
-				tableSelectionView.setSelectedLocale(localeID);
+				//Show what locale is currently being used:
+				String localeIDForCombo = Utils.getCurrentLocaleID();
+				
+				//Indicate that we use English if no other locale has been specified by either
+				//the URL or the configuration.
+				//Alternatively we could also show the locale in the URL, even if it is en.
+				if(StringUtils.isEmpty(localeIDForCombo)) {
+					localeIDForCombo = "en";
+				}
+				tableSelectionView.setSelectedLocale(localeIDForCombo);
 
 				documentTitle = result.getTitle();
 				tableSelectionView.setDocumentTitle(documentTitle);
 				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		};
+
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getDocumentInfo(documentID, localeID, callback);
+
+		// get the reports list for the current table:
+		final AsyncCallback<Reports> callback_report = new AsyncCallback<Reports>() {
+			@Override
+			public void onFailure(final Throwable caught) {
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportsList()");
+			}
+
+			@Override
+			public void onSuccess(final Reports result) {
+				tableSelectionView.setReportList(result);
+				
+				// Show the selected report name again:
+				// TODO: Avoid duplication in ReportActivity.
+				tableSelectionView.setSelectedReport(reportName);
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().getReportsList(documentID, tableName, localeID, callback_report);
 
 		// Show the quickFind text that was specified by the URL token:
 		tableSelectionView.setQuickFindText(quickFind);
@@ -165,12 +214,12 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	// This method will be called before the {@link TableSelectionActivity#start(AcceptsOneWidget, EventBus)} method and
 	// any time the Place changes after the start method has been called.
-	public void setPlace(final HasSelectableTablePlace place) {
+	public void setPlace(final HasTablePlace place) {
 		documentID = place.getDocumentID();
 		tableName = place.getTableName();
 
 		try {
-			final ListPlace asPlace = (ListPlace) place;
+			final HasRecordsPlace asPlace = (HasRecordsPlace) place;
 			quickFind = asPlace.getQuickFind();
 		} catch (final ClassCastException ex) {
 			quickFind = "";
@@ -178,17 +227,17 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 
-		// Update the selected table if it's not correct.
-		if (!tableSelectionView.getSelectedTableName().equals(tableName)) {
-			tableSelectionView.setSelectedTableName(tableName);
-		}
-
-		// show the 'back to list' link if we're at a DetailsPlace, hide it otherwise
-		if (place instanceof DetailsPlace) {
+		// Show the 'back to list' link if we're at a DetailsPlace or a ReportPlace.
+		if (place instanceof DetailsPlace || place instanceof ReportPlace) {
 			tableSelectionView.setBackLinkVisible(true);
 			tableSelectionView.setBackLink(documentID, tableName, ""); // TODO: quickfind?
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
+		}
+		
+		reportName = "";
+		if (place instanceof ReportPlace) {
+			reportName = ((ReportPlace)place).getReportName();
 		}
 
 		fillView(tableSelectionView);
@@ -210,6 +259,11 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		if (localeChangeHandlerRegistration != null) {
 			localeChangeHandlerRegistration.removeHandler();
 			localeChangeHandlerRegistration = null;
+		}
+
+		if (reportChangeHandlerRegistration != null) {
+			reportChangeHandlerRegistration.removeHandler();
+			reportChangeHandlerRegistration = null;
 		}
 	}
 

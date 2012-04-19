@@ -38,6 +38,7 @@ import org.glom.libglom.LayoutItem_Notebook;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.NumericFormat;
 import org.glom.libglom.Relationship;
+import org.glom.libglom.Report;
 import org.glom.libglom.StringVector;
 import org.glom.web.server.database.DetailsDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
@@ -47,6 +48,7 @@ import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.GlomNumericFormat;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.Formatting;
 import org.glom.web.shared.layout.LayoutGroup;
@@ -347,6 +349,17 @@ final class ConfiguredDocument {
 
 		final org.glom.libglom.LayoutGroup libglomLayoutGroup = getValidListViewLayoutGroup(tableName);
 
+		return getLayoutGroupFromLiblomLayoutGroup(tableName, libglomLayoutGroup, localeID);
+	}
+
+	/**
+	 * @param tableName
+	 * @param libglomLayoutGroup
+	 * @param localeID
+	 * @return
+	 */
+	private LayoutGroup getLayoutGroupFromLiblomLayoutGroup(final String tableName,
+			final org.glom.libglom.LayoutGroup libglomLayoutGroup, final String localeID) {
 		final LayoutGroup layoutGroup = new LayoutGroup(); // the object that will be returned
 		int primaryKeyIndex = -1;
 
@@ -761,4 +774,27 @@ final class ConfiguredDocument {
 		return tableName;
 	}
 
+	/**
+	 * @param tableName
+	 * @param localeID2
+	 * @return
+	 */
+	public Reports getReports(final String tableName, final String localeID) {
+		final Reports result = new Reports();
+
+		final StringVector names = document.get_report_names(tableName);
+
+		final int count = Utils.safeLongToInt(names.size());
+		for (int i = 0; i < count; i++) {
+			final String name = names.get(i);
+			final Report report = document.get_report(tableName, name);
+			if (report == null)
+				continue;
+
+			final String title = report.get_title(localeID);
+			result.addReport(name, title);
+		}
+
+		return result;
+	}
 }

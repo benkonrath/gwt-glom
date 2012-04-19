@@ -1,17 +1,397 @@
-1.21.8:
+2012-04-19  Murray Cumming  <murrayc@murrayc.com>
 
-2012-04-12  Murray Cumming  <murrayc@murrayc.com>
+	Reports: Localize the waiting for report message.
 
-	Adapt to the java-libglom 1.21.8 API.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Get the message from the contants.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+	Add the string here.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_de.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_es.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_sl.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_zh_CN.properties:
+	Update these files with the English text for newer strings for now.
+
+2012-04-19  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports: Show a message while waiting for the report.
+
+	* src/main/java/org/glom/web/client/ui/ReportView.java
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java:
+	Add setWaitingText(), to show a message saying that we are 
+	waiting for the report to be ready.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Call setWaitingText() before calling the async
+	report generation.
+
+2012-04-19  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Specify date and time formats.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	createFieldValueElement(): Use the default (and localized)
+	short formats, though we still need a way to show 4-digit
+	years without providing the format for every locale.
+	* src/main/java/org/glom/web/server/database/DBAccess.java:
+	convertResultSetToDTO(): Use the short formats here too.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Use the correct numeric formatting.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	createFieldExpression(), createFieldValueElement(): Take the
+	whole LayoutItem_Field instead of just the field name, so
+	we have access to the formatting.
+	createFieldValueElement(): Use JRTextField.setPattern() to
+	specify the numeric formatting, with the help of a 
+	regular DecimalFormat.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Avoid showing null for group by titles.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	generateReport(): Use setBlankWhenNull() on the field title
+	style too, because this is used for values in group by
+	sections.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Add a colon to titles in vertical groups.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	addFieldToDetailBandVertical(): Pass true for the withColon
+	parameter.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Simplify the code by using Position more.
+
+2012-04-18  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports: Support vertical groups, roughly.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	addToReport(): Rename to addGroupToReport() and, if necessary,
+	call the new addVerticalGroupToReport() method.
+	createFieldValueElement(): Let the caller specify the Y position
+	too.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports: Allow a second report to be shown.
+
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java:
+	clear(): Do not remove the HTML widget, which broke the whole layout.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Locales drop-down: Show that we use English by default.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	fillView(): When we use English, just because that is the default, when
+	no locale is specified, show that in the Locales drop-down instead of 
+	just showing the first item.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Unselect the Report/Locale/Table combo item when appropriate.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	setPlace(): clear reportName if this is not a ReportPlace.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	setSelectedTableName(), setSelectedLocale(), setSelectedReport():
+	When the provided name is empty, unselect all items, so that none are
+	indicated. This uses a for loop because I cannot find a single method
+	to do this.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Report: Give the user a way to get back to the list.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+	start(), setPlace(): Show the Back To List link on reports, and also 
+	interpret selecting the empty report item as back to list.
+
+2012-04-17  Murray Cumming  <murrayc@murrayc.com>
+
+	Style: Remove overflow:hidden from searchbox
+
+	* src/main/webapp/style.css: Because this pushes the Back To Link
+	label/link on to the next row, which is then hidden due to the 
+	hard-coded (in ems) height.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
+	Really show the selected Report name.
+
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity:
+	setPlace(): Store the reportName here, if it is that kind of Place.
+	fillView(): Set the selected Report after filling the list of reports.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	setSelectedLocale(), setSelectedReport(): Avoid possible uses of
+	null Strings, though we need some way to unselect all ListBox items
+	in that case.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Try to avoid some problems.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	addField(): Try to avoid duplicates, and avoid using a null
+	class type.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports: Use quickFind.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java;
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	getReportHTML(): Add a quickFind parameter.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Pass the quickFind parameter.
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	generateReport(): Take a quickFind parameter.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportPlace: Actually use the report name.
+
+	* src/main/java/org/glom/web/client/place/ReportPlace.java
+	getPlace(): Do not assign the report name to the quickfind.
+
+2012-04-13  Murray Cumming  <murrayc@murrayc.com>
+
+	Show java.library.path when complaining.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	init(): When telling us to check java.library.path, show the
+	current value.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Do not show nulls.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Make the title font larger.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Put field titles inside groups, if there are groups.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Take the Report itself instead of the name and group.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	Remove getReportLayoutGroup().
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getReportHTML(): Pass the report instead
+	of its name and layout group.
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	generateReport(): Use the report object to use the title 
+	instead of the name.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Remove designBand parameters.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Make designBand a class member instead of passing it to all
+	methods.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Add lines, a bit like in the desktop version.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	addToReport(): Use JRDesignLine.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Correct the title positions and use some bold style.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Break the code up into reusable functions, correct the placement of 
+	titles, and use normal/bold styles as in the reports in the desktop 
+	version.
+
+2012-03-06  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Add a header band to show the field titles.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getReportHTML(): Pass the localeId to the ReportGenerator 
+	constructor.
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	constructor: Take the localeID so we can get translated field
+	titles.
+	generateReport(), addToReport(), addFieldToBand(): Add field 
+	titles in a column header band.
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports drop-down list: Some improvement.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Adedd setSelectedReport(),
+	setReportList(): Add a blank line so that the user can select the 
+	first one.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Show the current report by calling setSelectedReport().
+	This does not seem to work yet.
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
+	DetailsActivity, ListActivity: Move some variables into a base class.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	* src/main/java/org/glom/web/client/activity/HasTableActivity.java:
+	* src/main/java/org/glom/web/client/activity/ListActivity.java: Move 
+	the clientFactory, documentID, tableName and authenticationPopup into
+	a base class, to avoid duplication.
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
+	Translate the Reports label.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	Get the "Reports" label string from the constants.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.pro
+	perties: Add Reports to the constants.
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports: Implement grouping.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Handle LayoutItem_GroupBy items and try to do the right thing
+	with JRDesignGroup. It seems to work.
+
+2012-03-04  Murray Cumming  <murrayc@murrayc.com>
+
+	Actually show some data with JasperReports.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java: 
+	getReportHTML(): Move most code into a ReportGenerator class.
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	Recurse into sub-groups, adding fields to the JasperDesign's details
+	band. Note that we must set an arbitrary width and height, or it just
+	will not show any data.
+
+2012-03-04  Murray Cumming  <murrayc@murrayc.com>
+
+	Reports Chooser: Show the titles, not the names.
+
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java
+	(TableSelectionViewImpl.setReportList): Show the titles in the UI,
+	and the names as the values.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	(ConfiguredDocument.getReportLayoutGroup): Do not return a default
+	group now that we provide the report name, so it should always 
+	succeed.
+
+2012-02-15  Murray Cumming  <murrayc@murrayc.com>
+
+	Depend on jasperreports.
+
+	* pom.xml: Add the dependency. My plan is to use this on the 
+	server side.
+
+2012-01-31  Murray Cumming  <murrayc@murrayc.com>
+
+	Implement navigation to report places.
+
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Do not bother to handle all events here.
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Added getSelectedReport().
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java: start(): When handling a change to the reports chooser,
+	call getSelectedReport() and goTo() its ReportPlace.
+	* src/main/java/org/glom/web/client/ui/ReportView.java
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java:
+	Added setReportHTML() which puts the html in a gwt HTML widget.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getReportHTML(): Return "TODO" just to show that this works.
+
+2012-01-31  Murray Cumming  <murrayc@murrayc.com>
+
+	Make ReportPlace usable.
+
+	* src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+	Mention ReportPlace.
+	* src/main/java/org/glom/web/client/place/ReportPlace.java:
+	Correct the @prefix annotation.
+
+2012-01-31  Murray Cumming  <murrayc@murrayc.com>
+
+	OnlineGlomService: Return report HTML rather than the LayoutGroup.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Change getReportLayout() to getReportHMTL() because we will not need to 
+	parse or render the report layout on the client side.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	getReportLayout(): Return the libglom LayoutGroup type because we will
+	not need to convert to a shared type, because this will not be used on
+	the client side.
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	Adapted.
+
+	Note that there is still no implementation for this.
+
+
+2012-01-27  Murray Cumming  <murrayc@murrayc.com>
+
+	Add a (empty) Report Place, View, and Activity.
+
+	* src/main/java/org/glom/web/client/place/HasSelectableTablePlace.java:
+	Rename to:
+	* src/main/java/org/glom/web/client/place/HasTablePlace.java
+	* src/main/java/org/glom/web/client/place/ListPlace.java: Move some of
+	this into a superclass:
+	* src/main/java/org/glom/web/client/place/HasRecordsPlace.java
+	and also use it as the base of this new ReportPlace:
+	* src/main/java/org/glom/web/client/place/ReportPlace.java
+
+	* src/main/java/org/glom/web/client/ui/ReportView.java
+	* src/main/java/org/glom/web/client/ui/ReportViewImpl.java
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	Add these, containing mostly boiler-plate for now.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Add API to get the LayoutGroup for the report.
+
+2012-01-23  Murray Cumming  <murrayc@murrayc.com>
+
+	Add and fill a Reports drop-down list box.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
-	java-libglom's FieldFormatting is now Formatting.
+	Aded getReports():
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Added getReports(document, table, localeID), calling 
+	ConfiguredDocument.getReports().
+	* src/main/java/org/glom/web/client/ui/TableSelectionView.java:
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	Added setReportsList() and a list widget.
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity
+	.java (TableSelectionActivity.fillView(): Fill the view's reports list.
 
-2012-04-12  Murray Cumming  <murrayc@murrayc.com>
 
-	Use the latest java-libglom version.
-
-	* pom.xml: Use java-libglom 1.21.8.
+1.21.8:
 
 2012-04-12  Murray Cumming  <murrayc@murrayc.com>
 
@@ -20,6 +400,15 @@
 	* src/main/java/org/glom/web/OnlineGlom.gwt.xml
 	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_eo.
 	properties: Add this translation because someone took the time to make it.
+
+2012-03-15  Murray Cumming  <murrayc@murrayc.com>
+
+	Adapt to the java-libglom 1.21.7 API. 
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	addToReport(): get_group_secondary_fields() is now
+	get_secondary_fields().
+
 
 2012-03-15  Murray Cumming  <murrayc@murrayc.com>
 
@@ -34,6 +423,22 @@
 	https://bugzilla.gnome.org/show_bug.cgi?id=671257
 
 	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+
+2012-03-05  Murray Cumming  <murrayc@murrayc.com>
+
+	Require the latest java-libglom.
+
+	* pom.xml: java-libglom 1.21.5 has LayoutItem_GroupBy.
+
+2012-03-04  Murray Cumming  <murrayc@murrayc.com>
+
+	ListViewDbAccess.getSelectQuery(): Avoid using empty quickfind strings.
+
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java
+	ListViewDBAccess.getSelectQuery(): Do not create a where clause for 
+	an empty quickfind string. I also corrected libglom to create only 
+	empty where clauses for empty quickfind strings, but this avoids the
+	need for that fix.
 
 2012-02-24  Ben Konrath  <ben@bagu.org>
 
@@ -54,7 +459,7 @@
 	Take the Details translation from Glom's po files.
 	I have added the other strings to Glom so we can get translations that way:
 	http://git.gnome.org/browse/glom/commit/?id=c3cefe607428a84bdf8de1b04e8bef6f70b04564
-	
+
 2012-01-27  Murray Cumming  <murrayc@murrayc.com>
 
 	TableSelectionViewImpl: Put the search label and entry in a div.
@@ -238,6 +643,10 @@
 	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
 	libglom now uses only Vector instead of List, which uses add() instead of
 	addLast(). 
+
+2012-01-22  Murray Cumming  <murrayc@murrayc.com>
+
+	ConfiguredDocument: Rename the localedID private member variable.
 
 2012-01-20  Murray Cumming  <murrayc@murrayc.com>
 

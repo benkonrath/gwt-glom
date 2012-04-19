@@ -26,35 +26,45 @@ import org.glom.web.client.StringUtils;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
-public class ListPlace extends HasRecordsPlace {
+public class ReportPlace extends HasRecordsPlace {
 
-	public ListPlace(final String documentID, final String tableName, final String quickFind) {
+	private final String reportName;
+
+	public ReportPlace(final String documentID, final String tableName, final String reportName, final String quickFind) {
 		super(documentID, tableName, quickFind);
+		this.reportName = reportName;
 	}
 
-	@Prefix("list")
-	public static class Tokenizer extends HasRecordsPlace.Tokenizer implements PlaceTokenizer<ListPlace> {
+	public String getReportName() {
+		return reportName;
+	}
+
+	@Prefix("report")
+	public static class Tokenizer extends HasRecordsPlace.Tokenizer implements PlaceTokenizer<ReportPlace> {
+		protected final String reportKey = "report";
 
 		@Override
-		public String getToken(final ListPlace place) {
+		public String getToken(final ReportPlace place) {
 			final HashMap<String, String> params = new HashMap<String, String>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
+			params.put(reportKey, place.getReportName());
 			params.put(quickFindKey, place.getQuickFind());
 			return buildParamsToken(params);
 		}
 
 		@Override
-		public ListPlace getPlace(final String token) {
+		public ReportPlace getPlace(final String token) {
 			// default empty values
 			String documentID = "";
 			String tableName = ""; // an empty value represents the default table
+			String reportName = "";
 			String quickFind = "";
 
 			final HashMap<String, String> params = getTokenParams(token);
 
 			if (params == null) {
-				return new ListPlace("", "", "");
+				return new ReportPlace("", "", "", "");
 			}
 
 			if (params.get(documentKey) != null) {
@@ -69,12 +79,16 @@ public class ListPlace extends HasRecordsPlace {
 				quickFind = params.get(quickFindKey);
 			}
 
-			if (StringUtils.isEmpty(documentID)) {
-				// The documentID was not retrieved from the URL. Use empty values for the list place.
-				return new ListPlace("", "", "");
+			if (params.get(reportKey) != null) {
+				reportName = params.get(reportKey);
 			}
 
-			return new ListPlace(documentID, tableName, quickFind);
+			if (StringUtils.isEmpty(documentID)) {
+				// The documentID was not retrieved from the URL. Use empty values for the list place.
+				return new ReportPlace("", "", "", "");
+			}
+
+			return new ReportPlace(documentID, tableName, reportName, quickFind);
 		}
 	}
 

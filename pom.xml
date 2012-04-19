@@ -95,6 +95,21 @@
 			<version>2.6</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>4.5.0</version>
+			<scope>compile</scope>
+			<exclusions>
+				<!-- There is apparently a clash between the jdtcore used by jasperreports and gwt,
+				so we do this to avoid the reportUnusedDeclaredThrownExceptionIncludeDocCommentReference
+				exception during the gwt compile. -->
+				<exclusion>
+					<groupId>eclipse</groupId>
+					<artifactId>jdtcore</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
             
 		<dependency>
 			<groupId>log4j</groupId>

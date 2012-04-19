@@ -21,6 +21,8 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.shared.Reports;
+
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 
 /**
@@ -63,4 +65,12 @@ public interface TableSelectionView extends View {
 	void setBackLink(final String documentID, final String tableName, String quickFind);
 
 	void setDocumentTitle(String documentTitle);
+
+	HasChangeHandlers getReportSelector();
+
+	void setReportList(Reports reports);
+
+	String getSelectedReport();
+
+	void setSelectedReport(String reportName);
 }

@@ -21,7 +21,9 @@ package org.glom.web.client.ui;
 
 import java.util.ArrayList;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.client.place.ListPlace;
+import org.glom.web.shared.Reports;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -52,6 +54,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	Label searchLabel = new Label(constants.search());
 	TextBox searchTextBox = new TextBox();
 
+	Label reportsLabel = new Label(constants.reports());
+	ListBox reportsChooser = new ListBox();
+
 	ListBox localesChooser = new ListBox();
 
 	Anchor backLink = new Anchor(constants.backToList());
@@ -74,7 +79,10 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		final FlowPanel titlebox = new FlowPanel();
 		DOM.setElementAttribute(titlebox.getElement(), "id", "titlebox");
 		titlebox.add(documentTitleLabel);
+
 		titlebox.add(localesChooser);
+		titlebox.add(reportsChooser);
+		titlebox.add(reportsLabel);
 
 		// document title
 		// Set a default value for the document title label with the opacity set to 0. The headbox will bounce up and
@@ -83,6 +91,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		documentTitleLabel.setText("A");
 		documentTitleLabel.addStyleName("document-title");
 		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
+
+		reportsLabel.setStyleName("reportslabel"); // TODO: This is tedious.
+		reportsChooser.setStyleName("reportschooser"); // TODO: This is tedious.
 
 		localesChooser.setStyleName("localeschooser"); // TODO: This is tedious.
 
@@ -117,6 +128,16 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedTableName(final String tableName) {
+		if(StringUtils.isEmpty(tableName)) {
+			//Make sure none are selected:
+			//TODO: Find a better way to do this.
+			for (int i = 0; i < tablesChooser.getItemCount(); i++) {
+				tablesChooser.setItemSelected(i, false);
+			}
+
+			return;
+		}
+		
 		for (int i = 0; i < tablesChooser.getItemCount(); i++) {
 			if (tableName.equals(tablesChooser.getValue(i))) {
 				tablesChooser.setSelectedIndex(i);
@@ -215,6 +236,16 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedLocale(final String localeID) {
+		if(StringUtils.isEmpty(localeID)) {
+			//Make sure none are selected:
+			//TODO: Find a better way to do this.
+			for (int i = 0; i < localesChooser.getItemCount(); i++) {
+				localesChooser.setItemSelected(i, false);
+			}
+
+			return;
+		}
+		
 		for (int i = 0; i < localesChooser.getItemCount(); i++) {
 			if (localeID.equals(localesChooser.getValue(i))) {
 				localesChooser.setSelectedIndex(i);
@@ -222,5 +253,52 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 			}
 		}
 
+	}
+
+	@Override
+	public HasChangeHandlers getReportSelector() {
+		return reportsChooser;
+	}
+
+	@Override
+	public String getSelectedReport() {
+		final int selectedIndex = reportsChooser.getSelectedIndex();
+		return selectedIndex < 0 ? "" : reportsChooser.getValue(selectedIndex);
+	}
+
+	@Override
+	public void setSelectedReport(final String reportName) {
+		if(StringUtils.isEmpty(reportName)) {
+			//Make sure none are selected:
+			//TODO: Find a better way to do this.
+			for (int i = 0; i < reportsChooser.getItemCount(); i++) {
+				reportsChooser.setItemSelected(i, false);
+			}
+
+			return;
+		}
+		
+		for (int i = 0; i < reportsChooser.getItemCount(); i++) {
+			if (reportName.equals(reportsChooser.getValue(i))) {
+				reportsChooser.setSelectedIndex(i);
+				break;
+			}
+		}
+
+	}
+
+	@Override
+	public void setReportList(final Reports reports) {
+		reportsChooser.clear();
+
+		// Add a first item as a default for the combobox.
+		// Otherwise a report will be chosen already,
+		// so the user will not be able to choose that report to go to that page.
+		// TODO: Think of a better UI for this.
+		reportsChooser.addItem("-", "");
+
+		for (int i = 0; i < reports.getCount(); i++) {
+			reportsChooser.addItem(reports.getTitle(i), reports.getName(i));
+		}
 	}
 }

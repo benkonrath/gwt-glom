@@ -26,6 +26,8 @@ import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.DocumentSelectionViewImpl;
 import org.glom.web.client.ui.ListView;
 import org.glom.web.client.ui.ListViewImpl;
+import org.glom.web.client.ui.ReportView;
+import org.glom.web.client.ui.ReportViewImpl;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.TableSelectionViewImpl;
 
@@ -41,6 +43,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	private final ListView listView = new ListViewImpl();
 	private final AuthenticationPopup authenticationPopup = new AuthenticationPopup();
 	private final DetailsView detailsView = new DetailsViewImpl();
+	private final ReportView reportView = new ReportViewImpl();
 
 	@Override
 	public EventBus getEventBus() {
@@ -75,6 +78,16 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public DetailsView getDetailsView() {
 		return detailsView;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.ClientFactory#getReportView()
+	 */
+	@Override
+	public ReportView getReportView() {
+		return reportView;
 	}
 
 }

@@ -22,6 +22,7 @@ package org.glom.web.server;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -36,12 +37,14 @@ import org.apache.commons.lang.StringUtils;
 import org.glom.libglom.BakeryDocument.LoadFailureCodes;
 import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
+import org.glom.libglom.Report;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
+import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
 
@@ -135,7 +138,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// Check to see if the native library of java libglom is visible to the JVM
 			if (!isNativeLibraryVisibleToJVM()) {
 				final String errorMessage = "The java-libglom shared library is not visible to the JVM."
-						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library.";
+						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library."
+						+ "\n: java.library.path: " + System.getProperty("java.library.path");
 				Log.error(errorMessage);
 				throw new Exception(errorMessage);
 			}
@@ -293,6 +297,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null)
 			return new DocumentInfo();
 
+		// Avoid dereferencing a null object:
+		if (configuredDoc == null)
+			return new DocumentInfo();
+
 		// FIXME check for authentication
 
 		return configuredDoc.getDocumentInfo(StringUtils.defaultString(localeID));
@@ -313,6 +321,50 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		// FIXME check for authentication
 
 		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
+	}
+
+	// TODO: Specify the foundset (via a where clause) and maybe a default sort order.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getReportLayout(java.lang.String, java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public String getReportHTML(final String documentID, final String tableName, final String reportName, final String quickFind, 
+			final String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null)
+			return "";
+
+		final Document glomDocument = configuredDoc.getDocument();
+		if (glomDocument == null) {
+			final String errorMessage = "getReportHTML(): getDocument() failed.";
+			Log.fatal(errorMessage);
+			// TODO: throw new Exception(errorMessage);
+			return "";
+		}
+
+		// FIXME check for authentication
+
+		final Report report = glomDocument.get_report(tableName, reportName);
+		if (report == null) {
+			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
+			return "";
+		}
+
+		Connection connection;
+		try {
+			connection = configuredDoc.getCpds().getConnection();
+		} catch (final SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			return "Connection Failed";
+		}
+
+		// TODO: Use quickFind
+		final ReportGenerator generator = new ReportGenerator(StringUtils.defaultString(localeID));
+		return generator.generateReport(glomDocument, tableName, report, connection, quickFind);
 	}
 
 	/*
@@ -411,6 +463,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getReportsList(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Reports getReportsList(final String documentID, final String tableName, final String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		return configuredDoc.getReports(tableName, localeID);
 	}
 
 	/*

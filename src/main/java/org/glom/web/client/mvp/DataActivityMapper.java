@@ -22,8 +22,11 @@ package org.glom.web.client.mvp;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.activity.DetailsActivity;
 import org.glom.web.client.activity.ListActivity;
+import org.glom.web.client.activity.ReportActivity;
 import org.glom.web.client.place.DetailsPlace;
+import org.glom.web.client.place.HasRecordsPlace;
 import org.glom.web.client.place.ListPlace;
+import org.glom.web.client.place.ReportPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -52,9 +55,11 @@ public class DataActivityMapper implements ActivityMapper {
 	@Override
 	public Activity getActivity(Place place) {
 		if (place instanceof ListPlace)
-			return new ListActivity((ListPlace) place, clientFactory);
+			return new ListActivity((HasRecordsPlace) place, clientFactory);
 		if (place instanceof DetailsPlace)
 			return new DetailsActivity((DetailsPlace) place, clientFactory);
+		if (place instanceof ReportPlace)
+			return new ReportActivity((ReportPlace) place, clientFactory);
 
 		return null;
 	}
