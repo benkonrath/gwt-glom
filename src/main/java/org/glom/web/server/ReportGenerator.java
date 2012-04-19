@@ -216,6 +216,11 @@ public class ReportGenerator {
 			// Use points instead of pixels for sizes, because pixels are silly
 			// in HTML:
 			exporter.setParameter(JRHtmlExporterParameter.SIZE_UNIT, "pt");
+			
+			// Avoid the page breaks, because they do not make sense for HTML:
+			// TODO: These do not seem to preven the page break gap.
+			exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+			exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "");
 
 			exporter.exportReport();
 		} catch (final JRException ex) {
