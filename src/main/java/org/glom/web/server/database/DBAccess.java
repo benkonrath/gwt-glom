@@ -91,7 +91,9 @@ abstract class DBAccess {
 				case TYPE_DATE:
 					Date date = rs.getDate(i + 1);
 					if (date != null) {
-						DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ROOT);
+						//TODO: Pass Date and Time types instead of converting to text here?
+						//TODO: Use a 4-digit-year short form, somehow.
+						DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
 						rowArray[i].setText(dateFormat.format(date));
 					} else {
 						rowArray[i].setText("");
@@ -100,7 +102,7 @@ abstract class DBAccess {
 				case TYPE_TIME:
 					Time time = rs.getTime(i + 1);
 					if (time != null) {
-						DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.ROOT);
+						DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
 						rowArray[i].setText(timeFormat.format(time));
 					} else {
 						rowArray[i].setText("");

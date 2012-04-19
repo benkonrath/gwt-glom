@@ -21,8 +21,11 @@ package org.glom.web.server;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Locale;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -523,9 +526,8 @@ public class ReportGenerator {
 		final JRDesignExpression expression = createFieldExpression(libglomLayoutItemField);
 		textField.setExpression(expression);
 
-		// Numeric formatting:
 		if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_NUMERIC) {
-
+			// Numeric formatting:
 			final Formatting formatting = libglomLayoutItemField.get_formatting_used();
 			final NumericFormat numericFormat = formatting.get_numeric_format();
 
@@ -535,7 +537,29 @@ public class ReportGenerator {
 
 			// TODO: Use numericFormat.get_currency_symbol(), possibly via format.setCurrency().
 			textField.setPattern(format.toPattern());
-		}
+		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_DATE) {
+			// Date formatting
+			// TODO: Use a 4-digit-year short form, somehow.
+			try //We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
+			{
+			  final SimpleDateFormat format = (SimpleDateFormat)DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
+
+			  textField.setPattern(format.toPattern());
+			} catch (final Exception ex) {
+				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
+			}
+		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_TIME) {
+			// Time formatting
+			try //We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
+			{
+				final SimpleDateFormat format = (SimpleDateFormat)DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
+
+				textField.setPattern(format.toPattern());
+			} catch (final Exception ex) {
+				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
+			}
+	}
+
 		return textField;
 	}
 

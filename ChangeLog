@@ -1,3 +1,14 @@
+2012-04-19  Murray Cumming  <murrayc@murrayc.com>
+
+	ReportGenerator: Specify date and time formats.
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	createFieldValueElement(): Use the default (and localized)
+	short formats, though we still need a way to show 4-digit
+	years without providing the format for every locale.
+	* src/main/java/org/glom/web/server/database/DBAccess.java:
+	convertResultSetToDTO(): Use the short formats here too.
+
 2012-04-18  Murray Cumming  <murrayc@murrayc.com>
 
 	ReportGenerator: Use the correct numeric formatting.
