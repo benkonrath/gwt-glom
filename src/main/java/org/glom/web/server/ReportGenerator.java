@@ -224,7 +224,19 @@ public class ReportGenerator {
 		}
 
 		// System.out.print(output.toString() + "\n");
-		return output.toString();
+		final String html = output.toString();
+
+		// This does not work because jasperReports does not put individual rows in separate table rows.
+		// jasperReports just puts the whole thing in one table row.
+		// Remove the arbitrary width and height that JasperReports forced us to specify:
+		//html = html.replaceAll("position:absolute;", "");
+		//html = html.replaceAll("top:(\\d*)pt;", "");
+		//html = html.replaceAll("left:(\\d*)pt;", "");
+		//html = html.replaceAll("height:(\\d*)pt;", "");
+		//html = html.replaceAll("width:(\\d*)pt;", "");
+		//html = html.replaceAll("overflow: hidden;", "");
+
+		return html;
 	}
 
 	/**
