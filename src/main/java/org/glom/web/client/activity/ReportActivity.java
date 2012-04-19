@@ -27,6 +27,7 @@ import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ReportPlace;
 import org.glom.web.client.ui.AuthenticationPopup;
+import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
@@ -49,6 +50,11 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 	private final ClientFactory clientFactory;
 	private final ReportView reportView;
 	private final AuthenticationPopup authenticationPopup;
+	
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
 	public ReportActivity(final ReportPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID(); // TODO: Just store the place?
@@ -104,7 +110,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setSelectedReport(reportName);
 
-		reportView.setWaitingText("Generating the report..."); //This is cleared by setReportHTML().
+		reportView.setWaitingText(constants.generatingReport()); //This is cleared by setReportHTML().
 		final String localeID = Utils.getCurrentLocaleID();
 		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, quickFind, localeID, callback);
 

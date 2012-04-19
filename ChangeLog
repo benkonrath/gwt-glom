@@ -1,5 +1,20 @@
 2012-04-19  Murray Cumming  <murrayc@murrayc.com>
 
+	Reports: Localize the waiting for report message.
+
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java
+	start(): Get the message from the contants.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+	Add the string here.
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_de.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_es.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_sl.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_zh_CN.properties:
+	Update these files with the English text for newer strings for now.
+
+2012-04-19  Murray Cumming  <murrayc@murrayc.com>
+
 	Reports: Show a message while waiting for the report.
 
 	* src/main/java/org/glom/web/client/ui/ReportView.java
