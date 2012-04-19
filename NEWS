@@ -1,3 +1,9 @@
+1.21.8.1 (unstable):
+
+* Add Report generation, via a Reports drop-down.
+  This is a rough first version of this feature.
+  This uses JasperReports, though it probably will not in future.
+
 1.21.8 (unstable):
 
 * Use the latest java-libglom.
