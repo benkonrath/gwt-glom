@@ -297,10 +297,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null)
 			return new DocumentInfo();
 
-		// Avoid dereferencing a null object:
-		if (configuredDoc == null)
-			return new DocumentInfo();
-
 		// FIXME check for authentication
 
 		return configuredDoc.getDocumentInfo(StringUtils.defaultString(localeID));

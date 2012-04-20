@@ -1,3 +1,11 @@
+2012-04-20  Murray Cumming  <murrayc@murrayc.com>
+
+	Remove some duplicate code.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	getDocumentInfo(): This must have been duplicated during the merge from the
+	reports branch.
+
 1.21.8.1:
 
 2012-04-19  Murray Cumming  <murrayc@murrayc.com>
