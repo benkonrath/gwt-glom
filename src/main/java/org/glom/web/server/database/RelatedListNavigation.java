@@ -49,11 +49,11 @@ public class RelatedListNavigation extends DBAccess {
 
 	private LayoutItem_Portal portal;
 
-	public RelatedListNavigation(Document document, String documentID, ComboPooledDataSource cpds, String tableName,
-			String relationshipName) {
+	public RelatedListNavigation(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			final String tableName, final String relationshipName) {
 		super(document, documentID, cpds, tableName);
 
-		LayoutItem_Portal portal = getPortal(relationshipName);
+		final LayoutItem_Portal portal = getPortal(relationshipName);
 		if (portal == null) {
 			Log.error(documentID, tableName, "Couldn't find LayoutItem_Portal \"" + relationshipName + "\" in table \""
 					+ tableName + "\". " + "Cannot retrive data for the related list.");
@@ -68,7 +68,7 @@ public class RelatedListNavigation extends DBAccess {
 	 * 
 	 * This code was ported from Glom: Box_Data_Portal::get_suitable_record_to_view_details()
 	 */
-	public NavigationRecord getNavigationRecord(TypedDataItem primaryKeyValue) {
+	public NavigationRecord getNavigationRecord(final TypedDataItem primaryKeyValue) {
 
 		if (portal == null) {
 			Log.error(documentID, tableName,
@@ -76,11 +76,11 @@ public class RelatedListNavigation extends DBAccess {
 			return null;
 		}
 
-		StringBuffer navigationTableNameSB = new StringBuffer();
-		LayoutItem_Field navigationRelationshipItem = new LayoutItem_Field();
+		final StringBuffer navigationTableNameSB = new StringBuffer();
+		final LayoutItem_Field navigationRelationshipItem = new LayoutItem_Field();
 		portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem, document);
 
-		String navigationTableName = navigationTableNameSB.toString();
+		final String navigationTableName = navigationTableNameSB.toString();
 		if (StringUtils.isEmpty(navigationTableName)) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot cannot be determined because the navigation table name is empty.");
@@ -88,20 +88,20 @@ public class RelatedListNavigation extends DBAccess {
 		}
 
 		// Get the primary key of that table:
-		Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTableName);
+		final Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTableName);
 
 		// Build a layout item to get the field's value:
 		navigationRelationshipItem.set_full_field_details(navigationTablePrimaryKey);
 
 		// Get the value of the navigation related primary key:
-		LayoutFieldVector fieldsToGet = new LayoutFieldVector();
+		final LayoutFieldVector fieldsToGet = new LayoutFieldVector();
 		fieldsToGet.add(navigationRelationshipItem);
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
-		String relatedTableName = portal.get_table_used("" /* not relevant */);
-		Field primaryKeyField = getPrimaryKeyField(relatedTableName);
+		final String relatedTableName = portal.get_table_used("" /* not relevant */);
+		final Field primaryKeyField = getPrimaryKeyField(relatedTableName);
 
-		NavigationRecord navigationRecord = new NavigationRecord();
+		final NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;
 		Connection conn = null;
 		Statement st = null;
@@ -111,14 +111,14 @@ public class RelatedListNavigation extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			Value gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
+			final Value gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					primaryKeyField.get_glom_type(), primaryKeyValue);
 
 			// Only create the query if we've created a Gda Value from the DataItem.
 			if (gdaPrimaryKeyValue != null) {
 
-				SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKeyField,
-						gdaPrimaryKeyValue);
+				final SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet,
+						primaryKeyField, gdaPrimaryKeyValue);
 				query = Glom.sqlbuilder_get_full_query(builder);
 
 				rs = st.executeQuery(query);
@@ -127,9 +127,9 @@ public class RelatedListNavigation extends DBAccess {
 				navigationRecord.setTableName(navigationTableName);
 
 				rs.next();
-				TypedDataItem navigationTablePrimaryKeyValue = new TypedDataItem();
-				ResultSetMetaData rsMetaData = rs.getMetaData();
-				int queryReturnValueType = rsMetaData.getColumnType(1);
+				final TypedDataItem navigationTablePrimaryKeyValue = new TypedDataItem();
+				final ResultSetMetaData rsMetaData = rs.getMetaData();
+				final int queryReturnValueType = rsMetaData.getColumnType(1);
 				switch (navigationTablePrimaryKey.get_glom_type()) {
 				case TYPE_NUMERIC:
 					if (queryReturnValueType == java.sql.Types.NUMERIC) {
@@ -165,7 +165,7 @@ public class RelatedListNavigation extends DBAccess {
 					navigationRecord.setPrimaryKeyValue(navigationTablePrimaryKeyValue);
 				}
 			}
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query: " + query, e);
 			// TODO: somehow notify user of problem
 			return null;
@@ -178,7 +178,7 @@ public class RelatedListNavigation extends DBAccess {
 					st.close();
 				if (conn != null)
 					conn.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
@@ -187,7 +187,8 @@ public class RelatedListNavigation extends DBAccess {
 		return navigationRecord;
 	}
 
-	private void logNavigationTablePrimaryKeyTypeMismatchError(glom_field_type glomType, String queryReturnValueTypeName) {
+	private void logNavigationTablePrimaryKeyTypeMismatchError(final glom_field_type glomType,
+			final String queryReturnValueTypeName) {
 		Log.error(documentID, tableName, "The expected type from the Glom document: " + glomType
 				+ " doesn't match the type returned by the SQL query: " + queryReturnValueTypeName + ".");
 		Log.error(documentID, tableName, "The navigation table primary key value will not be created. This is a bug.");

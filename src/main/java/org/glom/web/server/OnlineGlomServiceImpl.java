@@ -291,7 +291,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
 
-		ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// Avoid dereferencing a null object:
 		if (configuredDoc == null)
@@ -327,8 +327,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * java.lang.String)
 	 */
 	@Override
-	public String getReportHTML(final String documentID, final String tableName, final String reportName, final String quickFind, 
-			final String localeID) {
+	public String getReportHTML(final String documentID, final String tableName, final String reportName,
+			final String quickFind, final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null)
 			return "";
