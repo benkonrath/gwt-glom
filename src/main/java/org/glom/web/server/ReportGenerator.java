@@ -46,7 +46,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Formatting;
@@ -216,7 +216,7 @@ public class ReportGenerator {
 			// Use points instead of pixels for sizes, because pixels are silly
 			// in HTML:
 			exporter.setParameter(JRHtmlExporterParameter.SIZE_UNIT, "pt");
-			
+
 			// Avoid the page breaks, because they do not make sense for HTML:
 			// TODO: These do not seem to preven the page break gap.
 			exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);

@@ -1,3 +1,19 @@
+2012-04-21  Murray Cumming  <murrayc@murrayc.com>
+
+	Update to the latest versions of dependencies.
+
+	* pom.xml: Update version numbers of dependencies to the latest
+	versions.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.
+	java:
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	Modify the imports where necessary.
+
 2012-04-17  Murray Cumming  <murrayc@murrayc.com>
 
 	Style: Remove overflow:hidden from searchbox
