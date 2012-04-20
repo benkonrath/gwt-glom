@@ -234,12 +234,12 @@ public class ReportGenerator {
 		// This does not work because jasperReports does not put individual rows in separate table rows.
 		// jasperReports just puts the whole thing in one table row.
 		// Remove the arbitrary width and height that JasperReports forced us to specify:
-		//html = html.replaceAll("position:absolute;", "");
-		//html = html.replaceAll("top:(\\d*)pt;", "");
-		//html = html.replaceAll("left:(\\d*)pt;", "");
-		//html = html.replaceAll("height:(\\d*)pt;", "");
-		//html = html.replaceAll("width:(\\d*)pt;", "");
-		//html = html.replaceAll("overflow: hidden;", "");
+		// html = html.replaceAll("position:absolute;", "");
+		// html = html.replaceAll("top:(\\d*)pt;", "");
+		// html = html.replaceAll("left:(\\d*)pt;", "");
+		// html = html.replaceAll("height:(\\d*)pt;", "");
+		// html = html.replaceAll("width:(\\d*)pt;", "");
+		// html = html.replaceAll("overflow: hidden;", "");
 
 		return html;
 	}
@@ -557,25 +557,27 @@ public class ReportGenerator {
 		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_DATE) {
 			// Date formatting
 			// TODO: Use a 4-digit-year short form, somehow.
-			try //We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
+			try // We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
 			{
-			  final SimpleDateFormat format = (SimpleDateFormat)DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
-
-			  textField.setPattern(format.toPattern());
-			} catch (final Exception ex) {
-				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
-			}
-		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_TIME) {
-			// Time formatting
-			try //We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
-			{
-				final SimpleDateFormat format = (SimpleDateFormat)DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
+				final SimpleDateFormat format = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT,
+						Locale.ROOT);
 
 				textField.setPattern(format.toPattern());
 			} catch (final Exception ex) {
 				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
 			}
-	}
+		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_TIME) {
+			// Time formatting
+			try // We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
+			{
+				final SimpleDateFormat format = (SimpleDateFormat) DateFormat.getTimeInstance(DateFormat.SHORT,
+						Locale.ROOT);
+
+				textField.setPattern(format.toPattern());
+			} catch (final Exception ex) {
+				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
+			}
+		}
 
 		return textField;
 	}

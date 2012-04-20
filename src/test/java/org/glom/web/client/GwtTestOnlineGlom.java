@@ -44,18 +44,18 @@ public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 	public void beforeOnlineGlom() {
 		app = new OnlineGlom();
 		app.onModuleLoad();
-		
+
 		assertNotNull(app.clientFactory);
-		DocumentSelectionView view = app.clientFactory.getDocumentSelectionView();
+		final DocumentSelectionView view = app.clientFactory.getDocumentSelectionView();
 		assertNotNull(view);
 		assertNotNull(view.asWidget());
 		assertTrue(view.asWidget().isVisible());
-		
- 		// Some pre-assertions
+
+		// Some pre-assertions
 		assertTrue(app.docSelectionPanel.isVisible());
 		assertFalse(app.dataPanel.isVisible());
 		assertFalse(app.tableSelectionPanel.isVisible());
- 		//TODO: For instance: assertEquals("", app.docSelectionPanel.getText());
+		// TODO: For instance: assertEquals("", app.docSelectionPanel.getText());
 	}
 
 }
