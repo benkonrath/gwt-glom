@@ -4,21 +4,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.glom.web.client.mvp.AppPlaceHistoryMapper;
 import org.glom.web.client.ui.DocumentSelectionView;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.googlecode.gwt.test.GwtTestWithEasyMock;
-import com.googlecode.gwt.test.Mock;
 
 public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 
 	/**
 	 * Tell gwt-test-utils to use this mock when trying to create this class via GWT.create() in OnlineGlom.
 	 */
-	@Mock
-	private AppPlaceHistoryMapper mockAppPlaceHistoryMapper;
+	// @Mock
+	// private AppPlaceHistoryMapper mockAppPlaceHistoryMapper;
 
 	private OnlineGlom app;
 

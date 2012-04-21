@@ -1,5 +1,12 @@
 2012-04-21  Murray Cumming  <murrayc@murrayc.com>
 
+	GwtTestOnlineGlom: Comment out unused code.
+
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	Eclipse has started to say that some code is unused.
+
+2012-04-21  Murray Cumming  <murrayc@murrayc.com>
+
 	Update to the latest versions of dependencies.
 
 	* pom.xml: Update version numbers of dependencies to the latest
