@@ -43,22 +43,23 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class DetailsDBAccess extends DBAccess {
 
-	public DetailsDBAccess(Document document, String documentID, ComboPooledDataSource cpds, String tableName) {
+	public DetailsDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			final String tableName) {
 		super(document, documentID, cpds, tableName);
 		this.tableName = tableName;
 	}
 
-	public DataItem[] getData(TypedDataItem primaryKeyValue) {
+	public DataItem[] getData(final TypedDataItem primaryKeyValue) {
 
-		LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document
-				.get_data_layout_groups("details", tableName));
+		final LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document.get_data_layout_groups("details",
+				tableName));
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
 			Log.warn(documentID, tableName, "Didn't find any fields to show. Returning null.");
 			return null;
 		}
 
-		Field primaryKey = getPrimaryKeyField(tableName);
+		final Field primaryKey = getPrimaryKeyField(tableName);
 
 		if (primaryKey == null) {
 			Log.error(documentID, tableName, "Couldn't find primary key in table. Returning null.");
@@ -92,7 +93,7 @@ public class DetailsDBAccess extends DBAccess {
 				rowsList = convertResultSetToDTO(2, fieldsToGet, rs);
 			}
 
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem
 			return null;
@@ -105,7 +106,7 @@ public class DetailsDBAccess extends DBAccess {
 					st.close();
 				if (conn != null)
 					conn.close();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);
 			}
