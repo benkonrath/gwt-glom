@@ -138,7 +138,7 @@
 		</dependency>
 	</dependencies>
 
-	<url>http://www.glom.org</url>
+	<url>http://www.glom.org/wiki/index.php?title=Development/OnlineGlom</url>
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>

@@ -1,5 +1,11 @@
 2012-04-21  Murray Cumming  <murrayc@murrayc.com>
 
+	Update the project URL.
+
+	* pom.xml: Use an OnlineGlom-specific URL for the project URL.
+
+2012-04-21  Murray Cumming  <murrayc@murrayc.com>
+
 	Main layout: Use a FlowTable instead of absolute positioning.
 
 	* src/main/java/org/glom/web/client/OnlineGlom.java: onModuleLoad():
