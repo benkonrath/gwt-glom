@@ -121,27 +121,28 @@ public class OnlineGlom implements EntryPoint {
 		// See http://code.google.com/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
 		// which describes how to do this via our OnlineGlom.gwt.xml file.
 		clientFactory = GWT.create(ClientFactory.class);
-		EventBus eventBus = clientFactory.getEventBus();
-		PlaceController placeController = clientFactory.getPlaceController();
+		final EventBus eventBus = clientFactory.getEventBus();
+		final PlaceController placeController = clientFactory.getPlaceController();
 
 		// Activity manager for the data display region (list or details view).
-		ActivityMapper dataActivityMapper = new DataActivityMapper(clientFactory);
-		ActivityManager dataActivityManager = new ActivityManager(dataActivityMapper, eventBus);
+		final ActivityMapper dataActivityMapper = new DataActivityMapper(clientFactory);
+		final ActivityManager dataActivityManager = new ActivityManager(dataActivityMapper, eventBus);
 		dataActivityManager.setDisplay(dataDisplay);
 
 		// Activity manager for the document selection display region.
-		ActivityMapper docSelectionActivityMapper = new DocumentSelectionActivityMapper(clientFactory);
-		ActivityManager docSelectionActivityManager = new ActivityManager(docSelectionActivityMapper, eventBus);
+		final ActivityMapper docSelectionActivityMapper = new DocumentSelectionActivityMapper(clientFactory);
+		final ActivityManager docSelectionActivityManager = new ActivityManager(docSelectionActivityMapper, eventBus);
 		docSelectionActivityManager.setDisplay(docSelectionDisplay);
 
 		// Activity manager for the table selection display region.
-		ActivityMapper tableSelectionActivityMapper = new TableSelectionActivityMapper(clientFactory);
-		ActivityManager tableSelectionActivityManager = new ActivityManager(tableSelectionActivityMapper, eventBus);
+		final ActivityMapper tableSelectionActivityMapper = new TableSelectionActivityMapper(clientFactory);
+		final ActivityManager tableSelectionActivityManager = new ActivityManager(tableSelectionActivityMapper,
+				eventBus);
 		tableSelectionActivityManager.setDisplay(tableSelectionDisplay);
 
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper.
-		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
-		PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+		final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
 		historyHandler.register(placeController, eventBus, defaultPlace);
 
 		// Goes to the place represented on the URL or the default place.
