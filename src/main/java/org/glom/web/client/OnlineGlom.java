@@ -35,6 +35,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -51,7 +52,9 @@ public class OnlineGlom implements EntryPoint {
 	 * Some of these are protected, rather than private, so that GwtTestOnlineGlom can access them.
 	 */
 	private Place defaultPlace = new DocumentSelectionPlace();
-	private LayoutPanel layoutPanel = RootLayoutPanel.get();
+
+	private LayoutPanel rootLayoutPanel = RootLayoutPanel.get();
+	private FlowPanel layoutPanel = new FlowPanel();
 	protected SimplePanel docSelectionPanel = new SimplePanel();
 	protected SimplePanel dataPanel = new SimplePanel();
 	protected SimplePanel tableSelectionPanel = new SimplePanel();
@@ -60,27 +63,27 @@ public class OnlineGlom implements EntryPoint {
 
 	AcceptsOneWidget docSelectionDisplay = new AcceptsOneWidget() {
 		@Override
-		public void setWidget(IsWidget activityWidget) {
-			Widget widget = Widget.asWidgetOrNull(activityWidget);
-			layoutPanel.setWidgetVisible(docSelectionPanel, widget != null);
+		public void setWidget(final IsWidget activityWidget) {
+			final Widget widget = Widget.asWidgetOrNull(activityWidget);
+			docSelectionPanel.setVisible(widget != null);
 			docSelectionPanel.setWidget(widget);
 		}
 	};
 
 	AcceptsOneWidget dataDisplay = new AcceptsOneWidget() {
 		@Override
-		public void setWidget(IsWidget activityWidget) {
-			Widget widget = Widget.asWidgetOrNull(activityWidget);
-			layoutPanel.setWidgetVisible(dataPanel, widget != null);
+		public void setWidget(final IsWidget activityWidget) {
+			final Widget widget = Widget.asWidgetOrNull(activityWidget);
+			dataPanel.setVisible(widget != null);
 			dataPanel.setWidget(widget);
 		}
 	};
 
 	AcceptsOneWidget tableSelectionDisplay = new AcceptsOneWidget() {
 		@Override
-		public void setWidget(IsWidget activityWidget) {
-			Widget widget = Widget.asWidgetOrNull(activityWidget);
-			layoutPanel.setWidgetVisible(tableSelectionPanel, widget != null);
+		public void setWidget(final IsWidget activityWidget) {
+			final Widget widget = Widget.asWidgetOrNull(activityWidget);
+			tableSelectionPanel.setVisible(widget != null);
 			tableSelectionPanel.setWidget(widget);
 		}
 	};
@@ -90,6 +93,9 @@ public class OnlineGlom implements EntryPoint {
 	 */
 	@Override
 	public void onModuleLoad() {
+
+		rootLayoutPanel.add(layoutPanel);
+		rootLayoutPanel.setWidgetVisible(layoutPanel, true);
 
 		// TODO This value should really come from the css for the body tag but reading the value using
 		// RootPanel.getBodyElement().getStyle().getMargin() doesn't seem to be working.
@@ -101,21 +107,14 @@ public class OnlineGlom implements EntryPoint {
 		layoutPanel.add(dataPanel);
 
 		// set some properties for the display regions
-		// The 'overflow: visible' adds a horizontal scrollbar when the list view table is larger than the browser
-		// window.
-		layoutPanel.getWidgetContainerElement(dataPanel).getStyle().setOverflow(Overflow.VISIBLE);
-
-		// set the layout for the list and details places
-		// TODO Figure out a way to make the layout without absolute positioning. Right now changes to the vertical
-		// height of the table selector (i.e. CSS changes that affect the vertical height) require the
-		// tableSelectionSize to be updated.
-		double tableSelectionSize = 4.7;
-		layoutPanel.setWidgetTopHeight(tableSelectionPanel, 0, Unit.PCT, tableSelectionSize, Unit.EM);
-		layoutPanel.setWidgetTopHeight(dataPanel, tableSelectionSize, Unit.EM, 100, Unit.PCT);
+		// The 'overflow: visible' adds a horizontal scrollbar when the content is larger than the browser window.
+		// TODO: It would be better to just have the regular browser scrollbars, but for some reason they
+		// are not shown.
+		rootLayoutPanel.getWidgetContainerElement(layoutPanel).getStyle().setOverflow(Overflow.VISIBLE);
 
 		// hide the display regions for the list and details places because they are not shown by default
-		layoutPanel.setWidgetVisible(tableSelectionPanel, false);
-		layoutPanel.setWidgetVisible(dataPanel, false);
+		tableSelectionPanel.setVisible(false);
+		dataPanel.setVisible(false);
 
 		// We might, in future, use different ClientFactory implementations to create different views
 		// for different browser types (such as mobile), so we use GWT.create() to have deferred binding.

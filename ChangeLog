@@ -1,5 +1,14 @@
 2012-04-21  Murray Cumming  <murrayc@murrayc.com>
 
+	Main layout: Use a FlowTable instead of absolute positioning.
+
+	* src/main/java/org/glom/web/client/OnlineGlom.java: onModuleLoad():
+	The RootLayoutPanel is a (extends) AbsolutePanel, so each of its 
+	child panels/widgets must have an absolute position. But that is annoying, so
+	this adds a FlowTable and puts the child panels in there.
+
+2012-04-21  Murray Cumming  <murrayc@murrayc.com>
+
 	GwtTestOnlineGlom: Comment out unused code.
 
 	* src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
