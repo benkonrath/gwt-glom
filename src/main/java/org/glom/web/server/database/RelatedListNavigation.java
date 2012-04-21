@@ -29,13 +29,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.Field.glom_field_type;
-import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_Portal;
-import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
+import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
@@ -117,9 +116,8 @@ public class RelatedListNavigation extends DBAccess {
 			// Only create the query if we've created a Gda Value from the DataItem.
 			if (gdaPrimaryKeyValue != null) {
 
-				final SqlBuilder builder = Glom.build_sql_select_with_key(relatedTableName, fieldsToGet,
-						primaryKeyField, gdaPrimaryKeyValue);
-				query = Glom.sqlbuilder_get_full_query(builder);
+				query = SqlUtils.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKeyField,
+						gdaPrimaryKeyValue);
 
 				rs = st.executeQuery(query);
 

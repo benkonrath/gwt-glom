@@ -27,11 +27,10 @@ import java.util.ArrayList;
 
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
-import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
+import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
@@ -82,9 +81,8 @@ public class DetailsDBAccess extends DBAccess {
 			// Only create the query if we've created a Gda Value from the TypedDataItem.
 			if (gdaPrimaryKeyValue != null) {
 
-				SqlBuilder builder = Glom.build_sql_select_with_key(tableName, fieldsToGet, primaryKey,
+				final String query = SqlUtils.build_sql_select_with_key(tableName, fieldsToGet, primaryKey,
 						gdaPrimaryKeyValue);
-				String query = Glom.sqlbuilder_get_full_query(builder);
 
 				rs = st.executeQuery(query);
 

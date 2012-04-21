@@ -30,10 +30,10 @@ import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
-import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
+import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
@@ -176,10 +176,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 						gdaForeignKeyValue);
 		}
 
-		final Relationship extraJoin = new Relationship(); // Ignored.
-		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
-				extraJoin, sortClause);
-		return Glom.sqlbuilder_get_full_query(builder);
+		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
 
 	}
 
@@ -229,10 +226,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 						gdaForeignKeyValue);
 		}
 
-		final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause);
-		final SqlBuilder countBuilder = Glom.build_sql_select_count_rows(builder);
-		return Glom.sqlbuilder_get_full_query(countBuilder);
-
+		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet, whereClause);
 	}
 
 }

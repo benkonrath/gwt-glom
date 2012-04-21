@@ -58,11 +58,9 @@ import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_GroupBy;
 import org.glom.libglom.LayoutItem_VerticalGroup;
 import org.glom.libglom.NumericFormat;
-import org.glom.libglom.Relationship;
 import org.glom.libglom.Report;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
-import org.glom.libglom.SqlBuilder;
 import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
 
@@ -174,10 +172,7 @@ public class ReportGenerator {
 
 		String sqlQuery = "";
 		if (!fieldsToGet.isEmpty()) {
-			final Relationship extraJoin = new Relationship(); // Ignored.
-			final SqlBuilder builder = Glom.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
-					extraJoin, sortClause);
-			sqlQuery = Glom.sqlbuilder_get_full_query(builder);
+			sqlQuery = SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
 		} else {
 			Log.info("generateReport(): fieldsToGet is empty.");
 		}

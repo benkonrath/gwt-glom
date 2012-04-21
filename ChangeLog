@@ -1,5 +1,14 @@
 2012-04-21  Murray Cumming  <murrayc@murrayc.com>
 
+	Move use of Glom.build_sql*() into a new SqlUtils class.
+
+	* src/main/java/org/glom/web/server/SqlUtils.java: Add static methods
+	to wrap Glom.build_sql*(). The parameter types are still Glom one,
+	but this will make it easier to start using something other than 
+	libglom or SqlBuilder.
+
+2012-04-21  Murray Cumming  <murrayc@murrayc.com>
+
 	Update the project URL.
 
 	* pom.xml: Use an OnlineGlom-specific URL for the project URL.
