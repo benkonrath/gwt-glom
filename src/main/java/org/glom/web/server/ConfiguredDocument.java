@@ -377,6 +377,8 @@ final class ConfiguredDocument {
 				if (field.get_primary_key())
 					primaryKeyIndex = i;
 			} else {
+				// TODO: We can implement this easily when we replace libglom, because then we won't need to translate
+				// libglom items to our own item classes here.
 				Log.info(documentID, tableName,
 						"Ignoring unknown list LayoutItem of type " + libglomLayoutItem.get_part_type_name() + ".");
 				continue;
