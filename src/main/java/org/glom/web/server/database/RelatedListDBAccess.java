@@ -19,24 +19,24 @@
 
 package org.glom.web.server.database;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldVector;
-import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
-import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
+import org.jooq.Condition;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -152,7 +152,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
+	protected String getSelectQuery(final Connection connection, final String quickFind, final SortClause sortClause) {
 		// TODO: combine this method with getCountQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
@@ -166,17 +166,17 @@ public class RelatedListDBAccess extends ListDBAccess {
 			return "";
 		}
 
-		SqlExpr whereClause = new SqlExpr(); // Note that we ignore quickFind.
+		Condition whereClause = null; // Note that we ignore quickFind.
 		// only attempt to make a where clause if it makes sense to do so
 		if (!StringUtils.isEmpty(whereClauseToTableName)) {
 			final Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
 			if (gdaForeignKeyValue != null)
-				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
+				whereClause = SqlUtils.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
 						gdaForeignKeyValue);
 		}
 
-		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause);
 
 	}
 
@@ -202,7 +202,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * @see org.glom.web.server.ListDBAccess#getCountQuery()
 	 */
 	@Override
-	protected String getCountQuery() {
+	protected String getCountQuery(final Connection connection) {
 		// TODO: combine this method with getSelectQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
@@ -216,17 +216,17 @@ public class RelatedListDBAccess extends ListDBAccess {
 			return "";
 		}
 
-		SqlExpr whereClause = new SqlExpr();
+		Condition whereClause = null;
 		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
 			final Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
 					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
 			if (gdaForeignKeyValue != null)
-				whereClause = Glom.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
+				whereClause = SqlUtils.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
 						gdaForeignKeyValue);
 		}
 
-		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet, whereClause);
+		return SqlUtils.build_sql_count_select_with_where_clause(connection, tableName, fieldsToGet, whereClause);
 	}
 
 }

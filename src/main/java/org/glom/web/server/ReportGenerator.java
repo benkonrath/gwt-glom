@@ -50,7 +50,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Formatting;
-import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroup;
 import org.glom.libglom.LayoutItemVector;
@@ -61,8 +60,8 @@ import org.glom.libglom.NumericFormat;
 import org.glom.libglom.Report;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
-import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
+import org.jooq.Condition;
 
 /**
  * @author Murray Cumming <murrayc@openimus.com>
@@ -162,17 +161,16 @@ public class ReportGenerator {
 
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
 		// but let's be sure:
-		SqlExpr whereClause;
-		if (StringUtils.isEmpty(quickFind)) {
-			whereClause = new SqlExpr();
-		} else {
+		Condition whereClause = null;
+		if (!StringUtils.isEmpty(quickFind)) {
 			final Value quickFindValue = new Value(quickFind);
-			whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
+			whereClause = SqlUtils.get_find_where_clause_quick(document, tableName, quickFindValue);
 		}
 
 		String sqlQuery = "";
 		if (!fieldsToGet.isEmpty()) {
-			sqlQuery = SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
+			sqlQuery = SqlUtils.build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause,
+					sortClause);
 		} else {
 			Log.info("generateReport(): fieldsToGet is empty.");
 		}

@@ -81,7 +81,7 @@ public class DetailsDBAccess extends DBAccess {
 			// Only create the query if we've created a Gda Value from the TypedDataItem.
 			if (gdaPrimaryKeyValue != null) {
 
-				final String query = SqlUtils.build_sql_select_with_key(tableName, fieldsToGet, primaryKey,
+				final String query = SqlUtils.build_sql_select_with_key(conn, tableName, fieldsToGet, primaryKey,
 						gdaPrimaryKeyValue);
 
 				rs = st.executeQuery(query);

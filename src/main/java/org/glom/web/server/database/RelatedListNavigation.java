@@ -116,7 +116,7 @@ public class RelatedListNavigation extends DBAccess {
 			// Only create the query if we've created a Gda Value from the DataItem.
 			if (gdaPrimaryKeyValue != null) {
 
-				query = SqlUtils.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKeyField,
+				query = SqlUtils.build_sql_select_with_key(conn, relatedTableName, fieldsToGet, primaryKeyField,
 						gdaPrimaryKeyValue);
 
 				rs = st.executeQuery(query);

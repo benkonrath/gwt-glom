@@ -1,3 +1,28 @@
+2012-04-23  Murray Cumming  <murrayc@murrayc.com>
+
+	Use jOOQ instead of Glom.build_sql*(), to avoid native calls.
+
+	* pom.xml: Depend on jooq.
+	* src/main/java/org/glom/web/server/SqlUtils.java: Reimplement the
+	methods with jOOQ, based on the C++ implementations in libglom,
+	with some changes to the logic required by jooQ.
+	Take a jOOQ Condition rather than a Glom.SqlExpr (GdaSqlExpr) for the
+	where clause.
+	* src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation:
+	Adapt. In particular, the SqlUtils methods now need to take a Connection,
+	because jOOQ needs that, though it seems unnecessary.
+
+	This is not quite finished. Ideally jOOQ would help us to build 
+	table_name.field_name names, quoting and escaping them properly.
+	See http://stackoverflow.com/questions/10264001/instantiating-a-jooq-field-by-name
+
 2012-04-21  Murray Cumming  <murrayc@murrayc.com>
 
 	Move use of Glom.build_sql*() into a new SqlUtils class.

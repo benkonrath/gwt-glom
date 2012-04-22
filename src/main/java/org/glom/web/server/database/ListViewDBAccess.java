@@ -19,19 +19,19 @@
 
 package org.glom.web.server.database;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.libglom.Document;
 import org.glom.libglom.Field;
-import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.SortClause;
-import org.glom.libglom.SqlExpr;
 import org.glom.libglom.Value;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.shared.DataItem;
+import org.jooq.Condition;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -82,18 +82,16 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
+	protected String getSelectQuery(final Connection connection, final String quickFind, final SortClause sortClause) {
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
 		// but let's be sure:
-		SqlExpr whereClause;
-		if (StringUtils.isEmpty(quickFind)) {
-			whereClause = new SqlExpr();
-		} else {
+		Condition whereClause = null;
+		if (!StringUtils.isEmpty(quickFind)) {
 			final Value quickFindValue = new Value(quickFind);
-			whereClause = Glom.get_find_where_clause_quick(document, tableName, quickFindValue);
+			whereClause = SqlUtils.get_find_where_clause_quick(document, tableName, quickFindValue);
 		}
 
-		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause);
 	}
 
 	/*
@@ -102,8 +100,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * @see org.glom.web.server.ListDBAccess#getCountQuery(org.glom.libglom.LayoutFieldVector)
 	 */
 	@Override
-	protected String getCountQuery() {
-		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet);
+	protected String getCountQuery(final Connection connection) {
+		return SqlUtils.build_sql_count_select_with_where_clause(connection, tableName, fieldsToGet);
 	}
 
 	/**

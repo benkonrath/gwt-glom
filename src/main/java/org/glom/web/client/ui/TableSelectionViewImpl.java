@@ -121,6 +121,10 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	@Override
 	public void setTableSelection(final ArrayList<String> names, final ArrayList<String> titles) {
 		tablesChooser.clear();
+
+		if (names == null)
+			return;
+
 		for (int i = 0; i < names.size(); i++) {
 			tablesChooser.addItem(titles.get(i), names.get(i));
 		}
@@ -128,16 +132,16 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedTableName(final String tableName) {
-		if(StringUtils.isEmpty(tableName)) {
-			//Make sure none are selected:
-			//TODO: Find a better way to do this.
+		if (StringUtils.isEmpty(tableName)) {
+			// Make sure none are selected:
+			// TODO: Find a better way to do this.
 			for (int i = 0; i < tablesChooser.getItemCount(); i++) {
 				tablesChooser.setItemSelected(i, false);
 			}
 
 			return;
 		}
-		
+
 		for (int i = 0; i < tablesChooser.getItemCount(); i++) {
 			if (tableName.equals(tablesChooser.getValue(i))) {
 				tablesChooser.setSelectedIndex(i);
@@ -236,16 +240,16 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedLocale(final String localeID) {
-		if(StringUtils.isEmpty(localeID)) {
-			//Make sure none are selected:
-			//TODO: Find a better way to do this.
+		if (StringUtils.isEmpty(localeID)) {
+			// Make sure none are selected:
+			// TODO: Find a better way to do this.
 			for (int i = 0; i < localesChooser.getItemCount(); i++) {
 				localesChooser.setItemSelected(i, false);
 			}
 
 			return;
 		}
-		
+
 		for (int i = 0; i < localesChooser.getItemCount(); i++) {
 			if (localeID.equals(localesChooser.getValue(i))) {
 				localesChooser.setSelectedIndex(i);
@@ -268,16 +272,16 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 	@Override
 	public void setSelectedReport(final String reportName) {
-		if(StringUtils.isEmpty(reportName)) {
-			//Make sure none are selected:
-			//TODO: Find a better way to do this.
+		if (StringUtils.isEmpty(reportName)) {
+			// Make sure none are selected:
+			// TODO: Find a better way to do this.
 			for (int i = 0; i < reportsChooser.getItemCount(); i++) {
 				reportsChooser.setItemSelected(i, false);
 			}
 
 			return;
 		}
-		
+
 		for (int i = 0; i < reportsChooser.getItemCount(); i++) {
 			if (reportName.equals(reportsChooser.getValue(i))) {
 				reportsChooser.setSelectedIndex(i);
