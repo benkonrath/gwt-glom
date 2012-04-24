@@ -224,9 +224,7 @@ public class SqlUtils {
 			return result;
 		}
 
-		// TODO: field() takes general SQL, not specifically a field name, so this is unsafe.
-		final String sqlFieldName = get_sql_field_name(tableName, fieldName);
-		final org.jooq.Field<Object> field = Factory.field(sqlFieldName);
+		final org.jooq.Field<Object> field = createField(tableName, fieldName);
 		result = field.equal(gdaPrimaryKeyValue.get_double()); // TODO: Handle other types too.
 		return result;
 	}
@@ -358,11 +356,8 @@ public class SqlUtils {
 			 * builder->add_field_id(layout_item->get_name(), tableName)); builder->add_field_value_id(id_function); }
 			 * else {
 			 */
-			final String sql_field_name = get_sql_field_name(tableName, layout_item);
-			if (!StringUtils.isEmpty(sql_field_name)) {
-				// TODO Factory.field() takes SQL, which can be a field name,
-				// but this does not interpret it as a field name, so this is unsafe.
-				final org.jooq.Field<?> field = Factory.field(sql_field_name);
+			final org.jooq.Field<?> field = createField(tableName, layout_item);
+			if (field != null) {
 				step = step.select(field);
 
 				// Avoid duplicate records with doubly-related fields:
@@ -381,6 +376,24 @@ public class SqlUtils {
 		}
 
 		return listRelationships;
+	}
+
+	private static org.jooq.Field<Object> createField(final String tableName, final String fieldName) {
+		final String sql_field_name = get_sql_field_name(tableName, fieldName);
+		if (StringUtils.isEmpty(sql_field_name)) {
+			return null;
+		}
+
+		return Factory.field(sql_field_name);
+	}
+
+	private static org.jooq.Field<Object> createField(final String tableName, final LayoutItem_Field layoutField) {
+		final String sql_field_name = get_sql_field_name(tableName, layoutField);
+		if (StringUtils.isEmpty(sql_field_name)) {
+			return null;
+		}
+
+		return Factory.field(sql_field_name);
 	}
 
 	private static String get_sql_field_name(final String tableName, final String fieldName) {
@@ -496,11 +509,9 @@ public class SqlUtils {
 		// Add the JOIN:
 		if (!uses_relationship.getHasRelatedRelationshipName()) {
 
-			final String sql_field_name_from = get_sql_field_name(relationship.get_from_table(),
+			final org.jooq.Field<Object> fieldFrom = createField(relationship.get_from_table(),
 					relationship.get_from_field());
-			final org.jooq.Field<Object> fieldFrom = Factory.field(sql_field_name_from);
-			final String sql_field_name_to = get_sql_field_name(alias_name, relationship.get_to_field());
-			final org.jooq.Field<Object> fieldTo = Factory.field(sql_field_name_to);
+			final org.jooq.Field<Object> fieldTo = createField(alias_name, relationship.get_to_field());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// TODO: join() takes SQL, not specifically an alias name, so this is unsafe.
@@ -511,11 +522,9 @@ public class SqlUtils {
 			parent_relationship.setRelationship(relationship);
 			final Relationship relatedRelationship = uses_relationship.getRelatedRelationship();
 
-			final String sql_field_name_from = get_sql_field_name(parent_relationship.get_sql_join_alias_name(),
+			final org.jooq.Field<Object> fieldFrom = createField(parent_relationship.get_sql_join_alias_name(),
 					relatedRelationship.get_from_field());
-			final org.jooq.Field<Object> fieldFrom = Factory.field(sql_field_name_from);
-			final String sql_field_name_to = get_sql_field_name(alias_name, relatedRelationship.get_to_field());
-			final org.jooq.Field<Object> fieldTo = Factory.field(sql_field_name_to);
+			final org.jooq.Field<Object> fieldTo = createField(alias_name, relatedRelationship.get_to_field());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// TODO: join() takes SQL, not specifically an alias name, so this is unsafe.
@@ -549,8 +558,7 @@ public class SqlUtils {
 				continue;
 			}
 
-			final String sql_field_name = get_sql_field_name(tableName, field.get_name());
-			final org.jooq.Field<Object> jooqField = Factory.field(sql_field_name);
+			final org.jooq.Field<Object> jooqField = createField(tableName, field.get_name());
 			final Condition thisCondition = jooqField.equal(quickFindValue.get_string());
 
 			if (condition == null) {

@@ -1,5 +1,12 @@
 2012-04-24  Murray Cumming  <murrayc@murrayc.com>
 
+	Use of jOOQ: Move Field creation into a utility method.
+
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	This lets us improve it more easily.
+
+2012-04-24  Murray Cumming  <murrayc@murrayc.com>
+
 	Use of jOOQ: Improve the code to COUNT a sub-select.
 
 	* src/main/java/org/glom/web/server/SqlUtils.java:
