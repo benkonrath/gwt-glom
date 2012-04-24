@@ -33,6 +33,7 @@ import org.glom.libglom.Relationship;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.Value;
+import org.jooq.AggregateFunction;
 import org.jooq.Condition;
 import org.jooq.SQLDialect;
 import org.jooq.SelectFinalStep;
@@ -251,21 +252,27 @@ public class SqlUtils {
 		}
 
 		final String query = step.getQuery().getSQL(true);
-		//Log.info("Query: " + query);
+		// Log.info("Query: " + query);
 		return query;
+	}
+
+	private static SelectSelectStep createSelect(final Connection connection) {
+		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
+		final Settings settings = factory.getSettings();
+		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
+		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
+
+		final SelectSelectStep selectStep = factory.select();
+		return selectStep;
 	}
 
 	private static SelectFinalStep build_sql_select_step_with_where_clause(final Connection connection,
 			final String tableName, final LayoutFieldVector fieldsToGet, final Condition whereClause,
 			final SortClause sortClause) {
 
-		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
-		final Settings settings = factory.getSettings();
-		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
-		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
+		final SelectSelectStep selectStep = createSelect(connection);
 
 		// Add the fields, and any necessary joins:
-		final SelectSelectStep selectStep = factory.select();
 		final List<UsesRelationship> listRelationships = build_sql_select_add_fields_to_get(selectStep, tableName,
 				fieldsToGet, sortClause, false /* extraJoin */);
 
@@ -289,20 +296,25 @@ public class SqlUtils {
 			final LayoutFieldVector fieldsToGet) {
 		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(connection, tableName, fieldsToGet,
 				null, null);
-		return build_sql_select_count_rows(selectInner);
+		return build_sql_select_count_rows(connection, selectInner);
 	}
 
 	public static String build_sql_count_select_with_where_clause(final Connection connection, final String tableName,
 			final LayoutFieldVector fieldsToGet, final Condition whereClause) {
 		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(connection, tableName, fieldsToGet,
 				whereClause, null);
-		return build_sql_select_count_rows(selectInner);
+		return build_sql_select_count_rows(connection, selectInner);
 	}
 
-	private static String build_sql_select_count_rows(final SelectFinalStep selectInner) {
+	private static String build_sql_select_count_rows(final Connection connection, final SelectFinalStep selectInner) {
 		// TODO: Find a way to do this with the jOOQ API:
-		final String query = selectInner.getQuery().getSQL(true);
-		return "SELECT COUNT(*) FROM (" + query + ") AS glomarbitraryalias";
+		final SelectSelectStep select = createSelect(connection);
+
+		final org.jooq.Field<?> field = Factory.field("*");
+		final AggregateFunction<?> count = Factory.count(field);
+		select.select(count).from(selectInner);
+		return select.getQuery().getSQL(true);
+		// return "SELECT COUNT(*) FROM (" + query + ") AS glomarbitraryalias";
 	}
 
 	private static List<UsesRelationship> build_sql_select_add_fields_to_get(SelectSelectStep step,
