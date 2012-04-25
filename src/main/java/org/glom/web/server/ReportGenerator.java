@@ -47,7 +47,6 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Document;
 import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Formatting;
 import org.glom.libglom.LayoutFieldVector;
@@ -57,11 +56,12 @@ import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.LayoutItem_GroupBy;
 import org.glom.libglom.LayoutItem_VerticalGroup;
 import org.glom.libglom.NumericFormat;
-import org.glom.libglom.Report;
 import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.Value;
 import org.jooq.Condition;
+import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Report;
 
 /**
  * @author Murray Cumming <murrayc@openimus.com>
@@ -103,7 +103,7 @@ public class ReportGenerator {
 
 	/**
 	 */
-	public String generateReport(final Document document, final String tableName, final Report report,
+	public String generateReport(final Document glomDocument, final String tableName, final Report report,
 			final Connection connection, final String quickFind) {
 
 		final org.glom.libglom.LayoutGroup layout_group = report.get_layout_group();
@@ -164,7 +164,7 @@ public class ReportGenerator {
 		Condition whereClause = null;
 		if (!StringUtils.isEmpty(quickFind)) {
 			final Value quickFindValue = new Value(quickFind);
-			whereClause = SqlUtils.get_find_where_clause_quick(document, tableName, quickFindValue);
+			whereClause = SqlUtils.get_find_where_clause_quick(glomDocument, tableName, quickFindValue);
 		}
 
 		String sqlQuery = "";

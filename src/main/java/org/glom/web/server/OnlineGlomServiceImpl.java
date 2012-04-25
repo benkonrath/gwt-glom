@@ -34,10 +34,7 @@ import javax.servlet.ServletException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.BakeryDocument.LoadFailureCodes;
-import org.glom.libglom.Document;
 import org.glom.libglom.Glom;
-import org.glom.libglom.Report;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
@@ -47,6 +44,8 @@ import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Report;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
@@ -163,7 +162,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				final boolean retval = document.load(error);
 				if (retval == false) {
 					String message;
-					if (LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == LoadFailureCodes.swigToEnum(error)) {
+					if (false) {//TODO: Document.LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == (error) {
 						message = "Could not find file: " + glomFile.getAbsolutePath();
 					} else {
 						message = "An unknown error occurred when trying to load file: " + glomFile.getAbsolutePath();

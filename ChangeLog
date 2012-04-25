@@ -1,3 +1,11 @@
+2012-04-25  Murray Cumming  <murrayc@murrayc.com>
+
+	Initial Document loading implementation, instead of libglom.
+
+	* src/test/java/org/glom/web/shared/libglom/: Add Document, Report,
+	and Translatable classes, and adapt the rest of the code to use them.
+	However, this is still missing Layout and Field classes and loading.
+
 2012-04-24  Murray Cumming  <murrayc@murrayc.com>
 
 	Use of jOOQ: Move Field creation into a utility method.

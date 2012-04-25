@@ -26,7 +26,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.LayoutFieldVector;
@@ -38,6 +37,7 @@ import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
+import org.glom.web.shared.libglom.Document;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -77,7 +77,7 @@ public class RelatedListNavigation extends DBAccess {
 
 		final StringBuffer navigationTableNameSB = new StringBuffer();
 		final LayoutItem_Field navigationRelationshipItem = new LayoutItem_Field();
-		portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem, document);
+		//TODO: //portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem, document);
 
 		final String navigationTableName = navigationTableNameSB.toString();
 		if (StringUtils.isEmpty(navigationTableName)) {

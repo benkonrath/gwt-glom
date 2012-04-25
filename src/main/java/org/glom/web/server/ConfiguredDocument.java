@@ -26,10 +26,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldVector;
-import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_CalendarPortal;
@@ -38,7 +36,6 @@ import org.glom.libglom.LayoutItem_Notebook;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.NumericFormat;
 import org.glom.libglom.Relationship;
-import org.glom.libglom.Report;
 import org.glom.libglom.StringVector;
 import org.glom.web.server.database.DetailsDBAccess;
 import org.glom.web.server.database.ListViewDBAccess;
@@ -56,6 +53,8 @@ import org.glom.web.shared.layout.LayoutItem;
 import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemNotebook;
 import org.glom.web.shared.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Report;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -505,8 +504,8 @@ final class ConfiguredDocument {
 
 					// Determine if the field should have a navigation button and set this in the DTO.
 					final Relationship fieldUsedInRelationshipToOne = new Relationship();
-					final boolean addNavigation = Glom.layout_field_should_have_navigation(tableName,
-							libglomLayoutItemField, document, fieldUsedInRelationshipToOne);
+					final boolean addNavigation = false; //TODO: Glom.layout_field_should_have_navigation(tableName,
+							// libglomLayoutItemField, document, fieldUsedInRelationshipToOne);
 					layoutItemField.setAddNavigation(addNavigation);
 
 					// Set the the name of the table to navigate to if navigation should be enabled.
@@ -615,8 +614,8 @@ final class ConfiguredDocument {
 			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
 			final StringBuffer navigationTableName = new StringBuffer();
 			final LayoutItem_Field navigationRelationship = new LayoutItem_Field(); // Ignored.
-			libglomLayoutItemPortal.get_suitable_table_to_view_details(navigationTableName, navigationRelationship,
-					document);
+			//TODO: libglomLayoutItemPortal.get_suitable_table_to_view_details(navigationTableName, navigationRelationship,
+			//		document);
 			layoutItemPortal.setAddNavigation(!StringUtils.isEmpty(navigationTableName.toString()));
 		}
 

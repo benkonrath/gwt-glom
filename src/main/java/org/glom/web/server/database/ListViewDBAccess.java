@@ -23,7 +23,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem_Field;
@@ -32,6 +31,7 @@ import org.glom.libglom.Value;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.shared.DataItem;
 import org.jooq.Condition;
+import org.glom.web.shared.libglom.Document;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 

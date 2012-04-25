@@ -27,7 +27,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.glom.libglom.Document;
 import org.glom.libglom.Field;
 import org.glom.libglom.FieldVector;
 import org.glom.libglom.LayoutFieldVector;
@@ -39,6 +38,7 @@ import org.glom.libglom.LayoutItem_Portal;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.libglom.Document;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
