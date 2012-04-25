@@ -25,10 +25,9 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem;
@@ -39,6 +38,7 @@ import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -174,7 +174,7 @@ abstract class DBAccess {
 			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(layoutItem);
 			if (layoutItemField != null) {
 				// the layoutItem is a LayoutItem_Field
-				FieldVector fields;
+				List<org.glom.web.shared.libglom.Field> fields;
 				if (layoutItemField.get_has_relationship_name()) {
 					// layoutItemField is a field in a related table
 					fields = document.get_table_fields(layoutItemField.get_table_used(tableName));
@@ -227,7 +227,7 @@ abstract class DBAccess {
 	 */
 	protected Field getPrimaryKeyField(String tableName) {
 		Field primaryKey = null;
-		FieldVector fieldsVec = document.get_table_fields(tableName);
+		List<Field> fieldsVec = document.get_table_fields(tableName);
 		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
 			Field field = fieldsVec.get(i);
 			if (field.get_primary_key()) {

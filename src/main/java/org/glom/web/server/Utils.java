@@ -21,10 +21,10 @@ package org.glom.web.server;
 
 import java.io.File;
 
-import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.Value;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
+import org.glom.web.shared.libglom.Field;
 
 /**
  *
@@ -49,10 +49,10 @@ public class Utils {
 	}
 
 	public static Value getGlomTypeGdaValueForTypedDataItem(String documentID, String tableName,
-			glom_field_type glomType, TypedDataItem dataItem) {
+			Field.glom_field_type glom_field_type, TypedDataItem dataItem) {
 		Value gdaValue = null;
 
-		switch (glomType) {
+		switch (glom_field_type) {
 		case TYPE_NUMERIC:
 
 			if (dataItem.isEmpty()) {
@@ -80,7 +80,7 @@ public class Utils {
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the data when the type doesn't match the type from the Glom document.
-				logTypeMismatchError(documentID, tableName, glomType, dataItem);
+				logTypeMismatchError(documentID, tableName, glom_field_type, dataItem);
 				gdaValue = new Value(); // an empty Value
 			}
 			break;
@@ -105,13 +105,13 @@ public class Utils {
 			} else {
 				// non-empty data, mis-matched types:
 				// Don't use the primary key value when the type doesn't match the type from the Glom document.
-				logTypeMismatchError(documentID, tableName, glomType, dataItem);
+				logTypeMismatchError(documentID, tableName, glom_field_type, dataItem);
 				gdaValue = new Value(""); // an emtpy string Value
 			}
 			break;
 
 		default:
-			Log.error(documentID, tableName, "Unable to create a Gda Value of type: " + glomType
+			Log.error(documentID, tableName, "Unable to create a Gda Value of type: " + glom_field_type
 					+ " based on data of type: " + dataItem.getType() + ".");
 			Log.warn(documentID, tableName, "The data item is being ignored. This is a Bug.");
 			gdaValue = new Value(); // an empty Value
@@ -121,7 +121,7 @@ public class Utils {
 		return gdaValue;
 	}
 
-	private static void logTypeMismatchError(String documentID, String tableName, glom_field_type glomType,
+	private static void logTypeMismatchError(String documentID, String tableName, Field.glom_field_type glomType,
 			TypedDataItem dataItem) {
 
 		String dataItemString;

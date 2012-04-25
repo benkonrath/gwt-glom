@@ -1,5 +1,9 @@
 2012-04-25  Murray Cumming  <murrayc@murrayc.com>
 
+	Add a Field class and implement some loading of it in Document.
+
+2012-04-25  Murray Cumming  <murrayc@murrayc.com>
+
 	Initial Document loading implementation, instead of libglom.
 
 	* src/test/java/org/glom/web/shared/libglom/: Add Document, Report,

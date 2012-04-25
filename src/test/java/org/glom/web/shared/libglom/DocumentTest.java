@@ -24,9 +24,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.glom.web.shared.libglom.Document;
-import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
 import org.glom.libglom.Glom;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutGroup;
@@ -92,7 +92,7 @@ public class DocumentTest {
 	@Test
 	public void testReadTableFieldSizes() {
 
-		FieldVector fields = document.get_table_fields("albums");
+		List<Field> fields = document.get_table_fields("albums");
 		assertEquals(6, fields.size());
 
 		Field field = fields.get(0);

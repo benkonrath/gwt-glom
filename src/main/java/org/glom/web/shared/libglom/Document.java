@@ -20,17 +20,18 @@
 package org.glom.web.shared.libglom;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.StringVector;
+import org.glom.web.shared.layout.LayoutItemField;
 import org.jfree.util.Log;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -49,7 +50,8 @@ public class Document {
 		public String name = "";
 		public boolean isDefault;
 		public boolean isHidden;
-		
+
+		private final Hashtable<String, Field> fieldsMap = new Hashtable<String, Field>();
 		private final Hashtable<String, Report> reportsMap = new Hashtable<String, Report>();
 	};
 
@@ -79,6 +81,8 @@ public class Document {
 	private static String NODE_REPORT = "report";
 	private static String NODE_FIELDS = "fields";
 	private static String NODE_FIELD = "field";
+	private static String ATTRIBUTE_PRIMARY_KEY = "primary_key";
+	private static String ATTRIBUTE_FIELD_TYPE = "type";
 	
 	public void set_file_uri(final String fileURI) {
 		this.fileURI = fileURI;
@@ -125,7 +129,7 @@ public class Document {
 			return false;
 		}
 		
-		databaseTitle.original = rootNode.getAttribute(ATTRIBUTE_TITLE);
+		databaseTitle.set_title_original( rootNode.getAttribute(ATTRIBUTE_TITLE) );
 		
 		final NodeList listTableNodes = rootNode.getElementsByTagName(NODE_TABLE);
 		final int num = listTableNodes.getLength();
@@ -177,7 +181,7 @@ public class Document {
 	 * @param title
 	 */
 	private void loadTitle(final Element node, final Translatable title) {
-		title.original = node.getAttribute(ATTRIBUTE_TITLE);
+		title.set_title_original(node.getAttribute(ATTRIBUTE_TITLE));
 		
 		final Element nodeSet = getElementByName(node, NODE_TRANSLATIONS_SET);
 		if(nodeSet == null) {
@@ -209,7 +213,21 @@ public class Document {
 		loadTitle(node, info);
 		info.isDefault = getAttributeAsBoolean(node, ATTRIBUTE_DEFAULT);
 		info.isHidden = getAttributeAsBoolean(node, ATTRIBUTE_HIDDEN);
-		
+
+		final Element fieldsNode = getElementByName(node, NODE_FIELDS);
+		if(fieldsNode != null) {
+			final NodeList listFieldNodes = fieldsNode.getElementsByTagName(NODE_FIELD);
+			final int numFields = listFieldNodes.getLength();
+			for(int i = 0; i < numFields; i++) {
+				final Node fieldNode = listFieldNodes.item(i);
+				final Element element = (Element)fieldNode; //TODO: Check the cast.
+				Field field = new Field();
+				loadField(element, field);
+
+				info.fieldsMap.put(field.get_name(), field);
+			}
+		}
+
 		final Element reportsNode = getElementByName(node, NODE_REPORTS);
 		if(reportsNode != null) {
 			final NodeList listReportNodes = reportsNode.getElementsByTagName(NODE_REPORT);
@@ -220,21 +238,7 @@ public class Document {
 				Report report = new Report();
 				loadReport(element, report);
 
-				info.reportsMap.put(report.name, report);
-			}
-		}
-		
-		final Element fieldsNode = getElementByName(node, NODE_FIELDS);
-		if(fieldsNode != null) {
-			final NodeList listFieldNodes = reportsNode.getElementsByTagName(NODE_FIELD);
-			final int numFields = listFieldNodes.getLength();
-			for(int i = 0; i < numFields; i++) {
-				final Node fieldNode = listFieldNodes.item(i);
-				final Element element = (Element)fieldNode; //TODO: Check the cast.
-				//TODO: Report report = new Report();
-				//loadField(element, report);
-
-				//TODO: info.fieldsMap.put(field.name, Field);
+				info.reportsMap.put(report.get_name(), report);
 			}
 		}
 		
@@ -243,10 +247,41 @@ public class Document {
 
 	/**
 	 * @param element
+	 * @param field
+	 */
+	private void loadField(Element element, Field field) {
+		field.set_name(element.getAttribute(ATTRIBUTE_NAME));
+		
+		Field.glom_field_type fieldType = Field.glom_field_type.TYPE_INVALID;
+		final String fieldTypeStr = element.getAttribute(ATTRIBUTE_FIELD_TYPE);
+		if(!StringUtils.isEmpty(fieldTypeStr)) {
+			if(fieldTypeStr == "boolean") {
+				fieldType = Field.glom_field_type.TYPE_BOOLEAN;
+			} else if (fieldTypeStr == "date") {
+				fieldType = Field.glom_field_type.TYPE_DATE;
+			} else if (fieldTypeStr == "image") {
+				fieldType = Field.glom_field_type.TYPE_IMAGE;
+			} else if (fieldTypeStr == "numeric") {
+				fieldType = Field.glom_field_type.TYPE_NUMERIC;
+			} else if (fieldTypeStr == "text") {
+				fieldType = Field.glom_field_type.TYPE_TEXT;
+			} else if (fieldTypeStr == "time") {
+				fieldType = Field.glom_field_type.TYPE_TIME;
+			}
+		}
+			
+		field.set_glom_field_type(fieldType);
+		
+		field.set_primary_key(getAttributeAsBoolean(element, ATTRIBUTE_PRIMARY_KEY));
+		loadTitle(element, field);
+	}
+
+	/**
+	 * @param element
 	 * @param reportNode
 	 */
 	private void loadReport(Element element, Report report) {
-		report.name = element.getAttribute(ATTRIBUTE_NAME);
+		report.set_name(element.getAttribute(ATTRIBUTE_NAME));
 		loadTitle(element, report);
 	}
 	
@@ -336,9 +371,12 @@ public class Document {
 		return true;
 	}
 	
-	public FieldVector get_table_fields(final String tableName) {
-		//TODO:
-		return new FieldVector();
+	public List<Field> get_table_fields(final String tableName) {
+		final TableInfo info = getTableInfo(tableName);
+		if(info == null)
+			return null;
+
+		return new ArrayList<Field>(info.fieldsMap.values());
 	}
 	
 	public Field get_field(String table_name, String strFieldName) {
@@ -359,7 +397,7 @@ public class Document {
 			return result;
 
 		for (final Report report : info.reportsMap.values()) {
-			result.add(report.name);
+			result.add(report.get_name());
 		}
 
 		return new StringVector();

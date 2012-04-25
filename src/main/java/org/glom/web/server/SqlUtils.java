@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
 import org.glom.libglom.LayoutFieldVector;
 import org.glom.libglom.LayoutItem_Field;
 import org.glom.libglom.Relationship;
@@ -33,6 +31,7 @@ import org.glom.libglom.SortClause;
 import org.glom.libglom.SortFieldPair;
 import org.glom.libglom.Value;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field;
 import org.jooq.AggregateFunction;
 import org.jooq.Condition;
 import org.jooq.SQLDialect;
@@ -545,7 +544,7 @@ public class SqlUtils {
 		Condition condition = null;
 
 		// TODO: Cache the list of all fields, as well as caching (m_Fields) the list of all visible fields:
-		final FieldVector fields = document.get_table_fields(tableName);
+		final List<Field> fields = document.get_table_fields(tableName);
 
 		final int fieldsSize = Utils.safeLongToInt(fields.size());
 		for (int i = 0; i < fieldsSize; i++) {

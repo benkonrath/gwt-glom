@@ -3,7 +3,6 @@ package org.glom.web.shared.libglom;
 import org.glom.libglom.LayoutGroup;
 
 public class Report extends Translatable {
-	public String name;
 
 	/**
 	 * @return

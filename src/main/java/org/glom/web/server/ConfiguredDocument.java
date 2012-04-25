@@ -23,11 +23,12 @@ import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
+import org.glom.libglom.Field.glom_field_type;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItemVector;
 import org.glom.libglom.LayoutItem_CalendarPortal;
@@ -54,6 +55,7 @@ import org.glom.web.shared.layout.LayoutItemField;
 import org.glom.web.shared.layout.LayoutItemNotebook;
 import org.glom.web.shared.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Report;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -244,7 +246,7 @@ final class ConfiguredDocument {
 			Log.info(documentID, tableName,
 					"A list layout is not defined for this table. Displaying a list layout based on the field list.");
 
-			final FieldVector fieldsVec = document.get_table_fields(tableName);
+			final List<Field> fieldsVec = document.get_table_fields(tableName);
 			libglomLayoutGroup = new org.glom.libglom.LayoutGroup();
 			for (int i = 0; i < fieldsVec.size(); i++) {
 				final Field field = fieldsVec.get(i);
@@ -394,7 +396,7 @@ final class ConfiguredDocument {
 			// Add a LayoutItemField for the primary key to the end of the item list in the LayoutGroup because it
 			// doesn't already contain a primary key.
 			Field primaryKey = null;
-			final FieldVector fieldsVec = document.get_table_fields(tableName);
+			final List<Field> fieldsVec = document.get_table_fields(tableName);
 			for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
 				final Field field = fieldsVec.get(i);
 				if (field.get_primary_key()) {
@@ -595,7 +597,7 @@ final class ConfiguredDocument {
 			if (!StringUtils.isEmpty(toTableName)) {
 
 				// get the LayoutItem_Feild with details from its Field in the document
-				final FieldVector fields = document.get_table_fields(toTableName);
+				final List<Field> fields = document.get_table_fields(toTableName);
 				numItems = fields.size(); // reuse loop variable from above
 				for (int i = 0; i < numItems; i++) {
 					final Field field = fields.get(i);
@@ -694,8 +696,8 @@ final class ConfiguredDocument {
 	 * Field.glom_field_type enum with RPC. An enum identical to Formatting.glom_field_type is included in the
 	 * ColumnInfo class.
 	 */
-	private LayoutItemField.GlomFieldType convertToGWTGlomFieldType(final Field.glom_field_type type) {
-		switch (type) {
+	private LayoutItemField.GlomFieldType convertToGWTGlomFieldType(final glom_field_type glom_field_type) {
+		switch (glom_field_type) {
 		case TYPE_BOOLEAN:
 			return LayoutItemField.GlomFieldType.TYPE_BOOLEAN;
 		case TYPE_DATE:
@@ -713,7 +715,7 @@ final class ConfiguredDocument {
 			return LayoutItemField.GlomFieldType.TYPE_INVALID;
 		default:
 			Log.error("Recieved a type that I don't know about: " + Field.glom_field_type.class.getName() + "."
-					+ type.toString() + ". Returning " + LayoutItemField.GlomFieldType.TYPE_INVALID.toString() + ".");
+					+ glom_field_type.toString() + ". Returning " + LayoutItemField.GlomFieldType.TYPE_INVALID.toString() + ".");
 			return LayoutItemField.GlomFieldType.TYPE_INVALID;
 		}
 	}

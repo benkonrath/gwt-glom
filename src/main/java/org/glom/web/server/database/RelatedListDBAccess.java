@@ -21,10 +21,9 @@ package org.glom.web.server.database;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Field;
-import org.glom.libglom.FieldVector;
 import org.glom.libglom.LayoutGroupVector;
 import org.glom.libglom.LayoutItem_Portal;
 import org.glom.libglom.Relationship;
@@ -37,6 +36,7 @@ import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.jooq.Condition;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -185,7 +185,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		if (StringUtils.isEmpty(tableName))
 			return null;
 
-		final FieldVector fields = document.get_table_fields(tableName);
+		final List<Field> fields = document.get_table_fields(tableName);
 		for (int i = 0; i < fields.size(); i++) {
 			final Field field = fields.get(i);
 			if (fieldName.equals(field.get_name())) {
