@@ -49,8 +49,8 @@ public class DocumentTest {
 
 	private static Document document;
 	private static String locale = ""; // This means the original locale.
-	final static String testUriMusicCollection = "src/test/java/org/glom/web/shared/libglom/example_music_collection.glom";
-	final static String testUriFilmManager = "src/test/java/org/glom/web/shared/libglom/example_film_manager.glom";
+	final static String testUriMusicCollection = "src/test/java/org/glom/web/server/libglom/example_music_collection.glom";
+	final static String testUriFilmManager = "src/test/java/org/glom/web/server/libglom/example_film_manager.glom";
 
 	@BeforeClass
 	static public void setUp() {
