@@ -103,13 +103,16 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 	private final DetailsView detailsView;
 	ArrayList<DetailsCell> detailsCells;
 	ArrayList<Portal> portals;
+	private DetailsPlace detailsPlace;
 
 	public DetailsActivity(DetailsPlace place, ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID();
 		this.tableName = place.getTableName();
 		this.primaryKeyValue = place.getPrimaryKeyValue();
+		this.detailsPlace = place;
 		this.clientFactory = clientFactory;
 		detailsView = clientFactory.getDetailsView();
+
 	}
 
 	/*
@@ -244,6 +247,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 
 	private void refreshData() {
 
+		final DetailsPlace dp2 = detailsPlace;
+
 		// get the data for the DetailsView
 		AsyncCallback<DataItem[]> callback = new AsyncCallback<DataItem[]>() {
 			public void onFailure(Throwable caught) {
@@ -254,6 +259,8 @@ public class DetailsActivity extends AbstractActivity implements DetailsView.Pre
 			@Override
 			public void onSuccess(DataItem[] result) {
 				setData(result);
+				// TODO update URL
+				// http://stackoverflow.com/questions/7482833/in-gwt-mvp-how-to-save-state-in-the-url-without-navigating-to-another-place
 			}
 		};
 
