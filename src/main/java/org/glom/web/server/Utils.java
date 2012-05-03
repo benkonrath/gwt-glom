@@ -21,10 +21,6 @@ package org.glom.web.server;
 
 import java.io.File;
 
-import org.glom.libglom.Value;
-import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
-import org.glom.web.shared.libglom.Field;
 
 /**
  *
@@ -46,106 +42,6 @@ public class Utils {
 	public static String getFileName(String fileURI) {
 		String[] splitURI = fileURI.split(File.separator);
 		return splitURI[splitURI.length - 1];
-	}
-
-	public static Value getGlomTypeGdaValueForTypedDataItem(String documentID, String tableName,
-			Field.glom_field_type glom_field_type, TypedDataItem dataItem) {
-		Value gdaValue = null;
-
-		switch (glom_field_type) {
-		case TYPE_NUMERIC:
-
-			if (dataItem.isEmpty()) {
-				// No data has been set on the TypedDataItem. Use an empty value.
-				gdaValue = new Value();
-
-			} else if (dataItem.getType() == GlomFieldType.TYPE_NUMERIC) {
-				// non-empty data, numeric type:
-				// Trust the data in the TypedDataItem because the types match.
-				gdaValue = new Value(dataItem.getNumber());
-
-			} else if (dataItem.getType() == GlomFieldType.TYPE_INVALID) {
-				// non-empty data, invalid type:
-				// An invalid type that's not empty indicates that the TypeDataItem has been created from a URL string.
-				// The string will be converted into the Glom type (numeric).
-				try {
-					// non-locale specific string-to-number conversion:
-					// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#valueOf%28java.lang.String%29
-					gdaValue = new Value(Double.parseDouble(dataItem.getUnknown()));
-				} catch (Exception e) {
-					// Use an empty Value when the number conversion doesn't work.
-					gdaValue = new Value();
-				}
-
-			} else {
-				// non-empty data, mis-matched types:
-				// Don't use the data when the type doesn't match the type from the Glom document.
-				logTypeMismatchError(documentID, tableName, glom_field_type, dataItem);
-				gdaValue = new Value(); // an empty Value
-			}
-			break;
-
-		case TYPE_TEXT:
-
-			if (dataItem.isEmpty()) {
-				// No data has been set on the TypedDataItem. Use an empty string value.
-				gdaValue = new Value("");
-
-			} else if (dataItem.getType() == GlomFieldType.TYPE_TEXT) {
-				// non-empty data, text type:
-				// Trust the data in the TypedDataItem because the types match.
-				gdaValue = new Value(dataItem.getText());
-
-			} else if (dataItem.getType() == GlomFieldType.TYPE_INVALID) {
-				// non-empty data, invalid type:
-				// An invalid type that's not empty indicates that primary key value has been created from a URL string.
-				// The string will be converted into the Glom type (text).
-				gdaValue = new Value(dataItem.getUnknown());
-
-			} else {
-				// non-empty data, mis-matched types:
-				// Don't use the primary key value when the type doesn't match the type from the Glom document.
-				logTypeMismatchError(documentID, tableName, glom_field_type, dataItem);
-				gdaValue = new Value(""); // an emtpy string Value
-			}
-			break;
-
-		default:
-			Log.error(documentID, tableName, "Unable to create a Gda Value of type: " + glom_field_type
-					+ " based on data of type: " + dataItem.getType() + ".");
-			Log.warn(documentID, tableName, "The data item is being ignored. This is a Bug.");
-			gdaValue = new Value(); // an empty Value
-			break;
-		}
-
-		return gdaValue;
-	}
-
-	private static void logTypeMismatchError(String documentID, String tableName, Field.glom_field_type glomType,
-			TypedDataItem dataItem) {
-
-		String dataItemString;
-		switch (dataItem.getType()) {
-		case TYPE_BOOLEAN:
-			dataItemString = Boolean.toString(dataItem.getBoolean());
-			break;
-		case TYPE_NUMERIC:
-			dataItemString = Double.toString(dataItem.getNumber());
-			break;
-		case TYPE_INVALID:
-			dataItemString = dataItem.getUnknown();
-			break;
-		case TYPE_TEXT:
-			dataItemString = dataItem.getText();
-			break;
-		default:
-			dataItemString = "";
-			break;
-		}
-
-		Log.error(documentID, tableName, "The data with type: " + dataItem.getType() + " and value: " + dataItemString
-				+ " doesn't match the expected type from the Glom document: " + glomType + ".");
-		Log.error(documentID, tableName, "The data item is being ignored. This is a bug.");
 	}
 
 }

@@ -24,20 +24,19 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.LayoutItem_Field;
-import org.glom.libglom.LayoutItem_Portal;
-import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
-import org.glom.web.server.Utils;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
-import org.glom.web.shared.libglom.Field.glom_field_type;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -46,15 +45,15 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class RelatedListNavigation extends DBAccess {
 
-	private LayoutItem_Portal portal;
+	private LayoutItemPortal portal;
 
 	public RelatedListNavigation(final Document document, final String documentID, final ComboPooledDataSource cpds,
 			final String tableName, final String relationshipName) {
 		super(document, documentID, cpds, tableName);
 
-		final LayoutItem_Portal portal = getPortal(relationshipName);
+		final LayoutItemPortal portal = getPortal(relationshipName);
 		if (portal == null) {
-			Log.error(documentID, tableName, "Couldn't find LayoutItem_Portal \"" + relationshipName + "\" in table \""
+			Log.error(documentID, tableName, "Couldn't find LayoutItemPortal \"" + relationshipName + "\" in table \""
 					+ tableName + "\". " + "Cannot retrive data for the related list.");
 			return;
 		}
@@ -71,12 +70,12 @@ public class RelatedListNavigation extends DBAccess {
 
 		if (portal == null) {
 			Log.error(documentID, tableName,
-					"The related list navigation cannot be determined because the LayoutItem_Portal has not been found.");
+					"The related list navigation cannot be determined because the LayoutItemPortal has not been found.");
 			return null;
 		}
 
 		final StringBuffer navigationTableNameSB = new StringBuffer();
-		final LayoutItem_Field navigationRelationshipItem = new LayoutItem_Field();
+		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
 		//TODO: //portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem, document);
 
 		final String navigationTableName = navigationTableNameSB.toString();
@@ -93,7 +92,7 @@ public class RelatedListNavigation extends DBAccess {
 		navigationRelationshipItem.set_full_field_details(navigationTablePrimaryKey);
 
 		// Get the value of the navigation related primary key:
-		final LayoutFieldVector fieldsToGet = new LayoutFieldVector();
+		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
 		fieldsToGet.add(navigationRelationshipItem);
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
@@ -110,14 +109,10 @@ public class RelatedListNavigation extends DBAccess {
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			final Value gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
-					primaryKeyField.get_glom_type(), primaryKeyValue);
-
-			// Only create the query if we've created a Gda Value from the DataItem.
-			if (gdaPrimaryKeyValue != null) {
+			if (primaryKeyValue != null) {
 
 				query = SqlUtils.build_sql_select_with_key(conn, relatedTableName, fieldsToGet, primaryKeyField,
-						gdaPrimaryKeyValue);
+						primaryKeyValue);
 
 				rs = st.executeQuery(query);
 
@@ -133,7 +128,7 @@ public class RelatedListNavigation extends DBAccess {
 					if (queryReturnValueType == java.sql.Types.NUMERIC) {
 						navigationTablePrimaryKeyValue.setNumber(rs.getDouble(1));
 					} else {
-						logNavigationTablePrimaryKeyTypeMismatchError(Field.glom_field_type.TYPE_NUMERIC,
+						logNavigationTablePrimaryKeyTypeMismatchError(Field.GlomFieldType.TYPE_NUMERIC,
 								rsMetaData.getColumnTypeName(1));
 					}
 					break;
@@ -141,7 +136,7 @@ public class RelatedListNavigation extends DBAccess {
 					if (queryReturnValueType == java.sql.Types.VARCHAR) {
 						navigationTablePrimaryKeyValue.setText(rs.getString(1));
 					} else {
-						logNavigationTablePrimaryKeyTypeMismatchError(Field.glom_field_type.TYPE_TEXT,
+						logNavigationTablePrimaryKeyTypeMismatchError(Field.GlomFieldType.TYPE_TEXT,
 								rsMetaData.getColumnTypeName(1));
 					}
 					break;
@@ -185,7 +180,7 @@ public class RelatedListNavigation extends DBAccess {
 		return navigationRecord;
 	}
 
-	private void logNavigationTablePrimaryKeyTypeMismatchError(final glom_field_type glomType,
+	private void logNavigationTablePrimaryKeyTypeMismatchError(final GlomFieldType glomType,
 			final String queryReturnValueTypeName) {
 		Log.error(documentID, tableName, "The expected type from the Glom document: " + glomType
 				+ " doesn't match the type returned by the SQL query: " + queryReturnValueTypeName + ".");

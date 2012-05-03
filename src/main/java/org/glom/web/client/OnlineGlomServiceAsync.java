@@ -28,7 +28,7 @@ import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

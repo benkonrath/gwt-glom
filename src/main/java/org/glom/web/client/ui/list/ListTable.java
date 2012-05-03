@@ -20,7 +20,7 @@
 
 package org.glom.web.client.ui.list;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.glom.web.client.Utils;
 import org.glom.web.client.ui.cell.BooleanCell;
@@ -28,12 +28,12 @@ import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.cell.NumericCell;
 import org.glom.web.client.ui.cell.TextCell;
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.GlomNumericFormat;
-import org.glom.web.shared.layout.Formatting;
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItem;
-import org.glom.web.shared.layout.LayoutItemField;
-import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
+import org.glom.web.shared.libglom.NumericFormat;
+import org.glom.web.shared.libglom.layout.Formatting;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -115,15 +115,14 @@ public abstract class ListTable extends Composite {
 		this.documentID = documentID;
 	}
 
-	protected void createCellTable(final LayoutGroup layoutGroup, final int numVisibleRows,
+	protected void createCellTable(final LayoutGroup layoutGroup, final String tableName, final int numVisibleRows,
 			final String navigationButtonLabel, final NavigationButtonCell navigationButtonCell) {
-		tableName = layoutGroup.getTableName(); // TODO: Is this in the regular libglom API, or is it a gwt-glom hack?
-												// murrayc
-		final ArrayList<LayoutItem> layoutItems = layoutGroup.getItems();
+		this.tableName = tableName;
+		final List<LayoutItem> layoutItems = layoutGroup.get_items();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
 		final LayoutItemField primaryKeyLayoutItem = (LayoutItemField) layoutItems.get(primaryKeyIndex);
-		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.getType();
+		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.get_glom_type();
 		final ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
 			@Override
 			public Object getKey(final DataItem[] row) {
@@ -143,7 +142,7 @@ public abstract class ListTable extends Composite {
 		// from wrapping
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
-		final int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();
+		final int numItems = /* TODO: layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : */ layoutItems.size();
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem layoutItem = layoutItems.get(i);
 
@@ -251,7 +250,7 @@ public abstract class ListTable extends Composite {
 		// create a new column
 		Column<DataItem[], ?> column = null;
 		final int j = cellTable.getColumnCount();
-		switch (layoutItemField.getType()) {
+		switch (layoutItemField.get_glom_type()) {
 
 		case TYPE_BOOLEAN:
 			column = new Column<DataItem[], Boolean>(new BooleanCell()) {
@@ -269,13 +268,13 @@ public abstract class ListTable extends Composite {
 
 		case TYPE_NUMERIC:
 			// create a GWT NumberFormat for the column
-			final GlomNumericFormat glomNumericFormat = formatting.getGlomNumericFormat();
-			final NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
+			final NumericFormat numericFormat = formatting.getNumericFormat();
+			final NumberFormat gwtNumberFormat = Utils.getNumberFormat(numericFormat);
 
 			// create the actual column
 			column = new Column<DataItem[], Double>(new NumericCell(formatting.getTextFormatColourForeground(),
 					formatting.getTextFormatColourBackground(), gwtNumberFormat,
-					glomNumericFormat.getUseAltForegroundColourForNegatives(), glomNumericFormat.getCurrencyCode())) {
+					numericFormat.getUseAltForegroundColorForNegatives(), numericFormat.getCurrencySymbol())) {
 				@Override
 				public Double getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null)
@@ -310,7 +309,7 @@ public abstract class ListTable extends Composite {
 		// set column properties and add to cell cellTable
 		column.setHorizontalAlignment(columnAlignment);
 		column.setSortable(true);
-		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
+		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.get_title())));
 	}
 
 	private void addNavigationButtonColumn(final String navigationButtonLabel,

@@ -22,11 +22,11 @@ package org.glom.web.client.ui.details;
 import java.util.ArrayList;
 
 import org.glom.web.client.StringUtils;
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItem;
-import org.glom.web.shared.layout.LayoutItemField;
-import org.glom.web.shared.layout.LayoutItemNotebook;
-import org.glom.web.shared.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -71,7 +71,7 @@ public class Group extends Composite {
 		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
 		FlowPanel groupContents;
-		String groupTitle = layoutGroup.getTitle();
+		String groupTitle = layoutGroup.get_title();
 
 		if (setGroupTitle && !StringUtils.isEmpty(groupTitle)) {
 			Label label = new Label(groupTitle);
@@ -88,7 +88,7 @@ public class Group extends Composite {
 		}
 
 		FlowTable flowtable = new FlowTable(layoutGroup.getColumnCount());
-		for (LayoutItem layoutItem : layoutGroup.getItems()) {
+		for (LayoutItem layoutItem : layoutGroup.get_items()) {
 			Widget child = createChildWidget(layoutItem, true);
 			flowtable.add(child);
 		}

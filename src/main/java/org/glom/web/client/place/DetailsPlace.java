@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import org.glom.web.client.StringUtils;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
 
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;

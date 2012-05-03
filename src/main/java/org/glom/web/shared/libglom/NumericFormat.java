@@ -1,38 +1,13 @@
-/*
- * Copyright (C) 2011 Openismus GmbH
- *
- * This file is part of GWT-Glom.
- *
- * GWT-Glom is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * GWT-Glom is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
- */
+package org.glom.web.shared.libglom;
 
-package org.glom.web.shared;
-
-import java.io.Serializable;
-
-/**
- * 
- */
-@SuppressWarnings("serial")
-public class GlomNumericFormat implements Serializable {
+public class NumericFormat implements Cloneable {
 
 	/**
 	 * String to use as the currency symbol. When the symbol is shown in the UI, a space is appended to the string, and
 	 * the result is prepended to the data from the database. Be aware that the string supplied by the Glom document
 	 * might have no representation in the current user's locale.
 	 */
-	private String currencyCode = "";
+	private String currencySymbol = "";
 
 	/**
 	 * Setting this to false would override the locale, if it used a 1000s separator.
@@ -53,14 +28,14 @@ public class GlomNumericFormat implements Serializable {
 	/**
 	 * Whether to use an alternative foreground colour for negative values.
 	 */
-	private boolean useAltForegroundColourForNegatives = false;
+	private boolean useAltForegroundColorForNegatives = false;
 
-	public String getCurrencyCode() {
-		return currencyCode;
+	public String getCurrencySymbol() {
+		return currencySymbol;
 	}
 
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
+	public void setCurrencySymbol(String currencySymbol) {
+		this.currencySymbol = currencySymbol;
 	}
 
 	public boolean getUseThousandsSeparator() {
@@ -78,6 +53,10 @@ public class GlomNumericFormat implements Serializable {
 	public void setDecimalPlacesRestricted(boolean decimalPlacesRestricted) {
 		this.decimalPlacesRestricted = decimalPlacesRestricted;
 	}
+	
+	public static int getDefaultPrecision() {
+		return 15; //As in libglom's numeric_format.cc
+	}
 
 	public int getDecimalPlaces() {
 		return decimalPlaces;
@@ -86,13 +65,31 @@ public class GlomNumericFormat implements Serializable {
 	public void setDecimalPlaces(int decimalPlaces) {
 		this.decimalPlaces = decimalPlaces;
 	}
-
-	public boolean getUseAltForegroundColourForNegatives() {
-		return useAltForegroundColourForNegatives;
+	
+	public static String getAlternativeColorForNegatives() {
+		return "red"; //As in libglom's numeric_format.cc
 	}
 
-	public void setUseAltForegroundColourForNegatives(boolean useAltForegroundColourForNegatives) {
-		this.useAltForegroundColourForNegatives = useAltForegroundColourForNegatives;
+	public boolean getUseAltForegroundColorForNegatives() {
+		return useAltForegroundColorForNegatives;
+	}
+
+	public void setUseAltForegroundColorForNegatives(boolean useAltForegroundColorForNegatives) {
+		this.useAltForegroundColorForNegatives = useAltForegroundColorForNegatives;
+	}
+	
+	public Object clone() {
+		NumericFormat result = null;
+		try {
+			result = (NumericFormat)super.clone();
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Object.clone() failed: " + e.getMessage());
+			 return null;
+		}
+
+		result.currencySymbol = new String(this.currencySymbol);
+
+		return result;
 	}
 
 }

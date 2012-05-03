@@ -24,7 +24,9 @@ import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import net.sf.jasperreports.engine.JRException;
@@ -47,21 +49,20 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Field.glom_field_type;
-import org.glom.libglom.Formatting;
-import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.LayoutGroup;
-import org.glom.libglom.LayoutItemVector;
-import org.glom.libglom.LayoutItem_Field;
-import org.glom.libglom.LayoutItem_GroupBy;
-import org.glom.libglom.LayoutItem_VerticalGroup;
-import org.glom.libglom.NumericFormat;
-import org.glom.libglom.SortClause;
-import org.glom.libglom.SortFieldPair;
-import org.glom.libglom.Value;
 import org.jooq.Condition;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.Report;
+import org.glom.web.shared.libglom.layout.Formatting;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.NumericFormat;
+import org.glom.web.shared.libglom.layout.SortClause;
+import org.glom.web.shared.libglom.layout.UsesRelationship;
+import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
+import org.glom.web.shared.libglom.layout.reportparts.LayoutItemVerticalGroup;
 
 /**
  * @author Murray Cumming <murrayc@openimus.com>
@@ -88,7 +89,7 @@ public class ReportGenerator {
 	// An arbitrary width, because we must specify _some_ width:
 	final int width = 100; // Points, as specified later.
 
-	LayoutFieldVector fieldsToGet = new LayoutFieldVector();
+	List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
 	SortClause sortClause = new SortClause();
 	String localeID;
 
@@ -106,7 +107,7 @@ public class ReportGenerator {
 	public String generateReport(final Document glomDocument, final String tableName, final Report report,
 			final Connection connection, final String quickFind) {
 
-		final org.glom.libglom.LayoutGroup layout_group = report.get_layout_group();
+		final LayoutGroup layout_group = report.get_layout_group();
 
 		design.setName(report.get_title(localeID)); // TODO: Actually, we want the title.
 
@@ -152,7 +153,7 @@ public class ReportGenerator {
 		final JRDesignBand headerBand = new JRDesignBand();
 		headerBand.setHeight(height + 20);
 
-		fieldsToGet = new LayoutFieldVector();
+		fieldsToGet = new ArrayList<LayoutItemField>();
 		final int x = 0;
 		addGroupToReport(layout_group, detailBand, x, headerBand, 0);
 
@@ -163,7 +164,8 @@ public class ReportGenerator {
 		// but let's be sure:
 		Condition whereClause = null;
 		if (!StringUtils.isEmpty(quickFind)) {
-			final Value quickFindValue = new Value(quickFind);
+			final TypedDataItem quickFindValue = new TypedDataItem();
+			quickFindValue.setText(quickFind);
 			whereClause = SqlUtils.get_find_where_clause_quick(glomDocument, tableName, quickFindValue);
 		}
 
@@ -247,17 +249,17 @@ public class ReportGenerator {
 	 *            TODO
 	 * @param height
 	 */
-	private Position addVerticalGroupToReport(final org.glom.libglom.LayoutItem_VerticalGroup layout_group,
+	private Position addVerticalGroupToReport(final LayoutItemVerticalGroup layout_group,
 			final JRDesignBand parentBand, final Position pos) {
 		Position pos_result = new Position(pos);
 
-		final LayoutItemVector layoutItemsVec = layout_group.get_items();
+		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
-			final org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
+			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
-			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
-			if (libglomLayoutItemField != null) {
+			if(libglomLayoutItem instanceof LayoutItemField) {
+				final LayoutItemField libglomLayoutItemField = (LayoutItemField)libglomLayoutItem;
 				pos_result = addFieldToDetailBandVertical(parentBand, pos_result, libglomLayoutItemField);
 				pos_result.x = pos.x;
 			} else {
@@ -281,7 +283,7 @@ public class ReportGenerator {
 	 *            TODO
 	 * @param height
 	 */
-	private Position addGroupToReport(final org.glom.libglom.LayoutGroup layout_group, final JRDesignBand parentBand,
+	private Position addGroupToReport(final LayoutGroup layout_group, final JRDesignBand parentBand,
 			final int x, final JRDesignBand headerBand, final int fieldTitlesY) {
 
 		Position pos_result = new Position(x, 0);
@@ -289,9 +291,8 @@ public class ReportGenerator {
 		/**
 		 * * If this is a vertical group then we will lay the fields out vertically instead of horizontally.
 		 */
-		final org.glom.libglom.LayoutItem_VerticalGroup verticalGroup = LayoutItem_VerticalGroup
-				.cast_dynamic(layout_group);
-		if (verticalGroup != null) {
+		if(layout_group instanceof LayoutItemVerticalGroup) {
+			final LayoutItemVerticalGroup verticalGroup = (LayoutItemVerticalGroup)layout_group;
 			return addVerticalGroupToReport(verticalGroup, parentBand, pos_result);
 		}
 
@@ -299,20 +300,22 @@ public class ReportGenerator {
 		JRDesignBand fieldTitlesBand = headerBand;
 		int thisFieldTitlesY = fieldTitlesY; // If they are in a group title then they must be lower.
 
-		final LayoutItemVector layoutItemsVec = layout_group.get_items();
+		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
-			final org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
+			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
-			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
-			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
-			if (libglomLayoutItemField != null) {
+			if(libglomLayoutItem instanceof LayoutItemField) {
+				final LayoutItemField libglomLayoutItemField = (LayoutItemField)libglomLayoutItem;
 				pos_result = addFieldToDetailBand(parentBand, headerBand, pos_result.x, libglomLayoutItemField,
-						thisFieldTitlesY, pos_result.y);
-			} else if (libglomLayoutGroup != null) {
-				final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
-				if (libglomGroupBy != null) {
-					final LayoutItem_Field fieldGroupBy = libglomGroupBy.get_field_group_by();
+							thisFieldTitlesY, pos_result.y);
+			}
+			else if(libglomLayoutItem instanceof LayoutGroup) {
+				final LayoutGroup libglomLayoutGroup = (LayoutGroup)libglomLayoutItem;
+				
+				if(libglomLayoutGroup instanceof LayoutItemGroupBy) {
+					final LayoutItemGroupBy libglomGroupBy = (LayoutItemGroupBy)libglomLayoutGroup;
+					final LayoutItemField fieldGroupBy = libglomGroupBy.get_field_group_by();
 					if (fieldGroupBy == null)
 						continue;
 
@@ -324,9 +327,9 @@ public class ReportGenerator {
 					// We must sort by the group field,
 					// so that JasperReports can start a new group when its value changes.
 					// Note that this is not like a SQL GROUP BY.
-					final SortFieldPair pair = new SortFieldPair();
-					pair.setFirst(fieldGroupBy);
-					pair.setSecond(true); // Ascending.
+					final SortClause.SortField pair = new SortClause.SortField();
+					pair.field = fieldGroupBy;
+					pair.ascending = true;
 					sortClause.add(pair);
 
 					final JRDesignGroup group = new JRDesignGroup();
@@ -391,18 +394,19 @@ public class ReportGenerator {
 		return pos_result;
 	}
 
-	private int addSecondaryFieldsToGroupBand(final org.glom.libglom.LayoutGroup layout_group,
+	private int addSecondaryFieldsToGroupBand(final LayoutGroup layout_group,
 			final JRDesignBand groupBand, int x) {
-		final LayoutItemVector layoutItemsVec = layout_group.get_items();
+		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
-			final org.glom.libglom.LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
+			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
-			final LayoutGroup libglomLayoutGroup = LayoutGroup.cast_dynamic(libglomLayoutItem);
-			final LayoutItem_Field libglomLayoutItemField = LayoutItem_Field.cast_dynamic(libglomLayoutItem);
-			if (libglomLayoutItemField != null) {
+			if(libglomLayoutItem instanceof LayoutItemField) {
+				final LayoutItemField libglomLayoutItemField = (LayoutItemField)libglomLayoutItem;
 				x = addFieldToGroupBand(groupBand, x, libglomLayoutItemField);
-			} else if (libglomLayoutGroup != null) {
+			} else if(libglomLayoutItem instanceof LayoutGroup) {
+				final LayoutGroup libglomLayoutGroup = (LayoutGroup)libglomLayoutItem;
+
 				// We do not expect LayoutItem_GroupBy in the secondary fields:
 				// final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);
 
@@ -418,7 +422,7 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private JRDesignExpression createFieldExpression(final LayoutItem_Field libglomLayoutItemField) {
+	private JRDesignExpression createFieldExpression(final LayoutItemField libglomLayoutItemField) {
 		final JRDesignExpression expression = new JRDesignExpression();
 
 		final String fieldName = libglomLayoutItemField.get_name(); // TODO: Is this enough for related fields?
@@ -437,7 +441,7 @@ public class ReportGenerator {
 	 * @return
 	 */
 	private Position addFieldToDetailBand(final JRDesignBand parentBand, final JRDesignBand headerBand, final int x,
-			final LayoutItem_Field libglomLayoutItemField, final int fieldTitlesY, final int fieldY) {
+			final LayoutItemField libglomLayoutItemField, final int fieldTitlesY, final int fieldY) {
 		addField(libglomLayoutItemField);
 
 		// Show the field title:
@@ -463,7 +467,7 @@ public class ReportGenerator {
 	 * @return
 	 */
 	private Position addFieldToDetailBandVertical(final JRDesignBand parentBand, final Position pos,
-			final LayoutItem_Field libglomLayoutItemField) {
+			final LayoutItemField libglomLayoutItemField) {
 		addField(libglomLayoutItemField);
 
 		final Position pos_result = new Position(pos);
@@ -491,7 +495,7 @@ public class ReportGenerator {
 	}
 
 	private int addFieldToGroupBand(final JRDesignBand parentBand, final int x,
-			final LayoutItem_Field libglomLayoutItemField) {
+			final LayoutItemField libglomLayoutItemField) {
 		addField(libglomLayoutItemField);
 
 		final Position pos = new Position(x, 0);
@@ -519,7 +523,7 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private JRDesignTextField createFieldValueElement(final Position pos, final LayoutItem_Field libglomLayoutItemField) {
+	private JRDesignTextField createFieldValueElement(final Position pos, final LayoutItemField libglomLayoutItemField) {
 		final JRDesignTextField textField = new JRDesignTextField();
 
 		// Make sure this field starts at the right of the previous field,
@@ -536,18 +540,18 @@ public class ReportGenerator {
 		final JRDesignExpression expression = createFieldExpression(libglomLayoutItemField);
 		textField.setExpression(expression);
 
-		if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_NUMERIC) {
+		if (libglomLayoutItemField.get_glom_type() == GlomFieldType.TYPE_NUMERIC) {
 			// Numeric formatting:
 			final Formatting formatting = libglomLayoutItemField.get_formatting_used();
-			final NumericFormat numericFormat = formatting.get_numeric_format();
+			final NumericFormat numericFormat = formatting.getNumericFormat();
 
 			final DecimalFormat format = new DecimalFormat();
-			format.setMaximumFractionDigits((int) numericFormat.get_decimal_places());
-			format.setGroupingUsed(numericFormat.get_use_thousands_separator());
+			format.setMaximumFractionDigits((int) numericFormat.getDecimalPlaces());
+			format.setGroupingUsed(numericFormat.getUseThousandsSeparator());
 
 			// TODO: Use numericFormat.get_currency_symbol(), possibly via format.setCurrency().
 			textField.setPattern(format.toPattern());
-		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_DATE) {
+		} else if (libglomLayoutItemField.get_glom_type() == GlomFieldType.TYPE_DATE) {
 			// Date formatting
 			// TODO: Use a 4-digit-year short form, somehow.
 			try // We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
@@ -559,7 +563,7 @@ public class ReportGenerator {
 			} catch (final Exception ex) {
 				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
 			}
-		} else if (libglomLayoutItemField.get_glom_type() == glom_field_type.TYPE_TIME) {
+		} else if (libglomLayoutItemField.get_glom_type() == GlomFieldType.TYPE_TIME) {
 			// Time formatting
 			try // We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
 			{
@@ -583,7 +587,7 @@ public class ReportGenerator {
 	 * @return
 	 */
 	private JRDesignStaticText createFieldTitleElement(final Position pos,
-			final LayoutItem_Field libglomLayoutItemField, final boolean withColon) {
+			final LayoutItemField libglomLayoutItemField, final boolean withColon) {
 		final JRDesignStaticText textFieldColumn = new JRDesignStaticText();
 
 		String title = StringUtils.defaultString(libglomLayoutItemField.get_title(this.localeID));
@@ -605,20 +609,20 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private String addField(final LayoutItem_Field libglomLayoutItemField) {
+	private String addField(final LayoutItemField libglomLayoutItemField) {
 
 		final String fieldName = libglomLayoutItemField.get_name(); // TODO: Is this enough for related fields?
 
 		// Avoid an unnamed field:
 		if (StringUtils.isEmpty(fieldName)) {
-			Log.info("addField(): Ignoring LayoutItem_Field with no field name");
+			Log.info("addField(): Ignoring LayoutItemField with no field name");
 			return fieldName;
 		}
 
 		// Avoid adding duplicate fields,
 		// because JasperDesign.addField() throws a "Duplicate declaration of field" exception.
 		for (int i = 0; i < fieldsToGet.size(); ++i) {
-			final LayoutItem_Field thisField = fieldsToGet.get(i);
+			final UsesRelationship thisField = fieldsToGet.get(i);
 			if (thisField.equals(libglomLayoutItemField))
 				return fieldName;
 		}
@@ -653,11 +657,11 @@ public class ReportGenerator {
 	 * @param libglomLayoutItemField
 	 * @return
 	 */
-	private Class<?> getClassTypeForGlomType(final LayoutItem_Field libglomLayoutItemField) {
+	private Class<?> getClassTypeForGlomType(final LayoutItemField libglomLayoutItemField) {
 		// Choose a suitable java class type for the SQL field:
 		Class<?> klass = null;
 
-		final glom_field_type glom_type = libglomLayoutItemField.get_glom_type();
+		final GlomFieldType glom_type = libglomLayoutItemField.get_glom_type();
 		switch (glom_type) {
 		case TYPE_TEXT:
 			klass = java.lang.String.class;

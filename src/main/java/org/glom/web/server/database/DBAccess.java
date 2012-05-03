@@ -28,17 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.LayoutGroupVector;
-import org.glom.libglom.LayoutItem;
-import org.glom.libglom.LayoutItemVector;
-import org.glom.libglom.LayoutItem_Field;
-import org.glom.libglom.LayoutItem_Portal;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -61,7 +59,7 @@ abstract class DBAccess {
 	/*
 	 * Converts data from a ResultSet to an ArrayList of DataItem array suitable for sending back to the client.
 	 */
-	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, LayoutFieldVector layoutFields, ResultSet rs)
+	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, List<LayoutItemField> layoutFields, ResultSet rs)
 			throws SQLException {
 
 		// get the data we've been asked for
@@ -76,7 +74,7 @@ abstract class DBAccess {
 
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
-				LayoutItem_Field field = layoutFields.get(i);
+				LayoutItemField field = layoutFields.get(i);
 				switch (field.get_glom_type()) {
 				case TYPE_TEXT:
 					String text = rs.getString(i + 1);
@@ -134,27 +132,27 @@ abstract class DBAccess {
 	}
 
 	/*
-	 * Gets a LayoutFieldVector to use when generating an SQL query.
+	 * Gets a list to use when generating an SQL query.
 	 */
-	protected LayoutFieldVector getFieldsToShowForSQLQuery(LayoutGroupVector layoutGroupVec) {
-		LayoutFieldVector layoutFieldVector = new LayoutFieldVector();
+	protected List<LayoutItemField> getFieldsToShowForSQLQuery(List<LayoutGroup> layoutGroupVec) {
+		List<LayoutItemField> listLayoutFIelds = new ArrayList<LayoutItemField>();
 
 		// We will show the fields that the document says we should:
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
-			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
+			LayoutGroup layoutGroup = layoutGroupVec.get(i);
 
-			// satisfy the precondition of getDetailsLayoutGroup(String tableName, org.glom.libglom.LayoutGroup
+			// satisfy the precondition of getDetailsLayoutGroup(String tableName, LayoutGroup
 			// libglomLayoutGroup)
 			if (layoutGroup == null)
 				continue;
 
 			// Get the fields:
-			ArrayList<LayoutItem_Field> layoutItemFields = getFieldsToShowForSQLQueryAddGroup(layoutGroup);
-			for (LayoutItem_Field layoutItem_Field : layoutItemFields) {
-				layoutFieldVector.add(layoutItem_Field);
+			ArrayList<LayoutItemField> layoutItemFields = getFieldsToShowForSQLQueryAddGroup(layoutGroup);
+			for (LayoutItemField layoutItem_Field : layoutItemFields) {
+				listLayoutFIelds.add(layoutItem_Field);
 			}
 		}
-		return layoutFieldVector;
+		return listLayoutFIelds;
 	}
 
 	/*
@@ -162,20 +160,20 @@ abstract class DBAccess {
 	 * 
 	 * @precondition libglomLayoutGroup must not be null
 	 */
-	private ArrayList<LayoutItem_Field> getFieldsToShowForSQLQueryAddGroup(
-			org.glom.libglom.LayoutGroup libglomLayoutGroup) {
+	private ArrayList<LayoutItemField> getFieldsToShowForSQLQueryAddGroup(
+			final LayoutGroup libglomLayoutGroup) {
 
-		ArrayList<LayoutItem_Field> layoutItemFields = new ArrayList<LayoutItem_Field>();
-		LayoutItemVector items = libglomLayoutGroup.get_items();
-		int numItems = Utils.safeLongToInt(items.size());
+		final ArrayList<LayoutItemField> layoutItemFields = new ArrayList<LayoutItemField>();
+		final List<LayoutItem> items = libglomLayoutGroup.get_items();
+		final int numItems = Utils.safeLongToInt(items.size());
 		for (int i = 0; i < numItems; i++) {
 			LayoutItem layoutItem = items.get(i);
 
-			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(layoutItem);
-			if (layoutItemField != null) {
+			if(layoutItem instanceof LayoutItemField) {
+				LayoutItemField layoutItemField = (LayoutItemField)layoutItem;
 				// the layoutItem is a LayoutItem_Field
 				List<org.glom.web.shared.libglom.Field> fields;
-				if (layoutItemField.get_has_relationship_name()) {
+				if (layoutItemField.getHasRelationshipName()) {
 					// layoutItemField is a field in a related table
 					fields = document.get_table_fields(layoutItemField.get_table_used(tableName));
 				} else {
@@ -201,17 +199,13 @@ abstract class DBAccess {
 					}
 				}
 
-			} else {
-				// the layoutItem is not a LayoutItem_Field
-				org.glom.libglom.LayoutGroup subLayoutGroup = org.glom.libglom.LayoutGroup.cast_dynamic(layoutItem);
-				if (subLayoutGroup != null) {
-					// the layoutItem is a LayoutGroup
-					LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(layoutItem);
-					if (layoutItemPortal == null) {
-						// The subGroup is not a LayoutItem_Portal.
-						// We're ignoring portals because they are filled by means of a separate SQL query.
-						layoutItemFields.addAll(getFieldsToShowForSQLQueryAddGroup(subLayoutGroup));
-					}
+			} else if (layoutItem instanceof LayoutGroup) {
+				LayoutGroup subLayoutGroup = (LayoutGroup)layoutItem;
+				
+				if(!(subLayoutGroup instanceof LayoutItemPortal)) {
+					// The subGroup is not a LayoutItemPortal.
+					// We're ignoring portals because they are filled by means of a separate SQL query.
+					layoutItemFields.addAll(getFieldsToShowForSQLQueryAddGroup(subLayoutGroup));
 				}
 			}
 		}
@@ -245,10 +239,10 @@ abstract class DBAccess {
 	 *            name of table to search for the primary key LayoutItem_Field
 	 * @return primary key LayoutItem_Field
 	 */
-	protected LayoutItem_Field getPrimaryKeyLayoutItemField(String tableName) {
+	protected LayoutItemField getPrimaryKeyLayoutItemField(String tableName) {
 		Field primaryKey = getPrimaryKeyField(tableName);
 
-		LayoutItem_Field libglomLayoutItemField = new LayoutItem_Field();
+		LayoutItemField libglomLayoutItemField = new LayoutItemField();
 
 		if (primaryKey != null) {
 			libglomLayoutItemField.set_full_field_details(primaryKey);
@@ -261,65 +255,59 @@ abstract class DBAccess {
 	}
 
 	/*
-	 * Find the LayoutItem_Portal for the related list name
+	 * Find the LayoutItemPortal for the related list name
 	 */
-	final protected LayoutItem_Portal getPortal(String relationshipName) {
+	final protected LayoutItemPortal getPortal(String relationshipName) {
 
-		LayoutGroupVector layoutGroupVec = document.get_data_layout_groups("details", tableName);
-		// LayoutItem_Portal portal = null;
+		List<LayoutGroup> layoutGroupVec = document.get_data_layout_groups("details", tableName);
+		// LayoutItemPortal portal = null;
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
-			org.glom.libglom.LayoutGroup layoutGroup = layoutGroupVec.get(i);
-			LayoutItem_Portal portal = getPortal(relationshipName, layoutGroup);
+			LayoutGroup layoutGroup = layoutGroupVec.get(i);
+			LayoutItemPortal portal = getPortal(relationshipName, layoutGroup);
 			if (portal != null) {
 				return portal;
 			}
 		}
 
-		// the LayoutItem_Portal with relationshipName was not found
+		// the LayoutItemPortal with relationshipName was not found
 		return null;
 	}
 
 	/*
 	 * Recursive helper method.
 	 */
-	final private LayoutItem_Portal getPortal(String relationshipName, org.glom.libglom.LayoutGroup layoutGroup) {
+	final private LayoutItemPortal getPortal(String relationshipName, LayoutGroup layoutGroup) {
 
 		if (relationshipName == null)
 			return null;
 
-		LayoutItemVector items = layoutGroup.get_items();
+		List<LayoutItem> items = layoutGroup.get_items();
 		for (int i = 0; i < items.size(); i++) {
 			LayoutItem layoutItem = items.get(i);
 
-			LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(layoutItem);
-			if (layoutItemField != null) {
+			if(layoutItem instanceof LayoutItem) {
 				// the layoutItem is a LayoutItem_Field
 				continue;
 
-			} else {
-				// the layoutItem is not a LayoutItem_Field
-				org.glom.libglom.LayoutGroup subLayoutGroup = org.glom.libglom.LayoutGroup.cast_dynamic(layoutItem);
-				if (subLayoutGroup != null) {
-					// the layoutItem is a LayoutGroup
-					LayoutItem_Portal layoutItemPortal = LayoutItem_Portal.cast_dynamic(layoutItem);
-					if (layoutItemPortal != null) {
-						// The subGroup is a LayoutItem_Protal
-						if (relationshipName.equals(layoutItemPortal.get_relationship_name_used())) {
-							// yey, we found it!
-							return layoutItemPortal;
-						}
-					} else {
-						// The subGroup is not a LayoutItem_Portal.
-						LayoutItem_Portal retval = getPortal(relationshipName, subLayoutGroup);
-						if (retval != null) {
-							return retval;
-						}
+			} else if (layoutItem instanceof LayoutGroup) {
+				final LayoutGroup subLayoutGroup = (LayoutGroup)layoutItem;
+				if(subLayoutGroup instanceof LayoutItemPortal) {
+					final LayoutItemPortal layoutItemPortal = (LayoutItemPortal)layoutItem;
+					if (relationshipName.equals(layoutItemPortal.getRelationshipNameUsed())) {
+						// yey, we found it!
+						return layoutItemPortal;
+					}
+				} else {
+					// The subGroup is not a LayoutItemPortal.
+					LayoutItemPortal retval = getPortal(relationshipName, subLayoutGroup);
+					if (retval != null) {
+						return retval;
 					}
 				}
 			}
 		}
 
-		// the LayoutItem_Portal with relationshipName was not found
+		// the LayoutItemPortal with relationshipName was not found
 		return null;
 	}
 

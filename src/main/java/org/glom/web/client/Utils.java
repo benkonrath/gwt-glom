@@ -20,9 +20,9 @@
 package org.glom.web.client;
 
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.GlomNumericFormat;
+import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
@@ -37,18 +37,18 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Utils {
 
-	public static NumberFormat getNumberFormat(final GlomNumericFormat glomNumericFormat) {
+	public static NumberFormat getNumberFormat(final NumericFormat numericFormat) {
 
 		final StringBuilder pattern = new StringBuilder("0.");
 
 		// add pattern for thousands separator
-		if (glomNumericFormat.getUseThousandsSeparator()) {
+		if (numericFormat.getUseThousandsSeparator()) {
 			pattern.insert(0, "#,##");
 		}
 
 		// add pattern for restricted decimal places
-		if (glomNumericFormat.getDecimalPlacesRestricted()) {
-			for (int i = 0; i < glomNumericFormat.getDecimalPlaces(); i++) {
+		if (numericFormat.getDecimalPlacesRestricted()) {
+			for (int i = 0; i < numericFormat.getDecimalPlaces(); i++) {
 				pattern.append('0');
 			}
 		} else {

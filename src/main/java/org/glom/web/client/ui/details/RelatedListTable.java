@@ -27,7 +27,7 @@ import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.list.ListTable;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
@@ -74,9 +74,10 @@ public class RelatedListTable extends ListTable {
 		// These variables need to be set before the createCellTable() method is called so that the data provider can
 		// use them.
 		this.foreignKeyValue = foreignKeyValue;
-		this.relationshipName = layoutItemPortal.getName();
+		this.relationshipName = layoutItemPortal.get_name(); //TODO: Is this correct?
 
-		createCellTable(layoutItemPortal, MAX_TABLE_ROWS, constants.open(), navigationButtonCell);
+		//TODO: Is tableName set here?
+		createCellTable(layoutItemPortal, tableName, MAX_TABLE_ROWS, constants.open(), navigationButtonCell);
 
 		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want
 		// the table to overflow it's container. Browsers will make columns with equal widths since we're currently not

@@ -21,17 +21,18 @@ package org.glom.web.server.database;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Field;
-import org.glom.libglom.LayoutGroupVector;
-import org.glom.libglom.LayoutItem_Field;
-import org.glom.libglom.SortClause;
-import org.glom.libglom.Value;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.TypedDataItem;
 import org.jooq.Condition;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.SortClause;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -41,11 +42,11 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class ListViewDBAccess extends ListDBAccess {
 
 	public ListViewDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
-			final String tableName, final org.glom.libglom.LayoutGroup libglomLayoutGroup) {
+			final String tableName, final LayoutGroup libglomLayoutGroup) {
 		super(document, documentID, cpds, tableName);
 
-		// Convert the libglom LayoutGroup object into a LayoutFieldVector suitable for SQL queries.
-		final LayoutGroupVector tempLayoutGroupVec = new LayoutGroupVector();
+		// Convert the LayoutGroup object into a List suitable for SQL queries.
+		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<LayoutGroup>();
 		tempLayoutGroupVec.add(libglomLayoutGroup);
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 
@@ -78,8 +79,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.server.ListDBAccess#getSQLQuery(org.glom.libglom.LayoutFieldVector,
-	 * org.glom.libglom.SortClause)
+	 * @see org.glom.web.server.ListDBAccess#getSQLQuery(LayoutFieldVector,
+	 * SortClause)
 	 */
 	@Override
 	protected String getSelectQuery(final Connection connection, final String quickFind, final SortClause sortClause) {
@@ -87,7 +88,8 @@ public class ListViewDBAccess extends ListDBAccess {
 		// but let's be sure:
 		Condition whereClause = null;
 		if (!StringUtils.isEmpty(quickFind)) {
-			final Value quickFindValue = new Value(quickFind);
+			final TypedDataItem quickFindValue = new TypedDataItem();
+			quickFindValue.setText(quickFind);
 			whereClause = SqlUtils.get_find_where_clause_quick(document, tableName, quickFindValue);
 		}
 
@@ -97,7 +99,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.server.ListDBAccess#getCountQuery(org.glom.libglom.LayoutFieldVector)
+	 * @see org.glom.web.server.ListDBAccess#getCountQuery(LayoutFieldVector)
 	 */
 	@Override
 	protected String getCountQuery(final Connection connection) {
@@ -111,7 +113,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	private int getPrimaryKeyIndex() {
 		for (int i = 0; i < fieldsToGet.size(); i++) {
-			final LayoutItem_Field layoutItemField = fieldsToGet.get(i);
+			final LayoutItemField layoutItemField = fieldsToGet.get(i);
 			final Field field = layoutItemField.get_full_field_details();
 			if (tableName.equals(layoutItemField.get_table_used(tableName)) && field != null && field.get_primary_key())
 				return i;

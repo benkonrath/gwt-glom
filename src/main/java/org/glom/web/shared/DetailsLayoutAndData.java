@@ -20,23 +20,23 @@
 package org.glom.web.shared;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 /**
  * Wrapper DTO for details view layout and data.
  */
 @SuppressWarnings("serial")
 public class DetailsLayoutAndData implements Serializable {
-	private ArrayList<LayoutGroup> layout;
+	private List<LayoutGroup> layout;
 	private DataItem[] data;
 
-	public ArrayList<LayoutGroup> getLayout() {
+	public List<LayoutGroup> getLayout() {
 		return layout;
 	}
 
-	public void setLayout(ArrayList<LayoutGroup> layout) {
+	public void setLayout(List<LayoutGroup> layout) {
 		this.layout = layout;
 	}
 

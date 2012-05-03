@@ -19,11 +19,11 @@
 
 package org.glom.web.client.ui;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Portal;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 /**
  *
@@ -32,8 +32,8 @@ public interface DetailsView extends View {
 
 	public void addGroup(LayoutGroup layoutGroup);
 
-	public ArrayList<DetailsCell> getCells();
+	public List<DetailsCell> getCells();
 
-	public ArrayList<Portal> getPortals();
+	public List<Portal> getPortals();
 
 }

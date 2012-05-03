@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.glom.web.client.ui.details.DetailsCell;
 import org.glom.web.client.ui.details.Group;
 import org.glom.web.client.ui.details.Portal;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -57,7 +57,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.ui.DetailsView#addGroup(org.glom.web.shared.layout.LayoutGroup)
+	 * @see org.glom.web.client.ui.DetailsView#addGroup(LayoutGroup)
 	 */
 	@Override
 	public void addGroup(LayoutGroup layoutGroup) {

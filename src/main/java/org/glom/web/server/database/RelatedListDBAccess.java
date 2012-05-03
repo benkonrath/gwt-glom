@@ -24,19 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.LayoutGroupVector;
-import org.glom.libglom.LayoutItem_Portal;
-import org.glom.libglom.Relationship;
-import org.glom.libglom.SortClause;
-import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
-import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.jooq.Condition;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.Relationship;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.SortClause;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -45,7 +43,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class RelatedListDBAccess extends ListDBAccess {
 	private TypedDataItem foreignKeyValue = null;
-	private LayoutItem_Portal portal = null;
+	private LayoutItemPortal portal = null;
 	private String parentTable = null;
 	private String whereClauseToTableName = null;
 	private Field whereClauseToKeyField = null;
@@ -54,7 +52,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 			final String tableName, final String relationshipName) {
 		super(document, documentID, cpds, tableName);
 
-		final LayoutItem_Portal portal = getPortal(relationshipName);
+		final LayoutItemPortal portal = getPortal(relationshipName);
 		if (portal == null) {
 			Log.error(documentID, tableName, "Couldn't find LayoutItem_Portal \"" + relationshipName + "\" in table \""
 					+ tableName + "\". " + "Cannot retrive data for the related list.");
@@ -66,8 +64,8 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// getFieldsToShowForSQLQuery().
 		this.tableName = portal.get_table_used("" /* parent table - not relevant */);
 
-		// Convert the libglom LayoutGroup object into a LayoutFieldVector suitable for SQL queries.
-		final LayoutGroupVector tempLayoutGroupVec = new LayoutGroupVector();
+		// Convert the libglom LayoutGroup object into a List<LayoutItem_Field> suitable for SQL queries.
+		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<LayoutGroup>();
 		tempLayoutGroupVec.add(portal);
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 
@@ -75,7 +73,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		 * The code from the rest of this method was inspired by code from Glom:
 		 * Base_DB::set_found_set_where_clause_for_portal()
 		 */
-		final Relationship relationship = portal.get_relationship();
+		final Relationship relationship = portal.getRelationship();
 
 		// Notice that, in the case that this is a portal to doubly-related records,
 		// The WHERE clause mentions the first-related table (though by the alias defined in extra_join)
@@ -87,7 +85,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// Add primary key
 		fieldsToGet.add(getPrimaryKeyLayoutItemField(this.tableName));
 
-		final Relationship relationshipRelated = portal.get_related_relationship();
+		final Relationship relationshipRelated = portal.getRelatedRelationship();
 		if (relationshipRelated != null) {
 			Log.error(documentID, tableName, "The related relationship " + relationshipRelated.get_name()
 					+ " is not empty but the related relationship code has not been implemented yet.");
@@ -169,11 +167,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 		Condition whereClause = null; // Note that we ignore quickFind.
 		// only attempt to make a where clause if it makes sense to do so
 		if (!StringUtils.isEmpty(whereClauseToTableName)) {
-			final Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
-					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
-			if (gdaForeignKeyValue != null)
+			if (foreignKeyValue != null)
 				whereClause = SqlUtils.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
-						gdaForeignKeyValue);
+						foreignKeyValue);
 		}
 
 		return SqlUtils.build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause);
@@ -219,11 +215,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 		Condition whereClause = null;
 		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
-			final Value gdaForeignKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
-					whereClauseToKeyField.get_glom_type(), foreignKeyValue);
-			if (gdaForeignKeyValue != null)
+			if (foreignKeyValue != null)
 				whereClause = SqlUtils.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
-						gdaForeignKeyValue);
+						foreignKeyValue);
 		}
 
 		return SqlUtils.build_sql_count_select_with_where_clause(connection, tableName, fieldsToGet, whereClause);

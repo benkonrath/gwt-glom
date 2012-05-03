@@ -19,7 +19,7 @@
 
 package org.glom.web.shared;
 
-import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
 
 /**
  * This specialization of DataItem can hold a primary key item.

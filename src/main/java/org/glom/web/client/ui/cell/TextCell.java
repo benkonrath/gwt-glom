@@ -20,7 +20,6 @@
 package org.glom.web.client.ui.cell;
 
 import org.glom.web.client.StringUtils;
-import org.glom.web.shared.layout.LayoutItemField.GlomFieldType;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtml;

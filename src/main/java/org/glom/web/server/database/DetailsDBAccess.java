@@ -24,16 +24,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.Value;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
-import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -50,7 +49,7 @@ public class DetailsDBAccess extends DBAccess {
 
 	public DataItem[] getData(final TypedDataItem primaryKeyValue) {
 
-		final LayoutFieldVector fieldsToGet = getFieldsToShowForSQLQuery(document.get_data_layout_groups("details",
+		final List<LayoutItemField> fieldsToGet = getFieldsToShowForSQLQuery(document.get_data_layout_groups("details",
 				tableName));
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
@@ -69,20 +68,15 @@ public class DetailsDBAccess extends DBAccess {
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
-		Value gdaPrimaryKeyValue = null;
 		try {
 			// Setup the JDBC driver and get the query.
 			conn = cpds.getConnection();
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
-			gdaPrimaryKeyValue = Utils.getGlomTypeGdaValueForTypedDataItem(documentID, tableName,
-					primaryKey.get_glom_type(), primaryKeyValue);
-
-			// Only create the query if we've created a Gda Value from the TypedDataItem.
-			if (gdaPrimaryKeyValue != null) {
+			if (primaryKeyValue != null) {
 
 				final String query = SqlUtils.build_sql_select_with_key(conn, tableName, fieldsToGet, primaryKey,
-						gdaPrimaryKeyValue);
+						primaryKeyValue);
 
 				rs = st.executeQuery(query);
 
@@ -113,7 +107,7 @@ public class DetailsDBAccess extends DBAccess {
 		if (rowsList.size() == 0) {
 			Log.error(documentID, tableName, "The query returned an empty ResultSet. Returning null.");
 			return null;
-		} else if (rowsList.size() > 1 && !gdaPrimaryKeyValue.is_null()) {
+		} else if (rowsList.size() > 1 && (primaryKeyValue != null)) {
 			// Only log a warning if the result size is greater than 1 and the gdaPrimaryKeyValue is not null. When
 			// gdaPrimaryKeyValue.is_null() is true, the default query for the details view is being executed so we
 			// expect a result set that is larger than one.

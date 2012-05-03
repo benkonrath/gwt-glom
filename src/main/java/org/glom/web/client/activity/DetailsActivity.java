@@ -19,7 +19,7 @@
 
 package org.glom.web.client.activity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
@@ -43,9 +43,9 @@ import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutGroup;
-import org.glom.web.shared.layout.LayoutItemField;
-import org.glom.web.shared.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
@@ -103,8 +103,8 @@ public class DetailsActivity extends HasTableActivity {
 
 	private TypedDataItem primaryKeyValue;
 	private final DetailsView detailsView;
-	ArrayList<DetailsCell> detailsCells;
-	ArrayList<Portal> portals;
+	List<DetailsCell> detailsCells;
+	List<Portal> portals;
 
 	public DetailsActivity(final DetailsPlace place, final ClientFactory clientFactory) {
 		super(place, clientFactory);
@@ -191,9 +191,9 @@ public class DetailsActivity extends HasTableActivity {
 	/*
 	 * Create the layout.
 	 */
-	private void createLayout(final ArrayList<LayoutGroup> layout) {
+	private void createLayout(final List<LayoutGroup> list) {
 		// add the groups
-		for (final LayoutGroup layoutGroup : layout) {
+		for (final LayoutGroup layoutGroup : list) {
 			detailsView.addGroup(layoutGroup);
 		}
 
@@ -204,11 +204,14 @@ public class DetailsActivity extends HasTableActivity {
 		// Setup click handlers for the navigation buttons
 		for (final DetailsCell detailsCell : detailsCells) {
 			final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
+			if(layoutItemField == null) {
+				continue;
+			}
 			if (layoutItemField.getAddNavigation()) {
 				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(final ClickEvent event) {
-						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getType(),
+						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.get_glom_type(),
 								detailsCell.getData());
 						processNavigation(layoutItemField.getNavigationTableName(), primaryKeyItem);
 
@@ -243,23 +246,22 @@ public class DetailsActivity extends HasTableActivity {
 					final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
 					final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 
-					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
+					if (layoutItemField.get_name().equals(layoutItemPortal.getFromField())) {
 						if (data[i] == null)
 							continue;
 
 						final TypedDataItem foreignKeyValue = Utils
-								.getTypedDataItem(layoutItemField.getType(), data[i]);
+								.getTypedDataItem(layoutItemField.get_glom_type(), data[i]);
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getName()));
+								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.get_name()));
 
-						if (!layoutItemPortal.getAddNavigation()
-								|| layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
+						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
 							relatedListTable.hideNavigationButtons();
 						}
 						portal.setContents(relatedListTable);
 
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), foreignKeyValue);
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.get_name(), foreignKeyValue);
 					}
 				}
 			}

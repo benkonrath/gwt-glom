@@ -20,7 +20,7 @@
 package org.glom.web.client.ui.details;
 
 import org.glom.web.client.Utils;
-import org.glom.web.shared.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -54,7 +54,7 @@ public class Portal extends Composite {
 		mainPanel.setStyleName("subgroup");
 
 		if (setTitle) {
-			Label title = new Label(layoutItem.getTitle());
+			Label title = new Label(layoutItem.get_title());
 			title.setStyleName("subgroup-title");
 			mainPanel.add(title);
 

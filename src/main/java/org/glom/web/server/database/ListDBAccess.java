@@ -24,16 +24,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.glom.libglom.Field;
-import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.LayoutItem_Field;
-import org.glom.libglom.SortClause;
-import org.glom.libglom.SortFieldPair;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Document;
+import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.SortClause;
+import org.glom.web.shared.libglom.layout.UsesRelationship;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -41,7 +42,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  *
  */
 public abstract class ListDBAccess extends DBAccess {
-	protected LayoutFieldVector fieldsToGet;
+	protected List<LayoutItemField> fieldsToGet;
 
 	protected ListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
 			final String tableName) {
@@ -58,22 +59,22 @@ public abstract class ListDBAccess extends DBAccess {
 		// create a sort clause for the column we've been asked to sort
 		final SortClause sortClause = new SortClause();
 		if (useSortClause) {
-			final org.glom.libglom.LayoutItem item = fieldsToGet.get(sortColumnIndex);
-			final LayoutItem_Field layoutItemField = LayoutItem_Field.cast_dynamic(item);
-			if (layoutItemField != null)
-				sortClause.add(new SortFieldPair(layoutItemField, isAscending));
-			else {
-				Log.error(documentID, tableName, "Error getting LayoutItem_Field for column index " + sortColumnIndex
+			final LayoutItem item = fieldsToGet.get(sortColumnIndex);
+			if(item instanceof LayoutItemField) {
+				final UsesRelationship layoutItemField = (UsesRelationship)item;
+				sortClause.add(new SortClause.SortField(layoutItemField, isAscending));
+			} else {
+				Log.error(documentID, tableName, "Error getting LayoutItemField for column index " + sortColumnIndex
 						+ ". Cannot create a sort clause for this column.");
 			}
 		} else {
 			// create a sort clause for the primary key if we're not asked to sort a specific column
 			final int numItems = Utils.safeLongToInt(fieldsToGet.size());
 			for (int i = 0; i < numItems; i++) {
-				final LayoutItem_Field layoutItem = fieldsToGet.get(i);
+				final LayoutItemField layoutItem = fieldsToGet.get(i);
 				final Field details = layoutItem.get_full_field_details();
 				if (details != null && details.get_primary_key()) {
-					sortClause.add(new SortFieldPair(layoutItem, true)); // ascending
+					sortClause.add(new SortClause.SortField(layoutItem, true)); // ascending
 					break;
 				}
 			}

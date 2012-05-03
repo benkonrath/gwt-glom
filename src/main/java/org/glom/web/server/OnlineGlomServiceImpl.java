@@ -34,7 +34,6 @@ import javax.servlet.ServletException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.Glom;
 import org.glom.web.client.OnlineGlomService;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
@@ -43,9 +42,9 @@ import org.glom.web.shared.Documents;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutGroup;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Report;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
@@ -147,14 +146,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// for table titles, field titles, etc:
 			final String globalLocaleID = StringUtils.defaultString(config.getProperty("glom.document.locale"));
 
-			// This initialisation method can throw an UnsatisfiedLinkError if the java-libglom native library isn't
-			// available. But since we're checking for the error condition above, the UnsatisfiedLinkError will never be
-			// thrown.
-			Glom.libglom_init();
-
-			// Allow a fake connection, so sqlbuilder_get_full_query() can work:
-			Glom.set_fake_connection();
-
 			for (final File glomFile : glomFiles) {
 				final Document document = new Document();
 				document.set_file_uri("file://" + glomFile.getAbsolutePath());
@@ -252,8 +243,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public void destroy() {
-		Glom.libglom_deinit();
-
 		for (final String documenTitle : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
 			if (configuredDoc == null)

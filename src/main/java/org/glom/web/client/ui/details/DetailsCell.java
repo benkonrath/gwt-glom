@@ -26,9 +26,9 @@ import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.GlomNumericFormat;
-import org.glom.web.shared.layout.Formatting;
-import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.libglom.NumericFormat;
+import org.glom.web.shared.libglom.layout.Formatting;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -71,7 +71,7 @@ public class DetailsCell extends Composite {
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
 		// data elements to be changed for right-to-left languages.
 
-		Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
+		Label detailsLabel = new Label(layoutItemField.get_title() + ":");
 		detailsLabel.setStyleName("details-label");
 
 		detailsData.setStyleName("details-data");
@@ -131,7 +131,7 @@ public class DetailsCell extends Composite {
 			return;
 
 		// FIXME use the cell renderers from the list view to render the inforamtion here
-		switch (layoutItemField.getType()) {
+		switch (layoutItemField.get_glom_type()) {
 		case TYPE_BOOLEAN:
 			final CheckBox checkBox = new CheckBox();
 			checkBox.setValue(dataItem.getBoolean());
@@ -146,17 +146,17 @@ public class DetailsCell extends Composite {
 			detailsData.add(checkBox);
 			break;
 		case TYPE_NUMERIC:
-			GlomNumericFormat glomNumericFormat = layoutItemField.getFormatting().getGlomNumericFormat();
-			NumberFormat gwtNumberFormat = Utils.getNumberFormat(glomNumericFormat);
+			NumericFormat numericFormat = layoutItemField.getFormatting().getNumericFormat();
+			NumberFormat gwtNumberFormat = Utils.getNumberFormat(numericFormat);
 
-			// set the foreground colour to red if the number is negative and this is requested
-			if (glomNumericFormat.getUseAltForegroundColourForNegatives() && dataItem.getNumber() < 0) {
-				// The default alternative colour in libglom is red.
-				detailsData.getElement().getStyle().setColor("Red");
+			// set the foreground color to red if the number is negative and this is requested
+			if (numericFormat.getUseAltForegroundColorForNegatives() && dataItem.getNumber() < 0) {
+				// The default alternative color in libglom is red.
+				detailsData.getElement().getStyle().setColor(NumericFormat.getAlternativeColorForNegatives());
 			}
 
-			final String currencyCode = StringUtils.isEmpty(glomNumericFormat.getCurrencyCode()) ? ""
-					: glomNumericFormat.getCurrencyCode().trim() + " ";
+			final String currencyCode = StringUtils.isEmpty(numericFormat.getCurrencySymbol()) ? ""
+					: numericFormat.getCurrencySymbol().trim() + " ";
 			detailsLabel.setText(currencyCode + gwtNumberFormat.format(dataItem.getNumber()));
 			detailsData.add(detailsLabel);
 			break;

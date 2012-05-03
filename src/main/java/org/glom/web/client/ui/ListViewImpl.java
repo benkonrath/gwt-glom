@@ -23,7 +23,7 @@ import org.glom.web.client.place.DetailsPlace;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.client.ui.list.ListViewTable;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
@@ -73,7 +73,7 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentID, final LayoutGroup layoutGroup, final String quickFind) {
+	public void setCellTable(final String documentID, final String tableName, final LayoutGroup layoutGroup, final String quickFind) {
 		// This is not really in the MVP style because we're creating a new ListTable (really just a configured
 		// CellTable) for every document and table name change. The issue with creating a re-usable CellTable with
 		// methods like setColumnTitles() and setNumRows() is that the column objects (new Column<DataItem[],
@@ -86,7 +86,7 @@ public class ListViewImpl extends Composite implements ListView {
 		mainPanel.clear();
 
 		final ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup,
-				new ListViewNavigationButtonCell(documentID, layoutGroup.getTableName()), quickFind);
+				new ListViewNavigationButtonCell(documentID, tableName), quickFind);
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {
 			// Set the table row count to the minimum row count if the data row count is less than or equal to

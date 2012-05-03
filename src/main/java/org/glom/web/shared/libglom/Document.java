@@ -29,9 +29,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.libglom.LayoutGroupVector;
-import org.glom.libglom.StringVector;
-import org.glom.web.shared.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.Formatting;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.UsesRelationship;
+import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
+import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
 import org.jfree.util.Log;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,43 +51,77 @@ import org.xml.sax.SAXException;
 public class Document {
 
 	
+	@SuppressWarnings("serial")
 	private class TableInfo extends Translatable {
-		public String name = "";
 		public boolean isDefault;
 		public boolean isHidden;
 
 		private final Hashtable<String, Field> fieldsMap = new Hashtable<String, Field>();
+		private final Hashtable<String, Relationship> relationshipsMap = new Hashtable<String, Relationship>();
 		private final Hashtable<String, Report> reportsMap = new Hashtable<String, Report>();
-	};
+		
+		private List<LayoutGroup> layoutGroupsList = new ArrayList<LayoutGroup>();
+		private List<LayoutGroup> layoutGroupsDetails = new ArrayList<LayoutGroup>();
+	}
 
 	private String fileURI = "";
 	private org.w3c.dom.Document xmlDocument = null;
 	
 	private Translatable databaseTitle = new Translatable();
+	private List<String> translationAvailableLocales = new ArrayList<String>(); //TODO
 	private String connectionServer = "";
 	private String connectionDatabase = "";
 	private int connectionPort = 0;
 	private final Hashtable<String, TableInfo> tablesMap = new Hashtable<String, TableInfo>();
 	
-	private static String NODE_CONNECTION = "connection";
-	private static String ATTRIBUTE_CONNECTION_SERVER = "server";
-	private static String ATTRIBUTE_CONNECTION_DATABASE = "database";
-	private static String ATTRIBUTE_CONNECTION_PORT = "port";
-	private static String NODE_TABLE = "table";
-	private static String ATTRIBUTE_NAME = "name";
-	private static String ATTRIBUTE_TITLE = "title";
-	private static String ATTRIBUTE_DEFAULT = "default";
-	private static String ATTRIBUTE_HIDDEN = "hidden";
-	private static String NODE_TRANSLATIONS_SET = "trans_set";
-	private static String NODE_TRANSLATIONS = "trans";
-	private static String ATTRIBUTE_TRANSLATION_LOCALE = "loc";
-	private static String ATTRIBUTE_TRANSLATION_TITLE = "val";
-	private static String NODE_REPORTS = "reports";
-	private static String NODE_REPORT = "report";
-	private static String NODE_FIELDS = "fields";
-	private static String NODE_FIELD = "field";
-	private static String ATTRIBUTE_PRIMARY_KEY = "primary_key";
-	private static String ATTRIBUTE_FIELD_TYPE = "type";
+	private static final String NODE_CONNECTION = "connection";
+	private static final String ATTRIBUTE_CONNECTION_SERVER = "server";
+	private static final String ATTRIBUTE_CONNECTION_DATABASE = "database";
+	private static final String ATTRIBUTE_CONNECTION_PORT = "port";
+	private static final String NODE_TABLE = "table";
+	private static final String ATTRIBUTE_NAME = "name";
+	private static final String ATTRIBUTE_TITLE = "title";
+	private static final String ATTRIBUTE_DEFAULT = "default";
+	private static final String ATTRIBUTE_HIDDEN = "hidden";
+	private static final String NODE_TRANSLATIONS_SET = "trans_set";
+	private static final String NODE_TRANSLATIONS = "trans";
+	private static final String ATTRIBUTE_TRANSLATION_LOCALE = "loc";
+	private static final String ATTRIBUTE_TRANSLATION_TITLE = "val";
+	private static final String NODE_REPORTS = "reports";
+	private static final String NODE_REPORT = "report";
+	private static final String NODE_FIELDS = "fields";
+	private static final String NODE_FIELD = "field";
+	private static final String ATTRIBUTE_PRIMARY_KEY = "primary_key";
+	private static final String ATTRIBUTE_FIELD_TYPE = "type";
+	private static final String NODE_FORMATTING = "formatting";
+	private static final String ATTRIBUTE_TEXT_FORMAT_MULTILINE = "format_text_multiline";
+	private static final String ATTRIBUTE_USE_THOUSANDS_SEPARATOR = "format_thousands_separator";
+	private static final String ATTRIBUTE_DECIMAL_PLACES = "format_decimal_places";
+	private static final String NODE_RELATIONSHIPS = "relationships";
+	private static final String NODE_RELATIONSHIP = "relationship";
+	private static final String ATTRIBUTE_RELATIONSHIP_FROM_FIELD = "key";
+	private static final String ATTRIBUTE_RELATIONSHIP_TO_TABLE = "other_table";
+	private static final String ATTRIBUTE_RELATIONSHIP_TO_FIELD = "other_key";
+	private static final String NODE_DATA_LAYOUTS = "data_layouts";
+	private static final String NODE_DATA_LAYOUT = "data_layout";
+	private static final String NODE_DATA_LAYOUT_GROUPS = "data_layout_groups";
+	private static final String NODE_DATA_LAYOUT_GROUP = "data_layout_group";
+	private static final String NODE_DATA_LAYOUT_NOTEBOOK = "data_layout_notebook";
+	private static final String NODE_DATA_LAYOUT_PORTAL = "data_layout_portal";
+	private static final String NODE_DATA_LAYOUT_PORTAL_NAVIGATIONRELATIONSHIP = "portal_navigation_relationship";
+	private static final String ATTRIBUTE_PORTAL_NAVIGATION_TYPE = "navigation_type";
+	private static final String ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC = "automatic";
+	private static final String ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC = "specific";
+	private static final String ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE = "none";
+	private static final String ATTRIBUTE_RELATIONSHIP_NAME = "relationship";
+	private static final String ATTRIBUTE_RELATED_RELATIONSHIP_NAME = "related_relationship";
+	private static final String NODE_DATA_LAYOUT_ITEM = "data_layout_item";
+	private static final String NODE_DATA_LAYOUT_ITEM_GROUPBY = "data_layout_item_groupby";
+	private static final String NODE_GROUPBY = "groupby";
+	private static final String NODE_SECONDARY_FIELDS = "secondary_fields";
+	private static final String ATTRIBUTE_USE_DEFAULT_FORMATTING = "use_default_formatting";
+	private static final String LAYOUT_NAME_DETAILS = "details";
+	private static final String LAYOUT_NAME_LIST = "list";
 	
 	public void set_file_uri(final String fileURI) {
 		this.fileURI = fileURI;
@@ -131,40 +170,60 @@ public class Document {
 		
 		databaseTitle.set_title_original( rootNode.getAttribute(ATTRIBUTE_TITLE) );
 		
-		final NodeList listTableNodes = rootNode.getElementsByTagName(NODE_TABLE);
-		final int num = listTableNodes.getLength();
-		for(int i = 0; i < num; i++) {
-			final Node node = listTableNodes.item(i);
-			final Element element = (Element)node; //TODO: Check the cast.
-			loadTableNode(element);
+		//We first load the fields, relationships, etc,
+		//for all tables:
+		final List<Node> listTableNodes = getChildrenByTagName(rootNode, NODE_TABLE);
+		for(Node node: listTableNodes) {
+			if(!(node instanceof Element))
+				continue;
+
+			final Element element = (Element)node;
+			final TableInfo info = loadTableNodeBasic(element);
+			tablesMap.put(info.get_name(), info);
+		}
+
+		//We then load the layouts for all tables, because they
+		//need the fields and relationships for all tables:
+		for(Node node: listTableNodes) {
+			if(!(node instanceof Element))
+				continue;
+
+			final Element element = (Element)node;
+			final String tableName = element.getAttribute(ATTRIBUTE_NAME);
+			
+			//We first load the fields, relationships, etc:
+			final TableInfo info = getTableInfo(tableName);
+			if(info == null) {
+				continue;
+			}
+			
+			//We then load the layouts afterwards, because they
+			//need the fields and relationships:
+			loadTableLayouts(element, info);
+
+			tablesMap.put(info.get_name(), info);
 		}
 		
 		Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if(nodeConnection != null) {
 			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
 			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
-			
-			final String strPort = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_PORT);
-			int port = 0;
-			if(!StringUtils.isEmpty(strPort)) {
-				port = Integer.valueOf(strPort);
-			}
-			connectionPort = port;
+			connectionPort = getAttributeAsDecimal(nodeConnection, nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_PORT));
 		}
 		
 
 		return true;
 	};
 	
-	private Element getElementByName(final Element parentElement, final String tagName) {
-		final NodeList listNodes = parentElement.getElementsByTagName(NODE_TABLE);
+	private Element getElementByName(final Element parentElement, final String tagName) {	
+		final List<Node> listNodes = getChildrenByTagName(parentElement, tagName);
 		if(listNodes == null)
 			return null;
 
-		if(listNodes.getLength() == 0)
+		if(listNodes.size() == 0)
 			return null;
 
-		return (Element)listNodes.item(0);
+		return (Element)listNodes.get(0);
 	}
 	
 	private boolean getAttributeAsBoolean(final Element node, final String attributeName) {
@@ -172,7 +231,20 @@ public class Document {
 		if(str == null)
 			return false;
 		
-		return (str.equals("true"));
+		return str.equals("true");
+	}
+	
+	/**
+	 * @param elementFormatting
+	 * @param aTTRIBUTE_DECIMAL_PLACES2
+	 * @return
+	 */
+	private int getAttributeAsDecimal(final Element node, final String attributeName) {
+		final String str = node.getAttribute(attributeName);
+		if(StringUtils.isEmpty(str))
+			return 0;
+		
+		return Integer.valueOf(str);
 	}
 	
 	/** Load a title and its translations.
@@ -181,6 +253,8 @@ public class Document {
 	 * @param title
 	 */
 	private void loadTitle(final Element node, final Translatable title) {
+		title.set_name(node.getAttribute(ATTRIBUTE_NAME));
+		
 		title.set_title_original(node.getAttribute(ATTRIBUTE_TITLE));
 		
 		final Element nodeSet = getElementByName(node, NODE_TRANSLATIONS_SET);
@@ -188,14 +262,16 @@ public class Document {
 			return;
 		}
 		
-		final NodeList listNodes = nodeSet.getElementsByTagName(NODE_TRANSLATIONS);
+		final List<Node> listNodes = getChildrenByTagName(nodeSet, NODE_TRANSLATIONS);
 		if(listNodes == null)
 			return;
 
-		final int num = listNodes.getLength();
-		for(int i = 0; i < num; i++) {
-			final Node transNode = listNodes.item(i);
-			final Element element = (Element)transNode; //TODO: Check the cast.
+		for(Node transNode : listNodes) {
+			if(!(transNode instanceof Element)) {
+				continue;
+			}
+			
+			final Element element = (Element)transNode;
 			
 			final String locale = element.getAttribute(ATTRIBUTE_TRANSLATION_LOCALE);
 			final String translatedTitle = element.getAttribute(ATTRIBUTE_TRANSLATION_TITLE);
@@ -205,22 +281,47 @@ public class Document {
 		}
 	}
 	/**
-	 * @param node
+	 * @param tableNode
+	 * @return 
 	 */
-	private void loadTableNode(final Element node) {
+	private TableInfo loadTableNodeBasic(final Element tableNode) {
 		TableInfo info = new TableInfo();
-		info.name = node.getAttribute(ATTRIBUTE_NAME);
-		loadTitle(node, info);
-		info.isDefault = getAttributeAsBoolean(node, ATTRIBUTE_DEFAULT);
-		info.isHidden = getAttributeAsBoolean(node, ATTRIBUTE_HIDDEN);
+		loadTitle(tableNode, info);
+		final String tableName = info.get_name();
 
-		final Element fieldsNode = getElementByName(node, NODE_FIELDS);
+		info.isDefault = getAttributeAsBoolean(tableNode, ATTRIBUTE_DEFAULT);
+		info.isHidden = getAttributeAsBoolean(tableNode, ATTRIBUTE_HIDDEN);
+		
+		//These should be loaded before the fields, because the fields use them.
+		final Element relationshipsNode = getElementByName(tableNode, NODE_RELATIONSHIPS);
+		if(relationshipsNode != null) {
+			final List<Node> listNodes = getChildrenByTagName(relationshipsNode, NODE_RELATIONSHIP);
+			for(Node node : listNodes) {
+				if(!(node instanceof Element)) {
+					continue;
+				}
+				
+				final Element element = (Element)node;
+				Relationship relationship = new Relationship();
+				loadTitle(element, relationship);
+				relationship.setFromTable(tableName);
+				relationship.setFromField( element.getAttribute(ATTRIBUTE_RELATIONSHIP_FROM_FIELD));
+				relationship.setToTable( element.getAttribute(ATTRIBUTE_RELATIONSHIP_TO_TABLE));
+				relationship.setToField( element.getAttribute(ATTRIBUTE_RELATIONSHIP_TO_FIELD));
+
+				info.relationshipsMap.put(relationship.get_name(), relationship);
+			}
+		}
+		
+		final Element fieldsNode = getElementByName(tableNode, NODE_FIELDS);
 		if(fieldsNode != null) {
-			final NodeList listFieldNodes = fieldsNode.getElementsByTagName(NODE_FIELD);
-			final int numFields = listFieldNodes.getLength();
-			for(int i = 0; i < numFields; i++) {
-				final Node fieldNode = listFieldNodes.item(i);
-				final Element element = (Element)fieldNode; //TODO: Check the cast.
+			final List<Node> listNodes = getChildrenByTagName(fieldsNode, NODE_FIELD);
+			for(Node node : listNodes) {
+				if(!(node instanceof Element)) {
+					continue;
+				}
+
+				final Element element = (Element)node;
 				Field field = new Field();
 				loadField(element, field);
 
@@ -228,21 +329,285 @@ public class Document {
 			}
 		}
 
-		final Element reportsNode = getElementByName(node, NODE_REPORTS);
+		return info;
+	}
+
+	/**
+	 * @param tableNode
+	 * @param info
+	 */
+	private void loadTableLayouts(final Element tableNode, TableInfo info) {
+		final String tableName = info.get_name();
+
+		final Element layoutsNode = getElementByName(tableNode, NODE_DATA_LAYOUTS);
+		if(layoutsNode != null) {
+			final List<Node> listNodes = getChildrenByTagName(layoutsNode, NODE_DATA_LAYOUT);
+			for(Node node : listNodes) {
+				if(!(node instanceof Element)) {
+					continue;
+				}
+
+				final Element element = (Element)node;
+				final String name = element.getAttribute("name");
+				final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName);
+				if(name.equals(LAYOUT_NAME_DETAILS)) {
+					info.layoutGroupsDetails = listLayoutGroups;
+				} else if (name.equals(LAYOUT_NAME_LIST)) {
+					info.layoutGroupsList = listLayoutGroups;
+				} else {
+					Log.error("loadTableNode(): unexpected layout name: " + name);
+				}
+			}
+		}
+		
+		final Element reportsNode = getElementByName(tableNode, NODE_REPORTS);
 		if(reportsNode != null) {
-			final NodeList listReportNodes = reportsNode.getElementsByTagName(NODE_REPORT);
-			final int numReports = listReportNodes.getLength();
-			for(int i = 0; i < numReports; i++) {
-				final Node reportNode = listReportNodes.item(i);
-				final Element element = (Element)reportNode; //TODO: Check the cast.
+			final List<Node> listNodes = getChildrenByTagName(reportsNode, NODE_REPORT);
+			for(Node node : listNodes) {
+				if(!(node instanceof Element)) {
+					continue;
+				}
+				
+				final Element element = (Element)node;
 				Report report = new Report();
-				loadReport(element, report);
+				loadReport(element, report, tableName);
 
 				info.reportsMap.put(report.get_name(), report);
 			}
 		}
+	}
+
+	/**
+	 * @param node
+	 * @return 
+	 */
+	private List<LayoutGroup> loadLayoutNode(final Element node, final String tableName) {
+		if(node == null) {
+			return null;
+		}
 		
-		tablesMap.put(info.name, info);
+		List<LayoutGroup> result = new ArrayList<LayoutGroup>();
+		
+		final List<Node> listNodes = getChildrenByTagName(node, NODE_DATA_LAYOUT_GROUPS);
+		for(Node nodeGroups : listNodes) {
+			if(!(nodeGroups instanceof Element)) {
+				continue;
+			}
+
+			final Element elementGroups = (Element)nodeGroups;
+			
+			NodeList list = elementGroups.getChildNodes();
+			final int num = list.getLength();
+			for(int i = 0; i < num; i++) {
+				final Node nodeLayoutGroup = list.item(i);
+				if(nodeLayoutGroup == null) {
+					continue;
+				}
+				
+				if(!(nodeLayoutGroup instanceof Element)) {
+					continue;
+				}
+
+				final Element element = (Element)nodeLayoutGroup;
+				final String tagName = element.getTagName();
+				if(tagName == NODE_DATA_LAYOUT_GROUP) {
+					LayoutGroup group = new LayoutGroup();
+					loadDataLayoutGroup(element, group, tableName);
+					result.add(group);
+				} else if(tagName == NODE_DATA_LAYOUT_NOTEBOOK) {
+					LayoutItemNotebook group = new LayoutItemNotebook();
+					loadDataLayoutGroup(element, group, tableName);
+					result.add(group);
+				} else if(tagName == NODE_DATA_LAYOUT_PORTAL) {
+					LayoutItemPortal portal = new LayoutItemPortal();
+					loadDataLayoutPortal(element, portal, tableName);
+					result.add(portal);
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param element
+	 * @param tableName
+	 * @param portal
+	 */
+	private void loadUsesRelationship(Element element, String tableName, UsesRelationship item) {
+		if(element == null) {
+			return;
+		}
+
+		if(item == null) {
+			return;
+		}
+
+		final String relationship_name = element.getAttribute(ATTRIBUTE_RELATIONSHIP_NAME);
+		Relationship relationship = null;
+		if(!StringUtils.isEmpty(relationship_name)) {
+			//std::cout << "  debug in : table_name=" << table_name << ", relationship_name=" << relationship_name << std::endl;
+			relationship = getRelationship(tableName, relationship_name);
+			item.setRelationship(relationship);
+
+			if(relationship == null) {
+				Log.error("relationship not found: " + relationship_name + ", in table: " + tableName);
+			}
+		}
+
+		final String related_relationship_name = element.getAttribute(ATTRIBUTE_RELATED_RELATIONSHIP_NAME);
+		if(!StringUtils.isEmpty(related_relationship_name) && (relationship != null)) {
+			final Relationship related_relationship = getRelationship(relationship.get_to_table(), related_relationship_name);
+			if(related_relationship == null) {
+				Log.error("related relationship not found in table=" + relationship.get_to_table() + ",  name=" + related_relationship_name);
+
+				item.setRelatedRelationship(related_relationship);
+			}
+		}
+	}
+
+	/** getElementsByTagName() is recursive, but we do not want that.
+	 * 
+	 * @param node
+	 * @param
+	 * @return
+	 */
+	private List<Node> getChildrenByTagName(final Element parentNode, final String tagName) {
+		List<Node> result = new ArrayList<Node>();
+
+		NodeList list = parentNode.getElementsByTagName(tagName);
+		final int num = list.getLength();
+		for(int i = 0; i < num; i++) {
+			final Node node = list.item(i);
+			if(node == null) {
+				continue;
+			}
+
+			final Node itemParentNode = node.getParentNode();
+			if(itemParentNode.equals(parentNode)) {
+				result.add(node);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param element
+	 * @param group
+	 */
+	private void loadDataLayoutGroup(Element nodeGroup, LayoutGroup group, final String tableName) {
+		loadTitle(nodeGroup, group);
+		
+		final NodeList listNodes = nodeGroup.getChildNodes();
+		final int num = listNodes.getLength();
+		for(int i = 0; i < num; i++) {
+			final Node node = listNodes.item(i);
+			if(!(node instanceof Element))
+				continue;
+
+			final Element element = (Element)node;
+			final String tagName = element.getTagName();
+			if(tagName == NODE_DATA_LAYOUT_GROUP) {
+				LayoutGroup childGroup = new LayoutGroup();
+				loadDataLayoutGroup(element, childGroup, tableName);
+				group.add_item(childGroup);
+			} else if(tagName == NODE_DATA_LAYOUT_NOTEBOOK) {
+				LayoutItemNotebook childGroup = new LayoutItemNotebook();
+				loadDataLayoutGroup(element, childGroup, tableName);
+				group.add_item(childGroup);
+			} else if(tagName == NODE_DATA_LAYOUT_PORTAL) {
+				LayoutItemPortal childGroup = new LayoutItemPortal();
+				loadDataLayoutPortal(element, childGroup, tableName);
+				group.add_item(childGroup);
+			} else if(element.getTagName() == NODE_DATA_LAYOUT_ITEM) {
+				final LayoutItemField item = new LayoutItemField();
+				loadDataLayoutItemField(element, item, tableName);
+				group.add_item(item);
+			} else if(element.getTagName() == NODE_DATA_LAYOUT_ITEM_GROUPBY) {
+				final LayoutItemGroupBy item = new LayoutItemGroupBy();
+				loadDataLayoutItemGroupBy(element, item, tableName);
+				group.add_item(item);
+			}
+		}
+	}
+
+	/**
+	 * @param element
+	 * @param item
+	 * @param tableName
+	 */
+	private void loadDataLayoutItemGroupBy(final Element element, final LayoutItemGroupBy item, final String tableName) {
+		loadDataLayoutGroup(element, item, tableName);
+
+		final Element elementGroupBy = getElementByName(element, NODE_GROUPBY);
+		if(elementGroupBy == null) {
+			return;
+		}
+
+		final LayoutItemField fieldGroupBy = new LayoutItemField();
+		loadDataLayoutItemField(elementGroupBy, fieldGroupBy, tableName);
+		item.set_field_group_by(fieldGroupBy);
+		
+		final Element elementSecondaryFields = getElementByName(element, NODE_SECONDARY_FIELDS);
+		if(elementSecondaryFields == null) {
+			return;
+		}
+
+		final Element elementLayoutGroup = getElementByName(elementSecondaryFields, NODE_DATA_LAYOUT_GROUP);
+		if(elementLayoutGroup != null) {
+			final LayoutGroup secondaryLayoutGroup = new LayoutGroup();
+			loadDataLayoutGroup(elementLayoutGroup, secondaryLayoutGroup, tableName);
+			item.set_secondary_fields(secondaryLayoutGroup);
+		}
+	}
+
+	/**
+	 * @param element
+	 * @param item
+	 */
+	private void loadDataLayoutItemField(final Element element, final LayoutItemField item, final String tableName) {
+		loadTitle(element, item);
+		loadUsesRelationship(element, tableName, item);
+		
+		//Get the actual field:
+		final String fieldName = item.get_name();
+		final String inTableName = item.get_table_used(tableName);
+		final Field field = get_field(inTableName, fieldName);
+		item.set_full_field_details(field);
+		
+		item.setUseDefaultFormatting(getAttributeAsBoolean(element, ATTRIBUTE_USE_DEFAULT_FORMATTING));
+		
+		final Element elementFormatting = getElementByName(element, NODE_FORMATTING);
+		if(elementFormatting != null) {
+			loadFormatting(elementFormatting, item.getFormatting());
+		}
+	}
+
+	/**
+	 * @param element
+	 * @param childGroup
+	 */
+	private void loadDataLayoutPortal(Element element, LayoutItemPortal portal, final String tableName) {
+		loadUsesRelationship(element, tableName, portal);
+		final String relatedTableName = portal.get_table_used(tableName);
+		loadDataLayoutGroup(element, portal, relatedTableName);
+
+		final Element elementNavigation = getElementByName(element, NODE_DATA_LAYOUT_PORTAL_NAVIGATIONRELATIONSHIP);
+		if(elementNavigation != null) {
+			final String navigation_type_as_string = elementNavigation.getAttribute(ATTRIBUTE_PORTAL_NAVIGATION_TYPE);
+			if(StringUtils.isEmpty(navigation_type_as_string) || navigation_type_as_string == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC) {
+				portal.setNavigationType(LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC);
+			} else if(navigation_type_as_string == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE) {
+				portal.setNavigationType(LayoutItemPortal.NavigationType.NAVIGATION_NONE);
+			} else if(navigation_type_as_string == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC) {
+				//Read the specified relationship name:
+				final UsesRelationship relationship_navigation_specific = new UsesRelationshipImpl();
+				loadUsesRelationship(elementNavigation, relatedTableName, relationship_navigation_specific);
+				portal.setNavigationRelationshipSpecific(relationship_navigation_specific);
+			}
+		}
+		
 	}
 
 	/**
@@ -250,23 +615,23 @@ public class Document {
 	 * @param field
 	 */
 	private void loadField(Element element, Field field) {
-		field.set_name(element.getAttribute(ATTRIBUTE_NAME));
+		loadTitle(element, field);
 		
-		Field.glom_field_type fieldType = Field.glom_field_type.TYPE_INVALID;
+		Field.GlomFieldType fieldType = Field.GlomFieldType.TYPE_INVALID;
 		final String fieldTypeStr = element.getAttribute(ATTRIBUTE_FIELD_TYPE);
 		if(!StringUtils.isEmpty(fieldTypeStr)) {
-			if(fieldTypeStr == "boolean") {
-				fieldType = Field.glom_field_type.TYPE_BOOLEAN;
-			} else if (fieldTypeStr == "date") {
-				fieldType = Field.glom_field_type.TYPE_DATE;
-			} else if (fieldTypeStr == "image") {
-				fieldType = Field.glom_field_type.TYPE_IMAGE;
-			} else if (fieldTypeStr == "numeric") {
-				fieldType = Field.glom_field_type.TYPE_NUMERIC;
-			} else if (fieldTypeStr == "text") {
-				fieldType = Field.glom_field_type.TYPE_TEXT;
-			} else if (fieldTypeStr == "time") {
-				fieldType = Field.glom_field_type.TYPE_TIME;
+			if(fieldTypeStr.equals("Boolean")) {
+				fieldType = Field.GlomFieldType.TYPE_BOOLEAN;
+			} else if (fieldTypeStr.equals("Date")) {
+				fieldType = Field.GlomFieldType.TYPE_DATE;
+			} else if (fieldTypeStr.equals("Image")) {
+				fieldType = Field.GlomFieldType.TYPE_IMAGE;
+			} else if (fieldTypeStr.equals("Number")) {
+				fieldType = Field.GlomFieldType.TYPE_NUMERIC;
+			} else if (fieldTypeStr.equals("Text")) {
+				fieldType = Field.GlomFieldType.TYPE_TEXT;
+			} else if (fieldTypeStr.equals("Time")) {
+				fieldType = Field.GlomFieldType.TYPE_TIME;
 			}
 		}
 			
@@ -274,15 +639,54 @@ public class Document {
 		
 		field.set_primary_key(getAttributeAsBoolean(element, ATTRIBUTE_PRIMARY_KEY));
 		loadTitle(element, field);
+		
+		final Element elementFormatting = getElementByName(element, NODE_FORMATTING);
+		if(elementFormatting != null) {
+			loadFormatting(elementFormatting, field.getFormatting());
+		}
+	}
+
+	/**
+	 * @param elementFormatting
+	 * @param formatting
+	 */
+	private void loadFormatting(Element elementFormatting, Formatting formatting) {
+		if (elementFormatting == null)
+			return;
+
+		if (formatting == null)
+			return;
+		
+		//formatting.setTextFormatMultiline(getAttributeAsBoolean(elementFormatting, ATTRIBUTE_TEXT_FORMAT_MULTILINE));
+
+
+		final NumericFormat numericFormatting = formatting.getNumericFormat();
+		if(numericFormatting != null) {
+			numericFormatting.setUseThousandsSeparator(getAttributeAsBoolean(elementFormatting, ATTRIBUTE_USE_THOUSANDS_SEPARATOR));
+			numericFormatting.setDecimalPlaces(getAttributeAsDecimal(elementFormatting, ATTRIBUTE_DECIMAL_PLACES));
+		}
+		
 	}
 
 	/**
 	 * @param element
 	 * @param reportNode
 	 */
-	private void loadReport(Element element, Report report) {
+	private void loadReport(Element element, Report report, final String tableName) {
 		report.set_name(element.getAttribute(ATTRIBUTE_NAME));
 		loadTitle(element, report);
+
+		final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName);
+		
+		//A report can actually only have one LayoutGroup,
+		//though it uses the same XML structure as List and Details layouts,
+		//which (wrongly) suggests that it can have more than one group.
+		LayoutGroup layoutGroup = null;
+		if(!listLayoutGroups.isEmpty()) {
+			layoutGroup = listLayoutGroups.get(0);
+		}
+
+		report.set_layout_group(layoutGroup);
 	}
 	
 	private TableInfo getTableInfo(final String tableName) {
@@ -303,12 +707,12 @@ public class Document {
 		return databaseTitle.get_title_original();
 	}
 	
-	public StringVector get_translation_available_locales() {
-		return new StringVector();
+	public List<String> get_translation_available_locales() {
+		return translationAvailableLocales;
 	}
 	
 	public Document.HostingMode get_hosting_mode() {
-		return HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
+		return HostingMode.HOSTING_MODE_POSTGRES_CENTRAL; //TODO
 	}
 	
 	public String get_connection_server() {
@@ -323,24 +727,18 @@ public class Document {
 		return connectionDatabase;
 	}
 	
-	public StringVector get_table_names() {
-		StringVector result = new StringVector(); //TODO: Use a normal type.
-		
-		//return tablesMap.keySet();
-		
-		for (final TableInfo info : tablesMap.values()) {
-			result.add(info.name);
-		}
-		
-		return result;
+	public List<String> get_table_names() {
+		//TODO: Return a Set?
+		return new ArrayList<String>(tablesMap.keySet());
 	}
 	
-	public boolean get_table_is_hidden(final String table_name) {
-		for (final TableInfo info : tablesMap.values()) {
-			return info.isHidden;
+	public boolean get_table_is_hidden(final String tableName) {
+		final TableInfo info = getTableInfo(tableName);
+		if(info == null) {
+			return false;
 		}
 		
-		return false;
+		return info.isHidden;
 	}
 			
 	public String get_table_title(final String tableName, final String locale) {
@@ -355,7 +753,7 @@ public class Document {
 	public String get_default_table() {
 		for (final TableInfo info : tablesMap.values()) {
 			if(info.isDefault) {
-				return info.name;
+				return info.get_name();
 			}
 		}
 		
@@ -379,28 +777,34 @@ public class Document {
 		return new ArrayList<Field>(info.fieldsMap.values());
 	}
 	
-	public Field get_field(String table_name, String strFieldName) {
-		//TODO:
-		return new Field();
-	}
-	
-	public LayoutGroupVector get_data_layout_groups(String layout_name, String parent_table_name) {
-		//TODO:
-		return new LayoutGroupVector();
-	}
-	
-	public StringVector get_report_names(String tableName) {
-		StringVector result = new StringVector();
-
+	public Field get_field(String tableName, String strFieldName) {
 		final TableInfo info = getTableInfo(tableName);
 		if(info == null)
-			return result;
+			return null;
 
-		for (final Report report : info.reportsMap.values()) {
-			result.add(report.get_name());
+		return info.fieldsMap.get(strFieldName);
+	}
+	
+	public List<LayoutGroup> get_data_layout_groups(String layoutName, String parentTableName) {
+		final TableInfo info = getTableInfo(parentTableName);
+		if(info == null)
+			return new ArrayList<LayoutGroup>();
+		
+		if(layoutName == LAYOUT_NAME_DETAILS) {
+			return info.layoutGroupsDetails;
+		} else if(layoutName == LAYOUT_NAME_LIST) {
+			return info.layoutGroupsList;
+		} else {
+			return new ArrayList<LayoutGroup>();
 		}
+	}
+	
+	public List<String> get_report_names(String tableName) {
+		final TableInfo info = getTableInfo(tableName);
+		if(info == null)
+			return new ArrayList<String>();
 
-		return new StringVector();
+		return new ArrayList<String>(info.reportsMap.keySet());
 	}
 	
 	public Report get_report(String tableName, String reportName) {
@@ -409,5 +813,88 @@ public class Document {
 			return null;
 
 		return info.reportsMap.get(reportName);
+	}
+
+	/**
+	 * @param parent_table_name
+	 * @param field
+	 * @return
+	 */
+	public Relationship getFieldUsedInRelationshipToOne(String table_name, LayoutItemField layout_field) {
+		
+		if(layout_field == null)
+		{
+			Log.error("layout_field was null");
+			return null;
+		}
+
+		Relationship result = null;
+
+		final String table_used = layout_field.get_table_used(table_name);
+		final TableInfo info = getTableInfo(table_used);
+		if(info == null) {
+			//This table is special. We would not create a relationship to it using a field:
+			//if(table_used == GLOM_STANDARD_TABLE_PREFS_TABLE_NAME)
+			//	return result;
+
+			Log.error("table not found: " + table_used);
+			return null;
+		}
+
+		//Look at each relationship:
+		final String field_name = layout_field.get_name();
+		for(Relationship relationship : info.relationshipsMap.values()) {
+			if(relationship != null)
+			{
+				//If the relationship uses the field
+				if(relationship.get_from_field() == field_name)
+				{
+					//if the to_table is not hidden:
+					if(!get_table_is_hidden(relationship.get_to_table()))
+					{
+						//TODO_Performance: The use of this convenience method means we get the full relationship information again:
+						if(getRelationshipIsToOne(table_name, relationship.get_name()))
+						{
+							result = relationship;
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param table_name
+	 * @param get_name
+	 * @return
+	 */
+	private boolean getRelationshipIsToOne(String table_name, String relationship_name) {
+		final Relationship relationship = getRelationship(table_name, relationship_name);
+		if(relationship != null)
+		{
+			final Field field_to = get_field(relationship.get_to_table(), relationship.get_to_field());
+			if(field_to != null) {
+				return (field_to.get_primary_key() || field_to.getUniqueKey());
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param table_name
+	 * @param relationship_name
+	 * @return
+	 */
+	private Relationship getRelationship(String table_name, String relationship_name) {
+		final TableInfo info = getTableInfo(table_name);
+		if(info == null) {
+			Log.error("table not found: " + table_name);
+			return null;
+		}
+
+		return info.relationshipsMap.get(relationship_name);
 	}
 }

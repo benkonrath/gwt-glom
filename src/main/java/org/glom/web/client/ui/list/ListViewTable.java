@@ -25,7 +25,7 @@ import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.client.ui.cell.NavigationButtonCell;
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.cellview.client.Column;
@@ -57,7 +57,8 @@ public class ListViewTable extends ListTable {
 			final NavigationButtonCell navigationButtonCell, final String quickFind) {
 		super(documentID);
 		this.quickFind = quickFind;
-		createCellTable(layoutGroup, MAX_TABLE_ROWS, constants.details(), navigationButtonCell);
+		//TODO: Us tableName set here?
+		createCellTable(layoutGroup, tableName, MAX_TABLE_ROWS, constants.details(), navigationButtonCell);
 	}
 
 	/*

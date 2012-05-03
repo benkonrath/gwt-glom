@@ -33,7 +33,7 @@ import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.HasRecordsPlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.ListView;
-import org.glom.web.shared.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -100,7 +100,7 @@ public class ListActivity extends HasTableActivity {
 			public void onSuccess(final LayoutGroup result) {
 				// TODO check if result.getTableName() is the same as the tableName field. Update it if it's not the
 				// same.
-				listView.setCellTable(documentID, result, quickFind);
+				listView.setCellTable(documentID, tableName, result, quickFind);
 			}
 		};
 

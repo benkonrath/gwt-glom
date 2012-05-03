@@ -24,24 +24,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.glom.web.shared.libglom.Document;
-import org.glom.libglom.Glom;
-import org.glom.libglom.LayoutFieldVector;
-import org.glom.libglom.LayoutGroup;
-import org.glom.libglom.LayoutGroupVector;
-import org.glom.libglom.LayoutItem;
-import org.glom.libglom.LayoutItem_GroupBy;
-import org.glom.libglom.LayoutItemVector;
-import org.glom.libglom.LayoutItem_Field;
-import org.glom.libglom.LayoutItem_Notebook;
-import org.glom.libglom.LayoutItem_Portal;
-import org.glom.libglom.NumericFormat;
-import org.glom.libglom.Relationship;
-import org.glom.libglom.SortClause;
-import org.glom.libglom.SortFieldPair;
-import org.glom.libglom.StringVector;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.SortClause;
+import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,7 +61,6 @@ public class DocumentTest {
 
 	@AfterClass
 	static public void tearDown() {
-		Glom.libglom_deinit();
 	}
 
 	@Test
@@ -79,7 +71,7 @@ public class DocumentTest {
 
 	@Test
 	public void testReadTableNames() {
-		StringVector tableNames = document.get_table_names();
+		List<String> tableNames = document.get_table_names();
 		assertEquals(4, tableNames.size());
 
 		String tables = tableNames.get(0);
@@ -101,7 +93,9 @@ public class DocumentTest {
 			field = fields.get(i);
 			titles += ", " + field.get_title_or_name(locale);
 		}
-		assertThat(titles, is("Album ID, Comments, Name, Artist ID, Publisher ID, Year"));
+
+		//TODO: The sequence is not important. It's only important that they are all there.
+		assertThat(titles, is("Publisher ID, Artist ID, Album ID, Name, Year, Comments"));
 
 		fields = document.get_table_fields("artists");
 		assertEquals(4, fields.size());
@@ -112,7 +106,9 @@ public class DocumentTest {
 			field = fields.get(i);
 			titles += ", " + field.get_title_or_name(locale);
 		}
-		assertThat(titles, is("Artist ID, Description, Comments, Name"));
+
+		//TODO: The sequence is not important. It's only important that they are all there.
+		assertThat(titles, is("Artist ID, Name, Description, Comments"));
 
 		fields = document.get_table_fields("publishers");
 		assertEquals(3, fields.size());
@@ -123,7 +119,9 @@ public class DocumentTest {
 			field = fields.get(i);
 			titles += ", " + field.get_title_or_name(locale);
 		}
-		assertThat(titles, is("Publisher ID, Comments, Name"));
+
+		//TODO: The sequence is not important. It's only important that they are all there.
+		assertThat(titles, is("Name, Publisher ID, Comments"));
 
 		fields = document.get_table_fields("songs");
 		assertEquals(4, fields.size());
@@ -134,7 +132,9 @@ public class DocumentTest {
 			field = fields.get(i);
 			titles += ", " + field.get_title_or_name(locale);
 		}
-		assertThat(titles, is("Song ID, Comments, Album ID, Name"));
+
+		//TODO: The sequence is not important. It's only important that they are all there.
+		assertThat(titles, is("Song ID, Album ID, Name, Comments"));
 	}
 
 	@Test
@@ -144,19 +144,21 @@ public class DocumentTest {
 		int[] layoutFieldSizes = { 7, 4, 3, 4 };
 
 		for (int i = 0; i < tables.length; i++) {
-			LayoutGroupVector layoutList = document.get_data_layout_groups("list", tables[i]);
-			LayoutItemVector layoutItems = layoutList.get(0).get_items();
-			LayoutFieldVector layoutFields = new LayoutFieldVector();
-			SortClause sortClause = new SortClause();
+			List<LayoutGroup> layoutList = document.get_data_layout_groups("list", tables[i]);
+			assertTrue(!layoutList.isEmpty());
+			List<LayoutItem> layoutItems = layoutList.get(0).get_items();
+			List<LayoutItemField> layoutFields = new ArrayList<LayoutItemField>();
+			SortClause sortClause = new SortClause(); //TODO: Why use a SortClause instead of a List?
 			int numItems = safeLongToInt(layoutItems.size());
 			for (int j = 0; j < numItems; j++) {
 				LayoutItem item = layoutItems.get(j);
-				LayoutItem_Field field = LayoutItem_Field.cast_dynamic(item);
-				if (field != null) {
+				
+				if(item instanceof LayoutItemField ) {
+					LayoutItemField field = (LayoutItemField)item;
 					layoutFields.add(field);
 					Field details = field.get_full_field_details();
-					if (details != null && details.get_primary_key()) {
-						sortClause.add(new SortFieldPair(field, true)); // ascending
+					if (details != null && details.get_primary_key()) { 
+						sortClause.add(new SortClause.SortField(field, true)); // ascending
 					}
 				}
 			}
@@ -171,41 +173,45 @@ public class DocumentTest {
 	 */
 	@Test
 	public void testGetNumericFormat() {
-		StringVector tableNames = document.get_table_names();
+		List<String> tableNames = document.get_table_names();
 
 		for (int i = 0; i < tableNames.size(); i++) {
 			String table = tableNames.get(i);
-			LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
-			LayoutItemVector layoutItems = layoutList.get(0).get_items();
+			List<LayoutGroup> layoutList = document.get_data_layout_groups("list", table);
+			assertTrue(!layoutList.isEmpty());
+			List<LayoutItem> layoutItems = layoutList.get(0).get_items();
 			int numItems = safeLongToInt(layoutItems.size());
 			for (int j = 0; j < numItems; j++) {
 				LayoutItem item = layoutItems.get(j);
-				LayoutItem_Field item_field = LayoutItem_Field.cast_dynamic(item);
-				if (item_field != null) {
+				assertTrue(item != null);
+				
+				if(item instanceof LayoutItemField) {
+					final LayoutItemField item_field = (LayoutItemField)item;
 					// don't keep a reference to the FeildFormatting object
-					NumericFormat numFormat = item_field.get_formatting_used().get_numeric_format();
+					NumericFormat numFormat = item_field.get_formatting_used().getNumericFormat();
+					assertTrue(numFormat != null);
 
 					// get the values
-					boolean altForegroundColorForNegatives = numFormat.get_alt_foreground_color_for_negatives();
-					String currencySymbol = numFormat.get_currency_symbol();
-					long decimalPlaces = numFormat.get_decimal_places();
-					boolean decimalPlacesRestricted = numFormat.get_decimal_places_restricted();
-					boolean useThousandsSepator = numFormat.get_use_thousands_separator();
-					String alternativeColorForNegatives = NumericFormat.get_alternative_color_for_negatives();
-					long defaultPrecision = NumericFormat.get_default_precision();
+					boolean altForegroundColorForNegatives = numFormat.getUseAltForegroundColorForNegatives();
+					String currencySymbol = numFormat.getCurrencySymbol();
+					long decimalPlaces = numFormat.getDecimalPlaces();
+					boolean decimalPlacesRestricted = numFormat.getDecimalPlacesRestricted();
+					boolean useThousandsSepator = numFormat.getUseThousandsSeparator();
+					String alternativeColorForNegatives = NumericFormat.getAlternativeColorForNegatives();
+					long defaultPrecision = NumericFormat.getDefaultPrecision();
 
 					// Simulate a garbage collection
 					System.gc();
 					System.runFinalization();
 
 					// re-get the values and test
-					assertEquals(altForegroundColorForNegatives, numFormat.get_alt_foreground_color_for_negatives());
-					assertEquals(currencySymbol, numFormat.get_currency_symbol());
-					assertEquals(decimalPlaces, numFormat.get_decimal_places());
-					assertEquals(decimalPlacesRestricted, numFormat.get_decimal_places_restricted());
-					assertEquals(useThousandsSepator, numFormat.get_use_thousands_separator());
-					assertEquals(alternativeColorForNegatives, NumericFormat.get_alternative_color_for_negatives());
-					assertEquals(defaultPrecision, NumericFormat.get_default_precision());
+					assertEquals(altForegroundColorForNegatives, numFormat.getUseAltForegroundColorForNegatives());
+					assertEquals(currencySymbol, numFormat.getCurrencySymbol());
+					assertEquals(decimalPlaces, numFormat.getDecimalPlaces());
+					assertEquals(decimalPlacesRestricted, numFormat.getDecimalPlacesRestricted());
+					assertEquals(useThousandsSepator, numFormat.getUseThousandsSeparator());
+					assertEquals(alternativeColorForNegatives, NumericFormat.getAlternativeColorForNegatives());
+					assertEquals(defaultPrecision, NumericFormat.getDefaultPrecision());
 
 				}
 			}
@@ -213,29 +219,31 @@ public class DocumentTest {
 	}
 
 	/*
-	 * A smoke test for the methods added to LayoutItem_Field for accessing methods in Glom::UsesRelationship.
+	 * A smoke test for the methods added to LayoutItemField for accessing methods in Glom::UsesRelationship.
 	 */
 	@Test
 	public void testUsesRelationshipMethods() {
 		String table = "albums";
-		LayoutGroupVector layoutList = document.get_data_layout_groups("list", table);
-		LayoutItemVector layoutItems = layoutList.get(0).get_items();
+		List<LayoutGroup> layoutList = document.get_data_layout_groups("list", table);
+		List<LayoutItem> layoutItems = layoutList.get(0).get_items();
 
 		String names = null, hasRelationshipNames = null, tablesUsed = null;
-		LayoutItem firstItem = layoutItems.get(0);
-		LayoutItem_Field firstItemField = LayoutItem_Field.cast_dynamic(firstItem);
-		if (firstItemField != null) {
+		final LayoutItem firstItem = layoutItems.get(0);
+		
+		if(firstItem instanceof LayoutItemField) {
+			LayoutItemField firstItemField = (LayoutItemField)firstItem;
 			names = firstItemField.get_name();
-			hasRelationshipNames = "" + firstItemField.get_has_relationship_name();
+			hasRelationshipNames = "" + firstItemField.getHasRelationshipName();
 			tablesUsed = firstItemField.get_table_used(table);
 		}
 		int numItems = safeLongToInt(layoutItems.size());
 		for (int j = 1; j < numItems; j++) {
 			LayoutItem item = layoutItems.get(j);
-			LayoutItem_Field itemField = LayoutItem_Field.cast_dynamic(item);
-			if (itemField != null) {
+
+			if(item instanceof LayoutItemField) {
+				LayoutItemField itemField = (LayoutItemField)item;
 				names += ", " + itemField.get_name();
-				hasRelationshipNames += ", " + itemField.get_has_relationship_name();
+				hasRelationshipNames += ", " + itemField.getHasRelationshipName();
 				tablesUsed += ", " + itemField.get_table_used(table);
 			}
 		}
@@ -257,7 +265,7 @@ public class DocumentTest {
 
 		// Get the "Scene Cast" related list portal. This relies on specific details of the film manager details
 		// view layout. I've included safety checks that will fail if the layout changes.
-		LayoutGroupVector detailsLayout = filmManagerDocument.get_data_layout_groups("details", "scenes");
+		List<LayoutGroup> detailsLayout = filmManagerDocument.get_data_layout_groups("details", "scenes");
 		assertEquals(3, detailsLayout.size());
 
 		LayoutGroup layoutGroup = detailsLayout.get(1);
@@ -266,41 +274,43 @@ public class DocumentTest {
 		layoutGroup = detailsLayout.get(2);
 		assertEquals("details_lower", layoutGroup.get_name());
 
-		LayoutItemVector items = layoutGroup.get_items();
+		List<LayoutItem> items = layoutGroup.get_items();
 		assertEquals(2, items.size());
 
 		LayoutItem notebookItem = items.get(0);
 		assertEquals("notebook", notebookItem.get_name());
-		LayoutItem_Notebook notebook = LayoutItem_Notebook.cast_dynamic(notebookItem);
+		assertTrue(notebookItem instanceof LayoutItemNotebook);
+		LayoutItemNotebook notebook = (LayoutItemNotebook)notebookItem;
 		items = notebook.get_items();
 		assertEquals(7, items.size());
 		LayoutItem portalItem = items.get(0);
-		LayoutItem_Portal portal = LayoutItem_Portal.cast_dynamic(portalItem);
+		assertTrue(portalItem instanceof LayoutItemPortal);
+		LayoutItemPortal portal = (LayoutItemPortal)portalItem;
 		assertTrue(portal != null);
+		
+		assertEquals(portal.getRelationshipNameUsed(), "scene_cast");
 
 		// call get_suitable_table_to_view_details
-		StringBuffer navigation_table_name = new StringBuffer();
-		LayoutItem_Field navigation_relationship = new LayoutItem_Field(); // LayoutItem_Field is being used in place of
-																			// UsesRelationship
-		//TODO: portal.get_suitable_table_to_view_details(navigation_table_name, navigation_relationship, filmManagerDocument);
+		final LayoutItemPortal.TableToViewDetails viewDetails = portal.get_suitable_table_to_view_details(filmManagerDocument);
+		assertTrue(viewDetails != null);
 
 		// Simulate a garbage collection
 		System.gc();
 		System.runFinalization();
 
 		// Check if things are working like we expect
-		assertEquals("characters", navigation_table_name.toString());
-		assertTrue(navigation_relationship != null);
-		Relationship relationship = navigation_relationship.get_relationship();
+		assertEquals("characters", viewDetails.tableName);
+		assertTrue(viewDetails.usesRelationship != null);
+		Relationship relationship = viewDetails.usesRelationship.getRelationship();
 		assertTrue(relationship != null);
 		assertEquals("cast", relationship.get_name());
-		assertTrue(navigation_relationship.get_related_relationship() == null);
+		assertTrue(viewDetails.usesRelationship.getRelatedRelationship() == null);
 
 	}
 
 	@Test
 	public void testReadReportNames() {
-		StringVector reportNames = document.get_report_names("albums");
+		List<String> reportNames = document.get_report_names("albums");
 		assertEquals(1, reportNames.size()); //TODO: Test something with more reports.
 
 		String reports = reportNames.get(0);
@@ -316,43 +326,45 @@ public class DocumentTest {
 		assertTrue(report != null);
 		LayoutGroup layoutGroup = report.get_layout_group();
 		assertTrue(layoutGroup != null);
-		LayoutItemVector layoutItems = layoutGroup.get_items();
+		List<LayoutItem> layoutItems = layoutGroup.get_items();
 		final int numItems = safeLongToInt(layoutItems.size());
 		assertEquals(1, numItems);
 
 		LayoutItem layoutItem = layoutItems.get(0);
 		assertTrue(layoutItem != null);
-		LayoutGroup asGroup = LayoutGroup.cast_dynamic(layoutItem);
+		LayoutGroup asGroup = (LayoutGroup)layoutItem;
 		assertTrue(asGroup != null);
-		LayoutItem_GroupBy groupby = LayoutItem_GroupBy.cast_dynamic(layoutItem);
+		LayoutItemGroupBy groupby = (LayoutItemGroupBy)layoutItem;
 		assertTrue(groupby != null);
 
 		assertTrue(groupby.get_has_field_group_by());
-		LayoutItem_Field fieldGroupBy = groupby.get_field_group_by();
+		LayoutItemField fieldGroupBy = groupby.get_field_group_by();
 		assertTrue(fieldGroupBy != null);
 		assertThat(fieldGroupBy.get_name(), is("artist_id"));
 
 		LayoutGroup groupSecondaries = groupby.get_secondary_fields();
 		assertTrue(groupSecondaries != null);
 
-		LayoutItemVector innerItems = groupby.get_items();
+		List<LayoutItem> innerItems = groupby.get_items();
 		assertTrue(innerItems != null);
 		final int numInnerItems = safeLongToInt(innerItems.size());
 		assertEquals(2, numInnerItems);
 
-		layoutItem = layoutItems.get(0);
+		layoutItem = innerItems.get(0);
 		assertTrue(layoutItem != null);
-		LayoutItem_Field field = LayoutItem_Field.cast_dynamic(layoutItem);
+		assertTrue(layoutItem instanceof LayoutItemField);
+		LayoutItemField field = (LayoutItemField)layoutItem;
 		assertTrue(field != null);
 		assertThat(field.get_name(), is("name"));
-		assertThat(field.get_glom_type(), is(Field.glom_field_type.TYPE_TEXT));
+		assertThat(field.get_glom_type(), is(Field.GlomFieldType.TYPE_TEXT));
 
-		layoutItem = layoutItems.get(1);
+		layoutItem = innerItems.get(1);
 		assertTrue(layoutItem != null);
-		field = LayoutItem_Field.cast_dynamic(layoutItem);
+		assertTrue(layoutItem instanceof LayoutItemField);
+		field = (LayoutItemField)layoutItem;
 		assertTrue(field != null);
 		assertThat(field.get_name(), is("year"));
-		assertThat(field.get_glom_type(), is(Field.glom_field_type.TYPE_NUMERIC));
+		assertThat(field.get_glom_type(), is(Field.GlomFieldType.TYPE_NUMERIC));
 	}
 
 	// Test thread class that runs all the tests.
