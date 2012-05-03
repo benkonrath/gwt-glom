@@ -114,7 +114,7 @@ public class Utils {
 
 	public static String getCurrentLocaleID() {
 		String localeID = LocaleInfo.getCurrentLocale().getLocaleName();
-		if (localeID == "default") {
+		if (localeID.equals("default")) {
 			localeID = ""; // This is how libglom refers to the default locale.
 		}
 
