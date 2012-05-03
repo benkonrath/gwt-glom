@@ -1,7 +1,7 @@
 package org.glom.web.client.place;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class DetailsPlaceTest {
 

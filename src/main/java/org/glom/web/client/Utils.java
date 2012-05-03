@@ -20,9 +20,9 @@
 package org.glom.web.client;
 
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
+import org.glom.web.shared.libglom.NumericFormat;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;

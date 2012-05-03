@@ -20,8 +20,8 @@
 package org.glom.web.client;
 
 import org.glom.web.client.ui.AuthenticationPopup;
-import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.ListView;
 import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.TableSelectionView;

@@ -19,6 +19,8 @@
 
 package org.glom.web.client.ui.cell;
 
+import org.glom.web.shared.libglom.Field.GlomFieldType;
+
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;

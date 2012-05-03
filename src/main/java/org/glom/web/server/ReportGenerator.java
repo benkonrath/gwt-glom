@@ -50,20 +50,20 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jooq.Condition;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
+import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Report;
 import org.glom.web.shared.libglom.layout.Formatting;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
-import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.layout.SortClause;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemVerticalGroup;
+import org.jooq.Condition;
 
 /**
  * @author Murray Cumming <murrayc@openimus.com>

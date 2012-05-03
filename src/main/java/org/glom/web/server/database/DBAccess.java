@@ -33,9 +33,9 @@ import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
-import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;

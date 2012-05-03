@@ -28,13 +28,13 @@ import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
-import org.jooq.Condition;
 import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.SortClause;
+import org.jooq.Condition;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 

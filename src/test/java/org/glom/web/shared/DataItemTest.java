@@ -1,8 +1,7 @@
 package org.glom.web.shared;
 
-import org.glom.web.shared.DataItem;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class DataItemTest {
 
