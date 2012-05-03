@@ -1,16 +1,16 @@
 package org.glom.web.shared.libglom;
 
 import java.io.Serializable;
-import java.util.Hashtable;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.glom.web.client.StringUtils;
 
 @SuppressWarnings("serial")
 public class Translatable implements Serializable, Cloneable {
 
-	// TODO: Use Hashmap everywhere instead?
-	public static class TranslationsMap extends Hashtable<String, String> {
+	// We use TreeMap instead of HashTable because GWT does not support HashTable.
+	public static class TranslationsMap extends TreeMap<String, String> {
 		@Override
 		public Object clone() {
 			final TranslationsMap result = (TranslationsMap) super.clone();
