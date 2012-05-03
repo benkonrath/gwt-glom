@@ -9,18 +9,18 @@ public class LayoutGroup extends LayoutItem {
 	private class LayoutItemList extends ArrayList<LayoutItem> {
 		@Override
 		public Object clone() {
-			LayoutItemList result = (LayoutItemList)super.clone();
-			    
-			//TODO: Performance: There is probably a better way to do this.
+			LayoutItemList result = (LayoutItemList) super.clone();
+
+			// TODO: Performance: There is probably a better way to do this.
 			result.clear();
-			for(LayoutItem item : this) {
+			for (LayoutItem item : this) {
 				result.add(item);
 			}
-			
+
 			return result;
 		}
 	};
-	
+
 	private LayoutItemList items = new LayoutItemList();
 
 	/**
@@ -66,7 +66,7 @@ public class LayoutGroup extends LayoutItem {
 	 */
 	public void setExpectedResultSize(int expectedResultSize) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class LayoutGroup extends LayoutItem {
 	 */
 	public void setHiddenPrimaryKey(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -95,9 +95,9 @@ public class LayoutGroup extends LayoutItem {
 
 	@Override
 	public Object clone() {
-		LayoutGroup result = (LayoutGroup)super.clone();
+		LayoutGroup result = (LayoutGroup) super.clone();
 
-		result.items = (LayoutItemList)this.items.clone();
+		result.items = (LayoutItemList) this.items.clone();
 
 		return result;
 	}

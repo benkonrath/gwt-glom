@@ -79,8 +79,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.server.ListDBAccess#getSQLQuery(LayoutFieldVector,
-	 * SortClause)
+	 * @see org.glom.web.server.ListDBAccess#getSQLQuery(LayoutFieldVector, SortClause)
 	 */
 	@Override
 	protected String getSelectQuery(final Connection connection, final String quickFind, final SortClause sortClause) {

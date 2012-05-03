@@ -74,9 +74,9 @@ public class RelatedListTable extends ListTable {
 		// These variables need to be set before the createCellTable() method is called so that the data provider can
 		// use them.
 		this.foreignKeyValue = foreignKeyValue;
-		this.relationshipName = layoutItemPortal.get_name(); //TODO: Is this correct?
+		this.relationshipName = layoutItemPortal.get_name(); // TODO: Is this correct?
 
-		//TODO: Is tableName set here?
+		// TODO: Is tableName set here?
 		createCellTable(layoutItemPortal, tableName, MAX_TABLE_ROWS, constants.open(), navigationButtonCell);
 
 		// The FixedLayout property tells the browser that we want to manually specify the column widths and don't want

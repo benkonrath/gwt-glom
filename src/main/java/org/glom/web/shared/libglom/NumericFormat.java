@@ -53,9 +53,9 @@ public class NumericFormat implements Cloneable {
 	public void setDecimalPlacesRestricted(boolean decimalPlacesRestricted) {
 		this.decimalPlacesRestricted = decimalPlacesRestricted;
 	}
-	
+
 	public static int getDefaultPrecision() {
-		return 15; //As in libglom's numeric_format.cc
+		return 15; // As in libglom's numeric_format.cc
 	}
 
 	public int getDecimalPlaces() {
@@ -65,9 +65,9 @@ public class NumericFormat implements Cloneable {
 	public void setDecimalPlaces(int decimalPlaces) {
 		this.decimalPlaces = decimalPlaces;
 	}
-	
+
 	public static String getAlternativeColorForNegatives() {
-		return "red"; //As in libglom's numeric_format.cc
+		return "red"; // As in libglom's numeric_format.cc
 	}
 
 	public boolean getUseAltForegroundColorForNegatives() {
@@ -77,15 +77,15 @@ public class NumericFormat implements Cloneable {
 	public void setUseAltForegroundColorForNegatives(boolean useAltForegroundColorForNegatives) {
 		this.useAltForegroundColorForNegatives = useAltForegroundColorForNegatives;
 	}
-	
+
 	@Override
 	public Object clone() {
 		NumericFormat result = null;
 		try {
-			result = (NumericFormat)super.clone();
+			result = (NumericFormat) super.clone();
 		} catch (CloneNotSupportedException e) {
 			System.err.println("Object.clone() failed: " + e.getMessage());
-			 return null;
+			return null;
 		}
 
 		result.currencySymbol = new String(this.currencySymbol);

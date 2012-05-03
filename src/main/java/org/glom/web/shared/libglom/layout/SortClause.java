@@ -4,27 +4,27 @@ import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class SortClause extends ArrayList<SortClause.SortField> {
-	
+
 	public static class SortField implements Cloneable {
 		public SortField() {
 		}
-		
+
 		public SortField(UsesRelationship field, boolean ascending) {
 			this.field = field;
 			this.ascending = ascending;
 		}
-		
+
 		@Override
 		public Object clone() {
 			SortField result;
 			try {
-				result = (SortField)super.clone();
+				result = (SortField) super.clone();
 			} catch (CloneNotSupportedException e) {
-				 System.err.println("SortField.clone() failed: " + e.getMessage());
-				 return null;
+				System.err.println("SortField.clone() failed: " + e.getMessage());
+				return null;
 			}
 
-			result.field = (UsesRelationship)this.field.clone();
+			result.field = (UsesRelationship) this.field.clone();
 			result.ascending = this.ascending;
 
 			return result;
@@ -33,14 +33,14 @@ public class SortClause extends ArrayList<SortClause.SortField> {
 		public UsesRelationship field;
 		public boolean ascending;
 	}
-	
+
 	@Override
 	public Object clone() {
-		SortClause result = (SortClause)super.clone();
+		SortClause result = (SortClause) super.clone();
 
 		result.clear();
-		for(SortField item : this) {
-			final SortField clone = (SortField)item.clone();
+		for (SortField item : this) {
+			final SortField clone = (SortField) item.clone();
 			result.add(clone);
 		}
 

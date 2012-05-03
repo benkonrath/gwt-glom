@@ -22,16 +22,15 @@ package org.glom.web.shared.libglom.layout;
 import org.glom.web.shared.libglom.Relationship;
 
 /**
- * @author Murray Cumming  <murrayc@openismus.com>
- *
+ * @author Murray Cumming <murrayc@openismus.com>
+ * 
  */
 public interface UsesRelationship extends Cloneable {
 
-
 	public abstract void setRelationship(final Relationship relationship);
-	
+
 	public abstract Relationship getRelationship();
-	
+
 	/**
 	 * @return
 	 */
@@ -43,20 +42,20 @@ public interface UsesRelationship extends Cloneable {
 	public abstract void setRelatedRelationship(final Relationship relationship);
 
 	public abstract Relationship getRelatedRelationship();
-	
+
 	public abstract boolean getHasRelatedRelationshipName();
 
 	public abstract String get_sql_join_alias_name();
-	
+
 	public abstract String get_sql_table_or_join_alias_name(String tableName);
-	
+
 	/**
 	 * @param string
 	 * @return
 	 */
 	public abstract String get_table_used(String string);
-	
+
 	public abstract String getRelationshipNameUsed();
-	
+
 	public abstract Object clone();
 }

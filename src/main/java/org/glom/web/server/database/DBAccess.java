@@ -59,8 +59,8 @@ abstract class DBAccess {
 	/*
 	 * Converts data from a ResultSet to an ArrayList of DataItem array suitable for sending back to the client.
 	 */
-	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, List<LayoutItemField> layoutFields, ResultSet rs)
-			throws SQLException {
+	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, List<LayoutItemField> layoutFields,
+			ResultSet rs) throws SQLException {
 
 		// get the data we've been asked for
 		int rowCount = 0;
@@ -89,8 +89,8 @@ abstract class DBAccess {
 				case TYPE_DATE:
 					Date date = rs.getDate(i + 1);
 					if (date != null) {
-						//TODO: Pass Date and Time types instead of converting to text here?
-						//TODO: Use a 4-digit-year short form, somehow.
+						// TODO: Pass Date and Time types instead of converting to text here?
+						// TODO: Use a 4-digit-year short form, somehow.
 						DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
 						rowArray[i].setText(dateFormat.format(date));
 					} else {
@@ -160,8 +160,7 @@ abstract class DBAccess {
 	 * 
 	 * @precondition libglomLayoutGroup must not be null
 	 */
-	private ArrayList<LayoutItemField> getFieldsToShowForSQLQueryAddGroup(
-			final LayoutGroup libglomLayoutGroup) {
+	private ArrayList<LayoutItemField> getFieldsToShowForSQLQueryAddGroup(final LayoutGroup libglomLayoutGroup) {
 
 		final ArrayList<LayoutItemField> layoutItemFields = new ArrayList<LayoutItemField>();
 		final List<LayoutItem> items = libglomLayoutGroup.get_items();
@@ -169,8 +168,8 @@ abstract class DBAccess {
 		for (int i = 0; i < numItems; i++) {
 			LayoutItem layoutItem = items.get(i);
 
-			if(layoutItem instanceof LayoutItemField) {
-				LayoutItemField layoutItemField = (LayoutItemField)layoutItem;
+			if (layoutItem instanceof LayoutItemField) {
+				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				// the layoutItem is a LayoutItem_Field
 				List<org.glom.web.shared.libglom.Field> fields;
 				if (layoutItemField.getHasRelationshipName()) {
@@ -200,9 +199,9 @@ abstract class DBAccess {
 				}
 
 			} else if (layoutItem instanceof LayoutGroup) {
-				LayoutGroup subLayoutGroup = (LayoutGroup)layoutItem;
-				
-				if(!(subLayoutGroup instanceof LayoutItemPortal)) {
+				LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;
+
+				if (!(subLayoutGroup instanceof LayoutItemPortal)) {
 					// The subGroup is not a LayoutItemPortal.
 					// We're ignoring portals because they are filled by means of a separate SQL query.
 					layoutItemFields.addAll(getFieldsToShowForSQLQueryAddGroup(subLayoutGroup));
@@ -285,14 +284,14 @@ abstract class DBAccess {
 		for (int i = 0; i < items.size(); i++) {
 			LayoutItem layoutItem = items.get(i);
 
-			if(layoutItem instanceof LayoutItem) {
+			if (layoutItem instanceof LayoutItem) {
 				// the layoutItem is a LayoutItem_Field
 				continue;
 
 			} else if (layoutItem instanceof LayoutGroup) {
-				final LayoutGroup subLayoutGroup = (LayoutGroup)layoutItem;
-				if(subLayoutGroup instanceof LayoutItemPortal) {
-					final LayoutItemPortal layoutItemPortal = (LayoutItemPortal)layoutItem;
+				final LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;
+				if (subLayoutGroup instanceof LayoutItemPortal) {
+					final LayoutItemPortal layoutItemPortal = (LayoutItemPortal) layoutItem;
 					if (relationshipName.equals(layoutItemPortal.getRelationshipNameUsed())) {
 						// yey, we found it!
 						return layoutItemPortal;

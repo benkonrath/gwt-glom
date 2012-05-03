@@ -4,9 +4,9 @@ package org.glom.web.shared.libglom.layout;
 public class LayoutItemNotebook extends LayoutGroup {
 	@Override
 	public Object clone() {
-		LayoutItemNotebook result = (LayoutItemNotebook)super.clone();
+		LayoutItemNotebook result = (LayoutItemNotebook) super.clone();
 
-		//TODO: Others?
+		// TODO: Others?
 
 		return result;
 	}

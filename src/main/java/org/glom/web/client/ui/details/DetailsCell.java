@@ -155,8 +155,8 @@ public class DetailsCell extends Composite {
 				detailsData.getElement().getStyle().setColor(NumericFormat.getAlternativeColorForNegatives());
 			}
 
-			final String currencyCode = StringUtils.isEmpty(numericFormat.getCurrencySymbol()) ? ""
-					: numericFormat.getCurrencySymbol().trim() + " ";
+			final String currencyCode = StringUtils.isEmpty(numericFormat.getCurrencySymbol()) ? "" : numericFormat
+					.getCurrencySymbol().trim() + " ";
 			detailsLabel.setText(currencyCode + gwtNumberFormat.format(dataItem.getNumber()));
 			detailsData.add(detailsLabel);
 			break;

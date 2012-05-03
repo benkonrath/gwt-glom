@@ -259,8 +259,8 @@ public class ReportGenerator {
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
-			if(libglomLayoutItem instanceof LayoutItemField) {
-				final LayoutItemField libglomLayoutItemField = (LayoutItemField)libglomLayoutItem;
+			if (libglomLayoutItem instanceof LayoutItemField) {
+				final LayoutItemField libglomLayoutItemField = (LayoutItemField) libglomLayoutItem;
 				pos_result = addFieldToDetailBandVertical(parentBand, pos_result, libglomLayoutItemField);
 				pos_result.x = pos.x;
 			} else {
@@ -284,16 +284,16 @@ public class ReportGenerator {
 	 *            TODO
 	 * @param height
 	 */
-	private Position addGroupToReport(final LayoutGroup layout_group, final JRDesignBand parentBand,
-			final int x, final JRDesignBand headerBand, final int fieldTitlesY) {
+	private Position addGroupToReport(final LayoutGroup layout_group, final JRDesignBand parentBand, final int x,
+			final JRDesignBand headerBand, final int fieldTitlesY) {
 
 		Position pos_result = new Position(x, 0);
 
 		/**
 		 * * If this is a vertical group then we will lay the fields out vertically instead of horizontally.
 		 */
-		if(layout_group instanceof LayoutItemVerticalGroup) {
-			final LayoutItemVerticalGroup verticalGroup = (LayoutItemVerticalGroup)layout_group;
+		if (layout_group instanceof LayoutItemVerticalGroup) {
+			final LayoutItemVerticalGroup verticalGroup = (LayoutItemVerticalGroup) layout_group;
 			return addVerticalGroupToReport(verticalGroup, parentBand, pos_result);
 		}
 
@@ -306,16 +306,15 @@ public class ReportGenerator {
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
-			if(libglomLayoutItem instanceof LayoutItemField) {
-				final LayoutItemField libglomLayoutItemField = (LayoutItemField)libglomLayoutItem;
+			if (libglomLayoutItem instanceof LayoutItemField) {
+				final LayoutItemField libglomLayoutItemField = (LayoutItemField) libglomLayoutItem;
 				pos_result = addFieldToDetailBand(parentBand, headerBand, pos_result.x, libglomLayoutItemField,
-							thisFieldTitlesY, pos_result.y);
-			}
-			else if(libglomLayoutItem instanceof LayoutGroup) {
-				final LayoutGroup libglomLayoutGroup = (LayoutGroup)libglomLayoutItem;
-				
-				if(libglomLayoutGroup instanceof LayoutItemGroupBy) {
-					final LayoutItemGroupBy libglomGroupBy = (LayoutItemGroupBy)libglomLayoutGroup;
+						thisFieldTitlesY, pos_result.y);
+			} else if (libglomLayoutItem instanceof LayoutGroup) {
+				final LayoutGroup libglomLayoutGroup = (LayoutGroup) libglomLayoutItem;
+
+				if (libglomLayoutGroup instanceof LayoutItemGroupBy) {
+					final LayoutItemGroupBy libglomGroupBy = (LayoutItemGroupBy) libglomLayoutGroup;
 					final LayoutItemField fieldGroupBy = libglomGroupBy.get_field_group_by();
 					if (fieldGroupBy == null)
 						continue;
@@ -395,18 +394,17 @@ public class ReportGenerator {
 		return pos_result;
 	}
 
-	private int addSecondaryFieldsToGroupBand(final LayoutGroup layout_group,
-			final JRDesignBand groupBand, int x) {
+	private int addSecondaryFieldsToGroupBand(final LayoutGroup layout_group, final JRDesignBand groupBand, int x) {
 		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
 
-			if(libglomLayoutItem instanceof LayoutItemField) {
-				final LayoutItemField libglomLayoutItemField = (LayoutItemField)libglomLayoutItem;
+			if (libglomLayoutItem instanceof LayoutItemField) {
+				final LayoutItemField libglomLayoutItemField = (LayoutItemField) libglomLayoutItem;
 				x = addFieldToGroupBand(groupBand, x, libglomLayoutItemField);
-			} else if(libglomLayoutItem instanceof LayoutGroup) {
-				final LayoutGroup libglomLayoutGroup = (LayoutGroup)libglomLayoutItem;
+			} else if (libglomLayoutItem instanceof LayoutGroup) {
+				final LayoutGroup libglomLayoutGroup = (LayoutGroup) libglomLayoutItem;
 
 				// We do not expect LayoutItem_GroupBy in the secondary fields:
 				// final LayoutItem_GroupBy libglomGroupBy = LayoutItem_GroupBy.cast_dynamic(libglomLayoutGroup);

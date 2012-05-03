@@ -45,7 +45,7 @@ import org.junit.Test;
 public class DocumentTest {
 
 	private static Document document;
-	private static String locale = ""; //This means the original locale.
+	private static String locale = ""; // This means the original locale.
 	final static String testUriMusicCollection = "src/test/java/org/glom/web/shared/libglom/example_music_collection.glom";
 	final static String testUriFilmManager = "src/test/java/org/glom/web/shared/libglom/example_film_manager.glom";
 
@@ -94,7 +94,7 @@ public class DocumentTest {
 			titles += ", " + field.get_title_or_name(locale);
 		}
 
-		//TODO: The sequence is not important. It's only important that they are all there.
+		// TODO: The sequence is not important. It's only important that they are all there.
 		assertThat(titles, is("Publisher ID, Artist ID, Album ID, Name, Year, Comments"));
 
 		fields = document.get_table_fields("artists");
@@ -107,7 +107,7 @@ public class DocumentTest {
 			titles += ", " + field.get_title_or_name(locale);
 		}
 
-		//TODO: The sequence is not important. It's only important that they are all there.
+		// TODO: The sequence is not important. It's only important that they are all there.
 		assertThat(titles, is("Artist ID, Name, Description, Comments"));
 
 		fields = document.get_table_fields("publishers");
@@ -120,7 +120,7 @@ public class DocumentTest {
 			titles += ", " + field.get_title_or_name(locale);
 		}
 
-		//TODO: The sequence is not important. It's only important that they are all there.
+		// TODO: The sequence is not important. It's only important that they are all there.
 		assertThat(titles, is("Name, Publisher ID, Comments"));
 
 		fields = document.get_table_fields("songs");
@@ -133,7 +133,7 @@ public class DocumentTest {
 			titles += ", " + field.get_title_or_name(locale);
 		}
 
-		//TODO: The sequence is not important. It's only important that they are all there.
+		// TODO: The sequence is not important. It's only important that they are all there.
 		assertThat(titles, is("Song ID, Album ID, Name, Comments"));
 	}
 
@@ -148,16 +148,16 @@ public class DocumentTest {
 			assertTrue(!layoutList.isEmpty());
 			List<LayoutItem> layoutItems = layoutList.get(0).get_items();
 			List<LayoutItemField> layoutFields = new ArrayList<LayoutItemField>();
-			SortClause sortClause = new SortClause(); //TODO: Why use a SortClause instead of a List?
+			SortClause sortClause = new SortClause(); // TODO: Why use a SortClause instead of a List?
 			int numItems = safeLongToInt(layoutItems.size());
 			for (int j = 0; j < numItems; j++) {
 				LayoutItem item = layoutItems.get(j);
-				
-				if(item instanceof LayoutItemField ) {
-					LayoutItemField field = (LayoutItemField)item;
+
+				if (item instanceof LayoutItemField) {
+					LayoutItemField field = (LayoutItemField) item;
 					layoutFields.add(field);
 					Field details = field.get_full_field_details();
-					if (details != null && details.get_primary_key()) { 
+					if (details != null && details.get_primary_key()) {
 						sortClause.add(new SortClause.SortField(field, true)); // ascending
 					}
 				}
@@ -184,9 +184,9 @@ public class DocumentTest {
 			for (int j = 0; j < numItems; j++) {
 				LayoutItem item = layoutItems.get(j);
 				assertTrue(item != null);
-				
-				if(item instanceof LayoutItemField) {
-					final LayoutItemField item_field = (LayoutItemField)item;
+
+				if (item instanceof LayoutItemField) {
+					final LayoutItemField item_field = (LayoutItemField) item;
 					// don't keep a reference to the FeildFormatting object
 					NumericFormat numFormat = item_field.get_formatting_used().getNumericFormat();
 					assertTrue(numFormat != null);
@@ -229,9 +229,9 @@ public class DocumentTest {
 
 		String names = null, hasRelationshipNames = null, tablesUsed = null;
 		final LayoutItem firstItem = layoutItems.get(0);
-		
-		if(firstItem instanceof LayoutItemField) {
-			LayoutItemField firstItemField = (LayoutItemField)firstItem;
+
+		if (firstItem instanceof LayoutItemField) {
+			LayoutItemField firstItemField = (LayoutItemField) firstItem;
 			names = firstItemField.get_name();
 			hasRelationshipNames = "" + firstItemField.getHasRelationshipName();
 			tablesUsed = firstItemField.get_table_used(table);
@@ -240,8 +240,8 @@ public class DocumentTest {
 		for (int j = 1; j < numItems; j++) {
 			LayoutItem item = layoutItems.get(j);
 
-			if(item instanceof LayoutItemField) {
-				LayoutItemField itemField = (LayoutItemField)item;
+			if (item instanceof LayoutItemField) {
+				LayoutItemField itemField = (LayoutItemField) item;
 				names += ", " + itemField.get_name();
 				hasRelationshipNames += ", " + itemField.getHasRelationshipName();
 				tablesUsed += ", " + itemField.get_table_used(table);
@@ -280,18 +280,19 @@ public class DocumentTest {
 		LayoutItem notebookItem = items.get(0);
 		assertEquals("notebook", notebookItem.get_name());
 		assertTrue(notebookItem instanceof LayoutItemNotebook);
-		LayoutItemNotebook notebook = (LayoutItemNotebook)notebookItem;
+		LayoutItemNotebook notebook = (LayoutItemNotebook) notebookItem;
 		items = notebook.get_items();
 		assertEquals(7, items.size());
 		LayoutItem portalItem = items.get(0);
 		assertTrue(portalItem instanceof LayoutItemPortal);
-		LayoutItemPortal portal = (LayoutItemPortal)portalItem;
+		LayoutItemPortal portal = (LayoutItemPortal) portalItem;
 		assertTrue(portal != null);
-		
+
 		assertEquals(portal.getRelationshipNameUsed(), "scene_cast");
 
 		// call get_suitable_table_to_view_details
-		final LayoutItemPortal.TableToViewDetails viewDetails = portal.get_suitable_table_to_view_details(filmManagerDocument);
+		final LayoutItemPortal.TableToViewDetails viewDetails = portal
+				.get_suitable_table_to_view_details(filmManagerDocument);
 		assertTrue(viewDetails != null);
 
 		// Simulate a garbage collection
@@ -311,7 +312,7 @@ public class DocumentTest {
 	@Test
 	public void testReadReportNames() {
 		List<String> reportNames = document.get_report_names("albums");
-		assertEquals(1, reportNames.size()); //TODO: Test something with more reports.
+		assertEquals(1, reportNames.size()); // TODO: Test something with more reports.
 
 		String reports = reportNames.get(0);
 		for (int i = 1; i < reportNames.size(); i++) {
@@ -332,9 +333,9 @@ public class DocumentTest {
 
 		LayoutItem layoutItem = layoutItems.get(0);
 		assertTrue(layoutItem != null);
-		LayoutGroup asGroup = (LayoutGroup)layoutItem;
+		LayoutGroup asGroup = (LayoutGroup) layoutItem;
 		assertTrue(asGroup != null);
-		LayoutItemGroupBy groupby = (LayoutItemGroupBy)layoutItem;
+		LayoutItemGroupBy groupby = (LayoutItemGroupBy) layoutItem;
 		assertTrue(groupby != null);
 
 		assertTrue(groupby.get_has_field_group_by());
@@ -353,7 +354,7 @@ public class DocumentTest {
 		layoutItem = innerItems.get(0);
 		assertTrue(layoutItem != null);
 		assertTrue(layoutItem instanceof LayoutItemField);
-		LayoutItemField field = (LayoutItemField)layoutItem;
+		LayoutItemField field = (LayoutItemField) layoutItem;
 		assertTrue(field != null);
 		assertThat(field.get_name(), is("name"));
 		assertThat(field.get_glom_type(), is(Field.GlomFieldType.TYPE_TEXT));
@@ -361,7 +362,7 @@ public class DocumentTest {
 		layoutItem = innerItems.get(1);
 		assertTrue(layoutItem != null);
 		assertTrue(layoutItem instanceof LayoutItemField);
-		field = (LayoutItemField)layoutItem;
+		field = (LayoutItemField) layoutItem;
 		assertTrue(field != null);
 		assertThat(field.get_name(), is("year"));
 		assertThat(field.get_glom_type(), is(Field.GlomFieldType.TYPE_NUMERIC));

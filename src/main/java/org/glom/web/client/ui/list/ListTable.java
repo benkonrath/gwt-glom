@@ -142,7 +142,7 @@ public abstract class ListTable extends Composite {
 		// from wrapping
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
-		final int numItems = /* TODO: layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : */ layoutItems.size();
+		final int numItems = /* TODO: layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : */layoutItems.size();
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem layoutItem = layoutItems.get(i);
 

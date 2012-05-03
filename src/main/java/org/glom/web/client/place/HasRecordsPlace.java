@@ -19,7 +19,6 @@
 
 package org.glom.web.client.place;
 
-
 /**
  * @author Ben Konrath <ben@bagu.org>
  * 

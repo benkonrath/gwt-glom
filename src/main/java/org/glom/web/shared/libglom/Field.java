@@ -4,21 +4,15 @@ import org.glom.web.shared.libglom.layout.Formatting;
 
 @SuppressWarnings("serial")
 public class Field extends Translatable {
-	
+
 	public enum GlomFieldType {
-		TYPE_INVALID,
-		TYPE_NUMERIC,
-		TYPE_TEXT,
-		TYPE_DATE,
-		TYPE_TIME,
-		TYPE_BOOLEAN,
-		TYPE_IMAGE
+		TYPE_INVALID, TYPE_NUMERIC, TYPE_TEXT, TYPE_DATE, TYPE_TIME, TYPE_BOOLEAN, TYPE_IMAGE
 	};
-	
-	private GlomFieldType glom_field_type; //TODO: = glom_field_type.TYPE_INVALID;
+
+	private GlomFieldType glom_field_type; // TODO: = glom_field_type.TYPE_INVALID;
 	private boolean primaryKey = false;
 	private boolean uniqueKey = false;
-	Formatting formatting = new Formatting(); //TODO: Start will null?
+	Formatting formatting = new Formatting(); // TODO: Start will null?
 
 	/**
 	 * @return the formatting
@@ -28,7 +22,8 @@ public class Field extends Translatable {
 	}
 
 	/**
-	 * @param formatting the formatting to set
+	 * @param formatting
+	 *            the formatting to set
 	 */
 	public void setFormatting(Formatting formatting) {
 		this.formatting = formatting;
@@ -40,7 +35,7 @@ public class Field extends Translatable {
 	public boolean get_primary_key() {
 		return primaryKey;
 	};
-	
+
 	public void set_primary_key(boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
@@ -51,18 +46,18 @@ public class Field extends Translatable {
 	public GlomFieldType get_glom_type() {
 		return glom_field_type;
 	}
-	
+
 	void set_glom_field_type(GlomFieldType fieldType) {
 		this.glom_field_type = fieldType;
 	}
-	
+
 	@Override
 	public Object clone() {
-		final Field result = (Field)super.clone();
+		final Field result = (Field) super.clone();
 		result.glom_field_type = this.glom_field_type;
 		result.primaryKey = this.primaryKey;
 		result.uniqueKey = this.uniqueKey;
-		result.formatting = (Formatting)this.clone();
+		result.formatting = (Formatting) this.clone();
 		return result;
 	}
 
@@ -72,5 +67,5 @@ public class Field extends Translatable {
 	public boolean getUniqueKey() {
 		return uniqueKey;
 	}
-	
+
 }

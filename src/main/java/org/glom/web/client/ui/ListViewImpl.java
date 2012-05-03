@@ -73,7 +73,8 @@ public class ListViewImpl extends Composite implements ListView {
 	}
 
 	@Override
-	public void setCellTable(final String documentID, final String tableName, final LayoutGroup layoutGroup, final String quickFind) {
+	public void setCellTable(final String documentID, final String tableName, final LayoutGroup layoutGroup,
+			final String quickFind) {
 		// This is not really in the MVP style because we're creating a new ListTable (really just a configured
 		// CellTable) for every document and table name change. The issue with creating a re-usable CellTable with
 		// methods like setColumnTitles() and setNumRows() is that the column objects (new Column<DataItem[],

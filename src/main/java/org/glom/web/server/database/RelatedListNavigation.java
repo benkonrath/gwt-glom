@@ -76,7 +76,8 @@ public class RelatedListNavigation extends DBAccess {
 
 		final StringBuffer navigationTableNameSB = new StringBuffer();
 		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
-		//TODO: //portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem, document);
+		// TODO: //portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem,
+		// document);
 
 		final String navigationTableName = navigationTableNameSB.toString();
 		if (StringUtils.isEmpty(navigationTableName)) {

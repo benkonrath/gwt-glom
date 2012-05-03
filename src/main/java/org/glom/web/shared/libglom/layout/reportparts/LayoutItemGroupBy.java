@@ -14,10 +14,10 @@ public class LayoutItemGroupBy extends LayoutGroup {
 	 * @return
 	 */
 	public boolean get_has_field_group_by() {
-		if(fieldGroupBy == null) {
+		if (fieldGroupBy == null) {
 			return false;
 		}
-		
+
 		return !StringUtils.isEmpty(fieldGroupBy.get_name());
 	}
 
@@ -41,23 +41,22 @@ public class LayoutItemGroupBy extends LayoutGroup {
 	public LayoutGroup get_secondary_fields() {
 		return secondaryFields;
 	}
-	
+
 	/**
 	 * @param secondaryFields
 	 */
 	public void set_secondary_fields(final LayoutGroup secondaryFields) {
 		this.secondaryFields = secondaryFields;
 	}
-	
+
 	@Override
 	public Object clone() {
-		LayoutItemGroupBy result = (LayoutItemGroupBy)super.clone();
+		LayoutItemGroupBy result = (LayoutItemGroupBy) super.clone();
 
-		result.fieldGroupBy = (LayoutItemField)this.fieldGroupBy.clone();
-		result.secondaryFields = (LayoutGroup)this.secondaryFields.clone();
+		result.fieldGroupBy = (LayoutItemField) this.fieldGroupBy.clone();
+		result.secondaryFields = (LayoutGroup) this.secondaryFields.clone();
 
 		return result;
 	}
-
 
 }

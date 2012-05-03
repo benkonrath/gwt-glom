@@ -12,12 +12,12 @@ public class LayoutItem extends Translatable {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public Object clone() {
-		LayoutItem result = (LayoutItem)super.clone();
+		LayoutItem result = (LayoutItem) super.clone();
 
-		//TODO: Others.
+		// TODO: Others.
 
 		return result;
 	}

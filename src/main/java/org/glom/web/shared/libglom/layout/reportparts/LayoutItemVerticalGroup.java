@@ -6,9 +6,9 @@ import org.glom.web.shared.libglom.layout.LayoutGroup;
 public class LayoutItemVerticalGroup extends LayoutGroup {
 	@Override
 	public Object clone() {
-		LayoutItemVerticalGroup result = (LayoutItemVerticalGroup)super.clone();
+		LayoutItemVerticalGroup result = (LayoutItemVerticalGroup) super.clone();
 
-		//TODO: Others
+		// TODO: Others
 
 		return result;
 	}

@@ -204,7 +204,7 @@ public class DetailsActivity extends HasTableActivity {
 		// Setup click handlers for the navigation buttons
 		for (final DetailsCell detailsCell : detailsCells) {
 			final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
-			if(layoutItemField == null) {
+			if (layoutItemField == null) {
 				continue;
 			}
 			if (layoutItemField.getAddNavigation()) {
@@ -250,8 +250,8 @@ public class DetailsActivity extends HasTableActivity {
 						if (data[i] == null)
 							continue;
 
-						final TypedDataItem foreignKeyValue = Utils
-								.getTypedDataItem(layoutItemField.get_glom_type(), data[i]);
+						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.get_glom_type(),
+								data[i]);
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
 								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.get_name()));

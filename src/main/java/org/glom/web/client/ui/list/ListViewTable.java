@@ -57,7 +57,7 @@ public class ListViewTable extends ListTable {
 			final NavigationButtonCell navigationButtonCell, final String quickFind) {
 		super(documentID);
 		this.quickFind = quickFind;
-		//TODO: Us tableName set here?
+		// TODO: Us tableName set here?
 		createCellTable(layoutGroup, tableName, MAX_TABLE_ROWS, constants.details(), navigationButtonCell);
 	}
 

@@ -82,8 +82,8 @@ public class Notebook extends Group {
 
 		// Add a CSS class name for the first tab.
 		if (tabPanel.getWidgetCount() > 0) {
-			Element element = tabPanel.getElement().getFirstChildElement().getNextSiblingElement().getFirstChildElement()
-					.getFirstChildElement();
+			Element element = tabPanel.getElement().getFirstChildElement().getNextSiblingElement()
+					.getFirstChildElement().getFirstChildElement();
 			element.addClassName("firstTab");
 		}
 

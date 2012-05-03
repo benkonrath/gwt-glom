@@ -132,7 +132,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			@Override
 			public void onChange(final ChangeEvent event) {
 				final String reportName = tableSelectionView.getSelectedReport();
-				if(StringUtils.isEmpty(reportName)) {
+				if (StringUtils.isEmpty(reportName)) {
 					// Interpret selecting no report as requesting the list view.
 					goTo(new ListPlace(documentID, tableName, quickFind));
 				} else {
@@ -169,13 +169,13 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 				tableSelectionView.setLocaleList(result.getLocaleIDs(), result.getLocaleTitles());
 
-				//Show what locale is currently being used:
+				// Show what locale is currently being used:
 				String localeIDForCombo = Utils.getCurrentLocaleID();
-				
-				//Indicate that we use English if no other locale has been specified by either
-				//the URL or the configuration.
-				//Alternatively we could also show the locale in the URL, even if it is en.
-				if(StringUtils.isEmpty(localeIDForCombo)) {
+
+				// Indicate that we use English if no other locale has been specified by either
+				// the URL or the configuration.
+				// Alternatively we could also show the locale in the URL, even if it is en.
+				if (StringUtils.isEmpty(localeIDForCombo)) {
 					localeIDForCombo = "en";
 				}
 				tableSelectionView.setSelectedLocale(localeIDForCombo);
@@ -200,7 +200,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			@Override
 			public void onSuccess(final Reports result) {
 				tableSelectionView.setReportList(result);
-				
+
 				// Show the selected report name again:
 				// TODO: Avoid duplication in ReportActivity.
 				tableSelectionView.setSelectedReport(reportName);
@@ -234,10 +234,10 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 		} else if (place instanceof ListPlace) {
 			tableSelectionView.setBackLinkVisible(false);
 		}
-		
+
 		reportName = "";
 		if (place instanceof ReportPlace) {
-			reportName = ((ReportPlace)place).getReportName();
+			reportName = ((ReportPlace) place).getReportName();
 		}
 
 		fillView(tableSelectionView);

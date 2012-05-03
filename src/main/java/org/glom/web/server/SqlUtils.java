@@ -411,7 +411,7 @@ public class SqlUtils {
 			}
 
 			final org.jooq.Field<Object> jooqField = createField(tableName, field.get_name());
-			final Condition thisCondition = jooqField.equal(quickFindValue.getText()); //TODO: Handle other types.
+			final Condition thisCondition = jooqField.equal(quickFindValue.getText()); // TODO: Handle other types.
 
 			if (condition == null) {
 				condition = thisCondition;

@@ -60,8 +60,8 @@ public abstract class ListDBAccess extends DBAccess {
 		final SortClause sortClause = new SortClause();
 		if (useSortClause) {
 			final LayoutItem item = fieldsToGet.get(sortColumnIndex);
-			if(item instanceof LayoutItemField) {
-				final UsesRelationship layoutItemField = (UsesRelationship)item;
+			if (item instanceof LayoutItemField) {
+				final UsesRelationship layoutItemField = (UsesRelationship) item;
 				sortClause.add(new SortClause.SortField(layoutItemField, isAscending));
 			} else {
 				Log.error(documentID, tableName, "Error getting LayoutItemField for column index " + sortColumnIndex

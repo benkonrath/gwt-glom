@@ -13,12 +13,12 @@ public class Report extends Translatable {
 	public LayoutGroup get_layout_group() {
 		return layoutGroup;
 	}
-	
+
 	@Override
 	public Object clone() {
-		Report result = (Report)super.clone();
+		Report result = (Report) super.clone();
 
-		result.layoutGroup = (LayoutGroup)this.layoutGroup.clone(); 
+		result.layoutGroup = (LayoutGroup) this.layoutGroup.clone();
 
 		return result;
 	}

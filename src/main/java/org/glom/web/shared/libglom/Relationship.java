@@ -2,7 +2,6 @@ package org.glom.web.shared.libglom;
 
 import org.glom.web.client.StringUtils;
 
-
 @SuppressWarnings("serial")
 public class Relationship extends Translatable {
 
@@ -10,14 +9,13 @@ public class Relationship extends Translatable {
 	private String fromField = "";
 	private String toTable = "";
 	private String toField = "";
-	
+
 	/**
 	 * @return
 	 */
 	public boolean get_has_to_table() {
 		return !StringUtils.isEmpty(toTable);
 	}
-
 
 	/**
 	 * @return
@@ -40,13 +38,14 @@ public class Relationship extends Translatable {
 	public String get_to_table() {
 		return toTable;
 	}
+
 	/**
 	 * @return
 	 */
 	public String get_from_table() {
 		return fromTable;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -56,7 +55,7 @@ public class Relationship extends Translatable {
 
 	@Override
 	public Relationship clone() {
-		Relationship result = (Relationship)super.clone();
+		Relationship result = (Relationship) super.clone();
 
 		result.fromTable = new String(this.fromTable);
 		result.fromField = new String(this.fromField);
@@ -66,15 +65,13 @@ public class Relationship extends Translatable {
 		return result;
 	}
 
-
-
 	/**
 	 * @param
 	 */
 	public void setFromTable(String name) {
 		fromTable = name;
 	}
-	
+
 	/**
 	 * @param
 	 */
@@ -88,14 +85,12 @@ public class Relationship extends Translatable {
 	public void setToTable(String name) {
 		toTable = name;
 	}
-	
+
 	/**
 	 * @param
 	 */
 	public void setToField(String name) {
 		toField = name;
 	}
-
-
 
 }

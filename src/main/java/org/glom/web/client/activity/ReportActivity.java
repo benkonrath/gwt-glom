@@ -50,7 +50,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 	private final ClientFactory clientFactory;
 	private final ReportView reportView;
 	private final AuthenticationPopup authenticationPopup;
-	
+
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
@@ -110,9 +110,10 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setSelectedReport(reportName);
 
-		reportView.setWaitingText(constants.generatingReport()); //This is cleared by setReportHTML().
+		reportView.setWaitingText(constants.generatingReport()); // This is cleared by setReportHTML().
 		final String localeID = Utils.getCurrentLocaleID();
-		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, quickFind, localeID, callback);
+		OnlineGlomServiceAsync.Util.getInstance().getReportHTML(documentID, tableName, reportName, quickFind, localeID,
+				callback);
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(reportView.asWidget());

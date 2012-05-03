@@ -1,7 +1,5 @@
 package org.glom.web.shared.libglom.layout;
 
-
-
 @SuppressWarnings("serial")
 public class LayoutItemWithFormatting extends LayoutItem {
 	private Formatting formatting;
@@ -13,12 +11,12 @@ public class LayoutItemWithFormatting extends LayoutItem {
 	public void setFormatting(Formatting formatting) {
 		this.formatting = formatting;
 	}
-	
+
 	@Override
 	public Object clone() {
-		LayoutItemWithFormatting result = (LayoutItemWithFormatting)super.clone();
+		LayoutItemWithFormatting result = (LayoutItemWithFormatting) super.clone();
 
-		result.formatting = (Formatting)this.formatting.clone();
+		result.formatting = (Formatting) this.formatting.clone();
 
 		return result;
 	}

@@ -41,8 +41,7 @@ public class ReportViewImpl extends Composite implements ReportView {
 
 	@Override
 	public void setPresenter(final Presenter presenter) {
-		this.presenter =
-				presenter;
+		this.presenter = presenter;
 	}
 
 	/*
@@ -58,7 +57,7 @@ public class ReportViewImpl extends Composite implements ReportView {
 
 	@Override
 	public void setReportHTML(final String html) {
-		waitingLabel.setText(""); //Because we are not waiting anymore.
+		waitingLabel.setText(""); // Because we are not waiting anymore.
 		htmlWidget.setHTML(html); // TODO: Use SafeHTML?
 	}
 

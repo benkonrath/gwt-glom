@@ -82,8 +82,8 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 */
 	/*
 	 * @Override public int hashCode() { final int prime = 31; int result = 1; result = prime * result +
-	 * ((relatedRelationship == null) ? 0 : relatedRelationship.hashCode()); result = prime * result +
-	 * ((relationship == null) ? 0 : relationship.hashCode()); return result; }
+	 * ((relatedRelationship == null) ? 0 : relatedRelationship.hashCode()); result = prime * result + ((relationship ==
+	 * null) ? 0 : relationship.hashCode()); return result; }
 	 */
 
 	/*
@@ -155,55 +155,56 @@ public class UsesRelationshipImpl implements UsesRelationship {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
 	public String get_table_used(String parentTableName) {
 		String result = "";
-	
-		if(relatedRelationship != null) {
+
+		if (relatedRelationship != null) {
 			result = relatedRelationship.get_to_table();
 		}
-			
-		if(StringUtils.isEmpty(result) && (relationship != null)) {
+
+		if (StringUtils.isEmpty(result) && (relationship != null)) {
 			result = relationship.get_to_table();
 		}
-		
-		if(StringUtils.isEmpty(result)) {
+
+		if (StringUtils.isEmpty(result)) {
 			result = parentTableName;
 		}
-		
-		return result;
-}
 
-	/* (non-Javadoc)
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
 	 */
 	@Override
 	public String get_sql_table_or_join_alias_name(String parent_table) {
-		if(getHasRelationshipName() || getHasRelatedRelationshipName())
-		{
+		if (getHasRelationshipName() || getHasRelatedRelationshipName()) {
 			final String result = get_sql_join_alias_name();
-			if(StringUtils.isEmpty(result)) {
-				//Non-linked-fields relationship:
+			if (StringUtils.isEmpty(result)) {
+				// Non-linked-fields relationship:
 				return get_table_used(parent_table);
-			}
-			else
+			} else
 				return result;
-		}
-		else
+		} else
 			return parent_table;
 	}
-	
+
 	@Override
 	public UsesRelationshipImpl clone() {
 		UsesRelationshipImpl result;
 		try {
-			result = (UsesRelationshipImpl)super.clone();
+			result = (UsesRelationshipImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
-			 System.err.println("UsesRelationshipImpl.clone() failed: " + e.getMessage());
-			 return null;
+			System.err.println("UsesRelationshipImpl.clone() failed: " + e.getMessage());
+			return null;
 		}
 
 		result.relationship = this.relationship.clone();
@@ -212,14 +213,16 @@ public class UsesRelationshipImpl implements UsesRelationship {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelationshipNameUsed()
 	 */
 	@Override
 	public String getRelationshipNameUsed() {
-		if(relatedRelationship != null) {
+		if (relatedRelationship != null) {
 			return relatedRelationship.get_name();
-		} else if(relationship != null) {
+		} else if (relationship != null) {
 			return relationship.get_name();
 		} else {
 			return "";

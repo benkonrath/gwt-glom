@@ -21,7 +21,6 @@ package org.glom.web.client.ui;
 
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 
-
 /**
  *
  */

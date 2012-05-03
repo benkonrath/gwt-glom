@@ -245,10 +245,10 @@ final class ConfiguredDocument {
 				libglomLayoutGroup.add_item(layoutItemField);
 			}
 		}
-		
-		//Clone the group and change the clone, to discard unwanted informatin (such as translations),
-		//and to store some information that we do not want to calculate on the client side:
-		final LayoutGroup cloned = (LayoutGroup)libglomLayoutGroup.clone();
+
+		// Clone the group and change the clone, to discard unwanted informatin (such as translations),
+		// and to store some information that we do not want to calculate on the client side:
+		final LayoutGroup cloned = (LayoutGroup) libglomLayoutGroup.clone();
 		updateLayoutGroup(cloned, tableName, localeID);
 
 		return libglomLayoutGroup;
@@ -259,28 +259,29 @@ final class ConfiguredDocument {
 	 */
 	private void updateLayoutGroup(final LayoutGroup layoutGroup, final String tableName, final String localeID) {
 		final List<LayoutItem> layoutItemsVec = layoutGroup.get_items();
-		
+
 		int primaryKeyIndex = -1;
-		
+
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem layoutItem = layoutItemsVec.get(i);
-			
-			if(layoutItem instanceof LayoutItemField) {
-				LayoutItemField layoutItemField = (LayoutItemField)layoutItem;
+
+			if (layoutItem instanceof LayoutItemField) {
+				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				final Field field = layoutItemField.get_full_field_details();
 				if (field.get_primary_key())
 					primaryKeyIndex = i;
-				
-			} else if(layoutItem instanceof LayoutGroup) {
-				LayoutGroup childGroup = (LayoutGroup)layoutItem;
+
+			} else if (layoutItem instanceof LayoutGroup) {
+				LayoutGroup childGroup = (LayoutGroup) layoutItem;
 				updateLayoutGroup(childGroup, tableName, localeID);
 			}
 		}
-		
-		final ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName, layoutGroup);
+
+		final ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
+				layoutGroup);
 		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
-		
+
 		// Set the primary key index for the table
 		if (primaryKeyIndex < 0) {
 			// Add a LayoutItemField for the primary key to the end of the item list in the LayoutGroup because it
@@ -294,11 +295,11 @@ final class ConfiguredDocument {
 					break;
 				}
 			}
-			
+
 			if (primaryKey != null) {
 				final LayoutItemField layoutItemField = new LayoutItemField();
 				layoutItemField.set_full_field_details(primaryKey);
-				layoutGroup.add_item(layoutItemField); //TODO: Update the field to show just one locale?
+				layoutGroup.add_item(layoutItemField); // TODO: Update the field to show just one locale?
 				layoutGroup.setPrimaryKeyIndex(layoutGroup.get_items().size() - 1);
 				layoutGroup.setHiddenPrimaryKey(true);
 			} else {
@@ -309,10 +310,8 @@ final class ConfiguredDocument {
 			layoutGroup.setPrimaryKeyIndex(primaryKeyIndex);
 		}
 
-		
-		
-		if(layoutGroup instanceof LayoutItemPortal) {
-			LayoutItemPortal portal = (LayoutItemPortal)layoutGroup;
+		if (layoutGroup instanceof LayoutItemPortal) {
+			LayoutItemPortal portal = (LayoutItemPortal) layoutGroup;
 			updateLayoutItemPortalDTO(tableName, portal, localeID);
 		}
 	}
@@ -395,33 +394,35 @@ final class ConfiguredDocument {
 		return getValidListViewLayoutGroup(tableName, localeID);
 	}
 
-	/** Store some cache values in the LayoutItemPortal.
+	/**
+	 * Store some cache values in the LayoutItemPortal.
 	 * 
 	 * @param tableName
 	 * @param layoutItemPortal
 	 * @param localeID
 	 * @return
 	 */
-	private void updateLayoutItemPortalDTO(final String tableName,
-			final LayoutItemPortal layoutItemPortal, final String localeID) {
+	private void updateLayoutItemPortalDTO(final String tableName, final LayoutItemPortal layoutItemPortal,
+			final String localeID) {
 
 		// Ignore LayoutItem_CalendarPortals for now:
 		// https://bugzilla.gnome.org/show_bug.cgi?id=664273
-		if(layoutItemPortal instanceof LayoutItemCalendarPortal) {
+		if (layoutItemPortal instanceof LayoutItemCalendarPortal) {
 			return;
 		}
 
 		final Relationship relationship = layoutItemPortal.getRelationship();
 		if (relationship != null) {
-			//layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
-			//layoutItemPortal.setTableName(relationship.get_from_table());
-			//layoutItemPortal.setFromField(relationship.get_from_field());
+			// layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
+			// layoutItemPortal.setTableName(relationship.get_from_table());
+			// layoutItemPortal.setFromField(relationship.get_from_field());
 
 			// Set whether or not the related list will need to show the navigation buttons.
 			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
-			final LayoutItemPortal.TableToViewDetails viewDetails = layoutItemPortal.get_suitable_table_to_view_details(document);
+			final LayoutItemPortal.TableToViewDetails viewDetails = layoutItemPortal
+					.get_suitable_table_to_view_details(document);
 			boolean addNavigation = false;
-			if(viewDetails != null) {
+			if (viewDetails != null) {
 				addNavigation = !StringUtils.isEmpty(viewDetails.tableName);
 			}
 			layoutItemPortal.setAddNavigation(addNavigation);

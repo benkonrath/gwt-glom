@@ -153,7 +153,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				final boolean retval = document.load(error);
 				if (retval == false) {
 					String message;
-					if (false) {//TODO: Document.LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == (error) {
+					if (false) {// TODO: Document.LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == (error) {
 						message = "Could not find file: " + glomFile.getAbsolutePath();
 					} else {
 						message = "An unknown error occurred when trying to load file: " + glomFile.getAbsolutePath();
