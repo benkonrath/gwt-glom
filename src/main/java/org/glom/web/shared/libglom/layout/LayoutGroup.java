@@ -9,11 +9,11 @@ public class LayoutGroup extends LayoutItem {
 	private class LayoutItemList extends ArrayList<LayoutItem> {
 		@Override
 		public Object clone() {
-			LayoutItemList result = (LayoutItemList) super.clone();
+			final LayoutItemList result = (LayoutItemList) super.clone();
 
 			// TODO: Performance: There is probably a better way to do this.
 			result.clear();
-			for (LayoutItem item : this) {
+			for (final LayoutItem item : this) {
 				result.add(item);
 			}
 
@@ -26,14 +26,14 @@ public class LayoutGroup extends LayoutItem {
 	/**
 	 * @return
 	 */
-	public List<LayoutItem> get_items() {
+	public List<LayoutItem> getItems() {
 		return items;
 	}
 
 	/**
 	 * @param layoutItemField
 	 */
-	public void add_item(LayoutItem layoutItem) {
+	public void addItem(final LayoutItem layoutItem) {
 		items.add(layoutItem);
 	}
 
@@ -64,23 +64,15 @@ public class LayoutGroup extends LayoutItem {
 	/**
 	 * @param expectedResultSize
 	 */
-	public void setExpectedResultSize(int expectedResultSize) {
+	public void setExpectedResultSize(final int expectedResultSize) {
 		// TODO Auto-generated method stub
 
-	}
-
-	/**
-	 * @return
-	 */
-	public List<String> getItems() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**
 	 * @param b
 	 */
-	public void setHiddenPrimaryKey(boolean b) {
+	public void setHiddenPrimaryKey(final boolean b) {
 		// TODO Auto-generated method stub
 
 	}
@@ -88,14 +80,14 @@ public class LayoutGroup extends LayoutItem {
 	/**
 	 * @param i
 	 */
-	public void setPrimaryKeyIndex(int i) {
+	public void setPrimaryKeyIndex(final int i) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public Object clone() {
-		LayoutGroup result = (LayoutGroup) super.clone();
+		final LayoutGroup result = (LayoutGroup) super.clone();
 
 		result.items = (LayoutItemList) this.items.clone();
 

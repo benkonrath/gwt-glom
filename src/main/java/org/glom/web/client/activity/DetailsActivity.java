@@ -211,7 +211,7 @@ public class DetailsActivity extends HasTableActivity {
 				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(final ClickEvent event) {
-						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.get_glom_type(),
+						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getGlomType(),
 								detailsCell.getData());
 						processNavigation(layoutItemField.getNavigationTableName(), primaryKeyItem);
 
@@ -246,22 +246,22 @@ public class DetailsActivity extends HasTableActivity {
 					final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
 					final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 
-					if (layoutItemField.get_name().equals(layoutItemPortal.getFromField())) {
+					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
 						if (data[i] == null)
 							continue;
 
-						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.get_glom_type(),
+						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getGlomType(),
 								data[i]);
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.get_name()));
+								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getName()));
 
 						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
 							relatedListTable.hideNavigationButtons();
 						}
 						portal.setContents(relatedListTable);
 
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.get_name(), foreignKeyValue);
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), foreignKeyValue);
 					}
 				}
 			}

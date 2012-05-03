@@ -71,7 +71,7 @@ public class DetailsCell extends Composite {
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
 		// data elements to be changed for right-to-left languages.
 
-		Label detailsLabel = new Label(layoutItemField.get_title() + ":");
+		Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
 		detailsLabel.setStyleName("details-label");
 
 		detailsData.setStyleName("details-data");
@@ -131,7 +131,7 @@ public class DetailsCell extends Composite {
 			return;
 
 		// FIXME use the cell renderers from the list view to render the inforamtion here
-		switch (layoutItemField.get_glom_type()) {
+		switch (layoutItemField.getGlomType()) {
 		case TYPE_BOOLEAN:
 			final CheckBox checkBox = new CheckBox();
 			checkBox.setValue(dataItem.getBoolean());

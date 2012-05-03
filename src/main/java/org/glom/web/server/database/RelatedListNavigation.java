@@ -90,14 +90,14 @@ public class RelatedListNavigation extends DBAccess {
 		final Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTableName);
 
 		// Build a layout item to get the field's value:
-		navigationRelationshipItem.set_full_field_details(navigationTablePrimaryKey);
+		navigationRelationshipItem.setFullFieldDetails(navigationTablePrimaryKey);
 
 		// Get the value of the navigation related primary key:
 		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
 		fieldsToGet.add(navigationRelationshipItem);
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
-		final String relatedTableName = portal.get_table_used("" /* not relevant */);
+		final String relatedTableName = portal.getTableUsed("" /* not relevant */);
 		final Field primaryKeyField = getPrimaryKeyField(relatedTableName);
 
 		final NavigationRecord navigationRecord = new NavigationRecord();
@@ -124,7 +124,7 @@ public class RelatedListNavigation extends DBAccess {
 				final TypedDataItem navigationTablePrimaryKeyValue = new TypedDataItem();
 				final ResultSetMetaData rsMetaData = rs.getMetaData();
 				final int queryReturnValueType = rsMetaData.getColumnType(1);
-				switch (navigationTablePrimaryKey.get_glom_type()) {
+				switch (navigationTablePrimaryKey.getGlomType()) {
 				case TYPE_NUMERIC:
 					if (queryReturnValueType == java.sql.Types.NUMERIC) {
 						navigationTablePrimaryKeyValue.setNumber(rs.getDouble(1));

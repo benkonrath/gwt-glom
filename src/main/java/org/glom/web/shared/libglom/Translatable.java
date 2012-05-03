@@ -13,12 +13,12 @@ public class Translatable implements Serializable, Cloneable {
 	public static class TranslationsMap extends Hashtable<String, String> {
 		@Override
 		public Object clone() {
-			TranslationsMap result = (TranslationsMap) super.clone();
+			final TranslationsMap result = (TranslationsMap) super.clone();
 
 			// TODO: Performance: There is probably a better way to do this.
 			result.clear();
 			final Set<String> keys = this.keySet();
-			for (String key : keys) {
+			for (final String key : keys) {
 				final String value = this.get(key);
 				result.put(key, value);
 			}
@@ -28,34 +28,34 @@ public class Translatable implements Serializable, Cloneable {
 	};
 
 	private String name = "";
-	private String title_original = "";
+	private String titleOriginal = "";
 
 	// A map of localeID to title:
 	TranslationsMap translationsMap = new TranslationsMap();
 
-	public String get_name() {
+	public String getName() {
 		return name;
 	}
 
-	public void set_name(final String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public String get_title_original() {
-		return title_original;
+	public String getTitleOriginal() {
+		return titleOriginal;
 	}
 
-	public void set_title_original(final String title) {
-		this.title_original = title;
+	public void setTitleOriginal(final String title) {
+		this.titleOriginal = title;
 	}
 
-	public String get_title() {
-		return get_title_original();
+	public String getTitle() {
+		return getTitleOriginal();
 	}
 
-	public String get_title(final String locale) {
+	public String getTitle(final String locale) {
 		if (StringUtils.isEmpty(locale)) {
-			return get_title_original();
+			return getTitleOriginal();
 		}
 
 		final String title = translationsMap.get(locale);
@@ -70,10 +70,10 @@ public class Translatable implements Serializable, Cloneable {
 	 * @param locale
 	 * @return
 	 */
-	public String get_title_or_name(String locale) {
-		final String title = get_title(locale);
+	public String getTitleOrName(final String locale) {
+		final String title = getTitle(locale);
 		if (StringUtils.isEmpty(title)) {
-			return get_name();
+			return getName();
 		}
 
 		return title;
@@ -85,10 +85,10 @@ public class Translatable implements Serializable, Cloneable {
 	 * 
 	 * @param locale
 	 */
-	public void makeTitleOriginal(String locale) {
-		final String title = get_title(locale);
+	public void makeTitleOriginal(final String locale) {
+		final String title = getTitle(locale);
 		translationsMap.clear();
-		set_title_original(title);
+		setTitleOriginal(title);
 	}
 
 	/**
@@ -99,13 +99,13 @@ public class Translatable implements Serializable, Cloneable {
 		Translatable result = null;
 		try {
 			result = (Translatable) super.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			System.err.println("Translatable.clone() failed: " + e.getMessage());
 			return null;
 		}
 
 		result.name = new String(this.name);
-		result.title_original = new String(this.title_original);
+		result.titleOriginal = new String(this.titleOriginal);
 		result.translationsMap = (TranslationsMap) this.translationsMap.clone();
 		return result;
 	}

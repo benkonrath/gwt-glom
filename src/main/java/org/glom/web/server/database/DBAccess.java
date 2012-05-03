@@ -75,7 +75,7 @@ abstract class DBAccess {
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
 				LayoutItemField field = layoutFields.get(i);
-				switch (field.get_glom_type()) {
+				switch (field.getGlomType()) {
 				case TYPE_TEXT:
 					String text = rs.getString(i + 1);
 					rowArray[i].setText(text != null ? text : "");
@@ -163,7 +163,7 @@ abstract class DBAccess {
 	private ArrayList<LayoutItemField> getFieldsToShowForSQLQueryAddGroup(final LayoutGroup libglomLayoutGroup) {
 
 		final ArrayList<LayoutItemField> layoutItemFields = new ArrayList<LayoutItemField>();
-		final List<LayoutItem> items = libglomLayoutGroup.get_items();
+		final List<LayoutItem> items = libglomLayoutGroup.getItems();
 		final int numItems = Utils.safeLongToInt(items.size());
 		for (int i = 0; i < numItems; i++) {
 			LayoutItem layoutItem = items.get(i);
@@ -174,10 +174,10 @@ abstract class DBAccess {
 				List<org.glom.web.shared.libglom.Field> fields;
 				if (layoutItemField.getHasRelationshipName()) {
 					// layoutItemField is a field in a related table
-					fields = document.get_table_fields(layoutItemField.get_table_used(tableName));
+					fields = document.getTableFields(layoutItemField.getTableUsed(tableName));
 				} else {
 					// layoutItemField is a field in this table
-					fields = document.get_table_fields(tableName);
+					fields = document.getTableFields(tableName);
 				}
 
 				// set the layoutItemFeild with details from its Field in the document and
@@ -185,14 +185,14 @@ abstract class DBAccess {
 				for (int j = 0; j < fields.size(); j++) {
 					// check the names to see if they're the same
 					// this works because we're using the field list from the related table if necessary
-					if (layoutItemField.get_name().equals(fields.get(j).get_name())) {
+					if (layoutItemField.getName().equals(fields.get(j).getName())) {
 						Field field = fields.get(j);
 						if (field != null) {
-							layoutItemField.set_full_field_details(field);
+							layoutItemField.setFullFieldDetails(field);
 							layoutItemFields.add(layoutItemField);
 						} else {
-							Log.warn(document.get_database_title_original(), tableName, "LayoutItem_Field "
-									+ layoutItemField.get_layout_display_name() + " not found in document field list.");
+							Log.warn(document.getDatabaseTitleOriginal(), tableName, "LayoutItem_Field "
+									+ layoutItemField.getLayoutDisplayName() + " not found in document field list.");
 						}
 						break;
 					}
@@ -220,10 +220,10 @@ abstract class DBAccess {
 	 */
 	protected Field getPrimaryKeyField(String tableName) {
 		Field primaryKey = null;
-		List<Field> fieldsVec = document.get_table_fields(tableName);
+		List<Field> fieldsVec = document.getTableFields(tableName);
 		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
 			Field field = fieldsVec.get(i);
-			if (field.get_primary_key()) {
+			if (field.getPrimaryKey()) {
 				primaryKey = field;
 				break;
 			}
@@ -244,9 +244,9 @@ abstract class DBAccess {
 		LayoutItemField libglomLayoutItemField = new LayoutItemField();
 
 		if (primaryKey != null) {
-			libglomLayoutItemField.set_full_field_details(primaryKey);
+			libglomLayoutItemField.setFullFieldDetails(primaryKey);
 		} else {
-			Log.error(document.get_database_title_original(), this.tableName,
+			Log.error(document.getDatabaseTitleOriginal(), this.tableName,
 					"A primary key was not found in the FieldVector for this table.");
 		}
 
@@ -258,7 +258,7 @@ abstract class DBAccess {
 	 */
 	final protected LayoutItemPortal getPortal(String relationshipName) {
 
-		List<LayoutGroup> layoutGroupVec = document.get_data_layout_groups("details", tableName);
+		List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("details", tableName);
 		// LayoutItemPortal portal = null;
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
 			LayoutGroup layoutGroup = layoutGroupVec.get(i);
@@ -280,7 +280,7 @@ abstract class DBAccess {
 		if (relationshipName == null)
 			return null;
 
-		List<LayoutItem> items = layoutGroup.get_items();
+		List<LayoutItem> items = layoutGroup.getItems();
 		for (int i = 0; i < items.size(); i++) {
 			LayoutItem layoutItem = items.get(i);
 

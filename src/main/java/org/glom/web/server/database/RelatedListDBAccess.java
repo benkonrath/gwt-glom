@@ -62,7 +62,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		parentTable = tableName;
 		// Reassign the tableName variable to table that is being used for the related list. This needs to be set before
 		// getFieldsToShowForSQLQuery().
-		this.tableName = portal.get_table_used("" /* parent table - not relevant */);
+		this.tableName = portal.getTableUsed("" /* parent table - not relevant */);
 
 		// Convert the libglom LayoutGroup object into a List<LayoutItem_Field> suitable for SQL queries.
 		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<LayoutGroup>();
@@ -79,15 +79,15 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// The WHERE clause mentions the first-related table (though by the alias defined in extra_join)
 		// and we add an extra JOIN to mention the second-related table.
 
-		whereClauseToTableName = relationship.get_to_table();
-		whereClauseToKeyField = getFieldInTable(relationship.get_to_field(), whereClauseToTableName);
+		whereClauseToTableName = relationship.getToTable();
+		whereClauseToKeyField = getFieldInTable(relationship.getToField(), whereClauseToTableName);
 
 		// Add primary key
 		fieldsToGet.add(getPrimaryKeyLayoutItemField(this.tableName));
 
 		final Relationship relationshipRelated = portal.getRelatedRelationship();
 		if (relationshipRelated != null) {
-			Log.error(documentID, tableName, "The related relationship " + relationshipRelated.get_name()
+			Log.error(documentID, tableName, "The related relationship " + relationshipRelated.getName()
 					+ " is not empty but the related relationship code has not been implemented yet.");
 
 			// FIXME port this Glom code to Java
@@ -181,10 +181,10 @@ public class RelatedListDBAccess extends ListDBAccess {
 		if (StringUtils.isEmpty(tableName))
 			return null;
 
-		final List<Field> fields = document.get_table_fields(tableName);
+		final List<Field> fields = document.getTableFields(tableName);
 		for (int i = 0; i < fields.size(); i++) {
 			final Field field = fields.get(i);
-			if (fieldName.equals(field.get_name())) {
+			if (fieldName.equals(field.getName())) {
 				return field;
 			}
 		}

@@ -13,21 +13,21 @@ public class Relationship extends Translatable {
 	/**
 	 * @return
 	 */
-	public boolean get_has_to_table() {
+	public boolean getHasToTable() {
 		return !StringUtils.isEmpty(toTable);
 	}
 
 	/**
 	 * @return
 	 */
-	public String get_to_field() {
+	public String getToField() {
 		return toField;
 	}
 
 	/**
 	 * @return
 	 */
-	public boolean get_has_fields() {
+	public boolean getHasFields() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -35,21 +35,21 @@ public class Relationship extends Translatable {
 	/**
 	 * @return
 	 */
-	public String get_to_table() {
+	public String getToTable() {
 		return toTable;
 	}
 
 	/**
 	 * @return
 	 */
-	public String get_from_table() {
+	public String getFromTable() {
 		return fromTable;
 	}
 
 	/**
 	 * @return
 	 */
-	public String get_from_field() {
+	public String getFromField() {
 		return fromField;
 	}
 

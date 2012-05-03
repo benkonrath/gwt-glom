@@ -36,7 +36,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			return false;
 		}
 
-		if (StringUtils.isEmpty(relationship.get_name())) {
+		if (StringUtils.isEmpty(relationship.getName())) {
 			return false;
 		}
 
@@ -49,7 +49,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			return false;
 		}
 
-		if (StringUtils.isEmpty(relatedRelationship.get_name())) {
+		if (StringUtils.isEmpty(relatedRelationship.getName())) {
 			return false;
 		}
 
@@ -57,18 +57,18 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	}
 
 	@Override
-	public String get_sql_join_alias_name() {
+	public String getSqlJoinAliasName() {
 		String result = "";
 
-		if (getHasRelationshipName() && relationship.get_has_fields()) // relationships that link to tables together
+		if (getHasRelationshipName() && relationship.getHasFields()) // relationships that link to tables together
 																		// via a field
 		{
 			// We use relationship_name.field_name instead of related_tableName.field_name,
 			// because, in the JOIN below, will specify the relationship_name as an alias for the related table name
-			result += ("relationship_" + relationship.get_name());
+			result += ("relationship_" + relationship.getName());
 
-			if (getHasRelatedRelationshipName() && relatedRelationship.get_has_fields()) {
-				result += ('_' + relatedRelationship.get_name());
+			if (getHasRelatedRelationshipName() && relatedRelationship.getHasFields()) {
+				result += ('_' + relatedRelationship.getName());
 			}
 		}
 
@@ -113,7 +113,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			if (other.relationship != null) {
 				return false;
 			}
-		} else if (!relationship_equals(relationship, other.relationship)) {
+		} else if (!relationshipEquals(relationship, other.relationship)) {
 			return false;
 		}
 
@@ -121,7 +121,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			if (other.relatedRelationship != null) {
 				return false;
 			}
-		} else if (!relationship_equals(relatedRelationship, other.relatedRelationship)) {
+		} else if (!relationshipEquals(relatedRelationship, other.relatedRelationship)) {
 			return false;
 		}
 
@@ -132,7 +132,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * We use this utility function because Relationship.equals() fails in the the generated SWIG C++ code with a
 	 * NullPointerException.
 	 */
-	public static boolean relationship_equals(final Relationship a, final Relationship b) {
+	public static boolean relationshipEquals(final Relationship a, final Relationship b) {
 		if (a == null) {
 			if (b == null) {
 				return true;
@@ -145,10 +145,10 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			return false;
 		}
 
-		final String a_name = a.get_name();
-		final String b_name = b.get_name();
+		final String aName = a.getName();
+		final String bName = b.getName();
 
-		if (!StringUtils.equals(a_name, b_name)) { // TODO: And the rest.
+		if (!StringUtils.equals(aName, bName)) { // TODO: And the rest.
 			return false;
 		}
 
@@ -161,15 +161,15 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
-	public String get_table_used(String parentTableName) {
+	public String getTableUsed(final String parentTableName) {
 		String result = "";
 
 		if (relatedRelationship != null) {
-			result = relatedRelationship.get_to_table();
+			result = relatedRelationship.getToTable();
 		}
 
 		if (StringUtils.isEmpty(result) && (relationship != null)) {
-			result = relationship.get_to_table();
+			result = relationship.getToTable();
 		}
 
 		if (StringUtils.isEmpty(result)) {
@@ -185,12 +185,12 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
 	 */
 	@Override
-	public String get_sql_table_or_join_alias_name(String parent_table) {
+	public String getSqlTableOrJoinAliasName(final String parent_table) {
 		if (getHasRelationshipName() || getHasRelatedRelationshipName()) {
-			final String result = get_sql_join_alias_name();
+			final String result = getSqlJoinAliasName();
 			if (StringUtils.isEmpty(result)) {
 				// Non-linked-fields relationship:
-				return get_table_used(parent_table);
+				return getTableUsed(parent_table);
 			} else
 				return result;
 		} else
@@ -202,7 +202,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 		UsesRelationshipImpl result;
 		try {
 			result = (UsesRelationshipImpl) super.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (final CloneNotSupportedException e) {
 			System.err.println("UsesRelationshipImpl.clone() failed: " + e.getMessage());
 			return null;
 		}
@@ -221,9 +221,9 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	@Override
 	public String getRelationshipNameUsed() {
 		if (relatedRelationship != null) {
-			return relatedRelationship.get_name();
+			return relatedRelationship.getName();
 		} else if (relationship != null) {
-			return relationship.get_name();
+			return relationship.getName();
 		} else {
 			return "";
 		}

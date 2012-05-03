@@ -71,7 +71,7 @@ final class ConfiguredDocument {
 		cpds = new ComboPooledDataSource();
 
 		// We don't support sqlite or self-hosting yet.
-		if (document.get_hosting_mode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
+		if (document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
 			Log.fatal("Error configuring the database connection." + " Only central PostgreSQL hosting is supported.");
 			// FIXME: Throw exception?
 		}
@@ -85,8 +85,8 @@ final class ConfiguredDocument {
 		}
 
 		// setup the JDBC driver for the current glom document
-		cpds.setJdbcUrl("jdbc:postgresql://" + document.get_connection_server() + ":" + document.get_connection_port()
-				+ "/" + document.get_connection_database());
+		cpds.setJdbcUrl("jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort()
+				+ "/" + document.getConnectionDatabase());
 
 		this.document = document;
 	}
@@ -109,8 +109,8 @@ final class ConfiguredDocument {
 			conn = cpds.getConnection();
 			authenticated = true;
 		} catch (final SQLException e) {
-			Log.info(Utils.getFileName(document.get_file_uri()), e.getMessage());
-			Log.info(Utils.getFileName(document.get_file_uri()),
+			Log.info(Utils.getFileName(document.getFileURI()), e.getMessage());
+			Log.info(Utils.getFileName(document.getFileURI()),
 					"Connection Failed. Maybe the username or password is not correct.");
 			authenticated = false;
 		} finally {
@@ -156,7 +156,7 @@ final class ConfiguredDocument {
 		final DocumentInfo documentInfo = new DocumentInfo();
 
 		// get arrays of table names and titles, and find the default table index
-		final List<String> tablesVec = document.get_table_names();
+		final List<String> tablesVec = document.getTableNames();
 
 		final int numTables = Utils.safeLongToInt(tablesVec.size());
 		// we don't know how many tables will be hidden so we'll use half of the number of tables for the default size
@@ -167,14 +167,14 @@ final class ConfiguredDocument {
 		int visibleIndex = 0;
 		for (int i = 0; i < numTables; i++) {
 			final String tableName = tablesVec.get(i);
-			if (!document.get_table_is_hidden(tableName)) {
+			if (!document.getTableIsHidden(tableName)) {
 				tableNames.add(tableName);
 				// JNI is "expensive", the comparison will only be called if we haven't already found the default table
-				if (!foundDefaultTable && tableName.equals(document.get_default_table())) {
+				if (!foundDefaultTable && tableName.equals(document.getDefaultTable())) {
 					documentInfo.setDefaultTableIndex(visibleIndex);
 					foundDefaultTable = true;
 				}
-				tableTitles.add(document.get_table_title(tableName, localeID));
+				tableTitles.add(document.getTableTitle(tableName, localeID));
 				visibleIndex++;
 			}
 		}
@@ -182,10 +182,10 @@ final class ConfiguredDocument {
 		// set everything we need
 		documentInfo.setTableNames(tableNames);
 		documentInfo.setTableTitles(tableTitles);
-		documentInfo.setTitle(document.get_database_title(localeID));
+		documentInfo.setTitle(document.getDatabaseTitle(localeID));
 
 		// Fetch arrays of locale IDs and titles:
-		final List<String> localesVec = document.get_translation_available_locales();
+		final List<String> localesVec = document.getTranslationAvailableLocales();
 		final int numLocales = Utils.safeLongToInt(localesVec.size());
 		final ArrayList<String> localeIDs = new ArrayList<String>(numLocales);
 		final ArrayList<String> localeTitles = new ArrayList<String>(numLocales);
@@ -218,7 +218,7 @@ final class ConfiguredDocument {
 	 */
 	private LayoutGroup getValidListViewLayoutGroup(final String tableName, final String localeID) {
 
-		final List<LayoutGroup> layoutGroupVec = document.get_data_layout_groups("list", tableName);
+		final List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("list", tableName);
 
 		final int listViewLayoutGroupSize = Utils.safeLongToInt(layoutGroupVec.size());
 		LayoutGroup libglomLayoutGroup = null;
@@ -236,13 +236,13 @@ final class ConfiguredDocument {
 			Log.info(documentID, tableName,
 					"A list layout is not defined for this table. Displaying a list layout based on the field list.");
 
-			final List<Field> fieldsVec = document.get_table_fields(tableName);
+			final List<Field> fieldsVec = document.getTableFields(tableName);
 			libglomLayoutGroup = new LayoutGroup();
 			for (int i = 0; i < fieldsVec.size(); i++) {
 				final Field field = fieldsVec.get(i);
 				final LayoutItemField layoutItemField = new LayoutItemField();
-				layoutItemField.set_full_field_details(field);
-				libglomLayoutGroup.add_item(layoutItemField);
+				layoutItemField.setFullFieldDetails(field);
+				libglomLayoutGroup.addItem(layoutItemField);
 			}
 		}
 
@@ -258,7 +258,7 @@ final class ConfiguredDocument {
 	 * @param libglomLayoutGroup
 	 */
 	private void updateLayoutGroup(final LayoutGroup layoutGroup, final String tableName, final String localeID) {
-		final List<LayoutItem> layoutItemsVec = layoutGroup.get_items();
+		final List<LayoutItem> layoutItemsVec = layoutGroup.getItems();
 
 		int primaryKeyIndex = -1;
 
@@ -268,8 +268,8 @@ final class ConfiguredDocument {
 
 			if (layoutItem instanceof LayoutItemField) {
 				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
-				final Field field = layoutItemField.get_full_field_details();
-				if (field.get_primary_key())
+				final Field field = layoutItemField.getFullFieldDetails();
+				if (field.getPrimaryKey())
 					primaryKeyIndex = i;
 
 			} else if (layoutItem instanceof LayoutGroup) {
@@ -287,10 +287,10 @@ final class ConfiguredDocument {
 			// Add a LayoutItemField for the primary key to the end of the item list in the LayoutGroup because it
 			// doesn't already contain a primary key.
 			Field primaryKey = null;
-			final List<Field> fieldsVec = document.get_table_fields(tableName);
+			final List<Field> fieldsVec = document.getTableFields(tableName);
 			for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
 				final Field field = fieldsVec.get(i);
-				if (field.get_primary_key()) {
+				if (field.getPrimaryKey()) {
 					primaryKey = field;
 					break;
 				}
@@ -298,12 +298,12 @@ final class ConfiguredDocument {
 
 			if (primaryKey != null) {
 				final LayoutItemField layoutItemField = new LayoutItemField();
-				layoutItemField.set_full_field_details(primaryKey);
-				layoutGroup.add_item(layoutItemField); // TODO: Update the field to show just one locale?
-				layoutGroup.setPrimaryKeyIndex(layoutGroup.get_items().size() - 1);
+				layoutItemField.setFullFieldDetails(primaryKey);
+				layoutGroup.addItem(layoutItemField); // TODO: Update the field to show just one locale?
+				layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
 				layoutGroup.setHiddenPrimaryKey(true);
 			} else {
-				Log.error(document.get_database_title_original(), tableName,
+				Log.error(document.getDatabaseTitleOriginal(), tableName,
 						"A primary key was not found in the FieldVector for this table. Navigation buttons will not work.");
 			}
 		} else {
@@ -359,7 +359,7 @@ final class ConfiguredDocument {
 	List<LayoutGroup> getDetailsLayoutGroup(String tableName, final String localeID) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
-		return document.get_data_layout_groups("details", tableName);
+		return document.getDataLayoutGroups("details", tableName);
 	}
 
 	/*
@@ -420,7 +420,7 @@ final class ConfiguredDocument {
 			// Set whether or not the related list will need to show the navigation buttons.
 			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
 			final LayoutItemPortal.TableToViewDetails viewDetails = layoutItemPortal
-					.get_suitable_table_to_view_details(document);
+					.getSuitableTableToViewDetails(document);
 			boolean addNavigation = false;
 			if (viewDetails != null) {
 				addNavigation = !StringUtils.isEmpty(viewDetails.tableName);
@@ -457,8 +457,8 @@ final class ConfiguredDocument {
 	 * @return The table name to use.
 	 */
 	private String getTableNameToUse(final String tableName) {
-		if (StringUtils.isEmpty(tableName) || !document.get_table_is_known(tableName)) {
-			return document.get_default_table();
+		if (StringUtils.isEmpty(tableName) || !document.getTableIsKnown(tableName)) {
+			return document.getDefaultTable();
 		}
 		return tableName;
 	}
@@ -471,16 +471,16 @@ final class ConfiguredDocument {
 	public Reports getReports(final String tableName, final String localeID) {
 		final Reports result = new Reports();
 
-		final List<String> names = document.get_report_names(tableName);
+		final List<String> names = document.getReportNames(tableName);
 
 		final int count = Utils.safeLongToInt(names.size());
 		for (int i = 0; i < count; i++) {
 			final String name = names.get(i);
-			final Report report = document.get_report(tableName, name);
+			final Report report = document.getReport(tableName, name);
 			if (report == null)
 				continue;
 
-			final String title = report.get_title(localeID);
+			final String title = report.getTitle(localeID);
 			result.addReport(name, title);
 		}
 

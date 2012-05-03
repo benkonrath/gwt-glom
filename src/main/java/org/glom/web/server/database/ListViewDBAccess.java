@@ -113,8 +113,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	private int getPrimaryKeyIndex() {
 		for (int i = 0; i < fieldsToGet.size(); i++) {
 			final LayoutItemField layoutItemField = fieldsToGet.get(i);
-			final Field field = layoutItemField.get_full_field_details();
-			if (tableName.equals(layoutItemField.get_table_used(tableName)) && field != null && field.get_primary_key())
+			final Field field = layoutItemField.getFullFieldDetails();
+			if (tableName.equals(layoutItemField.getTableUsed(tableName)) && field != null && field.getPrimaryKey())
 				return i;
 		}
 		return -1;

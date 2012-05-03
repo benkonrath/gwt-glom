@@ -71,7 +71,7 @@ public class SqlUtils {
 			return result;
 		}
 
-		final String fieldName = primaryKey.get_name();
+		final String fieldName = primaryKey.getName();
 		if (StringUtils.isEmpty(fieldName)) {
 			return result;
 		}
@@ -273,8 +273,8 @@ public class SqlUtils {
 		}
 
 		// TODO: Quoting, escaping, etc:
-		return get_sql_field_name(layoutItemField.get_sql_table_or_join_alias_name(tableName),
-				layoutItemField.get_name());
+		return get_sql_field_name(layoutItemField.getSqlTableOrJoinAliasName(tableName),
+				layoutItemField.getName());
 	}
 
 	private static void add_to_relationships_list(final List<UsesRelationship> listRelationships,
@@ -342,8 +342,8 @@ public class SqlUtils {
 
 	private static void builder_add_join(SelectJoinStep step, final UsesRelationship uses_relationship) {
 		final Relationship relationship = uses_relationship.getRelationship();
-		if (!relationship.get_has_fields()) { // TODO: Handle related_record has_fields.
-			if (relationship.get_has_to_table()) {
+		if (!relationship.getHasFields()) { // TODO: Handle related_record has_fields.
+			if (relationship.getHasToTable()) {
 				// It is a relationship that only specifies the table, without specifying linking fields:
 
 				// TODO: from() takes SQL, not specifically a table name, so this is unsafe.
@@ -356,32 +356,32 @@ public class SqlUtils {
 		// Define the alias name as returned by get_sql_join_alias_name():
 
 		// Specify an alias, to avoid ambiguity when using 2 relationships to the same table.
-		final String alias_name = uses_relationship.get_sql_join_alias_name();
+		final String alias_name = uses_relationship.getSqlJoinAliasName();
 
 		// Add the JOIN:
 		if (!uses_relationship.getHasRelatedRelationshipName()) {
 
-			final org.jooq.Field<Object> fieldFrom = createField(relationship.get_from_table(),
-					relationship.get_from_field());
-			final org.jooq.Field<Object> fieldTo = createField(alias_name, relationship.get_to_field());
+			final org.jooq.Field<Object> fieldFrom = createField(relationship.getFromTable(),
+					relationship.getFromField());
+			final org.jooq.Field<Object> fieldTo = createField(alias_name, relationship.getToField());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// TODO: join() takes SQL, not specifically an alias name, so this is unsafe.
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
-			step = step.leftOuterJoin(relationship.get_to_table() + " AS " + alias_name).on(condition);
+			step = step.leftOuterJoin(relationship.getToTable() + " AS " + alias_name).on(condition);
 		} else {
 			final UsesRelationship parent_relationship = new UsesRelationshipImpl();
 			parent_relationship.setRelationship(relationship);
 			final Relationship relatedRelationship = uses_relationship.getRelatedRelationship();
 
-			final org.jooq.Field<Object> fieldFrom = createField(parent_relationship.get_sql_join_alias_name(),
-					relatedRelationship.get_from_field());
-			final org.jooq.Field<Object> fieldTo = createField(alias_name, relatedRelationship.get_to_field());
+			final org.jooq.Field<Object> fieldFrom = createField(parent_relationship.getSqlJoinAliasName(),
+					relatedRelationship.getFromField());
+			final org.jooq.Field<Object> fieldTo = createField(alias_name, relatedRelationship.getToField());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// TODO: join() takes SQL, not specifically an alias name, so this is unsafe.
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
-			step = step.leftOuterJoin(relatedRelationship.get_to_table() + " AS " + alias_name).on(condition);
+			step = step.leftOuterJoin(relatedRelationship.getToTable() + " AS " + alias_name).on(condition);
 		}
 	}
 
@@ -397,7 +397,7 @@ public class SqlUtils {
 		Condition condition = null;
 
 		// TODO: Cache the list of all fields, as well as caching (m_Fields) the list of all visible fields:
-		final List<Field> fields = document.get_table_fields(tableName);
+		final List<Field> fields = document.getTableFields(tableName);
 
 		final int fieldsSize = Utils.safeLongToInt(fields.size());
 		for (int i = 0; i < fieldsSize; i++) {
@@ -406,11 +406,11 @@ public class SqlUtils {
 				continue;
 			}
 
-			if (field.get_glom_type() != Field.GlomFieldType.TYPE_TEXT) {
+			if (field.getGlomType() != Field.GlomFieldType.TYPE_TEXT) {
 				continue;
 			}
 
-			final org.jooq.Field<Object> jooqField = createField(tableName, field.get_name());
+			final org.jooq.Field<Object> jooqField = createField(tableName, field.getName());
 			final Condition thisCondition = jooqField.equal(quickFindValue.getText()); // TODO: Handle other types.
 
 			if (condition == null) {

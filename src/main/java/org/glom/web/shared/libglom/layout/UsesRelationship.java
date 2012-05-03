@@ -45,15 +45,15 @@ public interface UsesRelationship extends Cloneable {
 
 	public abstract boolean getHasRelatedRelationshipName();
 
-	public abstract String get_sql_join_alias_name();
+	public abstract String getSqlJoinAliasName();
 
-	public abstract String get_sql_table_or_join_alias_name(String tableName);
+	public abstract String getSqlTableOrJoinAliasName(String tableName);
 
 	/**
 	 * @param string
 	 * @return
 	 */
-	public abstract String get_table_used(String string);
+	public abstract String getTableUsed(String string);
 
 	public abstract String getRelationshipNameUsed();
 

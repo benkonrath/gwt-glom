@@ -148,7 +148,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			for (final File glomFile : glomFiles) {
 				final Document document = new Document();
-				document.set_file_uri("file://" + glomFile.getAbsolutePath());
+				document.setFileURI("file://" + glomFile.getAbsolutePath());
 				final int error = 0;
 				final boolean retval = document.load(error);
 				if (retval == false) {
@@ -331,7 +331,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		final Report report = glomDocument.get_report(tableName, reportName);
+		final Report report = glomDocument.getReport(tableName, reportName);
 		if (report == null) {
 			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
 			return "";
@@ -408,7 +408,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			}
 
 			final String localeID = StringUtils.defaultString(configuredDoc.getDefaultLocaleID());
-			documents.addDocument(documentID, glomDocument.get_database_title(localeID), localeID);
+			documents.addDocument(documentID, glomDocument.getDatabaseTitle(localeID), localeID);
 		}
 		return documents;
 	}

@@ -118,11 +118,11 @@ public abstract class ListTable extends Composite {
 	protected void createCellTable(final LayoutGroup layoutGroup, final String tableName, final int numVisibleRows,
 			final String navigationButtonLabel, final NavigationButtonCell navigationButtonCell) {
 		this.tableName = tableName;
-		final List<LayoutItem> layoutItems = layoutGroup.get_items();
+		final List<LayoutItem> layoutItems = layoutGroup.getItems();
 
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
 		final LayoutItemField primaryKeyLayoutItem = (LayoutItemField) layoutItems.get(primaryKeyIndex);
-		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.get_glom_type();
+		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.getGlomType();
 		final ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
 			@Override
 			public Object getKey(final DataItem[] row) {
@@ -250,7 +250,7 @@ public abstract class ListTable extends Composite {
 		// create a new column
 		Column<DataItem[], ?> column = null;
 		final int j = cellTable.getColumnCount();
-		switch (layoutItemField.get_glom_type()) {
+		switch (layoutItemField.getGlomType()) {
 
 		case TYPE_BOOLEAN:
 			column = new Column<DataItem[], Boolean>(new BooleanCell()) {
@@ -309,7 +309,7 @@ public abstract class ListTable extends Composite {
 		// set column properties and add to cell cellTable
 		column.setHorizontalAlignment(columnAlignment);
 		column.setSortable(true);
-		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.get_title())));
+		cellTable.addColumn(column, new SafeHtmlHeader(SafeHtmlUtils.fromString(layoutItemField.getTitle())));
 	}
 
 	private void addNavigationButtonColumn(final String navigationButtonLabel,

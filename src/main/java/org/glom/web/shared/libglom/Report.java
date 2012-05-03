@@ -10,7 +10,7 @@ public class Report extends Translatable {
 	/**
 	 * @return
 	 */
-	public LayoutGroup get_layout_group() {
+	public LayoutGroup getLayoutGroup() {
 		return layoutGroup;
 	}
 
@@ -26,7 +26,7 @@ public class Report extends Translatable {
 	/**
 	 * @param listLayoutGroups
 	 */
-	public void set_layout_group(final LayoutGroup layoutGroup) {
+	public void setLayoutGroup(final LayoutGroup layoutGroup) {
 		this.layoutGroup = layoutGroup;
 	}
 }

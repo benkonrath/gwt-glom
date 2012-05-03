@@ -28,7 +28,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 		final Relationship relationship = getRelationship();
 		if (relationship != null) {
-			from_table = relationship.get_from_table();
+			from_table = relationship.getFromTable();
 		}
 
 		return from_table;
@@ -103,8 +103,8 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_join_alias_name()
 	 */
 	@Override
-	public String get_sql_join_alias_name() {
-		return usesRel.get_sql_join_alias_name();
+	public String getSqlJoinAliasName() {
+		return usesRel.getSqlJoinAliasName();
 	}
 
 	/*
@@ -113,8 +113,8 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
 	 */
 	@Override
-	public String get_sql_table_or_join_alias_name(String tableName) {
-		return usesRel.get_sql_table_or_join_alias_name(tableName);
+	public String getSqlTableOrJoinAliasName(String tableName) {
+		return usesRel.getSqlTableOrJoinAliasName(tableName);
 	}
 
 	/*
@@ -123,8 +123,8 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
-	public String get_table_used(String parentTable) {
-		return usesRel.get_table_used(parentTable);
+	public String getTableUsed(String parentTable) {
+		return usesRel.getTableUsed(parentTable);
 	}
 
 	/**
@@ -152,31 +152,31 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @param relationship
 	 * @param document
 	 */
-	public TableToViewDetails get_suitable_table_to_view_details(final Document document) {
-		UsesRelationship navigation_relationship = null;
+	public TableToViewDetails getSuitableTableToViewDetails(final Document document) {
+		UsesRelationship navigationRelationship = null;
 
 		// Check whether a relationship was specified:
 		if (getNavigationType() == NavigationType.NAVIGATION_AUTOMATIC) {
-			navigation_relationship = getPortalNavigationRelationshipAutomatic(document);
+			navigationRelationship = getPortalNavigationRelationshipAutomatic(document);
 		} else {
-			navigation_relationship = getNavigationRelationshipSpecific();
+			navigationRelationship = getNavigationRelationshipSpecific();
 		}
 
 		// Get the navigation table name from the chosen relationship:
-		String directly_related_table_name = get_table_used("" /* not relevant */);
+		String directlyRelatedTableName = getTableUsed("" /* not relevant */);
 
 		// The navigation_table_name (and therefore, the table_name output parameter,
 		// as well) stays empty if the navrel type was set to none.
-		String navigation_table_name = null;
-		if (navigation_relationship != null) {
-			navigation_table_name = navigation_relationship.get_table_used(directly_related_table_name);
+		String navigationTableName = null;
+		if (navigationRelationship != null) {
+			navigationTableName = navigationRelationship.getTableUsed(directlyRelatedTableName);
 		} else if (getNavigationType() != NavigationType.NAVIGATION_NONE) {
 			// An empty result from get_portal_navigation_relationship_automatic() or
 			// get_navigation_relationship_specific() means we should use the directly related table:
-			navigation_table_name = directly_related_table_name;
+			navigationTableName = directlyRelatedTableName;
 		}
 
-		if (StringUtils.isEmpty(navigation_table_name)) {
+		if (StringUtils.isEmpty(navigationTableName)) {
 			return null;
 		}
 
@@ -185,14 +185,14 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 			return null;
 		}
 
-		if (document.get_table_is_hidden(navigation_table_name)) {
-			Log.error("navigation_table_name indicates a hidden table: " + navigation_table_name);
+		if (document.getTableIsHidden(navigationTableName)) {
+			Log.error("navigation_table_name indicates a hidden table: " + navigationTableName);
 			return null;
 		}
 
 		TableToViewDetails result = new TableToViewDetails();
-		result.tableName = navigation_table_name;
-		result.usesRelationship = navigation_relationship;
+		result.tableName = navigationTableName;
+		result.usesRelationship = navigationRelationship;
 		return result;
 	}
 
@@ -224,8 +224,8 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 		}
 
 		// If the related table is not hidden then we can just navigate to that:
-		final String direct_related_table_name = get_table_used("" /* parent table - not relevant */);
-		if (!document.get_table_is_hidden(direct_related_table_name)) {
+		final String direct_related_table_name = getTableUsed("" /* parent table - not relevant */);
+		if (!document.getTableIsHidden(direct_related_table_name)) {
 			// Non-hidden tables can just be shown directly. Navigate to it:
 			return null;
 		} else {
@@ -271,9 +271,9 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 			return null;
 		}
 
-		final String parent_table_name = get_table_used("" /* parent table - not relevant */);
+		final String parent_table_name = getTableUsed("" /* parent table - not relevant */);
 
-		List<LayoutItem> items = get_items();
+		List<LayoutItem> items = getItems();
 		for (LayoutItem item : items) {
 			if (item instanceof LayoutItemField) {
 				LayoutItemField field = (LayoutItemField) item;
@@ -281,9 +281,9 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 					final Relationship relationship = document
 							.getFieldUsedInRelationshipToOne(parent_table_name, field);
 					if (relationship != null) {
-						final String table_name = relationship.get_to_table();
+						final String table_name = relationship.getToTable();
 						if (!StringUtils.isEmpty(table_name)) {
-							if (!(document.get_table_is_hidden(table_name))) {
+							if (!(document.getTableIsHidden(table_name))) {
 
 								FieldIdentifies result = new FieldIdentifies();
 								result.field = field;
@@ -312,15 +312,15 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 		LayoutItemField result = null;
 
-		final String parent_table_name = get_table_used("" /* parent table - not relevant */);
+		final String parent_table_name = getTableUsed("" /* parent table - not relevant */);
 
-		final List<LayoutItem> items = get_items();
+		final List<LayoutItem> items = getItems();
 		for (LayoutItem item : items) {
 			if (item instanceof LayoutItemField) {
 				LayoutItemField field = (LayoutItemField) item;
 				if (field.getHasRelationshipName()) {
-					final String table_name = field.get_table_used(parent_table_name);
-					if (!(document.get_table_is_hidden(table_name)))
+					final String table_name = field.getTableUsed(parent_table_name);
+					if (!(document.getTableIsHidden(table_name)))
 						return field;
 				}
 			}

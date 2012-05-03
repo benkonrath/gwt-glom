@@ -14,7 +14,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	/**
 	 * @return the field
 	 */
-	public Field get_full_field_details() {
+	public Field getFullFieldDetails() {
 		return field;
 	}
 
@@ -22,14 +22,14 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * @param field
 	 *            the field to set
 	 */
-	public void set_full_field_details(Field field) {
+	public void setFullFieldDetails(final Field field) {
 		this.field = field;
 	}
 
 	/**
 	 * @return
 	 */
-	public Formatting get_formatting_used() {
+	public Formatting getFormattingUsed() {
 		if (useDefaultFormatting && (field != null)) {
 			return field.getFormatting();
 		} else {
@@ -40,9 +40,9 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	/**
 	 * @return
 	 */
-	public GlomFieldType get_glom_type() {
+	public GlomFieldType getGlomType() {
 		if (field != null) {
-			return field.get_glom_type();
+			return field.getGlomType();
 		}
 
 		return GlomFieldType.TYPE_INVALID;
@@ -54,15 +54,15 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
-	public String get_table_used(String tableName) {
-		return usesRel.get_table_used(tableName);
+	public String getTableUsed(final String tableName) {
+		return usesRel.getTableUsed(tableName);
 	}
 
 	/**
 	 * @param forDetailsView
 	 * @return
 	 */
-	public Formatting.HorizontalAlignment get_formatting_used_horizontal_alignment(boolean forDetailsView) {
+	public Formatting.HorizontalAlignment getFormattingUsedHorizontalAlignment(final boolean forDetailsView) {
 		return null; // TODO
 	}
 
@@ -70,27 +70,27 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	/**
 	 * @return
 	 */
-	public String get_layout_display_name() {
+	public String getLayoutDisplayName() {
 		String result = "";
 
 		if (field != null) {
-			result = field.get_name();
+			result = field.getName();
 		} else {
-			result = get_name();
+			result = getName();
 		}
 
 		// Indicate if it's a field in another table.
 		if (getHasRelatedRelationshipName()) {
 			final Relationship rel = getRelatedRelationship();
 			if (rel != null) {
-				result = rel.get_name() + "::" + result;
+				result = rel.getName() + "::" + result;
 			}
 		}
 
 		if (getHasRelationshipName()) {
 			final Relationship rel = getRelationship();
 			if (rel != null) {
-				result = rel.get_name() + "::" + result;
+				result = rel.getName() + "::" + result;
 			}
 		}
 
@@ -104,7 +104,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * org.glom.web.shared.libglom.layout.UsesRelationship#setRelationship(org.glom.web.shared.libglom.Relationship)
 	 */
 	@Override
-	public void setRelationship(Relationship relationship) {
+	public void setRelationship(final Relationship relationship) {
 		usesRel.setRelationship(relationship);
 	}
 
@@ -136,7 +136,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * )
 	 */
 	@Override
-	public void setRelatedRelationship(Relationship relationship) {
+	public void setRelatedRelationship(final Relationship relationship) {
 		usesRel.setRelatedRelationship(relationship);
 	}
 
@@ -163,28 +163,28 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_join_alias_name()
+	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getSqlJoinAliasName()
 	 */
 	@Override
-	public String get_sql_join_alias_name() {
-		return usesRel.get_sql_join_alias_name();
+	public String getSqlJoinAliasName() {
+		return usesRel.getSqlJoinAliasName();
 	}
 
 	/**
 	 * @param attribute
 	 */
-	public void setUseDefaultFormatting(boolean useDefaultFormatting) {
+	public void setUseDefaultFormatting(final boolean useDefaultFormatting) {
 		this.useDefaultFormatting = useDefaultFormatting;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
+	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getSqlTableOrJoinAliasName(java.lang.String)
 	 */
 	@Override
-	public String get_sql_table_or_join_alias_name(String tableName) {
-		return usesRel.get_sql_table_or_join_alias_name(tableName);
+	public String getSqlTableOrJoinAliasName(final String tableName) {
+		return usesRel.getSqlTableOrJoinAliasName(tableName);
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	@Override
 	public Object clone() {
-		LayoutItemField result = (LayoutItemField) super.clone();
+		final LayoutItemField result = (LayoutItemField) super.clone();
 
 		result.field = (Field) this.field.clone();
 		result.usesRel = (UsesRelationship) this.usesRel.clone();

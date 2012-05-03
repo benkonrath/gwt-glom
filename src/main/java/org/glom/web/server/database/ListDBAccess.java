@@ -72,8 +72,8 @@ public abstract class ListDBAccess extends DBAccess {
 			final int numItems = Utils.safeLongToInt(fieldsToGet.size());
 			for (int i = 0; i < numItems; i++) {
 				final LayoutItemField layoutItem = fieldsToGet.get(i);
-				final Field details = layoutItem.get_full_field_details();
-				if (details != null && details.get_primary_key()) {
+				final Field details = layoutItem.getFullFieldDetails();
+				if (details != null && details.getPrimaryKey()) {
 					sortClause.add(new SortClause.SortField(layoutItem, true)); // ascending
 					break;
 				}

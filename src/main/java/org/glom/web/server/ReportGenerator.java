@@ -108,9 +108,9 @@ public class ReportGenerator {
 	public String generateReport(final Document glomDocument, final String tableName, final Report report,
 			final Connection connection, final String quickFind) {
 
-		final LayoutGroup layout_group = report.get_layout_group();
+		final LayoutGroup layout_group = report.getLayoutGroup();
 
-		design.setName(report.get_title(localeID)); // TODO: Actually, we want the title.
+		design.setName(report.getTitle(localeID)); // TODO: Actually, we want the title.
 
 		titleStyle.setName("Sans_Title");
 		titleStyle.setFontName("DejaVu Sans");
@@ -138,7 +138,7 @@ public class ReportGenerator {
 		final JRDesignBand titleBand = new JRDesignBand();
 		titleBand.setHeight(height);
 		final JRDesignStaticText staticTitle = new JRDesignStaticText();
-		staticTitle.setText(report.get_title(localeID));
+		staticTitle.setText(report.getTitle(localeID));
 		staticTitle.setY(0);
 		staticTitle.setX(0);
 		staticTitle.setWidth(width * 5); // No data will be shown without this.
@@ -193,7 +193,7 @@ public class ReportGenerator {
 		JasperPrint print;
 		try {
 			final HashMap<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("ReportTitle", report.get_title(localeID)); // TODO: Use the title, not the name.
+			parameters.put("ReportTitle", report.getTitle(localeID)); // TODO: Use the title, not the name.
 			print = JasperFillManager.fillReport(jasperreport, parameters, connection);
 		} catch (final JRException ex) {
 			ex.printStackTrace();
@@ -254,7 +254,7 @@ public class ReportGenerator {
 			final JRDesignBand parentBand, final Position pos) {
 		Position pos_result = new Position(pos);
 
-		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
+		final List<LayoutItem> layoutItemsVec = layout_group.getItems();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
@@ -301,7 +301,7 @@ public class ReportGenerator {
 		JRDesignBand fieldTitlesBand = headerBand;
 		int thisFieldTitlesY = fieldTitlesY; // If they are in a group title then they must be lower.
 
-		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
+		final List<LayoutItem> layoutItemsVec = layout_group.getItems();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
@@ -315,7 +315,7 @@ public class ReportGenerator {
 
 				if (libglomLayoutGroup instanceof LayoutItemGroupBy) {
 					final LayoutItemGroupBy libglomGroupBy = (LayoutItemGroupBy) libglomLayoutGroup;
-					final LayoutItemField fieldGroupBy = libglomGroupBy.get_field_group_by();
+					final LayoutItemField fieldGroupBy = libglomGroupBy.getFieldGroupBy();
 					if (fieldGroupBy == null)
 						continue;
 
@@ -367,7 +367,7 @@ public class ReportGenerator {
 					int groupX = addFieldToGroupBand(groupBand, x, fieldGroupBy);
 
 					// Show the secondary fields:
-					final LayoutGroup groupSecondaries = libglomGroupBy.get_secondary_fields();
+					final LayoutGroup groupSecondaries = libglomGroupBy.getSecondaryFields();
 					if (groupSecondaries != null)
 						groupX = addSecondaryFieldsToGroupBand(groupSecondaries, groupBand, groupX);
 
@@ -395,7 +395,7 @@ public class ReportGenerator {
 	}
 
 	private int addSecondaryFieldsToGroupBand(final LayoutGroup layout_group, final JRDesignBand groupBand, int x) {
-		final List<LayoutItem> layoutItemsVec = layout_group.get_items();
+		final List<LayoutItem> layoutItemsVec = layout_group.getItems();
 		final int numItems = Utils.safeLongToInt(layoutItemsVec.size());
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem libglomLayoutItem = layoutItemsVec.get(i);
@@ -424,7 +424,7 @@ public class ReportGenerator {
 	private JRDesignExpression createFieldExpression(final LayoutItemField libglomLayoutItemField) {
 		final JRDesignExpression expression = new JRDesignExpression();
 
-		final String fieldName = libglomLayoutItemField.get_name(); // TODO: Is this enough for related fields?
+		final String fieldName = libglomLayoutItemField.getName(); // TODO: Is this enough for related fields?
 
 		// TODO: Where is this format documented?
 		expression.setText("$F{" + fieldName + "}");
@@ -539,9 +539,9 @@ public class ReportGenerator {
 		final JRDesignExpression expression = createFieldExpression(libglomLayoutItemField);
 		textField.setExpression(expression);
 
-		if (libglomLayoutItemField.get_glom_type() == GlomFieldType.TYPE_NUMERIC) {
+		if (libglomLayoutItemField.getGlomType() == GlomFieldType.TYPE_NUMERIC) {
 			// Numeric formatting:
-			final Formatting formatting = libglomLayoutItemField.get_formatting_used();
+			final Formatting formatting = libglomLayoutItemField.getFormattingUsed();
 			final NumericFormat numericFormat = formatting.getNumericFormat();
 
 			final DecimalFormat format = new DecimalFormat();
@@ -550,7 +550,7 @@ public class ReportGenerator {
 
 			// TODO: Use numericFormat.get_currency_symbol(), possibly via format.setCurrency().
 			textField.setPattern(format.toPattern());
-		} else if (libglomLayoutItemField.get_glom_type() == GlomFieldType.TYPE_DATE) {
+		} else if (libglomLayoutItemField.getGlomType() == GlomFieldType.TYPE_DATE) {
 			// Date formatting
 			// TODO: Use a 4-digit-year short form, somehow.
 			try // We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
@@ -562,7 +562,7 @@ public class ReportGenerator {
 			} catch (final Exception ex) {
 				Log.info("ReportGenerator: The cast of SimpleDateFormat failed.");
 			}
-		} else if (libglomLayoutItemField.get_glom_type() == GlomFieldType.TYPE_TIME) {
+		} else if (libglomLayoutItemField.getGlomType() == GlomFieldType.TYPE_TIME) {
 			// Time formatting
 			try // We use a try block because getDateInstance() is not guaranteed to return a SimpleDateFormat.
 			{
@@ -589,7 +589,7 @@ public class ReportGenerator {
 			final LayoutItemField libglomLayoutItemField, final boolean withColon) {
 		final JRDesignStaticText textFieldColumn = new JRDesignStaticText();
 
-		String title = StringUtils.defaultString(libglomLayoutItemField.get_title(this.localeID));
+		String title = StringUtils.defaultString(libglomLayoutItemField.getTitle(this.localeID));
 
 		// If the title is at the left, instead of above, we need a : to show that it's a title.
 		if (withColon)
@@ -610,7 +610,7 @@ public class ReportGenerator {
 	 */
 	private String addField(final LayoutItemField libglomLayoutItemField) {
 
-		final String fieldName = libglomLayoutItemField.get_name(); // TODO: Is this enough for related fields?
+		final String fieldName = libglomLayoutItemField.getName(); // TODO: Is this enough for related fields?
 
 		// Avoid an unnamed field:
 		if (StringUtils.isEmpty(fieldName)) {
@@ -660,7 +660,7 @@ public class ReportGenerator {
 		// Choose a suitable java class type for the SQL field:
 		Class<?> klass = null;
 
-		final GlomFieldType glom_type = libglomLayoutItemField.get_glom_type();
+		final GlomFieldType glom_type = libglomLayoutItemField.getGlomType();
 		switch (glom_type) {
 		case TYPE_TEXT:
 			klass = java.lang.String.class;
@@ -682,10 +682,10 @@ public class ReportGenerator {
 			break;
 		case TYPE_INVALID:
 			Log.info("getClassTypeForGlomType() returning null for TYPE_INVALID glom type. Field name="
-					+ libglomLayoutItemField.get_layout_display_name());
+					+ libglomLayoutItemField.getLayoutDisplayName());
 		default:
 			Log.info("getClassTypeForGlomType() returning null for glom type: " + glom_type + ". Field name="
-					+ libglomLayoutItemField.get_layout_display_name());
+					+ libglomLayoutItemField.getLayoutDisplayName());
 			break;
 		}
 		return klass;

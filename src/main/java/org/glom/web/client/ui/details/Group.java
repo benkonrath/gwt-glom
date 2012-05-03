@@ -71,7 +71,7 @@ public class Group extends Composite {
 		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
 		FlowPanel groupContents;
-		String groupTitle = layoutGroup.get_title();
+		String groupTitle = layoutGroup.getTitle();
 
 		if (setGroupTitle && !StringUtils.isEmpty(groupTitle)) {
 			Label label = new Label(groupTitle);
@@ -88,7 +88,7 @@ public class Group extends Composite {
 		}
 
 		FlowTable flowtable = new FlowTable(layoutGroup.getColumnCount());
-		for (LayoutItem layoutItem : layoutGroup.get_items()) {
+		for (LayoutItem layoutItem : layoutGroup.getItems()) {
 			Widget child = createChildWidget(layoutItem, true);
 			flowtable.add(child);
 		}

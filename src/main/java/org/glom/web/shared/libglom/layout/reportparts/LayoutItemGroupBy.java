@@ -13,39 +13,39 @@ public class LayoutItemGroupBy extends LayoutGroup {
 	/**
 	 * @return
 	 */
-	public boolean get_has_field_group_by() {
+	public boolean getHasFieldGroupBy() {
 		if (fieldGroupBy == null) {
 			return false;
 		}
 
-		return !StringUtils.isEmpty(fieldGroupBy.get_name());
+		return !StringUtils.isEmpty(fieldGroupBy.getName());
 	}
 
 	/**
 	 * @return
 	 */
-	public LayoutItemField get_field_group_by() {
+	public LayoutItemField getFieldGroupBy() {
 		return fieldGroupBy;
 	}
 
 	/**
 	 * @param fieldGroupBy
 	 */
-	public void set_field_group_by(final LayoutItemField fieldGroupBy) {
+	public void setFieldGroupBy(final LayoutItemField fieldGroupBy) {
 		this.fieldGroupBy = fieldGroupBy;
 	}
 
 	/**
 	 * @return
 	 */
-	public LayoutGroup get_secondary_fields() {
+	public LayoutGroup getSecondaryFields() {
 		return secondaryFields;
 	}
 
 	/**
 	 * @param secondaryFields
 	 */
-	public void set_secondary_fields(final LayoutGroup secondaryFields) {
+	public void setSecondaryFields(final LayoutGroup secondaryFields) {
 		this.secondaryFields = secondaryFields;
 	}
 

@@ -54,7 +54,7 @@ public class Portal extends Composite {
 		mainPanel.setStyleName("subgroup");
 
 		if (setTitle) {
-			Label title = new Label(layoutItem.get_title());
+			Label title = new Label(layoutItem.getTitle());
 			title.setStyleName("subgroup-title");
 			mainPanel.add(title);
 

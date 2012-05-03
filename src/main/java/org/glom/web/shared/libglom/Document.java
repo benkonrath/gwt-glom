@@ -121,11 +121,11 @@ public class Document {
 	private static final String LAYOUT_NAME_DETAILS = "details";
 	private static final String LAYOUT_NAME_LIST = "list";
 
-	public void set_file_uri(final String fileURI) {
+	public void setFileURI(final String fileURI) {
 		this.fileURI = fileURI;
 	}
 
-	public String get_file_uri() {
+	public String getFileURI() {
 		return fileURI;
 	}
 
@@ -134,12 +134,12 @@ public class Document {
 		LOAD_FAILURE_CODE_NONE, LOAD_FAILURE_CODE_NOT_FOUND, LOAD_FAILURE_CODE_FILE_VERSION_TOO_NEW
 	};
 
-	public boolean load(int failure_code) {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	public boolean load(final int failure_code) {
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = dbf.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
+		} catch (final ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -147,11 +147,11 @@ public class Document {
 
 		try {
 			xmlDocument = documentBuilder.parse(fileURI);
-		} catch (SAXException e) {
+		} catch (final SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -163,23 +163,23 @@ public class Document {
 			return false;
 		}
 
-		databaseTitle.set_title_original(rootNode.getAttribute(ATTRIBUTE_TITLE));
+		databaseTitle.setTitleOriginal(rootNode.getAttribute(ATTRIBUTE_TITLE));
 
 		// We first load the fields, relationships, etc,
 		// for all tables:
 		final List<Node> listTableNodes = getChildrenByTagName(rootNode, NODE_TABLE);
-		for (Node node : listTableNodes) {
+		for (final Node node : listTableNodes) {
 			if (!(node instanceof Element))
 				continue;
 
 			final Element element = (Element) node;
 			final TableInfo info = loadTableNodeBasic(element);
-			tablesMap.put(info.get_name(), info);
+			tablesMap.put(info.getName(), info);
 		}
 
 		// We then load the layouts for all tables, because they
 		// need the fields and relationships for all tables:
-		for (Node node : listTableNodes) {
+		for (final Node node : listTableNodes) {
 			if (!(node instanceof Element))
 				continue;
 
@@ -196,10 +196,10 @@ public class Document {
 			// need the fields and relationships:
 			loadTableLayouts(element, info);
 
-			tablesMap.put(info.get_name(), info);
+			tablesMap.put(info.getName(), info);
 		}
 
-		Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
+		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if (nodeConnection != null) {
 			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
 			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
@@ -250,9 +250,9 @@ public class Document {
 	 * @param title
 	 */
 	private void loadTitle(final Element node, final Translatable title) {
-		title.set_name(node.getAttribute(ATTRIBUTE_NAME));
+		title.setName(node.getAttribute(ATTRIBUTE_NAME));
 
-		title.set_title_original(node.getAttribute(ATTRIBUTE_TITLE));
+		title.setTitleOriginal(node.getAttribute(ATTRIBUTE_TITLE));
 
 		final Element nodeSet = getElementByName(node, NODE_TRANSLATIONS_SET);
 		if (nodeSet == null) {
@@ -263,7 +263,7 @@ public class Document {
 		if (listNodes == null)
 			return;
 
-		for (Node transNode : listNodes) {
+		for (final Node transNode : listNodes) {
 			if (!(transNode instanceof Element)) {
 				continue;
 			}
@@ -283,9 +283,9 @@ public class Document {
 	 * @return
 	 */
 	private TableInfo loadTableNodeBasic(final Element tableNode) {
-		TableInfo info = new TableInfo();
+		final TableInfo info = new TableInfo();
 		loadTitle(tableNode, info);
-		final String tableName = info.get_name();
+		final String tableName = info.getName();
 
 		info.isDefault = getAttributeAsBoolean(tableNode, ATTRIBUTE_DEFAULT);
 		info.isHidden = getAttributeAsBoolean(tableNode, ATTRIBUTE_HIDDEN);
@@ -294,36 +294,36 @@ public class Document {
 		final Element relationshipsNode = getElementByName(tableNode, NODE_RELATIONSHIPS);
 		if (relationshipsNode != null) {
 			final List<Node> listNodes = getChildrenByTagName(relationshipsNode, NODE_RELATIONSHIP);
-			for (Node node : listNodes) {
+			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
 					continue;
 				}
 
 				final Element element = (Element) node;
-				Relationship relationship = new Relationship();
+				final Relationship relationship = new Relationship();
 				loadTitle(element, relationship);
 				relationship.setFromTable(tableName);
 				relationship.setFromField(element.getAttribute(ATTRIBUTE_RELATIONSHIP_FROM_FIELD));
 				relationship.setToTable(element.getAttribute(ATTRIBUTE_RELATIONSHIP_TO_TABLE));
 				relationship.setToField(element.getAttribute(ATTRIBUTE_RELATIONSHIP_TO_FIELD));
 
-				info.relationshipsMap.put(relationship.get_name(), relationship);
+				info.relationshipsMap.put(relationship.getName(), relationship);
 			}
 		}
 
 		final Element fieldsNode = getElementByName(tableNode, NODE_FIELDS);
 		if (fieldsNode != null) {
 			final List<Node> listNodes = getChildrenByTagName(fieldsNode, NODE_FIELD);
-			for (Node node : listNodes) {
+			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
 					continue;
 				}
 
 				final Element element = (Element) node;
-				Field field = new Field();
+				final Field field = new Field();
 				loadField(element, field);
 
-				info.fieldsMap.put(field.get_name(), field);
+				info.fieldsMap.put(field.getName(), field);
 			}
 		}
 
@@ -334,13 +334,13 @@ public class Document {
 	 * @param tableNode
 	 * @param info
 	 */
-	private void loadTableLayouts(final Element tableNode, TableInfo info) {
-		final String tableName = info.get_name();
+	private void loadTableLayouts(final Element tableNode, final TableInfo info) {
+		final String tableName = info.getName();
 
 		final Element layoutsNode = getElementByName(tableNode, NODE_DATA_LAYOUTS);
 		if (layoutsNode != null) {
 			final List<Node> listNodes = getChildrenByTagName(layoutsNode, NODE_DATA_LAYOUT);
-			for (Node node : listNodes) {
+			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
 					continue;
 				}
@@ -361,16 +361,16 @@ public class Document {
 		final Element reportsNode = getElementByName(tableNode, NODE_REPORTS);
 		if (reportsNode != null) {
 			final List<Node> listNodes = getChildrenByTagName(reportsNode, NODE_REPORT);
-			for (Node node : listNodes) {
+			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
 					continue;
 				}
 
 				final Element element = (Element) node;
-				Report report = new Report();
+				final Report report = new Report();
 				loadReport(element, report, tableName);
 
-				info.reportsMap.put(report.get_name(), report);
+				info.reportsMap.put(report.getName(), report);
 			}
 		}
 	}
@@ -384,17 +384,17 @@ public class Document {
 			return null;
 		}
 
-		List<LayoutGroup> result = new ArrayList<LayoutGroup>();
+		final List<LayoutGroup> result = new ArrayList<LayoutGroup>();
 
 		final List<Node> listNodes = getChildrenByTagName(node, NODE_DATA_LAYOUT_GROUPS);
-		for (Node nodeGroups : listNodes) {
+		for (final Node nodeGroups : listNodes) {
 			if (!(nodeGroups instanceof Element)) {
 				continue;
 			}
 
 			final Element elementGroups = (Element) nodeGroups;
 
-			NodeList list = elementGroups.getChildNodes();
+			final NodeList list = elementGroups.getChildNodes();
 			final int num = list.getLength();
 			for (int i = 0; i < num; i++) {
 				final Node nodeLayoutGroup = list.item(i);
@@ -409,15 +409,15 @@ public class Document {
 				final Element element = (Element) nodeLayoutGroup;
 				final String tagName = element.getTagName();
 				if (tagName == NODE_DATA_LAYOUT_GROUP) {
-					LayoutGroup group = new LayoutGroup();
+					final LayoutGroup group = new LayoutGroup();
 					loadDataLayoutGroup(element, group, tableName);
 					result.add(group);
 				} else if (tagName == NODE_DATA_LAYOUT_NOTEBOOK) {
-					LayoutItemNotebook group = new LayoutItemNotebook();
+					final LayoutItemNotebook group = new LayoutItemNotebook();
 					loadDataLayoutGroup(element, group, tableName);
 					result.add(group);
 				} else if (tagName == NODE_DATA_LAYOUT_PORTAL) {
-					LayoutItemPortal portal = new LayoutItemPortal();
+					final LayoutItemPortal portal = new LayoutItemPortal();
 					loadDataLayoutPortal(element, portal, tableName);
 					result.add(portal);
 				}
@@ -432,7 +432,7 @@ public class Document {
 	 * @param tableName
 	 * @param portal
 	 */
-	private void loadUsesRelationship(Element element, String tableName, UsesRelationship item) {
+	private void loadUsesRelationship(final Element element, final String tableName, final UsesRelationship item) {
 		if (element == null) {
 			return;
 		}
@@ -441,28 +441,27 @@ public class Document {
 			return;
 		}
 
-		final String relationship_name = element.getAttribute(ATTRIBUTE_RELATIONSHIP_NAME);
+		final String relationshipName = element.getAttribute(ATTRIBUTE_RELATIONSHIP_NAME);
 		Relationship relationship = null;
-		if (!StringUtils.isEmpty(relationship_name)) {
-			// std::cout << "  debug in : table_name=" << table_name << ", relationship_name=" << relationship_name <<
+		if (!StringUtils.isEmpty(relationshipName)) {
+			// std::cout << "  debug in : tableName=" << tableName << ", relationshipName=" << relationship_name <<
 			// std::endl;
-			relationship = getRelationship(tableName, relationship_name);
+			relationship = getRelationship(tableName, relationshipName);
 			item.setRelationship(relationship);
 
 			if (relationship == null) {
-				Log.error("relationship not found: " + relationship_name + ", in table: " + tableName);
+				Log.error("relationship not found: " + relationshipName + ", in table: " + tableName);
 			}
 		}
 
-		final String related_relationship_name = element.getAttribute(ATTRIBUTE_RELATED_RELATIONSHIP_NAME);
-		if (!StringUtils.isEmpty(related_relationship_name) && (relationship != null)) {
-			final Relationship related_relationship = getRelationship(relationship.get_to_table(),
-					related_relationship_name);
-			if (related_relationship == null) {
-				Log.error("related relationship not found in table=" + relationship.get_to_table() + ",  name="
-						+ related_relationship_name);
+		final String relatedRelationshipName = element.getAttribute(ATTRIBUTE_RELATED_RELATIONSHIP_NAME);
+		if (!StringUtils.isEmpty(relatedRelationshipName) && (relationship != null)) {
+			final Relationship relatedRelationship = getRelationship(relationship.getToTable(), relatedRelationshipName);
+			if (relatedRelationship == null) {
+				Log.error("related relationship not found in table=" + relationship.getToTable() + ",  name="
+						+ relatedRelationshipName);
 
-				item.setRelatedRelationship(related_relationship);
+				item.setRelatedRelationship(relatedRelationship);
 			}
 		}
 	}
@@ -475,9 +474,9 @@ public class Document {
 	 * @return
 	 */
 	private List<Node> getChildrenByTagName(final Element parentNode, final String tagName) {
-		List<Node> result = new ArrayList<Node>();
+		final List<Node> result = new ArrayList<Node>();
 
-		NodeList list = parentNode.getElementsByTagName(tagName);
+		final NodeList list = parentNode.getElementsByTagName(tagName);
 		final int num = list.getLength();
 		for (int i = 0; i < num; i++) {
 			final Node node = list.item(i);
@@ -498,7 +497,7 @@ public class Document {
 	 * @param element
 	 * @param group
 	 */
-	private void loadDataLayoutGroup(Element nodeGroup, LayoutGroup group, final String tableName) {
+	private void loadDataLayoutGroup(final Element nodeGroup, final LayoutGroup group, final String tableName) {
 		loadTitle(nodeGroup, group);
 
 		final NodeList listNodes = nodeGroup.getChildNodes();
@@ -511,25 +510,25 @@ public class Document {
 			final Element element = (Element) node;
 			final String tagName = element.getTagName();
 			if (tagName == NODE_DATA_LAYOUT_GROUP) {
-				LayoutGroup childGroup = new LayoutGroup();
+				final LayoutGroup childGroup = new LayoutGroup();
 				loadDataLayoutGroup(element, childGroup, tableName);
-				group.add_item(childGroup);
+				group.addItem(childGroup);
 			} else if (tagName == NODE_DATA_LAYOUT_NOTEBOOK) {
-				LayoutItemNotebook childGroup = new LayoutItemNotebook();
+				final LayoutItemNotebook childGroup = new LayoutItemNotebook();
 				loadDataLayoutGroup(element, childGroup, tableName);
-				group.add_item(childGroup);
+				group.addItem(childGroup);
 			} else if (tagName == NODE_DATA_LAYOUT_PORTAL) {
-				LayoutItemPortal childGroup = new LayoutItemPortal();
+				final LayoutItemPortal childGroup = new LayoutItemPortal();
 				loadDataLayoutPortal(element, childGroup, tableName);
-				group.add_item(childGroup);
+				group.addItem(childGroup);
 			} else if (element.getTagName() == NODE_DATA_LAYOUT_ITEM) {
 				final LayoutItemField item = new LayoutItemField();
 				loadDataLayoutItemField(element, item, tableName);
-				group.add_item(item);
+				group.addItem(item);
 			} else if (element.getTagName() == NODE_DATA_LAYOUT_ITEM_GROUPBY) {
 				final LayoutItemGroupBy item = new LayoutItemGroupBy();
 				loadDataLayoutItemGroupBy(element, item, tableName);
-				group.add_item(item);
+				group.addItem(item);
 			}
 		}
 	}
@@ -549,7 +548,7 @@ public class Document {
 
 		final LayoutItemField fieldGroupBy = new LayoutItemField();
 		loadDataLayoutItemField(elementGroupBy, fieldGroupBy, tableName);
-		item.set_field_group_by(fieldGroupBy);
+		item.setFieldGroupBy(fieldGroupBy);
 
 		final Element elementSecondaryFields = getElementByName(element, NODE_SECONDARY_FIELDS);
 		if (elementSecondaryFields == null) {
@@ -560,7 +559,7 @@ public class Document {
 		if (elementLayoutGroup != null) {
 			final LayoutGroup secondaryLayoutGroup = new LayoutGroup();
 			loadDataLayoutGroup(elementLayoutGroup, secondaryLayoutGroup, tableName);
-			item.set_secondary_fields(secondaryLayoutGroup);
+			item.setSecondaryFields(secondaryLayoutGroup);
 		}
 	}
 
@@ -573,10 +572,10 @@ public class Document {
 		loadUsesRelationship(element, tableName, item);
 
 		// Get the actual field:
-		final String fieldName = item.get_name();
-		final String inTableName = item.get_table_used(tableName);
-		final Field field = get_field(inTableName, fieldName);
-		item.set_full_field_details(field);
+		final String fieldName = item.getName();
+		final String inTableName = item.getTableUsed(tableName);
+		final Field field = getField(inTableName, fieldName);
+		item.setFullFieldDetails(field);
 
 		item.setUseDefaultFormatting(getAttributeAsBoolean(element, ATTRIBUTE_USE_DEFAULT_FORMATTING));
 
@@ -590,24 +589,24 @@ public class Document {
 	 * @param element
 	 * @param childGroup
 	 */
-	private void loadDataLayoutPortal(Element element, LayoutItemPortal portal, final String tableName) {
+	private void loadDataLayoutPortal(final Element element, final LayoutItemPortal portal, final String tableName) {
 		loadUsesRelationship(element, tableName, portal);
-		final String relatedTableName = portal.get_table_used(tableName);
+		final String relatedTableName = portal.getTableUsed(tableName);
 		loadDataLayoutGroup(element, portal, relatedTableName);
 
 		final Element elementNavigation = getElementByName(element, NODE_DATA_LAYOUT_PORTAL_NAVIGATIONRELATIONSHIP);
 		if (elementNavigation != null) {
-			final String navigation_type_as_string = elementNavigation.getAttribute(ATTRIBUTE_PORTAL_NAVIGATION_TYPE);
-			if (StringUtils.isEmpty(navigation_type_as_string)
-					|| navigation_type_as_string == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC) {
+			final String navigationTypeAsString = elementNavigation.getAttribute(ATTRIBUTE_PORTAL_NAVIGATION_TYPE);
+			if (StringUtils.isEmpty(navigationTypeAsString)
+					|| navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC) {
 				portal.setNavigationType(LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC);
-			} else if (navigation_type_as_string == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE) {
+			} else if (navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE) {
 				portal.setNavigationType(LayoutItemPortal.NavigationType.NAVIGATION_NONE);
-			} else if (navigation_type_as_string == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC) {
+			} else if (navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC) {
 				// Read the specified relationship name:
-				final UsesRelationship relationship_navigation_specific = new UsesRelationshipImpl();
-				loadUsesRelationship(elementNavigation, relatedTableName, relationship_navigation_specific);
-				portal.setNavigationRelationshipSpecific(relationship_navigation_specific);
+				final UsesRelationship relationshipNavigationSpecific = new UsesRelationshipImpl();
+				loadUsesRelationship(elementNavigation, relatedTableName, relationshipNavigationSpecific);
+				portal.setNavigationRelationshipSpecific(relationshipNavigationSpecific);
 			}
 		}
 
@@ -617,7 +616,7 @@ public class Document {
 	 * @param element
 	 * @param field
 	 */
-	private void loadField(Element element, Field field) {
+	private void loadField(final Element element, final Field field) {
 		loadTitle(element, field);
 
 		Field.GlomFieldType fieldType = Field.GlomFieldType.TYPE_INVALID;
@@ -638,9 +637,9 @@ public class Document {
 			}
 		}
 
-		field.set_glom_field_type(fieldType);
+		field.setGlomFieldType(fieldType);
 
-		field.set_primary_key(getAttributeAsBoolean(element, ATTRIBUTE_PRIMARY_KEY));
+		field.setPrimaryKey(getAttributeAsBoolean(element, ATTRIBUTE_PRIMARY_KEY));
 		loadTitle(element, field);
 
 		final Element elementFormatting = getElementByName(element, NODE_FORMATTING);
@@ -653,7 +652,7 @@ public class Document {
 	 * @param elementFormatting
 	 * @param formatting
 	 */
-	private void loadFormatting(Element elementFormatting, Formatting formatting) {
+	private void loadFormatting(final Element elementFormatting, final Formatting formatting) {
 		if (elementFormatting == null)
 			return;
 
@@ -675,8 +674,8 @@ public class Document {
 	 * @param element
 	 * @param reportNode
 	 */
-	private void loadReport(Element element, Report report, final String tableName) {
-		report.set_name(element.getAttribute(ATTRIBUTE_NAME));
+	private void loadReport(final Element element, final Report report, final String tableName) {
+		report.setName(element.getAttribute(ATTRIBUTE_NAME));
 		loadTitle(element, report);
 
 		final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName);
@@ -689,7 +688,7 @@ public class Document {
 			layoutGroup = listLayoutGroups.get(0);
 		}
 
-		report.set_layout_group(layoutGroup);
+		report.setLayoutGroup(layoutGroup);
 	}
 
 	private TableInfo getTableInfo(final String tableName) {
@@ -700,40 +699,40 @@ public class Document {
 		HOSTING_MODE_POSTGRES_CENTRAL, HOSTING_MODE_POSTGRES_SELF, HOSTING_MODE_SQLITE
 	};
 
-	public String get_database_title(final String locale) {
-		return databaseTitle.get_title(locale);
+	public String getDatabaseTitle(final String locale) {
+		return databaseTitle.getTitle(locale);
 	}
 
-	public String get_database_title_original() {
-		return databaseTitle.get_title_original();
+	public String getDatabaseTitleOriginal() {
+		return databaseTitle.getTitleOriginal();
 	}
 
-	public List<String> get_translation_available_locales() {
+	public List<String> getTranslationAvailableLocales() {
 		return translationAvailableLocales;
 	}
 
-	public Document.HostingMode get_hosting_mode() {
+	public Document.HostingMode getHostingMode() {
 		return HostingMode.HOSTING_MODE_POSTGRES_CENTRAL; // TODO
 	}
 
-	public String get_connection_server() {
+	public String getConnectionServer() {
 		return connectionServer;
 	}
 
-	public long get_connection_port() {
+	public long getConnectionPort() {
 		return connectionPort;
 	}
 
-	public String get_connection_database() {
+	public String getConnectionDatabase() {
 		return connectionDatabase;
 	}
 
-	public List<String> get_table_names() {
+	public List<String> getTableNames() {
 		// TODO: Return a Set?
 		return new ArrayList<String>(tablesMap.keySet());
 	}
 
-	public boolean get_table_is_hidden(final String tableName) {
+	public boolean getTableIsHidden(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
 			return false;
@@ -742,26 +741,26 @@ public class Document {
 		return info.isHidden;
 	}
 
-	public String get_table_title(final String tableName, final String locale) {
+	public String getTableTitle(final String tableName, final String locale) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
 			return "";
 		}
 
-		return info.get_title(locale);
+		return info.getTitle(locale);
 	}
 
-	public String get_default_table() {
+	public String getDefaultTable() {
 		for (final TableInfo info : tablesMap.values()) {
 			if (info.isDefault) {
-				return info.get_name();
+				return info.getName();
 			}
 		}
 
 		return "";
 	}
 
-	public boolean get_table_is_known(String tableName) {
+	public boolean getTableIsKnown(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
 			return false;
@@ -770,7 +769,7 @@ public class Document {
 		return true;
 	}
 
-	public List<Field> get_table_fields(final String tableName) {
+	public List<Field> getTableFields(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null)
 			return null;
@@ -778,7 +777,7 @@ public class Document {
 		return new ArrayList<Field>(info.fieldsMap.values());
 	}
 
-	public Field get_field(String tableName, String strFieldName) {
+	public Field getField(final String tableName, final String strFieldName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null)
 			return null;
@@ -786,7 +785,7 @@ public class Document {
 		return info.fieldsMap.get(strFieldName);
 	}
 
-	public List<LayoutGroup> get_data_layout_groups(String layoutName, String parentTableName) {
+	public List<LayoutGroup> getDataLayoutGroups(final String layoutName, final String parentTableName) {
 		final TableInfo info = getTableInfo(parentTableName);
 		if (info == null)
 			return new ArrayList<LayoutGroup>();
@@ -800,7 +799,7 @@ public class Document {
 		}
 	}
 
-	public List<String> get_report_names(String tableName) {
+	public List<String> getReportNames(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null)
 			return new ArrayList<String>();
@@ -808,7 +807,7 @@ public class Document {
 		return new ArrayList<String>(info.reportsMap.keySet());
 	}
 
-	public Report get_report(String tableName, String reportName) {
+	public Report getReport(final String tableName, final String reportName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null)
 			return null;
@@ -817,41 +816,41 @@ public class Document {
 	}
 
 	/**
-	 * @param parent_table_name
+	 * @param tableName
 	 * @param field
 	 * @return
 	 */
-	public Relationship getFieldUsedInRelationshipToOne(String table_name, LayoutItemField layout_field) {
+	public Relationship getFieldUsedInRelationshipToOne(final String tableName, final LayoutItemField layoutField) {
 
-		if (layout_field == null) {
-			Log.error("layout_field was null");
+		if (layoutField == null) {
+			Log.error("layoutField was null");
 			return null;
 		}
 
 		Relationship result = null;
 
-		final String table_used = layout_field.get_table_used(table_name);
-		final TableInfo info = getTableInfo(table_used);
+		final String tableUsed = layoutField.getTableUsed(tableName);
+		final TableInfo info = getTableInfo(tableUsed);
 		if (info == null) {
 			// This table is special. We would not create a relationship to it using a field:
-			// if(table_used == GLOM_STANDARD_TABLE_PREFS_TABLE_NAME)
+			// if(tableUsed == GLOM_STANDARD_TABLE_PREFS_TABLE_NAME)
 			// return result;
 
-			Log.error("table not found: " + table_used);
+			Log.error("table not found: " + tableUsed);
 			return null;
 		}
 
 		// Look at each relationship:
-		final String field_name = layout_field.get_name();
-		for (Relationship relationship : info.relationshipsMap.values()) {
+		final String fieldName = layoutField.getName();
+		for (final Relationship relationship : info.relationshipsMap.values()) {
 			if (relationship != null) {
 				// If the relationship uses the field
-				if (relationship.get_from_field() == field_name) {
+				if (relationship.getFromField() == fieldName) {
 					// if the to_table is not hidden:
-					if (!get_table_is_hidden(relationship.get_to_table())) {
+					if (!getTableIsHidden(relationship.getToTable())) {
 						// TODO_Performance: The use of this convenience method means we get the full relationship
 						// information again:
-						if (getRelationshipIsToOne(table_name, relationship.get_name())) {
+						if (getRelationshipIsToOne(tableName, relationship.getName())) {
 							result = relationship;
 						}
 					}
@@ -863,16 +862,16 @@ public class Document {
 	}
 
 	/**
-	 * @param table_name
-	 * @param get_name
+	 * @param tableName
+	 * @param relationshipName
 	 * @return
 	 */
-	private boolean getRelationshipIsToOne(String table_name, String relationship_name) {
-		final Relationship relationship = getRelationship(table_name, relationship_name);
+	private boolean getRelationshipIsToOne(final String tableName, final String relationshipName) {
+		final Relationship relationship = getRelationship(tableName, relationshipName);
 		if (relationship != null) {
-			final Field field_to = get_field(relationship.get_to_table(), relationship.get_to_field());
-			if (field_to != null) {
-				return (field_to.get_primary_key() || field_to.getUniqueKey());
+			final Field fieldTo = getField(relationship.getToTable(), relationship.getToField());
+			if (fieldTo != null) {
+				return (fieldTo.getPrimaryKey() || fieldTo.getUniqueKey());
 			}
 		}
 
@@ -880,17 +879,17 @@ public class Document {
 	}
 
 	/**
-	 * @param table_name
-	 * @param relationship_name
+	 * @param tableName
+	 * @param relationshipName
 	 * @return
 	 */
-	private Relationship getRelationship(String table_name, String relationship_name) {
-		final TableInfo info = getTableInfo(table_name);
+	private Relationship getRelationship(final String tableName, final String relationshipName) {
+		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
-			Log.error("table not found: " + table_name);
+			Log.error("table not found: " + tableName);
 			return null;
 		}
 
-		return info.relationshipsMap.get(relationship_name);
+		return info.relationshipsMap.get(relationshipName);
 	}
 }

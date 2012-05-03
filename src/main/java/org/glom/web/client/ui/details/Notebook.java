@@ -59,7 +59,7 @@ public class Notebook extends Group {
 		TabLayoutPanel tabPanel = new TabLayoutPanel(tabBarHeight, Unit.PX);
 
 		int maxChildHeight = 0;
-		for (LayoutItem layoutItem : layoutItemNotebook.get_items()) {
+		for (LayoutItem layoutItem : layoutItemNotebook.getItems()) {
 			if (!(layoutItem instanceof LayoutGroup))
 				// Ignore non-LayoutGroup items. This is what Glom 1.18 does.
 				continue;
@@ -74,7 +74,7 @@ public class Notebook extends Group {
 
 			// Use the name if the title is empty. This avoids having tabs with empty labels.
 			tabPanel.add(child,
-					StringUtils.isEmpty(layoutItem.get_title()) ? layoutItem.get_name() : layoutItem.get_title());
+					StringUtils.isEmpty(layoutItem.getTitle()) ? layoutItem.getName() : layoutItem.getTitle());
 		}
 
 		// Set the first tab as the default tab.
