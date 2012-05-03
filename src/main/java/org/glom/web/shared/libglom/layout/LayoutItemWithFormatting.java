@@ -14,6 +14,7 @@ public class LayoutItemWithFormatting extends LayoutItem {
 		this.formatting = formatting;
 	}
 	
+	@Override
 	public Object clone() {
 		LayoutItemWithFormatting result = (LayoutItemWithFormatting)super.clone();
 

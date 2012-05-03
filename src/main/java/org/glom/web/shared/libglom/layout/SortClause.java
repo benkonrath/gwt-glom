@@ -14,6 +14,7 @@ public class SortClause extends ArrayList<SortClause.SortField> {
 			this.ascending = ascending;
 		}
 		
+		@Override
 		public Object clone() {
 			SortField result;
 			try {
@@ -33,6 +34,7 @@ public class SortClause extends ArrayList<SortClause.SortField> {
 		public boolean ascending;
 	}
 	
+	@Override
 	public Object clone() {
 		SortClause result = (SortClause)super.clone();
 

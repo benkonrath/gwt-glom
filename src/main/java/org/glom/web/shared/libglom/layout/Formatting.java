@@ -94,6 +94,7 @@ public class Formatting implements Cloneable {
 			this.numericFormat = numericFormat;
 		}
 		
+		@Override
 		public Object clone() {
 			Formatting result = null;
 			try {

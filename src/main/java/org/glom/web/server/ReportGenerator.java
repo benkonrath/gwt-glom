@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -205,8 +206,8 @@ public class ReportGenerator {
 		// JasperExportManager.exportReportToXmlStream(print, output);
 		try {
 			final JRXhtmlExporter exporter = new JRXhtmlExporter();
-			exporter.setParameter(JRHtmlExporterParameter.JASPER_PRINT, print);
-			exporter.setParameter(JRHtmlExporterParameter.OUTPUT_STREAM, output);
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
 
 			// Use points instead of pixels for sizes, because pixels are silly
 			// in HTML:
@@ -546,7 +547,7 @@ public class ReportGenerator {
 			final NumericFormat numericFormat = formatting.getNumericFormat();
 
 			final DecimalFormat format = new DecimalFormat();
-			format.setMaximumFractionDigits((int) numericFormat.getDecimalPlaces());
+			format.setMaximumFractionDigits(numericFormat.getDecimalPlaces());
 			format.setGroupingUsed(numericFormat.getUseThousandsSeparator());
 
 			// TODO: Use numericFormat.get_currency_symbol(), possibly via format.setCurrency().

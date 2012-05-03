@@ -11,6 +11,7 @@ public class Translatable implements Serializable, Cloneable {
 	
 	//TODO: Use Hashmap everywhere instead?
 	public static class TranslationsMap extends Hashtable<String, String> {
+		@Override
 		public Object clone() {
 			TranslationsMap result = (TranslationsMap)super.clone();
 			    
@@ -92,6 +93,7 @@ public class Translatable implements Serializable, Cloneable {
 	
 	/** @override
 	 */
+	@Override
 	public Object clone() {
 		Translatable result = null;
 		try {

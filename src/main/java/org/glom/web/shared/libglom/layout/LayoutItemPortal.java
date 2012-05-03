@@ -335,6 +335,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 		this.addNavigation = addNavigation;
 	}
 
+	@Override
 	public Object clone() {
 		LayoutItemPortal result = (LayoutItemPortal)super.clone();
 

@@ -49,6 +49,7 @@ public class LayoutItemGroupBy extends LayoutGroup {
 		this.secondaryFields = secondaryFields;
 	}
 	
+	@Override
 	public Object clone() {
 		LayoutItemGroupBy result = (LayoutItemGroupBy)super.clone();
 

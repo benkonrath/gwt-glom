@@ -7,6 +7,7 @@ import java.util.List;
 public class LayoutGroup extends LayoutItem {
 
 	private class LayoutItemList extends ArrayList<LayoutItem> {
+		@Override
 		public Object clone() {
 			LayoutItemList result = (LayoutItemList)super.clone();
 			    
@@ -92,6 +93,7 @@ public class LayoutGroup extends LayoutItem {
 
 	}
 
+	@Override
 	public Object clone() {
 		LayoutGroup result = (LayoutGroup)super.clone();
 

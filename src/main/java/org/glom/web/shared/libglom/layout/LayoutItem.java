@@ -13,6 +13,7 @@ public class LayoutItem extends Translatable {
 		return null;
 	}
 	
+	@Override
 	public Object clone() {
 		LayoutItem result = (LayoutItem)super.clone();
 

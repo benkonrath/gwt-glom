@@ -181,6 +181,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 		return null;
 	}
 	
+	@Override
 	public Object clone() {
 		LayoutItemField result = (LayoutItemField)super.clone();
 

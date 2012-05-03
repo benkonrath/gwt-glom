@@ -54,6 +54,7 @@ public class Relationship extends Translatable {
 		return fromField;
 	}
 
+	@Override
 	public Relationship clone() {
 		Relationship result = (Relationship)super.clone();
 

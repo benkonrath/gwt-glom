@@ -14,6 +14,7 @@ public class Report extends Translatable {
 		return layoutGroup;
 	}
 	
+	@Override
 	public Object clone() {
 		Report result = (Report)super.clone();
 

@@ -7,6 +7,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	private Relationship relationship;
 	private Relationship relatedRelationship;
 
+	@Override
 	public void setRelationship(final Relationship relationship) {
 		this.relationship = relationship;
 	}
@@ -14,18 +15,22 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	/**
 	 * @param get_related_relationship
 	 */
+	@Override
 	public void setRelatedRelationship(final Relationship relationship) {
 		this.relatedRelationship = relationship;
 	}
 
+	@Override
 	public Relationship getRelationship() {
 		return relationship;
 	}
 
+	@Override
 	public Relationship getRelatedRelationship() {
 		return relatedRelationship;
 	}
 
+	@Override
 	public boolean getHasRelationshipName() {
 		if (relationship == null) {
 			return false;
@@ -38,6 +43,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 		return true;
 	}
 
+	@Override
 	public boolean getHasRelatedRelationshipName() {
 		if (relatedRelationship == null) {
 			return false;
@@ -50,6 +56,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 		return true;
 	}
 
+	@Override
 	public String get_sql_join_alias_name() {
 		String result = "";
 
@@ -189,6 +196,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			return parent_table;
 	}
 	
+	@Override
 	public UsesRelationshipImpl clone() {
 		UsesRelationshipImpl result;
 		try {
@@ -198,8 +206,8 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			 return null;
 		}
 
-		result.relationship = (Relationship)this.relationship.clone();
-		result.relatedRelationship = (Relationship)this.relatedRelationship.clone();
+		result.relationship = this.relationship.clone();
+		result.relatedRelationship = this.relatedRelationship.clone();
 
 		return result;
 	}

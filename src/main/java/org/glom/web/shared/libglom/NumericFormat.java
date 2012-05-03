@@ -78,6 +78,7 @@ public class NumericFormat implements Cloneable {
 		this.useAltForegroundColorForNegatives = useAltForegroundColorForNegatives;
 	}
 	
+	@Override
 	public Object clone() {
 		NumericFormat result = null;
 		try {

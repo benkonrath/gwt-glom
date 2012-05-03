@@ -56,6 +56,7 @@ public class Field extends Translatable {
 		this.glom_field_type = fieldType;
 	}
 	
+	@Override
 	public Object clone() {
 		final Field result = (Field)super.clone();
 		result.glom_field_type = this.glom_field_type;
