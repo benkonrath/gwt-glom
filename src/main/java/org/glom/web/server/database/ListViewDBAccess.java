@@ -25,9 +25,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.SqlUtils;
+import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemField;

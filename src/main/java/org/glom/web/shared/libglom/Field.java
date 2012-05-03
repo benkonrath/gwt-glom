@@ -25,7 +25,7 @@ public class Field extends Translatable {
 	 * @param formatting
 	 *            the formatting to set
 	 */
-	public void setFormatting(Formatting formatting) {
+	public void setFormatting(final Formatting formatting) {
 		this.formatting = formatting;
 	}
 
@@ -36,7 +36,7 @@ public class Field extends Translatable {
 		return primaryKey;
 	};
 
-	public void setPrimaryKey(boolean primaryKey) {
+	public void setPrimaryKey(final boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
 
@@ -47,7 +47,7 @@ public class Field extends Translatable {
 		return glomFieldType;
 	}
 
-	void setGlomFieldType(GlomFieldType fieldType) {
+	public void setGlomFieldType(final GlomFieldType fieldType) {
 		this.glomFieldType = fieldType;
 	}
 

@@ -50,8 +50,8 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXhtmlExporter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.TypedDataItem;
-import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Report;

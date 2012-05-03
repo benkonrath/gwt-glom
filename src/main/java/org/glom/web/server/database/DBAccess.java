@@ -30,8 +30,8 @@ import java.util.Locale;
 
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
+import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
-import org.glom.web.shared.libglom.Document;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;

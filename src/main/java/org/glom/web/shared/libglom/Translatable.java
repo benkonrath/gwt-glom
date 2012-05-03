@@ -109,4 +109,17 @@ public class Translatable implements Serializable, Cloneable {
 		result.translationsMap = (TranslationsMap) this.translationsMap.clone();
 		return result;
 	}
+
+	/**
+	 * @param translatedTitle
+	 * @param locale
+	 */
+	public void setTitle(final String title, final String locale) {
+		if (StringUtils.isEmpty(locale)) {
+			setTitleOriginal(title);
+			return;
+		}
+
+		translationsMap.put(locale, title);
+	}
 }

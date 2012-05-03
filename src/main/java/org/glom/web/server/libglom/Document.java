@@ -17,7 +17,7 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.shared.libglom;
+package org.glom.web.server.libglom;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +29,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.NumericFormat;
+import org.glom.web.shared.libglom.Relationship;
+import org.glom.web.shared.libglom.Report;
+import org.glom.web.shared.libglom.Translatable;
 import org.glom.web.shared.libglom.layout.Formatting;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
@@ -273,7 +278,7 @@ public class Document {
 			final String locale = element.getAttribute(ATTRIBUTE_TRANSLATION_LOCALE);
 			final String translatedTitle = element.getAttribute(ATTRIBUTE_TRANSLATION_TITLE);
 			if (!StringUtils.isEmpty(locale) && !StringUtils.isEmpty(translatedTitle)) {
-				title.translationsMap.put(locale, translatedTitle);
+				title.setTitle(translatedTitle, locale);
 			}
 		}
 	}

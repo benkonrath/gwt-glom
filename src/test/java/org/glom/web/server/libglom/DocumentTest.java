@@ -17,7 +17,7 @@
  * along with Java-libglom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.shared.libglom;
+package org.glom.web.server.libglom;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +27,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.NumericFormat;
+import org.glom.web.shared.libglom.Relationship;
+import org.glom.web.shared.libglom.Report;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;

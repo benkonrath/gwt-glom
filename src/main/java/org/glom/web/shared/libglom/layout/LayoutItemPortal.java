@@ -3,7 +3,7 @@ package org.glom.web.shared.libglom.layout;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.glom.web.shared.libglom.Document;
+import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.libglom.Relationship;
 import org.jfree.util.Log;
 
