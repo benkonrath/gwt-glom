@@ -294,8 +294,7 @@ public class DocumentTest {
 		assertEquals(portal.getRelationshipNameUsed(), "scene_cast");
 
 		// call getSuitableTableToCiewDetails
-		final LayoutItemPortal.TableToViewDetails viewDetails = portal
-				.getSuitableTableToViewDetails(filmManagerDocument);
+		final Document.TableToViewDetails viewDetails = filmManagerDocument.getPortalSuitableTableToViewDetails(portal);
 		assertTrue(viewDetails != null);
 
 		// Simulate a garbage collection

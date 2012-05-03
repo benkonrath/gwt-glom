@@ -419,8 +419,8 @@ final class ConfiguredDocument {
 
 			// Set whether or not the related list will need to show the navigation buttons.
 			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
-			final LayoutItemPortal.TableToViewDetails viewDetails = layoutItemPortal
-					.getSuitableTableToViewDetails(document);
+			final Document.TableToViewDetails viewDetails = document
+					.getPortalSuitableTableToViewDetails(layoutItemPortal);
 			boolean addNavigation = false;
 			if (viewDetails != null) {
 				addNavigation = !StringUtils.isEmpty(viewDetails.tableName);

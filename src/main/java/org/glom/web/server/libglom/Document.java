@@ -36,9 +36,11 @@ import org.glom.web.shared.libglom.Report;
 import org.glom.web.shared.libglom.Translatable;
 import org.glom.web.shared.libglom.layout.Formatting;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal.NavigationType;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
@@ -896,5 +898,178 @@ public class Document {
 		}
 
 		return info.relationshipsMap.get(relationshipName);
+	}
+
+	public class TableToViewDetails {
+		public String tableName;
+		public UsesRelationship usesRelationship;
+	}
+
+	private class FieldIdentifies {
+		public LayoutItemField field;
+		public Relationship usedInRelationShip;
+	}
+
+	/**
+	 * @param tableName
+	 *            Output parameter
+	 * @param relationship
+	 * @param portal
+	 *            TODO
+	 */
+	public TableToViewDetails getPortalSuitableTableToViewDetails(LayoutItemPortal portal) {
+		UsesRelationship navigationRelationship = null;
+
+		// Check whether a relationship was specified:
+		if (portal.getNavigationType() == NavigationType.NAVIGATION_AUTOMATIC) {
+			navigationRelationship = getPortalNavigationRelationshipAutomatic(portal);
+		} else {
+			navigationRelationship = portal.getNavigationRelationshipSpecific();
+		}
+
+		// Get the navigation table name from the chosen relationship:
+		String directlyRelatedTableName = portal.getTableUsed("" /* not relevant */);
+
+		// The navigation_table_name (and therefore, the table_name output parameter,
+		// as well) stays empty if the navrel type was set to none.
+		String navigationTableName = null;
+		if (navigationRelationship != null) {
+			navigationTableName = navigationRelationship.getTableUsed(directlyRelatedTableName);
+		} else if (portal.getNavigationType() != NavigationType.NAVIGATION_NONE) {
+			// An empty result from get_portal_navigation_relationship_automatic() or
+			// get_navigation_relationship_specific() means we should use the directly related table:
+			navigationTableName = directlyRelatedTableName;
+		}
+
+		if (StringUtils.isEmpty(navigationTableName)) {
+			return null;
+		}
+
+		if (this == null) {
+			Log.error("document is null.");
+			return null;
+		}
+
+		if (getTableIsHidden(navigationTableName)) {
+			Log.error("navigation_table_name indicates a hidden table: " + navigationTableName);
+			return null;
+		}
+
+		TableToViewDetails result = new TableToViewDetails();
+		result.tableName = navigationTableName;
+		result.usesRelationship = navigationRelationship;
+		return result;
+	}
+
+	/**
+	 * @param portal
+	 *            TODO
+	 * @return
+	 */
+	private UsesRelationship getPortalNavigationRelationshipAutomatic(LayoutItemPortal portal) {
+		if (this == null) {
+			return null;
+		}
+
+		// If the related table is not hidden then we can just navigate to that:
+		final String direct_related_table_name = portal.getTableUsed("" /* parent table - not relevant */);
+		if (!getTableIsHidden(direct_related_table_name)) {
+			// Non-hidden tables can just be shown directly. Navigate to it:
+			return null;
+		} else {
+			// If the related table is hidden,
+			// then find a suitable related non-hidden table by finding the first layout field that mentions one:
+			final LayoutItemField field = getPortalFieldIsFromNonHiddenRelatedRecord(portal);
+			if (field != null) {
+				return field; // Returns the UsesRelationship base part. (A relationship belonging to the portal's
+								// related table.)
+			} else {
+				// Instead, find a key field that's used in a relationship,
+				// and pretend that we are showing the to field as a related field:
+				final FieldIdentifies fieldIndentifies = getPortalFieldIdentifiesNonHiddenRelatedRecord(portal);
+				if (fieldIndentifies != null) {
+					if (fieldIndentifies.usedInRelationShip != null) {
+						UsesRelationship result = new UsesRelationshipImpl();
+						result.setRelationship(fieldIndentifies.usedInRelationShip);
+						return result;
+					}
+				}
+			}
+		}
+
+		// There was no suitable related table to show:
+		return null;
+	}
+
+	/**
+	 * @param portal
+	 *            TODO
+	 * @return
+	 */
+	private LayoutItemField getPortalFieldIsFromNonHiddenRelatedRecord(LayoutItemPortal portal) {
+		// Find the first field that is from a non-hidden related table.
+
+		if (this == null) {
+			return null;
+		}
+
+		LayoutItemField result = null;
+
+		final String parent_table_name = portal.getTableUsed("" /* parent table - not relevant */);
+
+		final List<LayoutItem> items = portal.getItems();
+		for (LayoutItem item : items) {
+			if (item instanceof LayoutItemField) {
+				LayoutItemField field = (LayoutItemField) item;
+				if (field.getHasRelationshipName()) {
+					final String table_name = field.getTableUsed(parent_table_name);
+					if (!(getTableIsHidden(table_name)))
+						return field;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param used_in_relationship
+	 * @param portal
+	 *            TODO
+	 * @return
+	 */
+	private FieldIdentifies getPortalFieldIdentifiesNonHiddenRelatedRecord(LayoutItemPortal portal) {
+		// Find the first field that is from a non-hidden related table.
+
+		if (this == null) {
+			Log.error("document is null");
+			return null;
+		}
+
+		final String parent_table_name = portal.getTableUsed("" /* parent table - not relevant */);
+
+		List<LayoutItem> items = portal.getItems();
+		for (LayoutItem item : items) {
+			if (item instanceof LayoutItemField) {
+				LayoutItemField field = (LayoutItemField) item;
+				if (field.getHasRelationshipName()) {
+					final Relationship relationship = getFieldUsedInRelationshipToOne(parent_table_name, field);
+					if (relationship != null) {
+						final String table_name = relationship.getToTable();
+						if (!StringUtils.isEmpty(table_name)) {
+							if (!(getTableIsHidden(table_name))) {
+
+								FieldIdentifies result = new FieldIdentifies();
+								result.field = field;
+								result.usedInRelationShip = relationship;
+								return result;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 }

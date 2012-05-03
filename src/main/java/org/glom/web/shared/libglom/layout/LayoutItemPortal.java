@@ -1,11 +1,6 @@
 package org.glom.web.shared.libglom.layout;
 
-import java.util.List;
-
-import org.glom.web.client.StringUtils;
-import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.libglom.Relationship;
-import org.jfree.util.Log;
 
 @SuppressWarnings("serial")
 public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
@@ -141,61 +136,6 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 		this.navigationType = navigationType;
 	}
 
-	public class TableToViewDetails {
-		public String tableName;
-		public UsesRelationship usesRelationship;
-	};
-
-	/**
-	 * @param tableName
-	 *            Output parameter
-	 * @param relationship
-	 * @param document
-	 */
-	public TableToViewDetails getSuitableTableToViewDetails(final Document document) {
-		UsesRelationship navigationRelationship = null;
-
-		// Check whether a relationship was specified:
-		if (getNavigationType() == NavigationType.NAVIGATION_AUTOMATIC) {
-			navigationRelationship = getPortalNavigationRelationshipAutomatic(document);
-		} else {
-			navigationRelationship = getNavigationRelationshipSpecific();
-		}
-
-		// Get the navigation table name from the chosen relationship:
-		String directlyRelatedTableName = getTableUsed("" /* not relevant */);
-
-		// The navigation_table_name (and therefore, the table_name output parameter,
-		// as well) stays empty if the navrel type was set to none.
-		String navigationTableName = null;
-		if (navigationRelationship != null) {
-			navigationTableName = navigationRelationship.getTableUsed(directlyRelatedTableName);
-		} else if (getNavigationType() != NavigationType.NAVIGATION_NONE) {
-			// An empty result from get_portal_navigation_relationship_automatic() or
-			// get_navigation_relationship_specific() means we should use the directly related table:
-			navigationTableName = directlyRelatedTableName;
-		}
-
-		if (StringUtils.isEmpty(navigationTableName)) {
-			return null;
-		}
-
-		if (document == null) {
-			Log.error("document is null.");
-			return null;
-		}
-
-		if (document.getTableIsHidden(navigationTableName)) {
-			Log.error("navigation_table_name indicates a hidden table: " + navigationTableName);
-			return null;
-		}
-
-		TableToViewDetails result = new TableToViewDetails();
-		result.tableName = navigationTableName;
-		result.usesRelationship = navigationRelationship;
-		return result;
-	}
-
 	/**
 	 * @return
 	 */
@@ -212,121 +152,6 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	public void setNavigationRelationshipSpecific(UsesRelationship relationship) {
 		navigationRelationshipSpecific = relationship;
 		navigationType = NavigationType.NAVIGATION_SPECIFIC;
-	}
-
-	/**
-	 * @param document
-	 * @return
-	 */
-	private UsesRelationship getPortalNavigationRelationshipAutomatic(Document document) {
-		if (document == null) {
-			return null;
-		}
-
-		// If the related table is not hidden then we can just navigate to that:
-		final String direct_related_table_name = getTableUsed("" /* parent table - not relevant */);
-		if (!document.getTableIsHidden(direct_related_table_name)) {
-			// Non-hidden tables can just be shown directly. Navigate to it:
-			return null;
-		} else {
-			// If the related table is hidden,
-			// then find a suitable related non-hidden table by finding the first layout field that mentions one:
-			final LayoutItemField field = getFieldIsFromNonHiddenRelatedRecord(document);
-			if (field != null) {
-				return field; // Returns the UsesRelationship base part. (A relationship belonging to the portal's
-								// related table.)
-			} else {
-				// Instead, find a key field that's used in a relationship,
-				// and pretend that we are showing the to field as a related field:
-				final FieldIdentifies fieldIndentifies = get_field_identifies_non_hidden_related_record(document);
-				if (fieldIndentifies != null) {
-					if (fieldIndentifies.usedInRelationShip != null) {
-						UsesRelationship result = new UsesRelationshipImpl();
-						result.setRelationship(fieldIndentifies.usedInRelationShip);
-						return result;
-					}
-				}
-			}
-		}
-
-		// There was no suitable related table to show:
-		return null;
-	}
-
-	class FieldIdentifies {
-		public LayoutItemField field;
-		public Relationship usedInRelationShip;
-	}
-
-	/**
-	 * @param used_in_relationship
-	 * @param document
-	 * @return
-	 */
-	private FieldIdentifies get_field_identifies_non_hidden_related_record(Document document) {
-		// Find the first field that is from a non-hidden related table.
-
-		if (document == null) {
-			Log.error("document is null");
-			return null;
-		}
-
-		final String parent_table_name = getTableUsed("" /* parent table - not relevant */);
-
-		List<LayoutItem> items = getItems();
-		for (LayoutItem item : items) {
-			if (item instanceof LayoutItemField) {
-				LayoutItemField field = (LayoutItemField) item;
-				if (field.getHasRelationshipName()) {
-					final Relationship relationship = document
-							.getFieldUsedInRelationshipToOne(parent_table_name, field);
-					if (relationship != null) {
-						final String table_name = relationship.getToTable();
-						if (!StringUtils.isEmpty(table_name)) {
-							if (!(document.getTableIsHidden(table_name))) {
-
-								FieldIdentifies result = new FieldIdentifies();
-								result.field = field;
-								result.usedInRelationShip = relationship;
-								return result;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param document
-	 * @return
-	 */
-	private LayoutItemField getFieldIsFromNonHiddenRelatedRecord(Document document) {
-		// Find the first field that is from a non-hidden related table.
-
-		if (document == null) {
-			return null;
-		}
-
-		LayoutItemField result = null;
-
-		final String parent_table_name = getTableUsed("" /* parent table - not relevant */);
-
-		final List<LayoutItem> items = getItems();
-		for (LayoutItem item : items) {
-			if (item instanceof LayoutItemField) {
-				LayoutItemField field = (LayoutItemField) item;
-				if (field.getHasRelationshipName()) {
-					final String table_name = field.getTableUsed(parent_table_name);
-					if (!(document.getTableIsHidden(table_name)))
-						return field;
-				}
-			}
-		}
-
-		return result;
 	}
 
 	// TODO: Where is getAddNavigation?
