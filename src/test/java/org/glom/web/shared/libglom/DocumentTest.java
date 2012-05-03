@@ -370,6 +370,7 @@ public class DocumentTest {
 	// Test thread class that runs all the tests.
 	private class TestThread implements Runnable {
 
+		@Override
 		public void run() {
 			for (int i = 0; i < 20; i++) {
 				testDocumentInfo();
