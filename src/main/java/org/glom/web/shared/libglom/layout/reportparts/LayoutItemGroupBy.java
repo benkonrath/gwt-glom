@@ -1,6 +1,6 @@
 package org.glom.web.shared.libglom.layout.reportparts;
 
-import org.apache.commons.lang3.StringUtils;
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 

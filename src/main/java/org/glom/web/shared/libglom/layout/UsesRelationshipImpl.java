@@ -1,6 +1,6 @@
 package org.glom.web.shared.libglom.layout;
 
-import org.apache.commons.lang3.StringUtils;
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.Relationship;
 
 public class UsesRelationshipImpl implements UsesRelationship {
