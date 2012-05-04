@@ -91,9 +91,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * (non-Javadoc)
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
-	 * 
-	 * 
-	 * TODO: This causes NullPointerExceptions when used from contains().
+	 *
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -133,7 +131,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * We use this utility function because Relationship.equals() fails in the the generated SWIG C++ code with a
 	 * NullPointerException.
 	 */
-	public static boolean relationshipEquals(final Relationship a, final Relationship b) {
+	private static boolean relationshipEquals(final Relationship a, final Relationship b) {
 		if (a == null) {
 			if (b == null) {
 				return true;
@@ -146,14 +144,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			return false;
 		}
 
-		final String aName = a.getName();
-		final String bName = b.getName();
-
-		if (!StringUtils.equals(aName, bName)) { // TODO: And the rest.
-			return false;
-		}
-
-		return true;
+		return a.equals(b);
 	}
 
 	/*

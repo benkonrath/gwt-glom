@@ -80,4 +80,32 @@ public class Relationship extends Translatable {
 		toField = name;
 	}
 
+	public boolean equals(final Relationship b) {
+		if (b == null) {
+			return false;
+		}
+
+		if (!StringUtils.equals(this.getName(), b.getName())) {
+			return false;
+		}
+		
+		if (!StringUtils.equals(this.fromTable, b.fromTable)) {
+			return false;
+		}
+
+		if (!StringUtils.equals(this.fromField, b.fromField)) {
+			return false;
+		}
+
+		if (!StringUtils.equals(this.toTable, b.toTable)) {
+			return false;
+		}
+
+		if (!StringUtils.equals(this.toField, b.toField)) {
+			return false;
+		}
+
+		return true;
+	}
+
 }
