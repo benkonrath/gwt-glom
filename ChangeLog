@@ -1,5 +1,13 @@
 2012-05-04  Murray Cumming  <murrayc@murrayc.com>
 
+	Add GwtTestOnlineGlomService.
+
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlomService.java:
+	However, this (and the other GwtTest*) does not seem to run during 
+	mvn test. 
+
+2012-05-04  Murray Cumming  <murrayc@murrayc.com>
+
 	Remove use of unsupported features from client code.
 
 	* src/main/java/org/glom/web/client/StringUtils.java: Add equals().
