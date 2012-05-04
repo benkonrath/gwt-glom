@@ -200,6 +200,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * @return
 	 */
 	public String getNavigationTableName() {
+		//TODO: This was a cache set by ConfiguredDocument, but not set any longer.
 		// TODO Auto-generated method stub
 		return null;
 	}

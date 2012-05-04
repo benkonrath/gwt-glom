@@ -28,8 +28,7 @@ public class Relationship extends Translatable {
 	 * @return
 	 */
 	public boolean getHasFields() {
-		// TODO Auto-generated method stub
-		return false;
+		return !StringUtils.isEmpty(toField) && !StringUtils.isEmpty(toTable) && !StringUtils.isEmpty(fromField) && !StringUtils.isEmpty(fromTable);
 	}
 
 	/**

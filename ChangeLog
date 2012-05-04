@@ -1,5 +1,9 @@
 2012-05-04  Murray Cumming  <murrayc@murrayc.com>
 
+	libglom classes: Implement some auto-generated emthods.
+
+2012-05-04  Murray Cumming  <murrayc@murrayc.com>
+
 	Add GwtTestOnlineGlomService.
 
 	* src/test/java/org/glom/web/client/GwtTestOnlineGlomService.java:

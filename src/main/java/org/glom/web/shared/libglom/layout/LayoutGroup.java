@@ -6,6 +6,14 @@ import java.util.List;
 public class LayoutGroup extends LayoutItem {
 
 	private static final long serialVersionUID = 2795852472980010553L;
+	private int columnCount = 0;
+
+	/**
+	 * @param columnCount the columnCount to set
+	 */
+	public void setColumnCount(int columnCount) {
+		this.columnCount = columnCount;
+	}
 
 	private class LayoutItemList extends ArrayList<LayoutItem> {
 		private static final long serialVersionUID = 8610424318876440333L;
@@ -31,8 +39,7 @@ public class LayoutGroup extends LayoutItem {
 	 * @return
 	 */
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return columnCount;
 	}
 
 	/**

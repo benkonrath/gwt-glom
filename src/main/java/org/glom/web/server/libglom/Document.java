@@ -99,7 +99,7 @@ public class Document {
 	private static final String ATTRIBUTE_PRIMARY_KEY = "primary_key";
 	private static final String ATTRIBUTE_FIELD_TYPE = "type";
 	private static final String NODE_FORMATTING = "formatting";
-	private static final String ATTRIBUTE_TEXT_FORMAT_MULTILINE = "format_text_multiline";
+	//private static final String ATTRIBUTE_TEXT_FORMAT_MULTILINE = "format_text_multiline";
 	private static final String ATTRIBUTE_USE_THOUSANDS_SEPARATOR = "format_thousands_separator";
 	private static final String ATTRIBUTE_DECIMAL_PLACES = "format_decimal_places";
 	private static final String NODE_RELATIONSHIPS = "relationships";
@@ -111,6 +111,7 @@ public class Document {
 	private static final String NODE_DATA_LAYOUT = "data_layout";
 	private static final String NODE_DATA_LAYOUT_GROUPS = "data_layout_groups";
 	private static final String NODE_DATA_LAYOUT_GROUP = "data_layout_group";
+	private static final String ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT = "columns_count";
 	private static final String NODE_DATA_LAYOUT_NOTEBOOK = "data_layout_notebook";
 	private static final String NODE_DATA_LAYOUT_PORTAL = "data_layout_portal";
 	private static final String NODE_DATA_LAYOUT_PORTAL_NAVIGATIONRELATIONSHIP = "portal_navigation_relationship";
@@ -506,6 +507,8 @@ public class Document {
 	 */
 	private void loadDataLayoutGroup(final Element nodeGroup, final LayoutGroup group, final String tableName) {
 		loadTitle(nodeGroup, group);
+		
+		group.setColumnCount( getAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT));
 
 		final NodeList listNodes = nodeGroup.getChildNodes();
 		final int num = listNodes.getLength();
