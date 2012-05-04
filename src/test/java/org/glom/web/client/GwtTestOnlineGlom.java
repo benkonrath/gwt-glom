@@ -35,7 +35,7 @@ public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 
 	@Override
 	public String getModuleName() {
-		return "org.glom.web.OnlineGlom.OnlineGlom";
+		return "org.glom.web.OnlineGlom";
 	}
 
 	@Before
