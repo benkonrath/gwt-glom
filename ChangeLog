@@ -1,5 +1,13 @@
 2012-05-04  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument: Cache the cloned and stripped layouts.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	getValidListViewLayoutGroup(), .getDetailsLayoutGroup(): Store the cloned
+	layout in a map, so we can retrieve it again without rebuilding it.
+
+2012-05-04  Murray Cumming  <murrayc@murrayc.com>
+
 	UsesRelationshipImpl: Complete the relationshipEquals() implementation.
 
 2012-05-04  Murray Cumming  <murrayc@murrayc.com>

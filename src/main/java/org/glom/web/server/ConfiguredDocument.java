@@ -28,6 +28,7 @@ import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,6 +65,89 @@ final class ConfiguredDocument {
 	private boolean authenticated = false;
 	private String documentID = "";
 	private String defaultLocaleID = "";
+
+	private class LayoutLocaleMap extends Hashtable<String, List<LayoutGroup>> {
+		private static final long serialVersionUID = 6542501521673767267L;
+	};
+
+	private class TableLayouts {
+		public LayoutLocaleMap listLayouts;
+		public LayoutLocaleMap detailsLayouts;
+	}
+	
+	private class TableLayoutsForLocale extends Hashtable<String, TableLayouts> {
+		private static final long serialVersionUID = -1947929931925049013L;
+
+		public LayoutGroup getListLayout(final String tableName, final String locale) {
+			final List<LayoutGroup> groups = getLayout(tableName, locale, false);
+			if(groups == null) {
+				return null;
+			}
+			
+			if(groups.isEmpty()) {
+				return null;
+			}
+			
+			return groups.get(0);
+		}
+		
+		public List<LayoutGroup> getDetailsLayout(final String tableName, final String locale) {
+			return getLayout(tableName, locale, true);
+		}
+		
+		public void setListLayout(final String tableName, final String locale, LayoutGroup layout) {
+			List<LayoutGroup> list = new ArrayList<LayoutGroup>();
+			list.add(layout);
+			setLayout(tableName, locale, list, false);
+		}
+
+		public void setDetailsLayout(final String tableName, final String locale, final List<LayoutGroup> layout) {
+			setLayout(tableName, locale, layout, true);
+		}
+		
+		private List<LayoutGroup> getLayout(final String tableName, final String locale, boolean details) {
+			LayoutLocaleMap map = getMap(tableName, details);
+			
+			if(map == null) {
+				return null;
+			}
+			
+			return map.get(locale);
+		}
+
+		private LayoutLocaleMap getMap(final String tableName, boolean details) {
+			final TableLayouts tableLayouts = get(tableName);
+			if(tableLayouts == null) {
+				return null;
+			}
+			
+			LayoutLocaleMap map = null;
+			if(details) {
+				map = tableLayouts.detailsLayouts;
+			} else {
+				map = tableLayouts.listLayouts;
+			}
+
+			return map;
+		}
+		
+		private LayoutLocaleMap getMapWithAdd(final String tableName, boolean details) {
+			TableLayouts tableLayouts = get(tableName);
+			if(tableLayouts == null) {
+				tableLayouts = new TableLayouts();
+				put(tableName, tableLayouts);
+			}
+			
+			return getMap(tableName, details);
+		}
+		
+		private void setLayout(final String tableName, final String locale, final List<LayoutGroup> layout, boolean details) {
+			LayoutLocaleMap map = getMapWithAdd(tableName, details);
+			map.put(locale, layout);
+		}
+	}
+	
+	private TableLayoutsForLocale mapTableLayouts = new TableLayoutsForLocale();
 
 	@SuppressWarnings("unused")
 	private ConfiguredDocument() {
@@ -223,6 +307,12 @@ final class ConfiguredDocument {
 	 */
 	private LayoutGroup getValidListViewLayoutGroup(final String tableName, final String localeID) {
 
+		//Try to return a cached version:
+		final LayoutGroup result = mapTableLayouts.getListLayout(tableName, localeID);
+		if(result != null) {
+			return result;
+		}
+		
 		final List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("list", tableName);
 
 		final int listViewLayoutGroupSize = Utils.safeLongToInt(layoutGroupVec.size());
@@ -261,8 +351,11 @@ final class ConfiguredDocument {
 		if(cloned != null) {
 			updateLayoutGroup(cloned, tableName, localeID);
 		}
+		
+		//Store it in the cache for next time.
+		mapTableLayouts.setListLayout(tableName, localeID, cloned);
 
-		return libglomLayoutGroup;
+		return cloned;
 	}
 	
 	static public Object deepCopy(Object oldObj)
@@ -401,7 +494,34 @@ final class ConfiguredDocument {
 	List<LayoutGroup> getDetailsLayoutGroup(String tableName, final String localeID) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
-		return document.getDataLayoutGroups("details", tableName);
+		
+		//Try to return a cached version:
+		final List<LayoutGroup> result = mapTableLayouts.getDetailsLayout(tableName, localeID);
+		if(result != null) {
+				return result;
+		}
+				
+		final List<LayoutGroup> listGroups = document.getDataLayoutGroups("details", tableName);
+		
+		// TODO: Clone the group and change the clone, to discard unwanted informatin (such as translations)
+		//store some information that we do not want to calculate on the client side.
+				
+		//Note that we don't use clone() here, because that would need clone() implementations
+		//in classes which are also used in the client code (though the clone() methods would
+		//not be used) and that makes the GWT java->javascript compilation fail.
+		final List<LayoutGroup> listCloned = new ArrayList<LayoutGroup>();
+		for(LayoutGroup group : listGroups) {
+			final LayoutGroup cloned = (LayoutGroup) deepCopy(group);
+			if(cloned != null) {
+				updateLayoutGroup(cloned, tableName, localeID);
+				listCloned.add(cloned);
+			}
+		}
+		
+		//Store it in the cache for next time.
+		mapTableLayouts.setDetailsLayout(tableName, localeID, listCloned);
+
+		return listCloned;
 	}
 
 	/*
