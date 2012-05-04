@@ -2,9 +2,9 @@ package org.glom.web.shared.libglom.layout;
 
 import org.glom.web.shared.libglom.Relationship;
 
-@SuppressWarnings("serial")
 public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
+	private static final long serialVersionUID = 751801531875664661L;
 	private UsesRelationship usesRel = new UsesRelationshipImpl();
 
 	public enum NavigationType {
@@ -162,18 +162,6 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 */
 	public void setAddNavigation(boolean addNavigation) {
 		this.addNavigation = addNavigation;
-	}
-
-	@Override
-	public Object clone() {
-		LayoutItemPortal result = (LayoutItemPortal) super.clone();
-
-		result.usesRel = (UsesRelationshipImpl) this.usesRel.clone();
-		result.navigationRelationshipSpecific = (UsesRelationship) this.navigationRelationshipSpecific.clone();
-		result.navigationType = this.navigationType;
-		result.addNavigation = this.addNavigation;
-
-		return result;
 	}
 
 	/*

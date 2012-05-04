@@ -20,6 +20,11 @@
 package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -246,12 +251,49 @@ final class ConfiguredDocument {
 			}
 		}
 
-		// Clone the group and change the clone, to discard unwanted informatin (such as translations),
-		// and to store some information that we do not want to calculate on the client side:
-		final LayoutGroup cloned = (LayoutGroup) libglomLayoutGroup.clone();
-		updateLayoutGroup(cloned, tableName, localeID);
+		// TODO: Clone the group and change the clone, to discard unwanted informatin (such as translations)
+		//store some information that we do not want to calculate on the client side.
+		
+		//Note that we don't use clone() here, because that would need clone() implementations
+		//in classes which are also used in the client code (though the clone() methods would
+		//not be used) and that makes the GWT java->javascript compilation fail.
+		final LayoutGroup cloned = (LayoutGroup) deepCopy(libglomLayoutGroup);
+		if(cloned != null) {
+			updateLayoutGroup(cloned, tableName, localeID);
+		}
 
 		return libglomLayoutGroup;
+	}
+	
+	static public Object deepCopy(Object oldObj)
+	   {
+		ObjectOutputStream oos = null;
+		ObjectInputStream ois = null;
+
+		try {
+			ByteArrayOutputStream bos = 
+					new ByteArrayOutputStream(); 
+			oos = new ObjectOutputStream(bos);
+			// serialize and pass the object
+			oos.writeObject(oldObj);   // C
+			oos.flush();               // D
+			ByteArrayInputStream bin = 
+					new ByteArrayInputStream(bos.toByteArray());
+			ois = new ObjectInputStream(bin);
+			// return the new object
+			return ois.readObject();
+		} catch(Exception e) {
+			System.out.println("Exception in deepCopy:" + e);
+			return null;
+		} finally {
+			try {
+				oos.close();
+				ois.close();
+			} catch(IOException e) {
+				System.out.println("Exception in deepCopy during finally: " + e);
+				return null;
+			}
+		}
 	}
 
 	/**

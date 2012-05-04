@@ -1,7 +1,8 @@
 package org.glom.web.shared.libglom.layout;
 
-@SuppressWarnings("serial")
 public class LayoutItemWithFormatting extends LayoutItem {
+
+	private static final long serialVersionUID = -3224795819809978669L;
 	private Formatting formatting;
 
 	public Formatting getFormatting() {
@@ -10,14 +11,5 @@ public class LayoutItemWithFormatting extends LayoutItem {
 
 	public void setFormatting(Formatting formatting) {
 		this.formatting = formatting;
-	}
-
-	@Override
-	public Object clone() {
-		LayoutItemWithFormatting result = (LayoutItemWithFormatting) super.clone();
-
-		result.formatting = (Formatting) this.formatting.clone();
-
-		return result;
 	}
 }

@@ -2,9 +2,9 @@ package org.glom.web.shared.libglom;
 
 import org.glom.web.client.StringUtils;
 
-@SuppressWarnings("serial")
 public class Relationship extends Translatable {
 
+	private static final long serialVersionUID = 851415917396362167L;
 	private String fromTable = "";
 	private String fromField = "";
 	private String toTable = "";
@@ -51,18 +51,6 @@ public class Relationship extends Translatable {
 	 */
 	public String getFromField() {
 		return fromField;
-	}
-
-	@Override
-	public Relationship clone() {
-		Relationship result = (Relationship) super.clone();
-
-		result.fromTable = new String(this.fromTable);
-		result.fromField = new String(this.fromField);
-		result.toTable = new String(this.toTable);
-		result.toField = new String(this.toField);
-
-		return result;
 	}
 
 	/**

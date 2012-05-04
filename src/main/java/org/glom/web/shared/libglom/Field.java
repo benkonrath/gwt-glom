@@ -2,8 +2,9 @@ package org.glom.web.shared.libglom;
 
 import org.glom.web.shared.libglom.layout.Formatting;
 
-@SuppressWarnings("serial")
 public class Field extends Translatable {
+
+	private static final long serialVersionUID = 5297785500678189743L;
 
 	public enum GlomFieldType {
 		TYPE_INVALID, TYPE_NUMERIC, TYPE_TEXT, TYPE_DATE, TYPE_TIME, TYPE_BOOLEAN, TYPE_IMAGE
@@ -49,16 +50,6 @@ public class Field extends Translatable {
 
 	public void setGlomFieldType(final GlomFieldType fieldType) {
 		this.glomFieldType = fieldType;
-	}
-
-	@Override
-	public Object clone() {
-		final Field result = (Field) super.clone();
-		result.glomFieldType = this.glomFieldType;
-		result.primaryKey = this.primaryKey;
-		result.uniqueKey = this.uniqueKey;
-		result.formatting = (Formatting) this.clone();
-		return result;
 	}
 
 	/**

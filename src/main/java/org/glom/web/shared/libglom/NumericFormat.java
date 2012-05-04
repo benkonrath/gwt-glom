@@ -1,6 +1,10 @@
 package org.glom.web.shared.libglom;
 
-public class NumericFormat implements Cloneable {
+import java.io.Serializable;
+
+public class NumericFormat implements Serializable {
+
+	private static final long serialVersionUID = -71135742094755989L;
 
 	/**
 	 * String to use as the currency symbol. When the symbol is shown in the UI, a space is appended to the string, and
@@ -77,20 +81,4 @@ public class NumericFormat implements Cloneable {
 	public void setUseAltForegroundColorForNegatives(boolean useAltForegroundColorForNegatives) {
 		this.useAltForegroundColorForNegatives = useAltForegroundColorForNegatives;
 	}
-
-	@Override
-	public Object clone() {
-		NumericFormat result = null;
-		try {
-			result = (NumericFormat) super.clone();
-		} catch (CloneNotSupportedException e) {
-			System.err.println("Object.clone() failed: " + e.getMessage());
-			return null;
-		}
-
-		result.currencySymbol = new String(this.currencySymbol);
-
-		return result;
-	}
-
 }

@@ -19,13 +19,15 @@
 
 package org.glom.web.shared.libglom.layout;
 
+import java.io.Serializable;
+
 import org.glom.web.shared.libglom.Relationship;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
  * 
  */
-public interface UsesRelationship extends Cloneable {
+public interface UsesRelationship extends Serializable {
 
 	public abstract void setRelationship(final Relationship relationship);
 
@@ -56,6 +58,4 @@ public interface UsesRelationship extends Cloneable {
 	public abstract String getTableUsed(String string);
 
 	public abstract String getRelationshipNameUsed();
-
-	public abstract Object clone();
 }

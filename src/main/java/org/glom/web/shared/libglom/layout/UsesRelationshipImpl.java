@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.shared.libglom.Relationship;
 
 public class UsesRelationshipImpl implements UsesRelationship {
+	private static final long serialVersionUID = -3778108396526473307L;
 	private Relationship relationship;
 	private Relationship relatedRelationship;
 
@@ -195,22 +196,6 @@ public class UsesRelationshipImpl implements UsesRelationship {
 				return result;
 		} else
 			return parent_table;
-	}
-
-	@Override
-	public UsesRelationshipImpl clone() {
-		UsesRelationshipImpl result;
-		try {
-			result = (UsesRelationshipImpl) super.clone();
-		} catch (final CloneNotSupportedException e) {
-			System.err.println("UsesRelationshipImpl.clone() failed: " + e.getMessage());
-			return null;
-		}
-
-		result.relationship = this.relationship.clone();
-		result.relatedRelationship = this.relatedRelationship.clone();
-
-		return result;
 	}
 
 	/*

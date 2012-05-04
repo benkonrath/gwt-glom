@@ -4,9 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 
-@SuppressWarnings("serial")
 public class LayoutItemGroupBy extends LayoutGroup {
 
+	private static final long serialVersionUID = -672753948682122432L;
 	private LayoutItemField fieldGroupBy = null;
 	private LayoutGroup secondaryFields = null;
 
@@ -48,15 +48,4 @@ public class LayoutItemGroupBy extends LayoutGroup {
 	public void setSecondaryFields(final LayoutGroup secondaryFields) {
 		this.secondaryFields = secondaryFields;
 	}
-
-	@Override
-	public Object clone() {
-		LayoutItemGroupBy result = (LayoutItemGroupBy) super.clone();
-
-		result.fieldGroupBy = (LayoutItemField) this.fieldGroupBy.clone();
-		result.secondaryFields = (LayoutGroup) this.secondaryFields.clone();
-
-		return result;
-	}
-
 }

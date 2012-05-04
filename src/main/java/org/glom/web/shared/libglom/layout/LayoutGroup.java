@@ -3,22 +3,12 @@ package org.glom.web.shared.libglom.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class LayoutGroup extends LayoutItem {
 
+	private static final long serialVersionUID = 2795852472980010553L;
+
 	private class LayoutItemList extends ArrayList<LayoutItem> {
-		@Override
-		public Object clone() {
-			final LayoutItemList result = (LayoutItemList) super.clone();
-
-			// TODO: Performance: There is probably a better way to do this.
-			result.clear();
-			for (final LayoutItem item : this) {
-				result.add(item);
-			}
-
-			return result;
-		}
+		private static final long serialVersionUID = 8610424318876440333L;
 	};
 
 	private LayoutItemList items = new LayoutItemList();
@@ -84,14 +74,4 @@ public class LayoutGroup extends LayoutItem {
 		// TODO Auto-generated method stub
 
 	}
-
-	@Override
-	public Object clone() {
-		final LayoutGroup result = (LayoutGroup) super.clone();
-
-		result.items = (LayoutItemList) this.items.clone();
-
-		return result;
-	}
-
 }

@@ -1,9 +1,14 @@
 package org.glom.web.shared.libglom.layout;
 
+import java.io.Serializable;
+
 import org.glom.web.shared.libglom.NumericFormat;
 
-public class Formatting implements Cloneable {
-	// @formatter:off
+public class Formatting implements Serializable {
+
+	private static final long serialVersionUID = -2848253819745789939L;
+
+		// @formatter:off
 		public enum HorizontalAlignment {
 			HORIZONTAL_ALIGNMENT_AUTO, // For instance, RIGHT for numeric fields.
 			HORIZONTAL_ALIGNMENT_LEFT,
@@ -92,22 +97,5 @@ public class Formatting implements Cloneable {
 
 	public void setNumericFormat(NumericFormat numericFormat) {
 		this.numericFormat = numericFormat;
-	}
-
-	@Override
-	public Object clone() {
-		Formatting result = null;
-		try {
-			result = (Formatting) super.clone();
-		} catch (CloneNotSupportedException e) {
-			System.err.println("Formatting.clone() failed: " + e.getMessage());
-			return null;
-		}
-
-		result.numericFormat = (NumericFormat) this.numericFormat.clone();
-		result.textFormatColourBackground = new String(this.textFormatColourBackground);
-		result.textFormatColourForeground = new String(this.textFormatColourForeground);
-
-		return result;
 	}
 }

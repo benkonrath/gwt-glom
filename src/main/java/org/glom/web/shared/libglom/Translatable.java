@@ -1,30 +1,18 @@
 package org.glom.web.shared.libglom;
 
 import java.io.Serializable;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.glom.web.client.StringUtils;
 
-@SuppressWarnings("serial")
-public class Translatable implements Serializable, Cloneable {
+public class Translatable implements Serializable {
+
+	private static final long serialVersionUID = 700462080795724363L;
 
 	// We use TreeMap instead of HashTable because GWT does not support HashTable.
 	public static class TranslationsMap extends TreeMap<String, String> {
-		@Override
-		public Object clone() {
-			final TranslationsMap result = (TranslationsMap) super.clone();
 
-			// TODO: Performance: There is probably a better way to do this.
-			result.clear();
-			final Set<String> keys = this.keySet();
-			for (final String key : keys) {
-				final String value = this.get(key);
-				result.put(key, value);
-			}
-
-			return result;
-		}
+		private static final long serialVersionUID = 1275019181399622213L;
 	};
 
 	private String name = "";
@@ -89,25 +77,6 @@ public class Translatable implements Serializable, Cloneable {
 		final String title = getTitle(locale);
 		translationsMap.clear();
 		setTitleOriginal(title);
-	}
-
-	/**
-	 * @override
-	 */
-	@Override
-	public Object clone() {
-		Translatable result = null;
-		try {
-			result = (Translatable) super.clone();
-		} catch (final CloneNotSupportedException e) {
-			System.err.println("Translatable.clone() failed: " + e.getMessage());
-			return null;
-		}
-
-		result.name = new String(this.name);
-		result.titleOriginal = new String(this.titleOriginal);
-		result.translationsMap = (TranslationsMap) this.translationsMap.clone();
-		return result;
 	}
 
 	/**

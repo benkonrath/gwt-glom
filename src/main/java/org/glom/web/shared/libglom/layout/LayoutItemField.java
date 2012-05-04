@@ -4,8 +4,9 @@ import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.Relationship;
 
-@SuppressWarnings("serial")
 public class LayoutItemField extends LayoutItemWithFormatting implements UsesRelationship {
+
+	private static final long serialVersionUID = -7101706636312130106L;
 	private Field field;
 	private UsesRelationship usesRel = new UsesRelationshipImpl();
 	private Formatting formatting = new Formatting();
@@ -201,17 +202,6 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	public String getNavigationTableName() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Object clone() {
-		final LayoutItemField result = (LayoutItemField) super.clone();
-
-		result.field = (Field) this.field.clone();
-		result.usesRel = (UsesRelationship) this.usesRel.clone();
-		result.useDefaultFormatting = this.useDefaultFormatting;
-
-		return result;
 	}
 
 	/*
