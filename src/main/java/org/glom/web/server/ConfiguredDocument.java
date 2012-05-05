@@ -66,16 +66,16 @@ final class ConfiguredDocument {
 	private String documentID = "";
 	private String defaultLocaleID = "";
 
-	private class LayoutLocaleMap extends Hashtable<String, List<LayoutGroup>> {
+	private static class LayoutLocaleMap extends Hashtable<String, List<LayoutGroup>> {
 		private static final long serialVersionUID = 6542501521673767267L;
 	};
 
-	private class TableLayouts {
+	private static class TableLayouts {
 		public LayoutLocaleMap listLayouts;
 		public LayoutLocaleMap detailsLayouts;
 	}
-	
-	private class TableLayoutsForLocale extends Hashtable<String, TableLayouts> {
+
+	private static class TableLayoutsForLocale extends Hashtable<String, TableLayouts> {
 		private static final long serialVersionUID = -1947929931925049013L;
 
 		public LayoutGroup getListLayout(final String tableName, final String locale) {

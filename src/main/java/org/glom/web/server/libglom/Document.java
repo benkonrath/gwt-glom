@@ -57,7 +57,7 @@ import org.xml.sax.SAXException;
 public class Document {
 
 	@SuppressWarnings("serial")
-	private class TableInfo extends Translatable {
+	private static class TableInfo extends Translatable {
 		public boolean isDefault;
 		public boolean isHidden;
 
@@ -908,7 +908,7 @@ public class Document {
 		public UsesRelationship usesRelationship;
 	}
 
-	private class FieldIdentifies {
+	private static class FieldIdentifies {
 		public LayoutItemField field;
 		public Relationship usedInRelationShip;
 	}

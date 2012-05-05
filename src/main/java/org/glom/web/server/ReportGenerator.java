@@ -71,7 +71,7 @@ import org.jooq.Condition;
  */
 public class ReportGenerator {
 
-	private class Position {
+	private static class Position {
 		public Position(final int x, final int y) {
 			this.x = x;
 			this.y = y;

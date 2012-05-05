@@ -1,5 +1,15 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	Make some inner classes static.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	* src/main/java/org/glom/web/server/ReportGenerator.java
+	* src/main/java/org/glom/web/server/libglom/Document.java
+	Make all inner classes static that can be static.
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlomServiceImpl: Do not load and check for java-libglom.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java

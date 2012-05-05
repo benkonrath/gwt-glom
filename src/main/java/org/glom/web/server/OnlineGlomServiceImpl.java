@@ -64,7 +64,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private static final String GLOM_FILE_EXTENSION = "glom";
 
 	// convenience class for dealing with the Online Glom configuration file
-	private class OnlineGlomProperties extends Properties {
+	private static class OnlineGlomProperties extends Properties {
 		public String getKey(final String value) {
 			for (final String key : stringPropertyNames()) {
 				if (getProperty(key).trim().equals(value))
