@@ -24,9 +24,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Relationship;
@@ -49,11 +51,21 @@ public class DocumentTest {
 
 	private static Document document;
 	private static String locale = ""; // This means the original locale.
-	final static String testUriMusicCollection = "src/test/java/org/glom/web/server/libglom/example_music_collection.glom";
-	final static String testUriFilmManager = "src/test/java/org/glom/web/server/libglom/example_film_manager.glom";
+	static String testUriMusicCollection = "";
+	static String testUriFilmManager = "";
 
 	@BeforeClass
 	static public void setUp() {
+		URL url = DocumentTest.class.getResource("example_music_collection.glom");
+		assertTrue(url != null);
+		testUriMusicCollection = url.toString();
+		assertTrue(!StringUtils.isEmpty(testUriMusicCollection));
+
+		url = DocumentTest.class.getResource("example_film_manager.glom");
+		assertTrue(url != null);
+		testUriFilmManager = url.toString();
+		assertTrue(!StringUtils.isEmpty(testUriMusicCollection));
+
 		document = new Document();
 		document.setFileURI(testUriMusicCollection);
 		final boolean retval = document.load();

@@ -1,5 +1,12 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	DocumentTest: Move the .glom files into the resources directory.
+
+	* src/test/java/org/glom/web/server/libglom/DocumentTest: And get the
+	URI via getResource().
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: Remove the FieldIdentifies inner class.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java: We only
