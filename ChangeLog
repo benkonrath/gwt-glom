@@ -1,5 +1,17 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	Fix mvn gwt:test
+
+	* pom.xml: Use htmlunit mode for gwt:test, because the default demands
+	user-interaction, asking us to load a temporary URL in a browser.s
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: Add a servlet node,
+	which is apparently necessary for testing the service. See the comment.
+	* src/test/java/org/glom/web/client/GwtTestOnlineGlomService.java: 
+	Show the exception, if any. This is how I saw the 404 in the HTML in 
+	the exception.
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	DocumentTest: Move the .glom files into the resources directory.
 
 	* src/test/java/org/glom/web/server/libglom/DocumentTest: And get the

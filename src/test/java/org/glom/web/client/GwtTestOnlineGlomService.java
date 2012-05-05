@@ -37,10 +37,7 @@ public class GwtTestOnlineGlomService extends GWTTestCase {
 		final AsyncCallback<Documents> callback = new AsyncCallback<Documents>() {
 			@Override
 			public void onFailure(final Throwable caught) {
-				// Try to get an error message. Most likely this won't work but it's worth a try.
-				//getAndSetErrorMessage();
-				
-				finishTest();
+				fail(caught.toString());
 			}
 
 			@Override

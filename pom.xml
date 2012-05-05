@@ -160,6 +160,8 @@
 					<i18nConstantsBundles>
 					  <i18nConstantsBundle>org.glom.web.client.ui.OnlineGlomConstants</i18nConstantsBundle>
 					</i18nConstantsBundles>
+              				<mode>htmlunit</mode> <!-- Because the default, manual, waits for us to paste a URL into a browser. -->
+            				<!-- <productionMode>true</productionMode> -->
 				</configuration>
 			</plugin>
 

@@ -36,4 +36,8 @@
 	<extend-property name="locale" values="sl"/>
 	<extend-property name="locale" values="zh_CN"/>
 
+	<!--  This is necessary to avoid 404 errors when testing the service from
+	GWTTestCase unit test. See also our web.xml file." -->
+	<servlet path="/libGlom" class="org.glom.web.server.OnlineGlomServiceImpl" />
+
 </module>
