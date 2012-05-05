@@ -908,11 +908,6 @@ public class Document {
 		public UsesRelationship usesRelationship;
 	}
 
-	private static class FieldIdentifies {
-		public LayoutItemField field;
-		public Relationship usedInRelationShip;
-	}
-
 	/**
 	 * @param tableName
 	 *            Output parameter
@@ -989,13 +984,11 @@ public class Document {
 			} else {
 				// Instead, find a key field that's used in a relationship,
 				// and pretend that we are showing the to field as a related field:
-				final FieldIdentifies fieldIndentifies = getPortalFieldIdentifiesNonHiddenRelatedRecord(portal);
+				final Relationship fieldIndentifies = getPortalFieldIdentifiesNonHiddenRelatedRecord(portal);
 				if (fieldIndentifies != null) {
-					if (fieldIndentifies.usedInRelationShip != null) {
-						UsesRelationship result = new UsesRelationshipImpl();
-						result.setRelationship(fieldIndentifies.usedInRelationShip);
-						return result;
-					}
+					UsesRelationship result = new UsesRelationshipImpl();
+					result.setRelationship(fieldIndentifies);
+					return result;
 				}
 			}
 		}
@@ -1041,7 +1034,7 @@ public class Document {
 	 *            TODO
 	 * @return
 	 */
-	private FieldIdentifies getPortalFieldIdentifiesNonHiddenRelatedRecord(LayoutItemPortal portal) {
+	private Relationship getPortalFieldIdentifiesNonHiddenRelatedRecord(LayoutItemPortal portal) {
 		// Find the first field that is from a non-hidden related table.
 
 		if (this == null) {
@@ -1061,11 +1054,7 @@ public class Document {
 						final String table_name = relationship.getToTable();
 						if (!StringUtils.isEmpty(table_name)) {
 							if (!(getTableIsHidden(table_name))) {
-
-								FieldIdentifies result = new FieldIdentifies();
-								result.field = field;
-								result.usedInRelationShip = relationship;
-								return result;
+								return relationship;
 							}
 						}
 					}

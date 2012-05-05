@@ -1,5 +1,13 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	Document: Remove the FieldIdentifies inner class.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java: We only
+	use the Relationship (though the same function in libglom is maybe
+	used in other ways) and so this removes a compiler warning.
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	Document.load() Remove the error code parameter.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java: load():
