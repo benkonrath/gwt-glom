@@ -259,7 +259,6 @@ public class DocumentTest {
 		// Create a new document for the film manager
 		final Document filmManagerDocument = new Document();
 		filmManagerDocument.setFileURI(testUriFilmManager);
-		final int error = 0;
 		final boolean retval = filmManagerDocument.load();
 		assertTrue(retval);
 
