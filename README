@@ -11,13 +11,6 @@ http://gitorious.org/online-glom/gwt-glom
 You will need to install mvn (maven), 
 Maven will download other Java dependencies automatically.
 
-However, you must separately install the shared library part of java-libglom.
-for instance, for Ubuntu via the libjava-libglom-java package 
-from the PPA for stable releases:
-  https://launchpad.net/~openismus-team/+archive/ppa
-or from the PPA for unstable releases:
-  https://launchpad.net/~openismus-team/+archive/openismus-glom-unstable/+packages
-
 To build the .war package, do:
   mvn clean package
 

@@ -1,5 +1,15 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	Remove mentions of java-libglom.
+
+	* README: Remove mention of java-libglom, because it no longer needed.
+	* utils/build-onlineglom-war.sh:
+	* utils/check-and-recover-tomcat.py:
+	* utils/install-onlineglom-war.sh: Remove these as they are no longer
+	useful. Building is now far easier, with no need for jhbuild.
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	Fix the build (mvn package)
 
 	* src/main/java/org/glom/web/shared/libglom/layout/LayoutGroup.java
