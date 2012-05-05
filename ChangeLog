@@ -1,5 +1,18 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	Document.load() Remove the error code parameter.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java: load():
+	Remove the parameter. We do not set it yet and it could never have
+	worked as an output parameter (though maybe it did in java-libglom).
+	We could use an exception if we really want the failure reason.
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	init():
+	* src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+	setUp(), testGetSuitableTableToViewDetails(): Adapt.
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	Make some inner classes static.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java

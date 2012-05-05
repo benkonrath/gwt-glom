@@ -56,10 +56,8 @@ public class DocumentTest {
 	static public void setUp() {
 		document = new Document();
 		document.setFileURI(testUriMusicCollection);
-		final int error = 0;
-		final boolean retval = document.load(error);
+		final boolean retval = document.load();
 		assertTrue(retval);
-		assertEquals(error, 0);
 	}
 
 	@AfterClass
@@ -262,9 +260,8 @@ public class DocumentTest {
 		final Document filmManagerDocument = new Document();
 		filmManagerDocument.setFileURI(testUriFilmManager);
 		final int error = 0;
-		final boolean retval = filmManagerDocument.load(error);
+		final boolean retval = filmManagerDocument.load();
 		assertTrue(retval);
-		assertEquals(error, 0);
 
 		// Get the "Scene Cast" related list portal. This relies on specific details of the film manager details
 		// view layout. I've included safety checks that will fail if the layout changes.

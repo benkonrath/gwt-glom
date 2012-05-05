@@ -139,15 +139,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			for (final File glomFile : glomFiles) {
 				final Document document = new Document();
 				document.setFileURI("file://" + glomFile.getAbsolutePath());
-				final int error = 0;
-				final boolean retval = document.load(error);
+				final boolean retval = document.load();
 				if (retval == false) {
-					String message;
-					if (false) {// TODO: Document.LoadFailureCodes.LOAD_FAILURE_CODE_NOT_FOUND == (error) {
-						message = "Could not find file: " + glomFile.getAbsolutePath();
-					} else {
-						message = "An unknown error occurred when trying to load file: " + glomFile.getAbsolutePath();
-					}
+					final String message = "An error occurred when trying to load file: " + glomFile.getAbsolutePath();
 					Log.error(message);
 					// continue with for loop because there may be other documents in the directory
 					continue;

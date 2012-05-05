@@ -142,7 +142,7 @@ public class Document {
 		LOAD_FAILURE_CODE_NONE, LOAD_FAILURE_CODE_NOT_FOUND, LOAD_FAILURE_CODE_FILE_VERSION_TOO_NEW
 	};
 
-	public boolean load(final int failure_code) {
+	public boolean load() {
 		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder;
 		try {
