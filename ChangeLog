@@ -1,3 +1,26 @@
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
+	Fix the build (mvn package)
+
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutGroup.java
+	(LayoutGroup): Make the LayoutItemList inner class static and protected.
+	Otherwise the GWT Java->Javascript compilation fails with just this
+	error, during mvn package or when attempting to view in a browser, 
+	in the GWT developer mode in Eclipse.
+
+	[INFO] --- gwt-maven-plugin:2.4.0:compile (default) @ gwt-glom ---
+	[INFO] auto discovered modules [org.glom.web.OnlineGlom]
+	[INFO] Compiling module org.glom.web.OnlineGlom
+	[INFO]    [ERROR] Errors in 'file:/home/murrayc/checkouts/gnome/gwt-glom/src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java'
+	[INFO]       [ERROR] Line 46:  Failed to resolve 'org.glom.web.client.OnlineGlomService' via deferred binding
+	[INFO]    Scanning for additional dependencies: file:/home/murrayc/checkouts/gnome/gwt-glom/src/main/java/org/glom/web/client/ui/details/DetailsCell.java
+	[INFO]       [WARN] For the following type(s), generated source was never committed (did you forget to call commit()?)
+	[INFO]          [WARN] org.glom.web.client.OnlineGlomService_Proxy
+	[INFO]    [ERROR] Cannot proceed due to previous errors
+
+	It has taken me 2 days to find out what was causing that. After reducing
+	the code, the compiler eventually showed me the full error message.
+
 2012-05-04  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Cache the cloned and stripped layouts.

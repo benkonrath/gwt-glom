@@ -15,7 +15,7 @@ public class LayoutGroup extends LayoutItem {
 		this.columnCount = columnCount;
 	}
 
-	private class LayoutItemList extends ArrayList<LayoutItem> {
+	static protected class LayoutItemList extends ArrayList<LayoutItem> {
 		private static final long serialVersionUID = 8610424318876440333L;
 	};
 
