@@ -1,5 +1,12 @@
 2012-05-05  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlomServiceImpl: Do not load and check for java-libglom.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	init(): We do not use java-libglom any more.
+
+2012-05-05  Murray Cumming  <murrayc@murrayc.com>
+
 	Remove mentions of java-libglom.
 
 	* README: Remove mention of java-libglom, because it no longer needed.

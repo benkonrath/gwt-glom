@@ -20,7 +20,6 @@
 package org.glom.web.server;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -133,15 +132,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				throw new Exception(errorMessage);
 			}
 
-			// Check to see if the native library of java libglom is visible to the JVM
-			if (!isNativeLibraryVisibleToJVM()) {
-				final String errorMessage = "The java-libglom shared library is not visible to the JVM."
-						+ " Ensure that 'java.library.path' is set with the path to the java-libglom shared library."
-						+ "\n: java.library.path: " + System.getProperty("java.library.path");
-				Log.error(errorMessage);
-				throw new Exception(errorMessage);
-			}
-
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
 			final String globalLocaleID = StringUtils.defaultString(config.getProperty("glom.document.locale"));
@@ -202,38 +192,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			configurationException = e;
 		}
 
-	}
-
-	/**
-	 * Checks if the java-libglom native library is visible to the JVM.
-	 * 
-	 * @return true if the java-libglom native library is visible to the JVM, false if it's not
-	 */
-	private boolean isNativeLibraryVisibleToJVM() {
-		final String javaLibraryPath = System.getProperty("java.library.path");
-
-		// Go through all the library paths and check for the java_libglom .so.
-		for (final String libDirName : javaLibraryPath.split(":")) {
-			final File libDir = new File(libDirName);
-
-			if (!libDir.isDirectory())
-				continue;
-			if (!libDir.canRead())
-				continue;
-
-			final File[] libs = libDir.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(final File dir, final String name) {
-					return name.matches("libjava_libglom-[0-9]\\.[0-9].+\\.so");
-				}
-			});
-
-			// if at least one directory had the .so, we're done
-			if (libs.length > 0)
-				return true;
-		}
-
-		return false;
 	}
 
 	/*

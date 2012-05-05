@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2009, 2010, 2011 Openismus GmbH
  *
- * This file is part of Java-libglom.
+ * This file is part of gwt-glom
  *
- * Java-libglom is free software: you can redistribute it and/or modify it
+ * gwt-glom is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or (at your
  * option) any later version.
  *
- * Java-libglom is distributed in the hope that it will be useful, but WITHOUT
+ * gwt-glom is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
  * for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java-libglom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with gwt-glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.glom.web.server.libglom;
@@ -388,7 +388,7 @@ public class DocumentTest {
 	}
 
 	/*
-	 * Tests threaded access to java-libglom.
+	 * Tests threaded access.
 	 */
 	@Test
 	public void testThreadedAccess() throws InterruptedException {
