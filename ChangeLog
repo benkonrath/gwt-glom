@@ -1,5 +1,12 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ListTable: Protect against an out of range error.
+
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java
+	createCellTable(): This is unlikely, but can happen while debugging.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	AsyncMessage onFailure() callbacks: Log the exception message.
 
 	* src/main/java/org/glom/web/client/activity/DetailsActivity.java

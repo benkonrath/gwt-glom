@@ -35,6 +35,7 @@ import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Unit;
@@ -120,18 +121,29 @@ public abstract class ListTable extends Composite {
 		this.tableName = tableName;
 		final List<LayoutItem> layoutItems = layoutGroup.getItems();
 
+		ProvidesKey<DataItem[]> keyProvider = null;
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
-		final LayoutItemField primaryKeyLayoutItem = (LayoutItemField) layoutItems.get(primaryKeyIndex);
-		final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.getGlomType();
-		final ProvidesKey<DataItem[]> keyProvider = new ProvidesKey<DataItem[]>() {
-			@Override
-			public Object getKey(final DataItem[] row) {
-				if (row.length == 1 && row[0] == null)
-					// an empty row
-					return null;
-				return Utils.getTypedDataItem(primaryKeyFieldType, row[primaryKeyIndex]);
+		if (primaryKeyIndex >= layoutItems.size()) {
+			GWT.log("createCellTable(): primaryKeyIndex is out of range.");
+		} else {
+			final LayoutItem primaryKeyItem = layoutItems.get(primaryKeyIndex);
+			if (!(primaryKeyItem instanceof LayoutItemField)) {
+				GWT.log("createCellTable(): primaryKeyItem is not a LayoutItemField.");
+			} else {
+				final LayoutItemField primaryKeyLayoutItem = (LayoutItemField) primaryKeyItem;
+				final GlomFieldType primaryKeyFieldType = primaryKeyLayoutItem.getGlomType();
+
+				keyProvider = new ProvidesKey<DataItem[]>() {
+					@Override
+					public Object getKey(final DataItem[] row) {
+						if (row.length == 1 && row[0] == null)
+							// an empty row
+							return null;
+						return Utils.getTypedDataItem(primaryKeyFieldType, row[primaryKeyIndex]);
+					}
+				};
 			}
-		};
+		}
 
 		// create the CellTable with the requested number of rows and the key provider
 		cellTable = new CellTable<DataItem[]>(numVisibleRows, keyProvider);
