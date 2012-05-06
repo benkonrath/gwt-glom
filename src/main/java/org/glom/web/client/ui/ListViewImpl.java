@@ -26,6 +26,7 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.ui.Composite;
@@ -55,7 +56,12 @@ public class ListViewImpl extends Composite implements ListView {
 		@Override
 		protected void onEnterKeyDown(final Context context, final Element parent, final String value,
 				final NativeEvent event, final ValueUpdater<String> valueUpdater) {
-			presenter.goTo(new DetailsPlace(documentID, tableName, (TypedDataItem) context.getKey()));
+			final Object item = context.getKey();
+			if (item instanceof TypedDataItem) {
+				presenter.goTo(new DetailsPlace(documentID, tableName, (TypedDataItem) item));
+			} else {
+				GWT.log("onEnterKeyDown(): context.getKey is not a TypedDataItem.");
+			}
 		}
 
 	}

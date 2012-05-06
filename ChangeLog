@@ -1,5 +1,12 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ListViewImpl: Protected against a bad cast error.
+
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	onEnterKeyDown(): Do not cast without an instanceof check.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ListTable: Protect against an out of range error.
 
 	* src/main/java/org/glom/web/client/ui/list/ListTable.java
