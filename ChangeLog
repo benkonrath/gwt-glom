@@ -1,5 +1,16 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	Correct use of setExpectedResultSize().
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	getValidListViewLayoutGroup(), getDetailsLayoutGroup():
+	Use setExpectedResultSize only on top-level groups (for instance, the
+	list layout) or on child portals (in details views).
+	Use the correct table name for portals to avoid SQL errors.
+	Update the expected counts when returning cached layouts.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: Interpret no group column count as 1.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java: Use a sane

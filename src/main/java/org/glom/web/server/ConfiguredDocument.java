@@ -324,12 +324,13 @@ final class ConfiguredDocument {
 	 */
 	private LayoutGroup getValidListViewLayoutGroup(final String tableName, final String localeID) {
 
-		//Try to return a cached version:
+		// Try to return a cached version:
 		final LayoutGroup result = mapTableLayouts.getListLayout(tableName, localeID);
-		if(result != null) {
+		if (result != null) {
+			updateLayoutGroupExpectedResultSize(result, tableName);
 			return result;
 		}
-		
+
 		final List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("list", tableName);
 
 		final int listViewLayoutGroupSize = Utils.safeLongToInt(layoutGroupVec.size());
@@ -423,16 +424,11 @@ final class ConfiguredDocument {
 				final Field field = layoutItemField.getFullFieldDetails();
 				if ((field != null) && field.getPrimaryKey())
 					primaryKeyIndex = i;
-
 			} else if (layoutItem instanceof LayoutGroup) {
 				LayoutGroup childGroup = (LayoutGroup) layoutItem;
 				updateLayoutGroup(childGroup, tableName, localeID);
 			}
 		}
-
-		final ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
-				layoutGroup);
-		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
 
 		// Set the primary key index for the table
 		if (primaryKeyIndex < 0) {
@@ -461,11 +457,12 @@ final class ConfiguredDocument {
 		} else {
 			layoutGroup.setPrimaryKeyIndex(primaryKeyIndex);
 		}
+	}
 
-		if (layoutGroup instanceof LayoutItemPortal) {
-			LayoutItemPortal portal = (LayoutItemPortal) layoutGroup;
-			updateLayoutItemPortalDTO(tableName, portal, localeID);
-		}
+	private void updateLayoutGroupExpectedResultSize(final LayoutGroup layoutGroup, final String tableName) {
+		final ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
+				layoutGroup);
+		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
 	}
 
 	ArrayList<DataItem[]> getListViewData(String tableName, final String quickFind, final int start, final int length,
@@ -511,34 +508,65 @@ final class ConfiguredDocument {
 	List<LayoutGroup> getDetailsLayoutGroup(String tableName, final String localeID) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
-		
-		//Try to return a cached version:
+
+		// Try to return a cached version:
 		final List<LayoutGroup> result = mapTableLayouts.getDetailsLayout(tableName, localeID);
-		if(result != null) {
-				return result;
+		if (result != null) {
+			updatePortalsExpectedResultsSize(result, tableName);
+			return result;
 		}
-				
+
 		final List<LayoutGroup> listGroups = document.getDataLayoutGroups("details", tableName);
-		
+
 		// TODO: Clone the group and change the clone, to discard unwanted informatin (such as translations)
-		//store some information that we do not want to calculate on the client side.
-				
-		//Note that we don't use clone() here, because that would need clone() implementations
-		//in classes which are also used in the client code (though the clone() methods would
-		//not be used) and that makes the GWT java->javascript compilation fail.
+		// store some information that we do not want to calculate on the client side.
+
+		// Note that we don't use clone() here, because that would need clone() implementations
+		// in classes which are also used in the client code (though the clone() methods would
+		// not be used) and that makes the GWT java->javascript compilation fail.
 		final List<LayoutGroup> listCloned = new ArrayList<LayoutGroup>();
-		for(LayoutGroup group : listGroups) {
+		for (LayoutGroup group : listGroups) {
 			final LayoutGroup cloned = (LayoutGroup) deepCopy(group);
-			if(cloned != null) {
+			if (cloned != null) {
 				updateLayoutGroup(cloned, tableName, localeID);
 				listCloned.add(cloned);
 			}
 		}
-		
-		//Store it in the cache for next time.
+
+		// Store it in the cache for next time.
 		mapTableLayouts.setDetailsLayout(tableName, localeID, listCloned);
 
+		updatePortalsExpectedResultsSize(listCloned, tableName);
+
 		return listCloned;
+	}
+
+	/**
+	 * @param result
+	 * @param tableName
+	 */
+	private void updatePortalsExpectedResultsSize(List<LayoutGroup> listGroups, String tableName) {
+		for (LayoutGroup group : listGroups) {
+			updatePortalsExpectedResultsSize(group, tableName);
+		}
+
+	}
+
+	private void updatePortalsExpectedResultsSize(LayoutGroup group, String tableName) {
+		if (group instanceof LayoutItemPortal) {
+			final LayoutItemPortal portal = (LayoutItemPortal) group;
+			final String tableNameUsed = portal.getTableUsed(tableName);
+			updateLayoutGroupExpectedResultSize(portal, tableNameUsed);
+		}
+
+		List<LayoutItem> childItems = group.getItems();
+		for (LayoutItem item : childItems) {
+			if (item instanceof LayoutGroup) {
+				final LayoutGroup childGroup = (LayoutGroup) item;
+				updatePortalsExpectedResultsSize(childGroup, tableName);
+			}
+		}
+
 	}
 
 	/*
