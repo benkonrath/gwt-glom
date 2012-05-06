@@ -52,7 +52,8 @@ public class LayoutItemFieldTest {
 
 		// Check that a custom title is used:
 		final String testItemTitle = "someitemtitle";
-		item.setTitleOriginal(testItemTitle);
+		item.getCustomTitle().setTitleOriginal(testItemTitle);
+		item.getCustomTitle().setUseCustomTitle(true);
 		assertEquals(testItemTitle, item.getTitleOriginal());
 		assertEquals(testItemTitle, item.getTitle(locale));
 	}

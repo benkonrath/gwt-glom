@@ -29,6 +29,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.shared.libglom.CustomTitle;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Relationship;
@@ -99,7 +100,7 @@ public class Document {
 	private static final String ATTRIBUTE_PRIMARY_KEY = "primary_key";
 	private static final String ATTRIBUTE_FIELD_TYPE = "type";
 	private static final String NODE_FORMATTING = "formatting";
-	//private static final String ATTRIBUTE_TEXT_FORMAT_MULTILINE = "format_text_multiline";
+	// private static final String ATTRIBUTE_TEXT_FORMAT_MULTILINE = "format_text_multiline";
 	private static final String ATTRIBUTE_USE_THOUSANDS_SEPARATOR = "format_thousands_separator";
 	private static final String ATTRIBUTE_DECIMAL_PLACES = "format_decimal_places";
 	private static final String NODE_RELATIONSHIPS = "relationships";
@@ -122,6 +123,8 @@ public class Document {
 	private static final String ATTRIBUTE_RELATIONSHIP_NAME = "relationship";
 	private static final String ATTRIBUTE_RELATED_RELATIONSHIP_NAME = "related_relationship";
 	private static final String NODE_DATA_LAYOUT_ITEM = "data_layout_item";
+	private static final String NODE_CUSTOM_TITLE = "title_custom";
+	private static final String ATTRIBUTE_CUSTOM_TITLE_USE_CUSTOM = "use_custom";
 	private static final String NODE_DATA_LAYOUT_ITEM_GROUPBY = "data_layout_item_groupby";
 	private static final String NODE_GROUPBY = "groupby";
 	private static final String NODE_SECONDARY_FIELDS = "secondary_fields";
@@ -583,8 +586,15 @@ public class Document {
 	 * @param item
 	 */
 	private void loadDataLayoutItemField(final Element element, final LayoutItemField item, final String tableName) {
-		loadTitle(element, item);
+		item.setName(element.getAttribute(ATTRIBUTE_NAME));
 		loadUsesRelationship(element, tableName, item);
+
+		final Element elementCustomTitle = getElementByName(element, NODE_CUSTOM_TITLE);
+		if (elementCustomTitle != null) {
+			final CustomTitle customTitle = item.getCustomTitle();
+			customTitle.setUseCustomTitle(getAttributeAsBoolean(elementCustomTitle, ATTRIBUTE_CUSTOM_TITLE_USE_CUSTOM));
+			loadTitle(elementCustomTitle, customTitle); // LayoutItemField doesn't use its own title member.
+		}
 
 		// Get the actual field:
 		final String fieldName = item.getName();

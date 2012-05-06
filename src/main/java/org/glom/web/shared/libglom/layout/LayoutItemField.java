@@ -1,6 +1,7 @@
 package org.glom.web.shared.libglom.layout;
 
 import org.glom.web.client.StringUtils;
+import org.glom.web.shared.libglom.CustomTitle;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.Relationship;
@@ -12,6 +13,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	private UsesRelationship usesRel = new UsesRelationshipImpl();
 	private Formatting formatting = new Formatting();
 	private boolean useDefaultFormatting = true;
+	private CustomTitle customTitle = new CustomTitle();
 
 	/**
 	 * @return the field
@@ -201,7 +203,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * @return
 	 */
 	public String getNavigationTableName() {
-		//TODO: This was a cache set by ConfiguredDocument, but not set any longer.
+		// TODO: This was a cache set by ConfiguredDocument, but not set any longer.
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -218,18 +220,26 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	@Override
 	public String getTitleOriginal() {
-		String title = super.getTitleOriginal();
-		if (StringUtils.isEmpty(title) && (field != null)) {
-			title = field.getTitleOriginal();
+		if (customTitle.getUseCustomTitle()) {
+			return customTitle.getTitleOriginal();
 		}
 
-		return title;
+		if (field != null) {
+			return field.getTitleOriginal();
+		}
+
+		return "";
 	}
 
 	@Override
 	public String getTitle(final String locale) {
-		String title = super.getTitle(locale);
-		if (StringUtils.isEmpty(title) && (field != null)) {
+		if (customTitle.getUseCustomTitle()) {
+			return customTitle.getTitle(locale);
+		}
+
+		// Fallback to the field's title:
+		String title = "";
+		if (field != null) {
 			title = field.getTitle(locale);
 		}
 
@@ -239,5 +249,24 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 		}
 
 		return title;
+	}
+
+	@Override
+	public String getTitleOrName(final String locale) {
+		if (customTitle.getUseCustomTitle()) {
+			return customTitle.getTitle(locale);
+			// TODO: Do not force the use of empty translations.
+		}
+
+		// Fallback to the field's original title:
+		if (field != null) {
+			return field.getTitleOrName(locale);
+		}
+
+		return getName();
+	}
+
+	public CustomTitle getCustomTitle() {
+		return customTitle;
 	}
 }
