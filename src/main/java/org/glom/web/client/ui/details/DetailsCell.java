@@ -76,6 +76,10 @@ public class DetailsCell extends Composite {
 
 		detailsData.setStyleName("details-data");
 		Formatting formatting = layoutItemField.getFormatting();
+		if (formatting == null) {
+			GWT.log("setData(): formatting is null");
+			formatting = new Formatting(); // To avoid checks later.
+		}
 
 		// set the height based on the number of lines
 		detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
@@ -130,6 +134,8 @@ public class DetailsCell extends Composite {
 		if (dataItem == null)
 			return;
 
+		Formatting formatting = layoutItemField.getFormatting();
+
 		// FIXME use the cell renderers from the list view to render the inforamtion here
 		switch (layoutItemField.getGlomType()) {
 		case TYPE_BOOLEAN:
@@ -146,7 +152,11 @@ public class DetailsCell extends Composite {
 			detailsData.add(checkBox);
 			break;
 		case TYPE_NUMERIC:
-			NumericFormat numericFormat = layoutItemField.getFormatting().getNumericFormat();
+			if (formatting == null) {
+				GWT.log("setData(): formatting is null");
+				formatting = new Formatting(); // To avoid checks later.
+			}
+			NumericFormat numericFormat = formatting.getNumericFormat();
 			NumberFormat gwtNumberFormat = Utils.getNumberFormat(numericFormat);
 
 			// set the foreground color to red if the number is negative and this is requested
@@ -163,9 +173,10 @@ public class DetailsCell extends Composite {
 		case TYPE_DATE:
 		case TYPE_TIME:
 		case TYPE_TEXT:
-			String text = dataItem.getText();
+			final String text = StringUtils.defaultString(dataItem.getText());
+
 			// Deal with multiline text differently than single line text.
-			if (layoutItemField.getFormatting().getTextFormatMultilineHeightLines() > 1) {
+			if ((formatting != null) && (formatting.getTextFormatMultilineHeightLines() > 1)) {
 				detailsData.getElement().getStyle().setOverflow(Overflow.AUTO);
 				// Convert '\n' to <br/> escaping the data so that it won't be rendered as HTML.
 				try {

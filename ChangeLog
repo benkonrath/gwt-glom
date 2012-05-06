@@ -1,5 +1,9 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	More null checks.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	Translatable: Use Hashmap instead of Treemap because GWT supports it.
 
 	* src/main/java/org/glom/web/shared/libglom/Translatable.java:

@@ -46,4 +46,16 @@ public class StringUtils {
 		return a.equals(b);
 	}
 
+	/**
+	 * @param text
+	 * @return
+	 */
+	public static String defaultString(String text) {
+		if (text == null) {
+			return "";
+		} else {
+			return text;
+		}
+	}
+
 }

@@ -95,6 +95,10 @@ public class FlowTable extends Composite {
 		table.getElement().getStyle().setProperty("borderCollapse", "collapse");
 		table.setBorderWidth(0);
 
+		if (columnCount < 1) {
+			columnCount = 1; // Avoid a division by zero.
+		}
+
 		// The column widths are evenly distributed amongst the number of columns with 1% padding between the columns.
 		double columnWidth = (100 - (columnCount - 1)) / columnCount;
 		for (int i = 0; i < columnCount; i++) {
