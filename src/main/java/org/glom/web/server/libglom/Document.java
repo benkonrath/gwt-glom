@@ -211,8 +211,7 @@ public class Document {
 		if (nodeConnection != null) {
 			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
 			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
-			connectionPort = getAttributeAsDecimal(nodeConnection,
-					nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_PORT));
+			connectionPort = getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
 		}
 
 		return true;
