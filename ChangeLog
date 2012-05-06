@@ -1,5 +1,13 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlom.gwt.xml: Add exludes to fix explicit gwt compilation in Eclipse.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: This is necessary 
+	when using the Google -> GWT Compile, or 
+	g toolbar button -> GWT Compile Project... feature in Eclipse.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ListTable.addColumn(): Protect against a null Formatting.
 
 	* src/main/java/org/glom/web/client/ui/list/ListTable.java: addColumn():
