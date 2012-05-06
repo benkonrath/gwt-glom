@@ -506,9 +506,15 @@ public class Document {
 	 */
 	private void loadDataLayoutGroup(final Element nodeGroup, final LayoutGroup group, final String tableName) {
 		loadTitle(nodeGroup, group);
-		
-		group.setColumnCount( getAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT));
 
+		// Read the column count:
+		int columnCount = getAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT);
+		if (columnCount < 1) {
+			columnCount = 1; // 0 is a useless default.
+		}
+		group.setColumnCount(columnCount);
+
+		// Get the child items:
 		final NodeList listNodes = nodeGroup.getChildNodes();
 		final int num = listNodes.getLength();
 		for (int i = 0; i < num; i++) {

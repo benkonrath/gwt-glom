@@ -1,5 +1,12 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	Document: Interpret no group column count as 1.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java: Use a sane
+	default, though we now check for this in the UI code anyway.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	More null checks.
 
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
