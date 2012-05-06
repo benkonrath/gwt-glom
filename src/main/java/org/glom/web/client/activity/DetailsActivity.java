@@ -87,7 +87,8 @@ public class DetailsActivity extends HasTableActivity {
 				@Override
 				public void onFailure(final Throwable caught) {
 					// TODO: create a way to notify users of asynchronous callback failures
-					GWT.log("AsyncCallback Failed: OnlineGlomService.getSuitableRecordToViewDetails()");
+					GWT.log("AsyncCallback Failed: OnlineGlomService.getSuitableRecordToViewDetails(): "
+							+ caught.getMessage());
 				}
 
 				@Override
@@ -143,7 +144,7 @@ public class DetailsActivity extends HasTableActivity {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsLayoutAndData()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsLayoutAndData(): " + caught.getMessage());
 			}
 
 			@Override
@@ -275,7 +276,7 @@ public class DetailsActivity extends HasTableActivity {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsData()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDetailsData(): " + caught.getMessage());
 			}
 
 			@Override
@@ -295,7 +296,7 @@ public class DetailsActivity extends HasTableActivity {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getRelatedListRowCount()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getRelatedListRowCount(): " + caught.getMessage());
 			}
 
 			@Override

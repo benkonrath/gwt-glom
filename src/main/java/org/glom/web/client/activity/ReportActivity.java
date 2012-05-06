@@ -80,7 +80,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): " + caught.getMessage());
 			}
 
 			@Override
@@ -98,7 +98,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportHTML()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportHTML(): " + caught.getMessage());
 			}
 
 			@Override
@@ -128,7 +128,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 					@Override
 					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication()");
+						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication(): " + caught.getMessage());
 					}
 
 					@Override

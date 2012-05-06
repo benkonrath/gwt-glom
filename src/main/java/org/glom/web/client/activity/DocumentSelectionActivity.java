@@ -26,6 +26,7 @@ import org.glom.web.client.ui.View;
 import org.glom.web.shared.Documents;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
@@ -53,6 +54,7 @@ public class DocumentSelectionActivity extends AbstractActivity implements View.
 			@Override
 			public void onFailure(final Throwable caught) {
 				// Try to get an error message. Most likely this won't work but it's worth a try.
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDocuments(): " + caught.getMessage());
 				getAndSetErrorMessage();
 			}
 
@@ -84,6 +86,8 @@ public class DocumentSelectionActivity extends AbstractActivity implements View.
 		final AsyncCallback<String> callback = new AsyncCallback<String>() {
 			@Override
 			public void onFailure(final Throwable caught) {
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getConfigurationErrorMessage(): "
+						+ caught.getMessage());
 				documentSelectionView
 						.setErrorMessage("Unable to communicate with the servlet. Check the error log for more information.");
 			}

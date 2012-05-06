@@ -154,7 +154,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getDocumentInfo()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getDocumentInfo(): " + caught.getMessage());
 			}
 
 			@Override
@@ -194,7 +194,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportsList()");
+				GWT.log("AsyncCallback Failed: OnlineGlomService.getReportsList(): " + caught.getMessage());
 			}
 
 			@Override

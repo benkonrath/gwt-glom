@@ -1,5 +1,18 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	AsyncMessage onFailure() callbacks: Log the exception message.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	* src/main/java/org/glom/web/client/activity/DocumentSelectionActivity.java:
+	* src/main/java/org/glom/web/client/activity/ListActivity.java:
+	* src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	* src/main/java/org/glom/web/client/activity/TableSelectionActivity:
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	These are useful clues when something is wrong.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ConfiguredDocument: Avoid a null dereference.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java

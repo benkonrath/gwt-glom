@@ -105,7 +105,8 @@ public class RelatedListTable extends ListTable {
 					@Override
 					public void onFailure(Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)RelatedListData()");
+						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)RelatedListData(): "
+								+ caught.getMessage());
 					}
 
 					@Override

@@ -80,7 +80,8 @@ public class ListViewTable extends ListTable {
 					@Override
 					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)ListViewData()");
+						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)ListViewData(): "
+								+ caught.getMessage());
 					}
 
 					@Override
