@@ -1,5 +1,12 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument.updateLayoutGroup(): Protect against a null dereference.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	updateLayoutGroup(): Check that the field is not null.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	ListViewImpl: Protected against a bad cast error.
 
 	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:

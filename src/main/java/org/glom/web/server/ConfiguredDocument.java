@@ -421,7 +421,7 @@ final class ConfiguredDocument {
 			if (layoutItem instanceof LayoutItemField) {
 				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				final Field field = layoutItemField.getFullFieldDetails();
-				if (field.getPrimaryKey())
+				if ((field != null) && field.getPrimaryKey())
 					primaryKeyIndex = i;
 
 			} else if (layoutItem instanceof LayoutGroup) {
