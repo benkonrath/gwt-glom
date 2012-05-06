@@ -1,5 +1,6 @@
 package org.glom.web.shared.libglom.layout;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.Relationship;
@@ -215,4 +216,28 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 		return usesRel.getRelationshipNameUsed();
 	}
 
+	@Override
+	public String getTitleOriginal() {
+		String title = super.getTitleOriginal();
+		if (StringUtils.isEmpty(title) && (field != null)) {
+			title = field.getTitleOriginal();
+		}
+
+		return title;
+	}
+
+	@Override
+	public String getTitle(final String locale) {
+		String title = super.getTitle(locale);
+		if (StringUtils.isEmpty(title) && (field != null)) {
+			title = field.getTitle(locale);
+		}
+
+		// Fallback to the field's original title:
+		if (StringUtils.isEmpty(title) && (field != null)) {
+			title = field.getTitleOriginal();
+		}
+
+		return title;
+	}
 }
