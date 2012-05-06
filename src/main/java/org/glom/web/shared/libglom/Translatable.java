@@ -1,7 +1,7 @@
 package org.glom.web.shared.libglom;
 
 import java.io.Serializable;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import org.glom.web.client.StringUtils;
 
@@ -9,8 +9,8 @@ public class Translatable implements Serializable {
 
 	private static final long serialVersionUID = 700462080795724363L;
 
-	// We use TreeMap instead of HashTable because GWT does not support HashTable.
-	public static class TranslationsMap extends TreeMap<String, String> {
+	// We use HashMap instead of Hashtable or TreeMap because GWT only supports HashMap.
+	public static class TranslationsMap extends HashMap<String, String> {
 
 		private static final long serialVersionUID = 1275019181399622213L;
 	};

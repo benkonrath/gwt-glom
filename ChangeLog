@@ -1,5 +1,14 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	Translatable: Use Hashmap instead of Treemap because GWT supports it.
+
+	* src/main/java/org/glom/web/shared/libglom/Translatable.java:
+	The use of Treemap lead to this error from async methods, with no 
+	further clue:
+	"The response could not be deserialized"
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlom.gwt.xml: Add exludes to fix explicit gwt compilation in Eclipse.
 
 	* src/main/java/org/glom/web/OnlineGlom.gwt.xml: This is necessary 
