@@ -269,4 +269,14 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	public CustomTitle getCustomTitle() {
 		return customTitle;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getTitleUsed(String parentTableTitle, String locale) {
+		return usesRel.getTitleUsed(parentTableTitle, locale);
+	}
 }

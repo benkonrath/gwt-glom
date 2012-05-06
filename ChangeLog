@@ -1,5 +1,9 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	LayoutItemPortal: getTitle*(): Use the relationship title.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	LayoutItemField: Fix loading of custom titles.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java

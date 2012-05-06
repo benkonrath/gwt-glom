@@ -1,5 +1,6 @@
 package org.glom.web.shared.libglom.layout;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.Relationship;
 
 public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
@@ -174,4 +175,34 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 		return usesRel.getRelationshipNameUsed();
 	}
 
+	@Override
+	public String getTitle(final String locale) {
+		String title = getTitleUsed("" /* parent table - not relevant */, locale);
+		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+			title = "Undefined Table";
+
+		return title;
+	}
+
+	@Override
+	public String getTitleOrName(final String locale) {
+		String title = getTitleUsed("" /* parent table - not relevant */, locale);
+		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+			title = getRelationshipNameUsed();
+
+		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+			title = "Undefined Table";
+
+		return title;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getTitleUsed(String parentTableTitle, String locale) {
+		return usesRel.getTitleUsed(parentTableTitle, locale);
+	}
 }

@@ -91,7 +91,6 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * (non-Javadoc)
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
-	 *
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -202,6 +201,22 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			return relationship.getName();
 		} else {
 			return "";
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getTitleUsed(String parentTableTitle, String locale) {
+		if (relatedRelationship != null) {
+			return relatedRelationship.getTitleOrName(locale);
+		} else if (relationship != null) {
+			return relationship.getTitleOrName(locale);
+		} else {
+			return parentTableTitle;
 		}
 	}
 }

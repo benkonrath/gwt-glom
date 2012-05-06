@@ -58,4 +58,6 @@ public interface UsesRelationship extends Serializable {
 	public abstract String getTableUsed(String string);
 
 	public abstract String getRelationshipNameUsed();
+
+	public abstract String getTitleUsed(String parentTableTitle, String locale);
 }
