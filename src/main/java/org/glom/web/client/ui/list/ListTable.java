@@ -245,7 +245,12 @@ public abstract class ListTable extends Composite {
 	private void addColumn(final LayoutItemField layoutItemField) {
 		// Setup the default alignment of the column.
 		HorizontalAlignmentConstant columnAlignment;
-		final Formatting formatting = layoutItemField.getFormatting();
+		Formatting formatting = layoutItemField.getFormatting();
+		if (formatting == null) {
+			GWT.log("addColumn(): Formatting is null.");
+			formatting = new Formatting(); // Just to avoid null dereferencing later.
+		}
+
 		switch (formatting.getHorizontalAlignment()) {
 		case HORIZONTAL_ALIGNMENT_LEFT:
 			columnAlignment = HasHorizontalAlignment.ALIGN_LEFT;
