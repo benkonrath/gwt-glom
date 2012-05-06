@@ -137,13 +137,30 @@ final class ConfiguredDocument {
 				tableLayouts = new TableLayouts();
 				put(tableName, tableLayouts);
 			}
-			
-			return getMap(tableName, details);
+
+			LayoutLocaleMap map = null;
+			if (details) {
+				if (tableLayouts.detailsLayouts == null) {
+					tableLayouts.detailsLayouts = new LayoutLocaleMap();
+				}
+
+				map = tableLayouts.detailsLayouts;
+			} else {
+				if (tableLayouts.listLayouts == null) {
+					tableLayouts.listLayouts = new LayoutLocaleMap();
+				}
+
+				map = tableLayouts.listLayouts;
+			}
+
+			return map;
 		}
 		
 		private void setLayout(final String tableName, final String locale, final List<LayoutGroup> layout, boolean details) {
 			LayoutLocaleMap map = getMapWithAdd(tableName, details);
-			map.put(locale, layout);
+			if (map != null) {
+				map.put(locale, layout);
+			}
 		}
 	}
 	

@@ -1,5 +1,13 @@
 2012-05-06  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument: Avoid a null dereference.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	TableLayoutsForLocale.getMapWithAdd(): Make sure that the list and 
+	details maps are created.
+
+2012-05-06  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: Correct the port number parsing.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java:
