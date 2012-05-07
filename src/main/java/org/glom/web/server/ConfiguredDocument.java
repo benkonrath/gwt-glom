@@ -494,6 +494,10 @@ final class ConfiguredDocument {
 	ArrayList<DataItem[]> getRelatedListData(String tableName, final String relationshipName,
 			final TypedDataItem foreignKeyValue, final int start, final int length, final boolean useSortClause,
 			final int sortColumnIndex, final boolean isAscending) {
+		if(StringUtils.isEmpty(relationshipName)) {
+			return null;
+		}
+
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 

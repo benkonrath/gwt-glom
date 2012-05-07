@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.libglom.Document.TableToViewDetails;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
@@ -76,10 +77,9 @@ public class RelatedListNavigation extends DBAccess {
 
 		final StringBuffer navigationTableNameSB = new StringBuffer();
 		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
-		// TODO: //portal.get_suitable_table_to_view_details(navigationTableNameSB, navigationRelationshipItem,
-		// document);
 
-		final String navigationTableName = navigationTableNameSB.toString();
+		final TableToViewDetails toViewDetails = document.getPortalSuitableTableToViewDetails(portal);
+		final String navigationTableName = toViewDetails.tableName;
 		if (StringUtils.isEmpty(navigationTableName)) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot cannot be determined because the navigation table name is empty.");

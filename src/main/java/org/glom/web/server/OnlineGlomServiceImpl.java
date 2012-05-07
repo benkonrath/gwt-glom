@@ -421,9 +421,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DataItem[] getDetailsData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue) {
+		//An empty tableName is OK, because that means the default table.
+
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return new DataItem[0];
+		}
 
 		// FIXME check for authentication
 
@@ -439,9 +442,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue, final String localeID) {
+		//An empty tableName is OK, because that means the default table.
+
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return null;
+		}
 
 		// FIXME check for authentication
 
@@ -461,6 +467,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
 			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length) {
+		//An empty tableName is OK, because that means the default table.
+		
+		if(StringUtils.isEmpty(relationshipName)) {
+			return null;
+		}
+
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// FIXME check for authentication
@@ -479,6 +491,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName,
 			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
+		//An empty tableName is OK, because that means the default table.
+		
+		if(StringUtils.isEmpty(relationshipName)) {
+			return null;
+		}
+
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null)
 			return new ArrayList<DataItem[]>();
@@ -492,9 +510,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public int getRelatedListRowCount(final String documentID, final String tableName, final String relationshipName,
 			final TypedDataItem foreignKeyValue) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		//An empty tableName is OK, because that means the default table.
+		
+		if(StringUtils.isEmpty(relationshipName)) {
 			return 0;
+		}
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return 0;
+		}
 
 		// FIXME check for authentication
 
@@ -510,9 +535,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
 			final String relationshipName, final TypedDataItem primaryKeyValue) {
+		//An empty tableName is OK, because that means the default table.
+		
+		if(StringUtils.isEmpty(relationshipName)) {
+			return null;
+		}
+		
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
-			return new NavigationRecord();
+		if (configuredDoc == null) {
+			return null;
+		}
 
 		// FIXME check for authentication
 
