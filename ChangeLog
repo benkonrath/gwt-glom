@@ -1,5 +1,21 @@
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
+	ConfiguredDocument: Restore correct addition of hidden primary key items.
+
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java
+	(ListTable.createCellTable): Uncomment out the check for the hidden
+	primary key.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Only
+	add primary key items for top-level lists and portals, as before, 
+	instead of adding them to each group.
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutGroup.java:
+	Actually implement the extra methods such as setHiddenPrimaryKey() and
+	comment that these are used only for top-level list groups and in portals.
+	This strangeness suggests even more that this should not be squeezed
+	into the LayoutGroup class.
+
+2012-05-07  Murray Cumming  <murrayc@murrayc.com>
+
 	Fix Formatting loading.
 
 	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemField.java:

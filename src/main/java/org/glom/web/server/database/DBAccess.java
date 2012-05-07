@@ -258,6 +258,7 @@ abstract class DBAccess {
 		LayoutItemField libglomLayoutItemField = new LayoutItemField();
 
 		if (primaryKey != null) {
+			libglomLayoutItemField.setName(primaryKey.getName());
 			libglomLayoutItemField.setFullFieldDetails(primaryKey);
 		} else {
 			Log.error(document.getDatabaseTitleOriginal(), this.tableName,

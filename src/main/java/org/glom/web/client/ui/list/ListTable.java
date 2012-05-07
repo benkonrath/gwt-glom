@@ -123,8 +123,8 @@ public abstract class ListTable extends Composite {
 
 		ProvidesKey<DataItem[]> keyProvider = null;
 		final int primaryKeyIndex = layoutGroup.getPrimaryKeyIndex();
-		if (primaryKeyIndex >= layoutItems.size()) {
-			GWT.log("createCellTable(): primaryKeyIndex is out of range.");
+		if ((primaryKeyIndex < 0) || (primaryKeyIndex >= layoutItems.size())) {
+			GWT.log("createCellTable(): primaryKeyIndex is out of range: " + primaryKeyIndex);
 		} else {
 			final LayoutItem primaryKeyItem = layoutItems.get(primaryKeyIndex);
 			if (!(primaryKeyItem instanceof LayoutItemField)) {
@@ -136,9 +136,16 @@ public abstract class ListTable extends Composite {
 				keyProvider = new ProvidesKey<DataItem[]>() {
 					@Override
 					public Object getKey(final DataItem[] row) {
-						if (row.length == 1 && row[0] == null)
+						if (row.length == 1 && row[0] == null) {
 							// an empty row
 							return null;
+						}
+
+						if ((primaryKeyIndex < 0) || (primaryKeyIndex >= row.length)) {
+							GWT.log("createCellTable(): primaryKeyIndex is out of range: " + primaryKeyIndex);
+							return null;
+						}
+
 						return Utils.getTypedDataItem(primaryKeyFieldType, row[primaryKeyIndex]);
 					}
 				};
@@ -154,7 +161,7 @@ public abstract class ListTable extends Composite {
 		// from wrapping
 
 		// add columns to the CellTable and deal with the case of the hidden primary key
-		final int numItems = /* TODO: layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : */layoutItems.size();
+		final int numItems = layoutGroup.hasHiddenPrimaryKey() ? layoutItems.size() - 1 : layoutItems.size();
 		for (int i = 0; i < numItems; i++) {
 			final LayoutItem layoutItem = layoutItems.get(i);
 

@@ -3,13 +3,34 @@ package org.glom.web.shared.libglom.layout;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.glom.web.client.StringUtils;
+
+import com.google.gwt.core.client.GWT;
+
 public class LayoutGroup extends LayoutItem {
 
 	private static final long serialVersionUID = 2795852472980010553L;
 	private int columnCount = 0;
 
+	// Extras:
+
+	// This is maybe only used in top-level List groups and portals.
+	// This is the primary key index of the LayoutFieldVector that is used for getting the SQL query. It's being used
+	// here to avoid having to set an isPrimaryKey boolean with every LayoutItemField. This also has the advantage of
+	// not having to iterate through all of the LayoutItemFields to find the primary key index on the client side.
+	private int primaryKeyIndex = -1;
+
+	// This is maybe only used in top-level List groups and portals.
+	// indicates if the primary key is hidden and has been added to the end of the LayoutListFields list and the
+	// database data list (DataItem).
+	private boolean hiddenPrimaryKey = false;
+
+	// expectedResultSize is used only for the list layout
+	private int expectedResultSize = -1;
+
 	/**
-	 * @param columnCount the columnCount to set
+	 * @param columnCount
+	 *            the columnCount to set
 	 */
 	public void setColumnCount(int columnCount) {
 		this.columnCount = columnCount;
@@ -43,42 +64,45 @@ public class LayoutGroup extends LayoutItem {
 	}
 
 	/**
+	 * @param expectedResultSize
+	 */
+	public void setExpectedResultSize(final int expectedResultSize) {
+		this.expectedResultSize = expectedResultSize;
+	}
+
+	/**
 	 * @return
 	 */
 	public int getExpectedResultSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return expectedResultSize;
 	}
 
 	/**
 	 * @return
 	 */
 	public int getPrimaryKeyIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return primaryKeyIndex;
 	}
 
 	/**
-	 * @param expectedResultSize
+	 * @param primaryKeyIndex
 	 */
-	public void setExpectedResultSize(final int expectedResultSize) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @param b
-	 */
-	public void setHiddenPrimaryKey(final boolean b) {
-		// TODO Auto-generated method stub
+	public void setPrimaryKeyIndex(final int primaryKeyIndex) {
+		this.primaryKeyIndex = primaryKeyIndex;
 
 	}
 
 	/**
-	 * @param i
+	 * @param hiddenPrimaryKey
 	 */
-	public void setPrimaryKeyIndex(final int i) {
-		// TODO Auto-generated method stub
+	public void setHiddenPrimaryKey(final boolean hiddenPrimaryKey) {
+		this.hiddenPrimaryKey = hiddenPrimaryKey;
+	}
 
+	/**
+	 * @return
+	 */
+	public boolean hasHiddenPrimaryKey() {
+		return hiddenPrimaryKey;
 	}
 }

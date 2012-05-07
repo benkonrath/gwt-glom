@@ -366,8 +366,8 @@ final class ConfiguredDocument {
 		//in classes which are also used in the client code (though the clone() methods would
 		//not be used) and that makes the GWT java->javascript compilation fail.
 		final LayoutGroup cloned = (LayoutGroup) deepCopy(libglomLayoutGroup);
-		if(cloned != null) {
-			updateLayoutGroup(cloned, tableName, localeID);
+		if (cloned != null) {
+			updateTopLevelListLayoutGroup(cloned, tableName, localeID);
 		}
 		
 		//Store it in the cache for next time.
@@ -410,7 +410,8 @@ final class ConfiguredDocument {
 	/**
 	 * @param libglomLayoutGroup
 	 */
-	private void updateLayoutGroup(final LayoutGroup layoutGroup, final String tableName, final String localeID) {
+	private void updateTopLevelListLayoutGroup(final LayoutGroup layoutGroup, final String tableName,
+			final String localeID) {
 		final List<LayoutItem> layoutItemsVec = layoutGroup.getItems();
 
 		int primaryKeyIndex = -1;
@@ -424,9 +425,6 @@ final class ConfiguredDocument {
 				final Field field = layoutItemField.getFullFieldDetails();
 				if ((field != null) && field.getPrimaryKey())
 					primaryKeyIndex = i;
-			} else if (layoutItem instanceof LayoutGroup) {
-				LayoutGroup childGroup = (LayoutGroup) layoutItem;
-				updateLayoutGroup(childGroup, tableName, localeID);
 			}
 		}
 
@@ -446,8 +444,9 @@ final class ConfiguredDocument {
 
 			if (primaryKey != null) {
 				final LayoutItemField layoutItemField = new LayoutItemField();
+				layoutItemField.setName(primaryKey.getName());
 				layoutItemField.setFullFieldDetails(primaryKey);
-				layoutGroup.addItem(layoutItemField); // TODO: Update the field to show just one locale?
+				layoutGroup.addItem(layoutItemField);
 				layoutGroup.setPrimaryKeyIndex(layoutGroup.getItems().size() - 1);
 				layoutGroup.setHiddenPrimaryKey(true);
 			} else {
@@ -516,13 +515,13 @@ final class ConfiguredDocument {
 		// Try to return a cached version:
 		final List<LayoutGroup> result = mapTableLayouts.getDetailsLayout(tableName, localeID);
 		if (result != null) {
-			updatePortalsExpectedResultsSize(result, tableName);
+			updatePortalsExtras(result, tableName);
 			return result;
 		}
 
 		final List<LayoutGroup> listGroups = document.getDataLayoutGroups("details", tableName);
 
-		// TODO: Clone the group and change the clone, to discard unwanted informatin (such as translations)
+		// TODO: Clone the group and change the clone, to discard unwanted information (such as translations)
 		// store some information that we do not want to calculate on the client side.
 
 		// Note that we don't use clone() here, because that would need clone() implementations
@@ -532,7 +531,6 @@ final class ConfiguredDocument {
 		for (LayoutGroup group : listGroups) {
 			final LayoutGroup cloned = (LayoutGroup) deepCopy(group);
 			if (cloned != null) {
-				updateLayoutGroup(cloned, tableName, localeID);
 				listCloned.add(cloned);
 			}
 		}
@@ -540,7 +538,7 @@ final class ConfiguredDocument {
 		// Store it in the cache for next time.
 		mapTableLayouts.setDetailsLayout(tableName, localeID, listCloned);
 
-		updatePortalsExpectedResultsSize(listCloned, tableName);
+		updatePortalsExtras(listCloned, tableName);
 
 		return listCloned;
 	}
@@ -549,25 +547,49 @@ final class ConfiguredDocument {
 	 * @param result
 	 * @param tableName
 	 */
-	private void updatePortalsExpectedResultsSize(List<LayoutGroup> listGroups, String tableName) {
+	private void updatePortalsExtras(List<LayoutGroup> listGroups, String tableName) {
 		for (LayoutGroup group : listGroups) {
-			updatePortalsExpectedResultsSize(group, tableName);
+			updatePortalsExtras(group, tableName);
 		}
 
 	}
 
-	private void updatePortalsExpectedResultsSize(LayoutGroup group, String tableName) {
+	private void updatePortalsExtras(LayoutGroup group, String tableName) {
 		if (group instanceof LayoutItemPortal) {
 			final LayoutItemPortal portal = (LayoutItemPortal) group;
 			final String tableNameUsed = portal.getTableUsed(tableName);
 			updateLayoutGroupExpectedResultSize(portal, tableNameUsed);
+
+			// get the primary key for the related list table
+			final Relationship relationship = portal.getRelationship();
+			if (relationship != null) {
+				final String toTableName = relationship.getToTable();
+				if (!StringUtils.isEmpty(toTableName)) {
+
+					// get the LayoutItemField with details from its Field in the document
+					final List<Field> fields = document.getTableFields(toTableName); // TODO_Performance: Cache this.
+					for (Field field : fields) {
+						// check the names to see if they're the same
+						if (field.getPrimaryKey()) {
+							final LayoutItemField layoutItemField = new LayoutItemField();
+							layoutItemField.setName(field.getName());
+							layoutItemField.setFullFieldDetails(field);
+							portal.addItem(layoutItemField);
+							portal.setPrimaryKeyIndex(portal.getItems().size() - 1);
+							portal.setHiddenPrimaryKey(true); // always hidden in portals
+							break;
+						}
+					}
+				}
+			}
+
 		}
 
 		List<LayoutItem> childItems = group.getItems();
 		for (LayoutItem item : childItems) {
 			if (item instanceof LayoutGroup) {
 				final LayoutGroup childGroup = (LayoutGroup) item;
-				updatePortalsExpectedResultsSize(childGroup, tableName);
+				updatePortalsExtras(childGroup, tableName);
 			}
 		}
 

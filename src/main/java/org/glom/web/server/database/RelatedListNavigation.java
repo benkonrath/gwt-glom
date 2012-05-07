@@ -90,6 +90,7 @@ public class RelatedListNavigation extends DBAccess {
 		final Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTableName);
 
 		// Build a layout item to get the field's value:
+		navigationRelationshipItem.setName(navigationTablePrimaryKey.getName());
 		navigationRelationshipItem.setFullFieldDetails(navigationTablePrimaryKey);
 
 		// Get the value of the navigation related primary key:
