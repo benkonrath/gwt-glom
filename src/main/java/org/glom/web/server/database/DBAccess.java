@@ -21,6 +21,7 @@ package org.glom.web.server.database;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
@@ -61,6 +63,9 @@ abstract class DBAccess {
 	 */
 	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, List<LayoutItemField> layoutFields,
 			ResultSet rs) throws SQLException {
+		
+	    final ResultSetMetaData rsMetaData = rs.getMetaData();
+	    final int rsColumnscount = rsMetaData.getColumnCount();
 
 		// get the data we've been asked for
 		int rowCount = 0;
@@ -70,24 +75,33 @@ abstract class DBAccess {
 			DataItem[] rowArray = new DataItem[layoutFieldsSize];
 			for (int i = 0; i < layoutFieldsSize; i++) {
 				// make a new DataItem to set the text and colours
-				rowArray[i] = new DataItem();
+				rowArray[i] = new DataItem(); //TODO: Performance: Set it in the rowArray at the end, to avoid repeated lookup via [].
+				
+				LayoutItemField field = layoutFields.get(i);
+
+				if(i >= rsColumnscount) {
+					Log.error("convertResultSetToDTO(): index i=" + i + "+1 (field=" + field.getName() + " is out of range for the ResultSet. Using empty string for value.");
+					rowArray[i].setText("");
+					continue;
+				}
+
+				final int rsIndex = i + 1; //Because java.sql.ResultSet is 1-indexed, for some reason.
 
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
-				LayoutItemField field = layoutFields.get(i);
 				switch (field.getGlomType()) {
 				case TYPE_TEXT:
-					String text = rs.getString(i + 1);
+					final String text = rs.getString(rsIndex);
 					rowArray[i].setText(text != null ? text : "");
 					break;
 				case TYPE_BOOLEAN:
-					rowArray[i].setBoolean(rs.getBoolean(i + 1));
+					rowArray[i].setBoolean(rs.getBoolean(rsIndex));
 					break;
 				case TYPE_NUMERIC:
-					rowArray[i].setNumber(rs.getDouble(i + 1));
+					rowArray[i].setNumber(rs.getDouble(rsIndex));
 					break;
 				case TYPE_DATE:
-					Date date = rs.getDate(i + 1);
+					final Date date = rs.getDate(rsIndex);
 					if (date != null) {
 						// TODO: Pass Date and Time types instead of converting to text here?
 						// TODO: Use a 4-digit-year short form, somehow.
@@ -98,7 +112,7 @@ abstract class DBAccess {
 					}
 					break;
 				case TYPE_TIME:
-					Time time = rs.getTime(i + 1);
+					final Time time = rs.getTime(rsIndex);
 					if (time != null) {
 						DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
 						rowArray[i].setText(timeFormat.format(time));
@@ -107,7 +121,7 @@ abstract class DBAccess {
 					}
 					break;
 				case TYPE_IMAGE:
-					byte[] image = rs.getBytes(i + 1);
+					final byte[] image = rs.getBytes(rsIndex);
 					if (image != null) {
 						// TODO implement field TYPE_IMAGE
 						rowArray[i].setText("Image (FIXME)");
@@ -257,6 +271,9 @@ abstract class DBAccess {
 	 * Find the LayoutItemPortal for the related list name
 	 */
 	final protected LayoutItemPortal getPortal(String relationshipName) {
+		if(StringUtils.isEmpty(relationshipName)) {
+			return null;
+		}
 
 		List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("details", tableName);
 		// LayoutItemPortal portal = null;

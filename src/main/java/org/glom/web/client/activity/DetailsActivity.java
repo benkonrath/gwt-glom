@@ -93,10 +93,16 @@ public class DetailsActivity extends HasTableActivity {
 
 				@Override
 				public void onSuccess(final NavigationRecord result) {
-					processNavigation(result.getTableName(), result.getPrimaryKeyValue());
+					if(result != null) {
+						processNavigation(result.getTableName(), result.getPrimaryKeyValue());
+					} else {
+						GWT.log("onEnterKeyDown(): getSuitableRecordToViewDetails() result is null.");
+					}
 				}
 
 			};
+			
+			//TODO: tableName is not set here.
 			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName,
 					relationshipName, (TypedDataItem) context.getKey(), callback);
 		}
@@ -241,13 +247,14 @@ public class DetailsActivity extends HasTableActivity {
 
 				// set the DatailsItem
 				detailsCell.setData(data[i]);
+				final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
+				final String fieldName = layoutItemField.getName();
 
 				// see if there are any related lists that need to be setup
 				for (final Portal portal : portals) {
-					final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
 					final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
-
-					if (layoutItemField.getName().equals(layoutItemPortal.getFromField())) {
+					final String portalFromField = layoutItemPortal.getFromField();
+					if (fieldName.equals(portalFromField)) {
 						if (data[i] == null)
 							continue;
 

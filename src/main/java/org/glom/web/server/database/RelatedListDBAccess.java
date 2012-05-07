@@ -54,7 +54,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 		final LayoutItemPortal portal = getPortal(relationshipName);
 		if (portal == null) {
-			Log.error(documentID, tableName, "Couldn't find LayoutItem_Portal \"" + relationshipName + "\" in table \""
+			Log.error(documentID, tableName, "Couldn't find LayoutItemPortal with relationship name=\"" + relationshipName + "\" in table \""
 					+ tableName + "\". " + "Cannot retrive data for the related list.");
 			return;
 		}

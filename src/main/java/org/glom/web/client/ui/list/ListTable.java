@@ -273,10 +273,17 @@ public abstract class ListTable extends Composite {
 			column = new Column<DataItem[], Boolean>(new BooleanCell()) {
 				@Override
 				public Boolean getValue(final DataItem[] row) {
-					if (row.length == 1 && row[0] == null)
+					if (row.length == 1 && row[0] == null) {
 						// an empty row
 						return null;
-					return row[j].getBoolean();
+					}
+					
+					if(j >= row.length) {
+						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
+						return null;
+					} else {
+						return row[j].getBoolean();
+					}
 				}
 			};
 			// override the configured horizontal alignment
@@ -294,10 +301,17 @@ public abstract class ListTable extends Composite {
 					numericFormat.getUseAltForegroundColorForNegatives(), numericFormat.getCurrencySymbol())) {
 				@Override
 				public Double getValue(final DataItem[] row) {
-					if (row.length == 1 && row[0] == null)
+					if (row.length == 1 && row[0] == null) {
 						// an empty row
 						return null;
-					return row[j].getNumber();
+					}
+
+					if(j >= row.length) {
+						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
+						return null;
+					} else {
+						return row[j].getNumber();
+					}
 				}
 			};
 			break;
@@ -314,10 +328,17 @@ public abstract class ListTable extends Composite {
 					formatting.getTextFormatColourBackground())) {
 				@Override
 				public String getValue(final DataItem[] row) {
-					if (row.length == 1 && row[0] == null)
+					if (row.length == 1 && row[0] == null) {
 						// an empty row
 						return null;
-					return row[j].getText();
+					}
+
+					if(j >= row.length) {
+						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
+						return null;
+					} else {
+						return row[j].getText();
+					}
 				}
 			};
 			break;

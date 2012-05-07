@@ -112,7 +112,11 @@ public class RelatedListTable extends ListTable {
 					@Override
 					public void onSuccess(ArrayList<DataItem[]> result) {
 						// keep track of the number of non-empty rows (rows with data)
-						numNonEmptyRows = result.size();
+						numNonEmptyRows = 0;
+						if(result != null) {
+							numNonEmptyRows = result.size();
+						}
+
 						// Add empty rows if required.
 						int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
 						for (int i = 0; i < numEmptyRows; i++) {

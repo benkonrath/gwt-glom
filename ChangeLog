@@ -1,5 +1,23 @@
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
+	Add some checks.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+	RelatedListNavigationButtonCell.onEnterKeyDown(), setData():
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	getDataProvider():
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java:
+	addColumn():
+	* src/main/java/org/glom/web/server/database/DBAccess.java:
+	convertResultSetToDTO(), getPortal():
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java
+	getListData():
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	Add checks for null objects and out of range access, with log messages to
+	give hints so we can fix these properly.
+
+2012-05-07  Murray Cumming  <murrayc@murrayc.com>
+
 	Portals: some corrections.
 
 	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
