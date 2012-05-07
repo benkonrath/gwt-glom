@@ -255,14 +255,14 @@ public class DetailsActivity extends HasTableActivity {
 								data[i]);
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
-								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getName()));
+								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getRelationshipNameUsed()));
 
 						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
 							relatedListTable.hideNavigationButtons();
 						}
 						portal.setContents(relatedListTable);
 
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getName(), foreignKeyValue);
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getRelationshipNameUsed(), foreignKeyValue);
 					}
 				}
 			}

@@ -277,14 +277,14 @@ abstract class DBAccess {
 	 */
 	final private LayoutItemPortal getPortal(String relationshipName, LayoutGroup layoutGroup) {
 
-		if (relationshipName == null)
+		if (StringUtils.isEmpty(relationshipName))
 			return null;
 
 		List<LayoutItem> items = layoutGroup.getItems();
 		for (int i = 0; i < items.size(); i++) {
 			LayoutItem layoutItem = items.get(i);
 
-			if (layoutItem instanceof LayoutItem) {
+			if (layoutItem instanceof LayoutItemField) {
 				// the layoutItem is a LayoutItem_Field
 				continue;
 

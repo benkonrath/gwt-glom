@@ -1,5 +1,19 @@
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
+	Portals: some corrections.
+
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	setData():
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	constructor: Use getRelationshipNameUsed() instead of getName(), because
+	that is what is meant.
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemPortal.java:
+	getFromField(): Fix a typo, to get the field name, not the table name.
+	* src/main/java/org/glom/web/server/database/DBAccess.java:
+	getPortal(): Fix a typo that stopped this from working.
+
+2012-05-07  Murray Cumming  <murrayc@murrayc.com>
+
 	LayoutItemPortal: Also override getTitleOriginal().
 
 	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemPortal.java:

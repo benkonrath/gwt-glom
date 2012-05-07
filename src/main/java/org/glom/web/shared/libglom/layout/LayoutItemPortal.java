@@ -20,14 +20,14 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @return
 	 */
 	public String getFromField() {
-		String from_table = null;
+		String result = null;
 
 		final Relationship relationship = getRelationship();
 		if (relationship != null) {
-			from_table = relationship.getFromTable();
+			result = relationship.getFromField();
 		}
 
-		return from_table;
+		return result;
 	}
 
 	/*
