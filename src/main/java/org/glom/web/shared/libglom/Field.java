@@ -13,7 +13,7 @@ public class Field extends Translatable {
 	private GlomFieldType glomFieldType; // TODO: = glom_field_type.TYPE_INVALID;
 	private boolean primaryKey = false;
 	private boolean uniqueKey = false;
-	Formatting formatting = new Formatting(); // TODO: Start will null?
+	Formatting formatting = new Formatting(); // Not null, so we have some default formatting.
 
 	/**
 	 * @return the formatting

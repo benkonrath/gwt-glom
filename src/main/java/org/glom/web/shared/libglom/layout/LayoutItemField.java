@@ -11,7 +11,6 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	private static final long serialVersionUID = -7101706636312130106L;
 	private Field field;
 	private UsesRelationship usesRel = new UsesRelationshipImpl();
-	private Formatting formatting = new Formatting();
 	private boolean useDefaultFormatting = true;
 	private CustomTitle customTitle = new CustomTitle();
 
@@ -37,7 +36,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 		if (useDefaultFormatting && (field != null)) {
 			return field.getFormatting();
 		} else {
-			return formatting;
+			return super.getFormatting();
 		}
 	}
 

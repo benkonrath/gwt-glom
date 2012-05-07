@@ -1,5 +1,18 @@
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
+	Fix Formatting loading.
+
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemField.java:
+	getFormattingUsed(): Remove the duplicate Formatting member variable
+	in favour of the one from the base class.
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemWithFormatting.java:
+	Initialize a new Formatting instead of using null by default, so we 
+	have some defaults, instead of having to initialize one later just to 
+	get the same defaults. This also makes loading of formatting from the
+	document work, because that expected a non-null.
+
+2012-05-07  Murray Cumming  <murrayc@murrayc.com>
+
 	RelatedListTable: Make sure that the tableName is set.
 
 	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:

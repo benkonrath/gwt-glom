@@ -678,11 +678,13 @@ public class Document {
 	 * @param formatting
 	 */
 	private void loadFormatting(final Element elementFormatting, final Formatting formatting) {
-		if (elementFormatting == null)
+		if (elementFormatting == null) {
 			return;
+		}
 
-		if (formatting == null)
+		if (formatting == null) {
 			return;
+		}
 
 		// formatting.setTextFormatMultiline(getAttributeAsBoolean(elementFormatting, ATTRIBUTE_TEXT_FORMAT_MULTILINE));
 

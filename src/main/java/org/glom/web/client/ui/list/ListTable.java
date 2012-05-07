@@ -247,7 +247,7 @@ public abstract class ListTable extends Composite {
 		HorizontalAlignmentConstant columnAlignment;
 		Formatting formatting = layoutItemField.getFormatting();
 		if (formatting == null) {
-			GWT.log("addColumn(): Formatting is null.");
+			GWT.log("addColumn(): Formatting is null for field=" + layoutItemField.getLayoutDisplayName());
 			formatting = new Formatting(); // Just to avoid null dereferencing later.
 		}
 
