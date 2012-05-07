@@ -261,7 +261,7 @@ public class DetailsActivity extends HasTableActivity {
 						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getGlomType(),
 								data[i]);
 
-						final RelatedListTable relatedListTable = new RelatedListTable(documentID, layoutItemPortal,
+						final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName, layoutItemPortal,
 								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getRelationshipNameUsed()));
 
 						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {

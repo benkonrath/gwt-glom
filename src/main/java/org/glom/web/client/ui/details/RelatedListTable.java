@@ -66,10 +66,11 @@ public class RelatedListTable extends ListTable {
 
 	private final static int expectedHeight = initializeExepectedHeight();
 
-	public RelatedListTable(String documentID, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
+	public RelatedListTable(String documentID, String tableName, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
 			NavigationButtonCell navigationButtonCell) {
 
 		super(documentID);
+		super.tableName = tableName;
 
 		// These variables need to be set before the createCellTable() method is called so that the data provider can
 		// use them.

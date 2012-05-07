@@ -1,5 +1,16 @@
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
+	RelatedListTable: Make sure that the tableName is set.
+
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	Constructor: Take the tableName so it is available later. Otherwise, 
+	the server assumes that we mean the default table and cannot find the
+	relationship in it.
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	setData(): Pass the tableName to the RelatedListTable constructor.
+
+2012-05-07  Murray Cumming  <murrayc@murrayc.com>
+
 	Add some checks.
 
 	* src/main/java/org/glom/web/client/activity/DetailsActivity.java:
