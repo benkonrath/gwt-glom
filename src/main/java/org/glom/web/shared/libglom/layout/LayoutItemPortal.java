@@ -176,6 +176,15 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	}
 
 	@Override
+	public String getTitleOriginal() {
+		String title = getTitleUsed("" /* parent table - not relevant */, "" /* locale */);
+		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+			title = "Undefined Table";
+
+		return title;
+	}
+	
+	@Override
 	public String getTitle(final String locale) {
 		String title = getTitleUsed("" /* parent table - not relevant */, locale);
 		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
