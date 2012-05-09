@@ -74,6 +74,10 @@ public class NumericFormat implements Serializable {
 		return "red"; // As in libglom's numeric_format.cc
 	}
 
+	public static String getAlternativeColorForNegativesAsHTMLColor() {
+		return "red"; // As in libglom's numeric_format.cc
+	}
+
 	public boolean getUseAltForegroundColorForNegatives() {
 		return useAltForegroundColorForNegatives;
 	}

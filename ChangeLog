@@ -50,6 +50,20 @@
 
 2012-05-09  Murray Cumming  <murrayc@murrayc.com>
 
+	Use colors in HTML format, solving a warning about an unused function.
+
+	* src/main/java/org/glom/web/shared/libglom/NumericFormat.java
+	* src/main/java/org/glom/web/shared/libglom/layout/Formatting.java:
+	Add *asHTMLColor() versions of methods.
+	TODO: However, we should create and cache the results on the server.
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java
+	* src/main/java/org/glom/web/client/ui/list/ListTable.java
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	* src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+	Use the asHTMLcolor() versions.
+
+2012-05-09  Murray Cumming  <murrayc@murrayc.com>
+
 	ListViewTable: Constructor: Take the table name as a parameter.
 
 	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:

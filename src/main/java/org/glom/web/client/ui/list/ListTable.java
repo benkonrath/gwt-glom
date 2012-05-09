@@ -305,8 +305,9 @@ public abstract class ListTable extends Composite {
 			final NumberFormat gwtNumberFormat = Utils.getNumberFormat(numericFormat);
 
 			// create the actual column
-			column = new Column<DataItem[], Double>(new NumericCell(formatting.getTextFormatColourForeground(),
-					formatting.getTextFormatColourBackground(), gwtNumberFormat,
+			column = new Column<DataItem[], Double>(new NumericCell(
+					formatting.getTextFormatColourForegroundAsHTMLColor(),
+					formatting.getTextFormatColourBackgroundAsHTMLColor(), gwtNumberFormat,
 					numericFormat.getUseAltForegroundColorForNegatives(), numericFormat.getCurrencySymbol())) {
 				@Override
 				public Double getValue(final DataItem[] row) {
@@ -333,8 +334,8 @@ public abstract class ListTable extends Composite {
 		case TYPE_INVALID:
 		case TYPE_TIME:
 		case TYPE_TEXT:
-			column = new Column<DataItem[], String>(new TextCell(formatting.getTextFormatColourForeground(),
-					formatting.getTextFormatColourBackground())) {
+			column = new Column<DataItem[], String>(new TextCell(formatting.getTextFormatColourForegroundAsHTMLColor(),
+					formatting.getTextFormatColourBackgroundAsHTMLColor())) {
 				@Override
 				public String getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null) {

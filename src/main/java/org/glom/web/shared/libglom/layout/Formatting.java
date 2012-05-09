@@ -2,7 +2,10 @@ package org.glom.web.shared.libglom.layout;
 
 import java.io.Serializable;
 
+import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.NumericFormat;
+
+import com.google.gwt.core.client.GWT;
 
 public class Formatting implements Serializable {
 
@@ -56,17 +59,29 @@ public class Formatting implements Serializable {
 	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColorForNegatives(boolean)} if that is
 	 * active.
 	 * 
-	 * @returns the text foreground colour in HTML colour format
+	 * @returns the text foreground colour in GdkColor colour format
 	 */
 	public String getTextFormatColourForeground() {
 		return textFormatColourForeground;
+	}
+
+	/*
+	 * Get the foreground colour to use for text when displaying a field value.
+	 * 
+	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColorForNegatives(boolean)} if that is
+	 * active.
+	 * 
+	 * @returns the text foreground colour in HTML colour format
+	 */
+	public String getTextFormatColourForegroundAsHTMLColor() {
+		return convertGdkColorToHtmlColour(textFormatColourForeground);
 	}
 
 	/**
 	 * Set the foreground colour to use for text when displaying a field value.
 	 * 
 	 * @param colour
-	 *            the text foreground colour in HTML colour format
+	 *            the text foreground colour in GdkColor colour format
 	 */
 	public void setTextFormatColourForeground(String colour) {
 		this.textFormatColourForeground = colour;
@@ -75,10 +90,19 @@ public class Formatting implements Serializable {
 	/**
 	 * Get the background colour to use for text when displaying a field value.
 	 * 
-	 * @returns the text background colour in HTML colour format
+	 * @returns the text background colour in GdkColor colour format
 	 */
 	public String getTextFormatColourBackground() {
 		return textFormatColourBackground;
+	}
+
+	/**
+	 * Get the background colour to use for text when displaying a field value.
+	 * 
+	 * @returns the text background colour in HTML colour format
+	 */
+	public String getTextFormatColourBackgroundAsHTMLColor() {
+		return convertGdkColorToHtmlColour(textFormatColourBackground);
 	}
 
 	/**
@@ -97,5 +121,26 @@ public class Formatting implements Serializable {
 
 	public void setNumericFormat(NumericFormat numericFormat) {
 		this.numericFormat = numericFormat;
+	}
+
+	/*
+	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by discarding the least
+	 * significant 8-bits in each channel.
+	 */
+	private static String convertGdkColorToHtmlColour(final String gdkColor) {
+		if (StringUtils.isEmpty(gdkColor)) {
+			return "";
+		}
+
+		if (gdkColor.length() == 13)
+			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
+		else if (gdkColor.length() == 7) {
+			// This shouldn't happen but let's deal with it if it does.
+			GWT.log("Expected a 13 character string but received a 7 character string. Returning received string.");
+			return gdkColor;
+		} else {
+			GWT.log("Did not receive a 13 or 7 character string. Returning black HTML colour code.");
+			return "#000000";
+		}
 	}
 }

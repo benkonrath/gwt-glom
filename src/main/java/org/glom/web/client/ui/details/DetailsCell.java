@@ -99,10 +99,10 @@ public class DetailsCell extends Composite {
 		}
 
 		// set the text foreground and background colours
-		String foregroundColour = formatting.getTextFormatColourForeground();
+		String foregroundColour = formatting.getTextFormatColourForegroundAsHTMLColor();
 		if (!StringUtils.isEmpty(foregroundColour))
 			detailsData.getElement().getStyle().setColor(foregroundColour);
-		String backgroundColour = formatting.getTextFormatColourBackground();
+		String backgroundColour = formatting.getTextFormatColourBackgroundAsHTMLColor();
 		if (!StringUtils.isEmpty(backgroundColour))
 			detailsData.getElement().getStyle().setBackgroundColor(backgroundColour);
 
@@ -163,7 +163,8 @@ public class DetailsCell extends Composite {
 			// set the foreground color to red if the number is negative and this is requested
 			if (numericFormat.getUseAltForegroundColorForNegatives() && dataItem.getNumber() < 0) {
 				// The default alternative color in libglom is red.
-				detailsData.getElement().getStyle().setColor(NumericFormat.getAlternativeColorForNegatives());
+				detailsData.getElement().getStyle()
+						.setColor(NumericFormat.getAlternativeColorForNegativesAsHTMLColor());
 			}
 
 			final String currencyCode = StringUtils.isEmpty(numericFormat.getCurrencySymbol()) ? "" : numericFormat

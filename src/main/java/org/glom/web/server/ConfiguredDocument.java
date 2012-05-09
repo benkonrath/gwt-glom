@@ -672,21 +672,38 @@ final class ConfiguredDocument {
 		return getValidListViewLayoutGroup(tableName, localeID);
 	}
 
-	/*
-	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by discarding the least
-	 * significant 8-bits in each channel.
+	/**
+	 * Store some cache values in the LayoutItemPortal.
+	 * 
+	 * @param tableName
+	 * @param layoutItemPortal
+	 * @param localeID
+	 * @return
 	 */
-	private String convertGdkColorToHtmlColour(final String gdkColor) {
-		if (gdkColor.length() == 13)
-			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
-		else if (gdkColor.length() == 7) {
-			// This shouldn't happen but let's deal with it if it does.
-			Log.warn(documentID,
-					"Expected a 13 character string but received a 7 character string. Returning received string.");
-			return gdkColor;
-		} else {
-			Log.error("Did not receive a 13 or 7 character string. Returning black HTML colour code.");
-			return "#000000";
+	private void updateLayoutItemPortalDTO(final String tableName, final LayoutItemPortal layoutItemPortal,
+			final String localeID) {
+
+		// Ignore LayoutItem_CalendarPortals for now:
+		// https://bugzilla.gnome.org/show_bug.cgi?id=664273
+		if (layoutItemPortal instanceof LayoutItemCalendarPortal) {
+			return;
+		}
+
+		final Relationship relationship = layoutItemPortal.getRelationship();
+		if (relationship != null) {
+			// layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
+			// layoutItemPortal.setTableName(relationship.get_from_table());
+			// layoutItemPortal.setFromField(relationship.get_from_field());
+
+			// Set whether or not the related list will need to show the navigation buttons.
+			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
+			final Document.TableToViewDetails viewDetails = document
+					.getPortalSuitableTableToViewDetails(layoutItemPortal);
+			boolean addNavigation = false;
+			if (viewDetails != null) {
+				addNavigation = !StringUtils.isEmpty(viewDetails.tableName);
+			}
+			layoutItemPortal.setAddNavigation(addNavigation);
 		}
 	}
 

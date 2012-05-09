@@ -213,7 +213,8 @@ public class DocumentTest {
 					final long decimalPlaces = numFormat.getDecimalPlaces();
 					final boolean decimalPlacesRestricted = numFormat.getDecimalPlacesRestricted();
 					final boolean useThousandsSepator = numFormat.getUseThousandsSeparator();
-					final String alternativeColorForNegatives = NumericFormat.getAlternativeColorForNegatives();
+					final String alternativeColorForNegatives = NumericFormat
+							.getAlternativeColorForNegativesAsHTMLColor();
 					final long defaultPrecision = NumericFormat.getDefaultPrecision();
 
 					// Simulate a garbage collection
@@ -226,7 +227,8 @@ public class DocumentTest {
 					assertEquals(decimalPlaces, numFormat.getDecimalPlaces());
 					assertEquals(decimalPlacesRestricted, numFormat.getDecimalPlacesRestricted());
 					assertEquals(useThousandsSepator, numFormat.getUseThousandsSeparator());
-					assertEquals(alternativeColorForNegatives, NumericFormat.getAlternativeColorForNegatives());
+					assertEquals(alternativeColorForNegatives,
+							NumericFormat.getAlternativeColorForNegativesAsHTMLColor());
 					assertEquals(defaultPrecision, NumericFormat.getDefaultPrecision());
 
 				}
