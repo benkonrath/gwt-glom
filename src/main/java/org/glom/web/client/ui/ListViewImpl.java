@@ -92,7 +92,7 @@ public class ListViewImpl extends Composite implements ListView {
 
 		mainPanel.clear();
 
-		final ListViewTable listViewTable = new ListViewTable(documentID, layoutGroup,
+		final ListViewTable listViewTable = new ListViewTable(documentID, tableName, layoutGroup,
 				new ListViewNavigationButtonCell(documentID, tableName), quickFind);
 
 		if (layoutGroup.getExpectedResultSize() <= listViewTable.getMinNumVisibleRows()) {

@@ -53,9 +53,10 @@ public class ListViewTable extends ListTable {
 
 	private int numNonEmptyRows = 0;
 
-	public ListViewTable(final String documentID, final LayoutGroup layoutGroup,
+	public ListViewTable(final String documentID, String tableName, final LayoutGroup layoutGroup,
 			final NavigationButtonCell navigationButtonCell, final String quickFind) {
 		super(documentID);
+		this.tableName = tableName;
 		this.quickFind = quickFind;
 		// TODO: Is tableName set here?
 		createCellTable(layoutGroup, tableName, MAX_TABLE_ROWS, constants.details(), navigationButtonCell);

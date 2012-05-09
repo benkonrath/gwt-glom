@@ -48,6 +48,18 @@
 	loadUsesRelationship(): Actually set the related relationship, instead
 	of only setting it if it's not found.
 
+2012-05-09  Murray Cumming  <murrayc@murrayc.com>
+
+	ListViewTable: Constructor: Take the table name as a parameter.
+
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	Constructor: Take the tableName, and set the member variable, because
+	we use it here.
+	* src/main/java/org/glom/web/client/ui/ListViewImpl.java:
+	setCellTable(): Pass the table name.
+	This makes navigation to non-default tables work again. I don't know 
+	why it worked before in the master branch.
+
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Restore correct addition of hidden primary key items.
