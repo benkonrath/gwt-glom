@@ -50,6 +50,12 @@
 
 2012-05-09  Murray Cumming  <murrayc@murrayc.com>
 
+	Replace all appearances of Colour with color.
+
+	Because US English is dominant.
+
+2012-05-09  Murray Cumming  <murrayc@murrayc.com>
+
 	Use colors in HTML format, solving a warning about an unused function.
 
 	* src/main/java/org/glom/web/shared/libglom/NumericFormat.java

@@ -98,13 +98,13 @@ public class DetailsCell extends Composite {
 			break;
 		}
 
-		// set the text foreground and background colours
-		String foregroundColour = formatting.getTextFormatColourForegroundAsHTMLColor();
-		if (!StringUtils.isEmpty(foregroundColour))
-			detailsData.getElement().getStyle().setColor(foregroundColour);
-		String backgroundColour = formatting.getTextFormatColourBackgroundAsHTMLColor();
-		if (!StringUtils.isEmpty(backgroundColour))
-			detailsData.getElement().getStyle().setBackgroundColor(backgroundColour);
+		// set the text foreground and background colors
+		String foregroundColor = formatting.getTextFormatColorForegroundAsHTMLColor();
+		if (!StringUtils.isEmpty(foregroundColor))
+			detailsData.getElement().getStyle().setColor(foregroundColor);
+		String backgroundColor = formatting.getTextFormatColorBackgroundAsHTMLColor();
+		if (!StringUtils.isEmpty(backgroundColor))
+			detailsData.getElement().getStyle().setBackgroundColor(backgroundColor);
 
 		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("details-cell");

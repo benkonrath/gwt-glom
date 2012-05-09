@@ -32,27 +32,27 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  * Cell renderer for {@link GlomFieldType} TYPE_NUMERIC.
  */
 public class NumericCell extends AbstractCell<Double> {
-	private SafeHtml colourCSSProp;
-	private SafeHtml backgroundColourCSSProp;
+	private SafeHtml colorCSSProp;
+	private SafeHtml backgroundColorCSSProp;
 	private NumberFormat numberFormat;
-	private boolean useAltColourForNegatives;
+	private boolean useAltColorForNegatives;
 	private String currencyCode;
 
-	// TODO Find a way to set the colours on the whole column
-	public NumericCell(String foregroundColour, String backgroundColour, NumberFormat numberFormat,
-			boolean useAltColourForNegatives, String currencyCode) {
-		if (!StringUtils.isEmpty(foregroundColour)) {
-			colourCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColour + ";");
+	// TODO Find a way to set the colors on the whole column
+	public NumericCell(String foregroundColor, String backgroundColor, NumberFormat numberFormat,
+			boolean useAltColorForNegatives, String currencyCode) {
+		if (!StringUtils.isEmpty(foregroundColor)) {
+			colorCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColor + ";");
 		} else {
-			colourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			colorCSSProp = SafeHtmlUtils.fromSafeConstant("");
 		}
-		if (!StringUtils.isEmpty(backgroundColour)) {
-			backgroundColourCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColour + ";");
+		if (!StringUtils.isEmpty(backgroundColor)) {
+			backgroundColorCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColor + ";");
 		} else {
-			backgroundColourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			backgroundColorCSSProp = SafeHtmlUtils.fromSafeConstant("");
 		}
 		this.numberFormat = numberFormat;
-		this.useAltColourForNegatives = useAltColourForNegatives;
+		this.useAltColorForNegatives = useAltColorForNegatives;
 		this.currencyCode = StringUtils.isEmpty(currencyCode) ? "" : currencyCode + " ";
 	}
 
@@ -70,18 +70,18 @@ public class NumericCell extends AbstractCell<Double> {
 			return;
 		}
 
-		// set the foreground colour to red if the number is negative and this is requested
-		if (useAltColourForNegatives && value.doubleValue() < 0) {
-			// The default alternative colour in libglom is red.
-			colourCSSProp = SafeHtmlUtils.fromString("color: #FF0000;");
+		// set the foreground color to red if the number is negative and this is requested
+		if (useAltColorForNegatives && value.doubleValue() < 0) {
+			// The default alternative color in libglom is red.
+			colorCSSProp = SafeHtmlUtils.fromString("color: #FF0000;");
 		}
 
 		// Convert the number to a string and set some CSS properties on the text.
 		// The overflow and text-overflow properties tell the browser to add an ellipsis when the text overflows the
 		// table cell.
 		// FIXME this isn't using safe html correctly!
-		sb.appendHtmlConstant("<div style=\"overflow: hidden; text-overflow: ellipsis; " + colourCSSProp.asString()
-				+ backgroundColourCSSProp.asString() + "\">");
+		sb.appendHtmlConstant("<div style=\"overflow: hidden; text-overflow: ellipsis; " + colorCSSProp.asString()
+				+ backgroundColorCSSProp.asString() + "\">");
 		sb.append(SafeHtmlUtils.fromString(currencyCode + numberFormat.format(value)));
 		sb.appendHtmlConstant("</div>");
 

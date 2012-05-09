@@ -74,7 +74,7 @@ abstract class DBAccess {
 			int layoutFieldsSize = Utils.safeLongToInt(layoutFields.size());
 			DataItem[] rowArray = new DataItem[layoutFieldsSize];
 			for (int i = 0; i < layoutFieldsSize; i++) {
-				// make a new DataItem to set the text and colours
+				// make a new DataItem to set the text and colors
 				rowArray[i] = new DataItem(); //TODO: Performance: Set it in the rowArray at the end, to avoid repeated lookup via [].
 				
 				LayoutItemField field = layoutFields.get(i);

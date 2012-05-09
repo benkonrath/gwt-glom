@@ -30,7 +30,7 @@ public class NumericFormat implements Serializable {
 	private int decimalPlaces = 2;
 
 	/**
-	 * Whether to use an alternative foreground colour for negative values.
+	 * Whether to use an alternative foreground color for negative values.
 	 */
 	private boolean useAltForegroundColorForNegatives = false;
 

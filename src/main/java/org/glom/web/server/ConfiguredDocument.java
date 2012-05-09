@@ -80,21 +80,21 @@ final class ConfiguredDocument {
 
 		public LayoutGroup getListLayout(final String tableName, final String locale) {
 			final List<LayoutGroup> groups = getLayout(tableName, locale, false);
-			if(groups == null) {
+			if (groups == null) {
 				return null;
 			}
-			
-			if(groups.isEmpty()) {
+
+			if (groups.isEmpty()) {
 				return null;
 			}
-			
+
 			return groups.get(0);
 		}
-		
+
 		public List<LayoutGroup> getDetailsLayout(final String tableName, final String locale) {
 			return getLayout(tableName, locale, true);
 		}
-		
+
 		public void setListLayout(final String tableName, final String locale, LayoutGroup layout) {
 			List<LayoutGroup> list = new ArrayList<LayoutGroup>();
 			list.add(layout);
@@ -104,25 +104,25 @@ final class ConfiguredDocument {
 		public void setDetailsLayout(final String tableName, final String locale, final List<LayoutGroup> layout) {
 			setLayout(tableName, locale, layout, true);
 		}
-		
+
 		private List<LayoutGroup> getLayout(final String tableName, final String locale, boolean details) {
 			LayoutLocaleMap map = getMap(tableName, details);
-			
-			if(map == null) {
+
+			if (map == null) {
 				return null;
 			}
-			
+
 			return map.get(locale);
 		}
 
 		private LayoutLocaleMap getMap(final String tableName, boolean details) {
 			final TableLayouts tableLayouts = get(tableName);
-			if(tableLayouts == null) {
+			if (tableLayouts == null) {
 				return null;
 			}
-			
+
 			LayoutLocaleMap map = null;
-			if(details) {
+			if (details) {
 				map = tableLayouts.detailsLayouts;
 			} else {
 				map = tableLayouts.listLayouts;
@@ -130,10 +130,10 @@ final class ConfiguredDocument {
 
 			return map;
 		}
-		
+
 		private LayoutLocaleMap getMapWithAdd(final String tableName, boolean details) {
 			TableLayouts tableLayouts = get(tableName);
-			if(tableLayouts == null) {
+			if (tableLayouts == null) {
 				tableLayouts = new TableLayouts();
 				put(tableName, tableLayouts);
 			}
@@ -155,15 +155,16 @@ final class ConfiguredDocument {
 
 			return map;
 		}
-		
-		private void setLayout(final String tableName, final String locale, final List<LayoutGroup> layout, boolean details) {
+
+		private void setLayout(final String tableName, final String locale, final List<LayoutGroup> layout,
+				boolean details) {
 			LayoutLocaleMap map = getMapWithAdd(tableName, details);
 			if (map != null) {
 				map.put(locale, layout);
 			}
 		}
 	}
-	
+
 	private TableLayoutsForLocale mapTableLayouts = new TableLayoutsForLocale();
 
 	@SuppressWarnings("unused")
@@ -360,22 +361,22 @@ final class ConfiguredDocument {
 		}
 
 		// TODO: Clone the group and change the clone, to discard unwanted information (such as translations)
-		//store some information that we do not want to calculate on the client side.
-		
-		//Note that we don't use clone() here, because that would need clone() implementations
-		//in classes which are also used in the client code (though the clone() methods would
-		//not be used) and that makes the GWT java->javascript compilation fail.
+		// store some information that we do not want to calculate on the client side.
+
+		// Note that we don't use clone() here, because that would need clone() implementations
+		// in classes which are also used in the client code (though the clone() methods would
+		// not be used) and that makes the GWT java->javascript compilation fail.
 		final LayoutGroup cloned = (LayoutGroup) deepCopy(libglomLayoutGroup);
 		if (cloned != null) {
 			updateTopLevelListLayoutGroup(cloned, tableName, localeID);
 		}
-		
-		//Store it in the cache for next time.
+
+		// Store it in the cache for next time.
 		mapTableLayouts.setListLayout(tableName, localeID, cloned);
 
 		return cloned;
 	}
-	
+
 	static public Object deepCopy(Object oldObj) {
 		ObjectOutputStream oos = null;
 		ObjectInputStream ois = null;
@@ -491,7 +492,7 @@ final class ConfiguredDocument {
 	ArrayList<DataItem[]> getRelatedListData(String tableName, final String relationshipName,
 			final TypedDataItem foreignKeyValue, final int start, final int length, final boolean useSortClause,
 			final int sortColumnIndex, final boolean isAscending) {
-		if(StringUtils.isEmpty(relationshipName)) {
+		if (StringUtils.isEmpty(relationshipName)) {
 			return null;
 		}
 
@@ -670,41 +671,6 @@ final class ConfiguredDocument {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 		return getValidListViewLayoutGroup(tableName, localeID);
-	}
-
-	/**
-	 * Store some cache values in the LayoutItemPortal.
-	 * 
-	 * @param tableName
-	 * @param layoutItemPortal
-	 * @param localeID
-	 * @return
-	 */
-	private void updateLayoutItemPortalDTO(final String tableName, final LayoutItemPortal layoutItemPortal,
-			final String localeID) {
-
-		// Ignore LayoutItem_CalendarPortals for now:
-		// https://bugzilla.gnome.org/show_bug.cgi?id=664273
-		if (layoutItemPortal instanceof LayoutItemCalendarPortal) {
-			return;
-		}
-
-		final Relationship relationship = layoutItemPortal.getRelationship();
-		if (relationship != null) {
-			// layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
-			// layoutItemPortal.setTableName(relationship.get_from_table());
-			// layoutItemPortal.setFromField(relationship.get_from_field());
-
-			// Set whether or not the related list will need to show the navigation buttons.
-			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
-			final Document.TableToViewDetails viewDetails = document
-					.getPortalSuitableTableToViewDetails(layoutItemPortal);
-			boolean addNavigation = false;
-			if (viewDetails != null) {
-				addNavigation = !StringUtils.isEmpty(viewDetails.tableName);
-			}
-			layoutItemPortal.setAddNavigation(addNavigation);
-		}
 	}
 
 	/**

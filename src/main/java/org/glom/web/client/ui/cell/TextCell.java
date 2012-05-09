@@ -31,20 +31,20 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  * Cell renderer for {@link GlomFieldType} TYPE_TEXT.
  */
 public class TextCell extends AbstractCell<String> {
-	SafeHtml colourCSSProp;
-	SafeHtml backgroundColourCSSProp;
+	SafeHtml colorCSSProp;
+	SafeHtml backgroundColorCSSProp;
 
-	// TODO Find a way to set the colours on the whole column
-	public TextCell(String foregroundColour, String backgroundColour) {
-		if (!StringUtils.isEmpty(foregroundColour)) {
-			colourCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColour + ";");
+	// TODO Find a way to set the colors on the whole column
+	public TextCell(String foregroundColor, String backgroundColor) {
+		if (!StringUtils.isEmpty(foregroundColor)) {
+			colorCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColor + ";");
 		} else {
-			colourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			colorCSSProp = SafeHtmlUtils.fromSafeConstant("");
 		}
-		if (!StringUtils.isEmpty(backgroundColour)) {
-			backgroundColourCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColour + ";");
+		if (!StringUtils.isEmpty(backgroundColor)) {
+			backgroundColorCSSProp = SafeHtmlUtils.fromString("background-color:" + backgroundColor + ";");
 		} else {
-			backgroundColourCSSProp = SafeHtmlUtils.fromSafeConstant("");
+			backgroundColorCSSProp = SafeHtmlUtils.fromSafeConstant("");
 		}
 	}
 
@@ -66,8 +66,8 @@ public class TextCell extends AbstractCell<String> {
 		// The overflow and text-overflow properties tell the browser to add an ellipsis when the text overflows the
 		// table cell.
 		// FIXME this isn't using safe html correctly!
-		sb.appendHtmlConstant("<div style=\"overflow: hidden; text-overflow: ellipsis; " + colourCSSProp.asString()
-				+ backgroundColourCSSProp.asString() + "\">");
+		sb.appendHtmlConstant("<div style=\"overflow: hidden; text-overflow: ellipsis; " + colorCSSProp.asString()
+				+ backgroundColorCSSProp.asString() + "\">");
 		sb.append(SafeHtmlUtils.fromString(value));
 		sb.appendHtmlConstant("</div>");
 

@@ -62,7 +62,7 @@ import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 
 /**
- * 
+ *
  */
 public abstract class ListTable extends Composite {
 
@@ -286,8 +286,8 @@ public abstract class ListTable extends Composite {
 						// an empty row
 						return null;
 					}
-					
-					if(j >= row.length) {
+
+					if (j >= row.length) {
 						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
 						return null;
 					} else {
@@ -306,8 +306,8 @@ public abstract class ListTable extends Composite {
 
 			// create the actual column
 			column = new Column<DataItem[], Double>(new NumericCell(
-					formatting.getTextFormatColourForegroundAsHTMLColor(),
-					formatting.getTextFormatColourBackgroundAsHTMLColor(), gwtNumberFormat,
+					formatting.getTextFormatColorForegroundAsHTMLColor(),
+					formatting.getTextFormatColorBackgroundAsHTMLColor(), gwtNumberFormat,
 					numericFormat.getUseAltForegroundColorForNegatives(), numericFormat.getCurrencySymbol())) {
 				@Override
 				public Double getValue(final DataItem[] row) {
@@ -316,7 +316,7 @@ public abstract class ListTable extends Composite {
 						return null;
 					}
 
-					if(j >= row.length) {
+					if (j >= row.length) {
 						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
 						return null;
 					} else {
@@ -334,8 +334,8 @@ public abstract class ListTable extends Composite {
 		case TYPE_INVALID:
 		case TYPE_TIME:
 		case TYPE_TEXT:
-			column = new Column<DataItem[], String>(new TextCell(formatting.getTextFormatColourForegroundAsHTMLColor(),
-					formatting.getTextFormatColourBackgroundAsHTMLColor())) {
+			column = new Column<DataItem[], String>(new TextCell(formatting.getTextFormatColorForegroundAsHTMLColor(),
+					formatting.getTextFormatColorBackgroundAsHTMLColor())) {
 				@Override
 				public String getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null) {
@@ -343,7 +343,7 @@ public abstract class ListTable extends Composite {
 						return null;
 					}
 
-					if(j >= row.length) {
+					if (j >= row.length) {
 						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
 						return null;
 					} else {

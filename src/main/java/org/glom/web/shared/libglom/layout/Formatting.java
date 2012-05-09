@@ -11,7 +11,7 @@ public class Formatting implements Serializable {
 
 	private static final long serialVersionUID = -2848253819745789939L;
 
-		// @formatter:off
+	// @formatter:off
 		public enum HorizontalAlignment {
 			HORIZONTAL_ALIGNMENT_AUTO, // For instance, RIGHT for numeric fields.
 			HORIZONTAL_ALIGNMENT_LEFT,
@@ -21,8 +21,8 @@ public class Formatting implements Serializable {
 
 	private HorizontalAlignment horizontalAlignment = HorizontalAlignment.HORIZONTAL_ALIGNMENT_AUTO;
 	private int multilineHeightLines = 1;
-	private String textFormatColourForeground = "";
-	private String textFormatColourBackground = "";
+	private String textFormatColorForeground = "";
+	private String textFormatColorBackground = "";
 	private NumericFormat numericFormat = new NumericFormat();
 
 	public void setHorizontalAlignment(HorizontalAlignment alignment) {
@@ -54,65 +54,65 @@ public class Formatting implements Serializable {
 	}
 
 	/**
-	 * Get the foreground colour to use for text when displaying a field value.
+	 * Get the foreground color to use for text when displaying a field value.
 	 * 
 	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColorForNegatives(boolean)} if that is
 	 * active.
 	 * 
-	 * @returns the text foreground colour in GdkColor colour format
+	 * @returns the text foreground color in GdkColor color format
 	 */
-	public String getTextFormatColourForeground() {
-		return textFormatColourForeground;
+	public String getTextFormatColorForeground() {
+		return textFormatColorForeground;
 	}
 
 	/*
-	 * Get the foreground colour to use for text when displaying a field value.
+	 * Get the foreground color to use for text when displaying a field value.
 	 * 
 	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColorForNegatives(boolean)} if that is
 	 * active.
 	 * 
-	 * @returns the text foreground colour in HTML colour format
+	 * @returns the text foreground color in HTML color format
 	 */
-	public String getTextFormatColourForegroundAsHTMLColor() {
-		return convertGdkColorToHtmlColour(textFormatColourForeground);
+	public String getTextFormatColorForegroundAsHTMLColor() {
+		return convertGdkColorToHtmlColor(textFormatColorForeground);
 	}
 
 	/**
-	 * Set the foreground colour to use for text when displaying a field value.
+	 * Set the foreground color to use for text when displaying a field value.
 	 * 
-	 * @param colour
-	 *            the text foreground colour in GdkColor colour format
+	 * @param color
+	 *            the text foreground color in GdkColor color format
 	 */
-	public void setTextFormatColourForeground(String colour) {
-		this.textFormatColourForeground = colour;
+	public void setTextFormatColorForeground(String color) {
+		this.textFormatColorForeground = color;
 	}
 
 	/**
-	 * Get the background colour to use for text when displaying a field value.
+	 * Get the background color to use for text when displaying a field value.
 	 * 
-	 * @returns the text background colour in GdkColor colour format
+	 * @returns the text background color in GdkColor color format
 	 */
-	public String getTextFormatColourBackground() {
-		return textFormatColourBackground;
+	public String getTextFormatColorBackground() {
+		return textFormatColorBackground;
 	}
 
 	/**
-	 * Get the background colour to use for text when displaying a field value.
+	 * Get the background color to use for text when displaying a field value.
 	 * 
-	 * @returns the text background colour in HTML colour format
+	 * @returns the text background color in HTML color format
 	 */
-	public String getTextFormatColourBackgroundAsHTMLColor() {
-		return convertGdkColorToHtmlColour(textFormatColourBackground);
+	public String getTextFormatColorBackgroundAsHTMLColor() {
+		return convertGdkColorToHtmlColor(textFormatColorBackground);
 	}
 
 	/**
-	 * Set the background colour to use for text when displaying a field value.
+	 * Set the background color to use for text when displaying a field value.
 	 * 
-	 * @param colour
-	 *            a text background colour in HTML colour format
+	 * @param color
+	 *            a text background color in HTML color format
 	 */
-	public void setTextFormatColourBackground(String colour) {
-		this.textFormatColourBackground = colour;
+	public void setTextFormatColorBackground(String color) {
+		this.textFormatColorBackground = color;
 	}
 
 	public NumericFormat getNumericFormat() {
@@ -124,10 +124,10 @@ public class Formatting implements Serializable {
 	}
 
 	/*
-	 * Converts a Gdk::Color (16-bits per channel) to an HTML colour (8-bits per channel) by discarding the least
+	 * Converts a Gdk::Color (16-bits per channel) to an HTML color (8-bits per channel) by discarding the least
 	 * significant 8-bits in each channel.
 	 */
-	private static String convertGdkColorToHtmlColour(final String gdkColor) {
+	private static String convertGdkColorToHtmlColor(final String gdkColor) {
 		if (StringUtils.isEmpty(gdkColor)) {
 			return "";
 		}
@@ -139,7 +139,7 @@ public class Formatting implements Serializable {
 			GWT.log("Expected a 13 character string but received a 7 character string. Returning received string.");
 			return gdkColor;
 		} else {
-			GWT.log("Did not receive a 13 or 7 character string. Returning black HTML colour code.");
+			GWT.log("Did not receive a 13 or 7 character string. Returning black HTML color code.");
 			return "#000000";
 		}
 	}
