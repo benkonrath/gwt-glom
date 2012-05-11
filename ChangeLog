@@ -1,5 +1,13 @@
 2012-05-11  Murray Cumming  <murrayc@murrayc.com>
 
+	DBAccess: Simplify the retrievel of full field details.
+
+	* src/main/java/org/glom/web/server/database/DBAccess.java
+	getFieldsToShowForSQLQueryAddGroup(). This might be unnecessary anyway,
+	because the Document loading should have done this.
+
+2012-05-11  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: Correct loading of doubly-related layout fields.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java:

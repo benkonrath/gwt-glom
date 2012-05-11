@@ -183,35 +183,26 @@ abstract class DBAccess {
 			LayoutItem layoutItem = items.get(i);
 
 			if (layoutItem instanceof LayoutItemField) {
-				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
+				final LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				// the layoutItem is a LayoutItem_Field
-				List<org.glom.web.shared.libglom.Field> fields;
+				
+				//Make sure that it has full field details:
+				//TODO: Is this necessary?
+				String tableNameToUse = tableName;
 				if (layoutItemField.getHasRelationshipName()) {
-					// layoutItemField is a field in a related table
-					fields = document.getTableFields(layoutItemField.getTableUsed(tableName));
+					tableNameToUse = layoutItemField.getTableUsed(tableName);
+				}
+				
+				final Field field = document.getField(tableNameToUse, layoutItemField.getName());
+				if (field != null) {
+					layoutItemField.setFullFieldDetails(field);
 				} else {
-					// layoutItemField is a field in this table
-					fields = document.getTableFields(tableName);
+					Log.warn(document.getDatabaseTitleOriginal(), tableName, "LayoutItem_Field "
+								+ layoutItemField.getLayoutDisplayName() + " not found in document field list.");
 				}
-
-				// set the layoutItemFeild with details from its Field in the document and
-				// add it to the list to be returned
-				for (int j = 0; j < fields.size(); j++) {
-					// check the names to see if they're the same
-					// this works because we're using the field list from the related table if necessary
-					if (layoutItemField.getName().equals(fields.get(j).getName())) {
-						Field field = fields.get(j);
-						if (field != null) {
-							layoutItemField.setFullFieldDetails(field);
-							layoutItemFields.add(layoutItemField);
-						} else {
-							Log.warn(document.getDatabaseTitleOriginal(), tableName, "LayoutItem_Field "
-									+ layoutItemField.getLayoutDisplayName() + " not found in document field list.");
-						}
-						break;
-					}
-				}
-
+		
+				//Add it to the list:
+				layoutItemFields.add(layoutItemField);
 			} else if (layoutItem instanceof LayoutGroup) {
 				LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;
 
