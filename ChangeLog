@@ -1,3 +1,11 @@
+2012-05-11  Murray Cumming  <murrayc@murrayc.com>
+
+	Document: Correct loading of doubly-related layout fields.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	loadUsesRelationship(): Actually set the related relationship, instead
+	of only setting it if it's not found.
+
 2012-05-07  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Restore correct addition of hidden primary key items.

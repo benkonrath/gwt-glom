@@ -464,14 +464,15 @@ public class Document {
 			}
 		}
 
+		//TODO: Unit test loading of doubly-related fields.
 		final String relatedRelationshipName = element.getAttribute(ATTRIBUTE_RELATED_RELATIONSHIP_NAME);
 		if (!StringUtils.isEmpty(relatedRelationshipName) && (relationship != null)) {
 			final Relationship relatedRelationship = getRelationship(relationship.getToTable(), relatedRelationshipName);
+			item.setRelatedRelationship(relatedRelationship);
+
 			if (relatedRelationship == null) {
 				Log.error("related relationship not found in table=" + relationship.getToTable() + ",  name="
 						+ relatedRelationshipName);
-
-				item.setRelatedRelationship(relatedRelationship);
 			}
 		}
 	}
