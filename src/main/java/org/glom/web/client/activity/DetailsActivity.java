@@ -93,7 +93,7 @@ public class DetailsActivity extends HasTableActivity {
 
 				@Override
 				public void onSuccess(final NavigationRecord result) {
-					if(result != null) {
+					if (result != null) {
 						processNavigation(result.getTableName(), result.getPrimaryKeyValue());
 					} else {
 						GWT.log("onEnterKeyDown(): getSuitableRecordToViewDetails() result is null.");
@@ -101,8 +101,7 @@ public class DetailsActivity extends HasTableActivity {
 				}
 
 			};
-			
-			//TODO: tableName is not set here.
+
 			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName,
 					relationshipName, (TypedDataItem) context.getKey(), callback);
 		}
@@ -261,15 +260,17 @@ public class DetailsActivity extends HasTableActivity {
 						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getGlomType(),
 								data[i]);
 
-						final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName, layoutItemPortal,
-								foreignKeyValue, new RelatedListNavigationButtonCell(layoutItemPortal.getRelationshipNameUsed()));
+						final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName,
+								layoutItemPortal, foreignKeyValue, new RelatedListNavigationButtonCell(
+										layoutItemPortal.getRelationshipNameUsed()));
 
 						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
 							relatedListTable.hideNavigationButtons();
 						}
 						portal.setContents(relatedListTable);
 
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getRelationshipNameUsed(), foreignKeyValue);
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getRelationshipNameUsed(),
+								foreignKeyValue);
 					}
 				}
 			}

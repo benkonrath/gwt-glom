@@ -183,7 +183,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 		return title;
 	}
-	
+
 	@Override
 	public String getTitle(final String locale) {
 		String title = getTitleUsed("" /* parent table - not relevant */, locale);

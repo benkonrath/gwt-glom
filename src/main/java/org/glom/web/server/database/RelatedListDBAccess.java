@@ -32,6 +32,7 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.SortClause;
 import org.jooq.Condition;
@@ -83,7 +84,12 @@ public class RelatedListDBAccess extends ListDBAccess {
 		whereClauseToKeyField = getFieldInTable(relationship.getToField(), whereClauseToTableName);
 
 		// Add primary key
-		fieldsToGet.add(getPrimaryKeyLayoutItemField(this.tableName));
+		final LayoutItemField primaryKey = getPrimaryKeyLayoutItemField(this.tableName);
+		if(primaryKey == null) {
+			Log.error(documentID, tableName, "RelatedListDBAccess: getPrimaryKeyLayoutItemField() failed.");
+		} else {
+			fieldsToGet.add(primaryKey);
+		}
 
 		final Relationship relationshipRelated = portal.getRelatedRelationship();
 		if (relationshipRelated != null) {

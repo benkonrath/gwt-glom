@@ -142,7 +142,7 @@ public abstract class ListTable extends Composite {
 						}
 
 						if ((primaryKeyIndex < 0) || (primaryKeyIndex >= row.length)) {
-							GWT.log("createCellTable(): primaryKeyIndex is out of range: " + primaryKeyIndex);
+							GWT.log("createCellTable() keyProvider.getKey(): primaryKeyIndex is out of range: " + primaryKeyIndex + ", row.length=" + row.length);
 							return null;
 						}
 
@@ -168,6 +168,8 @@ public abstract class ListTable extends Composite {
 			// only add columns for LayoutItemField types
 			if (layoutItem instanceof LayoutItemField) {
 				addColumn((LayoutItemField) layoutItem);
+			} else {
+				GWT.log("createCellTable(): Ignoring non-LayoutItemField layout item.");
 			}
 
 		}

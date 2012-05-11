@@ -359,7 +359,7 @@ final class ConfiguredDocument {
 			}
 		}
 
-		// TODO: Clone the group and change the clone, to discard unwanted informatin (such as translations)
+		// TODO: Clone the group and change the clone, to discard unwanted information (such as translations)
 		//store some information that we do not want to calculate on the client side.
 		
 		//Note that we don't use clone() here, because that would need clone() implementations
@@ -376,31 +376,29 @@ final class ConfiguredDocument {
 		return cloned;
 	}
 	
-	static public Object deepCopy(Object oldObj)
-	   {
+	static public Object deepCopy(Object oldObj) {
 		ObjectOutputStream oos = null;
 		ObjectInputStream ois = null;
 
 		try {
-			ByteArrayOutputStream bos = 
-					new ByteArrayOutputStream(); 
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			oos = new ObjectOutputStream(bos);
 			// serialize and pass the object
-			oos.writeObject(oldObj);   // C
-			oos.flush();               // D
-			ByteArrayInputStream bin = 
-					new ByteArrayInputStream(bos.toByteArray());
+			oos.writeObject(oldObj);
+			oos.flush();
+			ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
 			ois = new ObjectInputStream(bin);
+
 			// return the new object
 			return ois.readObject();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Exception in deepCopy:" + e);
 			return null;
 		} finally {
 			try {
 				oos.close();
 				ois.close();
-			} catch(IOException e) {
+			} catch (IOException e) {
 				System.out.println("Exception in deepCopy during finally: " + e);
 				return null;
 			}
@@ -515,7 +513,7 @@ final class ConfiguredDocument {
 		// Try to return a cached version:
 		final List<LayoutGroup> result = mapTableLayouts.getDetailsLayout(tableName, localeID);
 		if (result != null) {
-			updatePortalsExtras(result, tableName);
+			updatePortalsExtras(result, tableName); // Update expected results sizes.
 			return result;
 		}
 
