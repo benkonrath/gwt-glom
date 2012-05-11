@@ -4,8 +4,7 @@ import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.Relationship;
 
 public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
-
-	private static final long serialVersionUID = 751801531875664661L;
+	private static final long serialVersionUID = 4952677991725269830L;
 	private UsesRelationship usesRel = new UsesRelationshipImpl();
 
 	public enum NavigationType {
@@ -14,7 +13,9 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	private NavigationType navigationType = NavigationType.NAVIGATION_AUTOMATIC;
 	private UsesRelationship navigationRelationshipSpecific = null;
-	private boolean addNavigation = false;
+
+	// Extras:
+	private TableToViewDetails navigationTable = null; // If any.
 
 	/**
 	 * @return
@@ -155,14 +156,17 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 		navigationType = NavigationType.NAVIGATION_SPECIFIC;
 	}
 
-	// TODO: Where is getAddNavigation?
 	/**
 	 * Whether the UI should show a navigation button. TODO: Remove this?
 	 * 
 	 * @param b
 	 */
-	public void setAddNavigation(boolean addNavigation) {
-		this.addNavigation = addNavigation;
+	public void setNavigationTable(final TableToViewDetails viewDetails) {
+		this.navigationTable = viewDetails;
+	}
+
+	public TableToViewDetails getNavigationTable() {
+		return navigationTable;
 	}
 
 	/*

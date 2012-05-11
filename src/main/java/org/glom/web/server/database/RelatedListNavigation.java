@@ -31,13 +31,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.server.libglom.Document;
-import org.glom.web.server.libglom.Document.TableToViewDetails;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.TableToViewDetails;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -74,24 +74,40 @@ public class RelatedListNavigation extends DBAccess {
 					"The related list navigation cannot be determined because the LayoutItemPortal has not been found.");
 			return null;
 		}
+		
+		if (primaryKeyValue == null) {
+			Log.error(documentID, tableName,
+					"The related list navigation cannot be determined because the primaryKeyValue is null.");
+			return null;
+		}
 
-		final StringBuffer navigationTableNameSB = new StringBuffer();
-		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
-
-		final TableToViewDetails toViewDetails = document.getPortalSuitableTableToViewDetails(portal);
-		final String navigationTableName = toViewDetails.tableName;
-		if (StringUtils.isEmpty(navigationTableName)) {
+		//TODO: For some reason, LayoutItemPortal.navigationTable is null after using deepCopy(),
+		//so we can't use our cache:
+		//final TableToViewDetails navigationTable = portal.getNavigationTable();
+		final TableToViewDetails navigationTable = document.getPortalSuitableTableToViewDetails(portal);
+		if (navigationTable == null) {
+			Log.error(documentID, tableName,
+					"The related list navigation cannot cannot be determined because the navigation table details are empty.");
+			return null;
+		}
+		
+		if (StringUtils.isEmpty(navigationTable.tableName)) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot cannot be determined because the navigation table name is empty.");
 			return null;
 		}
 
 		// Get the primary key of that table:
-		final Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTableName);
+		final Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTable.tableName);
 
 		// Build a layout item to get the field's value:
+		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
 		navigationRelationshipItem.setName(navigationTablePrimaryKey.getName());
 		navigationRelationshipItem.setFullFieldDetails(navigationTablePrimaryKey);
+		if(navigationTable.usesRelationship != null) {
+			navigationRelationshipItem.setRelationship(navigationTable.usesRelationship.getRelationship());
+			navigationRelationshipItem.setRelatedRelationship(navigationTable.usesRelationship.getRelatedRelationship());
+		}
 
 		// Get the value of the navigation related primary key:
 		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
@@ -119,7 +135,7 @@ public class RelatedListNavigation extends DBAccess {
 				rs = st.executeQuery(query);
 
 				// Set the output parameters:
-				navigationRecord.setTableName(navigationTableName);
+				navigationRecord.setTableName(navigationTable.tableName);
 
 				rs.next();
 				final TypedDataItem navigationTablePrimaryKeyValue = new TypedDataItem();
@@ -154,7 +170,7 @@ public class RelatedListNavigation extends DBAccess {
 				// products table.
 				if (navigationTablePrimaryKeyValue.isEmpty()) {
 					Log.info(documentID, tableName, "SQL query returned empty primary key for navigation to the "
-							+ navigationTableName + "table. Navigation may not work correctly");
+							+ navigationTable.tableName + "table. Navigation may not work correctly");
 					navigationRecord.setPrimaryKeyValue(null);
 				} else {
 					navigationRecord.setPrimaryKeyValue(navigationTablePrimaryKeyValue);

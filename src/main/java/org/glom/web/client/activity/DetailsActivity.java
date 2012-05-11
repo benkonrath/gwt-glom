@@ -213,13 +213,15 @@ public class DetailsActivity extends HasTableActivity {
 			if (layoutItemField == null) {
 				continue;
 			}
-			if (layoutItemField.getAddNavigation()) {
+
+			final String navigationTablename = layoutItemField.getNavigationTableName();
+			if (!StringUtils.isEmpty(navigationTablename)) {
 				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(final ClickEvent event) {
 						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getGlomType(),
 								detailsCell.getData());
-						processNavigation(layoutItemField.getNavigationTableName(), primaryKeyItem);
+						processNavigation(navigationTablename, primaryKeyItem);
 
 					}
 				});

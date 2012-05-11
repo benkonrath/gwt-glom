@@ -48,9 +48,9 @@ import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.Report;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
-import org.glom.web.shared.libglom.layout.LayoutItemCalendarPortal;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.TableToViewDetails;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -533,10 +533,11 @@ final class ConfiguredDocument {
 			}
 		}
 
+		updatePortalsExtras(listCloned, tableName);
+		updateFieldsExtras(listCloned, tableName);
+
 		// Store it in the cache for next time.
 		mapTableLayouts.setDetailsLayout(tableName, localeID, listCloned);
-
-		updatePortalsExtras(listCloned, tableName);
 
 		return listCloned;
 	}
@@ -552,15 +553,39 @@ final class ConfiguredDocument {
 
 	}
 
+	/**
+	 * @param result
+	 * @param tableName
+	 */
+	private void updateFieldsExtras(final List<LayoutGroup> listGroups, String tableName) {
+		for (LayoutGroup group : listGroups) {
+			updateFieldsExtras(group, tableName);
+		}
+	}
+
 	private void updatePortalsExtras(LayoutGroup group, String tableName) {
 		if (group instanceof LayoutItemPortal) {
 			final LayoutItemPortal portal = (LayoutItemPortal) group;
 			final String tableNameUsed = portal.getTableUsed(tableName);
 			updateLayoutGroupExpectedResultSize(portal, tableNameUsed);
 
-			// get the primary key for the related list table
 			final Relationship relationship = portal.getRelationship();
 			if (relationship != null) {
+
+				// Cache the navigation information:
+				// layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
+				// layoutItemPortal.setTableName(relationship.get_from_table());
+				// layoutItemPortal.setFromField(relationship.get_from_field());
+
+				// Set whether the related list will need to show the navigation buttons,
+				// (null table name string if not) and what table to navigation to.
+				// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
+				final TableToViewDetails viewDetails = document.getPortalSuitableTableToViewDetails(portal);
+				if (viewDetails != null) {
+					portal.setNavigationTable(viewDetails);
+				}
+
+				// get the primary key for the related list table
 				final String toTableName = relationship.getToTable();
 				if (!StringUtils.isEmpty(toTableName)) {
 
@@ -588,6 +613,28 @@ final class ConfiguredDocument {
 			if (item instanceof LayoutGroup) {
 				final LayoutGroup childGroup = (LayoutGroup) item;
 				updatePortalsExtras(childGroup, tableName);
+			}
+		}
+
+	}
+
+	private void updateFieldsExtras(final LayoutGroup group, final String tableName) {
+
+		List<LayoutItem> childItems = group.getItems();
+		for (LayoutItem item : childItems) {
+			if (item instanceof LayoutGroup) {
+				// Recurse:
+				final LayoutGroup childGroup = (LayoutGroup) item;
+				updateFieldsExtras(childGroup, tableName);
+			} else if (item instanceof LayoutItemField) {
+				final LayoutItemField field = (LayoutItemField) item;
+
+				// Set whether the field should have a navigation button,
+				// because it identifies a related record.
+				final String navigationTableName = document.getLayoutItemFieldShouldHaveNavigation(tableName, field);
+				if (navigationTableName != null) {
+					field.setNavigationTableName(navigationTableName);
+				}
 			}
 		}
 
@@ -623,41 +670,6 @@ final class ConfiguredDocument {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 		return getValidListViewLayoutGroup(tableName, localeID);
-	}
-
-	/**
-	 * Store some cache values in the LayoutItemPortal.
-	 * 
-	 * @param tableName
-	 * @param layoutItemPortal
-	 * @param localeID
-	 * @return
-	 */
-	private void updateLayoutItemPortalDTO(final String tableName, final LayoutItemPortal layoutItemPortal,
-			final String localeID) {
-
-		// Ignore LayoutItem_CalendarPortals for now:
-		// https://bugzilla.gnome.org/show_bug.cgi?id=664273
-		if (layoutItemPortal instanceof LayoutItemCalendarPortal) {
-			return;
-		}
-
-		final Relationship relationship = layoutItemPortal.getRelationship();
-		if (relationship != null) {
-			// layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
-			// layoutItemPortal.setTableName(relationship.get_from_table());
-			// layoutItemPortal.setFromField(relationship.get_from_field());
-
-			// Set whether or not the related list will need to show the navigation buttons.
-			// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
-			final Document.TableToViewDetails viewDetails = document
-					.getPortalSuitableTableToViewDetails(layoutItemPortal);
-			boolean addNavigation = false;
-			if (viewDetails != null) {
-				addNavigation = !StringUtils.isEmpty(viewDetails.tableName);
-			}
-			layoutItemPortal.setAddNavigation(addNavigation);
-		}
 	}
 
 	/*

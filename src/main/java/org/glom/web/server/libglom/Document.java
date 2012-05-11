@@ -42,6 +42,7 @@ import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal.NavigationType;
+import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
@@ -873,7 +874,7 @@ public class Document {
 		for (final Relationship relationship : info.relationshipsMap.values()) {
 			if (relationship != null) {
 				// If the relationship uses the field
-				if (relationship.getFromField() == fieldName) {
+				if (StringUtils.equals(relationship.getFromField(), fieldName)) {
 					// if the to_table is not hidden:
 					if (!getTableIsHidden(relationship.getToTable())) {
 						// TODO_Performance: The use of this convenience method means we get the full relationship
@@ -919,11 +920,6 @@ public class Document {
 		}
 
 		return info.relationshipsMap.get(relationshipName);
-	}
-
-	public class TableToViewDetails {
-		public String tableName;
-		public UsesRelationship usesRelationship;
 	}
 
 	/**
@@ -1078,6 +1074,39 @@ public class Document {
 					}
 				}
 			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param tableName
+	 * @param layoutItem
+	 * @return The destination table name for navigation.
+	 */
+	public String getLayoutItemFieldShouldHaveNavigation(final String tableName, final LayoutItemField layoutItem) {
+		if (StringUtils.isEmpty(tableName)) {
+			return null;
+		}
+
+		if (layoutItem == null) {
+			return null;
+		}
+
+		// Check whether the field controls a relationship,
+		// meaning it identifies a record in another table.
+		final Relationship fieldUsedInRelationshipToOne = getFieldUsedInRelationshipToOne(tableName, layoutItem);
+		if (fieldUsedInRelationshipToOne != null) {
+			return fieldUsedInRelationshipToOne.getToTable();
+		}
+
+		// Check whether the field identifies a record in another table
+		// just because it is a primary key in that table:
+		final Field fieldInfo = layoutItem.getFullFieldDetails();
+		final boolean fieldIsRelatedPrimaryKey = layoutItem.getHasRelationshipName() && (fieldInfo != null)
+				&& fieldInfo.getPrimaryKey();
+		if (fieldIsRelatedPrimaryKey) {
+			return layoutItem.getRelationship().getToTable();
 		}
 
 		return null;

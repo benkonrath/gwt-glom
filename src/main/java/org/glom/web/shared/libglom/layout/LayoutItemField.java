@@ -14,6 +14,9 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	private boolean useDefaultFormatting = true;
 	private CustomTitle customTitle = new CustomTitle();
 
+	// Extras:
+	private String navigationTableName = null; // If any.
+
 	/**
 	 * @return the field
 	 */
@@ -193,18 +196,13 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	/**
 	 * @return
 	 */
-	public boolean getAddNavigation() {
-		// TODO Auto-generated method stub
-		return false;
+	public String getNavigationTableName() {
+		return navigationTableName;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getNavigationTableName() {
-		// TODO: This was a cache set by ConfiguredDocument, but not set any longer.
-		// TODO Auto-generated method stub
-		return null;
+	// TODO: Use this.
+	public void setNavigationTableName(final String navigationtableName) {
+		this.navigationTableName = navigationtableName;
 	}
 
 	/*

@@ -1,5 +1,39 @@
 2012-05-11  Murray Cumming  <murrayc@murrayc.com>
 
+	Make navigation work again.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	Add getLayoutItemFieldShouldHaveNavigation().
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemField.java:
+	Replace get/setAddNavigation() with the partly-existing 
+	get/setNavigationTableName(), with an empty string being no navigation,
+	because this is simpler. Use the new 
+	Document.getLayoutItemFieldShouldHaveNavigation() method to set this.
+	
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Add updateFieldsExtras() and call setNavigationTableName in it.
+	getDetailsLayoutGroup(), 
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	createLayout(): Adapted.
+	* src/main/java/org/glom/web/client/ui/details/DetailsCell.java
+	Constructor: Adapted.
+
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemPortal.java:
+	Replace get/setAddNavigation() with get/setNavigation(), returning a
+	TableToViewDetails class with both the table name and UsesRelationship,
+	because both are need. The previous code used java-libglom's output 
+	variable (strangely, via sharedptr) to return both, but we cannot really
+	do that in Java.
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	getNavigationRecord(): Adapt. However, we cannot actually use the cache
+	here because it somehow gets set to null during deepCopy(). I must test this.
+	* src/test/java/org/glom/web/server/libglom/DocumentTest.java
+	testGetSuitableTableToViewDetails(): Adapted.
+	
+	TODO: Find out why deepClone() is not quite working.
+	
+2012-05-11  Murray Cumming  <murrayc@murrayc.com>
+
 	DBAccess: Simplify the retrievel of full field details.
 
 	* src/main/java/org/glom/web/server/database/DBAccess.java

@@ -3,10 +3,6 @@ package org.glom.web.shared.libglom.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.glom.web.client.StringUtils;
-
-import com.google.gwt.core.client.GWT;
-
 public class LayoutGroup extends LayoutItem {
 
 	private static final long serialVersionUID = 2795852472980010553L;

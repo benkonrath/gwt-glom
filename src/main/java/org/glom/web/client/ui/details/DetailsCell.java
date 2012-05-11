@@ -112,7 +112,8 @@ public class DetailsCell extends Composite {
 		mainPanel.add(detailsLabel);
 		mainPanel.add(detailsData);
 
-		if (layoutItemField.getAddNavigation()) {
+		final String navigationTableName = layoutItemField.getNavigationTableName();
+		if (!StringUtils.isEmpty(navigationTableName)) {
 			openButton = new Button(constants.open());
 			openButton.setStyleName("details-navigation");
 			openButton.setEnabled(false);

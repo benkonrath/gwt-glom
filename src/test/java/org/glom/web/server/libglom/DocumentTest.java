@@ -39,6 +39,7 @@ import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.SortClause;
+import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -304,7 +305,7 @@ public class DocumentTest {
 		assertEquals(portal.getRelationshipNameUsed(), "scene_cast");
 
 		// call getSuitableTableToCiewDetails
-		final Document.TableToViewDetails viewDetails = filmManagerDocument.getPortalSuitableTableToViewDetails(portal);
+		final TableToViewDetails viewDetails = filmManagerDocument.getPortalSuitableTableToViewDetails(portal);
 		assertTrue(viewDetails != null);
 
 		// Simulate a garbage collection
