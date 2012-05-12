@@ -19,7 +19,12 @@
 
 package org.glom.web.server;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  *
@@ -41,6 +46,35 @@ public class Utils {
 	public static String getFileName(String fileURI) {
 		String[] splitURI = fileURI.split(File.separator);
 		return splitURI[splitURI.length - 1];
+	}
+
+	static public Object deepCopy(Object oldObj) {
+		ObjectOutputStream oos = null;
+		ObjectInputStream ois = null;
+	
+		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			oos = new ObjectOutputStream(bos);
+			// serialize and pass the object
+			oos.writeObject(oldObj);
+			oos.flush();
+			ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+			ois = new ObjectInputStream(bin);
+	
+			// return the new object
+			return ois.readObject();
+		} catch (Exception e) {
+			System.out.println("Exception in deepCopy:" + e);
+			return null;
+		} finally {
+			try {
+				oos.close();
+				ois.close();
+			} catch (IOException e) {
+				System.out.println("Exception in deepCopy during finally: " + e);
+				return null;
+			}
+		}
 	}
 
 }

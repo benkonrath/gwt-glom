@@ -20,11 +20,6 @@
 package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -366,7 +361,7 @@ final class ConfiguredDocument {
 		// Note that we don't use clone() here, because that would need clone() implementations
 		// in classes which are also used in the client code (though the clone() methods would
 		// not be used) and that makes the GWT java->javascript compilation fail.
-		final LayoutGroup cloned = (LayoutGroup) deepCopy(libglomLayoutGroup);
+		final LayoutGroup cloned = (LayoutGroup) Utils.deepCopy(libglomLayoutGroup);
 		if (cloned != null) {
 			updateTopLevelListLayoutGroup(cloned, tableName, localeID);
 		}
@@ -375,35 +370,6 @@ final class ConfiguredDocument {
 		mapTableLayouts.setListLayout(tableName, localeID, cloned);
 
 		return cloned;
-	}
-
-	static public Object deepCopy(Object oldObj) {
-		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
-
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			oos = new ObjectOutputStream(bos);
-			// serialize and pass the object
-			oos.writeObject(oldObj);
-			oos.flush();
-			ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
-			ois = new ObjectInputStream(bin);
-
-			// return the new object
-			return ois.readObject();
-		} catch (Exception e) {
-			System.out.println("Exception in deepCopy:" + e);
-			return null;
-		} finally {
-			try {
-				oos.close();
-				ois.close();
-			} catch (IOException e) {
-				System.out.println("Exception in deepCopy during finally: " + e);
-				return null;
-			}
-		}
 	}
 
 	/**
@@ -528,7 +494,7 @@ final class ConfiguredDocument {
 		// not be used) and that makes the GWT java->javascript compilation fail.
 		final List<LayoutGroup> listCloned = new ArrayList<LayoutGroup>();
 		for (LayoutGroup group : listGroups) {
-			final LayoutGroup cloned = (LayoutGroup) deepCopy(group);
+			final LayoutGroup cloned = (LayoutGroup) Utils.deepCopy(group);
 			if (cloned != null) {
 				listCloned.add(cloned);
 			}
