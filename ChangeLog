@@ -1,5 +1,15 @@
 2012-05-14  Murray Cumming  <murrayc@murrayc.com>
 
+	Fix quick find.
+
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	get_find_where_clause_quick(): Use a comparison of 
+	lowercase values, instead of a simple equals. Regular Glom
+	uses the PostgreSQL ILIKE operator but jOOQ does not 
+	support that just yet, though it will soon.
+
+2012-05-14  Murray Cumming  <murrayc@murrayc.com>
+
 	TableToViewDetails: Use a real serialization ID.
 
 	* src/main/java/org/glom/web/shared/libglom/layout/TableToViewDetails.java:

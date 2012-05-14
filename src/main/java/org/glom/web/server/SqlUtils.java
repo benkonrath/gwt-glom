@@ -411,7 +411,11 @@ public class SqlUtils {
 			}
 
 			final org.jooq.Field<Object> jooqField = createField(tableName, field.getName());
-			final Condition thisCondition = jooqField.equal(quickFindValue.getText()); // TODO: Handle other types.
+			
+			// Do a case-insensitive substring search:
+			// TODO: Use ILIKE: http://sourceforge.net/apps/trac/jooq/ticket/1423
+			// http://groups.google.com/group/jooq-user/browse_thread/thread/203ae5a1a06ae65f
+			final Condition thisCondition = jooqField.lower().contains(quickFindValue.getText().toLowerCase());
 
 			if (condition == null) {
 				condition = thisCondition;
