@@ -1,3 +1,10 @@
+2012-05-14  Murray Cumming  <murrayc@murrayc.com>
+
+	TableToViewDetails: Use a real serialization ID.
+
+	* src/main/java/org/glom/web/shared/libglom/layout/TableToViewDetails.java:
+	Though this does not fix the serialization problem.
+
 2012-05-12  Murray Cumming  <murrayc@murrayc.com>
 
 	Added LayoutItemPortalDeepCloneTest.
