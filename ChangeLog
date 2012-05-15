@@ -1,5 +1,14 @@
 2012-05-15  Murray Cumming  <murrayc@murrayc.com>
 
+	Document: Correctly report the number of available translation locales.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java: Fill
+	the available locale IDs list.
+	* src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+	testLocales: Test this.
+
+2012-05-15  Murray Cumming  <murrayc@murrayc.com>
+
 	SqlUtils: Use camelCase.
 
 	* src/main/java/org/glom/web/server/SqlUtils.java: Use camelCase.

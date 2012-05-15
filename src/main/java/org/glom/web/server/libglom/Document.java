@@ -75,12 +75,14 @@ public class Document {
 	private org.w3c.dom.Document xmlDocument = null;
 
 	private Translatable databaseTitle = new Translatable();
-	private List<String> translationAvailableLocales = new ArrayList<String>(); // TODO
+	private String translationOriginalLocale = "";
+	private List<String> translationAvailableLocales = new ArrayList<String>();
 	private String connectionServer = "";
 	private String connectionDatabase = "";
 	private int connectionPort = 0;
 	private final Hashtable<String, TableInfo> tablesMap = new Hashtable<String, TableInfo>();
 
+	private static final String ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE = "translation_original_locale";
 	private static final String NODE_CONNECTION = "connection";
 	private static final String ATTRIBUTE_CONNECTION_SERVER = "server";
 	private static final String ATTRIBUTE_CONNECTION_DATABASE = "database";
@@ -177,6 +179,16 @@ public class Document {
 
 		databaseTitle.setTitleOriginal(rootNode.getAttribute(ATTRIBUTE_TITLE));
 
+		translationOriginalLocale = rootNode.getAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE);
+		translationAvailableLocales.add(translationOriginalLocale); //Just a cache.
+
+		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
+		if (nodeConnection != null) {
+			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
+			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
+			connectionPort = getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
+		}
+		
 		// We first load the fields, relationships, etc,
 		// for all tables:
 		final List<Node> listTableNodes = getChildrenByTagName(rootNode, NODE_TABLE);
@@ -209,13 +221,6 @@ public class Document {
 			loadTableLayouts(element, info);
 
 			tablesMap.put(info.getName(), info);
-		}
-
-		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
-		if (nodeConnection != null) {
-			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
-			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
-			connectionPort = getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
 		}
 
 		return true;
@@ -285,6 +290,11 @@ public class Document {
 			final String translatedTitle = element.getAttribute(ATTRIBUTE_TRANSLATION_TITLE);
 			if (!StringUtils.isEmpty(locale) && !StringUtils.isEmpty(translatedTitle)) {
 				title.setTitle(translatedTitle, locale);
+				
+				//Remember any new translation locales in our cached list:
+		        if(!translationAvailableLocales.contains(locale)) {
+		        	translationAvailableLocales.add(locale);
+		        }
 			}
 		}
 	}

@@ -84,6 +84,18 @@ public class DocumentTest {
 	}
 
 	@Test
+	public void testLocales() {
+		final List<String> localeIDs = document.getTranslationAvailableLocales();
+		assertEquals(8, localeIDs.size());
+
+		String tables = localeIDs.get(0);
+		for (int i = 1; i < localeIDs.size(); i++) {
+			tables += ", " + localeIDs.get(i);
+		}
+		assertThat(tables, is("en, cs, de, es, fr, gl, pt_BR, sl"));
+	}
+	
+	@Test
 	public void testReadTableNames() {
 		final List<String> tableNames = document.getTableNames();
 		assertEquals(4, tableNames.size());
