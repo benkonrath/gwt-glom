@@ -129,7 +129,7 @@ public class RelatedListNavigation extends DBAccess {
 
 			if (primaryKeyValue != null) {
 
-				query = SqlUtils.build_sql_select_with_key(relatedTableName, fieldsToGet, primaryKeyField,
+				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField,
 						primaryKeyValue);
 
 				rs = st.executeQuery(query);

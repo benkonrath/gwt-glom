@@ -173,11 +173,11 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// only attempt to make a where clause if it makes sense to do so
 		if (!StringUtils.isEmpty(whereClauseToTableName)) {
 			if (foreignKeyValue != null)
-				whereClause = SqlUtils.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
+				whereClause = SqlUtils.buildSimpleWhereExpression(whereClauseToTableName, whereClauseToKeyField,
 						foreignKeyValue);
 		}
 
-		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
 
 	}
 
@@ -221,11 +221,11 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
 			if (foreignKeyValue != null)
-				whereClause = SqlUtils.build_simple_where_expression(whereClauseToTableName, whereClauseToKeyField,
+				whereClause = SqlUtils.buildSimpleWhereExpression(whereClauseToTableName, whereClauseToKeyField,
 						foreignKeyValue);
 		}
 
-		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet, whereClause);
+		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet, whereClause);
 	}
 
 }

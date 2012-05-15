@@ -1,5 +1,16 @@
 2012-05-15  Murray Cumming  <murrayc@murrayc.com>
 
+	SqlUtils: Use camelCase.
+
+	* src/main/java/org/glom/web/server/SqlUtils.java: Use camelCase.
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	* src/main/java/org/glom/web/server/ReportGenerator.java: Adapt.
+
+2012-05-15  Murray Cumming  <murrayc@murrayc.com>
+
 	Use jOOQ's tableByName() and fieldByName.
 
 	* pom.xml: Use jOOQ 2.3.1 to get the new API.

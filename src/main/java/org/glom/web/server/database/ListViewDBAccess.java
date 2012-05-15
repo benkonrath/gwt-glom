@@ -88,10 +88,10 @@ public class ListViewDBAccess extends ListDBAccess {
 		if (!StringUtils.isEmpty(quickFind)) {
 			final TypedDataItem quickFindValue = new TypedDataItem();
 			quickFindValue.setText(quickFind);
-			whereClause = SqlUtils.get_find_where_clause_quick(document, tableName, quickFindValue);
+			whereClause = SqlUtils.getFindWhereClauseQuick(document, tableName, quickFindValue);
 		}
 
-		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
 	}
 
 	/*
@@ -101,7 +101,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getCountQuery() {
-		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet);
+		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet);
 	}
 
 	/**

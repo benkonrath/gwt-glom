@@ -167,12 +167,12 @@ public class ReportGenerator {
 		if (!StringUtils.isEmpty(quickFind)) {
 			final TypedDataItem quickFindValue = new TypedDataItem();
 			quickFindValue.setText(quickFind);
-			whereClause = SqlUtils.get_find_where_clause_quick(glomDocument, tableName, quickFindValue);
+			whereClause = SqlUtils.getFindWhereClauseQuick(glomDocument, tableName, quickFindValue);
 		}
 
 		String sqlQuery = "";
 		if (!fieldsToGet.isEmpty()) {
-			sqlQuery = SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause,
+			sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause,
 					sortClause);
 		} else {
 			Log.info("generateReport(): fieldsToGet is empty.");

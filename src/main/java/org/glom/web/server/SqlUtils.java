@@ -45,25 +45,25 @@ import org.jooq.conf.Settings;
 import org.jooq.impl.Factory;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ * @author Murray Cumming <murrayc@openismus.com>
  * 
  */
 public class SqlUtils {
 
 	// TODO: Change to final ArrayList<LayoutItem_Field> fieldsToGet
-	public static String build_sql_select_with_key(final String tableName,
+	public static String buildSqlSelectWithKey(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Field primaryKey, final TypedDataItem primaryKeyValue) {
 
 		Condition whereClause = null; // Note that we ignore quickFind.
 		if (primaryKeyValue != null) {
-			whereClause = build_simple_where_expression(tableName, primaryKey, primaryKeyValue);
+			whereClause = buildSimpleWhereExpression(tableName, primaryKey, primaryKeyValue);
 		}
 
 		final SortClause sortClause = null; // Ignored.
-		return build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
+		return buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
 	}
 
-	public static Condition build_simple_where_expression(final String tableName, final Field primaryKey,
+	public static Condition buildSimpleWhereExpression(final String tableName, final Field primaryKey,
 			final TypedDataItem primaryKeyValue) {
 
 		Condition result = null;
@@ -83,20 +83,20 @@ public class SqlUtils {
 	}
 
 	/*
-	 * private static String build_sql_select_with_where_clause(final String tableName,
+	 * private static String buildSqlSelectWithWhereClause(final String tableName,
 	 * final LayoutFieldVector fieldsToGet) { final Condition whereClause = null; return
-	 * build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause); }
+	 * buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause); }
 	 */
 
 	/*
-	 * private static String build_sql_select_with_where_clause(final String tableName,
+	 * private static String buildSqlSelectWithWhereClause(final String tableName,
 	 * final LayoutFieldVector fieldsToGet, final Condition whereClause) { final SortClause sortClause = null; return
-	 * build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause); }
+	 * buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause); }
 	 */
 
-	public static String build_sql_select_with_where_clause(final String tableName,
+	public static String buildSqlSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause) {
-		final SelectFinalStep step = build_sql_select_step_with_where_clause(tableName, fieldsToGet,
+		final SelectFinalStep step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet,
 				whereClause, sortClause);
 		if (step == null) {
 			return "";
@@ -117,14 +117,14 @@ public class SqlUtils {
 		return selectStep;
 	}
 
-	private static SelectFinalStep build_sql_select_step_with_where_clause(
+	private static SelectFinalStep buildSqlSelectStepWithWhereClause(
 			final String tableName, final List<LayoutItemField> fieldsToGet, final Condition whereClause,
 			final SortClause sortClause) {
 
 		final SelectSelectStep selectStep = createSelect();
 
 		// Add the fields, and any necessary joins:
-		final List<UsesRelationship> listRelationships = build_sql_select_add_fields_to_get(selectStep, tableName,
+		final List<UsesRelationship> listRelationships = buildSqlSelectAddFieldsToGet(selectStep, tableName,
 				fieldsToGet, sortClause, false /* extraJoin */);
 
 		final Table<Record> table = Factory.tableByName(tableName);
@@ -133,7 +133,7 @@ public class SqlUtils {
 		// LEFT OUTER JOIN will get the field values from the other tables,
 		// and give us our fields for this table even if there is no corresponding value in the other table.
 		for (final UsesRelationship usesRelationship : listRelationships) {
-			builder_add_join(joinStep, usesRelationship);
+			builderAddJoin(joinStep, usesRelationship);
 		}
 
 		SelectFinalStep finalStep = joinStep;
@@ -144,21 +144,21 @@ public class SqlUtils {
 		return finalStep;
 	}
 
-	public static String build_sql_count_select_with_where_clause(final String tableName,
+	public static String buildSqlCountSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet) {
-		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(tableName, fieldsToGet,
+		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet,
 				null, null);
-		return build_sql_select_count_rows(selectInner);
+		return buildSqlSelectCountRows(selectInner);
 	}
 
-	public static String build_sql_count_select_with_where_clause(final String tableName,
+	public static String buildSqlCountSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause) {
-		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(tableName, fieldsToGet,
+		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet,
 				whereClause, null);
-		return build_sql_select_count_rows(selectInner);
+		return buildSqlSelectCountRows(selectInner);
 	}
 
-	private static String build_sql_select_count_rows(final SelectFinalStep selectInner) {
+	private static String buildSqlSelectCountRows(final SelectFinalStep selectInner) {
 		// TODO: Find a way to do this with the jOOQ API:
 		final SelectSelectStep select = createSelect();
 
@@ -169,7 +169,7 @@ public class SqlUtils {
 		// return "SELECT COUNT(*) FROM (" + query + ") AS glomarbitraryalias";
 	}
 
-	private static List<UsesRelationship> build_sql_select_add_fields_to_get(SelectSelectStep step,
+	private static List<UsesRelationship> buildSqlSelectAddFieldsToGet(SelectSelectStep step,
 			final String tableName, final List<LayoutItemField> fieldsToGet, final SortClause sortClause,
 			final boolean extraJoin) {
 
@@ -178,24 +178,24 @@ public class SqlUtils {
 
 		final int layoutFieldsSize = Utils.safeLongToInt(fieldsToGet.size());
 		for (int i = 0; i < layoutFieldsSize; i++) {
-			final UsesRelationship layout_item = fieldsToGet.get(i);
-			add_to_relationships_list(listRelationships, layout_item);
+			final UsesRelationship layoutItem = fieldsToGet.get(i);
+			addToRelationshipsList(listRelationships, layoutItem);
 		}
 
 		if (sortClause != null) {
 			final int sortFieldsSize = Utils.safeLongToInt(sortClause.size());
 			for (int i = 0; i < sortFieldsSize; i++) {
 				final SortClause.SortField pair = sortClause.get(i);
-				final UsesRelationship layout_item = pair.field;
-				add_to_relationships_list(listRelationships, layout_item);
+				final UsesRelationship layoutItem = pair.field;
+				addToRelationshipsList(listRelationships, layoutItem);
 			}
 		}
 
-		boolean one_added = false;
+		boolean oneAdded = false;
 		for (int i = 0; i < layoutFieldsSize; i++) {
-			final LayoutItemField layout_item = fieldsToGet.get(i);
+			final LayoutItemField layoutItem = fieldsToGet.get(i);
 
-			if (layout_item == null) {
+			if (layoutItem == null) {
 				// g_warn_if_reached();
 				continue;
 			}
@@ -210,7 +210,7 @@ public class SqlUtils {
 			 * builder->add_field_id(layout_item->get_name(), tableName)); builder->add_field_value_id(id_function); }
 			 * else {
 			 */
-			final org.jooq.Field<?> field = createField(tableName, layout_item);
+			final org.jooq.Field<?> field = createField(tableName, layoutItem);
 			if (field != null) {
 				step = step.select(field);
 
@@ -220,10 +220,10 @@ public class SqlUtils {
 			}
 			// }
 
-			one_added = true;
+			oneAdded = true;
 		}
 
-		if (!one_added) {
+		if (!oneAdded) {
 			// TODO: std::cerr << G_STRFUNC << ": No fields added: fieldsToGet.size()=" << fieldsToGet.size() <<
 			// std::endl;
 			return listRelationships;
@@ -256,23 +256,23 @@ public class SqlUtils {
 		return createField(layoutField.getSqlTableOrJoinAliasName(tableName), layoutField.getName());
 	}
 
-	private static void add_to_relationships_list(final List<UsesRelationship> listRelationships,
-			final UsesRelationship layout_item) {
+	private static void addToRelationshipsList(final List<UsesRelationship> listRelationships,
+			final UsesRelationship layoutItem) {
 
-		if (layout_item == null) {
+		if (layoutItem == null) {
 			return;
 		}
 
-		if (!layout_item.getHasRelationshipName()) {
+		if (!layoutItem.getHasRelationshipName()) {
 			return;
 		}
 
 		// If this is a related relationship, add the first-level relationship too, so that the related relationship can
 		// be defined in terms of it:
 		// TODO: //If the table is not yet in the list:
-		if (layout_item.getHasRelatedRelationshipName()) {
+		if (layoutItem.getHasRelatedRelationshipName()) {
 			final UsesRelationship usesRel = new UsesRelationshipImpl();
-			usesRel.setRelationship(layout_item.getRelationship());
+			usesRel.setRelationship(layoutItem.getRelationship());
 
 			// Remove any UsesRelationship that has only the same relationship (not related relationship),
 			// to avoid adding that part of the relationship to the SQL twice (two identical JOINS).
@@ -288,8 +288,8 @@ public class SqlUtils {
 
 		// Add the relationship to the list:
 		final UsesRelationship usesRel = new UsesRelationshipImpl();
-		usesRel.setRelationship(layout_item.getRelationship());
-		usesRel.setRelatedRelationship(layout_item.getRelatedRelationship());
+		usesRel.setRelationship(layoutItem.getRelationship());
+		usesRel.setRelatedRelationship(layoutItem.getRelatedRelationship());
 		if (!listRelationships.contains(usesRel)) {
 			listRelationships.add(usesRel);
 		}
@@ -319,14 +319,13 @@ public class SqlUtils {
 	 * } }
 	 */
 
-	private static void builder_add_join(SelectJoinStep step, final UsesRelationship uses_relationship) {
-		final Relationship relationship = uses_relationship.getRelationship();
+	private static void builderAddJoin(SelectJoinStep step, final UsesRelationship usesRelationship) {
+		final Relationship relationship = usesRelationship.getRelationship();
 		if (!relationship.getHasFields()) { // TODO: Handle related_record has_fields.
 			if (relationship.getHasToTable()) {
 				// It is a relationship that only specifies the table, without specifying linking fields:
 
-				// TODO: from() takes SQL, not specifically a table name, so this is unsafe.
-				// Table<Record> toTable = Factory.tableByName(relationship.get_to_table());
+				// Table<Record> toTable = Factory.tableByName(relationship.getToTable());
 				// TODO: stepResult = step.from(toTable);
 			}
 
@@ -336,36 +335,36 @@ public class SqlUtils {
 		// Define the alias name as returned by getSqlJoinAliasName():
 
 		// Specify an alias, to avoid ambiguity when using 2 relationships to the same table.
-		final String alias_name = uses_relationship.getSqlJoinAliasName();
+		final String aliasName = usesRelationship.getSqlJoinAliasName();
 
 		// Add the JOIN:
-		if (!uses_relationship.getHasRelatedRelationshipName()) {
+		if (!usesRelationship.getHasRelatedRelationshipName()) {
 
 			final org.jooq.Field<Object> fieldFrom = createField(relationship.getFromTable(),
 					relationship.getFromField());
-			final org.jooq.Field<Object> fieldTo = createField(alias_name, relationship.getToField());
+			final org.jooq.Field<Object> fieldTo = createField(aliasName, relationship.getToField());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
 			final Table<Record> toTable = Factory.tableByName(relationship.getToTable());
-			step = step.leftOuterJoin(toTable.as(alias_name)).on(condition);
+			step = step.leftOuterJoin(toTable.as(aliasName)).on(condition);
 		} else {
-			final UsesRelationship parent_relationship = new UsesRelationshipImpl();
-			parent_relationship.setRelationship(relationship);
-			final Relationship relatedRelationship = uses_relationship.getRelatedRelationship();
+			final UsesRelationship parentRelationship = new UsesRelationshipImpl();
+			parentRelationship.setRelationship(relationship);
+			final Relationship relatedRelationship = usesRelationship.getRelatedRelationship();
 
-			final org.jooq.Field<Object> fieldFrom = createField(parent_relationship.getSqlJoinAliasName(),
+			final org.jooq.Field<Object> fieldFrom = createField(parentRelationship.getSqlJoinAliasName(),
 					relatedRelationship.getFromField());
-			final org.jooq.Field<Object> fieldTo = createField(alias_name, relatedRelationship.getToField());
+			final org.jooq.Field<Object> fieldTo = createField(aliasName, relatedRelationship.getToField());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
 			final Table<Record> toTable = Factory.tableByName(relatedRelationship.getToTable());
-			step = step.leftOuterJoin(toTable.as(alias_name)).on(condition);
+			step = step.leftOuterJoin(toTable.as(aliasName)).on(condition);
 		}
 	}
 
-	public static Condition get_find_where_clause_quick(final Document document, final String tableName,
+	public static Condition getFindWhereClauseQuick(final Document document, final String tableName,
 			final TypedDataItem quickFindValue) {
 		if (StringUtils.isEmpty(tableName)) {
 			return null;
