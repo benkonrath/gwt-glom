@@ -33,10 +33,12 @@ import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.jooq.AggregateFunction;
 import org.jooq.Condition;
+import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.SelectFinalStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSelectStep;
+import org.jooq.Table;
 import org.jooq.conf.RenderKeywordStyle;
 import org.jooq.conf.RenderNameStyle;
 import org.jooq.conf.Settings;
@@ -125,7 +127,8 @@ public class SqlUtils {
 		final List<UsesRelationship> listRelationships = build_sql_select_add_fields_to_get(selectStep, tableName,
 				fieldsToGet, sortClause, false /* extraJoin */);
 
-		final SelectJoinStep joinStep = selectStep.from(tableName);
+		final Table<Record> table = Factory.tableByName(tableName);
+		final SelectJoinStep joinStep = selectStep.from(table);
 
 		// LEFT OUTER JOIN will get the field values from the other tables,
 		// and give us our fields for this table even if there is no corresponding value in the other table.
@@ -230,50 +233,27 @@ public class SqlUtils {
 	}
 
 	private static org.jooq.Field<Object> createField(final String tableName, final String fieldName) {
-		final String sql_field_name = get_sql_field_name(tableName, fieldName);
-		if (StringUtils.isEmpty(sql_field_name)) {
-			return null;
-		}
-
-		return Factory.field(sql_field_name);
-	}
-
-	private static org.jooq.Field<Object> createField(final String tableName, final LayoutItemField layoutField) {
-		final String sql_field_name = get_sql_field_name(tableName, layoutField);
-		if (StringUtils.isEmpty(sql_field_name)) {
-			return null;
-		}
-
-		return Factory.field(sql_field_name);
-	}
-
-	private static String get_sql_field_name(final String tableName, final String fieldName) {
-
 		if (StringUtils.isEmpty(tableName)) {
-			return "";
+			return null;
 		}
 
 		if (StringUtils.isEmpty(fieldName)) {
-			return "";
+			return null;
 		}
 
-		// TODO: Quoting, escaping, etc:
-		return tableName + "." + fieldName;
+		return Factory.fieldByName(tableName, fieldName);
 	}
 
-	private static String get_sql_field_name(final String tableName, final LayoutItemField layoutItemField) {
-
-		if (layoutItemField == null) {
-			return "";
-		}
-
+	private static org.jooq.Field<Object> createField(final String tableName, final LayoutItemField layoutField) {
 		if (StringUtils.isEmpty(tableName)) {
-			return "";
+			return null;
 		}
 
-		// TODO: Quoting, escaping, etc:
-		return get_sql_field_name(layoutItemField.getSqlTableOrJoinAliasName(tableName),
-				layoutItemField.getName());
+		if(layoutField == null) {
+			return null;
+		}
+		
+		return createField(layoutField.getSqlTableOrJoinAliasName(tableName), layoutField.getName());
 	}
 
 	private static void add_to_relationships_list(final List<UsesRelationship> listRelationships,
@@ -346,13 +326,14 @@ public class SqlUtils {
 				// It is a relationship that only specifies the table, without specifying linking fields:
 
 				// TODO: from() takes SQL, not specifically a table name, so this is unsafe.
-				// TODO: stepResult = step.from(relationship.get_to_table());
+				// Table<Record> toTable = Factory.tableByName(relationship.get_to_table());
+				// TODO: stepResult = step.from(toTable);
 			}
 
 			return;
 		}
 
-		// Define the alias name as returned by get_sql_join_alias_name():
+		// Define the alias name as returned by getSqlJoinAliasName():
 
 		// Specify an alias, to avoid ambiguity when using 2 relationships to the same table.
 		final String alias_name = uses_relationship.getSqlJoinAliasName();
@@ -365,9 +346,9 @@ public class SqlUtils {
 			final org.jooq.Field<Object> fieldTo = createField(alias_name, relationship.getToField());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
-			// TODO: join() takes SQL, not specifically an alias name, so this is unsafe.
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
-			step = step.leftOuterJoin(relationship.getToTable() + " AS " + alias_name).on(condition);
+			final Table<Record> toTable = Factory.tableByName(relationship.getToTable());
+			step = step.leftOuterJoin(toTable.as(alias_name)).on(condition);
 		} else {
 			final UsesRelationship parent_relationship = new UsesRelationshipImpl();
 			parent_relationship.setRelationship(relationship);
@@ -378,9 +359,9 @@ public class SqlUtils {
 			final org.jooq.Field<Object> fieldTo = createField(alias_name, relatedRelationship.getToField());
 			final Condition condition = fieldFrom.equal(fieldTo);
 
-			// TODO: join() takes SQL, not specifically an alias name, so this is unsafe.
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
-			step = step.leftOuterJoin(relatedRelationship.getToTable() + " AS " + alias_name).on(condition);
+			final Table<Record> toTable = Factory.tableByName(relatedRelationship.getToTable());
+			step = step.leftOuterJoin(toTable.as(alias_name)).on(condition);
 		}
 	}
 

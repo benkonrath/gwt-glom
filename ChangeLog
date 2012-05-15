@@ -1,5 +1,16 @@
 2012-05-15  Murray Cumming  <murrayc@murrayc.com>
 
+	Use jOOQ's tableByName() and fieldByName.
+
+	* pom.xml: Use jOOQ 2.3.1 to get the new API.
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	build_sql_select_step_with_where_clause(), .createField(),
+	builder_add_join(): Use Factory.tableByName() and Factory.fieldByName()
+	so we can get correct quoting and escaping. Thanks to Lukas Eder for 
+	adding this, and other things, to jOOQ.
+
+2012-05-15  Murray Cumming  <murrayc@murrayc.com>
+
 	SqlUtils: Remove the Connection parameters.
 
 	* src/main/java/org/glom/web/server/SqlUtils.java:
