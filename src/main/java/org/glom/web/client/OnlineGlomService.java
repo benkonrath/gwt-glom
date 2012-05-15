@@ -29,6 +29,7 @@ import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -155,15 +156,15 @@ public interface OnlineGlomService extends RemoteService {
 			final String localeID);
 
 	/**
-	 * Retrieves data for the related list table with the specified relationship name and foreign key value.
+	 * Retrieves data for the related list table with the specified portal and foreign key value.
 	 * 
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
 	 *            default table
-	 * @param relationshipName
-	 *            name of the relationship to use for setting up the SQL query
+	 * @param portal
+	 *            The portal to use for setting up the SQL query
 	 * @param start
 	 *            the start index in the data result set from the SQL query that should be retrieved
 	 * @param length
@@ -172,19 +173,19 @@ public interface OnlineGlomService extends RemoteService {
 	 *            the value of the foreign key
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, String relationshipName,
+	ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length);
 
 	/**
-	 * Retrieves sorted data for the related list table with the specified relationship name and foreign key value.
+	 * Retrieves sorted data for the related list table with the specified portal and foreign key value.
 	 * 
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
 	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
 	 *            default table
-	 * @param relationshipName
-	 *            name of the relationship to use for setting up the SQL query
+	 * @param portal
+	 *            The portal to use for setting up the SQL query
 	 * @param foreignKeyValue
 	 *            the value of the foreign key
 	 * @param start
@@ -198,11 +199,11 @@ public interface OnlineGlomService extends RemoteService {
 	 *            should be sorted in descending order
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, String relationshipName,
+	ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
 
 	/**
-	 * Gets the expected row count for the related list table with the specified relationship name and foreign key
+	 * Gets the expected row count for the related list table with the specified portal and foreign key
 	 * value.
 	 * 
 	 * @param documentID
@@ -210,16 +211,17 @@ public interface OnlineGlomService extends RemoteService {
 	 * @param tableName
 	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
 	 *            default table
-	 * @param relationshipName
-	 *            name of the relationship to use for setting up the SQL query
+	 * @param portal
+	 *            The portal to use for setting up the SQL query
 	 * @param foreignKeyValue
 	 *            the value of the foreign key
 	 * @return the expected row count
 	 */
-	int getRelatedListRowCount(String documentID, String tableName, String relationshipName,
+	int getRelatedListRowCount(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue);
 
-	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
+	//TODO: Do this only on the server side, or only on the client side?
+	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue);
 
 	String getConfigurationErrorMessage();

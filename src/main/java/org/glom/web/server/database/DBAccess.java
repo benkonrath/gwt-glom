@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
@@ -257,66 +256,6 @@ abstract class DBAccess {
 		}
 
 		return libglomLayoutItemField;
-	}
-
-	/*
-	 * Find the LayoutItemPortal for the related list name
-	 */
-	final protected LayoutItemPortal getPortal(String relationshipName) {
-		if(StringUtils.isEmpty(relationshipName)) {
-			return null;
-		}
-
-		List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("details", tableName);
-		// LayoutItemPortal portal = null;
-		for (int i = 0; i < layoutGroupVec.size(); i++) {
-			LayoutGroup layoutGroup = layoutGroupVec.get(i);
-			LayoutItemPortal portal = getPortal(relationshipName, layoutGroup);
-			if (portal != null) {
-				return portal;
-			}
-		}
-
-		// the LayoutItemPortal with relationshipName was not found
-		return null;
-	}
-
-	/*
-	 * Recursive helper method.
-	 */
-	final private LayoutItemPortal getPortal(String relationshipName, LayoutGroup layoutGroup) {
-
-		if (StringUtils.isEmpty(relationshipName))
-			return null;
-
-		List<LayoutItem> items = layoutGroup.getItems();
-		for (int i = 0; i < items.size(); i++) {
-			LayoutItem layoutItem = items.get(i);
-
-			if (layoutItem instanceof LayoutItemField) {
-				// the layoutItem is a LayoutItem_Field
-				continue;
-
-			} else if (layoutItem instanceof LayoutGroup) {
-				final LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;
-				if (subLayoutGroup instanceof LayoutItemPortal) {
-					final LayoutItemPortal layoutItemPortal = (LayoutItemPortal) layoutItem;
-					if (relationshipName.equals(layoutItemPortal.getRelationshipNameUsed())) {
-						// yey, we found it!
-						return layoutItemPortal;
-					}
-				} else {
-					// The subGroup is not a LayoutItemPortal.
-					LayoutItemPortal retval = getPortal(relationshipName, subLayoutGroup);
-					if (retval != null) {
-						return retval;
-					}
-				}
-			}
-		}
-
-		// the LayoutItemPortal with relationshipName was not found
-		return null;
 	}
 
 }

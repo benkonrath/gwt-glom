@@ -44,6 +44,7 @@ import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Report;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.DataSources;
@@ -466,10 +467,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
-			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length) {
+			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length) {
 		//An empty tableName is OK, because that means the default table.
 		
-		if(StringUtils.isEmpty(relationshipName)) {
+		if(portal == null) {
+			Log.error("getRelatedListData(): portal is null.");
 			return null;
 		}
 
@@ -477,7 +479,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getRelatedListData(tableName, relationshipName, foreignKeyValue, start, length, false, 0,
+		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, false, 0,
 				false);
 	}
 
@@ -489,11 +491,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName,
-			final String relationshipName, final TypedDataItem foreignKeyValue, final int start, final int length,
+			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
 		//An empty tableName is OK, because that means the default table.
 		
-		if(StringUtils.isEmpty(relationshipName)) {
+		if(portal == null) {
+			Log.error("getSortedRelatedListData(): portal is null.");
 			return null;
 		}
 
@@ -503,16 +506,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getRelatedListData(tableName, relationshipName, foreignKeyValue, start, length, true,
+		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, true,
 				sortColumnIndex, ascending);
 	}
 
 	@Override
-	public int getRelatedListRowCount(final String documentID, final String tableName, final String relationshipName,
+	public int getRelatedListRowCount(final String documentID, final String tableName, final LayoutItemPortal portal,
 			final TypedDataItem foreignKeyValue) {
 		//An empty tableName is OK, because that means the default table.
 		
-		if(StringUtils.isEmpty(relationshipName)) {
+		if(portal == null) {
+			Log.error("getRelatedListRowCount(): portal is null");
 			return 0;
 		}
 
@@ -523,7 +527,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getRelatedListRowCount(tableName, relationshipName, foreignKeyValue);
+		return configuredDoc.getRelatedListRowCount(tableName, portal, foreignKeyValue);
 	}
 
 	/*
@@ -534,10 +538,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
-			final String relationshipName, final TypedDataItem primaryKeyValue) {
+			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
 		//An empty tableName is OK, because that means the default table.
 		
-		if(StringUtils.isEmpty(relationshipName)) {
+		if(portal == null) {
+			Log.error("getSuitableRecordToViewDetails(): portal is null");
 			return null;
 		}
 		
@@ -548,7 +553,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getSuitableRecordToViewDetails(tableName, relationshipName, primaryKeyValue);
+		return configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
 	}
 
 }

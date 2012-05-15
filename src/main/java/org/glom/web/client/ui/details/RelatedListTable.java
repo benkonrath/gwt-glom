@@ -61,7 +61,7 @@ public class RelatedListTable extends ListTable {
 	private static final int MIN_TABLE_ROWS = MAX_TABLE_ROWS;
 
 	private TypedDataItem foreignKeyValue;
-	private String relationshipName;
+	private LayoutItemPortal portal = null;
 	private int numNonEmptyRows = 0;
 
 	private final static int expectedHeight = initializeExepectedHeight();
@@ -75,7 +75,7 @@ public class RelatedListTable extends ListTable {
 		// These variables need to be set before the createCellTable() method is called so that the data provider can
 		// use them.
 		this.foreignKeyValue = foreignKeyValue;
-		this.relationshipName = layoutItemPortal.getRelationshipNameUsed();
+		this.portal = layoutItemPortal;
 
 		createCellTable(layoutItemPortal, tableName, MAX_TABLE_ROWS, constants.open(), navigationButtonCell);
 
@@ -139,13 +139,13 @@ public class RelatedListTable extends ListTable {
 					ColumnSortInfo info = colSortList.get(0);
 
 					OnlineGlomServiceAsync.Util.getInstance().getSortedRelatedListData(documentID, tableName,
-							relationshipName, foreignKeyValue, start, range.getLength(),
+							portal, foreignKeyValue, start, range.getLength(),
 							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()), info.isAscending(),
 							callback);
 
 				} else {
 					OnlineGlomServiceAsync.Util.getInstance().getRelatedListData(documentID, tableName,
-							relationshipName, foreignKeyValue, start, range.getLength(), callback);
+							portal, foreignKeyValue, start, range.getLength(), callback);
 
 				}
 

@@ -49,13 +49,12 @@ public class RelatedListDBAccess extends ListDBAccess {
 	private Field whereClauseToKeyField = null;
 
 	public RelatedListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
-			final String tableName, final String relationshipName) {
+			final String tableName, final LayoutItemPortal portal) {
 		super(document, documentID, cpds, tableName);
 
-		final LayoutItemPortal portal = getPortal(relationshipName);
 		if (portal == null) {
-			Log.error(documentID, tableName, "Couldn't find LayoutItemPortal with relationship name=\"" + relationshipName + "\" in table \""
-					+ tableName + "\". " + "Cannot retrive data for the related list.");
+			Log.error(documentID, tableName, "portal is null in table \""
+					+ tableName + "\". " + "Cannot retrieve data for the related list.");
 			return;
 		}
 

@@ -461,10 +461,11 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
-	ArrayList<DataItem[]> getRelatedListData(String tableName, final String relationshipName,
+	ArrayList<DataItem[]> getRelatedListData(String tableName, final LayoutItemPortal portal,
 			final TypedDataItem foreignKeyValue, final int start, final int length, final boolean useSortClause,
 			final int sortColumnIndex, final boolean isAscending) {
-		if (StringUtils.isEmpty(relationshipName)) {
+		if (portal == null) {
+			Log.error("getRelatedListData(): portal is null");
 			return null;
 		}
 
@@ -473,7 +474,7 @@ final class ConfiguredDocument {
 
 		// Create a database access object for the related list
 		final RelatedListDBAccess relatedListDBAccess = new RelatedListDBAccess(document, documentID, cpds, tableName,
-				relationshipName);
+				portal);
 
 		// Return the data
 		return relatedListDBAccess.getData(start, length, foreignKeyValue, useSortClause, sortColumnIndex, isAscending);
@@ -676,25 +677,30 @@ final class ConfiguredDocument {
 	/*
 	 * Gets the expected row count for a related list.
 	 */
-	int getRelatedListRowCount(String tableName, final String relationshipName, final TypedDataItem foreignKeyValue) {
+	int getRelatedListRowCount(String tableName, final LayoutItemPortal portal, final TypedDataItem foreignKeyValue) {
+		if (portal == null) {
+			Log.error("getRelatedListData(): portal is null");
+			return 0;
+		}
+
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
 		// Create a database access object for the related list
 		final RelatedListDBAccess relatedListDBAccess = new RelatedListDBAccess(document, documentID, cpds, tableName,
-				relationshipName);
+				portal);
 
 		// Return the row count
 		return relatedListDBAccess.getExpectedResultSize(foreignKeyValue);
 	}
 
-	NavigationRecord getSuitableRecordToViewDetails(String tableName, final String relationshipName,
+	NavigationRecord getSuitableRecordToViewDetails(String tableName, final LayoutItemPortal portal,
 			final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 
 		final RelatedListNavigation relatedListNavigation = new RelatedListNavigation(document, documentID, cpds,
-				tableName, relationshipName);
+				tableName, portal);
 
 		return relatedListNavigation.getNavigationRecord(primaryKeyValue);
 	}

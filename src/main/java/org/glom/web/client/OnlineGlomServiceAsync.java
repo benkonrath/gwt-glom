@@ -29,6 +29,7 @@ import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -81,17 +82,17 @@ public interface OnlineGlomServiceAsync {
 	void getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue,
 			AsyncCallback<DataItem[]> callback);
 
-	void getRelatedListData(String documentID, String tableName, String relationshipName,
+	void getRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
 
-	void getSortedRelatedListData(String documentID, String tableName, String relationshipName,
+	void getSortedRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending,
 			AsyncCallback<ArrayList<DataItem[]>> callback);
 
-	void getRelatedListRowCount(String documentID, String tableName, String relationshipName,
+	void getRelatedListRowCount(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, AsyncCallback<Integer> callback);
 
-	void getSuitableRecordToViewDetails(String documentID, String tableName, String relationshipName,
+	void getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
 	void getConfigurationErrorMessage(AsyncCallback<String> callback);

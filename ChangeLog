@@ -1,5 +1,30 @@
 2012-05-15  Murray Cumming  <murrayc@murrayc.com>
 
+	Corrections to navigation to related records.
+	
+	* src/main/java/org/glom/web/client/OnlineGlomService.java:
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	getRelatedListData(), getSortedRelatedListData)(), getRelatedListRowCount(),
+	getSuitableRecordToViewDetails(): Take a LayoutItemPortal instead of a 
+	relationship name, because the relationship name is not necessarily unique 
+	on the layout.
+	TOOD: This is inefficient, because it passes the whole list of 
+	child field items back to the server, but it is more correct, and happens
+	to fix a bug with the primary key being lost after a few navigations.
+	There is probably a chance to make this more efficient anyway in some 
+	more basic way.
+	
+	* src/main/java/org/glom/web/client/activity/DetailsActivity.java
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.jav
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	* src/main/java/org/glom/web/server/database/DBAccess.java
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	Adapted.
+
+2012-05-15  Murray Cumming  <murrayc@murrayc.com>
+
 	Fix the use of translations.
 
 	* src/main/java/org/glom/web/server/ConfiguredDocument.java:

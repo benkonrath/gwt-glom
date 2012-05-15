@@ -67,10 +67,10 @@ public class DetailsActivity extends HasTableActivity {
 	 */
 	private class RelatedListNavigationButtonCell extends NavigationButtonCell {
 
-		private final String relationshipName;
+		private final LayoutItemPortal portal;
 
-		public RelatedListNavigationButtonCell(final String relationshipName) {
-			this.relationshipName = relationshipName;
+		public RelatedListNavigationButtonCell(final LayoutItemPortal portal) {
+			this.portal = portal;
 		}
 
 		/*
@@ -103,7 +103,7 @@ public class DetailsActivity extends HasTableActivity {
 			};
 
 			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName,
-					relationshipName, (TypedDataItem) context.getKey(), callback);
+					portal, (TypedDataItem) context.getKey(), callback);
 		}
 	}
 
@@ -264,14 +264,14 @@ public class DetailsActivity extends HasTableActivity {
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName,
 								layoutItemPortal, foreignKeyValue, new RelatedListNavigationButtonCell(
-										layoutItemPortal.getRelationshipNameUsed()));
+										layoutItemPortal));
 
 						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
 							relatedListTable.hideNavigationButtons();
 						}
 						portal.setContents(relatedListTable);
 
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal.getRelationshipNameUsed(),
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal,
 								foreignKeyValue);
 					}
 				}
@@ -300,7 +300,7 @@ public class DetailsActivity extends HasTableActivity {
 	}
 
 	// sets the row count for the related list table
-	private void setRowCountForRelatedListTable(final RelatedListTable relatedListTable, final String relationshipName,
+	private void setRowCountForRelatedListTable(final RelatedListTable relatedListTable, final LayoutItemPortal portal,
 			final TypedDataItem foreignKeyValue) {
 		final AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
 			@Override
@@ -324,7 +324,7 @@ public class DetailsActivity extends HasTableActivity {
 			}
 		};
 
-		OnlineGlomServiceAsync.Util.getInstance().getRelatedListRowCount(documentID, tableName, relationshipName,
+		OnlineGlomServiceAsync.Util.getInstance().getRelatedListRowCount(documentID, tableName, portal,
 				foreignKeyValue, callback);
 	}
 

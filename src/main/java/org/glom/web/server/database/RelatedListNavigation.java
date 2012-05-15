@@ -49,13 +49,12 @@ public class RelatedListNavigation extends DBAccess {
 	private LayoutItemPortal portal;
 
 	public RelatedListNavigation(final Document document, final String documentID, final ComboPooledDataSource cpds,
-			final String tableName, final String relationshipName) {
+			final String tableName, final LayoutItemPortal portal) {
 		super(document, documentID, cpds, tableName);
 
-		final LayoutItemPortal portal = getPortal(relationshipName);
 		if (portal == null) {
-			Log.error(documentID, tableName, "Couldn't find LayoutItemPortal \"" + relationshipName + "\" in table \""
-					+ tableName + "\". " + "Cannot retrive data for the related list.");
+			Log.error(documentID, tableName, "portal is null in table \""
+					+ tableName + "\". " + "Cannot retrieve data for the related list.");
 			return;
 		}
 
