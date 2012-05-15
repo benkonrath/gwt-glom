@@ -19,7 +19,6 @@
 
 package org.glom.web.server.database;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,7 +155,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * org.glom.libglom.SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(final Connection connection, final String quickFind, final SortClause sortClause) {
+	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
 		// TODO: combine this method with getCountQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
@@ -178,7 +177,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 						foreignKeyValue);
 		}
 
-		return SqlUtils.build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
 
 	}
 
@@ -204,7 +203,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	 * @see org.glom.web.server.ListDBAccess#getCountQuery()
 	 */
 	@Override
-	protected String getCountQuery(final Connection connection) {
+	protected String getCountQuery() {
 		// TODO: combine this method with getSelectQuery() to remove duplicate code
 		if (portal == null) {
 			Log.error(documentID, parentTable,
@@ -226,7 +225,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 						foreignKeyValue);
 		}
 
-		return SqlUtils.build_sql_count_select_with_where_clause(connection, tableName, fieldsToGet, whereClause);
+		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet, whereClause);
 	}
 
 }

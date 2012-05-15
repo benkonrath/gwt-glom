@@ -19,7 +19,6 @@
 
 package org.glom.web.server;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,7 @@ import org.jooq.impl.Factory;
 public class SqlUtils {
 
 	// TODO: Change to final ArrayList<LayoutItem_Field> fieldsToGet
-	public static String build_sql_select_with_key(final Connection connection, final String tableName,
+	public static String build_sql_select_with_key(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Field primaryKey, final TypedDataItem primaryKeyValue) {
 
 		Condition whereClause = null; // Note that we ignore quickFind.
@@ -59,7 +58,7 @@ public class SqlUtils {
 		}
 
 		final SortClause sortClause = null; // Ignored.
-		return build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause);
+		return build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
 	}
 
 	public static Condition build_simple_where_expression(final String tableName, final Field primaryKey,
@@ -82,20 +81,20 @@ public class SqlUtils {
 	}
 
 	/*
-	 * private static String build_sql_select_with_where_clause(final Connection connection, final String tableName,
+	 * private static String build_sql_select_with_where_clause(final String tableName,
 	 * final LayoutFieldVector fieldsToGet) { final Condition whereClause = null; return
-	 * build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause); }
+	 * build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause); }
 	 */
 
 	/*
-	 * private static String build_sql_select_with_where_clause(final Connection connection, final String tableName,
+	 * private static String build_sql_select_with_where_clause(final String tableName,
 	 * final LayoutFieldVector fieldsToGet, final Condition whereClause) { final SortClause sortClause = null; return
-	 * build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause); }
+	 * build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause); }
 	 */
 
-	public static String build_sql_select_with_where_clause(final Connection connection, final String tableName,
+	public static String build_sql_select_with_where_clause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause) {
-		final SelectFinalStep step = build_sql_select_step_with_where_clause(connection, tableName, fieldsToGet,
+		final SelectFinalStep step = build_sql_select_step_with_where_clause(tableName, fieldsToGet,
 				whereClause, sortClause);
 		if (step == null) {
 			return "";
@@ -106,8 +105,8 @@ public class SqlUtils {
 		return query;
 	}
 
-	private static SelectSelectStep createSelect(final Connection connection) {
-		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
+	private static SelectSelectStep createSelect() {
+		final Factory factory = new Factory(SQLDialect.POSTGRES);
 		final Settings settings = factory.getSettings();
 		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
 		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
@@ -116,11 +115,11 @@ public class SqlUtils {
 		return selectStep;
 	}
 
-	private static SelectFinalStep build_sql_select_step_with_where_clause(final Connection connection,
+	private static SelectFinalStep build_sql_select_step_with_where_clause(
 			final String tableName, final List<LayoutItemField> fieldsToGet, final Condition whereClause,
 			final SortClause sortClause) {
 
-		final SelectSelectStep selectStep = createSelect(connection);
+		final SelectSelectStep selectStep = createSelect();
 
 		// Add the fields, and any necessary joins:
 		final List<UsesRelationship> listRelationships = build_sql_select_add_fields_to_get(selectStep, tableName,
@@ -142,23 +141,23 @@ public class SqlUtils {
 		return finalStep;
 	}
 
-	public static String build_sql_count_select_with_where_clause(final Connection connection, final String tableName,
+	public static String build_sql_count_select_with_where_clause(final String tableName,
 			final List<LayoutItemField> fieldsToGet) {
-		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(connection, tableName, fieldsToGet,
+		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(tableName, fieldsToGet,
 				null, null);
-		return build_sql_select_count_rows(connection, selectInner);
+		return build_sql_select_count_rows(selectInner);
 	}
 
-	public static String build_sql_count_select_with_where_clause(final Connection connection, final String tableName,
+	public static String build_sql_count_select_with_where_clause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause) {
-		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(connection, tableName, fieldsToGet,
+		final SelectFinalStep selectInner = build_sql_select_step_with_where_clause(tableName, fieldsToGet,
 				whereClause, null);
-		return build_sql_select_count_rows(connection, selectInner);
+		return build_sql_select_count_rows(selectInner);
 	}
 
-	private static String build_sql_select_count_rows(final Connection connection, final SelectFinalStep selectInner) {
+	private static String build_sql_select_count_rows(final SelectFinalStep selectInner) {
 		// TODO: Find a way to do this with the jOOQ API:
-		final SelectSelectStep select = createSelect(connection);
+		final SelectSelectStep select = createSelect();
 
 		final org.jooq.Field<?> field = Factory.field("*");
 		final AggregateFunction<?> count = Factory.count(field);

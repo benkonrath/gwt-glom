@@ -49,9 +49,9 @@ public abstract class ListDBAccess extends DBAccess {
 		super(document, documentID, cpds, tableName);
 	}
 
-	protected abstract String getSelectQuery(Connection connection, String quickFind, SortClause sortClause);
+	protected abstract String getSelectQuery(String quickFind, SortClause sortClause);
 
-	protected abstract String getCountQuery(Connection connection);
+	protected abstract String getCountQuery();
 
 	protected ArrayList<DataItem[]> getListData(final String quickFind, final int start, final int length,
 			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
@@ -97,7 +97,7 @@ public abstract class ListDBAccess extends DBAccess {
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			st.setFetchSize(length);
-			final String query = getSelectQuery(conn, quickFind, sortClause) + " OFFSET " + start;
+			final String query = getSelectQuery(quickFind, sortClause) + " OFFSET " + start;
 			// TODO Test memory usage before and after we execute the query that would result in a large ResultSet.
 			// We need to ensure that the JDBC driver is in fact returning a cursor based result set that has a low
 			// memory footprint. Check the difference between this value before and after the query:
@@ -144,7 +144,8 @@ public abstract class ListDBAccess extends DBAccess {
 			conn = cpds.getConnection();
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			final String query = getCountQuery(conn);
+			final String query = getCountQuery();
+
 			// TODO Test execution time of this query with when the number of rows in the table is large (say >
 			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
 			rs = st.executeQuery(query);

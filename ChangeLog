@@ -1,3 +1,29 @@
+2012-05-15  Murray Cumming  <murrayc@murrayc.com>
+
+	SqlUtils: Remove the Connection parameters.
+
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	build_sql_select_with_key(), build_sql_select_with_where_clause(),
+	createSelect(), build_sql_select_step_with_where_clause(),
+	build_sql_count_select_with_where_clause(),
+	build_sql_select_count_rows(): Remove the Connection parameter because
+	jOOQ does not actually need a connectionwhen it is just used to build 
+	a SQL string:
+	https://groups.google.com/forum/#!topic/jooq-user/tIwobFOR2iM
+
+	* src/main/java/org/glom/web/server/ReportGenerator.java:
+	generateReport():
+	* src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+	getData():
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	Constructor, getListData(), getResultSizeOfSQLQuery():
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	getSelectQuery(), getCountQuery():
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	getSelectQuery(), getCountQuery():
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	getNavigationRecord(): Adapted.
+
 2012-05-14  Murray Cumming  <murrayc@murrayc.com>
 
 	Fix quick find.

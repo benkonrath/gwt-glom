@@ -19,7 +19,6 @@
 
 package org.glom.web.server.database;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +81,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * @see org.glom.web.server.ListDBAccess#getSQLQuery(LayoutFieldVector, SortClause)
 	 */
 	@Override
-	protected String getSelectQuery(final Connection connection, final String quickFind, final SortClause sortClause) {
+	protected String getSelectQuery(final String quickFind, final SortClause sortClause) {
 		// Later versions of libglom actually return an empty SqlExpr when quickFindValue is empty,
 		// but let's be sure:
 		Condition whereClause = null;
@@ -92,7 +91,7 @@ public class ListViewDBAccess extends ListDBAccess {
 			whereClause = SqlUtils.get_find_where_clause_quick(document, tableName, quickFindValue);
 		}
 
-		return SqlUtils.build_sql_select_with_where_clause(connection, tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.build_sql_select_with_where_clause(tableName, fieldsToGet, whereClause, sortClause);
 	}
 
 	/*
@@ -101,8 +100,8 @@ public class ListViewDBAccess extends ListDBAccess {
 	 * @see org.glom.web.server.ListDBAccess#getCountQuery(LayoutFieldVector)
 	 */
 	@Override
-	protected String getCountQuery(final Connection connection) {
-		return SqlUtils.build_sql_count_select_with_where_clause(connection, tableName, fieldsToGet);
+	protected String getCountQuery() {
+		return SqlUtils.build_sql_count_select_with_where_clause(tableName, fieldsToGet);
 	}
 
 	/**
