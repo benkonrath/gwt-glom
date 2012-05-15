@@ -1,5 +1,17 @@
 2012-05-15  Murray Cumming  <murrayc@murrayc.com>
 
+	Fix the use of translations.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Add updateTitlesForLocale().
+	getValidListViewLayoutGroup(), getDetailsLayoutGroup():
+	Call it to discard unwanted translations and to make getTitle() return
+	the wanted translation wihout the need for the client code to specify a locale.
+	* src/main/java/org/glom/web/shared/libglom/Translatable.java:
+	getTitle(): Fallback to the original title, as libglom does.
+
+2012-05-15  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: Correctly report the number of available translation locales.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java: Fill

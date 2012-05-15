@@ -47,11 +47,12 @@ public class Translatable implements Serializable {
 		}
 
 		final String title = translationsMap.get(locale);
-		if (title == null) {
-			return "";
+		if (title != null) {
+			return title;
 		}
 
-		return title;
+		//Fall back to the original (usually English) if there is no translation.
+		return getTitleOriginal();
 	}
 
 	/**
@@ -77,6 +78,12 @@ public class Translatable implements Serializable {
 		final String title = getTitle(locale);
 		translationsMap.clear();
 		setTitleOriginal(title);
+		
+		/* This will fail anyway, because setTitle() does not really work on LayoutItemField, because the getTitle() might have come from the field.
+		if(getTitle() != title) {
+			GWT.log("makeTitleOriginal(): failed.");
+		}
+		*/
 	}
 
 	/**

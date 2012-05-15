@@ -38,14 +38,17 @@ import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.TypedDataItem;
+import org.glom.web.shared.libglom.CustomTitle;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.Report;
+import org.glom.web.shared.libglom.Translatable;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.TableToViewDetails;
+import org.glom.web.shared.libglom.layout.UsesRelationship;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -364,6 +367,9 @@ final class ConfiguredDocument {
 		final LayoutGroup cloned = (LayoutGroup) Utils.deepCopy(libglomLayoutGroup);
 		if (cloned != null) {
 			updateTopLevelListLayoutGroup(cloned, tableName, localeID);
+			
+			//Discard unwanted translations so that getTitle(void) returns what we want.
+			updateTitlesForLocale(cloned, localeID);
 		}
 
 		// Store it in the cache for next time.
@@ -486,8 +492,8 @@ final class ConfiguredDocument {
 
 		final List<LayoutGroup> listGroups = document.getDataLayoutGroups("details", tableName);
 
-		// TODO: Clone the group and change the clone, to discard unwanted information (such as translations)
-		// store some information that we do not want to calculate on the client side.
+		// Clone the group and change the clone, to discard unwanted information (such as translations)
+		// and to store some information that we do not want to calculate on the client side.
 
 		// Note that we don't use clone() here, because that would need clone() implementations
 		// in classes which are also used in the client code (though the clone() methods would
@@ -502,6 +508,9 @@ final class ConfiguredDocument {
 
 		updatePortalsExtras(listCloned, tableName);
 		updateFieldsExtras(listCloned, tableName);
+		
+		//Discard unwanted translations so that getTitle(void) returns what we want.
+		updateTitlesForLocale(listCloned, localeID);
 
 		// Store it in the cache for next time.
 		mapTableLayouts.setDetailsLayout(tableName, localeID, listCloned);
@@ -527,6 +536,16 @@ final class ConfiguredDocument {
 	private void updateFieldsExtras(final List<LayoutGroup> listGroups, String tableName) {
 		for (LayoutGroup group : listGroups) {
 			updateFieldsExtras(group, tableName);
+		}
+	}
+	
+	/**
+	 * @param result
+	 * @param tableName
+	 */
+	private void updateTitlesForLocale(final List<LayoutGroup> listGroups, String localeID) {
+		for (LayoutGroup group : listGroups) {
+			updateTitlesForLocale(group, localeID);
 		}
 	}
 
@@ -604,7 +623,54 @@ final class ConfiguredDocument {
 				}
 			}
 		}
+	}
+	
+	private void updateTitlesForLocale(final LayoutGroup group, final String localeID) {
 
+		List<LayoutItem> childItems = group.getItems();
+		for (LayoutItem item : childItems) {
+			
+			// Call makeTitleOriginal on all Translatable items and all special
+			// Translatable items that they use:
+			if (item instanceof LayoutItemField) {
+				final LayoutItemField layoutItemField = (LayoutItemField) item;
+				
+				final Field field = layoutItemField.getFullFieldDetails();
+				if(field != null) {
+					field.makeTitleOriginal(localeID);
+				}
+				
+				final CustomTitle customTitle = layoutItemField.getCustomTitle();
+				if(customTitle != null) {
+					customTitle.makeTitleOriginal(localeID);
+				}
+			}
+			
+			if (item instanceof UsesRelationship) {
+				final UsesRelationship usesRelationship = (UsesRelationship) item;
+				final Relationship rel = usesRelationship.getRelationship();
+
+				if(rel != null) {
+					rel.makeTitleOriginal(localeID);
+				}
+				
+				final Relationship relatedRel = usesRelationship.getRelatedRelationship();
+				if(relatedRel != null) {
+					relatedRel.makeTitleOriginal(localeID);
+				}
+			}
+
+			if (item instanceof Translatable) {
+				final Translatable translatable = (Translatable) item;
+				translatable.makeTitleOriginal(localeID);
+			}
+			
+			if (item instanceof LayoutGroup) {
+				// Recurse:
+				final LayoutGroup childGroup = (LayoutGroup) item;
+				updateTitlesForLocale(childGroup, localeID);
+			}
+		}
 	}
 
 	/*
