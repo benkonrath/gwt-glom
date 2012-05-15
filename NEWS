@@ -1,3 +1,10 @@
+1.21.9 (unstable):
+
+* Remove the dependency on libglom, removing any use of native code.
+* Depend on jOOQ (instead of libgda's GdaSqlBuilder C API, indirectly) to 
+  build SQL queries.
+  (Murray Cumming)
+
 1.21.8.1 (unstable):
 
 * Add Report generation, via a Reports drop-down.
