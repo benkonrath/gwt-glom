@@ -7,7 +7,7 @@
 	<groupId>org.glom.web</groupId>
 	<artifactId>gwt-glom</artifactId>
 	<packaging>war</packaging>
-	<version>1.21.9.1</version>
+	<version>1.21.9.2</version>
 	<name>OnlineGlom</name>
 
 	<licenses>

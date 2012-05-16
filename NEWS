@@ -1,3 +1,8 @@
+1.21.9.2 (unstable):
+
+* Use translations for top-level group titles too, fixing a regression in
+  1.21.9.
+
 1.21.9.1 (unstable):
 
 * Just recompiled to fix a problem in the released .tar.gz file.
