@@ -628,6 +628,8 @@ final class ConfiguredDocument {
 	
 	private void updateTitlesForLocale(final LayoutGroup group, final String localeID) {
 
+		updateItemTitlesForLocale(group, localeID);
+		
 		List<LayoutItem> childItems = group.getItems();
 		for (LayoutItem item : childItems) {
 			
@@ -647,30 +649,34 @@ final class ConfiguredDocument {
 				}
 			}
 			
-			if (item instanceof UsesRelationship) {
-				final UsesRelationship usesRelationship = (UsesRelationship) item;
-				final Relationship rel = usesRelationship.getRelationship();
-
-				if(rel != null) {
-					rel.makeTitleOriginal(localeID);
-				}
-				
-				final Relationship relatedRel = usesRelationship.getRelatedRelationship();
-				if(relatedRel != null) {
-					relatedRel.makeTitleOriginal(localeID);
-				}
-			}
-
-			if (item instanceof Translatable) {
-				final Translatable translatable = (Translatable) item;
-				translatable.makeTitleOriginal(localeID);
-			}
+			updateItemTitlesForLocale(item, localeID);
 			
 			if (item instanceof LayoutGroup) {
 				// Recurse:
 				final LayoutGroup childGroup = (LayoutGroup) item;
 				updateTitlesForLocale(childGroup, localeID);
 			}
+		}
+	}
+
+	private void updateItemTitlesForLocale(LayoutItem item, final String localeID) {
+		if (item instanceof UsesRelationship) {
+			final UsesRelationship usesRelationship = (UsesRelationship) item;
+			final Relationship rel = usesRelationship.getRelationship();
+
+			if(rel != null) {
+				rel.makeTitleOriginal(localeID);
+			}
+			
+			final Relationship relatedRel = usesRelationship.getRelatedRelationship();
+			if(relatedRel != null) {
+				relatedRel.makeTitleOriginal(localeID);
+			}
+		}
+
+		if (item instanceof Translatable) {
+			final Translatable translatable = (Translatable) item;
+			translatable.makeTitleOriginal(localeID);
 		}
 	}
 

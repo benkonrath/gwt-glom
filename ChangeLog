@@ -1,3 +1,11 @@
+2012-05-16  Murray Cumming  <murrayc@murrayc.com>
+
+	Use translations for top-level groups too.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	updateTitlesForLocale(): Use the translation for the group 
+	as well as for child items.
+
 1.21.9.1:
 
 Just recompiled to fix a problem in the released .tar.gz file.
