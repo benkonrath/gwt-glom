@@ -105,8 +105,7 @@ public class RelatedListTable extends ListTable {
 					@Override
 					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)RelatedListData(): "
-								+ caught.getMessage());
+						GWT.log("AsyncCallback Failed: OnlineGlomService.getRelatedListData(): " + caught.getMessage());
 					}
 
 					@Override
@@ -134,21 +133,17 @@ public class RelatedListTable extends ListTable {
 
 				// get data from the server
 				final ColumnSortList colSortList = cellTable.getColumnSortList();
+				int sortColumn = -1; // -1 means no sort.
+				boolean ascending = false;
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					final ColumnSortInfo info = colSortList.get(0);
-
-					OnlineGlomServiceAsync.Util.getInstance().getSortedRelatedListData(documentID, tableName, portal,
-							foreignKeyValue, start, range.getLength(),
-							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()), info.isAscending(),
-							callback);
-
-				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getRelatedListData(documentID, tableName, portal,
-							foreignKeyValue, start, range.getLength(), callback);
-
+					sortColumn = cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn());
+					ascending = info.isAscending();
 				}
 
+				OnlineGlomServiceAsync.Util.getInstance().getRelatedListData(documentID, tableName, portal,
+						foreignKeyValue, start, range.getLength(), sortColumn, ascending, callback);
 			}
 		};
 

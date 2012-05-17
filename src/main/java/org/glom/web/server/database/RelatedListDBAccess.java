@@ -118,8 +118,18 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	}
 
+	/**
+	 * 
+	 * @param start
+	 * @param length
+	 * @param foreignKeyValue
+	 * @param sortColumnIndex
+	 *            The index of the column to sort by, or -1 for none.
+	 * @param isAscending
+	 * @return
+	 */
 	public ArrayList<DataItem[]> getData(final int start, final int length, final TypedDataItem foreignKeyValue,
-			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
+			final int sortColumnIndex, final boolean isAscending) {
 
 		if (tableName == null || foreignKeyValue == null || foreignKeyValue.isEmpty()) {
 			return null;
@@ -128,7 +138,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// Set the foreignKeyValue
 		this.foreignKeyValue = foreignKeyValue;
 
-		return getListData("" /* quickFind */, start, length, useSortClause, sortColumnIndex, isAscending);
+		return getListData("" /* quickFind */, start, length, sortColumnIndex, isAscending);
 	}
 
 	/*

@@ -53,12 +53,22 @@ public abstract class ListDBAccess extends DBAccess {
 
 	protected abstract String getCountQuery();
 
+	/**
+	 * 
+	 * @param quickFind
+	 * @param start
+	 * @param length
+	 * @param sortColumnIndex
+	 *            The index of the column to sort by, or -1 for none.
+	 * @param isAscending
+	 * @return
+	 */
 	protected ArrayList<DataItem[]> getListData(final String quickFind, final int start, final int length,
-			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
+			final int sortColumnIndex, final boolean isAscending) {
 
 		// create a sort clause for the column we've been asked to sort
 		final SortClause sortClause = new SortClause();
-		if (useSortClause) {
+		if (sortColumnIndex != -1) {
 			final LayoutItem item = fieldsToGet.get(sortColumnIndex);
 			if (item instanceof LayoutItemField) {
 				final UsesRelationship layoutItemField = (UsesRelationship) item;

@@ -440,6 +440,18 @@ final class ConfiguredDocument {
 		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
 	}
 
+	/**
+	 * 
+	 * @param tableName
+	 * @param quickFind
+	 * @param start
+	 * @param length
+	 * @param useSortClause
+	 * @param sortColumnIndex
+	 *            The index of the column to sort by, or -1 for none.
+	 * @param isAscending
+	 * @return
+	 */
 	ArrayList<DataItem[]> getListViewData(String tableName, final String quickFind, final int start, final int length,
 			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
 		// Validate the table name.
@@ -454,7 +466,7 @@ final class ConfiguredDocument {
 				libglomLayoutGroup);
 
 		// Return the data.
-		return listViewDBAccess.getData(quickFind, start, length, useSortClause, sortColumnIndex, isAscending);
+		return listViewDBAccess.getData(quickFind, start, length, sortColumnIndex, isAscending);
 	}
 
 	DataItem[] getDetailsData(String tableName, final TypedDataItem primaryKeyValue) {
@@ -466,9 +478,21 @@ final class ConfiguredDocument {
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
+	/**
+	 * 
+	 * @param tableName
+	 * @param portal
+	 * @param foreignKeyValue
+	 * @param start
+	 * @param length
+	 * @param sortColumnIndex
+	 *            The index of the column to sort by, or -1 for none.
+	 * @param isAscending
+	 * @return
+	 */
 	ArrayList<DataItem[]> getRelatedListData(String tableName, final LayoutItemPortal portal,
-			final TypedDataItem foreignKeyValue, final int start, final int length, final boolean useSortClause,
-			final int sortColumnIndex, final boolean isAscending) {
+			final TypedDataItem foreignKeyValue, final int start, final int length, final int sortColumnIndex,
+			final boolean isAscending) {
 		if (portal == null) {
 			Log.error("getRelatedListData(): portal is null");
 			return null;
@@ -482,7 +506,7 @@ final class ConfiguredDocument {
 				portal);
 
 		// Return the data
-		return relatedListDBAccess.getData(start, length, foreignKeyValue, useSortClause, sortColumnIndex, isAscending);
+		return relatedListDBAccess.getData(start, length, foreignKeyValue, sortColumnIndex, isAscending);
 	}
 
 	List<LayoutGroup> getDetailsLayoutGroup(String tableName, final String localeID) {

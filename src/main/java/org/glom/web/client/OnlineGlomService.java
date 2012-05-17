@@ -55,32 +55,16 @@ public interface OnlineGlomService extends RemoteService {
 	 *            the start index in the data result set from the SQL query that should be retrieved
 	 * @param length
 	 *            the number of rows of data to retrieve
-	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
-	 */
-	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, String quickFind, int start, int length);
-
-	/**
-	 * Retrieves sorted data for a list view table.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param tableName
-	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
-	 *            default table
-	 * @param start
-	 *            the start index in the data result set from the SQL query that should be retrieved
-	 * @param length
-	 *            the number of rows of data to retrieve
 	 * @param sortColumnIndex
-	 *            the index of the column to sort
+	 *            the index of the column to sort, or -1 for none.
 	 * @param ascending
 	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
 	 *            should be sorted in descending order
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
 
-	ArrayList<DataItem[]> getSortedListViewData(String documentID, String tableName, String quickFind, int start,
-			int length, int sortColumnIndex, boolean isAscending);
+	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, String quickFind, int start, int length,
+			int sortColumnIndex, boolean isAscending);
 
 	/**
 	 * Gets a list of Glom documents found in the configured directory.
@@ -165,27 +149,6 @@ public interface OnlineGlomService extends RemoteService {
 	 *            default table
 	 * @param portal
 	 *            The portal to use for setting up the SQL query
-	 * @param start
-	 *            the start index in the data result set from the SQL query that should be retrieved
-	 * @param length
-	 *            the number of rows of data to retrieve
-	 * @param foreignKeyValue
-	 *            the value of the foreign key
-	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
-	 */
-	ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
-			TypedDataItem foreignKeyValue, int start, int length);
-
-	/**
-	 * Retrieves sorted data for the related list table with the specified portal and foreign key value.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param tableName
-	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
-	 *            default table
-	 * @param portal
-	 *            The portal to use for setting up the SQL query
 	 * @param foreignKeyValue
 	 *            the value of the foreign key
 	 * @param start
@@ -193,13 +156,13 @@ public interface OnlineGlomService extends RemoteService {
 	 * @param length
 	 *            the number of rows of data to retrieve
 	 * @param sortColumnIndex
-	 *            the index of the column to sort
+	 *            the index of the column to sort, or -1 for none.
 	 * @param ascending
 	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
 	 *            should be sorted in descending order
 	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
 	 */
-	ArrayList<DataItem[]> getSortedRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
+	ArrayList<DataItem[]> getRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
 
 	/**

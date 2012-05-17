@@ -56,10 +56,20 @@ public class ListViewDBAccess extends ListDBAccess {
 		}
 	}
 
+	/**
+	 * 
+	 * @param quickFind
+	 * @param start
+	 * @param length
+	 * @param sortColumnIndex
+	 *            The index of the column to sort by, or -1 for none.
+	 * @param isAscending
+	 * @return
+	 */
 	public ArrayList<DataItem[]> getData(final String quickFind, final int start, final int length,
-			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
+			final int sortColumnIndex, final boolean isAscending) {
 
-		return getListData(quickFind, start, length, useSortClause, sortColumnIndex, isAscending);
+		return getListData(quickFind, start, length, sortColumnIndex, isAscending);
 	}
 
 	/*

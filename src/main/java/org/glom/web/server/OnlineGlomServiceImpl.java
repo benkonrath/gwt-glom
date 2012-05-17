@@ -314,26 +314,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int)
+	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int, int,
+	 * boolean)
 	 */
 	@Override
 	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName,
-			final String quickFind, final int start, final int length) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (!configuredDoc.isAuthenticated()) {
-			return new ArrayList<DataItem[]>();
-		}
-		return configuredDoc.getListViewData(tableName, quickFind, start, length, false, 0, false);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getSortedListViewData(java.lang.String, java.lang.String, int, int,
-	 * int, boolean)
-	 */
-	@Override
-	public ArrayList<DataItem[]> getSortedListViewData(final String documentID, final String tableName,
 			final String quickFind, final int start, final int length, final int sortColumnIndex,
 			final boolean isAscending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
@@ -472,39 +457,17 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int)
+	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int, int,
+	 * boolean)
 	 */
 	@Override
 	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
-			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length) {
-		// An empty tableName is OK, because that means the default table.
-
-		if (portal == null) {
-			Log.error("getRelatedListData(): portal is null.");
-			return null;
-		}
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-
-		// FIXME check for authentication
-
-		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, false, 0, false);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getSortedRelatedListData(java.lang.String, java.lang.String, int, int,
-	 * int, boolean)
-	 */
-	@Override
-	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
 		// An empty tableName is OK, because that means the default table.
 
 		if (portal == null) {
-			Log.error("getSortedRelatedListData(): portal is null.");
+			Log.error("getRelatedListData(): portal is null.");
 			return null;
 		}
 
@@ -515,8 +478,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, true,
-				sortColumnIndex, ascending);
+		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex,
+				ascending);
 	}
 
 	@Override

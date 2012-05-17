@@ -81,8 +81,7 @@ public class ListViewTable extends ListTable {
 					@Override
 					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)ListViewData(): "
-								+ caught.getMessage());
+						GWT.log("AsyncCallback Failed: OnlineGlomService.getListViewData(): " + caught.getMessage());
 					}
 
 					@Override
@@ -106,22 +105,18 @@ public class ListViewTable extends ListTable {
 				};
 
 				// get data from the server
+				int sortColumn = -1; // -1 means no sort.
+				boolean ascending = false;
 				final ColumnSortList colSortList = cellTable.getColumnSortList();
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
 					final ColumnSortInfo info = colSortList.get(0);
-
-					// TODO: Just make the sort field an optional parameter instead of having two methods?
-					OnlineGlomServiceAsync.Util.getInstance().getSortedListViewData(documentID, tableName, quickFind,
-							start, range.getLength(),
-							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()), info.isAscending(),
-							callback);
-
-				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getListViewData(documentID, tableName, quickFind, start,
-							range.getLength(), callback);
-
+					sortColumn = cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn());
+					ascending = info.isAscending();
 				}
+
+				OnlineGlomServiceAsync.Util.getInstance().getListViewData(documentID, tableName, quickFind, start,
+						range.getLength(), sortColumn, ascending, callback);
 
 			}
 		};

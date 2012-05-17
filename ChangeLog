@@ -1,3 +1,29 @@
+2012-05-17  Murray Cumming  <murrayc@murrayc.com>
+
+	OnlineGlomService: Simplify the getList/RelatedViewData() methods.
+
+	* src/main/java/org/glom/web/client/OnlineGlomService.java
+	* src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	Remove getSortedListViewData() and getSortedRelatedListData(), adding
+	the sort column index and ascending bool to the regular method.
+	Instead, a sort column index of -1 now means no sort.
+	This is less explicit, but it's fairly simple, reduces the amount of 
+	code, and makes the OnlineGlomService API slightly smaller.
+	* src/main/java/org/glom/web/client/ui/details/RelatedListTable.java:
+	* src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+	getDataProvider():
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	getListViewData(), getRelatedListData():
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	getListViewData(), getRelatedListData():
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	getListData():
+	* src/main/java/org/glom/web/server/database/ListViewDBAccess.java:
+	getData():
+	* src/main/java/org/glom/web/server/database/RelatedListDBAccess.java:
+	getData(): Adapted.
+
 1.21.9.2:
 
 2012-05-16  Murray Cumming  <murrayc@murrayc.com>

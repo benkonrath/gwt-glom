@@ -63,9 +63,6 @@ public interface OnlineGlomServiceAsync {
 			AsyncCallback<String> callback);
 
 	void getListViewData(String documentID, String tableName, String quickFind, int start, int length,
-			AsyncCallback<ArrayList<DataItem[]>> callback);
-
-	void getSortedListViewData(String documentID, String tableName, String quickFind, int start, int length,
 			int sortColumnIndex, boolean isAscending, AsyncCallback<ArrayList<DataItem[]>> callback);
 
 	void getDocuments(AsyncCallback<Documents> callback);
@@ -83,9 +80,6 @@ public interface OnlineGlomServiceAsync {
 			AsyncCallback<DataItem[]> callback);
 
 	void getRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
-			TypedDataItem foreignKeyValue, int start, int length, AsyncCallback<ArrayList<DataItem[]>> callback);
-
-	void getSortedRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending,
 			AsyncCallback<ArrayList<DataItem[]>> callback);
 
