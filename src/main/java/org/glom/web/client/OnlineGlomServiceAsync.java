@@ -54,30 +54,25 @@ public interface OnlineGlomServiceAsync {
 		}
 	}
 
-	void getDocumentInfo(String documentID, String localeID, AsyncCallback<DocumentInfo> callback);
-
-	void getListViewLayout(String documentID, String tableName, final String localeID,
-			AsyncCallback<LayoutGroup> callback);
-
-	void getReportHTML(String documentID, String tableName, String reportName, String quickFind, String localeID,
-			AsyncCallback<String> callback);
-
-	void getListViewData(String documentID, String tableName, String quickFind, int start, int length,
-			int sortColumnIndex, boolean isAscending, AsyncCallback<ArrayList<DataItem[]>> callback);
-
-	void getDocuments(AsyncCallback<Documents> callback);
-
-	void isAuthenticated(String documentID, AsyncCallback<Boolean> callback);
-
 	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
 
-	void getReportsList(String documentID, String tableName, String localeID, AsyncCallback<Reports> callback);
+	void getConfigurationErrorMessage(AsyncCallback<String> callback);
+
+	void getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue,
+			AsyncCallback<DataItem[]> callback);
 
 	void getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue, String localeID,
 			AsyncCallback<DetailsLayoutAndData> callback);
 
-	void getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue,
-			AsyncCallback<DataItem[]> callback);
+	void getDocumentInfo(String documentID, String localeID, AsyncCallback<DocumentInfo> callback);
+
+	void getDocuments(AsyncCallback<Documents> callback);
+
+	void getListViewData(String documentID, String tableName, String quickFind, int start, int length,
+			int sortColumnIndex, boolean isAscending, AsyncCallback<ArrayList<DataItem[]>> callback);
+
+	void getListViewLayout(String documentID, String tableName, final String localeID,
+			AsyncCallback<LayoutGroup> callback);
 
 	void getRelatedListData(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending,
@@ -86,8 +81,13 @@ public interface OnlineGlomServiceAsync {
 	void getRelatedListRowCount(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue, AsyncCallback<Integer> callback);
 
+	void getReportHTML(String documentID, String tableName, String reportName, String quickFind, String localeID,
+			AsyncCallback<String> callback);
+
+	void getReportsList(String documentID, String tableName, String localeID, AsyncCallback<Reports> callback);
+
 	void getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
 
-	void getConfigurationErrorMessage(AsyncCallback<String> callback);
+	void isAuthenticated(String documentID, AsyncCallback<Boolean> callback);
 }

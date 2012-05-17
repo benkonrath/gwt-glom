@@ -37,52 +37,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("libGlom")
 public interface OnlineGlomService extends RemoteService {
 
-	DocumentInfo getDocumentInfo(String documentID, String localeID);
-
-	LayoutGroup getListViewLayout(String documentID, String tableName, final String localeID);
-
-	String getReportHTML(String documentID, String tableName, String reportName, String quickFind, String localeID);
-
-	/**
-	 * Retrieves data for a list view table.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param tableName
-	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
-	 *            default table
-	 * @param start
-	 *            the start index in the data result set from the SQL query that should be retrieved
-	 * @param length
-	 *            the number of rows of data to retrieve
-	 * @param sortColumnIndex
-	 *            the index of the column to sort, or -1 for none.
-	 * @param ascending
-	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
-	 *            should be sorted in descending order
-	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
-	 */
-
-	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, String quickFind, int start, int length,
-			int sortColumnIndex, boolean isAscending);
-
-	/**
-	 * Gets a list of Glom documents found in the configured directory.
-	 * 
-	 * @return an {@link ArrayList<String>} of Glom document titles. If the list is empty, no glom documents were found
-	 *         in the configured directory because it's empty or the directory is not configured correctly.
-	 */
-	Documents getDocuments();
-
-	/**
-	 * Checks if the PostgreSQL authentication has been set for this document.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @return true if the authentication has been set, false if it hasn't
-	 */
-	boolean isAuthenticated(String documentID);
-
 	/**
 	 * Checks if the provided PostgreSQL username and password are correct for the specified glom document. If the
 	 * information is correct it is saved for future access.
@@ -97,18 +51,7 @@ public interface OnlineGlomService extends RemoteService {
 	 */
 	boolean checkAuthentication(String documentID, String username, String password);
 
-	/**
-	 * Get a list of reports for the specified table.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param tableName
-	 *            name of the table in the Glom document.
-	 * @param localeID
-	 *            The locale for the table titles.
-	 * @return The names and titles of the table's reports.
-	 */
-	Reports getReportsList(String documentID, String tableName, String localeID);
+	String getConfigurationErrorMessage();
 
 	/**
 	 * Gets data for the details view.
@@ -138,6 +81,41 @@ public interface OnlineGlomService extends RemoteService {
 	 */
 	DetailsLayoutAndData getDetailsLayoutAndData(String documentID, String tableName, TypedDataItem primaryKeyValue,
 			final String localeID);
+
+	DocumentInfo getDocumentInfo(String documentID, String localeID);
+
+	/**
+	 * Gets a list of Glom documents found in the configured directory.
+	 * 
+	 * @return an {@link ArrayList<String>} of Glom document titles. If the list is empty, no glom documents were found
+	 *         in the configured directory because it's empty or the directory is not configured correctly.
+	 */
+	Documents getDocuments();
+
+	/**
+	 * Retrieves data for a list view table.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document or an empty {@link String} ("") to get the layout for the
+	 *            default table
+	 * @param start
+	 *            the start index in the data result set from the SQL query that should be retrieved
+	 * @param length
+	 *            the number of rows of data to retrieve
+	 * @param sortColumnIndex
+	 *            the index of the column to sort, or -1 for none.
+	 * @param ascending
+	 *            <code>true</code> if the column should be sorted in ascending order, <code>false</code> if the column
+	 *            should be sorted in descending order
+	 * @return an {@link ArrayList} of {@link DataItem} arrays that represents the requested data
+	 */
+
+	ArrayList<DataItem[]> getListViewData(String documentID, String tableName, String quickFind, int start, int length,
+			int sortColumnIndex, boolean isAscending);
+
+	LayoutGroup getListViewLayout(String documentID, String tableName, final String localeID);
 
 	/**
 	 * Retrieves data for the related list table with the specified portal and foreign key value.
@@ -182,9 +160,31 @@ public interface OnlineGlomService extends RemoteService {
 	int getRelatedListRowCount(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue);
 
+	String getReportHTML(String documentID, String tableName, String reportName, String quickFind, String localeID);
+
+	/**
+	 * Get a list of reports for the specified table.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @param tableName
+	 *            name of the table in the Glom document.
+	 * @param localeID
+	 *            The locale for the table titles.
+	 * @return The names and titles of the table's reports.
+	 */
+	Reports getReportsList(String documentID, String tableName, String localeID);
+
 	// TODO: Do this only on the server side, or only on the client side?
 	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue);
 
-	String getConfigurationErrorMessage();
+	/**
+	 * Checks if the PostgreSQL authentication has been set for this document.
+	 * 
+	 * @param documentID
+	 *            identifier for the Glom document
+	 * @return true if the authentication has been set, false if it hasn't
+	 */
+	boolean isAuthenticated(String documentID);
 }

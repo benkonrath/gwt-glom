@@ -62,8 +62,6 @@ import com.mchange.v2.c3p0.DataSources;
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 
-	private static final String GLOM_FILE_EXTENSION = "glom";
-
 	// convenience class for dealing with the Online Glom configuration file
 	// TODO: Turn this into a class with specific getters, and test it.
 	private static class OnlineGlomProperties extends Properties {
@@ -77,8 +75,332 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 	}
 
+	private static final String GLOM_FILE_EXTENSION = "glom";
+
 	private final Hashtable<String, ConfiguredDocument> documentMapping = new Hashtable<String, ConfiguredDocument>();
 	private Exception configurationException = null;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public boolean checkAuthentication(final String documentID, final String username, final String password) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			Log.error(documentID, "The document could not be found for this ID: " + documentID);
+			return false;
+		}
+
+		try {
+			return configuredDoc.setUsernameAndPassword(username, password);
+		} catch (final SQLException e) {
+			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
+			return false;
+		}
+	}
+
+	/*
+	 * This is called when the servlet is stopped or restarted.
+	 * 
+	 * @see javax.servlet.GenericServlet#destroy()
+	 */
+	@Override
+	public void destroy() {
+		for (final String documenTitle : documentMapping.keySet()) {
+			final ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
+			if (configuredDoc == null) {
+				continue;
+			}
+
+			try {
+				DataSources.destroy(configuredDoc.getCpds());
+			} catch (final SQLException e) {
+				Log.error(documenTitle, "Error cleaning up the ComboPooledDataSource.", e);
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getConfigurationErrorMessage()
+	 */
+	@Override
+	public String getConfigurationErrorMessage() {
+		if (configurationException == null) {
+			return "No configuration errors to report.";
+		} else if (configurationException.getMessage() == null) {
+			return configurationException.toString();
+		} else {
+			return configurationException.getMessage();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public DataItem[] getDetailsData(final String documentID, final String tableName,
+			final TypedDataItem primaryKeyValue) {
+		// An empty tableName is OK, because that means the default table.
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return new DataItem[0];
+		}
+
+		// FIXME check for authentication
+
+		return configuredDoc.getDetailsData(tableName, primaryKeyValue);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutAndData(java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
+			final TypedDataItem primaryKeyValue, final String localeID) {
+		// An empty tableName is OK, because that means the default table.
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return null;
+		}
+
+		// FIXME check for authentication
+
+		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
+		initalDetailsView
+				.setLayout(configuredDoc.getDetailsLayoutGroup(tableName, StringUtils.defaultString(localeID)));
+		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
+
+		return initalDetailsView;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDocumentInfo(java.lang.String)
+	 */
+	@Override
+	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+
+		// Avoid dereferencing a null object:
+		if (configuredDoc == null) {
+			return new DocumentInfo();
+		}
+
+		// FIXME check for authentication
+
+		return configuredDoc.getDocumentInfo(StringUtils.defaultString(localeID));
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getDocuments()
+	 */
+	@Override
+	public Documents getDocuments() {
+		final Documents documents = new Documents();
+		for (final String documentID : documentMapping.keySet()) {
+			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+			if (configuredDoc == null) {
+				continue;
+			}
+
+			final Document glomDocument = configuredDoc.getDocument();
+			if (glomDocument == null) {
+				final String errorMessage = "getDocuments(): getDocument() failed.";
+				Log.fatal(errorMessage);
+				// TODO: throw new Exception(errorMessage);
+				continue;
+			}
+
+			final String localeID = StringUtils.defaultString(configuredDoc.getDefaultLocaleID());
+			documents.addDocument(documentID, glomDocument.getDatabaseTitle(localeID), localeID);
+		}
+		return documents;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int, int,
+	 * boolean)
+	 */
+	@Override
+	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName,
+			final String quickFind, final int start, final int length, final int sortColumnIndex,
+			final boolean isAscending) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return new ArrayList<DataItem[]>();
+		}
+
+		if (!configuredDoc.isAuthenticated()) {
+			return new ArrayList<DataItem[]>();
+		}
+		return configuredDoc.getListViewData(tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getListViewLayout(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public LayoutGroup getListViewLayout(final String documentID, final String tableName, final String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return new LayoutGroup();
+		}
+
+		// FIXME check for authentication
+
+		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int, int,
+	 * boolean)
+	 */
+	@Override
+	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
+			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
+			final int sortColumnIndex, final boolean ascending) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
+			Log.error("getRelatedListData(): portal is null.");
+			return null;
+		}
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return new ArrayList<DataItem[]>();
+		}
+
+		// FIXME check for authentication
+
+		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex,
+				ascending);
+	}
+
+	@Override
+	public int getRelatedListRowCount(final String documentID, final String tableName, final LayoutItemPortal portal,
+			final TypedDataItem foreignKeyValue) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
+			Log.error("getRelatedListRowCount(): portal is null");
+			return 0;
+		}
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return 0;
+		}
+
+		// FIXME check for authentication
+
+		return configuredDoc.getRelatedListRowCount(tableName, portal, foreignKeyValue);
+	}
+
+	// TODO: Specify the foundset (via a where clause) and maybe a default sort order.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getReportLayout(java.lang.String, java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public String getReportHTML(final String documentID, final String tableName, final String reportName,
+			final String quickFind, final String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return "";
+		}
+
+		final Document glomDocument = configuredDoc.getDocument();
+		if (glomDocument == null) {
+			final String errorMessage = "getReportHTML(): getDocument() failed.";
+			Log.fatal(errorMessage);
+			// TODO: throw new Exception(errorMessage);
+			return "";
+		}
+
+		// FIXME check for authentication
+
+		final Report report = glomDocument.getReport(tableName, reportName);
+		if (report == null) {
+			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
+			return "";
+		}
+
+		Connection connection;
+		try {
+			connection = configuredDoc.getCpds().getConnection();
+		} catch (final SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			return "Connection Failed";
+		}
+
+		// TODO: Use quickFind
+		final ReportGenerator generator = new ReportGenerator(StringUtils.defaultString(localeID));
+		return generator.generateReport(glomDocument, tableName, report, connection, quickFind);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getReportsList(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Reports getReportsList(final String documentID, final String tableName, final String localeID) {
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		return configuredDoc.getReports(tableName, localeID);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.client.OnlineGlomService#getSuitableRecordToViewDetails(java.lang.String, java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
+			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
+			Log.error("getSuitableRecordToViewDetails(): portal is null");
+			return null;
+		}
+
+		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
+		if (configuredDoc == null) {
+			return null;
+		}
+
+		// FIXME check for authentication
+
+		return configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
+	}
 
 	/*
 	 * This is called when the servlet is started or restarted.
@@ -192,175 +514,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	}
 
 	/*
-	 * This is called when the servlet is stopped or restarted.
-	 * 
-	 * @see javax.servlet.GenericServlet#destroy()
-	 */
-	@Override
-	public void destroy() {
-		for (final String documenTitle : documentMapping.keySet()) {
-			final ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
-			if (configuredDoc == null) {
-				continue;
-			}
-
-			try {
-				DataSources.destroy(configuredDoc.getCpds());
-			} catch (final SQLException e) {
-				Log.error(documenTitle, "Error cleaning up the ComboPooledDataSource.", e);
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getConfigurationErrorMessage()
-	 */
-	@Override
-	public String getConfigurationErrorMessage() {
-		if (configurationException == null) {
-			return "No configuration errors to report.";
-		} else if (configurationException.getMessage() == null) {
-			return configurationException.toString();
-		} else {
-			return configurationException.getMessage();
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDocumentInfo(java.lang.String)
-	 */
-	@Override
-	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-
-		// Avoid dereferencing a null object:
-		if (configuredDoc == null) {
-			return new DocumentInfo();
-		}
-
-		// FIXME check for authentication
-
-		return configuredDoc.getDocumentInfo(StringUtils.defaultString(localeID));
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getListViewLayout(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public LayoutGroup getListViewLayout(final String documentID, final String tableName, final String localeID) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return new LayoutGroup();
-		}
-
-		// FIXME check for authentication
-
-		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
-	}
-
-	// TODO: Specify the foundset (via a where clause) and maybe a default sort order.
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getReportLayout(java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public String getReportHTML(final String documentID, final String tableName, final String reportName,
-			final String quickFind, final String localeID) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return "";
-		}
-
-		final Document glomDocument = configuredDoc.getDocument();
-		if (glomDocument == null) {
-			final String errorMessage = "getReportHTML(): getDocument() failed.";
-			Log.fatal(errorMessage);
-			// TODO: throw new Exception(errorMessage);
-			return "";
-		}
-
-		// FIXME check for authentication
-
-		final Report report = glomDocument.getReport(tableName, reportName);
-		if (report == null) {
-			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
-			return "";
-		}
-
-		Connection connection;
-		try {
-			connection = configuredDoc.getCpds().getConnection();
-		} catch (final SQLException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-			return "Connection Failed";
-		}
-
-		// TODO: Use quickFind
-		final ReportGenerator generator = new ReportGenerator(StringUtils.defaultString(localeID));
-		return generator.generateReport(glomDocument, tableName, report, connection, quickFind);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int, int,
-	 * boolean)
-	 */
-	@Override
-	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName,
-			final String quickFind, final int start, final int length, final int sortColumnIndex,
-			final boolean isAscending) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return new ArrayList<DataItem[]>();
-		}
-
-		if (!configuredDoc.isAuthenticated()) {
-			return new ArrayList<DataItem[]>();
-		}
-		return configuredDoc.getListViewData(tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDocuments()
-	 */
-	@Override
-	public Documents getDocuments() {
-		final Documents documents = new Documents();
-		for (final String documentID : documentMapping.keySet()) {
-			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			if (configuredDoc == null) {
-				continue;
-			}
-
-			final Document glomDocument = configuredDoc.getDocument();
-			if (glomDocument == null) {
-				final String errorMessage = "getDocuments(): getDocument() failed.";
-				Log.fatal(errorMessage);
-				// TODO: throw new Exception(errorMessage);
-				continue;
-			}
-
-			final String localeID = StringUtils.defaultString(configuredDoc.getDefaultLocaleID());
-			documents.addDocument(documentID, glomDocument.getDatabaseTitle(localeID), localeID);
-		}
-		return documents;
-	}
-
-	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
@@ -373,159 +526,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		return configuredDoc.isAuthenticated();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public boolean checkAuthentication(final String documentID, final String username, final String password) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			Log.error(documentID, "The document could not be found for this ID: " + documentID);
-			return false;
-		}
-
-		try {
-			return configuredDoc.setUsernameAndPassword(username, password);
-		} catch (final SQLException e) {
-			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
-			return false;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getReportsList(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public Reports getReportsList(final String documentID, final String tableName, final String localeID) {
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		return configuredDoc.getReports(tableName, localeID);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public DataItem[] getDetailsData(final String documentID, final String tableName,
-			final TypedDataItem primaryKeyValue) {
-		// An empty tableName is OK, because that means the default table.
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return new DataItem[0];
-		}
-
-		// FIXME check for authentication
-
-		return configuredDoc.getDetailsData(tableName, primaryKeyValue);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutAndData(java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
-			final TypedDataItem primaryKeyValue, final String localeID) {
-		// An empty tableName is OK, because that means the default table.
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return null;
-		}
-
-		// FIXME check for authentication
-
-		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
-		initalDetailsView
-				.setLayout(configuredDoc.getDetailsLayoutGroup(tableName, StringUtils.defaultString(localeID)));
-		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
-
-		return initalDetailsView;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int, int,
-	 * boolean)
-	 */
-	@Override
-	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
-			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
-			final int sortColumnIndex, final boolean ascending) {
-		// An empty tableName is OK, because that means the default table.
-
-		if (portal == null) {
-			Log.error("getRelatedListData(): portal is null.");
-			return null;
-		}
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return new ArrayList<DataItem[]>();
-		}
-
-		// FIXME check for authentication
-
-		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex,
-				ascending);
-	}
-
-	@Override
-	public int getRelatedListRowCount(final String documentID, final String tableName, final LayoutItemPortal portal,
-			final TypedDataItem foreignKeyValue) {
-		// An empty tableName is OK, because that means the default table.
-
-		if (portal == null) {
-			Log.error("getRelatedListRowCount(): portal is null");
-			return 0;
-		}
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return 0;
-		}
-
-		// FIXME check for authentication
-
-		return configuredDoc.getRelatedListRowCount(tableName, portal, foreignKeyValue);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#getSuitableRecordToViewDetails(java.lang.String, java.lang.String,
-	 * java.lang.String, java.lang.String)
-	 */
-	@Override
-	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
-			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
-		// An empty tableName is OK, because that means the default table.
-
-		if (portal == null) {
-			Log.error("getSuitableRecordToViewDetails(): portal is null");
-			return null;
-		}
-
-		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null) {
-			return null;
-		}
-
-		// FIXME check for authentication
-
-		return configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
 	}
 
 }
