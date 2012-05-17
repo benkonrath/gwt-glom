@@ -367,8 +367,8 @@ final class ConfiguredDocument {
 		final LayoutGroup cloned = (LayoutGroup) Utils.deepCopy(libglomLayoutGroup);
 		if (cloned != null) {
 			updateTopLevelListLayoutGroup(cloned, tableName, localeID);
-			
-			//Discard unwanted translations so that getTitle(void) returns what we want.
+
+			// Discard unwanted translations so that getTitle(void) returns what we want.
 			updateTitlesForLocale(cloned, localeID);
 		}
 
@@ -509,8 +509,8 @@ final class ConfiguredDocument {
 
 		updatePortalsExtras(listCloned, tableName);
 		updateFieldsExtras(listCloned, tableName);
-		
-		//Discard unwanted translations so that getTitle(void) returns what we want.
+
+		// Discard unwanted translations so that getTitle(void) returns what we want.
 		updateTitlesForLocale(listCloned, localeID);
 
 		// Store it in the cache for next time.
@@ -539,7 +539,7 @@ final class ConfiguredDocument {
 			updateFieldsExtras(group, tableName);
 		}
 	}
-	
+
 	/**
 	 * @param result
 	 * @param tableName
@@ -625,32 +625,32 @@ final class ConfiguredDocument {
 			}
 		}
 	}
-	
+
 	private void updateTitlesForLocale(final LayoutGroup group, final String localeID) {
 
 		updateItemTitlesForLocale(group, localeID);
-		
+
 		List<LayoutItem> childItems = group.getItems();
 		for (LayoutItem item : childItems) {
-			
+
 			// Call makeTitleOriginal on all Translatable items and all special
 			// Translatable items that they use:
 			if (item instanceof LayoutItemField) {
 				final LayoutItemField layoutItemField = (LayoutItemField) item;
-				
+
 				final Field field = layoutItemField.getFullFieldDetails();
-				if(field != null) {
+				if (field != null) {
 					field.makeTitleOriginal(localeID);
 				}
-				
+
 				final CustomTitle customTitle = layoutItemField.getCustomTitle();
-				if(customTitle != null) {
+				if (customTitle != null) {
 					customTitle.makeTitleOriginal(localeID);
 				}
 			}
-			
+
 			updateItemTitlesForLocale(item, localeID);
-			
+
 			if (item instanceof LayoutGroup) {
 				// Recurse:
 				final LayoutGroup childGroup = (LayoutGroup) item;
@@ -664,12 +664,12 @@ final class ConfiguredDocument {
 			final UsesRelationship usesRelationship = (UsesRelationship) item;
 			final Relationship rel = usesRelationship.getRelationship();
 
-			if(rel != null) {
+			if (rel != null) {
 				rel.makeTitleOriginal(localeID);
 			}
-			
+
 			final Relationship relatedRel = usesRelationship.getRelatedRelationship();
-			if(relatedRel != null) {
+			if (relatedRel != null) {
 				relatedRel.makeTitleOriginal(localeID);
 			}
 		}

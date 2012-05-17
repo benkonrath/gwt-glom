@@ -62,9 +62,9 @@ abstract class DBAccess {
 	 */
 	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, List<LayoutItemField> layoutFields,
 			ResultSet rs) throws SQLException {
-		
-	    final ResultSetMetaData rsMetaData = rs.getMetaData();
-	    final int rsColumnscount = rsMetaData.getColumnCount();
+
+		final ResultSetMetaData rsMetaData = rs.getMetaData();
+		final int rsColumnscount = rsMetaData.getColumnCount();
 
 		// get the data we've been asked for
 		int rowCount = 0;
@@ -74,17 +74,19 @@ abstract class DBAccess {
 			DataItem[] rowArray = new DataItem[layoutFieldsSize];
 			for (int i = 0; i < layoutFieldsSize; i++) {
 				// make a new DataItem to set the text and colors
-				rowArray[i] = new DataItem(); //TODO: Performance: Set it in the rowArray at the end, to avoid repeated lookup via [].
-				
+				rowArray[i] = new DataItem(); // TODO: Performance: Set it in the rowArray at the end, to avoid repeated
+												// lookup via [].
+
 				LayoutItemField field = layoutFields.get(i);
 
-				if(i >= rsColumnscount) {
-					Log.error("convertResultSetToDTO(): index i=" + i + "+1 (field=" + field.getName() + " is out of range for the ResultSet. Using empty string for value.");
+				if (i >= rsColumnscount) {
+					Log.error("convertResultSetToDTO(): index i=" + i + "+1 (field=" + field.getName()
+							+ " is out of range for the ResultSet. Using empty string for value.");
 					rowArray[i].setText("");
 					continue;
 				}
 
-				final int rsIndex = i + 1; //Because java.sql.ResultSet is 1-indexed, for some reason.
+				final int rsIndex = i + 1; // Because java.sql.ResultSet is 1-indexed, for some reason.
 
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
@@ -184,23 +186,24 @@ abstract class DBAccess {
 			if (layoutItem instanceof LayoutItemField) {
 				final LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				// the layoutItem is a LayoutItem_Field
-				
-				//Make sure that it has full field details:
-				//TODO: Is this necessary?
+
+				// Make sure that it has full field details:
+				// TODO: Is this necessary?
 				String tableNameToUse = tableName;
 				if (layoutItemField.getHasRelationshipName()) {
 					tableNameToUse = layoutItemField.getTableUsed(tableName);
 				}
-				
+
 				final Field field = document.getField(tableNameToUse, layoutItemField.getName());
 				if (field != null) {
 					layoutItemField.setFullFieldDetails(field);
 				} else {
-					Log.warn(document.getDatabaseTitleOriginal(), tableName, "LayoutItem_Field "
-								+ layoutItemField.getLayoutDisplayName() + " not found in document field list.");
+					Log.warn(document.getDatabaseTitleOriginal(), tableName,
+							"LayoutItem_Field " + layoutItemField.getLayoutDisplayName()
+									+ " not found in document field list.");
 				}
-		
-				//Add it to the list:
+
+				// Add it to the list:
 				layoutItemFields.add(layoutItemField);
 			} else if (layoutItem instanceof LayoutGroup) {
 				LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;

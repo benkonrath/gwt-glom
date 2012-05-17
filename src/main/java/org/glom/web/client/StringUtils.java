@@ -33,14 +33,14 @@ public class StringUtils {
 	 * @return
 	 */
 	public static boolean equals(String a, String b) {
-		if(a == null) {
-			if(b == null) {
+		if (a == null) {
+			if (b == null) {
 				return true;
 			}
 		}
-		
-		if(b == null) {
-			return false; //aName was already checked for null.
+
+		if (b == null) {
+			return false; // aName was already checked for null.
 		}
 
 		return a.equals(b);

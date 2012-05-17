@@ -102,8 +102,8 @@ public class DetailsActivity extends HasTableActivity {
 
 			};
 
-			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName,
-					portal, (TypedDataItem) context.getKey(), callback);
+			OnlineGlomServiceAsync.Util.getInstance().getSuitableRecordToViewDetails(documentID, tableName, portal,
+					(TypedDataItem) context.getKey(), callback);
 		}
 	}
 
@@ -263,16 +263,15 @@ public class DetailsActivity extends HasTableActivity {
 								data[i]);
 
 						final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName,
-								layoutItemPortal, foreignKeyValue, new RelatedListNavigationButtonCell(
-										layoutItemPortal));
+								layoutItemPortal, foreignKeyValue,
+								new RelatedListNavigationButtonCell(layoutItemPortal));
 
 						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
 							relatedListTable.hideNavigationButtons();
 						}
 						portal.setContents(relatedListTable);
 
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal,
-								foreignKeyValue);
+						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal, foreignKeyValue);
 					}
 				}
 			}

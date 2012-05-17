@@ -203,8 +203,7 @@ public interface OnlineGlomService extends RemoteService {
 			TypedDataItem foreignKeyValue, int start, int length, int sortColumnIndex, boolean ascending);
 
 	/**
-	 * Gets the expected row count for the related list table with the specified portal and foreign key
-	 * value.
+	 * Gets the expected row count for the related list table with the specified portal and foreign key value.
 	 * 
 	 * @param documentID
 	 *            identifier for the Glom document
@@ -220,7 +219,7 @@ public interface OnlineGlomService extends RemoteService {
 	int getRelatedListRowCount(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem foreignKeyValue);
 
-	//TODO: Do this only on the server side, or only on the client side?
+	// TODO: Do this only on the server side, or only on the client side?
 	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue);
 

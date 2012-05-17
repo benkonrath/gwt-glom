@@ -422,7 +422,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DataItem[] getDetailsData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue) {
-		//An empty tableName is OK, because that means the default table.
+		// An empty tableName is OK, because that means the default table.
 
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null) {
@@ -443,7 +443,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue, final String localeID) {
-		//An empty tableName is OK, because that means the default table.
+		// An empty tableName is OK, because that means the default table.
 
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null) {
@@ -468,9 +468,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length) {
-		//An empty tableName is OK, because that means the default table.
-		
-		if(portal == null) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
 			Log.error("getRelatedListData(): portal is null.");
 			return null;
 		}
@@ -479,8 +479,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 		// FIXME check for authentication
 
-		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, false, 0,
-				false);
+		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, false, 0, false);
 	}
 
 	/*
@@ -493,9 +492,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public ArrayList<DataItem[]> getSortedRelatedListData(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
-		//An empty tableName is OK, because that means the default table.
-		
-		if(portal == null) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
 			Log.error("getSortedRelatedListData(): portal is null.");
 			return null;
 		}
@@ -513,9 +512,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public int getRelatedListRowCount(final String documentID, final String tableName, final LayoutItemPortal portal,
 			final TypedDataItem foreignKeyValue) {
-		//An empty tableName is OK, because that means the default table.
-		
-		if(portal == null) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
 			Log.error("getRelatedListRowCount(): portal is null");
 			return 0;
 		}
@@ -539,13 +538,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
-		//An empty tableName is OK, because that means the default table.
-		
-		if(portal == null) {
+		// An empty tableName is OK, because that means the default table.
+
+		if (portal == null) {
 			Log.error("getSuitableRecordToViewDetails(): portal is null");
 			return null;
 		}
-		
+
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 		if (configuredDoc == null) {
 			return null;

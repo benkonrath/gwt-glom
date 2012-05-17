@@ -75,8 +75,8 @@ public class DetailsDBAccess extends DBAccess {
 
 			if (primaryKeyValue != null) {
 
-				final String query = SqlUtils.buildSqlSelectWithKey(tableName, fieldsToGet, primaryKey,
-						primaryKeyValue);
+				final String query = SqlUtils
+						.buildSqlSelectWithKey(tableName, fieldsToGet, primaryKey, primaryKeyValue);
 
 				rs = st.executeQuery(query);
 

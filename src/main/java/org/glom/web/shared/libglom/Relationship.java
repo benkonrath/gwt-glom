@@ -28,7 +28,8 @@ public class Relationship extends Translatable {
 	 * @return
 	 */
 	public boolean getHasFields() {
-		return !StringUtils.isEmpty(toField) && !StringUtils.isEmpty(toTable) && !StringUtils.isEmpty(fromField) && !StringUtils.isEmpty(fromTable);
+		return !StringUtils.isEmpty(toField) && !StringUtils.isEmpty(toTable) && !StringUtils.isEmpty(fromField)
+				&& !StringUtils.isEmpty(fromTable);
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class Relationship extends Translatable {
 		if (!StringUtils.equals(this.getName(), b.getName())) {
 			return false;
 		}
-		
+
 		if (!StringUtils.equals(this.fromTable, b.fromTable)) {
 			return false;
 		}

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- *
+ * 
  */
 public class GwtTestOnlineGlomService extends GWTTestCase {
 
@@ -48,20 +48,20 @@ public class GwtTestOnlineGlomService extends GWTTestCase {
 						String title = documents.getTitle(i);
 					}
 				} else {
-					//getAndSetErrorMessage();
+					// getAndSetErrorMessage();
 				}
-				
+
 				finishTest();
 			}
 		};
-		
+
 		delayTestFinish(500);
 
 		OnlineGlomServiceAsync service = OnlineGlomServiceAsync.Util.getInstance();
 		assertNotNull(service);
 		service.getDocuments(callback);
 	}
-	
+
 	@Override
 	public String getModuleName() {
 		return "org.glom.web.OnlineGlom";

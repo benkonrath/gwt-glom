@@ -70,10 +70,10 @@ public abstract class ListDBAccess extends DBAccess {
 		} else {
 			// create a sort clause for the primary key if we're not asked to sort a specific column
 			int numItems = 0;
-			if(fieldsToGet != null) {
+			if (fieldsToGet != null) {
 				numItems = Utils.safeLongToInt(fieldsToGet.size());
 			}
-			
+
 			for (int i = 0; i < numItems; i++) {
 				final LayoutItemField layoutItem = fieldsToGet.get(i);
 				final Field details = layoutItem.getFullFieldDetails();

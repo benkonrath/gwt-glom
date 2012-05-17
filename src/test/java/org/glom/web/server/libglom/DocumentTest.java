@@ -94,7 +94,7 @@ public class DocumentTest {
 		}
 		assertThat(tables, is("en, cs, de, es, fr, gl, pt_BR, sl"));
 	}
-	
+
 	@Test
 	public void testReadTableNames() {
 		final List<String> tableNames = document.getTableNames();

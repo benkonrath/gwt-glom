@@ -142,7 +142,8 @@ public abstract class ListTable extends Composite {
 						}
 
 						if ((primaryKeyIndex < 0) || (primaryKeyIndex >= row.length)) {
-							GWT.log("createCellTable() keyProvider.getKey(): primaryKeyIndex is out of range: " + primaryKeyIndex + ", row.length=" + row.length);
+							GWT.log("createCellTable() keyProvider.getKey(): primaryKeyIndex is out of range: "
+									+ primaryKeyIndex + ", row.length=" + row.length);
 							return null;
 						}
 

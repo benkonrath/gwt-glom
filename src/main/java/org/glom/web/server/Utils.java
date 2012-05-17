@@ -51,7 +51,7 @@ public class Utils {
 	static public Object deepCopy(Object oldObj) {
 		ObjectOutputStream oos = null;
 		ObjectInputStream ois = null;
-	
+
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			oos = new ObjectOutputStream(bos);
@@ -60,7 +60,7 @@ public class Utils {
 			oos.flush();
 			ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
 			ois = new ObjectInputStream(bin);
-	
+
 			// return the new object
 			return ois.readObject();
 		} catch (Exception e) {

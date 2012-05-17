@@ -53,8 +53,8 @@ public class RelatedListDBAccess extends ListDBAccess {
 		super(document, documentID, cpds, tableName);
 
 		if (portal == null) {
-			Log.error(documentID, tableName, "portal is null in table \""
-					+ tableName + "\". " + "Cannot retrieve data for the related list.");
+			Log.error(documentID, tableName, "portal is null in table \"" + tableName + "\". "
+					+ "Cannot retrieve data for the related list.");
 			return;
 		}
 
@@ -83,7 +83,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 		// Add primary key
 		final LayoutItemField primaryKey = getPrimaryKeyLayoutItemField(this.tableName);
-		if(primaryKey == null) {
+		if (primaryKey == null) {
 			Log.error(documentID, tableName, "RelatedListDBAccess: getPrimaryKeyLayoutItemField() failed.");
 		} else {
 			fieldsToGet.add(primaryKey);

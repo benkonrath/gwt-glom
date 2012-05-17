@@ -66,8 +66,8 @@ public class RelatedListTable extends ListTable {
 
 	private final static int expectedHeight = initializeExepectedHeight();
 
-	public RelatedListTable(String documentID, String tableName, LayoutItemPortal layoutItemPortal, TypedDataItem foreignKeyValue,
-			NavigationButtonCell navigationButtonCell) {
+	public RelatedListTable(String documentID, String tableName, LayoutItemPortal layoutItemPortal,
+			TypedDataItem foreignKeyValue, NavigationButtonCell navigationButtonCell) {
 
 		super(documentID);
 		super.tableName = tableName;
@@ -113,7 +113,7 @@ public class RelatedListTable extends ListTable {
 					public void onSuccess(ArrayList<DataItem[]> result) {
 						// keep track of the number of non-empty rows (rows with data)
 						numNonEmptyRows = 0;
-						if(result != null) {
+						if (result != null) {
 							numNonEmptyRows = result.size();
 						}
 
@@ -138,14 +138,14 @@ public class RelatedListTable extends ListTable {
 					// ColumnSortEvent has been requested by the user
 					ColumnSortInfo info = colSortList.get(0);
 
-					OnlineGlomServiceAsync.Util.getInstance().getSortedRelatedListData(documentID, tableName,
-							portal, foreignKeyValue, start, range.getLength(),
+					OnlineGlomServiceAsync.Util.getInstance().getSortedRelatedListData(documentID, tableName, portal,
+							foreignKeyValue, start, range.getLength(),
 							cellTable.getColumnIndex((Column<DataItem[], ?>) info.getColumn()), info.isAscending(),
 							callback);
 
 				} else {
-					OnlineGlomServiceAsync.Util.getInstance().getRelatedListData(documentID, tableName,
-							portal, foreignKeyValue, start, range.getLength(), callback);
+					OnlineGlomServiceAsync.Util.getInstance().getRelatedListData(documentID, tableName, portal,
+							foreignKeyValue, start, range.getLength(), callback);
 
 				}
 

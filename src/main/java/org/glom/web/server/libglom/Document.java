@@ -180,7 +180,7 @@ public class Document {
 		databaseTitle.setTitleOriginal(rootNode.getAttribute(ATTRIBUTE_TITLE));
 
 		translationOriginalLocale = rootNode.getAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE);
-		translationAvailableLocales.add(translationOriginalLocale); //Just a cache.
+		translationAvailableLocales.add(translationOriginalLocale); // Just a cache.
 
 		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if (nodeConnection != null) {
@@ -188,7 +188,7 @@ public class Document {
 			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
 			connectionPort = getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
 		}
-		
+
 		// We first load the fields, relationships, etc,
 		// for all tables:
 		final List<Node> listTableNodes = getChildrenByTagName(rootNode, NODE_TABLE);
@@ -290,11 +290,11 @@ public class Document {
 			final String translatedTitle = element.getAttribute(ATTRIBUTE_TRANSLATION_TITLE);
 			if (!StringUtils.isEmpty(locale) && !StringUtils.isEmpty(translatedTitle)) {
 				title.setTitle(translatedTitle, locale);
-				
-				//Remember any new translation locales in our cached list:
-		        if(!translationAvailableLocales.contains(locale)) {
-		        	translationAvailableLocales.add(locale);
-		        }
+
+				// Remember any new translation locales in our cached list:
+				if (!translationAvailableLocales.contains(locale)) {
+					translationAvailableLocales.add(locale);
+				}
 			}
 		}
 	}
@@ -475,7 +475,7 @@ public class Document {
 			}
 		}
 
-		//TODO: Unit test loading of doubly-related fields.
+		// TODO: Unit test loading of doubly-related fields.
 		final String relatedRelationshipName = element.getAttribute(ATTRIBUTE_RELATED_RELATIONSHIP_NAME);
 		if (!StringUtils.isEmpty(relatedRelationshipName) && (relationship != null)) {
 			final Relationship relatedRelationship = getRelationship(relationship.getToTable(), relatedRelationshipName);

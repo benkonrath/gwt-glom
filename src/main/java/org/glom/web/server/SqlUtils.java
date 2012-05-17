@@ -51,8 +51,8 @@ import org.jooq.impl.Factory;
 public class SqlUtils {
 
 	// TODO: Change to final ArrayList<LayoutItem_Field> fieldsToGet
-	public static String buildSqlSelectWithKey(final String tableName,
-			final List<LayoutItemField> fieldsToGet, final Field primaryKey, final TypedDataItem primaryKeyValue) {
+	public static String buildSqlSelectWithKey(final String tableName, final List<LayoutItemField> fieldsToGet,
+			final Field primaryKey, final TypedDataItem primaryKeyValue) {
 
 		Condition whereClause = null; // Note that we ignore quickFind.
 		if (primaryKeyValue != null) {
@@ -83,21 +83,20 @@ public class SqlUtils {
 	}
 
 	/*
-	 * private static String buildSqlSelectWithWhereClause(final String tableName,
-	 * final LayoutFieldVector fieldsToGet) { final Condition whereClause = null; return
-	 * buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause); }
+	 * private static String buildSqlSelectWithWhereClause(final String tableName, final LayoutFieldVector fieldsToGet)
+	 * { final Condition whereClause = null; return buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause);
+	 * }
 	 */
 
 	/*
-	 * private static String buildSqlSelectWithWhereClause(final String tableName,
-	 * final LayoutFieldVector fieldsToGet, final Condition whereClause) { final SortClause sortClause = null; return
+	 * private static String buildSqlSelectWithWhereClause(final String tableName, final LayoutFieldVector fieldsToGet,
+	 * final Condition whereClause) { final SortClause sortClause = null; return
 	 * buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause); }
 	 */
 
-	public static String buildSqlSelectWithWhereClause(final String tableName,
-			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause) {
-		final SelectFinalStep step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet,
-				whereClause, sortClause);
+	public static String buildSqlSelectWithWhereClause(final String tableName, final List<LayoutItemField> fieldsToGet,
+			final Condition whereClause, final SortClause sortClause) {
+		final SelectFinalStep step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
 		if (step == null) {
 			return "";
 		}
@@ -117,9 +116,8 @@ public class SqlUtils {
 		return selectStep;
 	}
 
-	private static SelectFinalStep buildSqlSelectStepWithWhereClause(
-			final String tableName, final List<LayoutItemField> fieldsToGet, final Condition whereClause,
-			final SortClause sortClause) {
+	private static SelectFinalStep buildSqlSelectStepWithWhereClause(final String tableName,
+			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause) {
 
 		final SelectSelectStep selectStep = createSelect();
 
@@ -146,15 +144,13 @@ public class SqlUtils {
 
 	public static String buildSqlCountSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet) {
-		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet,
-				null, null);
+		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, null, null);
 		return buildSqlSelectCountRows(selectInner);
 	}
 
 	public static String buildSqlCountSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause) {
-		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet,
-				whereClause, null);
+		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, null);
 		return buildSqlSelectCountRows(selectInner);
 	}
 
@@ -169,9 +165,8 @@ public class SqlUtils {
 		// return "SELECT COUNT(*) FROM (" + query + ") AS glomarbitraryalias";
 	}
 
-	private static List<UsesRelationship> buildSqlSelectAddFieldsToGet(SelectSelectStep step,
-			final String tableName, final List<LayoutItemField> fieldsToGet, final SortClause sortClause,
-			final boolean extraJoin) {
+	private static List<UsesRelationship> buildSqlSelectAddFieldsToGet(SelectSelectStep step, final String tableName,
+			final List<LayoutItemField> fieldsToGet, final SortClause sortClause, final boolean extraJoin) {
 
 		// Get all relationships used in the query:
 		final List<UsesRelationship> listRelationships = new ArrayList<UsesRelationship>();
@@ -249,10 +244,10 @@ public class SqlUtils {
 			return null;
 		}
 
-		if(layoutField == null) {
+		if (layoutField == null) {
 			return null;
 		}
-		
+
 		return createField(layoutField.getSqlTableOrJoinAliasName(tableName), layoutField.getName());
 	}
 
@@ -390,7 +385,7 @@ public class SqlUtils {
 			}
 
 			final org.jooq.Field<Object> jooqField = createField(tableName, field.getName());
-			
+
 			// Do a case-insensitive substring search:
 			// TODO: Use ILIKE: http://sourceforge.net/apps/trac/jooq/ticket/1423
 			// http://groups.google.com/group/jooq-user/browse_thread/thread/203ae5a1a06ae65f

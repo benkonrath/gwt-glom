@@ -53,8 +53,8 @@ public class RelatedListNavigation extends DBAccess {
 		super(document, documentID, cpds, tableName);
 
 		if (portal == null) {
-			Log.error(documentID, tableName, "portal is null in table \""
-					+ tableName + "\". " + "Cannot retrieve data for the related list.");
+			Log.error(documentID, tableName, "portal is null in table \"" + tableName + "\". "
+					+ "Cannot retrieve data for the related list.");
 			return;
 		}
 
@@ -73,23 +73,23 @@ public class RelatedListNavigation extends DBAccess {
 					"The related list navigation cannot be determined because the LayoutItemPortal has not been found.");
 			return null;
 		}
-		
+
 		if (primaryKeyValue == null) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot be determined because the primaryKeyValue is null.");
 			return null;
 		}
 
-		//TODO: For some reason, LayoutItemPortal.navigationTable is null after using deepCopy(),
-		//so we can't use our cache:
-		//final TableToViewDetails navigationTable = portal.getNavigationTable();
+		// TODO: For some reason, LayoutItemPortal.navigationTable is null after using deepCopy(),
+		// so we can't use our cache:
+		// final TableToViewDetails navigationTable = portal.getNavigationTable();
 		final TableToViewDetails navigationTable = document.getPortalSuitableTableToViewDetails(portal);
 		if (navigationTable == null) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot cannot be determined because the navigation table details are empty.");
 			return null;
 		}
-		
+
 		if (StringUtils.isEmpty(navigationTable.tableName)) {
 			Log.error(documentID, tableName,
 					"The related list navigation cannot cannot be determined because the navigation table name is empty.");
@@ -103,9 +103,10 @@ public class RelatedListNavigation extends DBAccess {
 		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
 		navigationRelationshipItem.setName(navigationTablePrimaryKey.getName());
 		navigationRelationshipItem.setFullFieldDetails(navigationTablePrimaryKey);
-		if(navigationTable.usesRelationship != null) {
+		if (navigationTable.usesRelationship != null) {
 			navigationRelationshipItem.setRelationship(navigationTable.usesRelationship.getRelationship());
-			navigationRelationshipItem.setRelatedRelationship(navigationTable.usesRelationship.getRelatedRelationship());
+			navigationRelationshipItem
+					.setRelatedRelationship(navigationTable.usesRelationship.getRelatedRelationship());
 		}
 
 		// Get the value of the navigation related primary key:
@@ -128,8 +129,7 @@ public class RelatedListNavigation extends DBAccess {
 
 			if (primaryKeyValue != null) {
 
-				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField,
-						primaryKeyValue);
+				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField, primaryKeyValue);
 
 				rs = st.executeQuery(query);
 

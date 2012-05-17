@@ -10,6 +10,7 @@ public class SortClause extends ArrayList<SortClause.SortField> {
 	public static class SortField implements Serializable {
 
 		private static final long serialVersionUID = -4946144159226347837L;
+
 		public SortField() {
 		}
 
