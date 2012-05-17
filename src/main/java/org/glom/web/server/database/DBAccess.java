@@ -50,7 +50,8 @@ abstract class DBAccess {
 	protected String tableName;
 	protected ComboPooledDataSource cpds;
 
-	protected DBAccess(Document document, String documentID, ComboPooledDataSource cpds, String tableName) {
+	protected DBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			final String tableName) {
 		this.document = document;
 		this.documentID = documentID;
 		this.cpds = cpds;
@@ -60,24 +61,24 @@ abstract class DBAccess {
 	/*
 	 * Converts data from a ResultSet to an ArrayList of DataItem array suitable for sending back to the client.
 	 */
-	final protected ArrayList<DataItem[]> convertResultSetToDTO(int length, List<LayoutItemField> layoutFields,
-			ResultSet rs) throws SQLException {
+	final protected ArrayList<DataItem[]> convertResultSetToDTO(final int length,
+			final List<LayoutItemField> layoutFields, final ResultSet rs) throws SQLException {
 
 		final ResultSetMetaData rsMetaData = rs.getMetaData();
 		final int rsColumnscount = rsMetaData.getColumnCount();
 
 		// get the data we've been asked for
 		int rowCount = 0;
-		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
+		final ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
 		while (rs.next() && rowCount <= length) {
-			int layoutFieldsSize = Utils.safeLongToInt(layoutFields.size());
-			DataItem[] rowArray = new DataItem[layoutFieldsSize];
+			final int layoutFieldsSize = Utils.safeLongToInt(layoutFields.size());
+			final DataItem[] rowArray = new DataItem[layoutFieldsSize];
 			for (int i = 0; i < layoutFieldsSize; i++) {
 				// make a new DataItem to set the text and colors
 				rowArray[i] = new DataItem(); // TODO: Performance: Set it in the rowArray at the end, to avoid repeated
 												// lookup via [].
 
-				LayoutItemField field = layoutFields.get(i);
+				final LayoutItemField field = layoutFields.get(i);
 
 				if (i >= rsColumnscount) {
 					Log.error("convertResultSetToDTO(): index i=" + i + "+1 (field=" + field.getName()
@@ -106,7 +107,7 @@ abstract class DBAccess {
 					if (date != null) {
 						// TODO: Pass Date and Time types instead of converting to text here?
 						// TODO: Use a 4-digit-year short form, somehow.
-						DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
+						final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
 						rowArray[i].setText(dateFormat.format(date));
 					} else {
 						rowArray[i].setText("");
@@ -115,7 +116,7 @@ abstract class DBAccess {
 				case TYPE_TIME:
 					final Time time = rs.getTime(rsIndex);
 					if (time != null) {
-						DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
+						final DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
 						rowArray[i].setText(timeFormat.format(time));
 					} else {
 						rowArray[i].setText("");
@@ -149,12 +150,12 @@ abstract class DBAccess {
 	/*
 	 * Gets a list to use when generating an SQL query.
 	 */
-	protected List<LayoutItemField> getFieldsToShowForSQLQuery(List<LayoutGroup> layoutGroupVec) {
-		List<LayoutItemField> listLayoutFIelds = new ArrayList<LayoutItemField>();
+	protected List<LayoutItemField> getFieldsToShowForSQLQuery(final List<LayoutGroup> layoutGroupVec) {
+		final List<LayoutItemField> listLayoutFIelds = new ArrayList<LayoutItemField>();
 
 		// We will show the fields that the document says we should:
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
-			LayoutGroup layoutGroup = layoutGroupVec.get(i);
+			final LayoutGroup layoutGroup = layoutGroupVec.get(i);
 
 			// satisfy the precondition of getDetailsLayoutGroup(String tableName, LayoutGroup
 			// libglomLayoutGroup)
@@ -163,8 +164,8 @@ abstract class DBAccess {
 			}
 
 			// Get the fields:
-			ArrayList<LayoutItemField> layoutItemFields = getFieldsToShowForSQLQueryAddGroup(layoutGroup);
-			for (LayoutItemField layoutItem_Field : layoutItemFields) {
+			final ArrayList<LayoutItemField> layoutItemFields = getFieldsToShowForSQLQueryAddGroup(layoutGroup);
+			for (final LayoutItemField layoutItem_Field : layoutItemFields) {
 				listLayoutFIelds.add(layoutItem_Field);
 			}
 		}
@@ -182,7 +183,7 @@ abstract class DBAccess {
 		final List<LayoutItem> items = libglomLayoutGroup.getItems();
 		final int numItems = Utils.safeLongToInt(items.size());
 		for (int i = 0; i < numItems; i++) {
-			LayoutItem layoutItem = items.get(i);
+			final LayoutItem layoutItem = items.get(i);
 
 			if (layoutItem instanceof LayoutItemField) {
 				final LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
@@ -207,7 +208,7 @@ abstract class DBAccess {
 				// Add it to the list:
 				layoutItemFields.add(layoutItemField);
 			} else if (layoutItem instanceof LayoutGroup) {
-				LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;
+				final LayoutGroup subLayoutGroup = (LayoutGroup) layoutItem;
 
 				if (!(subLayoutGroup instanceof LayoutItemPortal)) {
 					// The subGroup is not a LayoutItemPortal.
@@ -226,11 +227,11 @@ abstract class DBAccess {
 	 *            name of table to search for the primary key field
 	 * @return primary key Field
 	 */
-	protected Field getPrimaryKeyField(String tableName) {
+	protected Field getPrimaryKeyField(final String tableName) {
 		Field primaryKey = null;
-		List<Field> fieldsVec = document.getTableFields(tableName);
+		final List<Field> fieldsVec = document.getTableFields(tableName);
 		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
-			Field field = fieldsVec.get(i);
+			final Field field = fieldsVec.get(i);
 			if (field.getPrimaryKey()) {
 				primaryKey = field;
 				break;
@@ -246,10 +247,10 @@ abstract class DBAccess {
 	 *            name of table to search for the primary key LayoutItem_Field
 	 * @return primary key LayoutItem_Field
 	 */
-	protected LayoutItemField getPrimaryKeyLayoutItemField(String tableName) {
-		Field primaryKey = getPrimaryKeyField(tableName);
+	protected LayoutItemField getPrimaryKeyLayoutItemField(final String tableName) {
+		final Field primaryKey = getPrimaryKeyField(tableName);
 
-		LayoutItemField libglomLayoutItemField = new LayoutItemField();
+		final LayoutItemField libglomLayoutItemField = new LayoutItemField();
 
 		if (primaryKey != null) {
 			libglomLayoutItemField.setName(primaryKey.getName());

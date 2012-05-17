@@ -39,7 +39,7 @@ public class DataItem implements Serializable {
 		return text;
 	}
 
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.text = text;
 	}
 
@@ -47,7 +47,7 @@ public class DataItem implements Serializable {
 		return bool;
 	}
 
-	public void setBoolean(boolean bool) {
+	public void setBoolean(final boolean bool) {
 		this.bool = bool;
 	}
 
@@ -55,7 +55,7 @@ public class DataItem implements Serializable {
 		return number;
 	}
 
-	public void setNumber(double number) {
+	public void setNumber(final double number) {
 		this.number = number;
 	}
 

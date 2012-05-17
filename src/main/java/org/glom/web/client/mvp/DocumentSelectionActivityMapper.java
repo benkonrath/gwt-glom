@@ -32,7 +32,7 @@ import com.google.gwt.place.shared.Place;
  */
 public class DocumentSelectionActivityMapper implements ActivityMapper {
 
-	private ClientFactory clientFactory;
+	private final ClientFactory clientFactory;
 
 	/**
 	 * ActivityMapper associates each Place with its corresponding {@link Activity}
@@ -40,7 +40,7 @@ public class DocumentSelectionActivityMapper implements ActivityMapper {
 	 * @param clientFactory
 	 *            Factory to be passed to activities
 	 */
-	public DocumentSelectionActivityMapper(ClientFactory clientFactory) {
+	public DocumentSelectionActivityMapper(final ClientFactory clientFactory) {
 		super();
 		this.clientFactory = clientFactory;
 	}
@@ -49,7 +49,7 @@ public class DocumentSelectionActivityMapper implements ActivityMapper {
 	 * Map each Place to its corresponding Activity.
 	 */
 	@Override
-	public Activity getActivity(Place place) {
+	public Activity getActivity(final Place place) {
 		if (place instanceof DocumentSelectionPlace) {
 			return new DocumentSelectionActivity(clientFactory);
 		}

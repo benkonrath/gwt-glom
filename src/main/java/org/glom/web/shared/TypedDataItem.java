@@ -43,7 +43,7 @@ public class TypedDataItem extends DataItem {
 	 * @see org.glom.web.shared.DataItem#setBoolean(boolean)
 	 */
 	@Override
-	public void setBoolean(boolean bool) {
+	public void setBoolean(final boolean bool) {
 		this.empty = false;
 		this.type = GlomFieldType.TYPE_BOOLEAN;
 		super.setBoolean(bool);
@@ -55,7 +55,7 @@ public class TypedDataItem extends DataItem {
 	 * @see org.glom.web.shared.DataItem#setNumber(double)
 	 */
 	@Override
-	public void setNumber(double number) {
+	public void setNumber(final double number) {
 		this.empty = false;
 		this.type = GlomFieldType.TYPE_NUMERIC;
 		super.setNumber(number);
@@ -67,7 +67,7 @@ public class TypedDataItem extends DataItem {
 	 * @see org.glom.web.shared.DataItem#setText(java.lang.String)
 	 */
 	@Override
-	public void setText(String text) {
+	public void setText(final String text) {
 		this.empty = false;
 		this.type = GlomFieldType.TYPE_TEXT;
 		super.setText(text);
@@ -78,7 +78,7 @@ public class TypedDataItem extends DataItem {
 	 * 
 	 * @see org.glom.web.shared.DataItem#setText(java.lang.String)
 	 */
-	public void setUnknown(String value) {
+	public void setUnknown(final String value) {
 		this.empty = false;
 		this.type = GlomFieldType.TYPE_INVALID;
 		this.unknown = value;

@@ -35,7 +35,7 @@ public class TextCell extends AbstractCell<String> {
 	SafeHtml backgroundColorCSSProp;
 
 	// TODO Find a way to set the colors on the whole column
-	public TextCell(String foregroundColor, String backgroundColor) {
+	public TextCell(final String foregroundColor, final String backgroundColor) {
 		if (!StringUtils.isEmpty(foregroundColor)) {
 			colorCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColor + ";");
 		} else {
@@ -55,7 +55,7 @@ public class TextCell extends AbstractCell<String> {
 	 * com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */
 	@Override
-	public void render(Context context, String value, SafeHtmlBuilder sb) {
+	public void render(final Context context, final String value, final SafeHtmlBuilder sb) {
 		if (value == null) {
 			// The value is from an empty row.
 			sb.appendHtmlConstant("&nbsp;");

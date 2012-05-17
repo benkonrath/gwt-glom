@@ -51,10 +51,10 @@ public class OnlineGlom implements EntryPoint {
 	/*
 	 * Some of these are protected, rather than private, so that GwtTestOnlineGlom can access them.
 	 */
-	private Place defaultPlace = new DocumentSelectionPlace();
+	private final Place defaultPlace = new DocumentSelectionPlace();
 
-	private LayoutPanel rootLayoutPanel = RootLayoutPanel.get();
-	private FlowPanel layoutPanel = new FlowPanel();
+	private final LayoutPanel rootLayoutPanel = RootLayoutPanel.get();
+	private final FlowPanel layoutPanel = new FlowPanel();
 	protected SimplePanel docSelectionPanel = new SimplePanel();
 	protected SimplePanel dataPanel = new SimplePanel();
 	protected SimplePanel tableSelectionPanel = new SimplePanel();

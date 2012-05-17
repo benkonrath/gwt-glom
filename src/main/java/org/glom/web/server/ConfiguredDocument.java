@@ -93,8 +93,8 @@ final class ConfiguredDocument {
 			return getLayout(tableName, locale, true);
 		}
 
-		public void setListLayout(final String tableName, final String locale, LayoutGroup layout) {
-			List<LayoutGroup> list = new ArrayList<LayoutGroup>();
+		public void setListLayout(final String tableName, final String locale, final LayoutGroup layout) {
+			final List<LayoutGroup> list = new ArrayList<LayoutGroup>();
 			list.add(layout);
 			setLayout(tableName, locale, list, false);
 		}
@@ -103,8 +103,8 @@ final class ConfiguredDocument {
 			setLayout(tableName, locale, layout, true);
 		}
 
-		private List<LayoutGroup> getLayout(final String tableName, final String locale, boolean details) {
-			LayoutLocaleMap map = getMap(tableName, details);
+		private List<LayoutGroup> getLayout(final String tableName, final String locale, final boolean details) {
+			final LayoutLocaleMap map = getMap(tableName, details);
 
 			if (map == null) {
 				return null;
@@ -113,7 +113,7 @@ final class ConfiguredDocument {
 			return map.get(locale);
 		}
 
-		private LayoutLocaleMap getMap(final String tableName, boolean details) {
+		private LayoutLocaleMap getMap(final String tableName, final boolean details) {
 			final TableLayouts tableLayouts = get(tableName);
 			if (tableLayouts == null) {
 				return null;
@@ -129,7 +129,7 @@ final class ConfiguredDocument {
 			return map;
 		}
 
-		private LayoutLocaleMap getMapWithAdd(final String tableName, boolean details) {
+		private LayoutLocaleMap getMapWithAdd(final String tableName, final boolean details) {
 			TableLayouts tableLayouts = get(tableName);
 			if (tableLayouts == null) {
 				tableLayouts = new TableLayouts();
@@ -155,15 +155,15 @@ final class ConfiguredDocument {
 		}
 
 		private void setLayout(final String tableName, final String locale, final List<LayoutGroup> layout,
-				boolean details) {
-			LayoutLocaleMap map = getMapWithAdd(tableName, details);
+				final boolean details) {
+			final LayoutLocaleMap map = getMapWithAdd(tableName, details);
 			if (map != null) {
 				map.put(locale, layout);
 			}
 		}
 	}
 
-	private TableLayoutsForLocale mapTableLayouts = new TableLayoutsForLocale();
+	private final TableLayoutsForLocale mapTableLayouts = new TableLayoutsForLocale();
 
 	@SuppressWarnings("unused")
 	private ConfiguredDocument() {
@@ -396,7 +396,7 @@ final class ConfiguredDocument {
 			final LayoutItem layoutItem = layoutItemsVec.get(i);
 
 			if (layoutItem instanceof LayoutItemField) {
-				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
+				final LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				final Field field = layoutItemField.getFullFieldDetails();
 				if ((field != null) && field.getPrimaryKey()) {
 					primaryKeyIndex = i;
@@ -505,7 +505,7 @@ final class ConfiguredDocument {
 		// in classes which are also used in the client code (though the clone() methods would
 		// not be used) and that makes the GWT java->javascript compilation fail.
 		final List<LayoutGroup> listCloned = new ArrayList<LayoutGroup>();
-		for (LayoutGroup group : listGroups) {
+		for (final LayoutGroup group : listGroups) {
 			final LayoutGroup cloned = (LayoutGroup) Utils.deepCopy(group);
 			if (cloned != null) {
 				listCloned.add(cloned);
@@ -528,8 +528,8 @@ final class ConfiguredDocument {
 	 * @param result
 	 * @param tableName
 	 */
-	private void updatePortalsExtras(List<LayoutGroup> listGroups, String tableName) {
-		for (LayoutGroup group : listGroups) {
+	private void updatePortalsExtras(final List<LayoutGroup> listGroups, final String tableName) {
+		for (final LayoutGroup group : listGroups) {
 			updatePortalsExtras(group, tableName);
 		}
 
@@ -539,8 +539,8 @@ final class ConfiguredDocument {
 	 * @param result
 	 * @param tableName
 	 */
-	private void updateFieldsExtras(final List<LayoutGroup> listGroups, String tableName) {
-		for (LayoutGroup group : listGroups) {
+	private void updateFieldsExtras(final List<LayoutGroup> listGroups, final String tableName) {
+		for (final LayoutGroup group : listGroups) {
 			updateFieldsExtras(group, tableName);
 		}
 	}
@@ -549,13 +549,13 @@ final class ConfiguredDocument {
 	 * @param result
 	 * @param tableName
 	 */
-	private void updateTitlesForLocale(final List<LayoutGroup> listGroups, String localeID) {
-		for (LayoutGroup group : listGroups) {
+	private void updateTitlesForLocale(final List<LayoutGroup> listGroups, final String localeID) {
+		for (final LayoutGroup group : listGroups) {
 			updateTitlesForLocale(group, localeID);
 		}
 	}
 
-	private void updatePortalsExtras(LayoutGroup group, String tableName) {
+	private void updatePortalsExtras(final LayoutGroup group, final String tableName) {
 		if (group instanceof LayoutItemPortal) {
 			final LayoutItemPortal portal = (LayoutItemPortal) group;
 			final String tableNameUsed = portal.getTableUsed(tableName);
@@ -583,7 +583,7 @@ final class ConfiguredDocument {
 
 					// get the LayoutItemField with details from its Field in the document
 					final List<Field> fields = document.getTableFields(toTableName); // TODO_Performance: Cache this.
-					for (Field field : fields) {
+					for (final Field field : fields) {
 						// check the names to see if they're the same
 						if (field.getPrimaryKey()) {
 							final LayoutItemField layoutItemField = new LayoutItemField();
@@ -600,8 +600,8 @@ final class ConfiguredDocument {
 
 		}
 
-		List<LayoutItem> childItems = group.getItems();
-		for (LayoutItem item : childItems) {
+		final List<LayoutItem> childItems = group.getItems();
+		for (final LayoutItem item : childItems) {
 			if (item instanceof LayoutGroup) {
 				final LayoutGroup childGroup = (LayoutGroup) item;
 				updatePortalsExtras(childGroup, tableName);
@@ -612,8 +612,8 @@ final class ConfiguredDocument {
 
 	private void updateFieldsExtras(final LayoutGroup group, final String tableName) {
 
-		List<LayoutItem> childItems = group.getItems();
-		for (LayoutItem item : childItems) {
+		final List<LayoutItem> childItems = group.getItems();
+		for (final LayoutItem item : childItems) {
 			if (item instanceof LayoutGroup) {
 				// Recurse:
 				final LayoutGroup childGroup = (LayoutGroup) item;
@@ -635,8 +635,8 @@ final class ConfiguredDocument {
 
 		updateItemTitlesForLocale(group, localeID);
 
-		List<LayoutItem> childItems = group.getItems();
-		for (LayoutItem item : childItems) {
+		final List<LayoutItem> childItems = group.getItems();
+		for (final LayoutItem item : childItems) {
 
 			// Call makeTitleOriginal on all Translatable items and all special
 			// Translatable items that they use:
@@ -664,7 +664,7 @@ final class ConfiguredDocument {
 		}
 	}
 
-	private void updateItemTitlesForLocale(LayoutItem item, final String localeID) {
+	private void updateItemTitlesForLocale(final LayoutItem item, final String localeID) {
 		if (item instanceof UsesRelationship) {
 			final UsesRelationship usesRelationship = (UsesRelationship) item;
 			final Relationship rel = usesRelationship.getRelationship();

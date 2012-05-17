@@ -38,16 +38,16 @@ public class LayoutItemPortalDeepCloneTest {
 	public void test() {
 		// This seems to fail when we use it in OnlineGlomServiceImpl,
 		// but it works here:
-		LayoutItemPortal portal = new LayoutItemPortal();
-		TableToViewDetails viewDetails = new TableToViewDetails();
+		final LayoutItemPortal portal = new LayoutItemPortal();
+		final TableToViewDetails viewDetails = new TableToViewDetails();
 		final String testTableName = "sometable";
 		viewDetails.tableName = testTableName;
 		viewDetails.usesRelationship = new UsesRelationshipImpl();
 		portal.setNavigationTable(viewDetails);
 
-		LayoutItemPortal clone = (LayoutItemPortal) Utils.deepCopy(portal);
+		final LayoutItemPortal clone = (LayoutItemPortal) Utils.deepCopy(portal);
 		assertTrue(clone != null);
-		TableToViewDetails cloneViewDetails = clone.getNavigationTable();
+		final TableToViewDetails cloneViewDetails = clone.getNavigationTable();
 		assertTrue(cloneViewDetails != null);
 		assertEquals(cloneViewDetails.tableName, testTableName);
 		assertTrue(cloneViewDetails.usesRelationship != null);

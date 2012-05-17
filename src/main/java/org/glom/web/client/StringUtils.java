@@ -23,7 +23,7 @@ package org.glom.web.client;
  */
 public class StringUtils {
 
-	public static boolean isEmpty(String str) {
+	public static boolean isEmpty(final String str) {
 		return (str == null) || (str.isEmpty());
 	}
 
@@ -32,7 +32,7 @@ public class StringUtils {
 	 * @param bName
 	 * @return
 	 */
-	public static boolean equals(String a, String b) {
+	public static boolean equals(final String a, final String b) {
 		if (a == null) {
 			if (b == null) {
 				return true;
@@ -50,7 +50,7 @@ public class StringUtils {
 	 * @param text
 	 * @return
 	 */
-	public static String defaultString(String text) {
+	public static String defaultString(final String text) {
 		if (text == null) {
 			return "";
 		} else {

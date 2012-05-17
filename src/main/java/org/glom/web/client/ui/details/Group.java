@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
  *
  */
 public class Group extends Composite {
-	private FlowPanel mainPanel = new FlowPanel();
+	private final FlowPanel mainPanel = new FlowPanel();
 	private final ArrayList<DetailsCell> cells = new ArrayList<DetailsCell>();
 	private final ArrayList<Portal> portals = new ArrayList<Portal>();
 
@@ -51,7 +51,7 @@ public class Group extends Composite {
 	 * @param layoutGroup
 	 *            The DTO that holds the Group or sub-Group layout information
 	 */
-	public Group(LayoutGroup layoutGroup) {
+	public Group(final LayoutGroup layoutGroup) {
 		// is default is a group that is not a sub
 		this(layoutGroup, false, true);
 	}
@@ -66,15 +66,15 @@ public class Group extends Composite {
 	 * @param setGroupTitle
 	 *            whether or not to add a title label for the Group
 	 */
-	private Group(LayoutGroup layoutGroup, boolean subGroup, boolean setGroupTitle) {
+	private Group(final LayoutGroup layoutGroup, final boolean subGroup, final boolean setGroupTitle) {
 
 		mainPanel.setStyleName(subGroup ? "subgroup" : "group");
 
 		FlowPanel groupContents;
-		String groupTitle = layoutGroup.getTitle();
+		final String groupTitle = layoutGroup.getTitle();
 
 		if (setGroupTitle && !StringUtils.isEmpty(groupTitle)) {
-			Label label = new Label(groupTitle);
+			final Label label = new Label(groupTitle);
 			mainPanel.add(label);
 
 			label.setStyleName(subGroup ? "subgroup-title" : "group-title");
@@ -87,9 +87,9 @@ public class Group extends Composite {
 			groupContents = mainPanel;
 		}
 
-		FlowTable flowtable = new FlowTable(layoutGroup.getColumnCount());
-		for (LayoutItem layoutItem : layoutGroup.getItems()) {
-			Widget child = createChildWidget(layoutItem, true);
+		final FlowTable flowtable = new FlowTable(layoutGroup.getColumnCount());
+		for (final LayoutItem layoutItem : layoutGroup.getItems()) {
+			final Widget child = createChildWidget(layoutItem, true);
 			flowtable.add(child);
 		}
 		groupContents.add(flowtable);
@@ -113,12 +113,12 @@ public class Group extends Composite {
 	 * @param addGroupTitle
 	 *            whether or not to add a title label for the Group
 	 */
-	protected Widget createChildWidget(LayoutItem layoutItem, boolean addGroupTitle) {
+	protected Widget createChildWidget(final LayoutItem layoutItem, final boolean addGroupTitle) {
 
 		if (layoutItem instanceof LayoutItemField) {
 
 			// create a DetailsCell
-			DetailsCell detailsCell = new DetailsCell((LayoutItemField) layoutItem);
+			final DetailsCell detailsCell = new DetailsCell((LayoutItemField) layoutItem);
 			cells.add(detailsCell);
 			return detailsCell;
 
@@ -127,14 +127,14 @@ public class Group extends Composite {
 			if (layoutItem instanceof LayoutItemPortal) {
 
 				// create a Portal
-				Portal portal = new Portal((LayoutItemPortal) layoutItem, addGroupTitle);
+				final Portal portal = new Portal((LayoutItemPortal) layoutItem, addGroupTitle);
 				portals.add(portal);
 				return portal;
 
 			} else if (layoutItem instanceof LayoutItemNotebook) {
 
 				// create a Notebook
-				Notebook notebook = new Notebook((LayoutItemNotebook) layoutItem);
+				final Notebook notebook = new Notebook((LayoutItemNotebook) layoutItem);
 				cells.addAll(notebook.getCells());
 				portals.addAll(notebook.getPortals());
 				return notebook;
@@ -142,7 +142,7 @@ public class Group extends Composite {
 			} else {
 
 				// create a subgroup Group
-				Group subGroup = new Group((LayoutGroup) layoutItem, true, addGroupTitle);
+				final Group subGroup = new Group((LayoutGroup) layoutItem, true, addGroupTitle);
 				cells.addAll(subGroup.getCells());
 				portals.addAll(subGroup.getPortals());
 				return subGroup;

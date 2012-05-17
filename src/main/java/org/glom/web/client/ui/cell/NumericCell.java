@@ -34,13 +34,13 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 public class NumericCell extends AbstractCell<Double> {
 	private SafeHtml colorCSSProp;
 	private SafeHtml backgroundColorCSSProp;
-	private NumberFormat numberFormat;
-	private boolean useAltColorForNegatives;
-	private String currencyCode;
+	private final NumberFormat numberFormat;
+	private final boolean useAltColorForNegatives;
+	private final String currencyCode;
 
 	// TODO Find a way to set the colors on the whole column
-	public NumericCell(String foregroundColor, String backgroundColor, NumberFormat numberFormat,
-			boolean useAltColorForNegatives, String currencyCode) {
+	public NumericCell(final String foregroundColor, final String backgroundColor, final NumberFormat numberFormat,
+			final boolean useAltColorForNegatives, final String currencyCode) {
 		if (!StringUtils.isEmpty(foregroundColor)) {
 			colorCSSProp = SafeHtmlUtils.fromString("color:" + foregroundColor + ";");
 		} else {
@@ -63,7 +63,7 @@ public class NumericCell extends AbstractCell<Double> {
 	 * com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */
 	@Override
-	public void render(Context context, Double value, SafeHtmlBuilder sb) {
+	public void render(final Context context, final Double value, final SafeHtmlBuilder sb) {
 		if (value == null) {
 			// The value is from an empty row.
 			sb.appendHtmlConstant("&nbsp;");

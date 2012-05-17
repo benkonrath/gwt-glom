@@ -36,7 +36,7 @@ public class NavigationButtonCell extends ButtonCell {
 	 * com.google.gwt.safehtml.shared.SafeHtml, com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */
 	@Override
-	public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
+	public void render(final Context context, final SafeHtml data, final SafeHtmlBuilder sb) {
 		if (data == null) {
 			// The value is from an empty row when the data is null.
 			// Use a disabled invisible button with a capital letter so that the height of an empty row is the same as

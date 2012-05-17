@@ -47,14 +47,14 @@ public class Portal extends Composite {
 	 * @param setTitle
 	 *            true if the title should be set, false otherwise
 	 */
-	public Portal(LayoutItemPortal layoutItemPortal, boolean setTitle) {
+	public Portal(final LayoutItemPortal layoutItemPortal, final boolean setTitle) {
 		layoutItem = layoutItemPortal;
 
-		FlowPanel mainPanel = new FlowPanel();
+		final FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("subgroup");
 
 		if (setTitle) {
-			Label title = new Label(layoutItem.getTitle());
+			final Label title = new Label(layoutItem.getTitle());
 			title.setStyleName("subgroup-title");
 			mainPanel.add(title);
 
@@ -71,11 +71,11 @@ public class Portal extends Composite {
 		// expected height of the Portal container. Height information is needed so that Notebooks can be set to the
 		// appropriate size for the RelatedListTable. The FlowTable also needs the height to be set so that it can
 		// decide how to create the layout.
-		int relatedListTableHeight = RelatedListTable.getExpectedHeight();
+		final int relatedListTableHeight = RelatedListTable.getExpectedHeight();
 		// Use a temporary label in the main panel so that the margin sizes can be calculated.
-		Label tempLabel = new Label("A");
+		final Label tempLabel = new Label("A");
 		mainPanel.add(tempLabel);
-		int containerHeight = Utils.getWidgetHeight(mainPanel) - Utils.getWidgetHeight(tempLabel);
+		final int containerHeight = Utils.getWidgetHeight(mainPanel) - Utils.getWidgetHeight(tempLabel);
 		mainPanel.remove(setTitle ? 2 : 0); // removes tempLabel
 		mainPanel.setHeight((relatedListTableHeight + containerHeight) + "px");
 
@@ -83,7 +83,7 @@ public class Portal extends Composite {
 	}
 
 	// TODO The RelatedListTable should be created in this class
-	public void setContents(RelatedListTable relatedListTable) {
+	public void setContents(final RelatedListTable relatedListTable) {
 		contents.clear();
 		contents.add(relatedListTable);
 	}

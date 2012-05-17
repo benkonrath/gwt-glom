@@ -212,7 +212,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String getTitleUsed(String parentTableTitle, String locale) {
+	public String getTitleUsed(final String parentTableTitle, final String locale) {
 		if (relatedRelationship != null) {
 			return relatedRelationship.getTitleOrName(locale);
 		} else if (relationship != null) {

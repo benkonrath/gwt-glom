@@ -32,7 +32,7 @@ import com.google.gwt.place.shared.Place;
  */
 public class TableSelectionActivityMapper implements ActivityMapper {
 
-	private TableSelectionActivity tableSelectionActivity;
+	private final TableSelectionActivity tableSelectionActivity;
 
 	/**
 	 * ActivityMapper associates each Place with its corresponding {@link Activity}
@@ -40,7 +40,7 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	 * @param clientFactory
 	 *            Factory to be passed to activities
 	 */
-	public TableSelectionActivityMapper(ClientFactory clientFactory) {
+	public TableSelectionActivityMapper(final ClientFactory clientFactory) {
 		tableSelectionActivity = new TableSelectionActivity(clientFactory);
 	}
 
@@ -48,7 +48,7 @@ public class TableSelectionActivityMapper implements ActivityMapper {
 	 * Map each Place to its corresponding Activity.
 	 */
 	@Override
-	public Activity getActivity(Place place) {
+	public Activity getActivity(final Place place) {
 		// We're not creating new TableSelectionActivity objects for each place because we want the ListBox to keep the
 		// table name when the Details button is clicked.
 		if (place instanceof HasTablePlace) {

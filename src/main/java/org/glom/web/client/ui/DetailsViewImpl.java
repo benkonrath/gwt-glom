@@ -50,7 +50,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 * @see org.glom.web.client.ui.View#setPresenter(org.glom.web.client.ui.View.Presenter)
 	 */
 	@Override
-	public void setPresenter(Presenter presenter) {
+	public void setPresenter(final Presenter presenter) {
 		this.presenter = presenter;
 	}
 
@@ -60,8 +60,8 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	 * @see org.glom.web.client.ui.DetailsView#addGroup(LayoutGroup)
 	 */
 	@Override
-	public void addGroup(LayoutGroup layoutGroup) {
-		Group group = new Group(layoutGroup);
+	public void addGroup(final LayoutGroup layoutGroup) {
+		final Group group = new Group(layoutGroup);
 		cells.addAll(group.getCells());
 		portals.addAll(group.getPortals());
 		mainPanel.add(group);

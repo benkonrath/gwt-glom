@@ -9,7 +9,7 @@ public class LayoutItemWithFormatting extends LayoutItem {
 		return formatting;
 	}
 
-	public void setFormatting(Formatting formatting) {
+	public void setFormatting(final Formatting formatting) {
 		this.formatting = formatting;
 	}
 }

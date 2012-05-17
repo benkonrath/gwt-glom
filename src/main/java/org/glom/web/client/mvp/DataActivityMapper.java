@@ -37,7 +37,7 @@ import com.google.gwt.place.shared.Place;
  */
 public class DataActivityMapper implements ActivityMapper {
 
-	private ClientFactory clientFactory;
+	private final ClientFactory clientFactory;
 
 	/**
 	 * ActivityMapper associates each Place with its corresponding {@link Activity}
@@ -45,7 +45,7 @@ public class DataActivityMapper implements ActivityMapper {
 	 * @param clientFactory
 	 *            Factory to be passed to activities
 	 */
-	public DataActivityMapper(ClientFactory clientFactory) {
+	public DataActivityMapper(final ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 	}
 
@@ -53,7 +53,7 @@ public class DataActivityMapper implements ActivityMapper {
 	 * Map each Place to its corresponding Activity.
 	 */
 	@Override
-	public Activity getActivity(Place place) {
+	public Activity getActivity(final Place place) {
 		if (place instanceof ListPlace) {
 			return new ListActivity((HasRecordsPlace) place, clientFactory);
 		}

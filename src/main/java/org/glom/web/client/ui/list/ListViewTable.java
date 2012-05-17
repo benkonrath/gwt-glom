@@ -45,7 +45,7 @@ public class ListViewTable extends ListTable {
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
-	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
 	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
 	private static final int MAX_TABLE_ROWS = 15;
@@ -53,7 +53,7 @@ public class ListViewTable extends ListTable {
 
 	private int numNonEmptyRows = 0;
 
-	public ListViewTable(final String documentID, String tableName, final LayoutGroup layoutGroup,
+	public ListViewTable(final String documentID, final String tableName, final LayoutGroup layoutGroup,
 			final NavigationButtonCell navigationButtonCell, final String quickFind) {
 		super(documentID);
 		this.tableName = tableName;

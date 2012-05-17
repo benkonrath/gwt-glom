@@ -52,7 +52,7 @@ public class FlowTable extends Composite {
 			// disable default constructor
 		}
 
-		FlowTableItem(Widget widget) {
+		FlowTableItem(final Widget widget) {
 			height = Utils.getWidgetHeight(widget);
 			this.widget = widget;
 		}
@@ -72,9 +72,9 @@ public class FlowTable extends Composite {
 		}
 	}
 
-	private FlexTable table = new FlexTable();
-	private ArrayList<FlowPanel> columns = new ArrayList<FlowPanel>();
-	private ArrayList<FlowTableItem> items = new ArrayList<FlowTableItem>();
+	private final FlexTable table = new FlexTable();
+	private final ArrayList<FlowPanel> columns = new ArrayList<FlowPanel>();
+	private final ArrayList<FlowTableItem> items = new ArrayList<FlowTableItem>();
 
 	@SuppressWarnings("unused")
 	private FlowTable() {
@@ -83,9 +83,9 @@ public class FlowTable extends Composite {
 
 	public FlowTable(int columnCount) {
 		// get the formatters
-		CellFormatter cellFormatter = table.getFlexCellFormatter();
-		ColumnFormatter columnFormatter = table.getColumnFormatter();
-		RowFormatter rowFormater = table.getRowFormatter();
+		final CellFormatter cellFormatter = table.getFlexCellFormatter();
+		final ColumnFormatter columnFormatter = table.getColumnFormatter();
+		final RowFormatter rowFormater = table.getRowFormatter();
 
 		// align the Cells to the top of the row
 		rowFormater.setVerticalAlign(0, HasVerticalAlignment.ALIGN_TOP);
@@ -100,10 +100,10 @@ public class FlowTable extends Composite {
 		}
 
 		// The column widths are evenly distributed amongst the number of columns with 1% padding between the columns.
-		double columnWidth = (100 - (columnCount - 1)) / columnCount;
+		final double columnWidth = (100 - (columnCount - 1)) / columnCount;
 		for (int i = 0; i < columnCount; i++) {
 			// create and add a column
-			FlowPanel column = new FlowPanel();
+			final FlowPanel column = new FlowPanel();
 			table.setWidget(0, i, column);
 
 			// set the column with from the calucation above
@@ -136,20 +136,20 @@ public class FlowTable extends Composite {
 	 * @param widget
 	 *            widget to add to the FlowTable
 	 */
-	public void add(Widget widget) {
+	public void add(final Widget widget) {
 
 		// keep track for the child items
 		items.add(new FlowTableItem(widget));
 
 		// Discover the total amount of minimum space needed by this container widget, by examining its child widgets,
 		// by examining every possible sequential arrangement of the widgets in this fixed number of columns:
-		int minColumnHeight = getMinimumColumnHeight(0, columns.size()); // This calls itself recursively.
+		final int minColumnHeight = getMinimumColumnHeight(0, columns.size()); // This calls itself recursively.
 
 		// Rearrange the widgets taking the newly added widget into account.
 		int currentColumnIndex = 0;
 		int currentColumnHeight = 0;
 		FlowPanel currentColumn = columns.get(currentColumnIndex);
-		for (FlowTableItem item : items) {
+		for (final FlowTableItem item : items) {
 			if (currentColumnHeight + item.getHeight() > minColumnHeight) {
 				// Ensure that we never try to add widgets to an existing column. This shouldn't happen so it's just a
 				// precaution. TODO: log a message if columnNumber is greater than columns.size()
@@ -169,11 +169,11 @@ public class FlowTable extends Composite {
 	 * 
 	 * This method was ported from the FlowTable class of Glom.
 	 */
-	private int getMinimumColumnHeight(int startWidget, int columnCount) {
+	private int getMinimumColumnHeight(final int startWidget, final int columnCount) {
 
 		if (columnCount == 1) {
 			// Just add the heights together:
-			int widgetsCount = items.size() - startWidget;
+			final int widgetsCount = items.size() - startWidget;
 			return getColumnHeight(startWidget, widgetsCount);
 
 		} else {
@@ -182,12 +182,12 @@ public class FlowTable extends Composite {
 			int minimumColumnHeight = 0;
 			boolean atLeastOneCombinationChecked = false;
 
-			int countItemsRemaining = items.size() - startWidget;
+			final int countItemsRemaining = items.size() - startWidget;
 
 			for (int firstColumnWidgetsCount = 1; firstColumnWidgetsCount <= countItemsRemaining; firstColumnWidgetsCount++) {
-				int firstColumnHeight = getColumnHeight(startWidget, firstColumnWidgetsCount);
+				final int firstColumnHeight = getColumnHeight(startWidget, firstColumnWidgetsCount);
 				int minimumColumnHeightSoFar = firstColumnHeight;
-				int othersColumnStartWidget = startWidget + firstColumnWidgetsCount;
+				final int othersColumnStartWidget = startWidget + firstColumnWidgetsCount;
 
 				// Call this function recursively to get the minimum column height in the other columns, when these
 				// widgets are in the first column:
@@ -212,12 +212,12 @@ public class FlowTable extends Composite {
 		}
 	}
 
-	private int getColumnHeight(int startWidget, int widgetCount) {
+	private int getColumnHeight(final int startWidget, final int widgetCount) {
 		// Just add the heights together:
 		int columnHeight = 0;
 		for (int i = startWidget; i < (startWidget + widgetCount); i++) {
-			FlowTableItem item = items.get(i);
-			int itemHeight = item.getHeight();
+			final FlowTableItem item = items.get(i);
+			final int itemHeight = item.getHeight();
 			columnHeight += itemHeight;
 		}
 		return columnHeight;

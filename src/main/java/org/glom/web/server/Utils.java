@@ -36,41 +36,41 @@ public class Utils {
 	 * 
 	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
 	 */
-	public static int safeLongToInt(long value) {
+	public static int safeLongToInt(final long value) {
 		if (value < Integer.MIN_VALUE || value > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException(value + " cannot be cast to int without changing its value.");
 		}
 		return (int) value;
 	}
 
-	public static String getFileName(String fileURI) {
-		String[] splitURI = fileURI.split(File.separator);
+	public static String getFileName(final String fileURI) {
+		final String[] splitURI = fileURI.split(File.separator);
 		return splitURI[splitURI.length - 1];
 	}
 
-	static public Object deepCopy(Object oldObj) {
+	static public Object deepCopy(final Object oldObj) {
 		ObjectOutputStream oos = null;
 		ObjectInputStream ois = null;
 
 		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			oos = new ObjectOutputStream(bos);
 			// serialize and pass the object
 			oos.writeObject(oldObj);
 			oos.flush();
-			ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
+			final ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
 			ois = new ObjectInputStream(bin);
 
 			// return the new object
 			return ois.readObject();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.out.println("Exception in deepCopy:" + e);
 			return null;
 		} finally {
 			try {
 				oos.close();
 				ois.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				System.out.println("Exception in deepCopy during finally: " + e);
 				return null;
 			}

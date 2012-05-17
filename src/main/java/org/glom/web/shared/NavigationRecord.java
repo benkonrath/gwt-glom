@@ -33,7 +33,7 @@ public class NavigationRecord implements Serializable {
 		return tableName;
 	}
 
-	public void setTableName(String tableName) {
+	public void setTableName(final String tableName) {
 		this.tableName = tableName;
 	}
 
@@ -41,7 +41,7 @@ public class NavigationRecord implements Serializable {
 		return primaryKeyValue;
 	}
 
-	public void setPrimaryKeyValue(TypedDataItem primaryKeyValue) {
+	public void setPrimaryKeyValue(final TypedDataItem primaryKeyValue) {
 		this.primaryKeyValue = primaryKeyValue;
 	}
 }

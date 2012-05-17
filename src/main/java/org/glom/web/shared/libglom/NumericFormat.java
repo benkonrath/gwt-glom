@@ -38,7 +38,7 @@ public class NumericFormat implements Serializable {
 		return currencySymbol;
 	}
 
-	public void setCurrencySymbol(String currencySymbol) {
+	public void setCurrencySymbol(final String currencySymbol) {
 		this.currencySymbol = currencySymbol;
 	}
 
@@ -46,7 +46,7 @@ public class NumericFormat implements Serializable {
 		return useThousandsSeparator;
 	}
 
-	public void setUseThousandsSeparator(boolean useThousandsSeparator) {
+	public void setUseThousandsSeparator(final boolean useThousandsSeparator) {
 		this.useThousandsSeparator = useThousandsSeparator;
 	}
 
@@ -54,7 +54,7 @@ public class NumericFormat implements Serializable {
 		return decimalPlacesRestricted;
 	}
 
-	public void setDecimalPlacesRestricted(boolean decimalPlacesRestricted) {
+	public void setDecimalPlacesRestricted(final boolean decimalPlacesRestricted) {
 		this.decimalPlacesRestricted = decimalPlacesRestricted;
 	}
 
@@ -66,7 +66,7 @@ public class NumericFormat implements Serializable {
 		return decimalPlaces;
 	}
 
-	public void setDecimalPlaces(int decimalPlaces) {
+	public void setDecimalPlaces(final int decimalPlaces) {
 		this.decimalPlaces = decimalPlaces;
 	}
 
@@ -82,7 +82,7 @@ public class NumericFormat implements Serializable {
 		return useAltForegroundColorForNegatives;
 	}
 
-	public void setUseAltForegroundColorForNegatives(boolean useAltForegroundColorForNegatives) {
+	public void setUseAltForegroundColorForNegatives(final boolean useAltForegroundColorForNegatives) {
 		this.useAltForegroundColorForNegatives = useAltForegroundColorForNegatives;
 	}
 }

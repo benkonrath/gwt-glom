@@ -55,23 +55,23 @@ public class DetailsCell extends Composite {
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
-	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
-	private LayoutItemField layoutItemField;
-	private FlowPanel detailsData = new FlowPanel();
-	private Label detailsLabel = new Label();
+	private final LayoutItemField layoutItemField;
+	private final FlowPanel detailsData = new FlowPanel();
+	private final Label detailsLabel = new Label();
 	private DataItem dataItem;
 
 	private Button openButton = null;
 	private HandlerRegistration openButtonHandlerReg = null;
 
-	public DetailsCell(LayoutItemField layoutItemField) {
+	public DetailsCell(final LayoutItemField layoutItemField) {
 		// Labels (text in div element) are being used so that the height of the details-data element can be set for
 		// the multiline height of LayoutItemFeilds. This allows the the data element to display the correct height
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
 		// data elements to be changed for right-to-left languages.
 
-		Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
+		final Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
 		detailsLabel.setStyleName("details-label");
 
 		detailsData.setStyleName("details-data");
@@ -99,16 +99,16 @@ public class DetailsCell extends Composite {
 		}
 
 		// set the text foreground and background colors
-		String foregroundColor = formatting.getTextFormatColorForegroundAsHTMLColor();
+		final String foregroundColor = formatting.getTextFormatColorForegroundAsHTMLColor();
 		if (!StringUtils.isEmpty(foregroundColor)) {
 			detailsData.getElement().getStyle().setColor(foregroundColor);
 		}
-		String backgroundColor = formatting.getTextFormatColorBackgroundAsHTMLColor();
+		final String backgroundColor = formatting.getTextFormatColorBackgroundAsHTMLColor();
 		if (!StringUtils.isEmpty(backgroundColor)) {
 			detailsData.getElement().getStyle().setBackgroundColor(backgroundColor);
 		}
 
-		FlowPanel mainPanel = new FlowPanel();
+		final FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("details-cell");
 
 		mainPanel.add(detailsLabel);
@@ -148,7 +148,7 @@ public class DetailsCell extends Composite {
 			checkBox.addClickHandler(new ClickHandler() {
 
 				@Override
-				public void onClick(ClickEvent event) {
+				public void onClick(final ClickEvent event) {
 					// don't let users change the checkbox
 					checkBox.setValue(dataItem.getBoolean());
 				}
@@ -160,8 +160,8 @@ public class DetailsCell extends Composite {
 				GWT.log("setData(): formatting is null");
 				formatting = new Formatting(); // To avoid checks later.
 			}
-			NumericFormat numericFormat = formatting.getNumericFormat();
-			NumberFormat gwtNumberFormat = Utils.getNumberFormat(numericFormat);
+			final NumericFormat numericFormat = formatting.getNumericFormat();
+			final NumberFormat gwtNumberFormat = Utils.getNumberFormat(numericFormat);
 
 			// set the foreground color to red if the number is negative and this is requested
 			if (numericFormat.getUseAltForegroundColorForNegatives() && dataItem.getNumber() < 0) {
@@ -187,22 +187,22 @@ public class DetailsCell extends Composite {
 				try {
 					// JavaScript requires the charsetName to be "UTF-8". CharsetName values that work in Java (such as
 					// "UTF8") will not work when compiled to JavaScript.
-					String utf8NewLine = new String(new byte[] { 0x0A }, "UTF-8");
-					String[] lines = text.split(utf8NewLine);
-					SafeHtmlBuilder sb = new SafeHtmlBuilder();
-					for (String line : lines) {
+					final String utf8NewLine = new String(new byte[] { 0x0A }, "UTF-8");
+					final String[] lines = text.split(utf8NewLine);
+					final SafeHtmlBuilder sb = new SafeHtmlBuilder();
+					for (final String line : lines) {
 						sb.append(SafeHtmlUtils.fromString(line));
 						sb.append(SafeHtmlUtils.fromSafeConstant("<br/>"));
 					}
 
 					// Manually add the HTML to the detailsData container.
-					DivElement div = Document.get().createDivElement();
+					final DivElement div = Document.get().createDivElement();
 					div.setInnerHTML(sb.toSafeHtml().asString());
 					detailsData.getElement().appendChild(div);
 
 					// Expand the width of detailsData if a vertical scrollbar has been placed on the inside of the
 					// detailsData container.
-					int scrollBarWidth = detailsData.getOffsetWidth() - div.getOffsetWidth();
+					final int scrollBarWidth = detailsData.getOffsetWidth() - div.getOffsetWidth();
 					if (scrollBarWidth > 0) {
 						// A vertical scrollbar is on the inside.
 						detailsData.setWidth((detailsData.getOffsetWidth() + scrollBarWidth + 4) + "px");
@@ -210,7 +210,7 @@ public class DetailsCell extends Composite {
 
 					// TODO Add horizontal scroll bars when detailsData expands beyond its container.
 
-				} catch (UnsupportedEncodingException e) {
+				} catch (final UnsupportedEncodingException e) {
 					// If the new String() line throws an exception, don't try to add the <br/> tags. This is unlikely
 					// to happen but we should do something if it does.
 					detailsLabel.setText(text);
@@ -218,7 +218,7 @@ public class DetailsCell extends Composite {
 				}
 
 			} else {
-				SingleLineText textPanel = new SingleLineText(text);
+				final SingleLineText textPanel = new SingleLineText(text);
 				detailsData.add(textPanel);
 			}
 		default:
@@ -238,7 +238,7 @@ public class DetailsCell extends Composite {
 		return layoutItemField;
 	}
 
-	public HandlerRegistration setOpenButtonClickHandler(ClickHandler clickHandler) {
+	public HandlerRegistration setOpenButtonClickHandler(final ClickHandler clickHandler) {
 		if (openButton != null) {
 			openButtonHandlerReg = openButton.addClickHandler(clickHandler);
 		}

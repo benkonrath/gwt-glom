@@ -10,9 +10,9 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	private static final long serialVersionUID = -7101706636312130106L;
 	private Field field;
-	private UsesRelationship usesRel = new UsesRelationshipImpl();
+	private final UsesRelationship usesRel = new UsesRelationshipImpl();
 	private boolean useDefaultFormatting = true;
-	private CustomTitle customTitle = new CustomTitle();
+	private final CustomTitle customTitle = new CustomTitle();
 
 	// Extras:
 	private String navigationTableName = null; // If any.
@@ -273,7 +273,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String getTitleUsed(String parentTableTitle, String locale) {
+	public String getTitleUsed(final String parentTableTitle, final String locale) {
 		return usesRel.getTitleUsed(parentTableTitle, locale);
 	}
 }

@@ -28,7 +28,7 @@ public class LayoutGroup extends LayoutItem {
 	 * @param columnCount
 	 *            the columnCount to set
 	 */
-	public void setColumnCount(int columnCount) {
+	public void setColumnCount(final int columnCount) {
 		this.columnCount = columnCount;
 	}
 
@@ -36,7 +36,7 @@ public class LayoutGroup extends LayoutItem {
 		private static final long serialVersionUID = 8610424318876440333L;
 	};
 
-	private LayoutItemList items = new LayoutItemList();
+	private final LayoutItemList items = new LayoutItemList();
 
 	/**
 	 * @return

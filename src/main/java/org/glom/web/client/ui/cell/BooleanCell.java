@@ -47,12 +47,12 @@ public class BooleanCell extends CheckboxCell {
 	 * com.google.gwt.cell.client.ValueUpdater)
 	 */
 	@Override
-	public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, Boolean value,
-			NativeEvent event, ValueUpdater<Boolean> valueUpdater) {
-		String type = event.getType();
-		boolean enterPressed = "keydown".equals(type) && event.getKeyCode() == KeyCodes.KEY_ENTER;
+	public void onBrowserEvent(final com.google.gwt.cell.client.Cell.Context context, final Element parent,
+			final Boolean value, final NativeEvent event, final ValueUpdater<Boolean> valueUpdater) {
+		final String type = event.getType();
+		final boolean enterPressed = "keydown".equals(type) && event.getKeyCode() == KeyCodes.KEY_ENTER;
 		if ("change".equals(type) || enterPressed) {
-			InputElement input = parent.getFirstChild().cast();
+			final InputElement input = parent.getFirstChild().cast();
 			input.setChecked(!input.isChecked());
 		}
 	}
@@ -64,7 +64,8 @@ public class BooleanCell extends CheckboxCell {
 	 * com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */
 	@Override
-	public void render(com.google.gwt.cell.client.Cell.Context context, Boolean value, SafeHtmlBuilder sb) {
+	public void render(final com.google.gwt.cell.client.Cell.Context context, final Boolean value,
+			final SafeHtmlBuilder sb) {
 		if (value == null) {
 			// The value is from an empty row.
 			sb.appendHtmlConstant("&nbsp;");

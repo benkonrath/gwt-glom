@@ -36,7 +36,7 @@ public class DetailsLayoutAndData implements Serializable {
 		return layout;
 	}
 
-	public void setLayout(List<LayoutGroup> layout) {
+	public void setLayout(final List<LayoutGroup> layout) {
 		this.layout = layout;
 	}
 
@@ -44,7 +44,7 @@ public class DetailsLayoutAndData implements Serializable {
 		return data;
 	}
 
-	public void setData(DataItem[] data) {
+	public void setData(final DataItem[] data) {
 		this.data = data;
 	}
 

@@ -40,7 +40,7 @@ public class SingleLineText extends Composite {
 
 	HandlerRegistration resizeHandlerReg;
 
-	public SingleLineText(String text) {
+	public SingleLineText(final String text) {
 		Widget dataWidget;
 		if (text.startsWith("http://") || text.startsWith("ftp://")) {
 			dataWidget = new Anchor(text, text, "_blank");
@@ -49,12 +49,12 @@ public class SingleLineText extends Composite {
 			dataWidget = new Anchor(text, "http://" + text, "_blank");
 			dataWidget.setStyleName("dataLink");
 		} else {
-			Label dataLabel = new Label();
+			final Label dataLabel = new Label();
 			dataLabel.setText(text);
 			dataWidget = dataLabel;
 		}
 
-		Style style = dataWidget.getElement().getStyle();
+		final Style style = dataWidget.getElement().getStyle();
 		style.setOverflow(Overflow.HIDDEN);
 		style.setProperty("textOverflow", "ellipsis");
 
@@ -74,7 +74,7 @@ public class SingleLineText extends Composite {
 		resizeHandlerReg = Window.addResizeHandler(new ResizeHandler() {
 
 			@Override
-			public void onResize(ResizeEvent event) {
+			public void onResize(final ResizeEvent event) {
 				setNewWidth();
 			}
 		});
@@ -98,10 +98,10 @@ public class SingleLineText extends Composite {
 		}
 
 		// Set the new width.
-		int parentWidth = getElement().getParentElement().getParentElement().getOffsetWidth();
-		int labelWidth = getElement().getParentElement().getPreviousSibling().<Element> cast().getOffsetWidth();
+		final int parentWidth = getElement().getParentElement().getParentElement().getOffsetWidth();
+		final int labelWidth = getElement().getParentElement().getPreviousSibling().<Element> cast().getOffsetWidth();
 		// Make the new width slights smaller than it should be so that it doesn't fall into a second line.
-		int newWidth = parentWidth - labelWidth - 2;
+		final int newWidth = parentWidth - labelWidth - 2;
 		// Don't set negative widths.
 		if (newWidth >= 0) {
 			getElement().getParentElement().getStyle().setWidth(newWidth, Unit.PX);

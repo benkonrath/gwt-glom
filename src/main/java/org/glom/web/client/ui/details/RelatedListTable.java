@@ -54,20 +54,20 @@ public class RelatedListTable extends ListTable {
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
-	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
 	// These represent the minimum and maximum number of rows in the cell table not the number of rows with data.
 	private static final int MAX_TABLE_ROWS = 5;
 	private static final int MIN_TABLE_ROWS = MAX_TABLE_ROWS;
 
-	private TypedDataItem foreignKeyValue;
+	private final TypedDataItem foreignKeyValue;
 	private LayoutItemPortal portal = null;
 	private int numNonEmptyRows = 0;
 
 	private final static int expectedHeight = initializeExepectedHeight();
 
-	public RelatedListTable(String documentID, String tableName, LayoutItemPortal layoutItemPortal,
-			TypedDataItem foreignKeyValue, NavigationButtonCell navigationButtonCell) {
+	public RelatedListTable(final String documentID, final String tableName, final LayoutItemPortal layoutItemPortal,
+			final TypedDataItem foreignKeyValue, final NavigationButtonCell navigationButtonCell) {
 
 		super(documentID);
 		super.tableName = tableName;
@@ -93,7 +93,7 @@ public class RelatedListTable extends ListTable {
 	 */
 	@Override
 	protected AsyncDataProvider<DataItem[]> getDataProvider() {
-		AsyncDataProvider<DataItem[]> dataProvider = new AsyncDataProvider<DataItem[]>() {
+		final AsyncDataProvider<DataItem[]> dataProvider = new AsyncDataProvider<DataItem[]>() {
 
 			@Override
 			@SuppressWarnings("unchecked")
@@ -101,16 +101,16 @@ public class RelatedListTable extends ListTable {
 				// setup the callback object
 				final Range range = display.getVisibleRange();
 				final int start = range.getStart();
-				AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
+				final AsyncCallback<ArrayList<DataItem[]>> callback = new AsyncCallback<ArrayList<DataItem[]>>() {
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
 						GWT.log("AsyncCallback Failed: OnlineGlomService.get(Sorted)RelatedListData(): "
 								+ caught.getMessage());
 					}
 
 					@Override
-					public void onSuccess(ArrayList<DataItem[]> result) {
+					public void onSuccess(final ArrayList<DataItem[]> result) {
 						// keep track of the number of non-empty rows (rows with data)
 						numNonEmptyRows = 0;
 						if (result != null) {
@@ -118,7 +118,7 @@ public class RelatedListTable extends ListTable {
 						}
 
 						// Add empty rows if required.
-						int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
+						final int numEmptyRows = MIN_TABLE_ROWS - numNonEmptyRows;
 						for (int i = 0; i < numEmptyRows; i++) {
 							// A row that has one null item will be rendered as an empty row.
 							result.add(new DataItem[1]);
@@ -133,10 +133,10 @@ public class RelatedListTable extends ListTable {
 				};
 
 				// get data from the server
-				ColumnSortList colSortList = cellTable.getColumnSortList();
+				final ColumnSortList colSortList = cellTable.getColumnSortList();
 				if (colSortList.size() > 0) {
 					// ColumnSortEvent has been requested by the user
-					ColumnSortInfo info = colSortList.get(0);
+					final ColumnSortInfo info = colSortList.get(0);
 
 					OnlineGlomServiceAsync.Util.getInstance().getSortedRelatedListData(documentID, tableName, portal,
 							foreignKeyValue, start, range.getLength(),
@@ -190,7 +190,7 @@ public class RelatedListTable extends ListTable {
 		// RelatedListTables are created in Portal instead of DetailsActivity.
 
 		// This table simulates a related list with one row containing a Text cell and a Button cell.
-		SafeHtmlBuilder tableBuilder = new SafeHtmlBuilder();
+		final SafeHtmlBuilder tableBuilder = new SafeHtmlBuilder();
 		tableBuilder.append(SafeHtmlUtils
 				.fromSafeConstant("<table class=\"data-list\"><thead><tr><th>TH</th><th>BH</th></tr></thead><tbody>"));
 		for (int i = 0; i < MAX_TABLE_ROWS; i++) {
@@ -198,28 +198,28 @@ public class RelatedListTable extends ListTable {
 					.fromSafeConstant("<tr><td>T</td><td><button type=\"button\">B</button></td></tr>"));
 		}
 		tableBuilder.append(SafeHtmlUtils.fromSafeConstant("</tbody></head>"));
-		HTML table = new HTML(tableBuilder.toSafeHtml());
+		final HTML table = new HTML(tableBuilder.toSafeHtml());
 
 		// The pager
-		SimplePager pager = new SimplePager();
+		final SimplePager pager = new SimplePager();
 		pager.addStyleName("pager");
 
 		// Pack the table and pager as they are found in the details view.
-		FlowPanel group = new FlowPanel();
+		final FlowPanel group = new FlowPanel();
 		group.setStyleName("group");
-		FlowPanel subgroup = new FlowPanel();
+		final FlowPanel subgroup = new FlowPanel();
 		subgroup.setStyleName("portal");
 		subgroup.add(table);
 		subgroup.add(pager);
 		group.add(subgroup);
 
 		// Calculate the height similar to Utils.getWidgetHeight().
-		Document doc = Document.get();
+		final Document doc = Document.get();
 		com.google.gwt.dom.client.Element div = doc.createDivElement();
 		div.getStyle().setVisibility(Visibility.HIDDEN);
 		div.appendChild(group.getElement().<com.google.gwt.user.client.Element> cast());
 		doc.getBody().appendChild(div);
-		int relatedListTableHeight = group.getElement().getFirstChildElement().getOffsetHeight();
+		final int relatedListTableHeight = group.getElement().getFirstChildElement().getOffsetHeight();
 
 		// remove the div from the from the document
 		doc.getBody().removeChild(div);

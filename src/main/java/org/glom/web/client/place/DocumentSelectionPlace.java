@@ -28,12 +28,12 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class DocumentSelectionPlace extends Place {
 	public static class Tokenizer implements PlaceTokenizer<DocumentSelectionPlace> {
 		@Override
-		public DocumentSelectionPlace getPlace(String token) {
+		public DocumentSelectionPlace getPlace(final String token) {
 			return new DocumentSelectionPlace();
 		}
 
 		@Override
-		public String getToken(DocumentSelectionPlace place) {
+		public String getToken(final DocumentSelectionPlace place) {
 			return "";
 		}
 	}

@@ -54,7 +54,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
-	private OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
 	public ReportActivity(final ReportPlace place, final ClientFactory clientFactory) {
 		this.documentID = place.getDocumentID(); // TODO: Just store the place?

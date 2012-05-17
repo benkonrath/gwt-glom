@@ -14,7 +14,7 @@ public class SortClause extends ArrayList<SortClause.SortField> {
 		public SortField() {
 		}
 
-		public SortField(UsesRelationship field, boolean ascending) {
+		public SortField(final UsesRelationship field, final boolean ascending) {
 			this.field = field;
 			this.ascending = ascending;
 		}

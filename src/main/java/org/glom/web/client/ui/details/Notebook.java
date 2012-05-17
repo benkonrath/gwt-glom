@@ -47,29 +47,29 @@ public class Notebook extends Group {
 	 * 
 	 * @param layoutItemNotebook
 	 */
-	public Notebook(LayoutItemNotebook layoutItemNotebook) {
+	public Notebook(final LayoutItemNotebook layoutItemNotebook) {
 		// The height of the TabLayoutPanel needs to be set to make the child widgets visible. The height of the tab bar
 		// also needs to be explicitly set. To work around these constraints, we're setting the tab height based on the
 		// tab text and decorations as set in the CSS. The height of the TabLayoutPanel will be set to be the height of
 		// the tab panel plus the height of the decorated tab content panel plus the height of the tallest child widget.
 
-		int tabBarHeight = getDecoratedTabBarHeight();
-		int emptyTabContentHeight = getDecoratedEmptyTabContentHeight();
+		final int tabBarHeight = getDecoratedTabBarHeight();
+		final int emptyTabContentHeight = getDecoratedEmptyTabContentHeight();
 
-		TabLayoutPanel tabPanel = new TabLayoutPanel(tabBarHeight, Unit.PX);
+		final TabLayoutPanel tabPanel = new TabLayoutPanel(tabBarHeight, Unit.PX);
 
 		int maxChildHeight = 0;
-		for (LayoutItem layoutItem : layoutItemNotebook.getItems()) {
+		for (final LayoutItem layoutItem : layoutItemNotebook.getItems()) {
 			if (!(layoutItem instanceof LayoutGroup)) {
 				// Ignore non-LayoutGroup items. This is what Glom 1.18 does.
 				continue;
 			}
 
 			// child groups of Notebooks shouldn't show their titles
-			Widget child = createChildWidget(layoutItem, false);
+			final Widget child = createChildWidget(layoutItem, false);
 
 			// update the maximum value of the child height if required
-			int childHeight = Utils.getWidgetHeight(child);
+			final int childHeight = Utils.getWidgetHeight(child);
 			if (childHeight > maxChildHeight) {
 				maxChildHeight = childHeight;
 			}
@@ -84,7 +84,7 @@ public class Notebook extends Group {
 
 		// Add a CSS class name for the first tab.
 		if (tabPanel.getWidgetCount() > 0) {
-			Element element = tabPanel.getElement().getFirstChildElement().getNextSiblingElement()
+			final Element element = tabPanel.getElement().getFirstChildElement().getNextSiblingElement()
 					.getFirstChildElement().getFirstChildElement();
 			element.addClassName("firstTab");
 		}
@@ -104,16 +104,16 @@ public class Notebook extends Group {
 		// with the same structure and CSS class names to get the decorated height.
 
 		// Create the widgets that make up the Tabs panel.
-		SimplePanel tabLayoutPanel = new SimplePanel();
+		final SimplePanel tabLayoutPanel = new SimplePanel();
 		tabLayoutPanel.setStyleName("gwt-TabLayoutPanel");
-		SimplePanel tabLayoutPanelTabs = new SimplePanel();
+		final SimplePanel tabLayoutPanelTabs = new SimplePanel();
 		tabLayoutPanelTabs.setStyleName("gwt-TabLayoutPanelTabs");
-		SimplePanel tabLayoutPanelTab = new SimplePanel();
+		final SimplePanel tabLayoutPanelTab = new SimplePanel();
 		tabLayoutPanelTab.setStyleName("gwt-TabLayoutPanelTab");
 		tabLayoutPanelTab.addStyleName("gwt-TabLayoutPanelTab-selected");
-		SimplePanel tabLayoutPanelTabInner = new SimplePanel();
+		final SimplePanel tabLayoutPanelTabInner = new SimplePanel();
 		tabLayoutPanelTabInner.setStyleName("gwt-TabLayoutPanelTabInner");
-		Label tabHeightHackLabel = new Label("A");
+		final Label tabHeightHackLabel = new Label("A");
 
 		// Build the widget structure.
 		tabLayoutPanelTabInner.add(tabHeightHackLabel);
@@ -134,9 +134,9 @@ public class Notebook extends Group {
 		// widget with the same structure and CSS class names to get the decorated height.
 
 		// Create the widgets that make up the tab content panel.
-		SimplePanel tabLayoutPanel = new SimplePanel();
+		final SimplePanel tabLayoutPanel = new SimplePanel();
 		tabLayoutPanel.setStyleName("gwt-TabLayoutPanel");
-		SimplePanel tabContentPanel = new SimplePanel();
+		final SimplePanel tabContentPanel = new SimplePanel();
 		tabContentPanel.setStyleName("subgroup");
 		tabContentPanel.addStyleName("gwt-TabLayoutPanelContent");
 

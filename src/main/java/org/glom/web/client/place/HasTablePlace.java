@@ -65,7 +65,7 @@ public abstract class HasTablePlace extends Place {
 		protected HashMap<String, String> getTokenParams(final String historyToken) {
 			final String[] arStr = historyToken.substring(0, historyToken.length()).split(separator);
 			final HashMap<String, String> params = new HashMap<String, String>();
-			for (String element : arStr) {
+			for (final String element : arStr) {
 				final String[] substr = element.split(equals);
 				if (substr.length != 2) {
 					continue;
@@ -99,7 +99,7 @@ public abstract class HasTablePlace extends Place {
 		 */
 		protected String buildParamsToken(final HashMap<String, String> params) {
 			String token = "";
-			for (Map.Entry<String, String> entry : params.entrySet()) {
+			for (final Map.Entry<String, String> entry : params.entrySet()) {
 				final String key = entry.getKey();
 				final String value = entry.getValue();
 				if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value)) {

@@ -31,7 +31,7 @@ public class CustomTitle extends Translatable {
 		return useCustomTitle;
 	}
 
-	public void setUseCustomTitle(boolean useCustomTitle) {
+	public void setUseCustomTitle(final boolean useCustomTitle) {
 		this.useCustomTitle = useCustomTitle;
 	}
 }

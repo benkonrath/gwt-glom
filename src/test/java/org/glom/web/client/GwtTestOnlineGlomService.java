@@ -44,8 +44,8 @@ public class GwtTestOnlineGlomService extends GWTTestCase {
 			public void onSuccess(final Documents documents) {
 				if (documents.getCount() > 0) {
 					for (int i = 0; i < documents.getCount(); i++) {
-						String id = documents.getDocumentID(i);
-						String title = documents.getTitle(i);
+						documents.getDocumentID(i);
+						documents.getTitle(i);
 					}
 				} else {
 					// getAndSetErrorMessage();
@@ -57,7 +57,7 @@ public class GwtTestOnlineGlomService extends GWTTestCase {
 
 		delayTestFinish(500);
 
-		OnlineGlomServiceAsync service = OnlineGlomServiceAsync.Util.getInstance();
+		final OnlineGlomServiceAsync service = OnlineGlomServiceAsync.Util.getInstance();
 		assertNotNull(service);
 		service.getDocuments(callback);
 	}

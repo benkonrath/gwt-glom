@@ -28,13 +28,13 @@ public class DetailsPlaceTest {
 
 		// Recreate it, testing getToken(),
 		// checking that the same parameters are read back:
-		DetailsPlace.Tokenizer tokenizer = new DetailsPlace.Tokenizer();
+		final DetailsPlace.Tokenizer tokenizer = new DetailsPlace.Tokenizer();
 		final String token = tokenizer.getToken(place);
 		place = getDetailsPlaceFromToken(token);
 		checkParameters(place, documentId, tableName, primaryKeyValue);
 	}
 
-	private void checkParameters(DetailsPlace place, final String documentID, final String tableName,
+	private void checkParameters(final DetailsPlace place, final String documentID, final String tableName,
 			final String primaryKeyValue) {
 		Assert.assertTrue(place != null);
 
@@ -44,14 +44,14 @@ public class DetailsPlaceTest {
 	}
 
 	private DetailsPlace getDetailsPlaceFromToken(final String token) {
-		DetailsPlace.Tokenizer tokenizer = new DetailsPlace.Tokenizer();
-		DetailsPlace place = tokenizer.getPlace(token);
+		final DetailsPlace.Tokenizer tokenizer = new DetailsPlace.Tokenizer();
+		final DetailsPlace place = tokenizer.getPlace(token);
 		Assert.assertTrue(place != null);
 		return place;
 	}
 
 	private void checkTokenWithoutParameters(final String token) {
-		DetailsPlace place = getDetailsPlaceFromToken(token);
+		final DetailsPlace place = getDetailsPlaceFromToken(token);
 
 		Assert.assertTrue(place.getDocumentID() != null);
 		Assert.assertTrue(place.getDocumentID().isEmpty());

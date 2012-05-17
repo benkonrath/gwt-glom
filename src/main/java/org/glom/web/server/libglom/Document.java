@@ -74,9 +74,9 @@ public class Document {
 	private String fileURI = "";
 	private org.w3c.dom.Document xmlDocument = null;
 
-	private Translatable databaseTitle = new Translatable();
+	private final Translatable databaseTitle = new Translatable();
 	private String translationOriginalLocale = "";
-	private List<String> translationAvailableLocales = new ArrayList<String>();
+	private final List<String> translationAvailableLocales = new ArrayList<String>();
 	private String connectionServer = "";
 	private String connectionDatabase = "";
 	private int connectionPort = 0;
@@ -952,7 +952,7 @@ public class Document {
 	 * @param portal
 	 *            TODO
 	 */
-	public TableToViewDetails getPortalSuitableTableToViewDetails(LayoutItemPortal portal) {
+	public TableToViewDetails getPortalSuitableTableToViewDetails(final LayoutItemPortal portal) {
 		UsesRelationship navigationRelationship = null;
 
 		// Check whether a relationship was specified:
@@ -963,7 +963,7 @@ public class Document {
 		}
 
 		// Get the navigation table name from the chosen relationship:
-		String directlyRelatedTableName = portal.getTableUsed("" /* not relevant */);
+		final String directlyRelatedTableName = portal.getTableUsed("" /* not relevant */);
 
 		// The navigation_table_name (and therefore, the table_name output parameter,
 		// as well) stays empty if the navrel type was set to none.
@@ -990,7 +990,7 @@ public class Document {
 			return null;
 		}
 
-		TableToViewDetails result = new TableToViewDetails();
+		final TableToViewDetails result = new TableToViewDetails();
 		result.tableName = navigationTableName;
 		result.usesRelationship = navigationRelationship;
 		return result;
@@ -1001,7 +1001,7 @@ public class Document {
 	 *            TODO
 	 * @return
 	 */
-	private UsesRelationship getPortalNavigationRelationshipAutomatic(LayoutItemPortal portal) {
+	private UsesRelationship getPortalNavigationRelationshipAutomatic(final LayoutItemPortal portal) {
 		if (this == null) {
 			return null;
 		}
@@ -1023,7 +1023,7 @@ public class Document {
 				// and pretend that we are showing the to field as a related field:
 				final Relationship fieldIndentifies = getPortalFieldIdentifiesNonHiddenRelatedRecord(portal);
 				if (fieldIndentifies != null) {
-					UsesRelationship result = new UsesRelationshipImpl();
+					final UsesRelationship result = new UsesRelationshipImpl();
 					result.setRelationship(fieldIndentifies);
 					return result;
 				}
@@ -1039,21 +1039,21 @@ public class Document {
 	 *            TODO
 	 * @return
 	 */
-	private LayoutItemField getPortalFieldIsFromNonHiddenRelatedRecord(LayoutItemPortal portal) {
+	private LayoutItemField getPortalFieldIsFromNonHiddenRelatedRecord(final LayoutItemPortal portal) {
 		// Find the first field that is from a non-hidden related table.
 
 		if (this == null) {
 			return null;
 		}
 
-		LayoutItemField result = null;
+		final LayoutItemField result = null;
 
 		final String parent_table_name = portal.getTableUsed("" /* parent table - not relevant */);
 
 		final List<LayoutItem> items = portal.getItems();
-		for (LayoutItem item : items) {
+		for (final LayoutItem item : items) {
 			if (item instanceof LayoutItemField) {
-				LayoutItemField field = (LayoutItemField) item;
+				final LayoutItemField field = (LayoutItemField) item;
 				if (field.getHasRelationshipName()) {
 					final String table_name = field.getTableUsed(parent_table_name);
 					if (!(getTableIsHidden(table_name))) {
@@ -1072,7 +1072,7 @@ public class Document {
 	 *            TODO
 	 * @return
 	 */
-	private Relationship getPortalFieldIdentifiesNonHiddenRelatedRecord(LayoutItemPortal portal) {
+	private Relationship getPortalFieldIdentifiesNonHiddenRelatedRecord(final LayoutItemPortal portal) {
 		// Find the first field that is from a non-hidden related table.
 
 		if (this == null) {
@@ -1082,10 +1082,10 @@ public class Document {
 
 		final String parent_table_name = portal.getTableUsed("" /* parent table - not relevant */);
 
-		List<LayoutItem> items = portal.getItems();
-		for (LayoutItem item : items) {
+		final List<LayoutItem> items = portal.getItems();
+		for (final LayoutItem item : items) {
 			if (item instanceof LayoutItemField) {
-				LayoutItemField field = (LayoutItemField) item;
+				final LayoutItemField field = (LayoutItemField) item;
 				if (field.getHasRelationshipName()) {
 					final Relationship relationship = getFieldUsedInRelationshipToOne(parent_table_name, field);
 					if (relationship != null) {

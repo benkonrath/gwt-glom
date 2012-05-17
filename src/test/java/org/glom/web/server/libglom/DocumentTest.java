@@ -205,7 +205,7 @@ public class DocumentTest {
 			final String table = tableNames.get(i);
 			final List<LayoutGroup> layoutList = document.getDataLayoutGroups("list", table);
 			assertTrue(!layoutList.isEmpty());
-			LayoutGroup firstgroup = layoutList.get(0);
+			final LayoutGroup firstgroup = layoutList.get(0);
 			assertTrue(firstgroup != null);
 			final List<LayoutItem> layoutItems = firstgroup.getItems();
 			final int numItems = safeLongToInt(layoutItems.size());

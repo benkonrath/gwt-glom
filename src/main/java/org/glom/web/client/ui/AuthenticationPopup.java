@@ -34,10 +34,10 @@ import com.google.gwt.user.client.ui.TextBox;
  *
  */
 public class AuthenticationPopup extends DecoratedPopupPanel {
-	private TextBox usernameTextBox = new TextBox();
-	private PasswordTextBox passwordTextBox = new PasswordTextBox();
-	private Label errorMessage = new Label("Username and/or password not correct.");
-	private Button okButton = new Button("OK");
+	private final TextBox usernameTextBox = new TextBox();
+	private final PasswordTextBox passwordTextBox = new PasswordTextBox();
+	private final Label errorMessage = new Label("Username and/or password not correct.");
+	private final Button okButton = new Button("OK");
 	FlexTable flexTable = new FlexTable();
 
 	private HandlerRegistration authOkHandlerRegistration;
@@ -45,7 +45,7 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 	public AuthenticationPopup() {
 		// setup the layout
 		flexTable.setCellSpacing(10);
-		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
+		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 		flexTable.setHTML(0, 0, "<b>Enter the PostgreSQL username and password.</b>");
 		cellFormatter.setColSpan(0, 0, 2);
 		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
@@ -66,7 +66,7 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 		errorMessage.getElement().getStyle().setColor("Red");
 	}
 
-	public void setClickOkHandler(ClickHandler clickHandler) {
+	public void setClickOkHandler(final ClickHandler clickHandler) {
 		authOkHandlerRegistration = okButton.addClickHandler(clickHandler);
 	}
 
@@ -91,14 +91,14 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 		clearError();
 	}
 
-	public void setTextFieldsEnabled(boolean enabled) {
+	public void setTextFieldsEnabled(final boolean enabled) {
 		usernameTextBox.setEnabled(enabled);
 		passwordTextBox.setEnabled(enabled);
 	}
 
 	public void setError() {
 		flexTable.setWidget(4, 0, errorMessage);
-		FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
+		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 		cellFormatter.setColSpan(4, 0, 2);
 		cellFormatter.setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}

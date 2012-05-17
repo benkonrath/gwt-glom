@@ -25,7 +25,7 @@ public class Formatting implements Serializable {
 	private String textFormatColorBackground = "";
 	private NumericFormat numericFormat = new NumericFormat();
 
-	public void setHorizontalAlignment(HorizontalAlignment alignment) {
+	public void setHorizontalAlignment(final HorizontalAlignment alignment) {
 		horizontalAlignment = alignment;
 	}
 
@@ -49,7 +49,7 @@ public class Formatting implements Serializable {
 	 *            number of lines of text that should be displayed
 	 * @returns the number of lines of text
 	 */
-	public void setTextFormatMultilineHeightLines(int value) {
+	public void setTextFormatMultilineHeightLines(final int value) {
 		this.multilineHeightLines = value;
 	}
 
@@ -83,7 +83,7 @@ public class Formatting implements Serializable {
 	 * @param color
 	 *            the text foreground color in GdkColor color format
 	 */
-	public void setTextFormatColorForeground(String color) {
+	public void setTextFormatColorForeground(final String color) {
 		this.textFormatColorForeground = color;
 	}
 
@@ -111,7 +111,7 @@ public class Formatting implements Serializable {
 	 * @param color
 	 *            a text background color in HTML color format
 	 */
-	public void setTextFormatColorBackground(String color) {
+	public void setTextFormatColorBackground(final String color) {
 		this.textFormatColorBackground = color;
 	}
 
@@ -119,7 +119,7 @@ public class Formatting implements Serializable {
 		return numericFormat;
 	}
 
-	public void setNumericFormat(NumericFormat numericFormat) {
+	public void setNumericFormat(final NumericFormat numericFormat) {
 		this.numericFormat = numericFormat;
 	}
 

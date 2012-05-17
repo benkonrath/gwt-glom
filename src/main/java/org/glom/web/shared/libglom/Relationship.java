@@ -56,28 +56,28 @@ public class Relationship extends Translatable {
 	/**
 	 * @param
 	 */
-	public void setFromTable(String name) {
+	public void setFromTable(final String name) {
 		fromTable = name;
 	}
 
 	/**
 	 * @param
 	 */
-	public void setFromField(String name) {
+	public void setFromField(final String name) {
 		fromField = name;
 	}
 
 	/**
 	 * @param
 	 */
-	public void setToTable(String name) {
+	public void setToTable(final String name) {
 		toTable = name;
 	}
 
 	/**
 	 * @param
 	 */
-	public void setToField(String name) {
+	public void setToField(final String name) {
 		toField = name;
 	}
 

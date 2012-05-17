@@ -5,7 +5,7 @@ import org.glom.web.shared.libglom.Relationship;
 
 public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	private static final long serialVersionUID = 4952677991725269830L;
-	private UsesRelationship usesRel = new UsesRelationshipImpl();
+	private final UsesRelationship usesRel = new UsesRelationshipImpl();
 
 	public enum NavigationType {
 		NAVIGATION_NONE, NAVIGATION_AUTOMATIC, NAVIGATION_SPECIFIC
@@ -38,7 +38,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * org.glom.web.shared.libglom.layout.UsesRelationship#setRelationship(org.glom.web.shared.libglom.Relationship)
 	 */
 	@Override
-	public void setRelationship(Relationship relationship) {
+	public void setRelationship(final Relationship relationship) {
 		usesRel.setRelationship(relationship);
 	}
 
@@ -70,7 +70,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * )
 	 */
 	@Override
-	public void setRelatedRelationship(Relationship relationship) {
+	public void setRelatedRelationship(final Relationship relationship) {
 		usesRel.setRelatedRelationship(relationship);
 	}
 
@@ -110,7 +110,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
 	 */
 	@Override
-	public String getSqlTableOrJoinAliasName(String tableName) {
+	public String getSqlTableOrJoinAliasName(final String tableName) {
 		return usesRel.getSqlTableOrJoinAliasName(tableName);
 	}
 
@@ -120,7 +120,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
-	public String getTableUsed(String parentTable) {
+	public String getTableUsed(final String parentTable) {
 		return usesRel.getTableUsed(parentTable);
 	}
 
@@ -134,7 +134,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	/**
 	 * @param navigationAutomatic
 	 */
-	public void setNavigationType(NavigationType navigationType) {
+	public void setNavigationType(final NavigationType navigationType) {
 		this.navigationType = navigationType;
 	}
 
@@ -152,7 +152,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	/**
 	 * @return
 	 */
-	public void setNavigationRelationshipSpecific(UsesRelationship relationship) {
+	public void setNavigationRelationshipSpecific(final UsesRelationship relationship) {
 		navigationRelationshipSpecific = relationship;
 		navigationType = NavigationType.NAVIGATION_SPECIFIC;
 	}
@@ -220,7 +220,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String getTitleUsed(String parentTableTitle, String locale) {
+	public String getTitleUsed(final String parentTableTitle, final String locale) {
 		return usesRel.getTitleUsed(parentTableTitle, locale);
 	}
 }
