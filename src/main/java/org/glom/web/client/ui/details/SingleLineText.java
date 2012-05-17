@@ -103,7 +103,8 @@ public class SingleLineText extends Composite {
 		// Make the new width slights smaller than it should be so that it doesn't fall into a second line.
 		int newWidth = parentWidth - labelWidth - 2;
 		// Don't set negative widths.
-		if (newWidth >= 0)
+		if (newWidth >= 0) {
 			getElement().getParentElement().getStyle().setWidth(newWidth, Unit.PX);
+		}
 	}
 }

@@ -50,8 +50,9 @@ public class DocumentSelectionActivityMapper implements ActivityMapper {
 	 */
 	@Override
 	public Activity getActivity(Place place) {
-		if (place instanceof DocumentSelectionPlace)
+		if (place instanceof DocumentSelectionPlace) {
 			return new DocumentSelectionActivity(clientFactory);
+		}
 
 		return null;
 	}

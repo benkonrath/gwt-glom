@@ -193,8 +193,9 @@ public class Document {
 		// for all tables:
 		final List<Node> listTableNodes = getChildrenByTagName(rootNode, NODE_TABLE);
 		for (final Node node : listTableNodes) {
-			if (!(node instanceof Element))
+			if (!(node instanceof Element)) {
 				continue;
+			}
 
 			final Element element = (Element) node;
 			final TableInfo info = loadTableNodeBasic(element);
@@ -204,8 +205,9 @@ public class Document {
 		// We then load the layouts for all tables, because they
 		// need the fields and relationships for all tables:
 		for (final Node node : listTableNodes) {
-			if (!(node instanceof Element))
+			if (!(node instanceof Element)) {
 				continue;
+			}
 
 			final Element element = (Element) node;
 			final String tableName = element.getAttribute(ATTRIBUTE_NAME);
@@ -228,19 +230,22 @@ public class Document {
 
 	private Element getElementByName(final Element parentElement, final String tagName) {
 		final List<Node> listNodes = getChildrenByTagName(parentElement, tagName);
-		if (listNodes == null)
+		if (listNodes == null) {
 			return null;
+		}
 
-		if (listNodes.size() == 0)
+		if (listNodes.size() == 0) {
 			return null;
+		}
 
 		return (Element) listNodes.get(0);
 	}
 
 	private boolean getAttributeAsBoolean(final Element node, final String attributeName) {
 		final String str = node.getAttribute(attributeName);
-		if (str == null)
+		if (str == null) {
 			return false;
+		}
 
 		return str.equals("true");
 	}
@@ -252,8 +257,9 @@ public class Document {
 	 */
 	private int getAttributeAsDecimal(final Element node, final String attributeName) {
 		final String str = node.getAttribute(attributeName);
-		if (StringUtils.isEmpty(str))
+		if (StringUtils.isEmpty(str)) {
 			return 0;
+		}
 
 		return Integer.valueOf(str);
 	}
@@ -276,8 +282,9 @@ public class Document {
 		}
 
 		final List<Node> listNodes = getChildrenByTagName(nodeSet, NODE_TRANSLATIONS);
-		if (listNodes == null)
+		if (listNodes == null) {
 			return;
+		}
 
 		for (final Node transNode : listNodes) {
 			if (!(transNode instanceof Element)) {
@@ -534,8 +541,9 @@ public class Document {
 		final int num = listNodes.getLength();
 		for (int i = 0; i < num; i++) {
 			final Node node = listNodes.item(i);
-			if (!(node instanceof Element))
+			if (!(node instanceof Element)) {
 				continue;
+			}
 
 			final Element element = (Element) node;
 			final String tagName = element.getTagName();
@@ -810,24 +818,27 @@ public class Document {
 
 	public List<Field> getTableFields(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
-		if (info == null)
+		if (info == null) {
 			return null;
+		}
 
 		return new ArrayList<Field>(info.fieldsMap.values());
 	}
 
 	public Field getField(final String tableName, final String strFieldName) {
 		final TableInfo info = getTableInfo(tableName);
-		if (info == null)
+		if (info == null) {
 			return null;
+		}
 
 		return info.fieldsMap.get(strFieldName);
 	}
 
 	public List<LayoutGroup> getDataLayoutGroups(final String layoutName, final String parentTableName) {
 		final TableInfo info = getTableInfo(parentTableName);
-		if (info == null)
+		if (info == null) {
 			return new ArrayList<LayoutGroup>();
+		}
 
 		if (layoutName == LAYOUT_NAME_DETAILS) {
 			return info.layoutGroupsDetails;
@@ -840,16 +851,18 @@ public class Document {
 
 	public List<String> getReportNames(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
-		if (info == null)
+		if (info == null) {
 			return new ArrayList<String>();
+		}
 
 		return new ArrayList<String>(info.reportsMap.keySet());
 	}
 
 	public Report getReport(final String tableName, final String reportName) {
 		final TableInfo info = getTableInfo(tableName);
-		if (info == null)
+		if (info == null) {
 			return null;
+		}
 
 		return info.reportsMap.get(reportName);
 	}
@@ -1043,8 +1056,9 @@ public class Document {
 				LayoutItemField field = (LayoutItemField) item;
 				if (field.getHasRelationshipName()) {
 					final String table_name = field.getTableUsed(parent_table_name);
-					if (!(getTableIsHidden(table_name)))
+					if (!(getTableIsHidden(table_name))) {
 						return field;
+					}
 				}
 			}
 		}

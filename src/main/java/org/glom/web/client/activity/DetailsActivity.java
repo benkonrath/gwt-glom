@@ -126,8 +126,9 @@ public class DetailsActivity extends HasTableActivity {
 	 */
 	@Override
 	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-		if (StringUtils.isEmpty(documentID))
+		if (StringUtils.isEmpty(documentID)) {
 			goTo(new DocumentSelectionPlace());
+		}
 
 		// register this class as the presenter
 		detailsView.setPresenter(this);
@@ -235,12 +236,14 @@ public class DetailsActivity extends HasTableActivity {
 	 */
 	private void setData(final DataItem[] data) {
 
-		if (data == null)
+		if (data == null) {
 			return;
+		}
 
 		// TODO create proper client side logging
-		if (data.length != detailsCells.size())
+		if (data.length != detailsCells.size()) {
 			GWT.log("Warning: The number of data items doesn't match the number of data detailsCells.");
+		}
 
 		for (int i = 0; i < Math.min(detailsCells.size(), data.length); i++) {
 			final DetailsCell detailsCell = detailsCells.get(i);
@@ -256,8 +259,9 @@ public class DetailsActivity extends HasTableActivity {
 					final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
 					final String portalFromField = layoutItemPortal.getFromField();
 					if (fieldName.equals(portalFromField)) {
-						if (data[i] == null)
+						if (data[i] == null) {
 							continue;
+						}
 
 						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getGlomType(),
 								data[i]);

@@ -136,8 +136,9 @@ public class Log {
 	// helper method
 	private static String getServletMethodName() {
 		StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
-		if (stackTraces.length > 3 && "org.glom.web.server.OnlineGlomServiceImpl".equals(stackTraces[3].getClassName()))
+		if (stackTraces.length > 3 && "org.glom.web.server.OnlineGlomServiceImpl".equals(stackTraces[3].getClassName())) {
 			return stackTraces[3].getMethodName() + " - ";
+		}
 		return "";
 	}
 

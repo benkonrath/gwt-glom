@@ -141,8 +141,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 		// Set the foreignKeyValue
 		this.foreignKeyValue = foreignKeyValue;
 
-		if (fieldsToGet == null || fieldsToGet.size() <= 0 || this.foreignKeyValue == null)
+		if (fieldsToGet == null || fieldsToGet.size() <= 0 || this.foreignKeyValue == null) {
 			return -1;
+		}
 
 		return getResultSizeOfSQLQuery();
 	}
@@ -171,9 +172,10 @@ public class RelatedListDBAccess extends ListDBAccess {
 		Condition whereClause = null; // Note that we ignore quickFind.
 		// only attempt to make a where clause if it makes sense to do so
 		if (!StringUtils.isEmpty(whereClauseToTableName)) {
-			if (foreignKeyValue != null)
+			if (foreignKeyValue != null) {
 				whereClause = SqlUtils.buildSimpleWhereExpression(whereClauseToTableName, whereClauseToKeyField,
 						foreignKeyValue);
+			}
 		}
 
 		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
@@ -182,8 +184,9 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	private Field getFieldInTable(final String fieldName, final String tableName) {
 
-		if (StringUtils.isEmpty(tableName))
+		if (StringUtils.isEmpty(tableName)) {
 			return null;
+		}
 
 		final List<Field> fields = document.getTableFields(tableName);
 		for (int i = 0; i < fields.size(); i++) {
@@ -219,9 +222,10 @@ public class RelatedListDBAccess extends ListDBAccess {
 		Condition whereClause = null;
 		// only attempt to make a where clause if it makes sense to do so
 		if (!whereClauseToTableName.isEmpty() && whereClauseToKeyField != null) {
-			if (foreignKeyValue != null)
+			if (foreignKeyValue != null) {
 				whereClause = SqlUtils.buildSimpleWhereExpression(whereClauseToTableName, whereClauseToKeyField,
 						foreignKeyValue);
+			}
 		}
 
 		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet, whereClause);

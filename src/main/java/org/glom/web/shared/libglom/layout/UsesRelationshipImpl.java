@@ -182,10 +182,12 @@ public class UsesRelationshipImpl implements UsesRelationship {
 			if (StringUtils.isEmpty(result)) {
 				// Non-linked-fields relationship:
 				return getTableUsed(parent_table);
-			} else
+			} else {
 				return result;
-		} else
+			}
+		} else {
 			return parent_table;
+		}
 	}
 
 	/*

@@ -65,11 +65,12 @@ public class BooleanCell extends CheckboxCell {
 	 */
 	@Override
 	public void render(com.google.gwt.cell.client.Cell.Context context, Boolean value, SafeHtmlBuilder sb) {
-		if (value == null)
+		if (value == null) {
 			// The value is from an empty row.
 			sb.appendHtmlConstant("&nbsp;");
-		else
+		} else {
 			super.render(context, value, sb);
+		}
 	}
 
 }

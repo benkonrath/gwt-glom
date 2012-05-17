@@ -122,8 +122,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	public void setTableSelection(final ArrayList<String> names, final ArrayList<String> titles) {
 		tablesChooser.clear();
 
-		if (names == null)
+		if (names == null) {
 			return;
+		}
 
 		for (int i = 0; i < names.size(); i++) {
 			tablesChooser.addItem(titles.get(i), names.get(i));

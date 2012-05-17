@@ -158,8 +158,9 @@ abstract class DBAccess {
 
 			// satisfy the precondition of getDetailsLayoutGroup(String tableName, LayoutGroup
 			// libglomLayoutGroup)
-			if (layoutGroup == null)
+			if (layoutGroup == null) {
 				continue;
+			}
 
 			// Get the fields:
 			ArrayList<LayoutItemField> layoutItemFields = getFieldsToShowForSQLQueryAddGroup(layoutGroup);

@@ -69,8 +69,9 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	public int getExpectedResultSize() {
 
-		if (fieldsToGet == null || fieldsToGet.size() <= 0)
+		if (fieldsToGet == null || fieldsToGet.size() <= 0) {
 			return -1;
+		}
 
 		return getResultSizeOfSQLQuery();
 	}
@@ -113,8 +114,9 @@ public class ListViewDBAccess extends ListDBAccess {
 		for (int i = 0; i < fieldsToGet.size(); i++) {
 			final LayoutItemField layoutItemField = fieldsToGet.get(i);
 			final Field field = layoutItemField.getFullFieldDetails();
-			if (tableName.equals(layoutItemField.getTableUsed(tableName)) && field != null && field.getPrimaryKey())
+			if (tableName.equals(layoutItemField.getTableUsed(tableName)) && field != null && field.getPrimaryKey()) {
 				return i;
+			}
 		}
 		return -1;
 	}

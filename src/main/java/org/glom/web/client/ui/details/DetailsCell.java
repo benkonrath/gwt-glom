@@ -100,11 +100,13 @@ public class DetailsCell extends Composite {
 
 		// set the text foreground and background colors
 		String foregroundColor = formatting.getTextFormatColorForegroundAsHTMLColor();
-		if (!StringUtils.isEmpty(foregroundColor))
+		if (!StringUtils.isEmpty(foregroundColor)) {
 			detailsData.getElement().getStyle().setColor(foregroundColor);
+		}
 		String backgroundColor = formatting.getTextFormatColorBackgroundAsHTMLColor();
-		if (!StringUtils.isEmpty(backgroundColor))
+		if (!StringUtils.isEmpty(backgroundColor)) {
 			detailsData.getElement().getStyle().setBackgroundColor(backgroundColor);
+		}
 
 		FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("details-cell");
@@ -132,8 +134,9 @@ public class DetailsCell extends Composite {
 	public void setData(final DataItem dataItem) {
 		detailsData.clear();
 
-		if (dataItem == null)
+		if (dataItem == null) {
 			return;
+		}
 
 		Formatting formatting = layoutItemField.getFormatting();
 

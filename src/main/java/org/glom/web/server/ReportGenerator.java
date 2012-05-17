@@ -315,8 +315,9 @@ public class ReportGenerator {
 				if (libglomLayoutGroup instanceof LayoutItemGroupBy) {
 					final LayoutItemGroupBy libglomGroupBy = (LayoutItemGroupBy) libglomLayoutGroup;
 					final LayoutItemField fieldGroupBy = libglomGroupBy.getFieldGroupBy();
-					if (fieldGroupBy == null)
+					if (fieldGroupBy == null) {
 						continue;
+					}
 
 					final String fieldName = addField(fieldGroupBy);
 					if (StringUtils.isEmpty(fieldName)) {
@@ -367,8 +368,9 @@ public class ReportGenerator {
 
 					// Show the secondary fields:
 					final LayoutGroup groupSecondaries = libglomGroupBy.getSecondaryFields();
-					if (groupSecondaries != null)
+					if (groupSecondaries != null) {
 						groupX = addSecondaryFieldsToGroupBand(groupSecondaries, groupBand, groupX);
+					}
 
 					final JRDesignLine line = new JRDesignLine();
 					final int lineheight = 1;
@@ -471,8 +473,9 @@ public class ReportGenerator {
 		final Position pos_result = new Position(pos);
 
 		// Make the band high enough if necessary:
-		if (parentBand.getHeight() < (pos_result.y + height))
+		if (parentBand.getHeight() < (pos_result.y + height)) {
 			parentBand.setHeight(pos_result.y + height + 20);
+		}
 
 		// Show the field title:
 		final JRDesignStaticText textFieldColumn = createFieldTitleElement(pos_result, libglomLayoutItemField, true);
@@ -591,8 +594,9 @@ public class ReportGenerator {
 		String title = StringUtils.defaultString(libglomLayoutItemField.getTitle(this.localeID));
 
 		// If the title is at the left, instead of above, we need a : to show that it's a title.
-		if (withColon)
+		if (withColon) {
 			title += ":";
+		}
 
 		textFieldColumn.setText(title);
 		textFieldColumn.setY(pos.y);
@@ -621,8 +625,9 @@ public class ReportGenerator {
 		// because JasperDesign.addField() throws a "Duplicate declaration of field" exception.
 		for (int i = 0; i < fieldsToGet.size(); ++i) {
 			final UsesRelationship thisField = fieldsToGet.get(i);
-			if (thisField.equals(libglomLayoutItemField))
+			if (thisField.equals(libglomLayoutItemField)) {
 				return fieldName;
+			}
 		}
 
 		fieldsToGet.add(libglomLayoutItemField);

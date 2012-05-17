@@ -104,7 +104,8 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 	}
 
 	public void clearError() {
-		if (flexTable.getRowCount() == 5)
+		if (flexTable.getRowCount() == 5) {
 			flexTable.removeRow(4);
+		}
 	}
 }

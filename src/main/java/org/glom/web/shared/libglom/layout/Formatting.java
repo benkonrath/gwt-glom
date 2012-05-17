@@ -132,9 +132,9 @@ public class Formatting implements Serializable {
 			return "";
 		}
 
-		if (gdkColor.length() == 13)
+		if (gdkColor.length() == 13) {
 			return gdkColor.substring(0, 3) + gdkColor.substring(5, 7) + gdkColor.substring(9, 11);
-		else if (gdkColor.length() == 7) {
+		} else if (gdkColor.length() == 7) {
 			// This shouldn't happen but let's deal with it if it does.
 			GWT.log("Expected a 13 character string but received a 7 character string. Returning received string.");
 			return gdkColor;

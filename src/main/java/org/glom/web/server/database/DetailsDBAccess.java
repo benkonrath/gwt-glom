@@ -92,12 +92,15 @@ public class DetailsDBAccess extends DBAccess {
 		} finally {
 			// cleanup everything that has been used
 			try {
-				if (rs != null)
+				if (rs != null) {
 					rs.close();
-				if (st != null)
+				}
+				if (st != null) {
 					st.close();
-				if (conn != null)
+				}
+				if (conn != null) {
 					conn.close();
+				}
 			} catch (final Exception e) {
 				Log.error(documentID, tableName,
 						"Error closing database resources. Subsequent database queries may not work.", e);

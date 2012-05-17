@@ -65,8 +65,9 @@ public class DetailsPlace extends HasTablePlace {
 				// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#toString%28double%29
 				primaryKeyValueString = Double.toString(primaryKeyValue.getNumber());
 				// Remove the trailing point and zero on integers. This just makes URL string look nicer.
-				if (primaryKeyValueString.endsWith(".0"))
+				if (primaryKeyValueString.endsWith(".0")) {
 					primaryKeyValueString = primaryKeyValueString.substring(0, primaryKeyValueString.length() - 2);
+				}
 				break;
 
 			case TYPE_TEXT:

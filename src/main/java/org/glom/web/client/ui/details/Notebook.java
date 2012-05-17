@@ -60,17 +60,19 @@ public class Notebook extends Group {
 
 		int maxChildHeight = 0;
 		for (LayoutItem layoutItem : layoutItemNotebook.getItems()) {
-			if (!(layoutItem instanceof LayoutGroup))
+			if (!(layoutItem instanceof LayoutGroup)) {
 				// Ignore non-LayoutGroup items. This is what Glom 1.18 does.
 				continue;
+			}
 
 			// child groups of Notebooks shouldn't show their titles
 			Widget child = createChildWidget(layoutItem, false);
 
 			// update the maximum value of the child height if required
 			int childHeight = Utils.getWidgetHeight(child);
-			if (childHeight > maxChildHeight)
+			if (childHeight > maxChildHeight) {
 				maxChildHeight = childHeight;
+			}
 
 			// Use the name if the title is empty. This avoids having tabs with empty labels.
 			tabPanel.add(child,

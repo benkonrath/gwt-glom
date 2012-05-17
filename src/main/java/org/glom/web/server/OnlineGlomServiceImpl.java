@@ -69,8 +69,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	private static class OnlineGlomProperties extends Properties {
 		public String getKey(final String value) {
 			for (final String key : stringPropertyNames()) {
-				if (getProperty(key).trim().equals(value))
+				if (getProperty(key).trim().equals(value)) {
 					return key;
+				}
 			}
 			return null;
 		}
@@ -199,8 +200,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public void destroy() {
 		for (final String documenTitle : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documenTitle);
-			if (configuredDoc == null)
+			if (configuredDoc == null) {
 				continue;
+			}
 
 			try {
 				DataSources.destroy(configuredDoc.getCpds());
@@ -217,12 +219,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public String getConfigurationErrorMessage() {
-		if (configurationException == null)
+		if (configurationException == null) {
 			return "No configuration errors to report.";
-		else if (configurationException.getMessage() == null)
+		} else if (configurationException.getMessage() == null) {
 			return configurationException.toString();
-		else
+		} else {
 			return configurationException.getMessage();
+		}
 	}
 
 	/*
@@ -236,8 +239,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
 
 		// Avoid dereferencing a null object:
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return new DocumentInfo();
+		}
 
 		// FIXME check for authentication
 
@@ -253,8 +257,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public LayoutGroup getListViewLayout(final String documentID, final String tableName, final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return new LayoutGroup();
+		}
 
 		// FIXME check for authentication
 
@@ -272,8 +277,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public String getReportHTML(final String documentID, final String tableName, final String reportName,
 			final String quickFind, final String localeID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return "";
+		}
 
 		final Document glomDocument = configuredDoc.getDocument();
 		if (glomDocument == null) {
@@ -331,8 +337,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			final String quickFind, final int start, final int length, final int sortColumnIndex,
 			final boolean isAscending) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
+		}
 
 		if (!configuredDoc.isAuthenticated()) {
 			return new ArrayList<DataItem[]>();
@@ -350,8 +357,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final Documents documents = new Documents();
 		for (final String documentID : documentMapping.keySet()) {
 			final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-			if (configuredDoc == null)
+			if (configuredDoc == null) {
 				continue;
+			}
 
 			final Document glomDocument = configuredDoc.getDocument();
 			if (glomDocument == null) {
@@ -375,8 +383,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public boolean isAuthenticated(final String documentID) {
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return false;
+		}
 
 		return configuredDoc.isAuthenticated();
 	}
@@ -500,8 +509,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		}
 
 		final ConfiguredDocument configuredDoc = documentMapping.get(documentID);
-		if (configuredDoc == null)
+		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
+		}
 
 		// FIXME check for authentication
 

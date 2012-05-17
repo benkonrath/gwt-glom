@@ -111,11 +111,13 @@ public class FlowTable extends Composite {
 
 			// Add space between the columns.
 			// Don't set the left padding on the first column.
-			if (i != 0)
+			if (i != 0) {
 				cellFormatter.getElement(0, i).getStyle().setPaddingLeft(0.5, Unit.PCT);
+			}
 			// Don't set the right padding on the last column.
-			if (i != columnCount - 1)
+			if (i != columnCount - 1) {
 				cellFormatter.getElement(0, i).getStyle().setPaddingRight(0.5, Unit.PCT);
+			}
 
 			// TODO The style name should be placed on the column FlexTable when I add it. - Ben
 			cellFormatter.addStyleName(0, i, "group-column");

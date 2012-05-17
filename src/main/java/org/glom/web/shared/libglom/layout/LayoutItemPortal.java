@@ -142,10 +142,11 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	 * @return
 	 */
 	public UsesRelationship getNavigationRelationshipSpecific() {
-		if (getNavigationType() == NavigationType.NAVIGATION_SPECIFIC)
+		if (getNavigationType() == NavigationType.NAVIGATION_SPECIFIC) {
 			return navigationRelationshipSpecific;
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**
@@ -182,8 +183,9 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	@Override
 	public String getTitleOriginal() {
 		String title = getTitleUsed("" /* parent table - not relevant */, "" /* locale */);
-		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+		if (StringUtils.isEmpty(title)) {
 			title = "Undefined Table";
+		}
 
 		return title;
 	}
@@ -191,8 +193,9 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	@Override
 	public String getTitle(final String locale) {
 		String title = getTitleUsed("" /* parent table - not relevant */, locale);
-		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+		if (StringUtils.isEmpty(title)) {
 			title = "Undefined Table";
+		}
 
 		return title;
 	}
@@ -200,11 +203,13 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	@Override
 	public String getTitleOrName(final String locale) {
 		String title = getTitleUsed("" /* parent table - not relevant */, locale);
-		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+		if (StringUtils.isEmpty(title)) {
 			title = getRelationshipNameUsed();
+		}
 
-		if (StringUtils.isEmpty(title)) // TODO: This prevents "" as a real title.
+		if (StringUtils.isEmpty(title)) {
 			title = "Undefined Table";
+		}
 
 		return title;
 	}

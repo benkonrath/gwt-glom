@@ -219,8 +219,9 @@ final class ConfiguredDocument {
 					"Connection Failed. Maybe the username or password is not correct.");
 			authenticated = false;
 		} finally {
-			if (conn != null)
+			if (conn != null) {
 				conn.close();
+			}
 			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
 		}
 		return authenticated;
@@ -301,11 +302,13 @@ final class ConfiguredDocument {
 			// Use java.util.Locale to get a title for the locale:
 			final String[] locale_parts = this_localeID.split("_");
 			String locale_lang = this_localeID;
-			if (locale_parts.length > 0)
+			if (locale_parts.length > 0) {
 				locale_lang = locale_parts[0];
+			}
 			String locale_country = "";
-			if (locale_parts.length > 1)
+			if (locale_parts.length > 1) {
 				locale_country = locale_parts[1];
+			}
 
 			final Locale locale = new Locale(locale_lang, locale_country);
 			final String title = locale.getDisplayName(locale);
@@ -337,9 +340,10 @@ final class ConfiguredDocument {
 		if (listViewLayoutGroupSize > 0) {
 			// A list layout group is defined.
 			// We use the first group as the list.
-			if (listViewLayoutGroupSize > 1)
+			if (listViewLayoutGroupSize > 1) {
 				Log.warn(documentID, tableName, "The size of the list layout group is greater than 1. "
 						+ "Attempting to use the first item for the layout list view.");
+			}
 
 			libglomLayoutGroup = layoutGroupVec.get(0);
 		} else {
@@ -394,8 +398,9 @@ final class ConfiguredDocument {
 			if (layoutItem instanceof LayoutItemField) {
 				LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 				final Field field = layoutItemField.getFullFieldDetails();
-				if ((field != null) && field.getPrimaryKey())
+				if ((field != null) && field.getPrimaryKey()) {
 					primaryKeyIndex = i;
+				}
 			}
 		}
 
@@ -747,8 +752,9 @@ final class ConfiguredDocument {
 		for (int i = 0; i < count; i++) {
 			final String name = names.get(i);
 			final Report report = document.getReport(tableName, name);
-			if (report == null)
+			if (report == null) {
 				continue;
+			}
 
 			final String title = report.getTitle(localeID);
 			result.addReport(name, title);

@@ -128,8 +128,9 @@ public class Utils {
 
 			// Prevent a null string from being used,
 			// in case the caller does not expect it.
-			if (localeID == null)
+			if (localeID == null) {
 				localeID = "";
+			}
 		}
 
 		return localeID;

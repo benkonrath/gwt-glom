@@ -367,9 +367,10 @@ public abstract class ListTable extends Composite {
 		navigationButtonColumn = new Column<DataItem[], String>(navigationButtonCell) {
 			@Override
 			public String getValue(final DataItem[] row) {
-				if (row.length == 1 && row[0] == null)
+				if (row.length == 1 && row[0] == null) {
 					// an empty row
 					return null;
+				}
 				return navigationButtonLabel;
 			}
 		};

@@ -68,8 +68,9 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 
 	@Override
 	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
-		if (StringUtils.isEmpty(documentID))
+		if (StringUtils.isEmpty(documentID)) {
 			goTo(new DocumentSelectionPlace());
+		}
 
 		// register this class as the presenter
 		reportView.setPresenter(this);

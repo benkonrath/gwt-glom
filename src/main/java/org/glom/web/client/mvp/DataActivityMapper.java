@@ -54,12 +54,15 @@ public class DataActivityMapper implements ActivityMapper {
 	 */
 	@Override
 	public Activity getActivity(Place place) {
-		if (place instanceof ListPlace)
+		if (place instanceof ListPlace) {
 			return new ListActivity((HasRecordsPlace) place, clientFactory);
-		if (place instanceof DetailsPlace)
+		}
+		if (place instanceof DetailsPlace) {
 			return new DetailsActivity((DetailsPlace) place, clientFactory);
-		if (place instanceof ReportPlace)
+		}
+		if (place instanceof ReportPlace) {
 			return new ReportActivity((ReportPlace) place, clientFactory);
+		}
 
 		return null;
 	}

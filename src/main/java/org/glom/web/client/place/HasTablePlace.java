@@ -102,8 +102,9 @@ public abstract class HasTablePlace extends Place {
 			for (Map.Entry<String, String> entry : params.entrySet()) {
 				final String key = entry.getKey();
 				final String value = entry.getValue();
-				if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value))
+				if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value)) {
 					continue;
+				}
 
 				if (token != "") {
 					token += separator;
