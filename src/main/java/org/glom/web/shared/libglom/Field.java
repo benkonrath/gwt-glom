@@ -12,7 +12,14 @@ public class Field extends Translatable {
 
 	private GlomFieldType glomFieldType; // TODO: = glom_field_type.TYPE_INVALID;
 	private boolean primaryKey = false;
-	private final boolean uniqueKey = false;
+
+	// TODO: Add a setter, and remove final.
+	/*
+	 * Don't make this final, because that breaks GWT serialization. See
+	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+	 */
+	private/* final */boolean uniqueKey = false;
+
 	Formatting formatting = new Formatting(); // Not null, so we have some default formatting.
 
 	/**

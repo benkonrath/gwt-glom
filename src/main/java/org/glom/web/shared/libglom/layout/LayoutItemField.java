@@ -10,9 +10,19 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	private static final long serialVersionUID = -7101706636312130106L;
 	private Field field;
-	private final UsesRelationship usesRel = new UsesRelationshipImpl();
+
+	/*
+	 * Don't make this final, because that breaks GWT compilation. See
+	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+	 */
+	private/* final */UsesRelationship usesRel = new UsesRelationshipImpl();
 	private boolean useDefaultFormatting = true;
-	private final CustomTitle customTitle = new CustomTitle();
+
+	/*
+	 * Don't make this final, because that breaks GWT serialization. See
+	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+	 */
+	private/* final */CustomTitle customTitle = new CustomTitle();
 
 	// Extras:
 	private String navigationTableName = null; // If any.

@@ -5,7 +5,12 @@ import org.glom.web.shared.libglom.Relationship;
 
 public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	private static final long serialVersionUID = 4952677991725269830L;
-	private final UsesRelationship usesRel = new UsesRelationshipImpl();
+
+	/*
+	 * Don't make this final, because that breaks GWT serialization. See
+	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+	 */
+	private/* final */UsesRelationship usesRel = new UsesRelationshipImpl();
 
 	public enum NavigationType {
 		NAVIGATION_NONE, NAVIGATION_AUTOMATIC, NAVIGATION_SPECIFIC

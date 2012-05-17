@@ -27,11 +27,13 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("serial")
 public class Reports implements Serializable {
-	// These should not be final, because that prevents them from being
-	// serializable, which breaks things. murrayc.
+	/*
+	 * Don't make these final, because that breaks GWT serialization. See
+	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+	 */
 	// TODO: Test that.
-	private final ArrayList<String> names = new ArrayList<String>();
-	private final ArrayList<String> titles = new ArrayList<String>();
+	private/* final */ArrayList<String> names = new ArrayList<String>();
+	private/* final */ArrayList<String> titles = new ArrayList<String>();
 
 	public Reports() {
 	}

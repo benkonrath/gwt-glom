@@ -36,7 +36,11 @@ public class LayoutGroup extends LayoutItem {
 		private static final long serialVersionUID = 8610424318876440333L;
 	};
 
-	private final LayoutItemList items = new LayoutItemList();
+	/*
+	 * Don't make this final, because that breaks GWT serialization. See
+	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
+	 */
+	private/* final */LayoutItemList items = new LayoutItemList();
 
 	/**
 	 * @return
