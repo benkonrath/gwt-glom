@@ -376,6 +376,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		return configuredDoc.getReports(tableName, localeID);
 	}
 
+	// TODO: It would be more efficient to get the extra related (or related related) column value along with the other
+	// values,
+	// instead of doing a separate SQL query to get it now for a specific row.
 	/*
 	 * (non-Javadoc)
 	 * 
