@@ -675,7 +675,7 @@ final class ConfiguredDocument {
 		}
 
 		if (item instanceof Translatable) {
-			final Translatable translatable = (Translatable) item;
+			final Translatable translatable = item;
 			translatable.makeTitleOriginal(localeID);
 		}
 	}

@@ -20,9 +20,7 @@
 package org.glom.web.client.place;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.glom.web.client.StringUtils;
 
@@ -67,8 +65,8 @@ public abstract class HasTablePlace extends Place {
 		protected HashMap<String, String> getTokenParams(final String historyToken) {
 			final String[] arStr = historyToken.substring(0, historyToken.length()).split(separator);
 			final HashMap<String, String> params = new HashMap<String, String>();
-			for (int i = 0; i < arStr.length; i++) {
-				final String[] substr = arStr[i].split(equals);
+			for (String element : arStr) {
+				final String[] substr = element.split(equals);
 				if (substr.length != 2) {
 					continue;
 				}
@@ -101,8 +99,7 @@ public abstract class HasTablePlace extends Place {
 		 */
 		protected String buildParamsToken(final HashMap<String, String> params) {
 			String token = "";
-			for (final Iterator<Entry<String, String>> it = params.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry<String, String> entry = it.next();
+			for (Map.Entry<String, String> entry : params.entrySet()) {
 				final String key = entry.getKey();
 				final String value = entry.getValue();
 				if (StringUtils.isEmpty(key) || StringUtils.isEmpty(value))
