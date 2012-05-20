@@ -21,8 +21,11 @@ package org.glom.web.server.libglom;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
@@ -40,8 +43,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.CustomTitle;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.Report;
@@ -73,8 +78,8 @@ public class Document {
 
 	@SuppressWarnings("serial")
 	private static class TableInfo extends Translatable {
-		public boolean isDefault;
-		public boolean isHidden;
+		private boolean isDefault;
+		private boolean isHidden;
 
 		private final Hashtable<String, Field> fieldsMap = new Hashtable<String, Field>();
 		private final Hashtable<String, Relationship> relationshipsMap = new Hashtable<String, Relationship>();
@@ -82,6 +87,8 @@ public class Document {
 
 		private List<LayoutGroup> layoutGroupsList = new ArrayList<LayoutGroup>();
 		private List<LayoutGroup> layoutGroupsDetails = new ArrayList<LayoutGroup>();
+
+		private List<List<DataItem>> exampleRows = null;
 	}
 
 	private String fileURI = "";
@@ -118,6 +125,10 @@ public class Document {
 	private static final String NODE_REPORT = "report";
 	private static final String NODE_FIELDS = "fields";
 	private static final String NODE_FIELD = "field";
+	private static final String NODE_EXAMPLE_ROWS = "example_rows";
+	private static final String NODE_EXAMPLE_ROW = "example_row";
+	private static final String NODE_VALUE = "value";
+	private static final String ATTRIBUTE_COLUMN = "column";
 	private static final String ATTRIBUTE_PRIMARY_KEY = "primary_key";
 	private static final String ATTRIBUTE_FIELD_TYPE = "type";
 	private static final String NODE_FORMATTING = "formatting";
@@ -152,6 +163,7 @@ public class Document {
 	private static final String ATTRIBUTE_USE_DEFAULT_FORMATTING = "use_default_formatting";
 	private static final String LAYOUT_NAME_DETAILS = "details";
 	private static final String LAYOUT_NAME_LIST = "list";
+	private static final String QUOTE_FOR_FILE_FORMAT = "\"";
 
 	public void setFileURI(final String fileURI) {
 		this.fileURI = fileURI;
@@ -215,7 +227,7 @@ public class Document {
 
 			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
 			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
-			connectionPort = getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
+			connectionPort = (int) getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
 		}
 
 		// We first load the fields, relationships, etc,
@@ -284,20 +296,23 @@ public class Document {
 		node.setAttribute(attributeName, str);
 	}
 
-	private int getAttributeAsDecimal(final Element node, final String attributeName) {
+	private double getAttributeAsDecimal(final Element node, final String attributeName) {
 		final String str = node.getAttribute(attributeName);
 		if (StringUtils.isEmpty(str)) {
 			return 0;
 		}
 
-		return Integer.valueOf(str);
+		return Double.valueOf(str);
 	}
 
-	private void setAttributeAsDecimal(Element node, String attributeName, int value) {
+	private String getStringForDecimal(double value) {
 		final NumberFormat format = NumberFormat.getInstance(Locale.US);
 		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
-		final String str = format.format(value);
-		node.setAttribute(attributeName, str);
+		return format.format(value);
+	}
+
+	private void setAttributeAsDecimal(final Element node, final String attributeName, double value) {
+		node.setAttribute(attributeName, getStringForDecimal(value));
 	}
 
 	/**
@@ -406,7 +421,137 @@ public class Document {
 			}
 		}
 
+		final Element exampleRowsNode = getElementByName(tableNode, NODE_EXAMPLE_ROWS);
+		if (exampleRowsNode != null) {
+
+			List<List<DataItem>> exampleRows = new ArrayList<List<DataItem>>();
+			final List<Node> listNodes = getChildrenByTagName(exampleRowsNode, NODE_EXAMPLE_ROW);
+			for (final Node node : listNodes) {
+				if (!(node instanceof Element)) {
+					continue;
+				}
+
+				final Element element = (Element) node;
+				final List<DataItem> row = new ArrayList<DataItem>();
+
+				final List<Node> listNodesValues = getChildrenByTagName(element, NODE_VALUE);
+				for (final Node nodeValue : listNodesValues) {
+					if (!(nodeValue instanceof Element)) {
+						continue;
+					}
+
+					final Element elementValue = (Element) nodeValue;
+					final String fieldName = elementValue.getAttribute(ATTRIBUTE_COLUMN);
+					if (StringUtils.isEmpty(fieldName)) {
+						continue;
+					}
+
+					DataItem value = null;
+					final Field field = info.fieldsMap.get(fieldName);
+					if (field != null) {
+						value = getNodeTextChildAsValue(elementValue, field.getGlomType());
+					}
+					row.add(value);
+				}
+
+				exampleRows.add(row);
+			}
+
+			info.exampleRows = exampleRows;
+		}
+
 		return info;
+	}
+
+	/**
+	 * @param elementValue
+	 * @param glomType
+	 * @return
+	 */
+	private DataItem getNodeTextChildAsValue(final Element element, GlomFieldType type) {
+		final DataItem result = new DataItem();
+
+		final String str = element.getTextContent();
+
+		// Unescape "" to ", because to_file_format() escaped ", as specified by the CSV RFC:
+		String unescaped = "";
+		if (type == GlomFieldType.TYPE_IMAGE) {
+			unescaped = str; // binary data does not have quote characters so we do not bother to escape or unescape it.
+		} else {
+			unescaped = str.replace(QUOTE_FOR_FILE_FORMAT + QUOTE_FOR_FILE_FORMAT, QUOTE_FOR_FILE_FORMAT);
+		}
+
+		switch (type) {
+		case TYPE_BOOLEAN: {
+			final boolean value = (unescaped == "true");
+			result.setBoolean(value);
+			break;
+		}
+		case TYPE_DATE: {
+			final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
+			Date value = null;
+			try {
+				value = dateFormat.parse(unescaped);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			result.setDate(value);
+			break;
+		}
+		case TYPE_IMAGE: {
+			final byte[] value = null; // TODO.
+			result.setImage(value);
+			break;
+		}
+		case TYPE_NUMERIC: {
+			final double value = Double.valueOf(unescaped);
+			result.setNumber(value);
+			break;
+		}
+		case TYPE_TEXT:
+			result.setText(unescaped);
+			break;
+		case TYPE_TIME:
+			// TODO
+			break;
+		}
+
+		return result;
+	}
+
+	private void setNodeTextChildAsValue(final Element element, final DataItem value, GlomFieldType type) {
+		String str = "";
+
+		switch (type) {
+		case TYPE_BOOLEAN: {
+			str = value.getBoolean() ? "true" : "false";
+			break;
+		}
+		case TYPE_DATE: {
+			// TODO: This is not really the format used by the Glom document:
+			final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
+			str = dateFormat.format(value.getDate());
+			break;
+		}
+		case TYPE_IMAGE: {
+			str = ""; // TODO
+			break;
+		}
+		case TYPE_NUMERIC: {
+			str = getStringForDecimal(value.getNumber());
+			break;
+		}
+		case TYPE_TEXT:
+			str = value.getText();
+			break;
+		case TYPE_TIME:
+			str = ""; // TODO
+			break;
+		}
+
+		final String escaped = str.replace(QUOTE_FOR_FILE_FORMAT, QUOTE_FOR_FILE_FORMAT + QUOTE_FOR_FILE_FORMAT);
+		element.setTextContent(escaped);
 	}
 
 	private void saveTableNodeBasic(org.w3c.dom.Document doc, final Element tableNode, final TableInfo info) {
@@ -429,6 +574,26 @@ public class Document {
 		for (Field field : info.fieldsMap.values()) {
 			final Element element = createElement(doc, fieldsNode, NODE_FIELD);
 			saveField(doc, element, field);
+		}
+
+		final Element exampleRowsNode = createElement(doc, tableNode, NODE_EXAMPLE_ROWS);
+
+		for (final List<DataItem> row : info.exampleRows) {
+			final Element node = createElement(doc, exampleRowsNode, NODE_EXAMPLE_ROW);
+
+			// TODO: This assumes that fieldsMap.values() will have the same sequence as the values,
+			int i = 0;
+			for (final Field field : info.fieldsMap.values()) {
+				if (i < row.size()) {
+					break;
+				}
+
+				final Element elementValue = createElement(doc, node, NODE_VALUE);
+				elementValue.setAttribute(ATTRIBUTE_COLUMN, field.getName());
+
+				final DataItem dataItem = row.get(i);
+				setNodeTextChildAsValue(elementValue, dataItem, field.getGlomType());
+			}
 		}
 	}
 
@@ -659,7 +824,7 @@ public class Document {
 		loadTitle(nodeGroup, group);
 
 		// Read the column count:
-		int columnCount = getAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT);
+		int columnCount = (int) getAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT);
 		if (columnCount < 1) {
 			columnCount = 1; // 0 is a useless default.
 		}
@@ -840,7 +1005,8 @@ public class Document {
 		if (numericFormatting != null) {
 			numericFormatting.setUseThousandsSeparator(getAttributeAsBoolean(elementFormatting,
 					ATTRIBUTE_USE_THOUSANDS_SEPARATOR));
-			numericFormatting.setDecimalPlaces(getAttributeAsDecimal(elementFormatting, ATTRIBUTE_DECIMAL_PLACES));
+			numericFormatting
+					.setDecimalPlaces((int) getAttributeAsDecimal(elementFormatting, ATTRIBUTE_DECIMAL_PLACES));
 		}
 
 	}
@@ -901,8 +1067,12 @@ public class Document {
 		return connectionServer;
 	}
 
-	public long getConnectionPort() {
+	public int getConnectionPort() {
 		return connectionPort;
+	}
+
+	public void setConnectionPort(int port) {
+		connectionPort = port;
 	}
 
 	public String getConnectionDatabase() {
@@ -930,6 +1100,15 @@ public class Document {
 		}
 
 		return info.getTitle(locale);
+	}
+
+	public List<List<DataItem>> getExampleRows(final String tableName) {
+		final TableInfo info = getTableInfo(tableName);
+		if (info == null) {
+			return null;
+		}
+
+		return info.exampleRows;
 	}
 
 	public String getDefaultTable() {
@@ -1347,7 +1526,6 @@ public class Document {
 		try {
 			Files.createParentDirs(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}

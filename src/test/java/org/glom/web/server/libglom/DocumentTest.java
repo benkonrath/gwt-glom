@@ -21,6 +21,7 @@ package org.glom.web.server.libglom;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Relationship;
@@ -161,6 +163,15 @@ public class DocumentTest {
 
 		// TODO: The sequence is not important. It's only important that they are all there.
 		assertThat(titles, is("Song ID, Album ID, Name, Comments"));
+	}
+
+	@Test
+	public void testReadTableExampleRows() {
+		List<List<DataItem>> exampleRows = document.getExampleRows("albums");
+		assertFalse(exampleRows.isEmpty());
+
+		List<DataItem> row = exampleRows.get(0);
+		assertFalse(row.isEmpty());
 	}
 
 	@Test

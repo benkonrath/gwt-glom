@@ -20,6 +20,7 @@
 package org.glom.web.shared;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * This Data Transfer Object (DTO) is used to send a data item between the client and the server.
@@ -31,6 +32,10 @@ public class DataItem implements Serializable {
 	private String text;
 	private boolean bool;
 	private double number;
+	private Date date;
+	private byte[] image;
+
+	// TODO: Time
 
 	public DataItem() {
 	}
@@ -57,6 +62,22 @@ public class DataItem implements Serializable {
 
 	public void setNumber(final double number) {
 		this.number = number;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(final Date date) {
+		this.date = date;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(final byte[] image) {
+		this.image = image;
 	}
 
 }

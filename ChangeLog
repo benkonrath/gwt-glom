@@ -1,5 +1,17 @@
 2012-05-20  Murray Cumming  <murrayc@murrayc.com>
 
+	Document: load(), save(): Handle the example rows.
+
+	* src/main/java/org/glom/web/shared/DataItem.java: Add get/setDate() 
+	and get/setImage().
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	load(), save(): Load and save the example rows, though the date, time
+	and image types are not handled properly yet.
+	* src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+	Add testReadTableExampleRows() just to check that something is read.
+
+2012-05-20  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: Add save().
 
 	* src/main/java/org/glom/web/shared/libglom/Translatable.java:
