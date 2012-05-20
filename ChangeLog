@@ -1,3 +1,17 @@
+2012-05-20  Murray Cumming  <murrayc@murrayc.com>
+
+	Document: Add save().
+
+	* src/main/java/org/glom/web/shared/libglom/Translatable.java:
+	Added getTranslationsMap() for use while saving.
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemField.java:
+	Adedd getUseDefaultFormatting() for use while saving.
+	* src/main/java/org/glom/web/server/libglom/Document.java: Added save()
+	and several private methods that it uses.
+
+	This will be useful while testing via self-hosting.
+	It is not complete, but should be complete enough for testing.
+
 2012-05-17  Murray Cumming  <murrayc@murrayc.com>
 
 	OnlineGlomService: Simplify the getList/RelatedViewData() methods.

@@ -193,6 +193,13 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 		this.useDefaultFormatting = useDefaultFormatting;
 	}
 
+	/**
+	 * @return
+	 */
+	public boolean getUseDefaultFormatting() {
+		return useDefaultFormatting;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -286,4 +293,5 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	public String getTitleUsed(final String parentTableTitle, final String locale) {
 		return usesRel.getTitleUsed(parentTableTitle, locale);
 	}
+
 }

@@ -19,14 +19,25 @@
 
 package org.glom.web.server.libglom;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.shared.libglom.CustomTitle;
@@ -51,6 +62,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import com.google.common.io.Files;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
@@ -77,13 +90,18 @@ public class Document {
 	private final Translatable databaseTitle = new Translatable();
 	private String translationOriginalLocale = "";
 	private final List<String> translationAvailableLocales = new ArrayList<String>();
+	private boolean isExample = false;
+	private HostingMode hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
 	private String connectionServer = "";
 	private String connectionDatabase = "";
 	private int connectionPort = 0;
 	private final Hashtable<String, TableInfo> tablesMap = new Hashtable<String, TableInfo>();
 
+	private static final String NODE_ROOT = "glom_document";
+	private static final String ATTRIBUTE_IS_EXAMPLE = "is_example";
 	private static final String ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE = "translation_original_locale";
 	private static final String NODE_CONNECTION = "connection";
+	private static final String ATTRIBUTE_CONNECTION_HOSTING_MODE = "hosting_mode";
 	private static final String ATTRIBUTE_CONNECTION_SERVER = "server";
 	private static final String ATTRIBUTE_CONNECTION_DATABASE = "database";
 	private static final String ATTRIBUTE_CONNECTION_PORT = "port";
@@ -150,7 +168,7 @@ public class Document {
 
 	public boolean load() {
 		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder;
+		DocumentBuilder documentBuilder = null;
 		try {
 			documentBuilder = dbf.newDocumentBuilder();
 		} catch (final ParserConfigurationException e) {
@@ -172,7 +190,7 @@ public class Document {
 		}
 
 		final Element rootNode = xmlDocument.getDocumentElement();
-		if (rootNode.getNodeName() != "glom_document") {
+		if (rootNode.getNodeName() != NODE_ROOT) {
 			Log.error("Unexpected XML root node name found: " + rootNode.getNodeName());
 			return false;
 		}
@@ -182,8 +200,19 @@ public class Document {
 		translationOriginalLocale = rootNode.getAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE);
 		translationAvailableLocales.add(translationOriginalLocale); // Just a cache.
 
+		isExample = getAttributeAsBoolean(rootNode, ATTRIBUTE_IS_EXAMPLE);
+
 		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if (nodeConnection != null) {
+			final String strHostingMode = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_HOSTING_MODE);
+			if (strHostingMode == "postgres_central") {
+				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
+			} else if (strHostingMode == "sqlite") {
+				hostingMode = HostingMode.HOSTING_MODE_SQLITE;
+			} else {
+				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
+			}
+
 			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
 			connectionDatabase = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_DATABASE);
 			connectionPort = getAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT);
@@ -250,11 +279,11 @@ public class Document {
 		return str.equals("true");
 	}
 
-	/**
-	 * @param elementFormatting
-	 * @param aTTRIBUTE_DECIMAL_PLACES2
-	 * @return
-	 */
+	private void setAttributeAsBoolean(final Element node, final String attributeName, boolean value) {
+		final String str = value ? "true" : "false";
+		node.setAttribute(attributeName, str);
+	}
+
 	private int getAttributeAsDecimal(final Element node, final String attributeName) {
 		final String str = node.getAttribute(attributeName);
 		if (StringUtils.isEmpty(str)) {
@@ -262,6 +291,13 @@ public class Document {
 		}
 
 		return Integer.valueOf(str);
+	}
+
+	private void setAttributeAsDecimal(Element node, String attributeName, int value) {
+		final NumberFormat format = NumberFormat.getInstance(Locale.US);
+		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
+		final String str = format.format(value);
+		node.setAttribute(attributeName, str);
 	}
 
 	/**
@@ -303,6 +339,21 @@ public class Document {
 					translationAvailableLocales.add(locale);
 				}
 			}
+		}
+	}
+
+	private void saveTitle(org.w3c.dom.Document doc, Element node, final Translatable title) {
+		node.setAttribute(ATTRIBUTE_NAME, title.getName());
+
+		node.setAttribute(ATTRIBUTE_TITLE, title.getTitleOriginal());
+
+		final Element nodeSet = createElement(doc, node, NODE_TRANSLATIONS_SET);
+
+		for (Entry<String, String> entry : title.getTranslationsMap().entrySet()) {
+			final Element element = createElement(doc, nodeSet, NODE_TRANSLATIONS);
+
+			element.setAttribute(ATTRIBUTE_TRANSLATION_LOCALE, entry.getKey());
+			element.setAttribute(ATTRIBUTE_TRANSLATION_TITLE, entry.getValue());
 		}
 	}
 
@@ -358,6 +409,84 @@ public class Document {
 		return info;
 	}
 
+	private void saveTableNodeBasic(org.w3c.dom.Document doc, final Element tableNode, final TableInfo info) {
+		saveTitle(doc, tableNode, info);
+
+		setAttributeAsBoolean(tableNode, ATTRIBUTE_DEFAULT, info.isDefault);
+		setAttributeAsBoolean(tableNode, ATTRIBUTE_HIDDEN, info.isHidden);
+
+		final Element relationshipsNode = createElement(doc, tableNode, NODE_RELATIONSHIPS);
+		for (Relationship relationship : info.relationshipsMap.values()) {
+			final Element element = createElement(doc, relationshipsNode, NODE_RELATIONSHIP);
+			saveTitle(doc, element, relationship);
+
+			element.setAttribute(ATTRIBUTE_RELATIONSHIP_FROM_FIELD, relationship.getFromField());
+			element.setAttribute(ATTRIBUTE_RELATIONSHIP_TO_TABLE, relationship.getToTable());
+			element.setAttribute(ATTRIBUTE_RELATIONSHIP_TO_FIELD, relationship.getToField());
+		}
+
+		final Element fieldsNode = createElement(doc, tableNode, NODE_FIELDS);
+		for (Field field : info.fieldsMap.values()) {
+			final Element element = createElement(doc, fieldsNode, NODE_FIELD);
+			saveField(doc, element, field);
+		}
+	}
+
+	/**
+	 * @param doc
+	 * @param element
+	 * @param field
+	 */
+	private void saveField(org.w3c.dom.Document doc, Element element, Field field) {
+		saveTitle(doc, element, field);
+
+		String fieldTypeStr = "";
+
+		switch (field.getGlomType()) {
+		case TYPE_BOOLEAN:
+			fieldTypeStr = "Boolean";
+			break;
+		case TYPE_DATE:
+			fieldTypeStr = "Date";
+			break;
+		case TYPE_IMAGE:
+			fieldTypeStr = "Image";
+			break;
+		case TYPE_NUMERIC:
+			fieldTypeStr = "Number";
+			break;
+		case TYPE_TEXT:
+			fieldTypeStr = "Text";
+			break;
+		case TYPE_TIME:
+			fieldTypeStr = "Time";
+			break;
+		default:
+			break;
+		}
+		element.setAttribute(ATTRIBUTE_FIELD_TYPE, fieldTypeStr);
+
+		setAttributeAsBoolean(element, ATTRIBUTE_PRIMARY_KEY, field.getPrimaryKey());
+
+		final Element elementFormatting = createElement(doc, element, NODE_FORMATTING);
+		saveFormatting(elementFormatting, field.getFormatting());
+	}
+
+	/**
+	 * @param elementFormatting
+	 * @param formatting
+	 */
+	private void saveFormatting(Element element, Formatting formatting) {
+		// formatting.setTextFormatMultiline(getAttributeAsBoolean(elementFormatting, ATTRIBUTE_TEXT_FORMAT_MULTILINE));
+
+		final NumericFormat numericFormatting = formatting.getNumericFormat();
+		if (numericFormatting != null) {
+			setAttributeAsBoolean(element, ATTRIBUTE_USE_THOUSANDS_SEPARATOR,
+					numericFormatting.getUseThousandsSeparator());
+			setAttributeAsDecimal(element, ATTRIBUTE_DECIMAL_PLACES, numericFormatting.getDecimalPlaces());
+		}
+	}
+
 	/**
 	 * @param tableNode
 	 * @param info
@@ -374,7 +503,7 @@ public class Document {
 				}
 
 				final Element element = (Element) node;
-				final String name = element.getAttribute("name");
+				final String name = element.getAttribute(ATTRIBUTE_NAME);
 				final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName);
 				if (name.equals(LAYOUT_NAME_DETAILS)) {
 					info.layoutGroupsDetails = listLayoutGroups;
@@ -685,7 +814,6 @@ public class Document {
 		field.setGlomFieldType(fieldType);
 
 		field.setPrimaryKey(getAttributeAsBoolean(element, ATTRIBUTE_PRIMARY_KEY));
-		loadTitle(element, field);
 
 		final Element elementFormatting = getElementByName(element, NODE_FORMATTING);
 		if (elementFormatting != null) {
@@ -759,7 +887,14 @@ public class Document {
 	}
 
 	public Document.HostingMode getHostingMode() {
-		return HostingMode.HOSTING_MODE_POSTGRES_CENTRAL; // TODO
+		return hostingMode;
+	}
+
+	/**
+	 * @param hostingMode
+	 */
+	public void setHostingMode(HostingMode hostingMode) {
+		this.hostingMode = hostingMode;
 	}
 
 	public String getConnectionServer() {
@@ -1134,5 +1269,330 @@ public class Document {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param isExample
+	 */
+	public void setIsExampleFile(boolean isExample) {
+		this.isExample = isExample;
+	}
+
+	/**
+	 */
+	public boolean getIsExampleFile() {
+		return isExample;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean save() {
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder documentBuilder = null;
+		try {
+			documentBuilder = dbf.newDocumentBuilder();
+		} catch (final ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+		final org.w3c.dom.Document doc = documentBuilder.newDocument();
+		final Element rootNode = doc.createElement(NODE_ROOT);
+		doc.appendChild(rootNode);
+
+		rootNode.setAttribute(ATTRIBUTE_TITLE, databaseTitle.getTitleOriginal());
+		rootNode.setAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE, translationOriginalLocale);
+		setAttributeAsBoolean(rootNode, ATTRIBUTE_IS_EXAMPLE, isExample);
+
+		String strHostingMode = "";
+		if (hostingMode == HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
+			strHostingMode = "postgres_central";
+		} else if (hostingMode == HostingMode.HOSTING_MODE_SQLITE) {
+			strHostingMode = "sqlite";
+		} else {
+			strHostingMode = "postgres_self";
+		}
+		final Element nodeConnection = createElement(doc, rootNode, NODE_CONNECTION);
+		nodeConnection.setAttribute(ATTRIBUTE_CONNECTION_HOSTING_MODE, strHostingMode);
+		nodeConnection.setAttribute(ATTRIBUTE_CONNECTION_SERVER, connectionServer);
+		nodeConnection.setAttribute(ATTRIBUTE_CONNECTION_DATABASE, connectionDatabase);
+		setAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT, connectionPort);
+
+		// for all tables:
+		for (TableInfo table : tablesMap.values()) {
+			final Element nodeTable = createElement(doc, rootNode, NODE_TABLE);
+			saveTableNodeBasic(doc, nodeTable, table);
+			saveTableLayouts(doc, nodeTable, table);
+		}
+
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer;
+		try {
+			transformer = transformerFactory.newTransformer();
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+		// TODO: This probably distorts text nodes,
+		// so careful when we load/save them. For instance, scripts.
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+		// Make sure that the parent directory exists:
+		final File file = new File(fileURI);
+		try {
+			Files.createParentDirs(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(file);
+
+		// Output to console for testing
+		// StreamResult result = new StreamResult(System.out);
+
+		try {
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param doc
+	 * @param nodeTable
+	 * @param table
+	 */
+	private void saveTableLayouts(org.w3c.dom.Document doc, Element tableNode, TableInfo table) {
+
+		final Element layoutsNode = createElement(doc, tableNode, NODE_DATA_LAYOUTS);
+
+		final Element nodeLayoutDetails = createElement(doc, layoutsNode, NODE_DATA_LAYOUT);
+		nodeLayoutDetails.setAttribute(ATTRIBUTE_NAME, LAYOUT_NAME_DETAILS);
+		saveLayoutNode(doc, nodeLayoutDetails, table.layoutGroupsDetails);
+
+		final Element nodeLayoutList = createElement(doc, layoutsNode, NODE_DATA_LAYOUT);
+		nodeLayoutList.setAttribute(ATTRIBUTE_NAME, LAYOUT_NAME_LIST);
+		saveLayoutNode(doc, nodeLayoutList, table.layoutGroupsList);
+
+		final Element reportsNode = createElement(doc, tableNode, NODE_REPORTS);
+		for (Report report : table.reportsMap.values()) {
+			final Element element = createElement(doc, reportsNode, NODE_REPORT);
+			saveReport(doc, element, report);
+		}
+
+	}
+
+	/**
+	 * @param doc
+	 * @param element
+	 * @param report
+	 */
+	private void saveReport(final org.w3c.dom.Document doc, final Element element, final Report report) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void saveLayoutNode(final org.w3c.dom.Document doc, Element element, final List<LayoutGroup> layoutGroups) {
+		final Element elementGroups = createElement(doc, element, NODE_DATA_LAYOUT_GROUPS);
+
+		for (final LayoutGroup layoutGroup : layoutGroups) {
+			if (layoutGroup instanceof LayoutItemNotebook) {
+				final Element elementGroup = createElement(doc, elementGroups, NODE_DATA_LAYOUT_NOTEBOOK);
+				saveDataLayoutGroup(doc, elementGroup, layoutGroup);
+			} else if (layoutGroup instanceof LayoutItemPortal) {
+				final Element elementGroup = createElement(doc, elementGroups, NODE_DATA_LAYOUT_PORTAL);
+				saveDataLayoutPortal(doc, elementGroup, (LayoutItemPortal) layoutGroup);
+			} else {
+				final Element elementGroup = createElement(doc, elementGroups, NODE_DATA_LAYOUT_GROUP);
+				saveDataLayoutGroup(doc, elementGroup, layoutGroup);
+			}
+		}
+
+	}
+
+	/**
+	 * @param doc
+	 * @param elementGroup
+	 * @param layoutGroup
+	 */
+	private void saveDataLayoutPortal(final org.w3c.dom.Document doc, final Element element,
+			final LayoutItemPortal portal) {
+		saveUsesRelationship(element, portal);
+		saveDataLayoutGroup(doc, element, portal);
+
+		final Element elementNavigation = createElement(doc, element, NODE_DATA_LAYOUT_PORTAL_NAVIGATIONRELATIONSHIP);
+		String navigationTypeAsString = "";
+		switch (portal.getNavigationType()) {
+		case NAVIGATION_AUTOMATIC:
+			navigationTypeAsString = ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC;
+			break;
+		case NAVIGATION_NONE:
+			navigationTypeAsString = ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE;
+			break;
+		case NAVIGATION_SPECIFIC:
+			navigationTypeAsString = ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC;
+			break;
+		default:
+			break;
+		}
+		elementNavigation.setAttribute(ATTRIBUTE_PORTAL_NAVIGATION_TYPE, navigationTypeAsString);
+
+		if (navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC) {
+			// Write the specified relationship name:
+			saveUsesRelationship(elementNavigation, portal.getNavigationRelationshipSpecific());
+		}
+	}
+
+	/**
+	 * @param doc
+	 * @param elementGroup
+	 * @param layoutGroup
+	 */
+	private void saveDataLayoutGroup(final org.w3c.dom.Document doc, final Element nodeGroup, final LayoutGroup group) {
+		saveTitle(doc, nodeGroup, group);
+
+		// Write the column count:
+		setAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT, group.getColumnCount());
+
+		// Write the child items:
+		for (LayoutItem layoutItem : group.getItems()) {
+			if (layoutItem instanceof LayoutItemPortal) {
+				final Element element = createElement(doc, nodeGroup, NODE_DATA_LAYOUT_PORTAL);
+				saveDataLayoutPortal(doc, element, (LayoutItemPortal) layoutItem);
+			} else if (layoutItem instanceof LayoutItemNotebook) {
+				final Element element = createElement(doc, nodeGroup, NODE_DATA_LAYOUT_NOTEBOOK);
+				saveDataLayoutGroup(doc, element, (LayoutItemNotebook) layoutItem);
+			} else if (layoutItem instanceof LayoutGroup) {
+				final Element element = createElement(doc, nodeGroup, NODE_DATA_LAYOUT_GROUP);
+				saveDataLayoutGroup(doc, element, (LayoutGroup) layoutItem);
+			} else if (layoutItem instanceof LayoutItemField) {
+				final Element element = createElement(doc, nodeGroup, NODE_DATA_LAYOUT_ITEM);
+				saveDataLayoutItemField(doc, element, (LayoutItemField) layoutItem);
+			} else if (layoutItem instanceof LayoutItemGroupBy) {
+				final Element element = createElement(doc, nodeGroup, NODE_DATA_LAYOUT_ITEM_GROUPBY);
+				saveDataLayoutItemGroupBy(doc, element, (LayoutItemGroupBy) layoutItem);
+			}
+		}
+	}
+
+	/**
+	 * @param doc
+	 * @param element
+	 * @param layoutItem
+	 */
+	private void saveDataLayoutItemGroupBy(org.w3c.dom.Document doc, Element element, LayoutItemGroupBy item) {
+		saveDataLayoutGroup(doc, element, item);
+
+		final Element elementGroupBy = createElement(doc, element, NODE_GROUPBY);
+		saveDataLayoutItemField(doc, elementGroupBy, item.getFieldGroupBy());
+
+		final Element elementSecondaryFields = createElement(doc, element, NODE_SECONDARY_FIELDS);
+		final Element elementLayoutGroup = createElement(doc, elementSecondaryFields, NODE_DATA_LAYOUT_GROUP);
+		saveDataLayoutGroup(doc, elementLayoutGroup, item.getSecondaryFields());
+	}
+
+	/**
+	 * @param doc
+	 * @param element
+	 * @param layoutItem
+	 */
+	private void saveDataLayoutItemField(final org.w3c.dom.Document doc, final Element element,
+			final LayoutItemField item) {
+		element.setAttribute(ATTRIBUTE_NAME, item.getName());
+		saveUsesRelationship(element, item);
+
+		final CustomTitle customTitle = item.getCustomTitle();
+		if (customTitle != null) {
+			final Element elementCustomTitle = createElement(doc, element, NODE_CUSTOM_TITLE);
+			setAttributeAsBoolean(elementCustomTitle, ATTRIBUTE_CUSTOM_TITLE_USE_CUSTOM,
+					customTitle.getUseCustomTitle());
+			saveTitle(doc, elementCustomTitle, customTitle); // LayoutItemField doesn't use its own title member.
+		}
+
+		setAttributeAsBoolean(element, ATTRIBUTE_USE_DEFAULT_FORMATTING, item.getUseDefaultFormatting());
+
+		final Element elementFormatting = createElement(doc, element, NODE_FORMATTING);
+		saveFormatting(elementFormatting, item.getFormatting());
+	}
+
+	/**
+	 * @param element
+	 * @param item
+	 */
+	private void saveUsesRelationship(Element element, UsesRelationship item) {
+		final Relationship relationship = item.getRelationship();
+		if (relationship != null) {
+			element.setAttribute(ATTRIBUTE_RELATIONSHIP_NAME, relationship.getName());
+		}
+
+		final Relationship relatedRelationship = item.getRelatedRelationship();
+		if (relatedRelationship != null) {
+			element.setAttribute(ATTRIBUTE_RELATED_RELATIONSHIP_NAME, relatedRelationship.getName());
+		}
+	}
+
+	/**
+	 * @param rootNode
+	 * @param nodeConnection
+	 * @return
+	 */
+	private Element createElement(final org.w3c.dom.Document doc, final Element parentNode, final String name) {
+		Element node = doc.createElement(name);
+		parentNode.appendChild(node);
+		return node;
+	}
+
+	public String getSelfHostedDirectoryPath() {
+		final String uriFile = getFileURI();
+		if (!StringUtils.isEmpty(uriFile)) {
+			final File file = new File(uriFile);
+			final File parent = file.getParentFile();
+			if (parent == null) {
+				// TODO: Warn.
+				return "";
+			}
+
+			File dataDir = null;
+			switch (hostingMode) {
+			case HOSTING_MODE_POSTGRES_SELF:
+				dataDir = new File(parent, "glom_postgres_data");
+				break;
+			case HOSTING_MODE_POSTGRES_CENTRAL:
+				dataDir = parent;
+				break;
+			case HOSTING_MODE_SQLITE:
+				dataDir = parent;
+				break;
+			default:
+				// TODO: Warn.
+				break;
+			}
+
+			if (dataDir != null) {
+				return dataDir.getPath();
+			}
+		}
+
+		// TODO: std::cerr << G_STRFUNC << ": returning empty string." << std::endl;
+		return "";
+	}
+
+	/**
+	 */
+	public void setConnectionDatabase(String databaseName) {
+		connectionDatabase = databaseName;
+
 	}
 }
