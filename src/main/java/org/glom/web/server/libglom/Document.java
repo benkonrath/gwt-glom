@@ -302,7 +302,14 @@ public class Document {
 			return 0;
 		}
 
-		return Double.valueOf(str);
+		double value = 0;
+		try {
+			value = Double.valueOf(str);
+		} catch (NumberFormatException e) {
+			// e.printStackTrace();
+		}
+
+		return value;
 	}
 
 	private String getStringForDecimal(double value) {
@@ -493,8 +500,7 @@ public class Document {
 			try {
 				value = dateFormat.parse(unescaped);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 			result.setDate(value);
 			break;
@@ -505,7 +511,13 @@ public class Document {
 			break;
 		}
 		case TYPE_NUMERIC: {
-			final double value = Double.valueOf(unescaped);
+			double value = 0;
+			try {
+				value = Double.valueOf(unescaped);
+			} catch (NumberFormatException e) {
+				// e.printStackTrace();
+			}
+
 			result.setNumber(value);
 			break;
 		}

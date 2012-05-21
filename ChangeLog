@@ -1,3 +1,11 @@
+2012-05-21  Murray Cumming  <murrayc@murrayc.com>
+
+	Document: loading example data: Handle exceptions.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	DateFormat.parse() and Double.valueOf() can throw exceptions, though
+	Eclipse did not warn about that.
+
 2012-05-20  Murray Cumming  <murrayc@murrayc.com>
 
 	Document: load(), save(): Handle the example rows.
