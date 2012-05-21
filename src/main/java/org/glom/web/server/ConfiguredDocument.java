@@ -173,11 +173,24 @@ final class ConfiguredDocument {
 	ConfiguredDocument(final Document document) throws PropertyVetoException {
 
 		// load the jdbc driver
-		cpds = new ComboPooledDataSource();
+		cpds = createAndSetupDataSource(document);
+
+		this.document = document;
+	}
+
+	/**
+	 * @param document
+	 * @return
+	 */
+	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
+		ComboPooledDataSource cpds = new ComboPooledDataSource();
 
 		// We don't support sqlite or self-hosting yet.
-		if (document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
-			Log.fatal("Error configuring the database connection." + " Only central PostgreSQL hosting is supported.");
+		if ((document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL)
+				&& (document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF)) {
+			// TODO: We allow self-hosting here, for testing,
+			// but maybe the startup of self-hosting should happen here.
+			Log.fatal("Error configuring the database connection." + " Only PostgreSQL hosting is supported.");
 			// FIXME: Throw exception?
 		}
 
@@ -186,14 +199,22 @@ final class ConfiguredDocument {
 		} catch (final PropertyVetoException e) {
 			Log.fatal("Error loading the PostgreSQL JDBC driver."
 					+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
-			throw e;
+			return null;
 		}
 
 		// setup the JDBC driver for the current glom document
-		cpds.setJdbcUrl("jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort()
-				+ "/" + document.getConnectionDatabase());
+		String jdbcURL = "jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort();
 
-		this.document = document;
+		String db = document.getConnectionDatabase();
+		if (StringUtils.isEmpty(db)) {
+			// Use the default PostgreSQL database, because ComboPooledDataSource.connect() fails otherwise.
+			db = "template1";
+		}
+		jdbcURL += "/" + db; // TODO: Quote the database name?
+
+		cpds.setJdbcUrl(jdbcURL);
+
+		return cpds;
 	}
 
 	/**

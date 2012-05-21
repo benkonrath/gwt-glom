@@ -28,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.shared.DataItem;
@@ -167,10 +168,10 @@ public class DocumentTest {
 
 	@Test
 	public void testReadTableExampleRows() {
-		List<List<DataItem>> exampleRows = document.getExampleRows("albums");
+		List<Map<String, DataItem>> exampleRows = document.getExampleRows("albums");
 		assertFalse(exampleRows.isEmpty());
 
-		List<DataItem> row = exampleRows.get(0);
+		Map<String, DataItem> row = exampleRows.get(0);
 		assertFalse(row.isEmpty());
 	}
 

@@ -1,5 +1,36 @@
 2012-05-21  Murray Cumming  <murrayc@murrayc.com>
 
+	Initial self-hosting for tests.
+
+	* pom.xml: Change the scope for log4j, to hopefully make it 
+	available to the test code which uses it indirectly via jOOQ.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java: Allow
+	self-hosting, though we only use it for testing.
+
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	example rows: Use a map instead of a list for each row of values,
+	so we know what field they are for, instead of relying on the sequence
+	being correct. This is not very efficient, but it does not really need 
+	to be.
+	* src/test/java/org/glom/web/server/libglom/DocumentTest.java
+	testReadTableExampleRows(): Adapted.
+
+	* src/main/java/org/glom/web/shared/DataItem.java: Added getValue()
+	that returns an Object, for generic use. Note that Object seems to be 
+	the implicit base even of double.
+	* src/main/java/org/glom/web/shared/libglom/Field.java: Add getSqlType(),
+	for use in CREATE TABLE SQL queries.
+	* src/test/java/org/glom/web/server/SelfHoster.java: Add this class 
+	to do self-hosting of PostgreSQL databases via its command-line 
+	utilities, based on Glom's C++ code in test_selfhosting_utils.cc and
+	backends/postgres_self.cc. This is incomplete - it needs more 
+	warnings about failures and it needs to clean up properly when things
+	fail.
+	* src/test/java/org/glom/web/server/SelfHostExampleTest.java: A simple 
+	test of this new class.
+
+2012-05-21  Murray Cumming  <murrayc@murrayc.com>
+
 	Document: loading example data: Handle exceptions.
 
 	* src/main/java/org/glom/web/server/libglom/Document.java:

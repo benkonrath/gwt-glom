@@ -83,6 +83,11 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>11.0.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>
 			<version>2.3.1</version>
@@ -103,14 +108,15 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-            
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
 			<type>jar</type>
-			<scope>runtime</scope>
+			<scope>compile</scope> <!-- It is used for runtime and test scopes -->
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

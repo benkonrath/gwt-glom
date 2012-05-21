@@ -22,6 +22,8 @@ package org.glom.web.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.glom.web.shared.libglom.Field;
+
 /**
  * This Data Transfer Object (DTO) is used to send a data item between the client and the server.
  * 
@@ -78,6 +80,23 @@ public class DataItem implements Serializable {
 
 	public void setImage(final byte[] image) {
 		this.image = image;
+	}
+
+	public Object getValue(final Field.GlomFieldType type) {
+		switch (type) {
+		case TYPE_BOOLEAN:
+			return getBoolean();
+		case TYPE_IMAGE:
+			return getImage();
+		case TYPE_NUMERIC:
+			return getNumber();
+		case TYPE_TEXT:
+			return getText();
+			// TODO: case TYPE_TIME;
+			// return getTime();
+		default:
+			return null;
+		}
 	}
 
 }

@@ -66,4 +66,26 @@ public class Field extends Translatable {
 		return uniqueKey;
 	}
 
+	/**
+	 * @return
+	 */
+	public String getSqlType() {
+		// libglom uses libgda's map of Gda types and its API,
+		// without hardcoding the actual SQL type names.
+		// This is based on what it actually uses with PostgreSQL.
+		switch (getGlomType()) {
+		case TYPE_NUMERIC:
+			return "numeric";
+		case TYPE_TEXT:
+			return "character varying";
+		case TYPE_DATE:
+			return "date";
+		case TYPE_TIME:
+			return "time with time zone";
+		case TYPE_IMAGE:
+			return "bytea";
+		default:
+			return "unknowntype";
+		}
+	}
 }

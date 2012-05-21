@@ -26,9 +26,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -88,7 +90,8 @@ public class Document {
 		private List<LayoutGroup> layoutGroupsList = new ArrayList<LayoutGroup>();
 		private List<LayoutGroup> layoutGroupsDetails = new ArrayList<LayoutGroup>();
 
-		private List<List<DataItem>> exampleRows = null;
+		// A list of maps (field name to value).
+		private List<Map<String, DataItem>> exampleRows = null;
 	}
 
 	private String fileURI = "";
@@ -431,7 +434,7 @@ public class Document {
 		final Element exampleRowsNode = getElementByName(tableNode, NODE_EXAMPLE_ROWS);
 		if (exampleRowsNode != null) {
 
-			List<List<DataItem>> exampleRows = new ArrayList<List<DataItem>>();
+			List<Map<String, DataItem>> exampleRows = new ArrayList<Map<String, DataItem>>();
 			final List<Node> listNodes = getChildrenByTagName(exampleRowsNode, NODE_EXAMPLE_ROW);
 			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
@@ -439,7 +442,7 @@ public class Document {
 				}
 
 				final Element element = (Element) node;
-				final List<DataItem> row = new ArrayList<DataItem>();
+				final Map<String, DataItem> row = new HashMap<String, DataItem>();
 
 				final List<Node> listNodesValues = getChildrenByTagName(element, NODE_VALUE);
 				for (final Node nodeValue : listNodesValues) {
@@ -458,7 +461,7 @@ public class Document {
 					if (field != null) {
 						value = getNodeTextChildAsValue(elementValue, field.getGlomType());
 					}
-					row.add(value);
+					row.put(fieldName, value);
 				}
 
 				exampleRows.add(row);
@@ -590,7 +593,7 @@ public class Document {
 
 		final Element exampleRowsNode = createElement(doc, tableNode, NODE_EXAMPLE_ROWS);
 
-		for (final List<DataItem> row : info.exampleRows) {
+		for (final Map<String, DataItem> row : info.exampleRows) {
 			final Element node = createElement(doc, exampleRowsNode, NODE_EXAMPLE_ROW);
 
 			// TODO: This assumes that fieldsMap.values() will have the same sequence as the values,
@@ -600,10 +603,18 @@ public class Document {
 					break;
 				}
 
-				final Element elementValue = createElement(doc, node, NODE_VALUE);
-				elementValue.setAttribute(ATTRIBUTE_COLUMN, field.getName());
+				final String fieldName = field.getName();
+				if (StringUtils.isEmpty(fieldName)) {
+					continue;
+				}
 
-				final DataItem dataItem = row.get(i);
+				final DataItem dataItem = row.get(fieldName);
+				if (dataItem == null) {
+					continue;
+				}
+
+				final Element elementValue = createElement(doc, node, NODE_VALUE);
+				elementValue.setAttribute(ATTRIBUTE_COLUMN, fieldName);
 				setNodeTextChildAsValue(elementValue, dataItem, field.getGlomType());
 			}
 		}
@@ -1114,7 +1125,7 @@ public class Document {
 		return info.getTitle(locale);
 	}
 
-	public List<List<DataItem>> getExampleRows(final String tableName) {
+	public List<Map<String, DataItem>> getExampleRows(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
 			return null;
