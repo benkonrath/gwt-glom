@@ -294,7 +294,7 @@ public class Document {
 		return str.equals("true");
 	}
 
-	private void setAttributeAsBoolean(final Element node, final String attributeName, boolean value) {
+	private void setAttributeAsBoolean(final Element node, final String attributeName, final boolean value) {
 		final String str = value ? "true" : "false";
 		node.setAttribute(attributeName, str);
 	}
@@ -308,20 +308,20 @@ public class Document {
 		double value = 0;
 		try {
 			value = Double.valueOf(str);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			// e.printStackTrace();
 		}
 
 		return value;
 	}
 
-	private String getStringForDecimal(double value) {
+	private String getStringForDecimal(final double value) {
 		final NumberFormat format = NumberFormat.getInstance(Locale.US);
 		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
 		return format.format(value);
 	}
 
-	private void setAttributeAsDecimal(final Element node, final String attributeName, double value) {
+	private void setAttributeAsDecimal(final Element node, final String attributeName, final double value) {
 		node.setAttribute(attributeName, getStringForDecimal(value));
 	}
 
@@ -367,14 +367,14 @@ public class Document {
 		}
 	}
 
-	private void saveTitle(org.w3c.dom.Document doc, Element node, final Translatable title) {
+	private void saveTitle(final org.w3c.dom.Document doc, final Element node, final Translatable title) {
 		node.setAttribute(ATTRIBUTE_NAME, title.getName());
 
 		node.setAttribute(ATTRIBUTE_TITLE, title.getTitleOriginal());
 
 		final Element nodeSet = createElement(doc, node, NODE_TRANSLATIONS_SET);
 
-		for (Entry<String, String> entry : title.getTranslationsMap().entrySet()) {
+		for (final Entry<String, String> entry : title.getTranslationsMap().entrySet()) {
 			final Element element = createElement(doc, nodeSet, NODE_TRANSLATIONS);
 
 			element.setAttribute(ATTRIBUTE_TRANSLATION_LOCALE, entry.getKey());
@@ -434,7 +434,7 @@ public class Document {
 		final Element exampleRowsNode = getElementByName(tableNode, NODE_EXAMPLE_ROWS);
 		if (exampleRowsNode != null) {
 
-			List<Map<String, DataItem>> exampleRows = new ArrayList<Map<String, DataItem>>();
+			final List<Map<String, DataItem>> exampleRows = new ArrayList<Map<String, DataItem>>();
 			final List<Node> listNodes = getChildrenByTagName(exampleRowsNode, NODE_EXAMPLE_ROW);
 			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
@@ -478,7 +478,7 @@ public class Document {
 	 * @param glomType
 	 * @return
 	 */
-	private DataItem getNodeTextChildAsValue(final Element element, GlomFieldType type) {
+	private DataItem getNodeTextChildAsValue(final Element element, final GlomFieldType type) {
 		final DataItem result = new DataItem();
 
 		final String str = element.getTextContent();
@@ -502,7 +502,7 @@ public class Document {
 			Date value = null;
 			try {
 				value = dateFormat.parse(unescaped);
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				// e.printStackTrace();
 			}
 			result.setDate(value);
@@ -517,7 +517,7 @@ public class Document {
 			double value = 0;
 			try {
 				value = Double.valueOf(unescaped);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				// e.printStackTrace();
 			}
 
@@ -535,7 +535,7 @@ public class Document {
 		return result;
 	}
 
-	private void setNodeTextChildAsValue(final Element element, final DataItem value, GlomFieldType type) {
+	private void setNodeTextChildAsValue(final Element element, final DataItem value, final GlomFieldType type) {
 		String str = "";
 
 		switch (type) {
@@ -569,14 +569,14 @@ public class Document {
 		element.setTextContent(escaped);
 	}
 
-	private void saveTableNodeBasic(org.w3c.dom.Document doc, final Element tableNode, final TableInfo info) {
+	private void saveTableNodeBasic(final org.w3c.dom.Document doc, final Element tableNode, final TableInfo info) {
 		saveTitle(doc, tableNode, info);
 
 		setAttributeAsBoolean(tableNode, ATTRIBUTE_DEFAULT, info.isDefault);
 		setAttributeAsBoolean(tableNode, ATTRIBUTE_HIDDEN, info.isHidden);
 
 		final Element relationshipsNode = createElement(doc, tableNode, NODE_RELATIONSHIPS);
-		for (Relationship relationship : info.relationshipsMap.values()) {
+		for (final Relationship relationship : info.relationshipsMap.values()) {
 			final Element element = createElement(doc, relationshipsNode, NODE_RELATIONSHIP);
 			saveTitle(doc, element, relationship);
 
@@ -586,7 +586,7 @@ public class Document {
 		}
 
 		final Element fieldsNode = createElement(doc, tableNode, NODE_FIELDS);
-		for (Field field : info.fieldsMap.values()) {
+		for (final Field field : info.fieldsMap.values()) {
 			final Element element = createElement(doc, fieldsNode, NODE_FIELD);
 			saveField(doc, element, field);
 		}
@@ -597,7 +597,7 @@ public class Document {
 			final Element node = createElement(doc, exampleRowsNode, NODE_EXAMPLE_ROW);
 
 			// TODO: This assumes that fieldsMap.values() will have the same sequence as the values,
-			int i = 0;
+			final int i = 0;
 			for (final Field field : info.fieldsMap.values()) {
 				if (i < row.size()) {
 					break;
@@ -625,7 +625,7 @@ public class Document {
 	 * @param element
 	 * @param field
 	 */
-	private void saveField(org.w3c.dom.Document doc, Element element, Field field) {
+	private void saveField(final org.w3c.dom.Document doc, final Element element, final Field field) {
 		saveTitle(doc, element, field);
 
 		String fieldTypeStr = "";
@@ -664,7 +664,7 @@ public class Document {
 	 * @param elementFormatting
 	 * @param formatting
 	 */
-	private void saveFormatting(Element element, Formatting formatting) {
+	private void saveFormatting(final Element element, final Formatting formatting) {
 		// formatting.setTextFormatMultiline(getAttributeAsBoolean(elementFormatting, ATTRIBUTE_TEXT_FORMAT_MULTILINE));
 
 		final NumericFormat numericFormatting = formatting.getNumericFormat();
@@ -1082,7 +1082,7 @@ public class Document {
 	/**
 	 * @param hostingMode
 	 */
-	public void setHostingMode(HostingMode hostingMode) {
+	public void setHostingMode(final HostingMode hostingMode) {
 		this.hostingMode = hostingMode;
 	}
 
@@ -1094,7 +1094,7 @@ public class Document {
 		return connectionPort;
 	}
 
-	public void setConnectionPort(int port) {
+	public void setConnectionPort(final int port) {
 		connectionPort = port;
 	}
 
@@ -1476,7 +1476,7 @@ public class Document {
 	/**
 	 * @param isExample
 	 */
-	public void setIsExampleFile(boolean isExample) {
+	public void setIsExampleFile(final boolean isExample) {
 		this.isExample = isExample;
 	}
 
@@ -1523,17 +1523,17 @@ public class Document {
 		setAttributeAsDecimal(nodeConnection, ATTRIBUTE_CONNECTION_PORT, connectionPort);
 
 		// for all tables:
-		for (TableInfo table : tablesMap.values()) {
+		for (final TableInfo table : tablesMap.values()) {
 			final Element nodeTable = createElement(doc, rootNode, NODE_TABLE);
 			saveTableNodeBasic(doc, nodeTable, table);
 			saveTableLayouts(doc, nodeTable, table);
 		}
 
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer;
 		try {
 			transformer = transformerFactory.newTransformer();
-		} catch (TransformerConfigurationException e) {
+		} catch (final TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -1548,20 +1548,20 @@ public class Document {
 		final File file = new File(fileURI);
 		try {
 			Files.createParentDirs(file);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 
-		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(file);
+		final DOMSource source = new DOMSource(doc);
+		final StreamResult result = new StreamResult(file);
 
 		// Output to console for testing
 		// StreamResult result = new StreamResult(System.out);
 
 		try {
 			transformer.transform(source, result);
-		} catch (TransformerException e) {
+		} catch (final TransformerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -1575,7 +1575,7 @@ public class Document {
 	 * @param nodeTable
 	 * @param table
 	 */
-	private void saveTableLayouts(org.w3c.dom.Document doc, Element tableNode, TableInfo table) {
+	private void saveTableLayouts(final org.w3c.dom.Document doc, final Element tableNode, final TableInfo table) {
 
 		final Element layoutsNode = createElement(doc, tableNode, NODE_DATA_LAYOUTS);
 
@@ -1588,7 +1588,7 @@ public class Document {
 		saveLayoutNode(doc, nodeLayoutList, table.layoutGroupsList);
 
 		final Element reportsNode = createElement(doc, tableNode, NODE_REPORTS);
-		for (Report report : table.reportsMap.values()) {
+		for (final Report report : table.reportsMap.values()) {
 			final Element element = createElement(doc, reportsNode, NODE_REPORT);
 			saveReport(doc, element, report);
 		}
@@ -1605,7 +1605,8 @@ public class Document {
 
 	}
 
-	private void saveLayoutNode(final org.w3c.dom.Document doc, Element element, final List<LayoutGroup> layoutGroups) {
+	private void saveLayoutNode(final org.w3c.dom.Document doc, final Element element,
+			final List<LayoutGroup> layoutGroups) {
 		final Element elementGroups = createElement(doc, element, NODE_DATA_LAYOUT_GROUPS);
 
 		for (final LayoutGroup layoutGroup : layoutGroups) {
@@ -1668,7 +1669,7 @@ public class Document {
 		setAttributeAsDecimal(nodeGroup, ATTRIBUTE_LAYOUT_GROUP_COLUMNS_COUNT, group.getColumnCount());
 
 		// Write the child items:
-		for (LayoutItem layoutItem : group.getItems()) {
+		for (final LayoutItem layoutItem : group.getItems()) {
 			if (layoutItem instanceof LayoutItemPortal) {
 				final Element element = createElement(doc, nodeGroup, NODE_DATA_LAYOUT_PORTAL);
 				saveDataLayoutPortal(doc, element, (LayoutItemPortal) layoutItem);
@@ -1693,7 +1694,8 @@ public class Document {
 	 * @param element
 	 * @param layoutItem
 	 */
-	private void saveDataLayoutItemGroupBy(org.w3c.dom.Document doc, Element element, LayoutItemGroupBy item) {
+	private void saveDataLayoutItemGroupBy(final org.w3c.dom.Document doc, final Element element,
+			final LayoutItemGroupBy item) {
 		saveDataLayoutGroup(doc, element, item);
 
 		final Element elementGroupBy = createElement(doc, element, NODE_GROUPBY);
@@ -1732,7 +1734,7 @@ public class Document {
 	 * @param element
 	 * @param item
 	 */
-	private void saveUsesRelationship(Element element, UsesRelationship item) {
+	private void saveUsesRelationship(final Element element, final UsesRelationship item) {
 		final Relationship relationship = item.getRelationship();
 		if (relationship != null) {
 			element.setAttribute(ATTRIBUTE_RELATIONSHIP_NAME, relationship.getName());
@@ -1750,7 +1752,7 @@ public class Document {
 	 * @return
 	 */
 	private Element createElement(final org.w3c.dom.Document doc, final Element parentNode, final String name) {
-		Element node = doc.createElement(name);
+		final Element node = doc.createElement(name);
 		parentNode.appendChild(node);
 		return node;
 	}
@@ -1792,7 +1794,7 @@ public class Document {
 
 	/**
 	 */
-	public void setConnectionDatabase(String databaseName) {
+	public void setConnectionDatabase(final String databaseName) {
 		connectionDatabase = databaseName;
 
 	}

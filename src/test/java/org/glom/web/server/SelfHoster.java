@@ -106,7 +106,7 @@ public class SelfHoster {
 	 * @param subDirectoryPath
 	 * @return
 	 */
-	private boolean createAndSelfHostNewEmpty(Document.HostingMode hostingMode) {
+	private boolean createAndSelfHostNewEmpty(final Document.HostingMode hostingMode) {
 		if (hostingMode != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF) {
 			// TODO: std::cerr << G_STRFUNC << ": This test function does not support the specified hosting_mode: " <<
 			// hosting_mode << std::endl;
@@ -116,7 +116,7 @@ public class SelfHoster {
 		// Save a copy, specifying the path to file in a directory:
 		// For instance, /tmp/testglom/testglom.glom");
 		final String tempFilename = "testglom";
-		File tempFolder = Files.createTempDir();
+		final File tempFolder = Files.createTempDir();
 		final File tempDir = new File(tempFolder, tempFilename);
 
 		final String tempDirPath = tempDir.getPath();
@@ -271,7 +271,7 @@ public class SelfHoster {
 	 * @param dbDirData
 	 * @return
 	 */
-	private String shellQuote(String str) {
+	private String shellQuote(final String str) {
 		// TODO: If we add the quotes then they seem to be used as part of the path, though that is not a problem with
 		// the normal command line.
 		return str;
@@ -280,7 +280,7 @@ public class SelfHoster {
 		// return "'" + str + "'";
 	}
 
-	private String getSelfHostingPath(final String subpath, boolean create) {
+	private String getSelfHostingPath(final String subpath, final boolean create) {
 		final String dbDir = document.getSelfHostedDirectoryPath();
 		if (StringUtils.isEmpty(subpath)) {
 			return dbDir;
@@ -297,7 +297,7 @@ public class SelfHoster {
 		if (!file.exists()) {
 			try {
 				Files.createParentDirs(file);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return "";
@@ -311,11 +311,11 @@ public class SelfHoster {
 		return dbDirData;
 	}
 
-	private String getSelfHostingDataPath(boolean create) {
+	private String getSelfHostingDataPath(final boolean create) {
 		return getSelfHostingPath(FILENAME_DATA, create);
 	}
 
-	private boolean executeCommandLineAndWait(ProcessBuilder command) {
+	private boolean executeCommandLineAndWait(final ProcessBuilder command) {
 
 		command.redirectErrorStream(true);
 
@@ -323,7 +323,7 @@ public class SelfHoster {
 		Process process = null;
 		try {
 			process = command.start();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -338,7 +338,7 @@ public class SelfHoster {
 			while ((line = br.readLine()) != null) {
 				output += line + "\n";
 			}
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			e1.printStackTrace();
 			return false;
 		}
@@ -346,7 +346,7 @@ public class SelfHoster {
 		int result = 0;
 		try {
 			result = process.waitFor();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -361,15 +361,15 @@ public class SelfHoster {
 		return true;
 	}
 
-	private boolean executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(ProcessBuilder command,
-			ProcessBuilder commandSecond, String secondCommandSuccessText) {
+	private boolean executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(final ProcessBuilder command,
+			final ProcessBuilder commandSecond, final String secondCommandSuccessText) {
 		command.redirectErrorStream(true);
 
 		// Run the first command, and do not wait for it to return:
 		Process process = null;
 		try {
 			process = command.start();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -396,7 +396,7 @@ public class SelfHoster {
 					output += line + "\n";
 					System.out.println(line);
 				}
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				return false;
@@ -412,7 +412,7 @@ public class SelfHoster {
 	 * @param string
 	 * @return
 	 */
-	private static String getPathToPostgresExecutable(String string) {
+	private static String getPathToPostgresExecutable(final String string) {
 		// TODO: Test other locations.
 		return "/usr/bin/" + string;
 	}
@@ -422,14 +422,14 @@ public class SelfHoster {
 	 * @param end
 	 * @return
 	 */
-	private static int discoverFirstFreePort(int start, int end) {
+	private static int discoverFirstFreePort(final int start, final int end) {
 		for (int port = start; port <= end; ++port) {
 			try {
-				ServerSocket socket = new ServerSocket(port);
+				final ServerSocket socket = new ServerSocket(port);
 
 				// If the instantiation succeeded then the port was free:
 				return socket.getLocalPort(); // This must equal port.
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				continue; // try next port
 			}
 		}
@@ -441,13 +441,9 @@ public class SelfHoster {
 	 * @param dbDir
 	 * @return
 	 */
-	private static boolean fileExists(String filePath) {
+	private static boolean fileExists(final String filePath) {
 		final File file = new File(filePath);
 		return file.exists();
-	}
-
-	private void setSelfHostingActive(boolean selfHostingActive) {
-		this.selfHostingActive = selfHostingActive;
 	}
 
 	/**
@@ -473,7 +469,7 @@ public class SelfHoster {
 		File filePwFile = null;
 		try {
 			filePwFile = File.createTempFile("glom_initdb_pwfile", "");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -507,7 +503,7 @@ public class SelfHoster {
 		}
 
 		// Of course, we don't want this to stay around. It would be a security risk.
-		File fileTempPwFile = new File(tempPwFile);
+		final File fileTempPwFile = new File(tempPwFile);
 		if (!fileTempPwFile.delete()) {
 			// TODO: Warn.
 		}
@@ -570,7 +566,7 @@ public class SelfHoster {
 		parent.mkdirs();
 		try {
 			file.createNewFile();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -579,7 +575,7 @@ public class SelfHoster {
 		FileOutputStream output = null;
 		try {
 			output = new FileOutputStream(file);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -587,7 +583,7 @@ public class SelfHoster {
 
 		try {
 			output.write(contents.getBytes());
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -614,7 +610,7 @@ public class SelfHoster {
 			// exists already.
 			try {
 				connection.close();
-			} catch (SQLException e) {
+			} catch (final SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -642,7 +638,7 @@ public class SelfHoster {
 		// Check that we can connect:
 		try {
 			connection.close();
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -659,7 +655,7 @@ public class SelfHoster {
 
 		// Create each table:
 		final List<String> tables = document.getTableNames();
-		for (String tableName : tables) {
+		for (final String tableName : tables) {
 
 			// Create SQL to describe all fields in this table:
 			final List<Field> fields = document.getTableFields(tableName);
@@ -690,7 +686,7 @@ public class SelfHoster {
 			return false;
 		}
 
-		for (String tableName : tables) {
+		for (final String tableName : tables) {
 			// Add any example data to the table:
 			progress();
 
@@ -721,7 +717,7 @@ public class SelfHoster {
 	 * @throws SQLException
 	 */
 	private Connection createConnection() {
-		Properties connectionProps = new Properties();
+		final Properties connectionProps = new Properties();
 		connectionProps.put("user", this.username);
 		connectionProps.put("password", this.password);
 
@@ -736,7 +732,7 @@ public class SelfHoster {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(jdbcURL + "/", connectionProps);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			return null;
@@ -797,8 +793,8 @@ public class SelfHoster {
 			final InsertResultStep<Record> insertResultStep = (InsertResultStep<Record>) insertStep;
 
 			try {
-				final Record record = insertResultStep.fetchOne();
-			} catch (DataAccessException e) {
+				insertResultStep.fetchOne();
+			} catch (final DataAccessException e) {
 				// e.printStackTrace();
 				return false;
 			}
@@ -812,7 +808,7 @@ public class SelfHoster {
 	 * @param document2
 	 * @return
 	 */
-	private boolean setTablePrivilegesGroupsFromDocument(Document document2) {
+	private boolean setTablePrivilegesGroupsFromDocument(final Document document2) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -821,7 +817,7 @@ public class SelfHoster {
 	 * @param document2
 	 * @return
 	 */
-	private boolean addGroupsFromDocument(Document document2) {
+	private boolean addGroupsFromDocument(final Document document2) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -845,12 +841,13 @@ public class SelfHoster {
 
 		// Create SQL to describe all fields in this table:
 		String sqlFields = "";
-		for (Field field : fields) {
+		for (final Field field : fields) {
 			// Create SQL to describe this field:
 			String sqlFieldDescription = escapeSqlId(field.getName()) + " " + field.getSqlType();
 
-			if (field.getPrimaryKey())
+			if (field.getPrimaryKey()) {
 				sqlFieldDescription += " NOT NULL  PRIMARY KEY";
+			}
 
 			// Append it:
 			if (!StringUtils.isEmpty(sqlFields)) {
@@ -866,8 +863,8 @@ public class SelfHoster {
 
 		// Actually create the table
 		final String query = "CREATE TABLE " + escapeSqlId(tableName) + " (" + sqlFields + ");";
-		Factory factory = new Factory(connection, SQLDialect.POSTGRES);
-		final int result = factory.execute(query);
+		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
+		factory.execute(query);
 		tableCreationSucceeded = true;
 		if (!tableCreationSucceeded) {
 			// TODO: Warn: std::cerr << G_STRFUNC << ": CREATE TABLE failed." << std::endl;
@@ -880,7 +877,7 @@ public class SelfHoster {
 	 * @param name
 	 * @return
 	 */
-	private String escapeSqlId(String name) {
+	private String escapeSqlId(final String name) {
 		// TODO:
 		return "\"" + name + "\"";
 	}
@@ -891,9 +888,9 @@ public class SelfHoster {
 	private static boolean createDatabase(final Connection connection, final String databaseName) {
 
 		final String query = "CREATE DATABASE \"" + databaseName + "\""; // TODO: Escaping.
-		Factory factory = new Factory(connection, SQLDialect.POSTGRES);
+		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
 
-		final int result = factory.execute(query);
+		factory.execute(query);
 
 		return true;
 	}

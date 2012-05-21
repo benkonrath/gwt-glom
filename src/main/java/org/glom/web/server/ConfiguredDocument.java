@@ -183,7 +183,7 @@ final class ConfiguredDocument {
 	 * @return
 	 */
 	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
-		ComboPooledDataSource cpds = new ComboPooledDataSource();
+		final ComboPooledDataSource cpds = new ComboPooledDataSource();
 
 		// We don't support sqlite or self-hosting yet.
 		if ((document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL)

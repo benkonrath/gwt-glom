@@ -168,10 +168,10 @@ public class DocumentTest {
 
 	@Test
 	public void testReadTableExampleRows() {
-		List<Map<String, DataItem>> exampleRows = document.getExampleRows("albums");
+		final List<Map<String, DataItem>> exampleRows = document.getExampleRows("albums");
 		assertFalse(exampleRows.isEmpty());
 
-		Map<String, DataItem> row = exampleRows.get(0);
+		final Map<String, DataItem> row = exampleRows.get(0);
 		assertFalse(row.isEmpty());
 	}
 
