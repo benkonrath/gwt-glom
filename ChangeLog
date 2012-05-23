@@ -1,5 +1,14 @@
 2012-05-23  Murray Cumming  <murrayc@murrayc.com>
 
+	Tests: SelfHoster: Check other paths for PostgreSQL command-line tools.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java:
+	getPathToPostgresExecutable(): Try some common paths (as on Ubuntu, for 
+	instance) instead of just /usr/bin (as on Fedora). Check the result when 
+	using this method.
+
+2012-05-23  Murray Cumming  <murrayc@murrayc.com>
+
 	Remove LayoutItemPortal.get/setNavigationTable().
 	
 	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemPortal.java:

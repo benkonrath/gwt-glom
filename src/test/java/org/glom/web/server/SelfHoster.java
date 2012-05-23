@@ -30,6 +30,7 @@ import java.net.ServerSocket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -221,7 +222,12 @@ public class SelfHoster {
 		// However, we must have a space after -k.
 		// Also, the c hba_file=path argument must be split after -c, or postgres will get a " hba_file" configuration
 		// parameter instead of "hba_file".
-		final ProcessBuilder commandPostgresStart = new ProcessBuilder(getPathToPostgresExecutable("postgres"), "-D"
+		final String commandPathStart = getPathToPostgresExecutable("postgres");
+		if(StringUtils.isEmpty(commandPathStart)) {
+			//TODO: Warn.
+			return false;
+		}
+		final ProcessBuilder commandPostgresStart = new ProcessBuilder(commandPathStart, "-D"
 				+ shellQuote(dbDirData), "-p", portAsText, "-i", // Equivalent to -h "*", which in turn is equivalent
 																	// to
 				// listen_addresses in postgresql.conf. Listen to all IP addresses,
@@ -238,7 +244,12 @@ public class SelfHoster {
 		// too many command-line arguments (first is "(null)")
 		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
 		// though that does not happen with the normal command line.
-		final ProcessBuilder commandCheckPostgresHasStarted = new ProcessBuilder(getPathToPostgresExecutable("pg_ctl"),
+		final String commandPathCheck = getPathToPostgresExecutable("pg_ctl");
+		if(StringUtils.isEmpty(commandPathCheck)) {
+			//TODO: Warn.
+			return false;
+		}
+		final ProcessBuilder commandCheckPostgresHasStarted = new ProcessBuilder(commandPathCheck,
 				"status", "-D" + shellQuote(dbDirData));
 
 		// For postgres 8.1, this is "postmaster is running".
@@ -413,8 +424,37 @@ public class SelfHoster {
 	 * @return
 	 */
 	private static String getPathToPostgresExecutable(final String string) {
-		// TODO: Test other locations.
-		return "/usr/bin/" + string;
+		final List<String> dirPaths = new ArrayList<String>();
+		dirPaths.add("/usr/bin");
+		dirPaths.add("/usr/lib/postgresql/9.1/bin");
+		dirPaths.add("/usr/lib/postgresql/9.0/bin");
+		dirPaths.add("/usr/lib/postgresql/8.4/bin");
+		
+		for(String dir : dirPaths) {
+			final String path = dir + File.separator + string;
+			if(fileExistsAndIsExecutable(path)) {
+				return path;
+			}
+		}
+		
+		return "";
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 */
+	private static boolean fileExistsAndIsExecutable(String path) {
+		final File file = new File(path);
+		if(!file.exists()) {
+			return false;
+		}
+		
+		if(!file.canExecute()) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
@@ -491,21 +531,28 @@ public class SelfHoster {
 		// TODO: If we quote tempPwFile then initdb says that it cannot find it.
 		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
 		// though that does not happen with the normal command line.
-		final ProcessBuilder commandInitdb = new ProcessBuilder(getPathToPostgresExecutable("initdb"), "-D"
-				+ shellQuote(dbDirData), "-U", initialUsername, "--pwfile=" + tempPwFile);
-
-		// Note that --pwfile takes the password from the first line of a file. It's an alternative to supplying it when
-		// prompted on stdin.
-		final boolean result = executeCommandLineAndWait(commandInitdb);
-		if (!result) {
-			// TODO: std::cerr << "Error while attempting to create self-hosting database." << std::endl;
-			return false;
+		boolean result = false;
+		final String commandPath = getPathToPostgresExecutable("initdb");
+		if(StringUtils.isEmpty(commandPath)) {
+			//TODO: Warn.
+		} else {
+			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "-D"
+					+ shellQuote(dbDirData), "-U", initialUsername, "--pwfile=" + tempPwFile);
+	
+			// Note that --pwfile takes the password from the first line of a file. It's an alternative to supplying it when
+			// prompted on stdin.
+			result = executeCommandLineAndWait(commandInitdb);
 		}
 
 		// Of course, we don't want this to stay around. It would be a security risk.
 		final File fileTempPwFile = new File(tempPwFile);
 		if (!fileTempPwFile.delete()) {
 			// TODO: Warn.
+		}
+		
+		if (!result) {
+			// TODO: std::cerr << "Error while attempting to create self-hosting database." << std::endl;
+			return false;
 		}
 
 		// Save the username and password for later;
@@ -912,12 +959,17 @@ public class SelfHoster {
 			// TODO: Warn about connected clients on other computers? Warn those other users?
 			// Make sure to use double quotes for the executable path, because the
 			// CreateProcess() API used on Windows does not support single quotes.
-			final ProcessBuilder commandPostgresStop = new ProcessBuilder(getPathToPostgresExecutable("pg_ctl"), "-D"
-					+ shellQuote(dbDirData), "stop", "-m", "fast");
-			final boolean result = executeCommandLineAndWait(commandPostgresStop);
-			if (!result) {
-				// TODO: Warn
-				// return;
+			final String commandPath = getPathToPostgresExecutable("pg_ctl");
+			if(StringUtils.isEmpty(commandPath)) {
+				//TODO: Warn.
+			} else {
+				final ProcessBuilder commandPostgresStop = new ProcessBuilder(commandPath, "-D"
+						+ shellQuote(dbDirData), "stop", "-m", "fast");
+				final boolean result = executeCommandLineAndWait(commandPostgresStop);
+				if (!result) {
+					// TODO: Warn
+					// return;
+				}
 			}
 
 			document.setConnectionPort(0);
