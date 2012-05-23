@@ -41,6 +41,8 @@ public class LayoutItemPortalDeepCloneTest {
 		final LayoutItemPortal portal = new LayoutItemPortal();
 		final TableToViewDetails viewDetails = new TableToViewDetails();
 		final String testTableName = "sometable";
+		
+		/* TODO: Test something else instead now that we have removed this API:
 		viewDetails.tableName = testTableName;
 		viewDetails.usesRelationship = new UsesRelationshipImpl();
 		portal.setNavigationTable(viewDetails);
@@ -51,5 +53,6 @@ public class LayoutItemPortalDeepCloneTest {
 		assertTrue(cloneViewDetails != null);
 		assertEquals(cloneViewDetails.tableName, testTableName);
 		assertTrue(cloneViewDetails.usesRelationship != null);
+		*/
 	}
 }

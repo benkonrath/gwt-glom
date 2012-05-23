@@ -1,3 +1,18 @@
+2012-05-23  Murray Cumming  <murrayc@murrayc.com>
+
+	Remove LayoutItemPortal.get/setNavigationTable().
+	
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemPortal.java:
+	Remove get/setNavigationTable(), which is only a cache, because it is not
+	used, and does not need to be used, because that decision should be made on
+	the server.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	updatePortalsExtras():
+	* src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+	getNavigationRecord():
+	* src/test/java/org/glom/web/server/libglom/LayoutItemPortalDeepCloneTest.java:
+	Adapted.
+
 2012-05-21  Murray Cumming  <murrayc@murrayc.com>
 
 	Initial self-hosting for tests.

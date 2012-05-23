@@ -80,9 +80,6 @@ public class RelatedListNavigation extends DBAccess {
 			return null;
 		}
 
-		// TODO: For some reason, LayoutItemPortal.navigationTable is null after using deepCopy(),
-		// so we can't use our cache:
-		// final TableToViewDetails navigationTable = portal.getNavigationTable();
 		final TableToViewDetails navigationTable = document.getPortalSuitableTableToViewDetails(portal);
 		if (navigationTable == null) {
 			Log.error(documentID, tableName,

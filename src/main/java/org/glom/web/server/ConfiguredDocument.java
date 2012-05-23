@@ -47,7 +47,6 @@ import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
-import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -613,14 +612,6 @@ final class ConfiguredDocument {
 				// layoutItemPortal.set_name(libglomLayoutItemPortal.get_relationship_name_used());
 				// layoutItemPortal.setTableName(relationship.get_from_table());
 				// layoutItemPortal.setFromField(relationship.get_from_field());
-
-				// Set whether the related list will need to show the navigation buttons,
-				// (null table name string if not) and what table to navigation to.
-				// This was ported from Glom: Box_Data_Portal::get_has_suitable_record_to_view_details()
-				final TableToViewDetails viewDetails = document.getPortalSuitableTableToViewDetails(portal);
-				if (viewDetails != null) {
-					portal.setNavigationTable(viewDetails);
-				}
 
 				// get the primary key for the related list table
 				final String toTableName = relationship.getToTable();

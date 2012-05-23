@@ -19,9 +19,6 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	private NavigationType navigationType = NavigationType.NAVIGATION_AUTOMATIC;
 	private UsesRelationship navigationRelationshipSpecific = null;
 
-	// Extras:
-	private TableToViewDetails navigationTable = null; // If any.
-
 	/**
 	 * @return
 	 */
@@ -160,19 +157,6 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 	public void setNavigationRelationshipSpecific(final UsesRelationship relationship) {
 		navigationRelationshipSpecific = relationship;
 		navigationType = NavigationType.NAVIGATION_SPECIFIC;
-	}
-
-	/**
-	 * Whether the UI should show a navigation button. TODO: Remove this?
-	 * 
-	 * @param b
-	 */
-	public void setNavigationTable(final TableToViewDetails viewDetails) {
-		this.navigationTable = viewDetails;
-	}
-
-	public TableToViewDetails getNavigationTable() {
-		return navigationTable;
 	}
 
 	/*
