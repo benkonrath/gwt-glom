@@ -1,5 +1,18 @@
 2012-05-24  Murray Cumming  <murrayc@murrayc.com>
 
+	Update translations, adding French.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_fr.properties:
+	Add a French translation, using the translation from Glom.
+
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_es.properties:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_sl.properties:
+	Update these based on the translations from Glom.
+
+2012-05-24  Murray Cumming  <murrayc@murrayc.com>
+
 	SelfHoster: Add some debug println messages to help when things fail.
 
 	* src/test/java/org/glom/web/server/SelfHoster.java: Add several
