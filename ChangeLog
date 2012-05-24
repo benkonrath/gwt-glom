@@ -1,3 +1,10 @@
+2012-05-24  Murray Cumming  <murrayc@murrayc.com>
+
+	SelfHoster: Add some debug println messages to help when things fail.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java: Add several
+	System.out.println() lines.
+
 2012-05-23  Murray Cumming  <murrayc@murrayc.com>
 
 	Tests: SelfHoster: Check other paths for PostgreSQL command-line tools.

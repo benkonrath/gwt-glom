@@ -95,7 +95,9 @@ public class SelfHoster {
 
 		final boolean recreated = recreateDatabaseFromDocument(); /* TODO: Progress callback */
 		if (!recreated) {
-			cleanup();
+			if(!cleanup()) {
+				return false;
+			}
 		}
 
 		return recreated;
@@ -136,7 +138,7 @@ public class SelfHoster {
 		document.setIsExampleFile(false);
 		final boolean saved = document.save();
 		if (!saved) {
-			// TODO: Warn
+			System.out.println("createAndSelfHostNewEmpty(): Document.save() failed.");
 			return false; // TODO: Delete the directory.
 		}
 
@@ -146,13 +148,13 @@ public class SelfHoster {
 
 		// Create the self-hosting files:
 		if (!initialize(user, password)) {
-			// TODO: Warn.
+			System.out.println("createAndSelfHostNewEmpty(): initialize failed.");
 			// TODO: Delete directory.
 		}
 
 		// Check that it really created some files:
 		if (!tempDir.exists()) {
-			// TODO: Warn
+			System.out.println("createAndSelfHostNewEmpty(): tempDir does not exist.");
 			// TODO: Delete directory.
 		}
 
@@ -224,7 +226,7 @@ public class SelfHoster {
 		// parameter instead of "hba_file".
 		final String commandPathStart = getPathToPostgresExecutable("postgres");
 		if(StringUtils.isEmpty(commandPathStart)) {
-			//TODO: Warn.
+			System.out.println("selfHost(): getPathToPostgresExecutable(postgres) failed.");
 			return false;
 		}
 		final ProcessBuilder commandPostgresStart = new ProcessBuilder(commandPathStart, "-D"
@@ -246,7 +248,7 @@ public class SelfHoster {
 		// though that does not happen with the normal command line.
 		final String commandPathCheck = getPathToPostgresExecutable("pg_ctl");
 		if(StringUtils.isEmpty(commandPathCheck)) {
-			//TODO: Warn.
+			System.out.println("selfHost(): getPathToPostgresExecutable(pg_ctl) failed.");
 			return false;
 		}
 		final ProcessBuilder commandCheckPostgresHasStarted = new ProcessBuilder(commandPathCheck,
@@ -268,7 +270,7 @@ public class SelfHoster {
 		final boolean result = executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(commandPostgresStart,
 				commandCheckPostgresHasStarted, secondCommandSuccessText);
 		if (!result) {
-			// TODO: std::cerr << "Error while attempting to self-host a database." << std::endl;
+			System.out.println("selfHost(): Error while attempting to self-host a database.");
 			return false; // STARTUPERROR_FAILED_UNKNOWN_REASON;
 		}
 
@@ -364,7 +366,7 @@ public class SelfHoster {
 		}
 
 		if (result != 0) {
-			System.out.println("Command failed: " + command.toString());
+			System.out.println("Command failed: " + command.command().toString());
 			System.out.print("Output: " + output);
 			return false;
 		}
@@ -499,7 +501,7 @@ public class SelfHoster {
 	 */
 	private boolean initialize(final String initialUsername, final String initialPassword) {
 		if (!initializeConfFiles()) {
-			// TODO: Warn
+			System.out.println("initialize(): initializeConfFiles() failed.");
 			return false;
 		}
 
@@ -517,7 +519,7 @@ public class SelfHoster {
 
 		final boolean pwfileCreationSucceeded = createTextFile(tempPwFile, initialPassword);
 		if (!pwfileCreationSucceeded) {
-			// TODO: Warn.
+			System.out.println("initialize(): createTextFile() failed.");
 			return false;
 		}
 
@@ -534,7 +536,7 @@ public class SelfHoster {
 		boolean result = false;
 		final String commandPath = getPathToPostgresExecutable("initdb");
 		if(StringUtils.isEmpty(commandPath)) {
-			//TODO: Warn.
+			System.out.println("initialize(): getPathToPostgresExecutable(initdb) failed.");
 		} else {
 			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "-D"
 					+ shellQuote(dbDirData), "-U", initialUsername, "--pwfile=" + tempPwFile);
@@ -547,11 +549,11 @@ public class SelfHoster {
 		// Of course, we don't want this to stay around. It would be a security risk.
 		final File fileTempPwFile = new File(tempPwFile);
 		if (!fileTempPwFile.delete()) {
-			// TODO: Warn.
+			System.out.println("initialize(): Failed to delete the password file.");
 		}
 		
 		if (!result) {
-			// TODO: std::cerr << "Error while attempting to create self-hosting database." << std::endl;
+			System.out.println("initialize(): Error while attempting to create self-hosting database.");
 			return false;
 		}
 
@@ -583,14 +585,14 @@ public class SelfHoster {
 		final boolean hbaConfCreationSucceeded = createTextFile(dbDirConfig + File.separator + "pg_hba.conf",
 				defaultConfContents);
 		if (!hbaConfCreationSucceeded) {
-			// TODO: Warn
+			System.out.println("initialize(): createTextFile() failed.");
 			return false;
 		}
 
 		final boolean identConfCreationSucceeded = createTextFile(dbDirConfig + File.separator + "pg_ident.conf",
 				DEFAULT_CONFIG_PG_IDENT);
 		if (!identConfCreationSucceeded) {
-			// TODO: Warn
+			System.out.println("initialize(): createTextFile() failed.");
 			return false;
 		}
 
@@ -606,7 +608,7 @@ public class SelfHoster {
 		final File file = new File(path);
 		final File parent = file.getParentFile();
 		if (parent == null) {
-			// TODO: Warn.
+			System.out.println("initialize(): getParentFile() failed.");
 			return false;
 		}
 
@@ -670,7 +672,7 @@ public class SelfHoster {
 
 		connection = createConnection();
 		if (connection == null) {
-			// TODO: Warn.
+			System.out.println("recreatedDatabase(): createConnection() failed, before creating the database.");
 			return false;
 		}
 
@@ -694,7 +696,7 @@ public class SelfHoster {
 		document.setConnectionDatabase(dbName);
 		connection = createConnection();
 		if (connection == null) {
-			// TODO: Warn
+			System.out.println("recreatedDatabase(): createConnection() failed, after creating the database.");
 			return false;
 		}
 
@@ -780,8 +782,7 @@ public class SelfHoster {
 		try {
 			conn = DriverManager.getConnection(jdbcURL + "/", connectionProps);
 		} catch (final SQLException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 
@@ -914,7 +915,7 @@ public class SelfHoster {
 		factory.execute(query);
 		tableCreationSucceeded = true;
 		if (!tableCreationSucceeded) {
-			// TODO: Warn: std::cerr << G_STRFUNC << ": CREATE TABLE failed." << std::endl;
+			System.out.println("recreatedDatabase(): CREATE TABLE() failed.");
 		}
 
 		return tableCreationSucceeded;
@@ -945,7 +946,8 @@ public class SelfHoster {
 	/**
 	 *
 	 */
-	public void cleanup() {
+	public boolean cleanup() {
+		boolean result = true;
 
 		// Stop the server:
 		if ((document != null) && (document.getConnectionPort() != 0)) {
@@ -961,14 +963,13 @@ public class SelfHoster {
 			// CreateProcess() API used on Windows does not support single quotes.
 			final String commandPath = getPathToPostgresExecutable("pg_ctl");
 			if(StringUtils.isEmpty(commandPath)) {
-				//TODO: Warn.
+				System.out.println("cleanup(): getPathToPostgresExecutable(pg_ctl) failed.");
 			} else {
 				final ProcessBuilder commandPostgresStop = new ProcessBuilder(commandPath, "-D"
 						+ shellQuote(dbDirData), "stop", "-m", "fast");
-				final boolean result = executeCommandLineAndWait(commandPostgresStop);
+				result = executeCommandLineAndWait(commandPostgresStop);
 				if (!result) {
-					// TODO: Warn
-					// return;
+					System.out.println("cleanup(): Failed to stop the PostgreSQL server.");
 				}
 			}
 
@@ -983,5 +984,7 @@ public class SelfHoster {
 		final String docPath = document.getFileURI();
 		final File fileDoc = new File(docPath);
 		fileDoc.delete();
+		
+		return result;
 	}
 }
