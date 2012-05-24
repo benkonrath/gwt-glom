@@ -21,8 +21,8 @@
 	<!-- gwt-test-utils is not in the regular maven repository: -->
 	<repositories>
 		<repository>
-		<id>forge.octo.com</id>
- 		<url>http://forge.octo.com/nexus/content/repositories/releases/</url>
+			<id>forge.octo.com</id>
+			<url>http://forge.octo.com/nexus/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 
@@ -99,9 +99,9 @@
 			<version>4.5.1</version>
 			<scope>compile</scope>
 			<exclusions>
-				<!-- There is apparently a clash between the jdtcore used by jasperreports and gwt,
-				so we do this to avoid the reportUnusedDeclaredThrownExceptionIncludeDocCommentReference
-				exception during the gwt compile. -->
+				<!-- There is apparently a clash between the jdtcore used by jasperreports
+					and gwt, so we do this to avoid the reportUnusedDeclaredThrownExceptionIncludeDocCommentReference
+					exception during the gwt compile. -->
 				<exclusion>
 					<groupId>eclipse</groupId>
 					<artifactId>jdtcore</artifactId>
@@ -124,16 +124,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-    		<groupId>com.googlecode.gwt-test-utils</groupId>
+			<groupId>com.googlecode.gwt-test-utils</groupId>
 			<artifactId>gwt-test-utils</artifactId>
 			<version>0.38</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-   			<groupId>org.easymock</groupId>
-   			<artifactId>easymock</artifactId>
-  			<version>3.1</version>
-  			<scope>test</scope>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -158,16 +158,16 @@
 						</goals>
 					</execution>
 				</executions>
-				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
+				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin
 					documentation at codehaus.org -->
 				<configuration>
 					<runTarget>OnlineGlom.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 					<i18nConstantsBundles>
-					  <i18nConstantsBundle>org.glom.web.client.ui.OnlineGlomConstants</i18nConstantsBundle>
+						<i18nConstantsBundle>org.glom.web.client.ui.OnlineGlomConstants</i18nConstantsBundle>
 					</i18nConstantsBundles>
-              				<mode>htmlunit</mode> <!-- Because the default, manual, waits for us to paste a URL into a browser. -->
-            				<!-- <productionMode>true</productionMode> -->
+					<mode>htmlunit</mode> <!-- Because the default, manual, waits for us to paste a URL into a browser. -->
+					<!-- <productionMode>true</productionMode> -->
 				</configuration>
 			</plugin>
 
@@ -203,7 +203,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -240,7 +241,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -255,7 +256,7 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
- 				<artifactId>maven-surefire-report-plugin</artifactId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
 				<version>2.12</version>
 				<configuration>
 					<!-- your configuration here -->
