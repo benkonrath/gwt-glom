@@ -118,6 +118,7 @@ public class Document {
 	private static final String NODE_TABLE = "table";
 	private static final String ATTRIBUTE_NAME = "name";
 	private static final String ATTRIBUTE_TITLE = "title";
+	private static final String DEPRECATED_ATTRIBUTE_DATABASE_TITLE = "database_title";
 	private static final String ATTRIBUTE_DEFAULT = "default";
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
 	private static final String NODE_TRANSLATIONS_SET = "trans_set";
@@ -210,7 +211,15 @@ public class Document {
 			return false;
 		}
 
-		databaseTitle.setTitleOriginal(rootNode.getAttribute(ATTRIBUTE_TITLE));
+		//Get the database title, falling back to the deprecated XML format for it:
+		//TODO: load() show complain (via an enum result) if the document format version is less than 7.
+		final String databaseTitleStr = rootNode.getAttribute(ATTRIBUTE_TITLE);
+		final String deprecatedDatabaseTitleStr = rootNode.getAttribute(DEPRECATED_ATTRIBUTE_DATABASE_TITLE);
+		if(!StringUtils.isEmpty(databaseTitleStr)) {
+			databaseTitle.setTitleOriginal(databaseTitleStr);
+		} else {
+			databaseTitle.setTitleOriginal(deprecatedDatabaseTitleStr);
+		}
 
 		translationOriginalLocale = rootNode.getAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE);
 		translationAvailableLocales.add(translationOriginalLocale); // Just a cache.
