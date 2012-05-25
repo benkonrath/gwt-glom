@@ -4,6 +4,7 @@
 
 	* src/main/java/org/glom/web/server/libglom/Document.java: Load the 
 	database_title attribute if the title attribute is not there.
+	Bug #676737
 
 2012-05-24  Ben Konrath  <ben@bagu.org>
 
