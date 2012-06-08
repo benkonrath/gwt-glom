@@ -372,15 +372,10 @@ public class SelfHoster {
 		final BufferedReader br = new BufferedReader(isr);
 		String output = "";
 		String line;
-		try {
-			//TODO: readLine() can hang, waiting for an end of line that never comes.
-			while ((line = br.readLine()) != null) {
-				output += line + "\n";
-			}
-		} catch (final IOException e1) {
-			e1.printStackTrace();
-			return false;
-		}
+		/*
+		 * try { //TODO: readLine() can hang, waiting for an end of line that never comes. while ((line = br.readLine())
+		 * != null) { output += line + "\n"; } } catch (final IOException e1) { e1.printStackTrace(); return false; }
+		 */
 
 		int result = 0;
 		try {
@@ -392,8 +387,8 @@ public class SelfHoster {
 		}
 
 		if (result != 0) {
-			System.out.println("Command failed: " + command.command().toString());
-			System.out.print("Output: " + output);
+			System.out.println("executeCommandLineAndWait(): Command failed: " + command.command().toString());
+			System.out.print("  Output: " + output);
 			return false;
 		}
 
@@ -424,28 +419,38 @@ public class SelfHoster {
 		 */
 
 		// Now run the second command, usually to verify that the first command has really done its work:
-		final boolean result = executeCommandLineAndWait(commandSecond);
-
-		// Try to get the output:
-		if (!result) {
-			String output = "";
-			String line;
-			try {
-				//TODO: readLine() can hang, waiting for an end of line that never comes.
-				while ((line = br.readLine()) != null) {
-					output += line + "\n";
-					System.out.println(line);
+		// We run this repeatedly until it succeeds, to show that the first command has finished.
+		boolean result = false;
+		while (true) {
+			result = executeCommandLineAndWait(commandSecond);
+			if (result) {
+				System.out.println("executeCommandLineAndWait(): second command succeeded.");
+				return true;
+			} else {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
 				}
-			} catch (final IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				return false;
-			}
 
-			System.out.print("Output of first command: " + output);
+				System.out.println("executeCommandLineAndWait(): Trying the second command again.");
+			}
 		}
 
-		return result;
+		// Try to get the output:
+		/*
+		 * if (!result) { String output = ""; /* String line; try { // TODO: readLine() can hang, waiting for an end of
+		 * line that never comes. while ((line = br.readLine()) != null) { output += line + "\n";
+		 * System.out.println(line); } } catch (final IOException e1) { // TODO Auto-generated catch block
+		 * e1.printStackTrace(); return false; }
+		 */
+
+		// System.out.println("  Output of first command: " + output);
+		// System.out.println("  first command: " + command.command().toString());
+		// System.out.println("  second command: " + commandSecond.command().toString());
+		// }
 	}
 
 	/**

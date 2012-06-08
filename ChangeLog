@@ -1,5 +1,15 @@
 2012-06-08  Murray Cumming  <murrayc@murrayc.com>
 
+	SelfHoster: Keep trying pg_ctl after starting postgres.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java
+	executeCommandLineAndWaitUntilSecondCommandReturnsSuccess():
+	Try pg_ctl repeatedly (for ever) until it succeeds, as we do in 
+	regular Glom. This seems mad but it seems to work because the first
+	command would fail if pg_ctl would eventually fail.
+
+2012-06-08  Murray Cumming  <murrayc@murrayc.com>
+
 	SelfHoster: Wait until the server is really ready.
 
 	* src/test/java/org/glom/web/server/SelfHoster.java
