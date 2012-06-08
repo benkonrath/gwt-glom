@@ -1,5 +1,13 @@
 2012-06-08  Murray Cumming  <murrayc@murrayc.com>
 
+	LayoutItemPortalDeepCloneTest: Test something to avoid warnings.
+
+	* src/test/java/org/glom/web/server/libglom/LayoutItemPortalDeepCloneTest.java:
+	Make this actually test the cloning again, though it is not very useful
+	now that we do not use the part that had a problem with cloning before.
+
+2012-06-08  Murray Cumming  <murrayc@murrayc.com>
+
 	SelfHoster: Keep trying pg_ctl after starting postgres.
 
 	* src/test/java/org/glom/web/server/SelfHoster.java

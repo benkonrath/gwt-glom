@@ -23,9 +23,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.glom.web.server.Utils;
+import org.glom.web.shared.libglom.Relationship;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
-import org.glom.web.shared.libglom.layout.TableToViewDetails;
-import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.junit.Test;
 
 /**
@@ -36,20 +36,34 @@ public class LayoutItemPortalDeepCloneTest {
 
 	@Test
 	public void test() {
-		// This seems to fail when we use it in OnlineGlomServiceImpl,
-		// but it works here:
-		final LayoutItemPortal portal = new LayoutItemPortal();
-		final TableToViewDetails viewDetails = new TableToViewDetails();
-		final String testTableName = "sometable";
+		final String testTableFrom = "testTableFrom";
+		final String testFieldFrom = "testFieldFrom";
+		final String testTableTo = "testTableTo";
+		final String testFieldTo = "testFieldTo";
 
-		/*
-		 * TODO: Test something else instead now that we have removed this API: viewDetails.tableName = testTableName;
-		 * viewDetails.usesRelationship = new UsesRelationshipImpl(); portal.setNavigationTable(viewDetails);
-		 * 
-		 * final LayoutItemPortal clone = (LayoutItemPortal) Utils.deepCopy(portal); assertTrue(clone != null); final
-		 * TableToViewDetails cloneViewDetails = clone.getNavigationTable(); assertTrue(cloneViewDetails != null);
-		 * assertEquals(cloneViewDetails.tableName, testTableName); assertTrue(cloneViewDetails.usesRelationship !=
-		 * null);
-		 */
+		final Relationship relationship = new Relationship();
+		relationship.setFromTable(testTableFrom);
+		relationship.setFromField(testFieldFrom);
+		relationship.setToTable(testTableTo);
+		relationship.setToField(testFieldTo);
+
+		final LayoutItemPortal portal = new LayoutItemPortal();
+		portal.setRelationship(relationship);
+
+		LayoutItemField item = new LayoutItemField();
+		item.setName("testfield1");
+		portal.addItem(item);
+		item = new LayoutItemField();
+		item.setName("testfield2");
+		portal.addItem(item);
+
+		final LayoutItemPortal clonePortal = (LayoutItemPortal) Utils.deepCopy(portal);
+		assertTrue(clonePortal != null);
+		final Relationship cloneRelationship = clonePortal.getRelationship();
+		assertTrue(cloneRelationship != null);
+		assertEquals(cloneRelationship.getFromTable(), testTableFrom);
+		assertEquals(cloneRelationship.getFromField(), testFieldFrom);
+		assertEquals(cloneRelationship.getToTable(), testTableTo);
+		assertEquals(cloneRelationship.getToField(), testFieldTo);
 	}
 }
