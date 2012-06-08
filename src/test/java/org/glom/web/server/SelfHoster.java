@@ -95,7 +95,7 @@ public class SelfHoster {
 
 		final boolean recreated = recreateDatabaseFromDocument(); /* TODO: Progress callback */
 		if (!recreated) {
-			if(!cleanup()) {
+			if (!cleanup()) {
 				return false;
 			}
 		}
@@ -225,13 +225,13 @@ public class SelfHoster {
 		// Also, the c hba_file=path argument must be split after -c, or postgres will get a " hba_file" configuration
 		// parameter instead of "hba_file".
 		final String commandPathStart = getPathToPostgresExecutable("postgres");
-		if(StringUtils.isEmpty(commandPathStart)) {
+		if (StringUtils.isEmpty(commandPathStart)) {
 			System.out.println("selfHost(): getPathToPostgresExecutable(postgres) failed.");
 			return false;
 		}
-		final ProcessBuilder commandPostgresStart = new ProcessBuilder(commandPathStart, "-D"
-				+ shellQuote(dbDirData), "-p", portAsText, "-i", // Equivalent to -h "*", which in turn is equivalent
-																	// to
+		final ProcessBuilder commandPostgresStart = new ProcessBuilder(commandPathStart, "-D" + shellQuote(dbDirData),
+				"-p", portAsText, "-i", // Equivalent to -h "*", which in turn is equivalent
+										// to
 				// listen_addresses in postgresql.conf. Listen to all IP addresses,
 				// so any client can connect (with a username+password)
 				"-c", "hba_file=" + shellQuote(dbDirHba), "-c", "ident_file=" + shellQuote(dbDirIdent), "-k"
@@ -247,12 +247,12 @@ public class SelfHoster {
 		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
 		// though that does not happen with the normal command line.
 		final String commandPathCheck = getPathToPostgresExecutable("pg_ctl");
-		if(StringUtils.isEmpty(commandPathCheck)) {
+		if (StringUtils.isEmpty(commandPathCheck)) {
 			System.out.println("selfHost(): getPathToPostgresExecutable(pg_ctl) failed.");
 			return false;
 		}
-		final ProcessBuilder commandCheckPostgresHasStarted = new ProcessBuilder(commandPathCheck,
-				"status", "-D" + shellQuote(dbDirData));
+		final ProcessBuilder commandCheckPostgresHasStarted = new ProcessBuilder(commandPathCheck, "status", "-D"
+				+ shellQuote(dbDirData));
 
 		// For postgres 8.1, this is "postmaster is running".
 		// For postgres 8.2, this is "server is running".
@@ -277,11 +277,11 @@ public class SelfHoster {
 		// Remember the port for later:
 		document.setConnectionPort(availablePort);
 
-		//Check that we can really connect:
+		// Check that we can really connect:
 
-		//pg_ctl sometimes reports success before it is really ready to let us connect,
-		//so in this case we can just keep trying until it works, for a while:
-		for(int i = 0; i < 10; i++) {
+		// pg_ctl sometimes reports success before it is really ready to let us connect,
+		// so in this case we can just keep trying until it works, for a while:
+		for (int i = 0; i < 10; i++) {
 
 			try {
 				Thread.sleep(1000);
@@ -291,14 +291,16 @@ public class SelfHoster {
 			}
 
 			final String dbName = document.getConnectionDatabase();
-			document.setConnectionDatabase(""); //We have not created the database yet.
+			document.setConnectionDatabase(""); // We have not created the database yet.
 			final Connection connection = createConnection();
 			document.setConnectionDatabase(dbName);
-			if(connection != null) {
+			if (connection != null) {
 				return true; // STARTUPERROR_NONE;
 			}
 
-			System.out.println("selfHost(): Waiting and retrying the connection due to suspected too-early success of pg_ctl. retries=" + i);
+			System.out
+					.println("selfHost(): Waiting and retrying the connection due to suspected too-early success of pg_ctl. retries="
+							+ i);
 		}
 
 		System.out.println("selfHost(): Test connection failed after multiple retries.");
@@ -463,14 +465,14 @@ public class SelfHoster {
 		dirPaths.add("/usr/lib/postgresql/9.1/bin");
 		dirPaths.add("/usr/lib/postgresql/9.0/bin");
 		dirPaths.add("/usr/lib/postgresql/8.4/bin");
-		
-		for(String dir : dirPaths) {
+
+		for (String dir : dirPaths) {
 			final String path = dir + File.separator + string;
-			if(fileExistsAndIsExecutable(path)) {
+			if (fileExistsAndIsExecutable(path)) {
 				return path;
 			}
 		}
-		
+
 		return "";
 	}
 
@@ -480,14 +482,14 @@ public class SelfHoster {
 	 */
 	private static boolean fileExistsAndIsExecutable(String path) {
 		final File file = new File(path);
-		if(!file.exists()) {
+		if (!file.exists()) {
 			return false;
 		}
-		
-		if(!file.canExecute()) {
+
+		if (!file.canExecute()) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -567,13 +569,14 @@ public class SelfHoster {
 		// though that does not happen with the normal command line.
 		boolean result = false;
 		final String commandPath = getPathToPostgresExecutable("initdb");
-		if(StringUtils.isEmpty(commandPath)) {
+		if (StringUtils.isEmpty(commandPath)) {
 			System.out.println("initialize(): getPathToPostgresExecutable(initdb) failed.");
 		} else {
-			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "-D"
-					+ shellQuote(dbDirData), "-U", initialUsername, "--pwfile=" + tempPwFile);
-	
-			// Note that --pwfile takes the password from the first line of a file. It's an alternative to supplying it when
+			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "-D" + shellQuote(dbDirData), "-U",
+					initialUsername, "--pwfile=" + tempPwFile);
+
+			// Note that --pwfile takes the password from the first line of a file. It's an alternative to supplying it
+			// when
 			// prompted on stdin.
 			result = executeCommandLineAndWait(commandInitdb);
 		}
@@ -583,7 +586,7 @@ public class SelfHoster {
 		if (!fileTempPwFile.delete()) {
 			System.out.println("initialize(): Failed to delete the password file.");
 		}
-		
+
 		if (!result) {
 			System.out.println("initialize(): Error while attempting to create self-hosting database.");
 			return false;
@@ -814,7 +817,7 @@ public class SelfHoster {
 		try {
 			conn = DriverManager.getConnection(jdbcURL + "/", connectionProps);
 		} catch (final SQLException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			return null;
 		}
 
@@ -994,11 +997,11 @@ public class SelfHoster {
 			// Make sure to use double quotes for the executable path, because the
 			// CreateProcess() API used on Windows does not support single quotes.
 			final String commandPath = getPathToPostgresExecutable("pg_ctl");
-			if(StringUtils.isEmpty(commandPath)) {
+			if (StringUtils.isEmpty(commandPath)) {
 				System.out.println("cleanup(): getPathToPostgresExecutable(pg_ctl) failed.");
 			} else {
-				final ProcessBuilder commandPostgresStop = new ProcessBuilder(commandPath, "-D"
-						+ shellQuote(dbDirData), "stop", "-m", "fast");
+				final ProcessBuilder commandPostgresStop = new ProcessBuilder(commandPath,
+						"-D" + shellQuote(dbDirData), "stop", "-m", "fast");
 				result = executeCommandLineAndWait(commandPostgresStop);
 				if (!result) {
 					System.out.println("cleanup(): Failed to stop the PostgreSQL server.");
@@ -1016,7 +1019,7 @@ public class SelfHoster {
 		final String docPath = document.getFileURI();
 		final File fileDoc = new File(docPath);
 		fileDoc.delete();
-		
+
 		return result;
 	}
 }

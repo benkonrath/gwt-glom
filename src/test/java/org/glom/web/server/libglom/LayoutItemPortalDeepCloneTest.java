@@ -41,18 +41,15 @@ public class LayoutItemPortalDeepCloneTest {
 		final LayoutItemPortal portal = new LayoutItemPortal();
 		final TableToViewDetails viewDetails = new TableToViewDetails();
 		final String testTableName = "sometable";
-		
-		/* TODO: Test something else instead now that we have removed this API:
-		viewDetails.tableName = testTableName;
-		viewDetails.usesRelationship = new UsesRelationshipImpl();
-		portal.setNavigationTable(viewDetails);
 
-		final LayoutItemPortal clone = (LayoutItemPortal) Utils.deepCopy(portal);
-		assertTrue(clone != null);
-		final TableToViewDetails cloneViewDetails = clone.getNavigationTable();
-		assertTrue(cloneViewDetails != null);
-		assertEquals(cloneViewDetails.tableName, testTableName);
-		assertTrue(cloneViewDetails.usesRelationship != null);
-		*/
+		/*
+		 * TODO: Test something else instead now that we have removed this API: viewDetails.tableName = testTableName;
+		 * viewDetails.usesRelationship = new UsesRelationshipImpl(); portal.setNavigationTable(viewDetails);
+		 * 
+		 * final LayoutItemPortal clone = (LayoutItemPortal) Utils.deepCopy(portal); assertTrue(clone != null); final
+		 * TableToViewDetails cloneViewDetails = clone.getNavigationTable(); assertTrue(cloneViewDetails != null);
+		 * assertEquals(cloneViewDetails.tableName, testTableName); assertTrue(cloneViewDetails.usesRelationship !=
+		 * null);
+		 */
 	}
 }
