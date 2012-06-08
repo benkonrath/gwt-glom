@@ -277,7 +277,32 @@ public class SelfHoster {
 		// Remember the port for later:
 		document.setConnectionPort(availablePort);
 
-		return true; // STARTUPERROR_NONE;
+		//Check that we can really connect:
+
+		//pg_ctl sometimes reports success before it is really ready to let us connect,
+		//so in this case we can just keep trying until it works, for a while:
+		for(int i = 0; i < 10; i++) {
+
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			final String dbName = document.getConnectionDatabase();
+			document.setConnectionDatabase(""); //We have not created the database yet.
+			final Connection connection = createConnection();
+			document.setConnectionDatabase(dbName);
+			if(connection != null) {
+				return true; // STARTUPERROR_NONE;
+			}
+
+			System.out.println("selfHost(): Waiting and retrying the connection due to suspected too-early success of pg_ctl. retries=" + i);
+		}
+
+		System.out.println("selfHost(): Test connection failed after multiple retries.");
+		return false;
 	}
 
 	/**
@@ -348,6 +373,7 @@ public class SelfHoster {
 		String output = "";
 		String line;
 		try {
+			//TODO: readLine() can hang, waiting for an end of line that never comes.
 			while ((line = br.readLine()) != null) {
 				output += line + "\n";
 			}
@@ -405,6 +431,7 @@ public class SelfHoster {
 			String output = "";
 			String line;
 			try {
+				//TODO: readLine() can hang, waiting for an end of line that never comes.
 				while ((line = br.readLine()) != null) {
 					output += line + "\n";
 					System.out.println(line);
