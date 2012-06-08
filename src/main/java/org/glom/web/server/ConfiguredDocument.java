@@ -605,6 +605,10 @@ final class ConfiguredDocument {
 			final String tableNameUsed = portal.getTableUsed(tableName);
 			updateLayoutGroupExpectedResultSize(portal, tableNameUsed);
 
+			//Do not add a primary key field if there is already one:
+			if(portal.getPrimaryKeyIndex() == -1 )
+				return;
+
 			final Relationship relationship = portal.getRelationship();
 			if (relationship != null) {
 

@@ -1,3 +1,13 @@
+2012-06-08  Murray Cumming  <murrayc@murrayc.com>
+
+	ConfiguredDocument: Do not add a primary key to portals each time.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	updatePortalsExtras(): Only add an extra primary key field if there is 
+	none, to avoid adding one each time we retrieve the details layout from the
+	layouts cache.
+	This should fix bug #676986 (Ben Konrath) 
+
 2012-05-25  Murray Cumming  <murrayc@murrayc.com>
 
 	Document.load(): Support version 7 documents. 
