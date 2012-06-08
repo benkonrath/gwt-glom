@@ -19,13 +19,10 @@
 
 package org.glom.web.server;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -369,11 +366,11 @@ public class SelfHoster {
 			return false;
 		}
 
-		final InputStream stderr = process.getInputStream();
-		final InputStreamReader isr = new InputStreamReader(stderr);
-		final BufferedReader br = new BufferedReader(isr);
-		String output = "";
-		String line;
+		// final InputStream stderr = process.getInputStream();
+		// final InputStreamReader isr = new InputStreamReader(stderr);
+		// final BufferedReader br = new BufferedReader(isr);
+		// String output = "";
+		// String line;
 		/*
 		 * try { //TODO: readLine() can hang, waiting for an end of line that never comes. while ((line = br.readLine())
 		 * != null) { output += line + "\n"; } } catch (final IOException e1) { e1.printStackTrace(); return false; }
@@ -390,7 +387,7 @@ public class SelfHoster {
 
 		if (result != 0) {
 			System.out.println("executeCommandLineAndWait(): Command failed: " + command.command().toString());
-			System.out.print("  Output: " + output);
+			// System.out.print("  Output: " + output);
 			return false;
 		}
 
@@ -402,18 +399,19 @@ public class SelfHoster {
 		command.redirectErrorStream(true);
 
 		// Run the first command, and do not wait for it to return:
-		Process process = null;
+		// Process process = null;
 		try {
-			process = command.start();
+			// Process process =
+			command.start();
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
 
-		final InputStream stderr = process.getInputStream();
-		final InputStreamReader isr = new InputStreamReader(stderr);
-		final BufferedReader br = new BufferedReader(isr);
+		// final InputStream stderr = process.getInputStream();
+		// final InputStreamReader isr = new InputStreamReader(stderr);
+		// final BufferedReader br = new BufferedReader(isr);
 
 		/*
 		 * We do not wait, because this (postgres, for instance), does not return: final int result = process.waitFor();

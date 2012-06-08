@@ -1,5 +1,17 @@
 2012-06-08  Murray Cumming  <murrayc@murrayc.com>
 
+	SelfHoster: Avoid some compiler warnings.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java
+	executeCommandLineAndWait():
+	executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(): Comment out
+	the now-unused streams for stdout and stderr from the command Processes.
+	These are not used because readln() hangs while waiting for a new line,
+	where there may be no next line. The commented out code is still there
+	to help us figure out how to do this properly.
+
+2012-06-08  Murray Cumming  <murrayc@murrayc.com>
+
 	LayoutItemPortalDeepCloneTest: Test something to avoid warnings.
 
 	* src/test/java/org/glom/web/server/libglom/LayoutItemPortalDeepCloneTest.java:
