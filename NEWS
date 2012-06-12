@@ -1,3 +1,18 @@
+1.21.9.3 (unstable):
+
+* Supprt version 7 of the Glom document file format, as well as the current
+  version 8.
+  (Murray Cumming) Bug #676737
+* Details: Do not add yet another primary key to related records 
+  portals each and every time they are loaded
+  (Murray Cumming) Bug #676986 (Ben Konrath)
+* Add a French translatino.
+* Tests: Add the ability to self-host Glom databases with PostgreSQL, so we can 
+  test the UI more later.
+  (Murray Cumming)
+* Build: Add configuration for auto-generating mvn:i18n from with Eclipse.
+  (Ben Konrath)
+
 1.21.9.2 (unstable):
 
 * Use translations for top-level group titles too, fixing a regression in
