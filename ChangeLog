@@ -1,3 +1,13 @@
+2012-06-12  Murray Cumming  <murrayc@murrayc.com>
+
+	ConfiguredDocument: Add a primary key to portals at least once.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java
+	updatePortalsExtras): Fix a typo so that we add the primary key
+	column at least once.
+	This is a fix for the previous commit:
+	ConfiguredDocument: Do not add a primary key to portals each time.
+
 2012-06-08  Murray Cumming  <murrayc@murrayc.com>
 
 	SelfHoster: Avoid some compiler warnings.
