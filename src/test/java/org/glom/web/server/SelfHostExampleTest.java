@@ -32,6 +32,8 @@ import org.junit.Test;
  * 
  */
 public class SelfHostExampleTest {
+	
+	private SelfHoster selfHoster = null;
 
 	@Test
 	public void test() {
@@ -43,11 +45,14 @@ public class SelfHostExampleTest {
 		document.setFileURI(uri);
 		assertTrue(document.load());
 
-		final SelfHoster selfHoster = new SelfHoster(document);
+		selfHoster = new SelfHoster(document);
 		final boolean hosted = selfHoster.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
 		assertTrue(hosted);
-
-		// TODO: Make sure that this is always called.
-		selfHoster.cleanup();
+	}
+	
+	public void tearDown() {
+		if(selfHoster != null) {
+			selfHoster.cleanup();
+		}
 	}
 }

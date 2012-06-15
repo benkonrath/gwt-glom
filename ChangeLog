@@ -1,3 +1,10 @@
+2012-06-15  Murray Cumming  <murrayc@murrayc.com>
+
+	SelfHostExampleTest: Make sure we cleanup on failure.
+
+	* src/test/java/org/glom/web/server/SelfHostExampleTest.java: Move
+	the use of cleanup() to a tearDown() JUnit method.
+
 2012-06-12  Murray Cumming  <murrayc@murrayc.com>
 
 	ConfiguredDocument: Add a primary key to portals at least once.
