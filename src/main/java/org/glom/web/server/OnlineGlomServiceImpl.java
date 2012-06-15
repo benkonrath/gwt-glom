@@ -562,11 +562,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 					configuredDocument.setDefaultLocaleID(globalLocaleID.trim());
 				}
 
-				// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
-				// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
-				final String documentID = FilenameUtils.removeExtension(filename).replace(' ', '+');
-				configuredDocument.setDocumentID(documentID);
-				documentMapping.put(documentID, configuredDocument);
+				addDocument(configuredDocument, filename);
 			}
 
 		} catch (final Exception e) {
@@ -574,6 +570,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			configurationException = e;
 		}
 
+	}
+
+	private void addDocument(final ConfiguredDocument configuredDocument, final String filename) {
+		// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
+		// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
+		final String documentID = FilenameUtils.removeExtension(filename).replace(' ', '+');
+		configuredDocument.setDocumentID(documentID);
+
+		documentMapping.put(documentID, configuredDocument);
 	}
 
 	/*

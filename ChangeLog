@@ -1,5 +1,12 @@
 2012-06-15  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlomServiceImpl.init(): Move some code into a new method.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Create addDocument().
+
+2012-06-15  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlomServiceImpl.OnlineGlomProperties: Improve getKey().
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
