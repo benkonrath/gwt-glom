@@ -66,17 +66,28 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	// TODO: test this.
 	private static class OnlineGlomProperties extends Properties {
 		
-		/** Get the whole line that has a key with this value.
+		/** Get the key for any *.*.filename = thefilename line.
  		 *
 		 * @param value
 		 * @return
 		 */
-		private String getKey(final String value) {
+		private String getKey(final String filename) {
+			
 			for (final String key : stringPropertyNames()) {
-				if (getProperty(key).trim().equals(value)) {
+				
+				//Split the line at the . separators,
+				final String[] keyArray = key.split("\\.");
+				if (keyArray.length != 3)
+					continue;
+				if(!("filename".equals(keyArray[2]))) {
+					continue;
+				}
+
+				if (getProperty(key).trim().equals(filename)) {
 					return key;
 				}
 			}
+
 			return null;
 		}
 		
@@ -88,8 +99,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		public Credentials getCredentials(final String filename) {
 			Credentials result = null;
 
-			//TODO: This could fail if a username or password has the same string as a filename.
-			//TODO: Check for ".filename =" in getKey().
 			final String key = getKey(filename);
 			if (key == null) {
 				return result;

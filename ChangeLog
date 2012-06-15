@@ -1,5 +1,13 @@
 2012-06-15  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlomServiceImpl.OnlineGlomProperties: Improve getKey().
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	OnlineGlomProperties.getKey(): Make this more robust by moving the
+	check for *.*.filename to here.
+
+2012-06-15  Murray Cumming  <murrayc@murrayc.com>
+
 	OnlineGlomServiceImpl: Improve the OnlineGlomProperties class.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
