@@ -1,5 +1,13 @@
 2012-06-15  Murray Cumming  <murrayc@murrayc.com>
 
+	OnlineGlomServiceImpl: Improve the OnlineGlomProperties class.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java
+	init(): Move knowledge of the config file format into the 
+	OnlineGlomProperties inner class.
+
+2012-06-15  Murray Cumming  <murrayc@murrayc.com>
+
 	SelfHostExampleTest: Make sure we cleanup on failure.
 
 	* src/test/java/org/glom/web/server/SelfHostExampleTest.java: Move

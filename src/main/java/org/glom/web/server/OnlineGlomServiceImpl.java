@@ -63,15 +63,69 @@ import com.mchange.v2.c3p0.DataSources;
 public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
 
 	// convenience class for dealing with the Online Glom configuration file
-	// TODO: Turn this into a class with specific getters, and test it.
+	// TODO: test this.
 	private static class OnlineGlomProperties extends Properties {
-		public String getKey(final String value) {
+		
+		/** Get the whole line that has a key with this value.
+ 		 *
+		 * @param value
+		 * @return
+		 */
+		private String getKey(final String value) {
 			for (final String key : stringPropertyNames()) {
 				if (getProperty(key).trim().equals(value)) {
 					return key;
 				}
 			}
 			return null;
+		}
+		
+		public static class Credentials {
+			public String userName = "";
+			public String password = "";
+		};
+
+		public Credentials getCredentials(final String filename) {
+			Credentials result = null;
+
+			//TODO: This could fail if a username or password has the same string as a filename.
+			//TODO: Check for ".filename =" in getKey().
+			final String key = getKey(filename);
+			if (key == null) {
+				return result;
+			}
+
+			//Split the line at the . separators,
+			final String[] keyArray = key.split("\\.");
+			
+			//Check that the third item is "filename", as expected:
+			if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
+				result = new Credentials();
+				
+				//Get the username and password for this file:
+				final String usernameKey = key.replaceAll(keyArray[2], "username");
+				final String passwordKey = key.replaceAll(keyArray[2], "password");
+				result.userName = getProperty(usernameKey).trim();
+				result.password = getProperty(passwordKey);
+			}
+			
+			return result;
+		}
+
+		public String getGlobalUsername() {
+			return getProperty("glom.document.username").trim();
+		}
+
+		public String getGlobalPassword() {
+			return getProperty("glom.document.password");
+		}
+
+		public String getGlobalLocale() {
+			return getProperty("glom.document.locale");
+		}
+
+		public String getDocumentsDirectory() {
+			return getProperty("glom.document.directory");
 		}
 	}
 
@@ -432,7 +486,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			config.load(is); // can throw an IOException
 
 			// check if we can read the configured glom file directory
-			final String documentDirName = config.getProperty("glom.document.directory");
+			final String documentDirName = config.getDocumentsDirectory();
 			final File documentDir = new File(documentDirName);
 			if (!documentDir.isDirectory()) {
 				final String errorMessage = documentDirName + " is not a directory.";
@@ -462,7 +516,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
-			final String globalLocaleID = StringUtils.defaultString(config.getProperty("glom.document.locale"));
+			final String globalLocaleID = StringUtils.defaultString(config.getGlobalLocale());
 
 			for (final File glomFile : glomFiles) {
 				final Document document = new Document();
@@ -478,24 +532,21 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 				final ConfiguredDocument configuredDocument = new ConfiguredDocument(document); // can throw a
 				// PropertyVetoException
 
+				final String globalUserName = config.getGlobalUsername();
+				final String globalPassword = config.getGlobalPassword();
+
 				// check if a username and password have been set and work for the current document
 				final String filename = glomFile.getName();
-				final String key = config.getKey(filename);
-				if (key != null) {
-					final String[] keyArray = key.split("\\.");
-					if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
-						// username/password could be set, let's check to see if it works
-						final String usernameKey = key.replaceAll(keyArray[2], "username");
-						final String passwordKey = key.replaceAll(keyArray[2], "password");
-						configuredDocument.setUsernameAndPassword(config.getProperty(usernameKey).trim(),
-								config.getProperty(passwordKey)); // can throw an SQLException
-					}
+				
+				// Username/password could be set. Let's check to see if it works.
+				final OnlineGlomProperties.Credentials docCredentials = config.getCredentials(filename);
+				if(docCredentials != null) {
+						configuredDocument.setUsernameAndPassword(docCredentials.userName, docCredentials.password); // can throw an SQLException
 				}
 
 				// check the if the global username and password have been set and work with this document
 				if (!configuredDocument.isAuthenticated()) {
-					configuredDocument.setUsernameAndPassword(config.getProperty("glom.document.username").trim(),
-							config.getProperty("glom.document.password")); // can throw an SQLException
+					configuredDocument.setUsernameAndPassword(globalUserName, globalPassword); // can throw an SQLException
 				}
 
 				if (!StringUtils.isEmpty(globalLocaleID)) {
