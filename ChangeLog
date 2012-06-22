@@ -1,3 +1,12 @@
+2012-06-22  Murray Cumming  <murrayc@murrayc.com>
+
+	Added OnlineGlomPropertiesTest.
+
+	* src/main/java/org/glom/web/server/OnlineGlomProperties.java:
+	Make sure we never return a null string.
+	* src/test/java/org/glom/web/server/OnlineGlomPropertiesTest.java:
+	Added tests of the OnlineGlomProperties API, using our sample file.
+
 2012-06-20  Murray Cumming  <murrayc@murrayc.com>
 
 	Make OnlineGlomProperties be a normal class.

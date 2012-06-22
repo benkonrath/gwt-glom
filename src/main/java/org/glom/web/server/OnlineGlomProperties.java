@@ -21,37 +21,14 @@ package org.glom.web.server;
 
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+
 /** A convenience class for dealing with the Online Glom configuration file
  * TODO: test this.
  */
 class OnlineGlomProperties extends Properties {
 
 	private static final long serialVersionUID = 4290997725469072758L;
-
-	/** Get the key for any *.*.filename = thefilename line.
-	 *
-	 * @param value
-	 * @return
-	 */
-	private String getKey(final String filename) {
-		
-		for (final String key : stringPropertyNames()) {
-			
-			//Split the line at the . separators,
-			final String[] keyArray = key.split("\\.");
-			if (keyArray.length != 3)
-				continue;
-			if(!("filename".equals(keyArray[2]))) {
-				continue;
-			}
-
-			if (getProperty(key).trim().equals(filename)) {
-				return key;
-			}
-		}
-
-		return null;
-	}
 	
 	public static class Credentials {
 		public String userName = "";
@@ -76,26 +53,55 @@ class OnlineGlomProperties extends Properties {
 			//Get the username and password for this file:
 			final String usernameKey = key.replaceAll(keyArray[2], "username");
 			final String passwordKey = key.replaceAll(keyArray[2], "password");
-			result.userName = getProperty(usernameKey).trim();
-			result.password = getProperty(passwordKey);
+			result.userName = getPropertyNonNull(usernameKey).trim();
+			result.password = getPropertyNonNull(passwordKey);
 		}
 		
 		return result;
 	}
 
 	public String getGlobalUsername() {
-		return getProperty("glom.document.username").trim();
+		return getPropertyNonNull("glom.document.username").trim();
 	}
 
 	public String getGlobalPassword() {
-		return getProperty("glom.document.password");
+		return getPropertyNonNull("glom.document.password");
 	}
 
 	public String getGlobalLocale() {
-		return getProperty("glom.document.locale");
+		return getPropertyNonNull("glom.document.locale");
 	}
 
 	public String getDocumentsDirectory() {
-		return getProperty("glom.document.directory");
+		return getPropertyNonNull("glom.document.directory");
+	}
+	
+	/** Get the key for any *.*.filename = thefilename line.
+	 *
+	 * @param value
+	 * @return
+	 */
+	private String getKey(final String filename) {
+		
+		for (final String key : stringPropertyNames()) {
+			
+			//Split the line at the . separators,
+			final String[] keyArray = key.split("\\.");
+			if (keyArray.length != 3)
+				continue;
+			if(!("filename".equals(keyArray[2]))) {
+				continue;
+			}
+
+			if (getPropertyNonNull(key).trim().equals(filename)) {
+				return key;
+			}
+		}
+
+		return null;
+	}
+	
+	private String getPropertyNonNull(final String key) {
+		return StringUtils.defaultString(getProperty(key));
 	}
 }
