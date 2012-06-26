@@ -32,26 +32,26 @@ import org.junit.Test;
  * 
  */
 public class SelfHostExampleTest {
-	
+
 	private SelfHoster selfHoster = null;
 
 	@Test
 	public void test() {
 		final URL url = SelfHostExampleTest.class.getResource("example_music_collection.glom");
 		assertTrue(url != null);
-		final String uri = url.toString();
+		final String strUri = url.toString();
 
 		final Document document = new Document();
-		document.setFileURI(uri);
+		document.setFileURI(strUri);
 		assertTrue(document.load());
 
 		selfHoster = new SelfHoster(document);
 		final boolean hosted = selfHoster.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
 		assertTrue(hosted);
 	}
-	
+
 	public void tearDown() {
-		if(selfHoster != null) {
+		if (selfHoster != null) {
 			selfHoster.cleanup();
 		}
 	}
