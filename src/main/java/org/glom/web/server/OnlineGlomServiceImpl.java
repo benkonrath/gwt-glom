@@ -33,7 +33,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.client.OnlineGlomService;
-import org.glom.web.server.OnlineGlomProperties;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DetailsLayoutAndData;
