@@ -539,6 +539,9 @@ public class Document {
 		case TYPE_TIME:
 			// TODO
 			break;
+		default:
+			Log.error("getNodeTextChildAsValue(): unexpected or invalid field type.");
+			break;
 		}
 
 		return result;
@@ -571,6 +574,9 @@ public class Document {
 			break;
 		case TYPE_TIME:
 			str = ""; // TODO
+			break;
+		default:
+			Log.error("setNodeTextChildAsValue(): unexpected or invalid field type.");
 			break;
 		}
 
