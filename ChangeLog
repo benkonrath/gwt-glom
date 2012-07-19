@@ -1,3 +1,11 @@
+2012-07-19  Murray Cumming  <murrayc@murrayc.com>
+
+	Avoid another code warning in Eclipse Juno.
+
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Do instanceof checks on the FileUtils.listFiles() result and its 
+	items.
+
 2012-07-13  Murray Cumming  <murrayc@murrayc.com>
 
 	Avoid some code warnings in Eclipse Juno

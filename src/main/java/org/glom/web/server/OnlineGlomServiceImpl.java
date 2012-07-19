@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -434,8 +435,12 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// get and check the glom files in the specified directory
 			// TODO: Test this:
 			final String[] extensions = { GLOM_FILE_EXTENSION };
-			final List<File> glomFiles = (List<File>) FileUtils
-					.listFiles(documentDir, extensions, true /* recursive */);
+			final Collection<?> glomFiles = FileUtils.listFiles(documentDir, extensions, true /* recursive */);
+			if(!(glomFiles instanceof List<?>)) {
+				final String errorMessage = "onlineglom.properties: listFiles() failed.";
+				Log.fatal(errorMessage);
+				throw new Exception(errorMessage);
+			}
 
 			// don't continue if there aren't any Glom files to configure
 			if (glomFiles.size() <= 0) {
@@ -450,7 +455,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// for table titles, field titles, etc:
 			final String globalLocaleID = StringUtils.defaultString(config.getGlobalLocale());
 
-			for (final File glomFile : glomFiles) {
+			for (final Object objGlomFile : glomFiles) {
+				if(!(objGlomFile instanceof File)) {
+					continue;
+				}
+				
+				final File glomFile = (File)objGlomFile;
+
 				final Document document = new Document();
 				document.setFileURI("file://" + glomFile.getAbsolutePath());
 				final boolean retval = document.load();
