@@ -502,7 +502,9 @@ public class SelfHoster {
 				final ServerSocket socket = new ServerSocket(port);
 
 				// If the instantiation succeeded then the port was free:
-				return socket.getLocalPort(); // This must equal port.
+				final int result = socket.getLocalPort(); // This must equal port.
+				socket.close();
+				return result;
 			} catch (final IOException ex) {
 				continue; // try next port
 			}

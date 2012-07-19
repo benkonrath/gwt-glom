@@ -1,5 +1,12 @@
 2012-07-19  Murray Cumming  <murrayc@murrayc.com>
 
+	SelfHoster.discoverFirstFreePort(): Close the socket.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java:
+	discoverFirstFreePort(): Close the socket. Eclipse Juno warns about this.
+
+2012-07-19  Murray Cumming  <murrayc@murrayc.com>
+
 	Avoid another code warning in Eclipse Juno.
 
 	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
