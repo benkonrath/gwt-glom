@@ -833,10 +833,8 @@ public class SelfHoster {
 	}
 
 	/**
-	 * @return
-	 * @throws SQLException
 	 */
-	private Connection createConnection(boolean failureExpected) {
+	public Connection createConnection(boolean failureExpected) {
 		final Properties connectionProps = new Properties();
 		connectionProps.put("user", this.username);
 		connectionProps.put("password", this.password);

@@ -1,5 +1,15 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	tests: SelfHoster: Test SqlUtils too.
+
+	* src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	Retrieve some data and check it too, as in the regular Glom
+	test_selfhosting_new_from_example.cc test.
+	* src/test/java/org/glom/web/server/SelfHoster.java:
+	createConnection(): Make this public.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	tests: SelfHoster: createConnection(): Do not warn about expected failures.
 	
 	Let the caller say if the connection is expected to fail, to avoid 
