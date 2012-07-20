@@ -68,7 +68,7 @@ public class DocumentTest {
 		url = DocumentTest.class.getResource("example_film_manager.glom");
 		assertTrue(url != null);
 		testUriFilmManager = url.toString();
-		assertTrue(!StringUtils.isEmpty(testUriMusicCollection));
+		assertTrue(!StringUtils.isEmpty(testUriFilmManager));
 
 		document = new Document();
 		document.setFileURI(testUriMusicCollection);
