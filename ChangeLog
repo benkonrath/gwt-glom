@@ -1,5 +1,13 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	Set JDBC timeouts.
+
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	Set the timeout here too.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	tests: ConfiguredDocumentTest: Make this pass.
 
 	* src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:

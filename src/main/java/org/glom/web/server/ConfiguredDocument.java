@@ -21,6 +21,7 @@ package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -231,6 +232,11 @@ final class ConfiguredDocument {
 		try {
 			// FIXME find a better way to check authentication
 			// it's possible that the connection could be failing for another reason
+			
+			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
+			//This is more than enough.
+			DriverManager.setLoginTimeout(5); 
+			
 			conn = cpds.getConnection();
 			authenticated = true;
 		} catch (final SQLException e) {

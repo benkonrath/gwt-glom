@@ -20,6 +20,7 @@
 package org.glom.web.server.database;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -99,6 +100,11 @@ public abstract class ListDBAccess extends DBAccess {
 		Statement st = null;
 		ResultSet rs = null;
 		try {
+			
+			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
+			//This is more than enough.
+			DriverManager.setLoginTimeout(5);
+
 			// Setup the JDBC driver and get the query. Special care needs to be take to ensure that the results will be
 			// based on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount
 			// of data. Here's the relevant PostgreSQL documentation:
@@ -155,6 +161,10 @@ public abstract class ListDBAccess extends DBAccess {
 		Statement st = null;
 		ResultSet rs = null;
 		try {
+			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
+			//This is more than enough.
+			DriverManager.setLoginTimeout(5); 
+			
 			// Setup and execute the count query. Special care needs to be take to ensure that the results will be based
 			// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
 			// data. Here's the relevant PostgreSQL documentation:
