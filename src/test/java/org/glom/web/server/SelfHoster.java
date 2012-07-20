@@ -275,6 +275,15 @@ public class SelfHoster {
 		document.setConnectionPort(availablePort);
 
 		// Check that we can really connect:
+		
+		//Sleep for a fairly long time initially to avoid distracting error messages when trying to connect,
+		//while the database server is still starting up.
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// pg_ctl sometimes reports success before it is really ready to let us connect,
 		// so in this case we can just keep trying until it works, for a while:

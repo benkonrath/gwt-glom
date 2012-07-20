@@ -1,3 +1,12 @@
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
+	tests: SelfHoster: createAndSelfHostNewEmpty(): Sleep after starting server.
+	
+	* src/test/java/org/glom/web/server/SelfHoster.java:
+	createAndSelfHostNewEmpty(): Sleep initially, to avoid distracting errors
+	due to the inevitable need to retry the connection while the database server
+	starts.
+
 2012-07-20  Murray Cumming  <murrayc@murray.com>
 
 	tests: SelfHoster: createConnection(): Set a timeout.
