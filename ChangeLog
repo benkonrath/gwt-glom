@@ -1,5 +1,12 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	tests: SelfHoster: createConnection(): Do not warn about expected failures.
+	
+	Let the caller say if the connection is expected to fail, to avoid 
+	irrelevant error output.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	tests: SelfHoster: createAndSelfHostNewEmpty(): Sleep after starting server.
 	
 	* src/test/java/org/glom/web/server/SelfHoster.java:

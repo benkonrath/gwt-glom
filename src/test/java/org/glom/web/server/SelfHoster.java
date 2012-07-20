@@ -300,7 +300,7 @@ public class SelfHoster {
 			document.setConnectionDatabase(""); // We have not created the database yet.
 
 			//Check that we can connect:
-			final Connection connection = createConnection();
+			final Connection connection = createConnection(false);
 			document.setConnectionDatabase(dbName);
 			if (connection != null) {
 				//Close the connection:
@@ -311,6 +311,7 @@ public class SelfHoster {
 					e.printStackTrace();
 				}
 
+				System.out.println("selfHost(): Connection succeeded after retries=" + i);
 				return true; // STARTUPERROR_NONE;
 			}
 
@@ -723,7 +724,7 @@ public class SelfHoster {
 		}
 
 		document.setConnectionDatabase(dbName);
-		Connection connection = createConnection();
+		Connection connection = createConnection(true);
 		if (connection != null) {
 			// Connection to the database succeeded, so the database
 			// exists already.
@@ -740,7 +741,7 @@ public class SelfHoster {
 		progress();
 		document.setConnectionDatabase("");
 
-		connection = createConnection();
+		connection = createConnection(false);
 		if (connection == null) {
 			System.out.println("recreatedDatabase(): createConnection() failed, before creating the database.");
 			return false;
@@ -764,7 +765,7 @@ public class SelfHoster {
 		connection = null;
 
 		document.setConnectionDatabase(dbName);
-		connection = createConnection();
+		connection = createConnection(false);
 		if (connection == null) {
 			System.out.println("recreatedDatabase(): createConnection() failed, after creating the database.");
 			return false;
@@ -835,7 +836,7 @@ public class SelfHoster {
 	 * @return
 	 * @throws SQLException
 	 */
-	private Connection createConnection() {
+	private Connection createConnection(boolean failureExpected) {
 		final Properties connectionProps = new Properties();
 		connectionProps.put("user", this.username);
 		connectionProps.put("password", this.password);
@@ -856,7 +857,9 @@ public class SelfHoster {
 			conn = DriverManager.getConnection(jdbcURL + "/", connectionProps);
 			//System.out.println("debug: SelfHoster.createConnection(): before createConnection()");
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			if(!failureExpected) {
+				e.printStackTrace();
+			}
 			return null;
 		}
 
