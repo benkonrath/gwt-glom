@@ -1,5 +1,13 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	Some error checking.
+
+	* src/main/java/org/glom/web/server/Log.java: Avoid using null strings.
+	* src/main/java/org/glom/web/server/database/ListDBAccess.java:
+	Avoid using a null Connection.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	tests: Add a ConfiguredDocument test.
 
 	* src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:

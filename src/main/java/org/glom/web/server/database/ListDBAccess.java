@@ -104,6 +104,11 @@ public abstract class ListDBAccess extends DBAccess {
 			// of data. Here's the relevant PostgreSQL documentation:
 			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
 			conn = cpds.getConnection();
+			if(conn == null) {
+				Log.error(documentID, tableName, "The connection is null.");
+				return rowsList;
+			}
+			
 			conn.setAutoCommit(false);
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			st.setFetchSize(length);
