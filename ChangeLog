@@ -1,5 +1,13 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	tests: SelfHoster: selfHost(): Close the test connection.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java: selfHost():
+	When we check that the connection works, close the connection. This seems
+	to not be closed automatically otherwise.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	Use slf4j-simple to see JDBC errors.
 
 	* pom.xml: Depend on slf4j-simple so we can see errors from JDBC.

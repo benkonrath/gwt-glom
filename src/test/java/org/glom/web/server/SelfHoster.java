@@ -289,9 +289,19 @@ public class SelfHoster {
 
 			final String dbName = document.getConnectionDatabase();
 			document.setConnectionDatabase(""); // We have not created the database yet.
+
+			//Check that we can connect:
 			final Connection connection = createConnection();
 			document.setConnectionDatabase(dbName);
 			if (connection != null) {
+				//Close the connection:
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return true; // STARTUPERROR_NONE;
 			}
 
