@@ -841,9 +841,13 @@ public class SelfHoster {
 
 		Connection conn = null;
 		try {
+			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
+			//System.out.println("debug: SelfHoster.createConnection(): before createConnection()");
+			DriverManager.setLoginTimeout(10);
 			conn = DriverManager.getConnection(jdbcURL + "/", connectionProps);
+			//System.out.println("debug: SelfHoster.createConnection(): before createConnection()");
 		} catch (final SQLException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 

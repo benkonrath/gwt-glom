@@ -1,3 +1,11 @@
+2012-07-20  Murray Cumming  <murrayc@murray.com>
+
+	tests: SelfHoster: createConnection(): Set a timeout.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java:
+	createConnection(): Use setLoginTimeout() because it otherwise seems to take
+	ages to actually return when it fails.
+
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
 	tests: SelfHoster: selfHost(): Close the test connection.
