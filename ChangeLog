@@ -1,5 +1,16 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	LayoutItemFIeld: getName(): Use the Field if it is set.
+
+	* src/main/java/org/glom/web/shared/libglom/layout/LayoutItemField.java:
+	getName(): If the full field details have been set, return its name, so that
+	callers do not need to set the name separately.
+	* src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	testExampleMusiccollectionData): Do not use a TYPE_FORWARD_ONLY statement,
+	so we can count the rows.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	tests: SelfHoster: Test SqlUtils too.
 
 	* src/test/java/org/glom/web/server/SelfHostExampleTest.java:

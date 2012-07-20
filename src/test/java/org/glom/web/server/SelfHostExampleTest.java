@@ -89,7 +89,7 @@ public class SelfHostExampleTest {
 	  final Connection conn = selfHoster.createConnection(false);
 	  assertTrue(conn != null);
 	  
-	  final Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+	  final Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       //st.setFetchSize(length);
 	  final ResultSet rs = st.executeQuery(sqlQuery);
 	  assertTrue(rs != null);

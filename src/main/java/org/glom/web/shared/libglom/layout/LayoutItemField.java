@@ -27,6 +27,15 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	// Extras:
 	private String navigationTableName = null; // If any.
 
+	@Override
+	public String getName() {
+		if(field == null) {
+			return super.getName();
+		} else {
+			return field.getName();
+		}
+	}
+
 	/**
 	 * @return the field
 	 */
