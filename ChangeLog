@@ -1,3 +1,9 @@
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
+	Use slf4j-simple to see JDBC errors.
+
+	* pom.xml: Depend on slf4j-simple so we can see errors from JDBC.
+
 2012-07-19  Murray Cumming  <murrayc@murrayc.com>
 
 	SelfHoster.discoverFirstFreePort(): Close the socket.
