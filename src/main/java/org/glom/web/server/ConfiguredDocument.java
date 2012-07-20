@@ -295,7 +295,8 @@ final class ConfiguredDocument {
 			final String tableName = tablesVec.get(i);
 			if (!document.getTableIsHidden(tableName)) {
 				tableNames.add(tableName);
-				// JNI is "expensive", the comparison will only be called if we haven't already found the default table
+
+				//The comparison will only be called if we haven't already found the default table
 				if (!foundDefaultTable && tableName.equals(document.getDefaultTable())) {
 					documentInfo.setDefaultTableIndex(visibleIndex);
 					foundDefaultTable = true;
