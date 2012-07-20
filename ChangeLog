@@ -1,5 +1,12 @@
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
+	tests: ConfiguredDocumentTest: Make this pass.
+
+	* src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:
+	Disable tests that need a database connection.
+
+2012-07-20  Murray Cumming  <murrayc@murrayc.com>
+
 	Use Java 1.7 instead of Java 1.6.
 
 	* pom.xml: Specify the 1.7 JDK, though I don't like how we seem to need
