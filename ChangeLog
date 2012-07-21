@@ -1,5 +1,14 @@
 2012-07-21  Murray Cumming  <murrayc@murrayc.com>
 
+        tests: Add SelfHostConfiguredDocumentTest
+ 
+        * src/test/java/org/glom/web/server/SelfHoster.java: Add getters for the 
+	username and password, for use by ConfiguredDocument.
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java: 
+	This tests some of the ConfiguredDocument API that requires a database connection.
+
+2012-07-21  Murray Cumming  <murrayc@murrayc.com>
+
         Document: Load title translations and test them.
 
         * src/main/java/org/glom/web/server/libglom/Document.java: Load the translations

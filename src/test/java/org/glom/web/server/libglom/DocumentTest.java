@@ -330,7 +330,7 @@ public class DocumentTest {
 		assertEquals("Cast", portal.getTitle(defaultLocale));
 		assertEquals("Szene Besetzung", portal.getTitle(germanLocale));
 
-		// call getSuitableTableToCiewDetails
+		// call getSuitableTableToViewDetails
 		final TableToViewDetails viewDetails = filmManagerDocument.getPortalSuitableTableToViewDetails(portal);
 		assertTrue(viewDetails != null);
 
