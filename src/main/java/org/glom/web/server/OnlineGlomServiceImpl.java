@@ -407,7 +407,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		try {
 			// Find the configuration file. See this thread for background info:
 			// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
-			// FIXME move onlineglom.properties to the WEB-INF folder (option number 2 from the stackoverflow question)
 			final OnlineGlomProperties config = new OnlineGlomProperties();
 			final InputStream is = Thread.currentThread().getContextClassLoader()
 					.getResourceAsStream("onlineglom.properties");
