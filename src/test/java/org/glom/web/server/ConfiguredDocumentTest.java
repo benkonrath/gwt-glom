@@ -23,15 +23,11 @@ import static org.junit.Assert.*;
 
 import java.beans.PropertyVetoException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.DocumentTest;
-import org.glom.web.shared.DataItem;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
@@ -107,8 +103,20 @@ public class ConfiguredDocumentTest {
 	 */
 	@Test
 	public void testGetDocumentInfo() {
-		final DocumentInfo docInfo = configuredDoc.getDocumentInfo("");
+		//Default locale:
+		DocumentInfo docInfo = configuredDoc.getDocumentInfo("");
 		Assert.assertNotNull(docInfo);
+		Assert.assertEquals(docInfo.getTitle(), "Music Collection");
+		
+		//Other locale:
+		docInfo = configuredDoc.getDocumentInfo("de");
+		Assert.assertNotNull(docInfo);
+		Assert.assertEquals(docInfo.getTitle(), "Musiksammlung");
+		
+		//Invalid locale, which should use the default one:
+		docInfo = configuredDoc.getDocumentInfo("someinvalidlocale");
+		Assert.assertNotNull(docInfo);
+		Assert.assertEquals(docInfo.getTitle(), "Music Collection");
 	}
 
 	/* This requires a database connection:

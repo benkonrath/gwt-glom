@@ -220,6 +220,7 @@ public class Document {
 		} else {
 			databaseTitle.setTitleOriginal(deprecatedDatabaseTitleStr);
 		}
+		loadTitle(rootNode, databaseTitle);
 
 		translationOriginalLocale = rootNode.getAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE);
 		translationAvailableLocales.add(translationOriginalLocale); // Just a cache.

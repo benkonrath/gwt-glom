@@ -36,6 +36,7 @@ import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.Report;
+import org.glom.web.shared.libglom.Translatable;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
@@ -54,7 +55,8 @@ import org.junit.Test;
 public class DocumentTest {
 
 	private static Document document;
-	private static String locale = ""; // This means the original locale.
+	private static String defaultLocale = "";
+	private static String germanLocale = "de";
 	static String testUriMusicCollection = "";
 	static String testUriFilmManager = "";
 
@@ -83,6 +85,8 @@ public class DocumentTest {
 	@Test
 	public void testDocumentInfo() {
 		assertThat(document.getDatabaseTitleOriginal(), is("Music Collection"));
+		assertThat(document.getDatabaseTitle(defaultLocale), is("Music Collection"));
+		assertThat(document.getDatabaseTitle(germanLocale), is("Musiksammlung"));
 		assertThat(document.getDefaultTable(), is("artists"));
 	}
 
@@ -95,7 +99,7 @@ public class DocumentTest {
 		for (int i = 1; i < localeIDs.size(); i++) {
 			tables += ", " + localeIDs.get(i);
 		}
-		assertThat(tables, is("en, cs, de, es, fr, gl, pt_BR, sl"));
+		assertThat(tables, is("cs, de, es, fr, gl, pt_BR, sl, en"));
 	}
 
 	@Test
@@ -109,6 +113,21 @@ public class DocumentTest {
 		}
 		assertThat(tables, is("artists, albums, songs, publishers"));
 	}
+	
+	String getTitles(final List<Field> list, final String locale) {
+		String result = "";
+		for (int i = 0; i < list.size(); i++) {
+			final Translatable item = list.get(i);
+			
+			if(i != 0) {
+				result += ", ";
+			}
+			
+			result += item.getTitleOrName(locale);
+		}
+
+		return result;
+	}
 
 	@Test
 	public void testReadTableFieldSizes() {
@@ -116,54 +135,31 @@ public class DocumentTest {
 		List<Field> fields = document.getTableFields("albums");
 		assertEquals(6, fields.size());
 
-		Field field = fields.get(0);
-		String titles = field.getTitleOrName(locale);
-		for (int i = 1; i < fields.size(); i++) {
-			field = fields.get(i);
-			titles += ", " + field.getTitleOrName(locale);
-		}
-
 		// TODO: The sequence is not important. It's only important that they are all there.
-		assertThat(titles, is("Publisher ID, Artist ID, Album ID, Name, Year, Comments"));
-
+		assertThat(getTitles(fields, defaultLocale), is("Publisher ID, Artist ID, Album ID, Name, Year, Comments"));
+		assertThat(getTitles(fields, germanLocale), is("Herausgeber-Kennung, Künstlerkennung, Albenkennung, Name, Jahr, Kommentare"));
+		
 		fields = document.getTableFields("artists");
 		assertEquals(4, fields.size());
 
-		field = fields.get(0);
-		titles = field.getTitleOrName(locale);
-		for (int i = 1; i < fields.size(); i++) {
-			field = fields.get(i);
-			titles += ", " + field.getTitleOrName(locale);
-		}
-
 		// TODO: The sequence is not important. It's only important that they are all there.
-		assertThat(titles, is("Artist ID, Name, Description, Comments"));
+		assertThat(getTitles(fields, defaultLocale), is("Artist ID, Name, Description, Comments"));
+		assertThat(getTitles(fields, germanLocale), is("Künstlerkennung, Name, Beschreibung, Kommentare"));
 
 		fields = document.getTableFields("publishers");
 		assertEquals(3, fields.size());
 
-		field = fields.get(0);
-		titles = field.getTitleOrName(locale);
-		for (int i = 1; i < fields.size(); i++) {
-			field = fields.get(i);
-			titles += ", " + field.getTitleOrName(locale);
-		}
-
 		// TODO: The sequence is not important. It's only important that they are all there.
-		assertThat(titles, is("Name, Publisher ID, Comments"));
+		assertThat(getTitles(fields, defaultLocale), is("Name, Publisher ID, Comments"));
+		assertThat(getTitles(fields, germanLocale), is("Name, Herausgeber-Kennung, Kommentare"));
+
 
 		fields = document.getTableFields("songs");
 		assertEquals(4, fields.size());
 
-		field = fields.get(0);
-		titles = field.getTitleOrName(locale);
-		for (int i = 1; i < fields.size(); i++) {
-			field = fields.get(i);
-			titles += ", " + field.getTitleOrName(locale);
-		}
-
 		// TODO: The sequence is not important. It's only important that they are all there.
-		assertThat(titles, is("Song ID, Album ID, Name, Comments"));
+		assertThat(getTitles(fields, defaultLocale), is("Song ID, Album ID, Name, Comments"));
+		assertThat(getTitles(fields, germanLocale), is("Lied-Kennung, Albenkennung, Name, Kommentare"));
 	}
 
 	@Test
@@ -310,6 +306,8 @@ public class DocumentTest {
 
 		LayoutGroup layoutGroup = detailsLayout.get(1);
 		assertEquals("details", layoutGroup.getName());
+		assertEquals("Details", layoutGroup.getTitle(defaultLocale));
+		assertEquals("Details", layoutGroup.getTitle(germanLocale));
 
 		layoutGroup = detailsLayout.get(2);
 		assertEquals("details_lower", layoutGroup.getName());
@@ -328,7 +326,9 @@ public class DocumentTest {
 		final LayoutItemPortal portal = (LayoutItemPortal) portalItem;
 		assertTrue(portal != null);
 
-		assertEquals(portal.getRelationshipNameUsed(), "scene_cast");
+		assertEquals("scene_cast", portal.getRelationshipNameUsed());
+		assertEquals("Cast", portal.getTitle(defaultLocale));
+		assertEquals("Szene Besetzung", portal.getTitle(germanLocale));
 
 		// call getSuitableTableToCiewDetails
 		final TableToViewDetails viewDetails = filmManagerDocument.getPortalSuitableTableToViewDetails(portal);
@@ -364,6 +364,10 @@ public class DocumentTest {
 	public void testReadReportStructure() {
 		final Report report = document.getReport("albums", "albums_by_artist");
 		assertTrue(report != null);
+		
+		assertThat(report.getTitle(defaultLocale), is("Albums By Artist"));
+		assertThat(report.getTitle(germanLocale), is("Alben nach Künstler"));	
+		
 		final LayoutGroup layoutGroup = report.getLayoutGroup();
 		assertTrue(layoutGroup != null);
 		final List<LayoutItem> layoutItems = layoutGroup.getItems();

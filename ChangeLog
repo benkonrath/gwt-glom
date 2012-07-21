@@ -1,3 +1,13 @@
+2012-07-21  Murray Cumming  <murrayc@murrayc.com>
+
+        Document: Load title translations and test them.
+
+        * src/main/java/org/glom/web/server/libglom/Document.java: Load the translations
+	of titles. I am surprised that we do not do this yet.
+        * src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:
+        * src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+	Test translations more.
+
 2012-07-20  Murray Cumming  <murrayc@murrayc.com>
 
 	Set JDBC timeouts.
