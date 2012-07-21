@@ -37,6 +37,7 @@ public class OnlineGlomPropertiesTest extends TestCase {
 
 	OnlineGlomProperties config = null;
 
+	@Override
 	@BeforeClass
 	public void setUp() throws IOException {
 		config = new OnlineGlomProperties();
@@ -91,6 +92,7 @@ public class OnlineGlomPropertiesTest extends TestCase {
 		assertEquals("/home/someuser/glomfiles", config.getDocumentsDirectory());
 	}
 	
+	@Override
 	@AfterClass
 	public void tearDown() {
 		config = null;
