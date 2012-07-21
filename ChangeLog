@@ -1,6 +1,14 @@
 2012-07-21  Murray Cumming  <murrayc@murrayc.com>
 
-        tests: Test translations moe.
+        tests: Use @BeforeClass on tearDown().
+
+        * src/test/java/org/glom/web/server/OnlineGlomPropertiesTest.java:
+        * src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	This avoids leaking a postgres process in SelfHostExampleTest.
+
+2012-07-21  Murray Cumming  <murrayc@murrayc.com>
+
+        tests: Test translations more.
 
         * src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:
         * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:

@@ -36,6 +36,7 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.jooq.Condition;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,7 +46,7 @@ import org.junit.Test;
  */
 public class SelfHostExampleTest {
 
-	private SelfHoster selfHoster = null;
+	private static SelfHoster selfHoster = null;
 
 	@Test
 	public void test() throws SQLException {
@@ -102,7 +103,8 @@ public class SelfHostExampleTest {
 	  Assert.assertEquals(1, rsRowsCount);
 	}
 
-	public void tearDown() {
+	@AfterClass
+	public static void tearDown() {
 		if (selfHoster != null) {
 			selfHoster.cleanup();
 		}
