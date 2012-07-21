@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 
 import java.beans.PropertyVetoException;
 import java.net.URL;
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,18 +33,22 @@ import org.glom.web.server.libglom.DocumentTest;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Reports;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * @author Ben Konrath <ben@bagu.org>
+ * @author Murray Cumming <murrayc@openismus.com>
  *
  */
 public class ConfiguredDocumentTest {
 
 	private static ConfiguredDocument configuredDoc;
 	private static Document document;
+	private static String defaultLocale = "";
+	private static String germanLocale = "de";
 	
 	@BeforeClass
 	static public void setUp() throws PropertyVetoException {
@@ -104,12 +110,12 @@ public class ConfiguredDocumentTest {
 	@Test
 	public void testGetDocumentInfo() {
 		//Default locale:
-		DocumentInfo docInfo = configuredDoc.getDocumentInfo("");
+		DocumentInfo docInfo = configuredDoc.getDocumentInfo(defaultLocale);
 		Assert.assertNotNull(docInfo);
 		Assert.assertEquals(docInfo.getTitle(), "Music Collection");
 		
 		//Other locale:
-		docInfo = configuredDoc.getDocumentInfo("de");
+		docInfo = configuredDoc.getDocumentInfo(germanLocale);
 		Assert.assertNotNull(docInfo);
 		Assert.assertEquals(docInfo.getTitle(), "Musiksammlung");
 		
@@ -119,55 +125,6 @@ public class ConfiguredDocumentTest {
 		Assert.assertEquals(docInfo.getTitle(), "Music Collection");
 	}
 
-	/* This requires a database connection:
-	@Test
-	public void testGetListViewData() {
-		final ArrayList<DataItem[]> list = configuredDoc.getListViewData("albums", "", 0, 10, false, 0, false);
-		Assert.assertNotNull(list);
-		Assert.assertEquals(10, list.size());
-		Assert.assertNotNull(list.get(0));
-		//TODO: test more details.
-	}
-	*/
-
-	/* This requires a database connection:
-	@Test
-	public void testGetDetailsData() {
-		final TypedDataItem primaryKeyValue = new TypedDataItem();
-		primaryKeyValue.setNumber(1);
-		final DataItem[] data = configuredDoc.getDetailsData("albums", primaryKeyValue);
-		Assert.assertNotNull(data);
-		Assert.assertNotNull(data[0]);
-		//TODO: test more details.
-	}
-	*/
-
-	/* This requires a database connection:
-	@Test
-	public void testGetRelatedListData() {
-		//TODO: final ArrayList<DataItem[]> list = configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex, isAscending)
-	}
-	*/
-
-	/* This requires a database connection (to update the portals details):
-	@Test
-	public void testGetDetailsLayoutGroup() {;
-		final List<LayoutGroup> list = configuredDoc.getDetailsLayoutGroup("albums", "");
-		Assert.assertNotNull(list);
-		Assert.assertNotNull(list.get(0));
-		//TODO: test more details.
-	}
-	*/
-
-	/* This requires a database connection:
-	@Test
-	public void testGetRelatedListRowCount() {
-		final TypedDataItem foreignKeyValue = new TypedDataItem();
-		primaryKeyValue.setNumber(1);
-		configuredDoc.getRelatedListRowCount(tableName, portal, foreignKeyValue);
-	}
-	*/
-
 	/**
 	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getSuitableRecordToViewDetails(java.lang.String, org.glom.web.shared.libglom.layout.LayoutItemPortal, org.glom.web.shared.TypedDataItem)}.
 	 */
@@ -176,16 +133,35 @@ public class ConfiguredDocumentTest {
 		//TODO: final NavigationRecord navRecord = configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
 	}
 
+
+	public void testGetListViewLayoutGroup(final String locale, final String field0Title, final String field1Title) {
+		final LayoutGroup group = configuredDoc.getListViewLayoutGroup("albums", defaultLocale);
+		Assert.assertNotNull(group);
+		
+		List<LayoutItem> items = group.getItems();
+		Assert.assertNotNull(items);
+		Assert.assertEquals(8, items.size());
+		
+		LayoutItem item = items.get(0);
+		Assert.assertTrue(item instanceof LayoutItemField);
+		
+		Assert.assertEquals("name", item.getName());
+		Assert.assertEquals(field0Title, item.getTitle());
+		
+		item = items.get(1);
+		Assert.assertTrue(item instanceof LayoutItemField);
+		
+		Assert.assertEquals("year", item.getName());
+		Assert.assertEquals(field1Title, item.getTitle());
+	}
+	
 	/**
 	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getListViewLayoutGroup(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testGetListViewLayoutGroup() {
-		final LayoutGroup group = configuredDoc.getListViewLayoutGroup("albums", "");
-		Assert.assertNotNull(group);
-		Assert.assertNotNull(group.getItems());
-		Assert.assertEquals(8, group.getItems().size());
-		//TODO: test more details.
+		testGetListViewLayoutGroup(defaultLocale, "Name", "Year");
+		testGetListViewLayoutGroup(germanLocale, "Name", "Year");
 	}
 
 	/**
@@ -193,7 +169,7 @@ public class ConfiguredDocumentTest {
 	 */
 	@Test
 	public void testGetReports() {
-		final Reports reports = configuredDoc.getReports("albums", "");
+		final Reports reports = configuredDoc.getReports("albums", defaultLocale);
 		Assert.assertNotNull(reports);
 		//TODO: test more details.
 	}

@@ -36,10 +36,6 @@ import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
-import org.glom.web.shared.libglom.layout.LayoutItem;
-import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
-import org.glom.web.shared.libglom.layout.LayoutItemPortal;
-import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -160,9 +156,8 @@ public class SelfHostConfiguredDocumentTest {
 		//TODO: final ArrayList<DataItem[]> list = configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex, isAscending)
 	}
 
-	@Test
-	public void testGetDetailsLayoutGroup() {;
-		final List<LayoutGroup> list = configuredDoc.getDetailsLayoutGroup("albums", defaultLocale);
+	public void testGetDetailsLayoutGroup(final String locale, final String detailsTitle) {;
+		final List<LayoutGroup> list = configuredDoc.getDetailsLayoutGroup("albums", locale);
 		Assert.assertNotNull(list);
 		Assert.assertEquals(2, list.size());
 		Assert.assertNotNull(list.get(0));
@@ -170,8 +165,14 @@ public class SelfHostConfiguredDocumentTest {
 		LayoutGroup layoutGroup = list.get(1);
 		Assert.assertNotNull(layoutGroup);
 		assertEquals("details", layoutGroup.getName());
-		assertEquals("Details", layoutGroup.getTitle(defaultLocale));
+		assertEquals("Details", layoutGroup.getTitle()); //We don't need to specify locale again.
 		//assertEquals("Details", layoutGroup.getTitle(germanLocale));
+	}
+	
+	@Test
+	public void testGetDetailsLayoutGroup() {;
+		testGetDetailsLayoutGroup(defaultLocale, "Details");
+		testGetDetailsLayoutGroup(germanLocale, "Details");
 	}
 
 	@Test

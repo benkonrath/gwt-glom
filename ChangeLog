@@ -1,5 +1,13 @@
 2012-07-21  Murray Cumming  <murrayc@murrayc.com>
 
+        tests: Test translations moe.
+
+        * src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:
+       	Test titles in the non-default locale.
+
+2012-07-21  Murray Cumming  <murrayc@murrayc.com>
+
         tests: Add SelfHostConfiguredDocumentTest
  
         * src/test/java/org/glom/web/server/SelfHoster.java: Add getters for the 
