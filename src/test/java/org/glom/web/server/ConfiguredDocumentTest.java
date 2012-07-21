@@ -23,8 +23,6 @@ import static org.junit.Assert.*;
 
 import java.beans.PropertyVetoException;
 import java.net.URL;
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.apache.commons.lang3.StringUtils;
@@ -32,9 +30,6 @@ import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.DocumentTest;
 import org.glom.web.shared.DocumentInfo;
 import org.glom.web.shared.Reports;
-import org.glom.web.shared.libglom.layout.LayoutGroup;
-import org.glom.web.shared.libglom.layout.LayoutItem;
-import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
