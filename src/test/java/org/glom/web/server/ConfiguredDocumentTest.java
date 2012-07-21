@@ -133,37 +133,6 @@ public class ConfiguredDocumentTest {
 		//TODO: final NavigationRecord navRecord = configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
 	}
 
-
-	public void testGetListViewLayoutGroup(final String locale, final String field0Title, final String field1Title) {
-		final LayoutGroup group = configuredDoc.getListViewLayoutGroup("albums", defaultLocale);
-		Assert.assertNotNull(group);
-		
-		List<LayoutItem> items = group.getItems();
-		Assert.assertNotNull(items);
-		Assert.assertEquals(8, items.size());
-		
-		LayoutItem item = items.get(0);
-		Assert.assertTrue(item instanceof LayoutItemField);
-		
-		Assert.assertEquals("name", item.getName());
-		Assert.assertEquals(field0Title, item.getTitle());
-		
-		item = items.get(1);
-		Assert.assertTrue(item instanceof LayoutItemField);
-		
-		Assert.assertEquals("year", item.getName());
-		Assert.assertEquals(field1Title, item.getTitle());
-	}
-	
-	/**
-	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getListViewLayoutGroup(java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	public void testGetListViewLayoutGroup() {
-		testGetListViewLayoutGroup(defaultLocale, "Name", "Year");
-		testGetListViewLayoutGroup(germanLocale, "Name", "Year");
-	}
-
 	/**
 	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getReports(java.lang.String, java.lang.String)}.
 	 */

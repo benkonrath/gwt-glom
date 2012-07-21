@@ -36,6 +36,8 @@ import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
+import org.glom.web.shared.libglom.layout.LayoutItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -80,6 +82,35 @@ public class SelfHostConfiguredDocumentTest {
 		}
 	}
 	
+	public void testGetListViewLayoutGroup(final String locale, final String field0Title, final String field1Title) {
+		final LayoutGroup group = configuredDoc.getListViewLayoutGroup("albums", defaultLocale);
+		Assert.assertNotNull(group);
+		
+		List<LayoutItem> items = group.getItems();
+		Assert.assertNotNull(items);
+		Assert.assertEquals(8, items.size());
+		
+		LayoutItem item = items.get(0);
+		Assert.assertTrue(item instanceof LayoutItemField);
+		
+		Assert.assertEquals("name", item.getName());
+		Assert.assertEquals(field0Title, item.getTitle());
+		
+		item = items.get(1);
+		Assert.assertTrue(item instanceof LayoutItemField);
+		
+		Assert.assertEquals("year", item.getName());
+		Assert.assertEquals(field1Title, item.getTitle());
+	}
+	
+	/**
+	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getListViewLayoutGroup(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testGetListViewLayoutGroup() {
+		testGetListViewLayoutGroup(defaultLocale, "Name", "Year");
+		testGetListViewLayoutGroup(germanLocale, "Name", "Year");
+	}
 
 	@Test
 	public void testGetListViewData() {
