@@ -87,20 +87,20 @@ public class SelfHostConfiguredDocumentTest {
 		Assert.assertNotNull(group);
 		
 		List<LayoutItem> items = group.getItems();
-		Assert.assertNotNull(items);
-		Assert.assertEquals(8, items.size());
+		assertNotNull(items);
+		assertEquals(8, items.size());
 		
 		LayoutItem item = items.get(0);
-		Assert.assertTrue(item instanceof LayoutItemField);
+		assertTrue(item instanceof LayoutItemField);
 		
-		Assert.assertEquals("name", item.getName());
-		Assert.assertEquals(field0Title, item.getTitle());
+		assertEquals("name", item.getName());
+		assertEquals(field0Title, item.getTitle());
 		
 		item = items.get(1);
-		Assert.assertTrue(item instanceof LayoutItemField);
+		assertTrue(item instanceof LayoutItemField);
 		
-		Assert.assertEquals("year", item.getName());
-		Assert.assertEquals(field1Title, item.getTitle());
+		assertEquals("year", item.getName());
+		assertEquals(field1Title, item.getTitle());
 	}
 	
 	/**
@@ -115,37 +115,37 @@ public class SelfHostConfiguredDocumentTest {
 	@Test
 	public void testGetListViewData() {
 		ArrayList<DataItem[]> list = configuredDoc.getListViewData("albums", defaultLocale, 0, 10, false, 0, false);
-		Assert.assertNotNull(list);
-		Assert.assertEquals(5, list.size());
+		assertNotNull(list);
+		assertEquals(5, list.size());
 		
 		DataItem[] data = list.get(2);
-		Assert.assertNotNull(data);
-		Assert.assertEquals(8, data.length);
+		assertNotNull(data);
+		assertEquals(8, data.length);
 		
 		DataItem dataItem = data[0];
-		Assert.assertNotNull(dataItem);
-		Assert.assertEquals("The Wild, the Innocent, & the E-Street Shuffle", dataItem.getText());
+		assertNotNull(dataItem);
+		assertEquals("The Wild, the Innocent, & the E-Street Shuffle", dataItem.getText());
 		
 		dataItem = data[1];
-		Assert.assertEquals(1973.0, dataItem.getNumber());
+		assertEquals(1973.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[2];
-		Assert.assertEquals(0.0, dataItem.getNumber());
+		assertEquals(0.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[3];
-		Assert.assertEquals("Bruce Springsteen", dataItem.getText());
+		assertEquals("Bruce Springsteen", dataItem.getText());
 		
 		dataItem = data[4];
-		Assert.assertEquals(0.0, dataItem.getNumber());
+		assertEquals(0.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[5];
-		Assert.assertEquals("Sony", dataItem.getText());
+		assertEquals("Sony", dataItem.getText());
 		
 		dataItem = data[6];
-		Assert.assertEquals("", dataItem.getText());
+		assertEquals("", dataItem.getText());
 		
 		dataItem = data[7];
-		Assert.assertEquals(2.0, dataItem.getNumber());
+		assertEquals(2.0, dataItem.getNumber(), 0);
 	}
 
 	@Test
@@ -153,33 +153,33 @@ public class SelfHostConfiguredDocumentTest {
 		final TypedDataItem primaryKeyValue = new TypedDataItem();
 		primaryKeyValue.setNumber(1);
 		final DataItem[] data = configuredDoc.getDetailsData("albums", primaryKeyValue);
-		Assert.assertNotNull(data);
-		Assert.assertEquals(8, data.length);
+		assertNotNull(data);
+		assertEquals(8, data.length);
 		
 		DataItem dataItem = data[0];
-		Assert.assertNotNull(dataItem);
-		Assert.assertEquals(1.0, dataItem.getNumber());
+		assertNotNull(dataItem);
+		assertEquals(1.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[1];
-		Assert.assertEquals("True Blue", dataItem.getText());
+		assertEquals("True Blue", dataItem.getText());
 		
 		dataItem = data[2];
-		Assert.assertEquals(1.0, dataItem.getNumber());
+		assertEquals(1.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[3];
-		Assert.assertEquals("Madonna", dataItem.getText());
+		assertEquals("Madonna", dataItem.getText());
 		
 		dataItem = data[4];
-		Assert.assertEquals(1.0, dataItem.getNumber());
+		assertEquals(1.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[5];
-		Assert.assertEquals("Warner Bros", dataItem.getText());
+		assertEquals("Warner Bros", dataItem.getText());
 		
 		dataItem = data[6];
-		Assert.assertEquals(1987.0, dataItem.getNumber());
+		assertEquals(1987.0, dataItem.getNumber(), 0);
 		
 		dataItem = data[7];
-		Assert.assertEquals("", dataItem.getText());
+		assertEquals("", dataItem.getText());
 	}
 
 	@Test
@@ -189,12 +189,12 @@ public class SelfHostConfiguredDocumentTest {
 
 	public void testGetDetailsLayoutGroup(final String locale, final String detailsTitle) {;
 		final List<LayoutGroup> list = configuredDoc.getDetailsLayoutGroup("albums", locale);
-		Assert.assertNotNull(list);
-		Assert.assertEquals(2, list.size());
-		Assert.assertNotNull(list.get(0));
+		assertNotNull(list);
+		assertEquals(2, list.size());
+		assertNotNull(list.get(0));
 		
 		LayoutGroup layoutGroup = list.get(1);
-		Assert.assertNotNull(layoutGroup);
+		assertNotNull(layoutGroup);
 		assertEquals("details", layoutGroup.getName());
 		assertEquals("Details", layoutGroup.getTitle()); //We don't need to specify locale again.
 		//assertEquals("Details", layoutGroup.getTitle(germanLocale));

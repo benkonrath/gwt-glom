@@ -1,6 +1,6 @@
 package org.glom.web.shared;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class DataItemTest {
@@ -12,7 +12,7 @@ public class DataItemTest {
 	public void testBoolean() {
 		final DataItem item = new DataItem();
 		item.setBoolean(true);
-		Assert.assertTrue(item.getBoolean());
+		assertTrue(item.getBoolean());
 	}
 
 	@Test
@@ -20,7 +20,7 @@ public class DataItemTest {
 		final DataItem item = new DataItem();
 		final double val = 123.456;
 		item.setNumber(val);
-		Assert.assertTrue(item.getNumber() == val);
+		assertTrue(item.getNumber() == val);
 	}
 
 	@Test
@@ -28,7 +28,7 @@ public class DataItemTest {
 		final DataItem item = new DataItem();
 		final String val = "abc";
 		item.setText(val);
-		Assert.assertTrue(item.getText() == val);
+		assertTrue(item.getText() == val);
 	}
 
 }

@@ -1,6 +1,6 @@
 package org.glom.web.client.place;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class ListPlaceTest {
@@ -33,27 +33,27 @@ public class ListPlaceTest {
 	}
 
 	private void checkParameters(final ListPlace place, final String documentID, final String tableName) {
-		Assert.assertTrue(place != null);
+		assertTrue(place != null);
 
-		Assert.assertEquals(documentID, place.getDocumentID());
-		Assert.assertEquals(tableName, place.getTableName());
+		assertEquals(documentID, place.getDocumentID());
+		assertEquals(tableName, place.getTableName());
 	}
 
 	private ListPlace getListPlaceFromToken(final String token) {
 		final ListPlace.Tokenizer tokenizer = new ListPlace.Tokenizer();
 		final ListPlace place = tokenizer.getPlace(token);
-		Assert.assertTrue(place != null);
+		assertTrue(place != null);
 		return place;
 	}
 
 	private void checkTokenWithoutParameters(final String token) {
 		final ListPlace place = getListPlaceFromToken(token);
 
-		Assert.assertTrue(place.getDocumentID() != null);
-		Assert.assertTrue(place.getDocumentID().isEmpty());
+		assertTrue(place.getDocumentID() != null);
+		assertTrue(place.getDocumentID().isEmpty());
 
-		Assert.assertTrue(place.getTableName() != null);
-		Assert.assertTrue(place.getTableName().isEmpty());
+		assertTrue(place.getTableName() != null);
+		assertTrue(place.getTableName().isEmpty());
 	}
 
 }

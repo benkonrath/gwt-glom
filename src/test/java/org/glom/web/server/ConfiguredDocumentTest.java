@@ -23,8 +23,6 @@ import static org.junit.Assert.*;
 
 import java.beans.PropertyVetoException;
 import java.net.URL;
-import junit.framework.Assert;
-
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.DocumentTest;
@@ -48,7 +46,7 @@ public class ConfiguredDocumentTest {
 	@BeforeClass
 	static public void setUp() throws PropertyVetoException {
 		URL url = DocumentTest.class.getResource("example_music_collection.glom");
-		assertTrue(url != null);
+		assertNotNull(url);
 		final String testUriMusicCollection = url.toString();
 		assertTrue(!StringUtils.isEmpty(testUriMusicCollection));
 
@@ -69,7 +67,7 @@ public class ConfiguredDocumentTest {
 	 */
 	@Test
 	public void testGetDocument() {
-		Assert.assertNotNull(configuredDoc.getDocument());
+		assertNotNull(configuredDoc.getDocument());
 	}
 
 	/**
@@ -77,7 +75,7 @@ public class ConfiguredDocumentTest {
 	 */
 	@Test
 	public void testIsAuthenticated() {
-		Assert.assertFalse(configuredDoc.isAuthenticated());
+		assertFalse(configuredDoc.isAuthenticated());
 	}
 
 	/**
@@ -88,7 +86,7 @@ public class ConfiguredDocumentTest {
 		//This is a simple setter/getter:
 		final String docID = "somethingOrOther";
 		configuredDoc.setDocumentID(docID);
-		Assert.assertEquals(docID, configuredDoc.getDocumentID());
+		assertEquals(docID, configuredDoc.getDocumentID());
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class ConfiguredDocumentTest {
 	 */
 	@Test
 	public void testGetDefaultLocaleID() {
-		Assert.assertEquals("", configuredDoc.getDefaultLocaleID());
+		assertEquals("", configuredDoc.getDefaultLocaleID());
 	}
 
 	/**
@@ -106,18 +104,18 @@ public class ConfiguredDocumentTest {
 	public void testGetDocumentInfo() {
 		//Default locale:
 		DocumentInfo docInfo = configuredDoc.getDocumentInfo(defaultLocale);
-		Assert.assertNotNull(docInfo);
-		Assert.assertEquals(docInfo.getTitle(), "Music Collection");
+		assertNotNull(docInfo);
+		assertEquals(docInfo.getTitle(), "Music Collection");
 		
 		//Other locale:
 		docInfo = configuredDoc.getDocumentInfo(germanLocale);
-		Assert.assertNotNull(docInfo);
-		Assert.assertEquals(docInfo.getTitle(), "Musiksammlung");
+		assertNotNull(docInfo);
+		assertEquals(docInfo.getTitle(), "Musiksammlung");
 		
 		//Invalid locale, which should use the default one:
 		docInfo = configuredDoc.getDocumentInfo("someinvalidlocale");
-		Assert.assertNotNull(docInfo);
-		Assert.assertEquals(docInfo.getTitle(), "Music Collection");
+		assertNotNull(docInfo);
+		assertEquals(docInfo.getTitle(), "Music Collection");
 	}
 
 	/**
@@ -134,7 +132,7 @@ public class ConfiguredDocumentTest {
 	@Test
 	public void testGetReports() {
 		final Reports reports = configuredDoc.getReports("albums", defaultLocale);
-		Assert.assertNotNull(reports);
+		assertNotNull(reports);
 		//TODO: test more details.
 	}
 

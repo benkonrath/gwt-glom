@@ -1,8 +1,6 @@
 package org.glom.web.client;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.glom.web.client.ui.DocumentSelectionView;
 import org.junit.Before;

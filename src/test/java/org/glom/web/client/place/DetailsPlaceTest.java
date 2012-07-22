@@ -1,6 +1,6 @@
 package org.glom.web.client.place;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class DetailsPlaceTest {
@@ -36,34 +36,34 @@ public class DetailsPlaceTest {
 
 	private void checkParameters(final DetailsPlace place, final String documentID, final String tableName,
 			final String primaryKeyValue) {
-		Assert.assertTrue(place != null);
+		assertNotNull(place);
 
-		Assert.assertEquals(documentID, place.getDocumentID());
-		Assert.assertEquals(tableName, place.getTableName());
-		Assert.assertEquals(primaryKeyValue, place.getPrimaryKeyValue().getUnknown());
+		assertEquals(documentID, place.getDocumentID());
+		assertEquals(tableName, place.getTableName());
+		assertEquals(primaryKeyValue, place.getPrimaryKeyValue().getUnknown());
 	}
 
 	private DetailsPlace getDetailsPlaceFromToken(final String token) {
 		final DetailsPlace.Tokenizer tokenizer = new DetailsPlace.Tokenizer();
 		final DetailsPlace place = tokenizer.getPlace(token);
-		Assert.assertTrue(place != null);
+		assertNotNull(place);
 		return place;
 	}
 
 	private void checkTokenWithoutParameters(final String token) {
 		final DetailsPlace place = getDetailsPlaceFromToken(token);
 
-		Assert.assertTrue(place.getDocumentID() != null);
-		Assert.assertTrue(place.getDocumentID().isEmpty());
+		assertNotNull(place.getDocumentID());
+		assertTrue(place.getDocumentID().isEmpty());
 
-		Assert.assertTrue(place.getTableName() != null);
-		Assert.assertTrue(place.getTableName().isEmpty());
+		assertNotNull(place.getTableName());
+		assertTrue(place.getTableName().isEmpty());
 
-		Assert.assertTrue(place.getPrimaryKeyValue() != null);
-		Assert.assertTrue(place.getPrimaryKeyValue().isEmpty());
-		Assert.assertEquals(null, place.getPrimaryKeyValue().getUnknown());
-		Assert.assertEquals(0.0, place.getPrimaryKeyValue().getNumber(), 0.0);
-		Assert.assertEquals(null, place.getPrimaryKeyValue().getText());
+		assertNotNull(place.getPrimaryKeyValue());
+		assertTrue(place.getPrimaryKeyValue().isEmpty());
+		assertEquals(null, place.getPrimaryKeyValue().getUnknown());
+		assertEquals(0.0, place.getPrimaryKeyValue().getNumber(), 0.0);
+		assertEquals(null, place.getPrimaryKeyValue().getText());
 	}
 
 }

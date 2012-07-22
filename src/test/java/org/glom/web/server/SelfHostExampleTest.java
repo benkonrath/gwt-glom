@@ -19,7 +19,7 @@
 
 package org.glom.web.server;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.net.URL;
 import java.sql.Connection;

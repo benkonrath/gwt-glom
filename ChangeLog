@@ -1,3 +1,21 @@
+2012-07-22  Murray Cumming  <murrayc@murrayc.com>
+
+      	Tests: Make the imports of assert*() consistent.
+
+        * src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+        * src/test/java/org/glom/web/client/place/DetailsPlaceTest.java:
+        * src/test/java/org/glom/web/client/place/ListPlaceTest.java:
+        * src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:
+        * src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+        * src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+        * src/test/java/org/glom/web/server/libglom/LayoutItemFieldTest.java:
+        * src/test/java/org/glom/web/server/libglom/LayoutItemPortalDeepCloneTest.java:
+        * src/test/java/org/glom/web/shared/DataItemTest.java:
+	Just do
+	import static org.junit.Assert.*;
+	which seems fairly common.
+
 1.21.10 (unstable):
 
 2012-07-21  Murray Cumming  <murrayc@murrayc.com>

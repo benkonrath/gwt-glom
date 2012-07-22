@@ -19,8 +19,7 @@
 
 package org.glom.web.server.libglom;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.glom.web.server.Utils;
 import org.glom.web.shared.libglom.Relationship;
