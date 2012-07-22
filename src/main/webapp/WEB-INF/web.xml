@@ -7,13 +7,13 @@
 
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>libGlomServlet</servlet-name>
+		<servlet-name>gwtGlomServlet</servlet-name>
 		<servlet-class>org.glom.web.server.OnlineGlomServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>libGlomServlet</servlet-name>
-		<url-pattern>/OnlineGlom/libGlom</url-pattern>
+		<servlet-name>gwtGlomServlet</servlet-name>
+		<url-pattern>/OnlineGlom/gwtGlom</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

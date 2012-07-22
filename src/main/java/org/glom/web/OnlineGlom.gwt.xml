@@ -43,6 +43,6 @@
 
 	<!--  This is necessary to avoid 404 errors when testing the service from
 	GWTTestCase unit test. See also our web.xml file." -->
-	<servlet path="/libGlom" class="org.glom.web.server.OnlineGlomServiceImpl" />
+	<servlet path="/gwtGlom" class="org.glom.web.server.OnlineGlomServiceImpl" />
 
 </module>

@@ -1,5 +1,15 @@
 2012-07-22  Murray Cumming  <murrayc@murrayc.com>
 
+        Rename the servlet.
+
+        * src/main/java/org/glom/web/OnlineGlom.gwt.xml:
+        * src/main/java/org/glom/web/client/OnlineGlomService.java:
+        * src/main/webapp/WEB-INF/web.xml: Change the servlet-name from libGlom
+	to gwtGlom, which is more appropriate.
+	This servlet name does not seem to be visible to the client side anyway.
+
+2012-07-22  Murray Cumming  <murrayc@murrayc.com>
+
       	Tests: Make the imports of assert*() consistent.
 
         * src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
