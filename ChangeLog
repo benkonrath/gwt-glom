@@ -1,3 +1,5 @@
+1.21.10 (unstable):
+
 2012-07-21  Murray Cumming  <murrayc@murrayc.com>
 
         tests: Move a test that needs a database connection.
@@ -210,6 +212,8 @@
 
 	* src/test/java/org/glom/web/server/SelfHostExampleTest.java: Move
 	the use of cleanup() to a tearDown() JUnit method.
+
+1.21.9.3:
 
 2012-06-12  Murray Cumming  <murrayc@murrayc.com>
 

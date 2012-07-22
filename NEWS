@@ -1,3 +1,10 @@
+1.21.10 (unstable):
+
+* Show the translated database title.
+* More regression tests.
+* Some refactoring and error checking.
+  (Murray Cumming)
+
 1.21.9.3 (unstable):
 
 * Supprt version 7 of the Glom document file format, as well as the current
