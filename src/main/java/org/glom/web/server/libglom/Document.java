@@ -519,8 +519,16 @@ public class Document {
 			break;
 		}
 		case TYPE_IMAGE: {
-			final byte[] value = null; // TODO.
-			result.setImage(value);
+			/* TODO:
+			final byte[] imageByteArray = null; // TODO.
+			if (imageByteArray != null) {
+				String base64 = com.google.gwt.user.server.Base64Utils.toBase64(imageByteArray);
+				base64 = "data:image/png;base64," + base64;
+				result.setImageDataUrl(base64);
+			} else {
+				result.setImageDataUrl(null);
+			}
+			*/
 			break;
 		}
 		case TYPE_NUMERIC: {

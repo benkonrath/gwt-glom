@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 /**
@@ -221,6 +222,16 @@ public class DetailsCell extends Composite {
 				final SingleLineText textPanel = new SingleLineText(text);
 				detailsData.add(textPanel);
 			}
+			break;
+		case TYPE_IMAGE:
+			final Image image = new Image();
+			final String imageDataUrl = dataItem.getImageDataUrl();
+			if(imageDataUrl != null) {
+				image.setUrl(imageDataUrl);
+			}
+
+			detailsData.add(image);
+			break;
 		default:
 			break;
 		}

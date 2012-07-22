@@ -123,12 +123,14 @@ abstract class DBAccess {
 					}
 					break;
 				case TYPE_IMAGE:
-					final byte[] image = rs.getBytes(rsIndex);
-					if (image != null) {
-						// TODO implement field TYPE_IMAGE
-						rowArray[i].setText("Image (FIXME)");
+					final byte[] imageByteArray = rs.getBytes(rsIndex);
+					if (imageByteArray != null) {
+						String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
+						base64 = "data:image/png;base64," + base64;
+						    
+						rowArray[i].setImageDataUrl(base64);
 					} else {
-						rowArray[i].setText("");
+						rowArray[i].setImageDataUrl(null);
 					}
 					break;
 				case TYPE_INVALID:

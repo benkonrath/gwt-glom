@@ -35,7 +35,7 @@ public class DataItem implements Serializable {
 	private boolean bool;
 	private double number;
 	private Date date;
-	private byte[] image;
+	private String imageDataUrl; //This is for use as an <img> or GWT Image URL.
 
 	// TODO: Time
 
@@ -74,12 +74,13 @@ public class DataItem implements Serializable {
 		this.date = date;
 	}
 
-	public byte[] getImage() {
-		return image;
+	public String getImageDataUrl() {
+		//For testing: return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+		return imageDataUrl;
 	}
 
-	public void setImage(final byte[] image) {
-		this.image = image;
+	public void setImageDataUrl(final String image) {
+		this.imageDataUrl = image;
 	}
 
 	public Object getValue(final Field.GlomFieldType type) {
@@ -87,7 +88,7 @@ public class DataItem implements Serializable {
 		case TYPE_BOOLEAN:
 			return getBoolean();
 		case TYPE_IMAGE:
-			return getImage();
+			return getImageDataUrl();
 		case TYPE_NUMERIC:
 			return getNumber();
 		case TYPE_TEXT:

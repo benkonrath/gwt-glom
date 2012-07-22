@@ -35,6 +35,7 @@ import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 
+import com.google.gwt.cell.client.ImageCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -326,12 +327,31 @@ public abstract class ListTable extends Composite {
 				}
 			};
 			break;
+		case TYPE_IMAGE:
+			column = new Column<DataItem[], String>(new ImageCell()) {
+				@Override
+				public String getValue(final DataItem[] row) {
+					if (row.length == 1 && row[0] == null) {
+						// an empty row
+						return null;
+					}
+
+					if (j >= row.length) {
+						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
+						return null;
+					} else {
+						return row[j].getImageDataUrl();
+					}
+				}
+			};
+			// override the configured horizontal alignment
+			columnAlignment = HasHorizontalAlignment.ALIGN_CENTER;
+			break;
 
 		default:
 			// use a text rendering cell for types we don't know about but log an error
 			// TODO log error here
 		case TYPE_DATE:
-		case TYPE_IMAGE:
 		case TYPE_INVALID:
 		case TYPE_TIME:
 		case TYPE_TEXT:
