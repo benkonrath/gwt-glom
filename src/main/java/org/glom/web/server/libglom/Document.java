@@ -45,6 +45,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.CustomTitle;
 import org.glom.web.shared.libglom.Field;
@@ -1821,5 +1822,25 @@ public class Document {
 	public void setConnectionDatabase(final String databaseName) {
 		connectionDatabase = databaseName;
 
+	}
+
+	/**
+	 * Gets the primary key Field for the specified table name.
+	 * 
+	 * @param tableName
+	 *            name of table to search for the primary key field
+	 * @return primary key Field
+	 */
+	public Field getTablePrimaryKeyField(final String tableName) {
+		Field primaryKey = null;
+		final List<Field> fieldsVec = getTableFields(tableName);
+		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
+			final Field field = fieldsVec.get(i);
+			if (field.getPrimaryKey()) {
+				primaryKey = field;
+				break;
+			}
+		}
+		return primaryKey;
 	}
 }

@@ -94,7 +94,7 @@ public class RelatedListNavigation extends DBAccess {
 		}
 
 		// Get the primary key of that table:
-		final Field navigationTablePrimaryKey = getPrimaryKeyField(navigationTable.tableName);
+		final Field navigationTablePrimaryKey = document.getTablePrimaryKeyField(navigationTable.tableName);
 
 		// Build a layout item to get the field's value:
 		final LayoutItemField navigationRelationshipItem = new LayoutItemField();
@@ -112,7 +112,7 @@ public class RelatedListNavigation extends DBAccess {
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
 		final String relatedTableName = portal.getTableUsed("" /* not relevant */);
-		final Field primaryKeyField = getPrimaryKeyField(relatedTableName);
+		final Field primaryKeyField = document.getTablePrimaryKeyField(relatedTableName);
 
 		final NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;

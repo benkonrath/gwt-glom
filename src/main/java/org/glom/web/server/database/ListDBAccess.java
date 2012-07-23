@@ -31,6 +31,7 @@ import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
@@ -127,7 +128,8 @@ public abstract class ListDBAccess extends DBAccess {
 			rs = st.executeQuery(query);
 
 			// get the results from the ResultSet
-			rowsList = convertResultSetToDTO(length, fieldsToGet, rs);
+			final TypedDataItem primaryKeyValue = null; //TODO: Discover it for each row instead.
+			rowsList = convertResultSetToDTO(length, fieldsToGet, primaryKeyValue, rs);
 		} catch (final SQLException e) {
 			Log.error(documentID, tableName, "Error executing database query.", e);
 			// TODO: somehow notify user of problem

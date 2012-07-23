@@ -12,6 +12,36 @@
 	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_id.properties:
 	This is from the new translation in Glom.
 
+2012-07-23  Murray Cumming  <murrayc@murrayc.com>
+
+        Details: Show images.
+
+        * src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Move some code into
+        * src/main/java/org/glom/web/server/ConfiguredDocumentSet.java:
+	so it can be used in:
+        * src/main/java/org/glom/web/server/OnlineGlomImages.java: A new servlet just
+	for serving image data.
+	* src/main/webapp/WEB-INF/web.xml: Mention the new servlet.
+
+	* src/main/java/org/glom/web/shared/DataItem.java: Added get/setImageDataUrl().
+        * src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+	setData(): For image field types, add a GWT Image widget, 
+	with the URL that was set in the DataItem.
+
+        * pom.xml: Depend on org.apache.httpcomponents for UriBuilder.
+        * src/main/java/org/glom/web/server/database/DBAccess.java:
+        convertResultSetToDTO(): Set the URL for image data, so the client browser
+	can retrieve the image from our new servlet. This uses UriBuilder.
+	Move getPrimaryKeyField to:
+ 	* src/main/java/org/glom/web/server/libglom/Document.java:
+	Added getTablePrimaryKeyField().
+
+        * src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+        * src/main/java/org/glom/web/server/database/ListDBAccess.java:
+        * src/main/java/org/glom/web/server/database/RelatedListNavigation.java:
+        Adapted.
+
 2012-07-22  Murray Cumming  <murrayc@murrayc.com>
 
         Rename the servlet.

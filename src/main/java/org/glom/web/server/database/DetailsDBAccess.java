@@ -57,7 +57,7 @@ public class DetailsDBAccess extends DBAccess {
 			return null;
 		}
 
-		final Field primaryKey = getPrimaryKeyField(tableName);
+		final Field primaryKey = document.getTablePrimaryKeyField(tableName);
 
 		if (primaryKey == null) {
 			Log.error(documentID, tableName, "Couldn't find primary key in table. Returning null.");
@@ -82,7 +82,7 @@ public class DetailsDBAccess extends DBAccess {
 
 				// get the results from the ResultSet
 				// using 2 as a length parameter so we can log a warning if appropriate
-				rowsList = convertResultSetToDTO(2, fieldsToGet, rs);
+				rowsList = convertResultSetToDTO(2, fieldsToGet, primaryKeyValue, rs);
 			}
 
 		} catch (final SQLException e) {

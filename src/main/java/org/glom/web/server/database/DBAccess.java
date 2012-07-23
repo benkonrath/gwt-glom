@@ -29,10 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
@@ -44,8 +46,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 /**
  *
  */
-abstract class DBAccess {
-	protected Document document;
+public abstract class DBAccess {
+	public Document document;
 	protected String documentID;
 	protected String tableName;
 	protected ComboPooledDataSource cpds;
@@ -62,7 +64,7 @@ abstract class DBAccess {
 	 * Converts data from a ResultSet to an ArrayList of DataItem array suitable for sending back to the client.
 	 */
 	final protected ArrayList<DataItem[]> convertResultSetToDTO(final int length,
-			final List<LayoutItemField> layoutFields, final ResultSet rs) throws SQLException {
+			final List<LayoutItemField> layoutFields, final TypedDataItem primaryKeyValue, final ResultSet rs) throws SQLException {
 
 		final ResultSetMetaData rsMetaData = rs.getMetaData();
 		final int rsColumnscount = rsMetaData.getColumnCount();
@@ -123,15 +125,30 @@ abstract class DBAccess {
 					}
 					break;
 				case TYPE_IMAGE:
-					final byte[] imageByteArray = rs.getBytes(rsIndex);
-					if (imageByteArray != null) {
-						String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
-						base64 = "data:image/png;base64," + base64;
-						    
-						rowArray[i].setImageDataUrl(base64);
-					} else {
-						rowArray[i].setImageDataUrl(null);
+					//We don't get the data here.
+					//Instead we provide a way for the client to get the image separately.
+					
+					//This doesn't seem to work,
+					//presumably because the base64 encoding is wrong:
+					//final byte[] imageByteArray = rs.getBytes(rsIndex);
+					//if (imageByteArray != null) {
+					//	String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
+					//	base64 = "data:image/png;base64," + base64;
+					
+					final URIBuilder uriBuilder = new URIBuilder();
+					//uriBuilder.setHost(GWT.getModuleBaseURL());
+					uriBuilder.setPath("OnlineGlom/gwtGlomImages"); //The name of our images servlet. See OnlineGlomImages.
+					uriBuilder.setParameter("document", documentID);
+					uriBuilder.setParameter("table", tableName);
+					
+					//TODO: Handle other types:
+					if(primaryKeyValue != null) {
+						uriBuilder.setParameter("value", Double.toString(primaryKeyValue.getNumber()));
 					}
+					
+					uriBuilder.setParameter("field", field.getName());
+					
+					rowArray[i].setImageDataUrl(uriBuilder.toString());
 					break;
 				case TYPE_INVALID:
 				default:
@@ -223,26 +240,6 @@ abstract class DBAccess {
 	}
 
 	/**
-	 * Gets the primary key Field for the specified table name.
-	 * 
-	 * @param tableName
-	 *            name of table to search for the primary key field
-	 * @return primary key Field
-	 */
-	protected Field getPrimaryKeyField(final String tableName) {
-		Field primaryKey = null;
-		final List<Field> fieldsVec = document.getTableFields(tableName);
-		for (int i = 0; i < Utils.safeLongToInt(fieldsVec.size()); i++) {
-			final Field field = fieldsVec.get(i);
-			if (field.getPrimaryKey()) {
-				primaryKey = field;
-				break;
-			}
-		}
-		return primaryKey;
-	}
-
-	/**
 	 * Gets the primary key LayoutItem_Field for the specified table.
 	 * 
 	 * @param tableName
@@ -250,7 +247,7 @@ abstract class DBAccess {
 	 * @return primary key LayoutItem_Field
 	 */
 	protected LayoutItemField getPrimaryKeyLayoutItemField(final String tableName) {
-		final Field primaryKey = getPrimaryKeyField(tableName);
+		final Field primaryKey = document.getTablePrimaryKeyField(tableName);
 
 		final LayoutItemField libglomLayoutItemField = new LayoutItemField();
 

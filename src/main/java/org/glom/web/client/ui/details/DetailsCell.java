@@ -26,6 +26,7 @@ import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
 import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.shared.DataItem;
+import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.layout.Formatting;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
@@ -68,7 +69,7 @@ public class DetailsCell extends Composite {
 
 	public DetailsCell(final LayoutItemField layoutItemField) {
 		// Labels (text in div element) are being used so that the height of the details-data element can be set for
-		// the multiline height of LayoutItemFeilds. This allows the the data element to display the correct height
+		// the multiline height of LayoutItemFields. This allows the the data element to display the correct height
 		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
 		// data elements to be changed for right-to-left languages.
 
@@ -83,7 +84,9 @@ public class DetailsCell extends Composite {
 		}
 
 		// set the height based on the number of lines
-		detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
+		if(layoutItemField.getGlomType() != Field.GlomFieldType.TYPE_IMAGE) {
+			detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
+		}
 
 		// set the alignment
 		switch (formatting.getHorizontalAlignment()) {
@@ -228,6 +231,9 @@ public class DetailsCell extends Composite {
 			final String imageDataUrl = dataItem.getImageDataUrl();
 			if(imageDataUrl != null) {
 				image.setUrl(imageDataUrl);
+				
+				//Set an arbitrary default size:
+				//image.setPixelSize(200, 200);
 			}
 
 			detailsData.add(image);
