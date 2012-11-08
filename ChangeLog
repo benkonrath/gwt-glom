@@ -1,3 +1,11 @@
+2012-11-08  Murray Cumming  <murrayc@murrayc.com>
+
+	Added an Indonesian translation.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_id.properties:
+	This is from the new translation in Glom.
+
 2012-07-22  Murray Cumming  <murrayc@murrayc.com>
 
         Rename the servlet.
