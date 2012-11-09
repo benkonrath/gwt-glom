@@ -1,5 +1,13 @@
 2012-11-09  Murray Cumming  <murrayc@murrayc.com>
 
+        Eclipse project files: Use JDK 1.7 instead of JDK 1.6.
+
+        * .classpath:
+        * .settings/org.eclipse.jdt.core.prefs: By changing the Eclipse
+	Java Compiler and Java Build path settings in the UI.
+
+2012-11-09  Murray Cumming  <murrayc@murrayc.com>
+
 	Use the latest (now stable) version of GWT.
 
 	* pom.xml: And the latest version of the gwt-maven-plugin.
