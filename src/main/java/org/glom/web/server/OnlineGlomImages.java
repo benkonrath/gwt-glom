@@ -19,8 +19,11 @@
 
 package org.glom.web.server;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -182,8 +185,10 @@ public class OnlineGlomImages extends HttpServlet {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "The database contained null.", attrDocumentID);
 			return;
 		}
-
-		resp.setContentType("image/png"); // TODO: Detect this.
+		
+		final InputStream is = new ByteArrayInputStream(bytes);
+		final String contentType = URLConnection.guessContentTypeFromStream(is);	
+		resp.setContentType(contentType);
 
 		// Set content size:
 		resp.setContentLength((int) bytes.length);

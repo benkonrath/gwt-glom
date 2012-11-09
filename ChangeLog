@@ -1,5 +1,12 @@
 2012-11-09  Murray Cumming  <murrayc@murrayc.com>
 
+        OnlineGlomImages: Detect the mime-type (content type).
+
+        * src/main/java/org/glom/web/server/OnlineGlomImages.java:
+	doGet(): Instead of hard-coding image/png.
+
+2012-11-09  Murray Cumming  <murrayc@murrayc.com>
+
         Eclipse project files: Use JDK 1.7 instead of JDK 1.6.
 
         * .classpath:
