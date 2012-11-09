@@ -1,3 +1,9 @@
+2012-11-09  Murray Cumming  <murrayc@murrayc.com>
+
+	Use the latest (now stable) version of GWT.
+
+	* pom.xml: And the latest version of the gwt-maven-plugin.
+
 2012-11-08  Murray Cumming  <murrayc@murrayc.com>
 
 	Added an Indonesian translation.
