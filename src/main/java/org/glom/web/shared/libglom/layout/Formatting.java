@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.NumericFormat;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.shared.GWT;
 
 public class Formatting implements Serializable {
 

@@ -1,3 +1,10 @@
+2012-11-13  Murray Cumming  <murrayc@murrayc.com>
+
+        Do not use client.GWT for shared code.
+
+        * src/main/java/org/glom/web/shared/libglom/layout/Formatting.java:
+	Import shared.GWT instead of client.GWT, which seems to be appropriate.
+
 2012-11-12  Murray Cumming  <murrayc@murrayc.com>
 
 	Use image data when recreating databases for testing.
