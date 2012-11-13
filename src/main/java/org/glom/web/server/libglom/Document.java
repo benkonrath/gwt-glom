@@ -19,8 +19,11 @@
 
 package org.glom.web.server.libglom;
 
+//import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+//import java.io.InputStream;
+//import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -442,6 +445,8 @@ public class Document {
 			}
 		}
 
+		// We do not normally use this,
+		// though we do use it during testing, in SelfHoster, to recreate the database data.
 		final Element exampleRowsNode = getElementByName(tableNode, NODE_EXAMPLE_ROWS);
 		if (exampleRowsNode != null) {
 
@@ -520,16 +525,23 @@ public class Document {
 			break;
 		}
 		case TYPE_IMAGE: {
-			/* TODO:
-			final byte[] imageByteArray = null; // TODO.
-			if (imageByteArray != null) {
-				String base64 = com.google.gwt.user.server.Base64Utils.toBase64(imageByteArray);
-				base64 = "data:image/png;base64," + base64;
-				result.setImageDataUrl(base64);
-			} else {
-				result.setImageDataUrl(null);
-			}
+			//Glom (at least since 2.23/24) uses base64 for the images:
+			
+			//Discover the mime type:
+			final byte[] bytes = com.google.gwt.user.server.Base64Utils.fromBase64(unescaped);
+			/*
+			final InputStream is = new ByteArrayInputStream(bytes);
+			String contentType = "";
+			try {
+				contentType = URLConnection.guessContentTypeFromStream(is);
+			} catch (IOException e) {
+				Log.error("getNodeTextChildAsValue(): unrecognised image data content type.");
+			}	
+			
+			final String base64 = "data:" + contentType + ";base64," + unescaped;
+			result.setImageDataUrl(base64);
 			*/
+			result.setImageData(bytes);
 			break;
 		}
 		case TYPE_NUMERIC: {

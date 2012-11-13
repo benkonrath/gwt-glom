@@ -35,6 +35,7 @@ public class DataItem implements Serializable {
 	private boolean bool;
 	private double number;
 	private Date date;
+	private byte[] imageData; //This is only used locally to recreate database data.
 	private String imageDataUrl; //This is for use as an <img> or GWT Image URL.
 
 	// TODO: Time
@@ -73,6 +74,18 @@ public class DataItem implements Serializable {
 	public void setDate(final Date date) {
 		this.date = date;
 	}
+	
+	/** This is not used in DataItem instances that are passed from the server to the client.
+	 * This is only used locally to recreate database data.
+	 * @param bytes
+	 */
+	public void setImageData(final byte[] imageData) {
+		this.imageData = imageData;
+	}
+	
+	public byte[] getImageData() {
+		return imageData;
+	}
 
 	public String getImageDataUrl() {
 		return imageDataUrl;
@@ -83,12 +96,17 @@ public class DataItem implements Serializable {
 		this.imageDataUrl = image;
 	}
 
+	/** This is used by SelfHoster to get data for a database column.
+	 * 
+	 * @param type The expected type of the data.
+	 * @return The data.
+	 */
 	public Object getValue(final Field.GlomFieldType type) {
 		switch (type) {
 		case TYPE_BOOLEAN:
 			return getBoolean();
 		case TYPE_IMAGE:
-			return getImageDataUrl();
+			return getImageData(); //getImageDataUrl() is for use on the client side only.
 		case TYPE_NUMERIC:
 			return getNumber();
 		case TYPE_TEXT:

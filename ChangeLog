@@ -1,3 +1,15 @@
+2012-11-12  Murray Cumming  <murrayc@murrayc.com>
+
+	Use image data when recreating databases for testing.
+
+        * src/main/java/org/glom/web/shared/DataItem.java: Add get/setImageData(),
+	for use locally (not acrosss the network) when recreating databases
+	for testing.
+	getValue(): Use it here instead of getImageDataUrl(), noting that 
+	this method is only for use when recreating databases.
+        * src/main/java/org/glom/web/server/libglom/Document.java:
+	getNodeTextChildAsValue(): Use it instead of setImageDataUrl().
+
 2012-11-09  Murray Cumming  <murrayc@murrayc.com>
 
         OnlineGlomImages: Detect the mime-type (content type).
