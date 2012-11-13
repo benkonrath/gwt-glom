@@ -61,9 +61,12 @@ import org.glom.web.shared.libglom.layout.Formatting;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemImage;
 import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal.NavigationType;
+import org.glom.web.shared.libglom.layout.LayoutItemText;
+import org.glom.web.shared.libglom.layout.StaticText;
 import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
@@ -165,6 +168,9 @@ public class Document {
 	private static final String NODE_DATA_LAYOUT_ITEM = "data_layout_item";
 	private static final String NODE_CUSTOM_TITLE = "title_custom";
 	private static final String ATTRIBUTE_CUSTOM_TITLE_USE_CUSTOM = "use_custom";
+	private static final String NODE_DATA_LAYOUT_TEXTOBJECT = "data_layout_text";
+	private static final String NODE_DATA_LAYOUT_TEXTOBJECT_TEXT = "text";
+	private static final String NODE_DATA_LAYOUT_IMAGEOBJECT = "data_layout_image";
 	private static final String NODE_DATA_LAYOUT_ITEM_GROUPBY = "data_layout_item_groupby";
 	private static final String NODE_GROUPBY = "groupby";
 	private static final String NODE_SECONDARY_FIELDS = "secondary_fields";
@@ -917,12 +923,53 @@ public class Document {
 				final LayoutItemField item = new LayoutItemField();
 				loadDataLayoutItemField(element, item, tableName);
 				group.addItem(item);
+			} else if (element.getTagName() == NODE_DATA_LAYOUT_TEXTOBJECT) {
+				final LayoutItemText item = new LayoutItemText();
+				loadDataLayoutItemText(element, item);
+				group.addItem(item);
+			} else if (element.getTagName() == NODE_DATA_LAYOUT_IMAGEOBJECT) {
+				final LayoutItemImage item = new LayoutItemImage();
+				loadDataLayoutItemImage(element, item);
+				group.addItem(item);
 			} else if (element.getTagName() == NODE_DATA_LAYOUT_ITEM_GROUPBY) {
 				final LayoutItemGroupBy item = new LayoutItemGroupBy();
 				loadDataLayoutItemGroupBy(element, item, tableName);
 				group.addItem(item);
 			}
 		}
+	}
+
+	/**
+	 * @param element
+	 * @param item
+	 */
+	private void loadDataLayoutItemImage(Element element, LayoutItemImage item) {
+		loadTitle(element, item);
+		
+		final Element elementValue = getElementByName(element, NODE_VALUE);
+		if (elementValue == null) {
+			return;
+		}
+
+		final DataItem image = getNodeTextChildAsValue(elementValue, Field.GlomFieldType.TYPE_IMAGE);
+		item.setImage(image);
+	}
+
+	/**
+	 * @param element
+	 * @param item
+	 */
+	private void loadDataLayoutItemText(Element element, LayoutItemText item) {
+		loadTitle(element, item);
+		
+		final Element elementText = getElementByName(element, NODE_DATA_LAYOUT_TEXTOBJECT_TEXT);
+		if (elementText == null) {
+			return;
+		}
+		
+		final StaticText text = new StaticText();
+		loadTitle(elementText, text); //This node reuses the title structure to hold its text.
+		item.setText(text);
 	}
 
 	/**

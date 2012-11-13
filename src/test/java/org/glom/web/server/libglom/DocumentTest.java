@@ -39,7 +39,9 @@ import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutItemText;
 import org.glom.web.shared.libglom.layout.SortClause;
+import org.glom.web.shared.libglom.layout.StaticText;
 import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
 import org.junit.AfterClass;
@@ -288,6 +290,35 @@ public class DocumentTest {
 	}
 
 	@Test
+	public void testLayoutItemText() {
+
+		// Create a new document for the film manager
+		final Document filmManagerDocument = new Document();
+		filmManagerDocument.setFileURI(testUriFilmManager);
+		final boolean retval = filmManagerDocument.load();
+		assertTrue(retval);
+
+		// This relies on specific details of the film manager details
+		// view layout. I've included safety checks that will fail if the layout changes.
+		final List<LayoutGroup> detailsLayout = filmManagerDocument.getDataLayoutGroups("details", "scenes");
+		assertEquals(3, detailsLayout.size());
+
+		LayoutGroup layoutGroup = detailsLayout.get(1);
+		assertEquals("details", layoutGroup.getName());
+
+		final List<LayoutItem> items = layoutGroup.getItems();
+		
+		final LayoutItem item = items.get(1);
+		assertTrue(item instanceof LayoutItemText);
+		
+		LayoutItemText itemText = (LayoutItemText)item;
+		StaticText text = itemText.getText();
+		assertEquals(text.getTitle(), "The location name will be used if the name is empty.");
+	}
+		
+		
+		
+	@Test
 	public void testGetSuitableTableToViewDetails() {
 
 		// Create a new document for the film manager
@@ -416,6 +447,7 @@ public class DocumentTest {
 			for (int i = 0; i < 20; i++) {
 				testDocumentInfo();
 				testGetNumericFormat();
+				testLayoutItemText();
 				testGetSuitableTableToViewDetails();
 				testReadLayoutListInfo();
 				testReadTableFieldSizes();
