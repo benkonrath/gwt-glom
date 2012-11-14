@@ -1,5 +1,13 @@
 2012-11-14  Murray Cumming  <murrayc@murrayc.com>
 
+        Document: Do not use == to compare strings. Use equals().
+
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	== only checks that they are the same object, so it can 
+	seem to fail.
+
+2012-11-14  Murray Cumming  <murrayc@murrayc.com>
+
         Document: Add and use public constants for layout names.
 
         * src/main/java/org/glom/web/server/libglom/Document.java:

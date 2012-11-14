@@ -240,9 +240,9 @@ public class Document {
 		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if (nodeConnection != null) {
 			final String strHostingMode = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_HOSTING_MODE);
-			if (strHostingMode == "postgres_central") {
+			if (strHostingMode.equals("postgres_central")) {
 				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
-			} else if (strHostingMode == "sqlite") {
+			} else if (strHostingMode.equals("sqlite")) {
 				hostingMode = HostingMode.HOSTING_MODE_SQLITE;
 			} else {
 				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
@@ -515,7 +515,7 @@ public class Document {
 
 		switch (type) {
 		case TYPE_BOOLEAN: {
-			final boolean value = (unescaped == "true");
+			final boolean value = (unescaped.equals("true"));
 			result.setBoolean(value);
 			break;
 		}
@@ -796,15 +796,15 @@ public class Document {
 
 				final Element element = (Element) nodeLayoutGroup;
 				final String tagName = element.getTagName();
-				if (tagName == NODE_DATA_LAYOUT_GROUP) {
+				if (tagName.equals(NODE_DATA_LAYOUT_GROUP)) {
 					final LayoutGroup group = new LayoutGroup();
 					loadDataLayoutGroup(element, group, tableName);
 					result.add(group);
-				} else if (tagName == NODE_DATA_LAYOUT_NOTEBOOK) {
+				} else if (tagName.equals(NODE_DATA_LAYOUT_NOTEBOOK)) {
 					final LayoutItemNotebook group = new LayoutItemNotebook();
 					loadDataLayoutGroup(element, group, tableName);
 					result.add(group);
-				} else if (tagName == NODE_DATA_LAYOUT_PORTAL) {
+				} else if (tagName.equals(NODE_DATA_LAYOUT_PORTAL)) {
 					final LayoutItemPortal portal = new LayoutItemPortal();
 					loadDataLayoutPortal(element, portal, tableName);
 					result.add(portal);
@@ -907,31 +907,31 @@ public class Document {
 
 			final Element element = (Element) node;
 			final String tagName = element.getTagName();
-			if (tagName == NODE_DATA_LAYOUT_GROUP) {
+			if (tagName.equals(NODE_DATA_LAYOUT_GROUP)) {
 				final LayoutGroup childGroup = new LayoutGroup();
 				loadDataLayoutGroup(element, childGroup, tableName);
 				group.addItem(childGroup);
-			} else if (tagName == NODE_DATA_LAYOUT_NOTEBOOK) {
+			} else if (tagName.equals(NODE_DATA_LAYOUT_NOTEBOOK)) {
 				final LayoutItemNotebook childGroup = new LayoutItemNotebook();
 				loadDataLayoutGroup(element, childGroup, tableName);
 				group.addItem(childGroup);
-			} else if (tagName == NODE_DATA_LAYOUT_PORTAL) {
+			} else if (tagName.equals(NODE_DATA_LAYOUT_PORTAL)) {
 				final LayoutItemPortal childGroup = new LayoutItemPortal();
 				loadDataLayoutPortal(element, childGroup, tableName);
 				group.addItem(childGroup);
-			} else if (element.getTagName() == NODE_DATA_LAYOUT_ITEM) {
+			} else if (tagName.equals(NODE_DATA_LAYOUT_ITEM)) {
 				final LayoutItemField item = new LayoutItemField();
 				loadDataLayoutItemField(element, item, tableName);
 				group.addItem(item);
-			} else if (element.getTagName() == NODE_DATA_LAYOUT_TEXTOBJECT) {
+			} else if (tagName.equals(NODE_DATA_LAYOUT_TEXTOBJECT)) {
 				final LayoutItemText item = new LayoutItemText();
 				loadDataLayoutItemText(element, item);
 				group.addItem(item);
-			} else if (element.getTagName() == NODE_DATA_LAYOUT_IMAGEOBJECT) {
+			} else if (tagName.equals(NODE_DATA_LAYOUT_IMAGEOBJECT)) {
 				final LayoutItemImage item = new LayoutItemImage();
 				loadDataLayoutItemImage(element, item);
 				group.addItem(item);
-			} else if (element.getTagName() == NODE_DATA_LAYOUT_ITEM_GROUPBY) {
+			} else if (tagName.equals(NODE_DATA_LAYOUT_ITEM_GROUPBY)) {
 				final LayoutItemGroupBy item = new LayoutItemGroupBy();
 				loadDataLayoutItemGroupBy(element, item, tableName);
 				group.addItem(item);
@@ -1044,11 +1044,11 @@ public class Document {
 		if (elementNavigation != null) {
 			final String navigationTypeAsString = elementNavigation.getAttribute(ATTRIBUTE_PORTAL_NAVIGATION_TYPE);
 			if (StringUtils.isEmpty(navigationTypeAsString)
-					|| navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC) {
+					|| navigationTypeAsString.equals(ATTRIBUTE_PORTAL_NAVIGATION_TYPE_AUTOMATIC)) {
 				portal.setNavigationType(LayoutItemPortal.NavigationType.NAVIGATION_AUTOMATIC);
-			} else if (navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE) {
+			} else if (navigationTypeAsString.equals(ATTRIBUTE_PORTAL_NAVIGATION_TYPE_NONE)) {
 				portal.setNavigationType(LayoutItemPortal.NavigationType.NAVIGATION_NONE);
-			} else if (navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC) {
+			} else if (navigationTypeAsString.equals(ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC)) {
 				// Read the specified relationship name:
 				final UsesRelationship relationshipNavigationSpecific = new UsesRelationshipImpl();
 				loadUsesRelationship(elementNavigation, relatedTableName, relationshipNavigationSpecific);
@@ -1261,9 +1261,9 @@ public class Document {
 			return new ArrayList<LayoutGroup>();
 		}
 
-		if (layoutName == LAYOUT_NAME_DETAILS) {
+		if (layoutName.equals(LAYOUT_NAME_DETAILS)) {
 			return info.layoutGroupsDetails;
-		} else if (layoutName == LAYOUT_NAME_LIST) {
+		} else if (layoutName.equals(LAYOUT_NAME_LIST)) {
 			return info.layoutGroupsList;
 		} else {
 			return new ArrayList<LayoutGroup>();
@@ -1735,7 +1735,7 @@ public class Document {
 		}
 		elementNavigation.setAttribute(ATTRIBUTE_PORTAL_NAVIGATION_TYPE, navigationTypeAsString);
 
-		if (navigationTypeAsString == ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC) {
+		if (navigationTypeAsString.equals(ATTRIBUTE_PORTAL_NAVIGATION_TYPE_SPECIFIC)) {
 			// Write the specified relationship name:
 			saveUsesRelationship(elementNavigation, portal.getNavigationRelationshipSpecific());
 		}
