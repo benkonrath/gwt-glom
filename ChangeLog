@@ -1,3 +1,15 @@
+2012-11-14  Murray Cumming  <murrayc@murrayc.com>
+
+        Document: Add and use public constants for layout names.
+
+        * src/main/java/org/glom/web/server/libglom/Document.java:
+	Make LAYOUT_NAME_DETAILS and LAYOUT_NAME_LIST public.
+        * src/main/java/org/glom/web/server/ConfiguredDocument.java:
+        * src/main/java/org/glom/web/server/database/DetailsDBAccess.java:
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:
+        * src/test/java/org/glom/web/server/libglom/DocumentTest.java: Use 
+	them here instead of hard-coded the strings repeatedly.
+
 2012-11-13  Murray Cumming  <murrayc@murrayc.com>
 
         Document: Load static text and image items too.

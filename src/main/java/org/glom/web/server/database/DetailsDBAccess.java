@@ -49,7 +49,7 @@ public class DetailsDBAccess extends DBAccess {
 
 	public DataItem[] getData(final TypedDataItem primaryKeyValue) {
 
-		final List<LayoutItemField> fieldsToGet = getFieldsToShowForSQLQuery(document.getDataLayoutGroups("details",
+		final List<LayoutItemField> fieldsToGet = getFieldsToShowForSQLQuery(document.getDataLayoutGroups(Document.LAYOUT_NAME_DETAILS,
 				tableName));
 
 		if (fieldsToGet == null || fieldsToGet.size() <= 0) {

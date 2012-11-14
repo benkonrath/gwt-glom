@@ -177,7 +177,7 @@ public class DocumentTest {
 		final int[] layoutFieldSizes = { 7, 4, 3, 4 };
 
 		for (int i = 0; i < tables.length; i++) {
-			final List<LayoutGroup> layoutList = document.getDataLayoutGroups("list", tables[i]);
+			final List<LayoutGroup> layoutList = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, tables[i]);
 			assertTrue(!layoutList.isEmpty());
 			final List<LayoutItem> layoutItems = layoutList.get(0).getItems();
 			final List<LayoutItemField> layoutFields = new ArrayList<LayoutItemField>();
@@ -210,7 +210,7 @@ public class DocumentTest {
 
 		for (int i = 0; i < tableNames.size(); i++) {
 			final String table = tableNames.get(i);
-			final List<LayoutGroup> layoutList = document.getDataLayoutGroups("list", table);
+			final List<LayoutGroup> layoutList = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, table);
 			assertTrue(!layoutList.isEmpty());
 			final LayoutGroup firstgroup = layoutList.get(0);
 			assertTrue(firstgroup != null);
@@ -261,7 +261,7 @@ public class DocumentTest {
 	@Test
 	public void testUsesRelationshipMethods() {
 		final String table = "albums";
-		final List<LayoutGroup> layoutList = document.getDataLayoutGroups("list", table);
+		final List<LayoutGroup> layoutList = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, table);
 		final List<LayoutItem> layoutItems = layoutList.get(0).getItems();
 
 		String names = null, hasRelationshipNames = null, tablesUsed = null;
@@ -300,11 +300,11 @@ public class DocumentTest {
 
 		// This relies on specific details of the film manager details
 		// view layout. I've included safety checks that will fail if the layout changes.
-		final List<LayoutGroup> detailsLayout = filmManagerDocument.getDataLayoutGroups("details", "scenes");
+		final List<LayoutGroup> detailsLayout = filmManagerDocument.getDataLayoutGroups(Document.LAYOUT_NAME_DETAILS, "scenes");
 		assertEquals(3, detailsLayout.size());
 
 		LayoutGroup layoutGroup = detailsLayout.get(1);
-		assertEquals("details", layoutGroup.getName());
+		assertEquals(Document.LAYOUT_NAME_DETAILS, layoutGroup.getName());
 
 		final List<LayoutItem> items = layoutGroup.getItems();
 		
@@ -329,11 +329,11 @@ public class DocumentTest {
 
 		// Get the "Scene Cast" related list portal. This relies on specific details of the film manager details
 		// view layout. I've included safety checks that will fail if the layout changes.
-		final List<LayoutGroup> detailsLayout = filmManagerDocument.getDataLayoutGroups("details", "scenes");
+		final List<LayoutGroup> detailsLayout = filmManagerDocument.getDataLayoutGroups(Document.LAYOUT_NAME_DETAILS, "scenes");
 		assertEquals(3, detailsLayout.size());
 
 		LayoutGroup layoutGroup = detailsLayout.get(1);
-		assertEquals("details", layoutGroup.getName());
+		assertEquals(Document.LAYOUT_NAME_DETAILS, layoutGroup.getName());
 		assertEquals("Details", layoutGroup.getTitle(defaultLocale));
 		assertEquals("Details", layoutGroup.getTitle(germanLocale));
 

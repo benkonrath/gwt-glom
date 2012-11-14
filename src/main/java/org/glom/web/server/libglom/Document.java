@@ -175,8 +175,8 @@ public class Document {
 	private static final String NODE_GROUPBY = "groupby";
 	private static final String NODE_SECONDARY_FIELDS = "secondary_fields";
 	private static final String ATTRIBUTE_USE_DEFAULT_FORMATTING = "use_default_formatting";
-	private static final String LAYOUT_NAME_DETAILS = "details";
-	private static final String LAYOUT_NAME_LIST = "list";
+	public static final String LAYOUT_NAME_DETAILS = "details";
+	public static final String LAYOUT_NAME_LIST = "list";
 	private static final String QUOTE_FOR_FILE_FORMAT = "\"";
 
 	public void setFileURI(final String fileURI) {

@@ -360,7 +360,7 @@ final class ConfiguredDocument {
 			return result;
 		}
 
-		final List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups("list", tableName);
+		final List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, tableName);
 
 		final int listViewLayoutGroupSize = Utils.safeLongToInt(layoutGroupVec.size());
 		LayoutGroup libglomLayoutGroup = null;
@@ -547,7 +547,7 @@ final class ConfiguredDocument {
 			return result;
 		}
 
-		final List<LayoutGroup> listGroups = document.getDataLayoutGroups("details", tableName);
+		final List<LayoutGroup> listGroups = document.getDataLayoutGroups(Document.LAYOUT_NAME_DETAILS, tableName);
 
 		// Clone the group and change the clone, to discard unwanted information (such as translations)
 		// and to store some information that we do not want to calculate on the client side.

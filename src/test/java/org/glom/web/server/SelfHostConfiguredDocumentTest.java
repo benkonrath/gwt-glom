@@ -195,7 +195,7 @@ public class SelfHostConfiguredDocumentTest {
 		
 		LayoutGroup layoutGroup = list.get(1);
 		assertNotNull(layoutGroup);
-		assertEquals("details", layoutGroup.getName());
+		assertEquals(Document.LAYOUT_NAME_DETAILS, layoutGroup.getName());
 		assertEquals("Details", layoutGroup.getTitle()); //We don't need to specify locale again.
 		//assertEquals("Details", layoutGroup.getTitle(germanLocale));
 	}
