@@ -101,6 +101,15 @@ public class Document {
 		// A list of maps (field name to value).
 		private List<Map<String, DataItem>> exampleRows = null;
 	}
+	
+	/** This is passed between methods to keep track of the hierarchy of layout items,
+	 * so we can later use it to specify the path to a layout item.
+	 */
+	private static class Path {
+		public String tableName = null;
+		public String layoutName = null;
+		public int[] indices = new int[1];
+	}
 
 	private String fileURI = "";
 	private org.w3c.dom.Document xmlDocument = null;
@@ -114,6 +123,7 @@ public class Document {
 	private String connectionDatabase = "";
 	private int connectionPort = 0;
 	private final Hashtable<String, TableInfo> tablesMap = new Hashtable<String, TableInfo>();
+	private String documentID = null; //Only for use in the Path, for use in image DataItems.
 
 	private static final String NODE_ROOT = "glom_document";
 	private static final String ATTRIBUTE_IS_EXAMPLE = "is_example";
@@ -179,6 +189,23 @@ public class Document {
 	public static final String LAYOUT_NAME_DETAILS = "details";
 	public static final String LAYOUT_NAME_LIST = "list";
 	private static final String QUOTE_FOR_FILE_FORMAT = "\"";
+
+	/**
+	 * Instantiate a Document with no documentID,
+	 * meaning that its LayoutItemImage items will not be able to provide a URI to request their data.
+	 * This constructor is useful for tests.
+	 */
+	public Document() {
+	}
+	
+	/**
+	 * Instantiate a Document.
+	 *
+	 * @param documentID Used by LayoutItemImage items to provide a URI to request their data.
+	 */
+	public Document(final String documentID) {
+		this.documentID = documentID;
+	}
 
 	public void setFileURI(final String fileURI) {
 		this.fileURI = fileURI;
@@ -744,7 +771,7 @@ public class Document {
 
 				final Element element = (Element) node;
 				final String name = element.getAttribute(ATTRIBUTE_NAME);
-				final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName);
+				final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName, name);
 				if (name.equals(LAYOUT_NAME_DETAILS)) {
 					info.layoutGroupsDetails = listLayoutGroups;
 				} else if (name.equals(LAYOUT_NAME_LIST)) {
@@ -776,13 +803,13 @@ public class Document {
 	 * @param node
 	 * @return
 	 */
-	private List<LayoutGroup> loadLayoutNode(final Element node, final String tableName) {
+	private List<LayoutGroup> loadLayoutNode(final Element node, final String tableName, final String layoutName) {
 		if (node == null) {
 			return null;
 		}
 
 		final List<LayoutGroup> result = new ArrayList<LayoutGroup>();
-
+		int groupIndex = 0;
 		final List<Node> listNodes = getChildrenByTagName(node, NODE_DATA_LAYOUT_GROUPS);
 		for (final Node nodeGroups : listNodes) {
 			if (!(nodeGroups instanceof Element)) {
@@ -802,20 +829,26 @@ public class Document {
 				if (!(nodeLayoutGroup instanceof Element)) {
 					continue;
 				}
+				
+				final Path path = new Path();
+				path.tableName = tableName;
+				path.layoutName = layoutName;
+				path.indices[0 /* depth */] = groupIndex;
+				++groupIndex;
 
 				final Element element = (Element) nodeLayoutGroup;
 				final String tagName = element.getTagName();
 				if (tagName.equals(NODE_DATA_LAYOUT_GROUP)) {
 					final LayoutGroup group = new LayoutGroup();
-					loadDataLayoutGroup(element, group, tableName);
+					loadDataLayoutGroup(element, group, tableName, path);
 					result.add(group);
 				} else if (tagName.equals(NODE_DATA_LAYOUT_NOTEBOOK)) {
 					final LayoutItemNotebook group = new LayoutItemNotebook();
-					loadDataLayoutGroup(element, group, tableName);
+					loadDataLayoutGroup(element, group, tableName, path);
 					result.add(group);
 				} else if (tagName.equals(NODE_DATA_LAYOUT_PORTAL)) {
 					final LayoutItemPortal portal = new LayoutItemPortal();
-					loadDataLayoutPortal(element, portal, tableName);
+					loadDataLayoutPortal(element, portal, tableName, path);
 					result.add(portal);
 				}
 			}
@@ -895,7 +928,7 @@ public class Document {
 	 * @param element
 	 * @param group
 	 */
-	private void loadDataLayoutGroup(final Element nodeGroup, final LayoutGroup group, final String tableName) {
+	private void loadDataLayoutGroup(final Element nodeGroup, final LayoutGroup group, final String tableName, final Path path) {
 		loadTitle(nodeGroup, group);
 
 		// Read the column count:
@@ -905,10 +938,14 @@ public class Document {
 		}
 		group.setColumnCount(columnCount);
 
+		final int depth = path.indices.length;
+
 		// Get the child items:
 		final NodeList listNodes = nodeGroup.getChildNodes();
 		final int num = listNodes.getLength();
+		int pathIndex = 0;
 		for (int i = 0; i < num; i++) {
+
 			final Node node = listNodes.item(i);
 			if (!(node instanceof Element)) {
 				continue;
@@ -916,17 +953,33 @@ public class Document {
 
 			final Element element = (Element) node;
 			final String tagName = element.getTagName();
+			
+			//Do not increment pathIndex for an item
+			//that we will not use:
+			if(tagName.equals(NODE_TRANSLATIONS_SET)) {
+				continue;
+			}
+
+			// Create a path of indices for the child:
+			final Path pathChild = new Path();
+			pathChild.tableName = path.tableName;
+			pathChild.layoutName = path.layoutName;
+			pathChild.indices = new int[path.indices.length + 1];
+			System.arraycopy( path.indices, 0, pathChild.indices, 0, path.indices.length );
+			pathChild.indices[depth] = pathIndex;
+			pathIndex++;
+
 			if (tagName.equals(NODE_DATA_LAYOUT_GROUP)) {
 				final LayoutGroup childGroup = new LayoutGroup();
-				loadDataLayoutGroup(element, childGroup, tableName);
+				loadDataLayoutGroup(element, childGroup, tableName, pathChild);
 				group.addItem(childGroup);
 			} else if (tagName.equals(NODE_DATA_LAYOUT_NOTEBOOK)) {
 				final LayoutItemNotebook childGroup = new LayoutItemNotebook();
-				loadDataLayoutGroup(element, childGroup, tableName);
+				loadDataLayoutGroup(element, childGroup, tableName, pathChild);
 				group.addItem(childGroup);
 			} else if (tagName.equals(NODE_DATA_LAYOUT_PORTAL)) {
 				final LayoutItemPortal childGroup = new LayoutItemPortal();
-				loadDataLayoutPortal(element, childGroup, tableName);
+				loadDataLayoutPortal(element, childGroup, tableName, pathChild);
 				group.addItem(childGroup);
 			} else if (tagName.equals(NODE_DATA_LAYOUT_ITEM)) {
 				final LayoutItemField item = new LayoutItemField();
@@ -938,11 +991,11 @@ public class Document {
 				group.addItem(item);
 			} else if (tagName.equals(NODE_DATA_LAYOUT_IMAGEOBJECT)) {
 				final LayoutItemImage item = new LayoutItemImage();
-				loadDataLayoutItemImage(element, item);
+				loadDataLayoutItemImage(element, item, pathChild);
 				group.addItem(item);
 			} else if (tagName.equals(NODE_DATA_LAYOUT_ITEM_GROUPBY)) {
 				final LayoutItemGroupBy item = new LayoutItemGroupBy();
-				loadDataLayoutItemGroupBy(element, item, tableName);
+				loadDataLayoutItemGroupBy(element, item, tableName, pathChild);
 				group.addItem(item);
 			}
 		}
@@ -952,7 +1005,7 @@ public class Document {
 	 * @param element
 	 * @param item
 	 */
-	private void loadDataLayoutItemImage(Element element, LayoutItemImage item) {
+	private void loadDataLayoutItemImage(Element element, LayoutItemImage item, final Path path) {
 		loadTitle(element, item);
 		
 		final Element elementValue = getElementByName(element, NODE_VALUE);
@@ -961,6 +1014,11 @@ public class Document {
 		}
 
 		final DataItem image = getNodeTextChildAsValue(elementValue, Field.GlomFieldType.TYPE_IMAGE);
+		
+		//This lets the client-side request the full data from our OnlineGlomImage service.
+		final String layoutPath = Utils.buildImageDataUrl(documentID, path.tableName, path.layoutName, path.indices);
+		image.setImageDataUrl(layoutPath);
+		
 		item.setImage(image);
 	}
 
@@ -986,8 +1044,8 @@ public class Document {
 	 * @param item
 	 * @param tableName
 	 */
-	private void loadDataLayoutItemGroupBy(final Element element, final LayoutItemGroupBy item, final String tableName) {
-		loadDataLayoutGroup(element, item, tableName);
+	private void loadDataLayoutItemGroupBy(final Element element, final LayoutItemGroupBy item, final String tableName, final Path path) {
+		loadDataLayoutGroup(element, item, tableName, path);
 
 		final Element elementGroupBy = getElementByName(element, NODE_GROUPBY);
 		if (elementGroupBy == null) {
@@ -1006,7 +1064,7 @@ public class Document {
 		final Element elementLayoutGroup = getElementByName(elementSecondaryFields, NODE_DATA_LAYOUT_GROUP);
 		if (elementLayoutGroup != null) {
 			final LayoutGroup secondaryLayoutGroup = new LayoutGroup();
-			loadDataLayoutGroup(elementLayoutGroup, secondaryLayoutGroup, tableName);
+			loadDataLayoutGroup(elementLayoutGroup, secondaryLayoutGroup, tableName, path); //TODO: Add the main group items count to path first?
 			item.setSecondaryFields(secondaryLayoutGroup);
 		}
 	}
@@ -1044,10 +1102,10 @@ public class Document {
 	 * @param element
 	 * @param childGroup
 	 */
-	private void loadDataLayoutPortal(final Element element, final LayoutItemPortal portal, final String tableName) {
+	private void loadDataLayoutPortal(final Element element, final LayoutItemPortal portal, final String tableName, final Path path) {
 		loadUsesRelationship(element, tableName, portal);
 		final String relatedTableName = portal.getTableUsed(tableName);
-		loadDataLayoutGroup(element, portal, relatedTableName);
+		loadDataLayoutGroup(element, portal, relatedTableName, path);
 
 		final Element elementNavigation = getElementByName(element, NODE_DATA_LAYOUT_PORTAL_NAVIGATIONRELATIONSHIP);
 		if (elementNavigation != null) {
@@ -1135,7 +1193,7 @@ public class Document {
 		report.setName(element.getAttribute(ATTRIBUTE_NAME));
 		loadTitle(element, report);
 
-		final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName);
+		final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName, null /* not needed */);
 
 		// A report can actually only have one LayoutGroup,
 		// though it uses the same XML structure as List and Details layouts,

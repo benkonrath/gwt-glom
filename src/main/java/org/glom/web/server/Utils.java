@@ -27,6 +27,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.glom.web.shared.TypedDataItem;
+import org.glom.web.shared.libglom.layout.LayoutItemField;
 
 /**
  *
@@ -78,7 +81,34 @@ public class Utils {
 			}
 		}
 	}
-	
+
+	/** Build the URL for the service that will return the binary data for an image.
+	 * 
+	 * @param primaryKeyValue
+	 * @param field
+	 * @return
+	 */
+	public static String buildImageDataUrl(final String documentID, final String tableName, final String layoutName, final int[] path) {
+		final URIBuilder uriBuilder = buildImageDataUrlStart(documentID, tableName);
+		uriBuilder.setParameter("layout", layoutName);
+		uriBuilder.setParameter("layoutpath", buildLayoutPath(path));
+		return uriBuilder.toString();
+	}
+
+	/**
+	 * @param documentID
+	 * @param tableName
+	 * @return
+	 */
+	private static URIBuilder buildImageDataUrlStart(final String documentID, final String tableName) {
+		final URIBuilder uriBuilder = new URIBuilder();
+		//uriBuilder.setHost(GWT.getModuleBaseURL());
+		uriBuilder.setPath("OnlineGlom/gwtGlomImages"); //The name of our images servlet. See OnlineGlomImages.
+		uriBuilder.setParameter("document", documentID);
+		uriBuilder.setParameter("table", tableName);
+		return uriBuilder;
+	}
+
 	/** Build a :-separated string to represent the path as a string.
 	 * @param path
 	 * @return

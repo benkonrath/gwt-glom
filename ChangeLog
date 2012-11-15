@@ -1,5 +1,20 @@
 2012-11-15  Murray Cumming  <murrayc@murrayc.com>
 
+        Document: Static image items: Store an image URL, using the layout path. 
+
+        * src/main/java/org/glom/web/server/Utils.java: Add buildImageDataUrl().
+        * src/main/java/org/glom/web/server/libglom/Document.java:
+        Add a constructor that takes the documentID, for use in the 
+	LayoutItemImage URL.
+	loadLayoutNode(): Pass a Path object to the helper methods, so we 
+	can use it to create a URL for LayoutItemImage items.
+	This seems as good a way as any to specify a layout item in the document.
+        * src/main/java/org/glom/web/server/ConfiguredDocumentSet.java:
+	Pass the documentID to the constructor, for use in the LayoutItemImage
+	URL.
+
+2012-11-15  Murray Cumming  <murrayc@murrayc.com>
+
         Document: Add getLayoutItemByPath().
 
         * src/main/java/org/glom/web/server/Utils.java:

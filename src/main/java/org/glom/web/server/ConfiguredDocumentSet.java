@@ -60,12 +60,14 @@ public class ConfiguredDocumentSet {
 		return configurationException;
 	}
 
-	private void addDocument(final ConfiguredDocument configuredDocument, final String filename) {
+	private static String getDocumentIdForFilename(final String filename) {
 		// The key for the hash table is the file name without the .glom extension and with spaces ( ) replaced
 		// with pluses (+). The space/plus replacement makes the key more friendly for URLs.
-		final String documentID = FilenameUtils.removeExtension(filename).replace(' ', '+');
+		return FilenameUtils.removeExtension(filename).replace(' ', '+');
+	}
+
+	private void addDocument(final ConfiguredDocument configuredDocument, final String documentID) {
 		configuredDocument.setDocumentID(documentID);
-	
 		documentMapping.put(documentID, configuredDocument);
 	}
 	
@@ -131,8 +133,10 @@ public class ConfiguredDocumentSet {
 				}
 				
 				final File glomFile = (File)objGlomFile;
+				final String filename = glomFile.getName();
 	
-				final Document document = new Document();
+				final String documentID = getDocumentIdForFilename(filename);
+				final Document document = new Document(documentID);
 				document.setFileURI("file://" + glomFile.getAbsolutePath());
 				final boolean retval = document.load();
 				if (retval == false) {
@@ -149,7 +153,6 @@ public class ConfiguredDocumentSet {
 				final String globalPassword = config.getGlobalPassword();
 	
 				// check if a username and password have been set and work for the current document
-				final String filename = glomFile.getName();
 				
 				// Username/password could be set. Let's check to see if it works.
 				final Credentials docCredentials = config.getCredentials(filename);
@@ -166,7 +169,7 @@ public class ConfiguredDocumentSet {
 					configuredDocument.setDefaultLocaleID(globalLocaleID.trim());
 				}
 	
-				addDocument(configuredDocument, filename);
+				addDocument(configuredDocument, documentID);
 			}
 	
 		} catch (final Exception e) {
