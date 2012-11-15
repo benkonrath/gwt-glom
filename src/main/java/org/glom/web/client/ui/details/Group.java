@@ -25,8 +25,10 @@ import org.glom.web.client.StringUtils;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemImage;
 import org.glom.web.shared.libglom.layout.LayoutItemNotebook;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutItemText;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -119,9 +121,15 @@ public class Group extends Composite {
 
 			// create a DetailsCell
 			final DetailsCell detailsCell = new DetailsCell((LayoutItemField) layoutItem);
-			cells.add(detailsCell);
+			cells.add(detailsCell); //Store it so we can set its data later.
 			return detailsCell;
 
+		} else if (layoutItem instanceof LayoutItemText) {
+			final DetailsCell detailsCell = new DetailsCell((LayoutItemText) layoutItem);
+			return detailsCell;
+		} else if (layoutItem instanceof LayoutItemImage) {
+			final DetailsCell detailsCell = new DetailsCell((LayoutItemImage) layoutItem);
+			return detailsCell;
 		} else if (layoutItem instanceof LayoutGroup) {
 
 			if (layoutItem instanceof LayoutItemPortal) {

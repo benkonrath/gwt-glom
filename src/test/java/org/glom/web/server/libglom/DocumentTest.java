@@ -448,6 +448,7 @@ public class DocumentTest {
 				testDocumentInfo();
 				testGetNumericFormat();
 				testLayoutItemText();
+				//TODO: testLayoutItemImage(), also testing that it has the expected layout path.
 				testGetSuitableTableToViewDetails();
 				testReadLayoutListInfo();
 				testReadTableFieldSizes();

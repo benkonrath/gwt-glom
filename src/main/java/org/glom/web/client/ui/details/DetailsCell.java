@@ -30,6 +30,9 @@ import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.NumericFormat;
 import org.glom.web.shared.libglom.layout.Formatting;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemImage;
+import org.glom.web.shared.libglom.layout.LayoutItemText;
+import org.glom.web.shared.libglom.layout.LayoutItemWithFormatting;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -59,24 +62,20 @@ public class DetailsCell extends Composite {
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
-	private final LayoutItemField layoutItemField;
+	private LayoutItemWithFormatting layoutItem = null;
+	private Field.GlomFieldType dataType = Field.GlomFieldType.TYPE_INVALID;
 	private final FlowPanel detailsData = new FlowPanel();
 	private final Label detailsLabel = new Label();
+	private final FlowPanel mainPanel = new FlowPanel();
 	private DataItem dataItem;
 
 	private Button openButton = null;
 	private HandlerRegistration openButtonHandlerReg = null;
 
 	public DetailsCell(final LayoutItemField layoutItemField) {
-		// Labels (text in div element) are being used so that the height of the details-data element can be set for
-		// the multiline height of LayoutItemFields. This allows the the data element to display the correct height
-		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
-		// data elements to be changed for right-to-left languages.
 
-		final Label detailsLabel = new Label(layoutItemField.getTitle() + ":");
-		detailsLabel.setStyleName("details-label");
-
-		detailsData.setStyleName("details-data");
+		setupWidgets(layoutItemField);
+		
 		Formatting formatting = layoutItemField.getFormatting();
 		if (formatting == null) {
 			GWT.log("setData(): formatting is null");
@@ -84,8 +83,72 @@ public class DetailsCell extends Composite {
 		}
 
 		// set the height based on the number of lines
-		if(layoutItemField.getGlomType() != Field.GlomFieldType.TYPE_IMAGE) {
+		if (layoutItemField.getGlomType() != Field.GlomFieldType.TYPE_IMAGE) {
 			detailsData.setHeight(formatting.getTextFormatMultilineHeightLines() + "em");
+		}
+
+		final String navigationTableName = layoutItemField.getNavigationTableName();
+		if (!StringUtils.isEmpty(navigationTableName)) {
+			openButton = new Button(constants.open());
+			openButton.setStyleName("details-navigation");
+			openButton.setEnabled(false);
+			mainPanel.add(openButton);
+		}
+
+		this.layoutItem = layoutItemField;
+		this.dataType = layoutItemField.getGlomType();
+
+		initWidget(mainPanel);
+	}
+	
+	public DetailsCell(final LayoutItemText layoutItemText) {
+
+		setupWidgets(layoutItemText);
+
+		this.layoutItem = layoutItemText;
+		this.dataType = Field.GlomFieldType.TYPE_TEXT;
+
+		initWidget(mainPanel);
+		
+		//Use the static text:
+		final DataItem dataItem = new DataItem();
+		final String text = layoutItemText.getText().getTitle();
+		dataItem.setText(text);
+		setData(dataItem);
+	}
+	
+	public DetailsCell(final LayoutItemImage layoutItemImage) {
+
+		setupWidgets(layoutItemImage);
+
+		this.layoutItem = layoutItemImage;
+		this.dataType = Field.GlomFieldType.TYPE_IMAGE;
+
+		initWidget(mainPanel);
+		
+		//Use the static image:
+		setData(layoutItemImage.getImage());
+	}
+
+	private void setupWidgets(LayoutItemWithFormatting layoutItem) {
+		// Labels (text in div element) are being used so that the height of the details-data element can be set for
+		// the multiline height of LayoutItemFields. This allows the the data element to display the correct height
+		// if style is applied that shows the height. This has the added benefit of allowing the order of the label and
+		// data elements to be changed for right-to-left languages.
+
+		String title = layoutItem.getTitle();
+		if(!StringUtils.isEmpty(title)) {
+			title += ":";
+		}
+
+		final Label detailsLabel = new Label(title); //TODO: Rename to titleLabel?
+		detailsLabel.setStyleName("details-label");
+
+		detailsData.setStyleName("details-data");
+		Formatting formatting = layoutItem.getFormatting();
+		if (formatting == null) {
+			GWT.log("setData(): formatting is null");
+			formatting = new Formatting(); // To avoid checks later.
 		}
 
 		// set the alignment
@@ -112,23 +175,10 @@ public class DetailsCell extends Composite {
 			detailsData.getElement().getStyle().setBackgroundColor(backgroundColor);
 		}
 
-		final FlowPanel mainPanel = new FlowPanel();
 		mainPanel.setStyleName("details-cell");
 
 		mainPanel.add(detailsLabel);
 		mainPanel.add(detailsData);
-
-		final String navigationTableName = layoutItemField.getNavigationTableName();
-		if (!StringUtils.isEmpty(navigationTableName)) {
-			openButton = new Button(constants.open());
-			openButton.setStyleName("details-navigation");
-			openButton.setEnabled(false);
-			mainPanel.add(openButton);
-		}
-
-		this.layoutItemField = layoutItemField;
-
-		initWidget(mainPanel);
 	}
 
 	public DataItem getData() {
@@ -142,10 +192,10 @@ public class DetailsCell extends Composite {
 			return;
 		}
 
-		Formatting formatting = layoutItemField.getFormatting();
+		Formatting formatting = layoutItem.getFormatting();
 
-		// FIXME use the cell renderers from the list view to render the inforamtion here
-		switch (layoutItemField.getGlomType()) {
+		// FIXME use the cell renderers from the list view to render the information here
+		switch (this.dataType) {
 		case TYPE_BOOLEAN:
 			final CheckBox checkBox = new CheckBox();
 			checkBox.setValue(dataItem.getBoolean());
@@ -229,11 +279,11 @@ public class DetailsCell extends Composite {
 		case TYPE_IMAGE:
 			final Image image = new Image();
 			final String imageDataUrl = dataItem.getImageDataUrl();
-			if(imageDataUrl != null) {
+			if (imageDataUrl != null) {
 				image.setUrl(imageDataUrl);
-				
-				//Set an arbitrary default size:
-				//image.setPixelSize(200, 200);
+
+				// Set an arbitrary default size:
+				// image.setPixelSize(200, 200);
 			}
 
 			detailsData.add(image);
@@ -251,8 +301,8 @@ public class DetailsCell extends Composite {
 
 	}
 
-	public LayoutItemField getLayoutItemField() {
-		return layoutItemField;
+	public LayoutItemWithFormatting getLayoutItem() {
+		return layoutItem;
 	}
 
 	public HandlerRegistration setOpenButtonClickHandler(final ClickHandler clickHandler) {

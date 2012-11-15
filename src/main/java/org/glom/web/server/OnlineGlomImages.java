@@ -40,7 +40,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemImage;
 
 import com.google.gwt.http.client.Response;
 
@@ -58,8 +60,7 @@ public class OnlineGlomImages extends HttpServlet {
 		try {
 			configuredDocumentSet.readConfiguration();
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.error("Configuration error", e);
 		}
 	}
 	
@@ -82,6 +83,11 @@ public class OnlineGlomImages extends HttpServlet {
 		final String attrPrimaryKeyValue = StringUtils.defaultString(req.getParameter("value"));
 		final String attrFieldName = StringUtils.defaultString(req.getParameter("field"));
 		
+		//To request a static LayoutItemImage from the document
+		//instead of from the database:
+		final String attrLayoutName = StringUtils.defaultString(req.getParameter("layout"));
+		final String attrLayoutPath = StringUtils.defaultString(req.getParameter("layoutpath"));
+		
 		if(StringUtils.isEmpty(attrDocumentID)) {
 			doError(resp, Response.SC_NOT_FOUND, "No document ID was specified.");
 			return;
@@ -92,12 +98,17 @@ public class OnlineGlomImages extends HttpServlet {
 			return;
 		}
 		
-		if(StringUtils.isEmpty(attrPrimaryKeyValue)) {
-			doError(resp, Response.SC_NOT_FOUND, "No primary key value was specified.", attrDocumentID);
+		//TODO: Is it from the database or is it a static LayouteItemText from the document.
+		
+		final boolean fromDb = !StringUtils.isEmpty(attrPrimaryKeyValue);
+		final boolean fromLayout = !StringUtils.isEmpty(attrLayoutName);
+		
+		if(!fromDb && !fromLayout) {
+			doError(resp, Response.SC_NOT_FOUND, "No primary key value or layout name was specified.", attrDocumentID);
 			return;
 		}
 		
-		if(StringUtils.isEmpty(attrFieldName)) {
+		if(fromDb && StringUtils.isEmpty(attrFieldName)) {
 			doError(resp, Response.SC_NOT_FOUND, "No field name was specified.", attrDocumentID);
 			return;
 		}
@@ -119,10 +130,85 @@ public class OnlineGlomImages extends HttpServlet {
 			return;
 		}
 		
+		byte[] bytes = null;
+		if(fromDb) {
+			bytes = getImageFromDatabase(resp, attrDocumentID, attrTableName, attrPrimaryKeyValue, attrFieldName,
+				configuredDocument, document);
+		} else {
+			bytes = getImageFromDocument(resp, attrDocumentID, attrTableName, attrLayoutName, attrLayoutPath,
+					configuredDocument, document);
+		}
+		
+		if(bytes == null) {
+			doError(resp, Response.SC_NOT_FOUND, "The image bytes could not be found. Please see the earlier error.", attrDocumentID);
+			return;
+		}
+		
+		final InputStream is = new ByteArrayInputStream(bytes);
+		final String contentType = URLConnection.guessContentTypeFromStream(is);	
+		resp.setContentType(contentType);
+
+		// Set content size:
+		resp.setContentLength((int) bytes.length);
+
+		// Open the output stream:
+		final OutputStream out = resp.getOutputStream();
+
+		// Copy the contents to the output stream
+		out.write(bytes);
+		out.close();
+	}
+
+	/** Get the image from a specific <data_layout_text> node of a specific layout for a specific table in the document,
+	 * with no access to the database data.
+	 * 
+	 * @param resp
+	 * @param attrDocumentID
+	 * @param attrTableName
+	 * @param attrLayoutName
+	 * @param attrLayoutPath
+	 * @param configuredDocument
+	 * @param document
+	 * @return
+	 * @throws IOException 
+	 */
+	private byte[] getImageFromDocument(HttpServletResponse resp, final String attrDocumentID, final String attrTableName,
+			final String attrLayoutName, final String attrLayoutPath, final ConfiguredDocument configuredDocument, final Document document) throws IOException {
+		final LayoutItem item = document.getLayoutItemByPath(attrTableName, attrLayoutName, attrLayoutPath);
+		
+		if(item == null) {
+			doError(resp, Response.SC_NOT_FOUND, "The item specifed by the layout path could not be found, attrLayoutPath=" + attrLayoutPath, attrDocumentID);
+			return null;
+		}
+		
+		if(!(item instanceof LayoutItemImage)) {
+			doError(resp, Response.SC_NOT_FOUND, "The item specifed by the layout path is not an image. It has class: " + item.getClass().getName() + " and item name=" + item.getName() + ", attrLayoutPath=" + attrLayoutPath, attrDocumentID);
+			return null;
+		}
+		
+		final LayoutItemImage image = (LayoutItemImage)item;
+		return image.getImage().getImageData();
+	}
+
+	/** Get the image from a specific field of a specific record in a specific table in the database.
+	 * 
+	 * @param resp
+	 * @param attrDocumentID
+	 * @param attrTableName
+	 * @param attrPrimaryKeyValue
+	 * @param attrFieldName
+	 * @param configuredDocument
+	 * @param document
+	 * @return
+	 * @throws IOException
+	 */
+	private byte[] getImageFromDatabase(HttpServletResponse resp, final String attrDocumentID,
+			final String attrTableName, final String attrPrimaryKeyValue, final String attrFieldName,
+			final ConfiguredDocument configuredDocument, final Document document) throws IOException {
 		final Field field = document.getField(attrTableName, attrFieldName);
 		if(field == null) {
 			doError(resp, Response.SC_NOT_FOUND, "The specified field was not found: field=" + attrFieldName, attrDocumentID);
-			return;
+			return null;
 		}
 		
 		final Field fieldPrimaryKey = document.getTablePrimaryKeyField(attrTableName);
@@ -143,7 +229,7 @@ public class OnlineGlomImages extends HttpServlet {
 			//e.printStackTrace();
 
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
-			return;
+			return null;
 		}
 		
 		Statement st = null;
@@ -151,12 +237,12 @@ public class OnlineGlomImages extends HttpServlet {
 			st = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		} catch (SQLException e) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
-			return;
+			return null;
 		}
 		
 		if(st == null) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "The SQL statement is null.", attrDocumentID);
-			return;
+			return null;
 		}
 
 		ResultSet rs = null;
@@ -164,12 +250,12 @@ public class OnlineGlomImages extends HttpServlet {
 			rs = st.executeQuery(query);
 		} catch (SQLException e) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
-			return;
+			return null;
 		}
 
 		if(rs == null) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "The SQL result set is null.", attrDocumentID);
-			return;
+			return null;
 		}
 		
 		byte[] bytes = null;
@@ -178,26 +264,14 @@ public class OnlineGlomImages extends HttpServlet {
 			bytes = rs.getBytes(1); //This is 1-indexed, not 0-indexed.
 		} catch (SQLException e) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
-			return;
+			return null;
 		}
 
 		if(bytes == null) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "The database contained null.", attrDocumentID);
-			return;
+			return null;
 		}
-		
-		final InputStream is = new ByteArrayInputStream(bytes);
-		final String contentType = URLConnection.guessContentTypeFromStream(is);	
-		resp.setContentType(contentType);
 
-		// Set content size:
-		resp.setContentLength((int) bytes.length);
-
-		// Open the output stream:
-		final OutputStream out = resp.getOutputStream();
-
-		// Copy the contents to the output stream
-		out.write(bytes);
-		out.close();
+		return bytes;
 	}
 }

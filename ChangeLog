@@ -1,5 +1,34 @@
 2012-11-15  Murray Cumming  <murrayc@murrayc.com>
 
+        Details: Get static image data from our images services.
+
+        * src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
+	Add constructors for LayoutItemText and LayoutItemImage and
+	deal with their common type instead of just LayoutItemField.
+        setData():
+        * src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+       	Adapted.
+        * src/main/java/org/glom/web/client/ui/details/Group.java:
+        createChildWidget(): Use the other DetailsCell constructors for
+	these layout items, and do not add them to the list of
+	cells with data from the database.
+        * src/main/java/org/glom/web/server/ConfiguredDocument.java:
+        getValidListViewLayoutGroup(), getDetailsLayoutGroup():
+	Remove the image data when cloning the layout and storing it in the
+	cache. Clients will instead get it via the URL, from
+	our images service.
+        * src/main/java/org/glom/web/server/OnlineGlomImages.java:
+	doGet(): Depending on the URI parameters, optionally get 
+	image data from a layout_item_image in the document,
+	via its layout path.
+        * src/main/java/org/glom/web/server/database/DBAccess.java:
+        convertResultSetToDTO(): Move some URIBuilder code to:
+        * src/main/java/org/glom/web/server/Utils.java:
+	Add buildImageDataUrl() taking the primary key, etc, to
+	get data from the database.
+
+2012-11-15  Murray Cumming  <murrayc@murrayc.com>
+
         Document: Static image items: Store an image URL, using the layout path. 
 
         * src/main/java/org/glom/web/server/Utils.java: Add buildImageDataUrl().

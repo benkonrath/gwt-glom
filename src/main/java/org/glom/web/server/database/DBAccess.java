@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.http.client.utils.URIBuilder;
 import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
@@ -135,20 +134,8 @@ public abstract class DBAccess {
 					//	String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
 					//	base64 = "data:image/png;base64," + base64;
 					
-					final URIBuilder uriBuilder = new URIBuilder();
-					//uriBuilder.setHost(GWT.getModuleBaseURL());
-					uriBuilder.setPath("OnlineGlom/gwtGlomImages"); //The name of our images servlet. See OnlineGlomImages.
-					uriBuilder.setParameter("document", documentID);
-					uriBuilder.setParameter("table", tableName);
-					
-					//TODO: Handle other types:
-					if(primaryKeyValue != null) {
-						uriBuilder.setParameter("value", Double.toString(primaryKeyValue.getNumber()));
-					}
-					
-					uriBuilder.setParameter("field", field.getName());
-					
-					rowArray[i].setImageDataUrl(uriBuilder.toString());
+					final String url = Utils.buildImageDataUrl(primaryKeyValue, documentID, tableName, field);
+					rowArray[i].setImageDataUrl(url);
 					break;
 				case TYPE_INVALID:
 				default:

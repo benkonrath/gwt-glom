@@ -47,6 +47,7 @@ import org.glom.web.shared.libglom.Translatable;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItem;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
+import org.glom.web.shared.libglom.layout.LayoutItemImage;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 
@@ -389,7 +390,8 @@ final class ConfiguredDocument {
 			}
 		}
 
-		// TODO: Clone the group and change the clone, to discard unwanted information (such as translations)
+		// Clone the group and change the clone, to discard unwanted information
+		// (such as translations or binary image data) and to
 		// store some information that we do not want to calculate on the client side.
 
 		// Note that we don't use clone() here, because that would need clone() implementations
@@ -401,6 +403,9 @@ final class ConfiguredDocument {
 
 			// Discard unwanted translations so that getTitle(void) returns what we want.
 			updateTitlesForLocale(cloned, localeID);
+			
+			// Discard binary image data:
+			updateLayoutItemImages(cloned);
 		}
 
 		// Store it in the cache for next time.
@@ -549,7 +554,8 @@ final class ConfiguredDocument {
 
 		final List<LayoutGroup> listGroups = document.getDataLayoutGroups(Document.LAYOUT_NAME_DETAILS, tableName);
 
-		// Clone the group and change the clone, to discard unwanted information (such as translations)
+		// Clone the group and change the clone, to discard unwanted information
+		// (such as translations or binary image data)
 		// and to store some information that we do not want to calculate on the client side.
 
 		// Note that we don't use clone() here, because that would need clone() implementations
@@ -568,11 +574,44 @@ final class ConfiguredDocument {
 
 		// Discard unwanted translations so that getTitle(void) returns what we want.
 		updateTitlesForLocale(listCloned, localeID);
+		
+		// Discard binary image data:
+		updateLayoutItemImages(listCloned);
 
 		// Store it in the cache for next time.
 		mapTableLayouts.setDetailsLayout(tableName, localeID, listCloned);
 
 		return listCloned;
+	}
+
+	/** Discard binary image data.
+	 * @param listCloned
+	 */
+	private void updateLayoutItemImages(final List<LayoutGroup> listGroups) {
+		for (final LayoutGroup group : listGroups) {
+			updateLayoutItemImages(group);
+		}
+		
+	}
+
+	/** Discard binary image data.
+	 * @param group
+	 */
+	private void updateLayoutItemImages(final LayoutGroup group) {
+		final List<LayoutItem> childItems = group.getItems();
+		for (final LayoutItem item : childItems) {
+			if (item instanceof LayoutGroup) {
+				// Recurse:
+				final LayoutGroup childGroup = (LayoutGroup) item;
+				updateLayoutItemImages(childGroup);
+			} else if (item instanceof LayoutItemImage) {
+				final LayoutItemImage imageItem = (LayoutItemImage) item;
+				final DataItem image = imageItem.getImage();
+				image.setImageData(null);
+				//The client can now request the full data via the path in DataItem.getImageDataUrl().
+			}
+		}
+		
 	}
 
 	/**

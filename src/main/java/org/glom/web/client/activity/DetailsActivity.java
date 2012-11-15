@@ -46,6 +46,7 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
+import org.glom.web.shared.libglom.layout.LayoutItemWithFormatting;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
@@ -210,22 +211,25 @@ public class DetailsActivity extends HasTableActivity {
 
 		// Setup click handlers for the navigation buttons
 		for (final DetailsCell detailsCell : detailsCells) {
-			final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
-			if (layoutItemField == null) {
+			final LayoutItemWithFormatting layoutItem = detailsCell.getLayoutItem();
+			if (layoutItem == null) {
 				continue;
 			}
 
-			final String navigationTablename = layoutItemField.getNavigationTableName();
-			if (!StringUtils.isEmpty(navigationTablename)) {
-				detailsCell.setOpenButtonClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(final ClickEvent event) {
-						final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getGlomType(),
-								detailsCell.getData());
-						processNavigation(navigationTablename, primaryKeyItem);
+			if (layoutItem instanceof LayoutItemField) {
+				final LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
 
-					}
-				});
+				final String navigationTablename = layoutItemField.getNavigationTableName();
+				if (!StringUtils.isEmpty(navigationTablename)) {
+					detailsCell.setOpenButtonClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(final ClickEvent event) {
+							final TypedDataItem primaryKeyItem = Utils.getTypedDataItem(layoutItemField.getGlomType(),
+									detailsCell.getData());
+							processNavigation(navigationTablename, primaryKeyItem);
+						}
+					});
+				}
 			}
 		}
 
@@ -251,31 +255,40 @@ public class DetailsActivity extends HasTableActivity {
 
 				// set the DatailsItem
 				detailsCell.setData(data[i]);
-				final LayoutItemField layoutItemField = detailsCell.getLayoutItemField();
-				final String fieldName = layoutItemField.getName();
+				final LayoutItemWithFormatting layoutItem = detailsCell.getLayoutItem();
+				if (layoutItem == null) {
+					continue;
+				}
 
-				// see if there are any related lists that need to be setup
-				for (final Portal portal : portals) {
-					final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
-					final String portalFromField = layoutItemPortal.getFromField();
-					if (fieldName.equals(portalFromField)) {
-						if (data[i] == null) {
-							continue;
+				if (layoutItem instanceof LayoutItemField) {
+					final LayoutItemField layoutItemField = (LayoutItemField) layoutItem;
+
+					final String fieldName = layoutItemField.getName();
+
+					// see if there are any related lists that need to be setup
+					for (final Portal portal : portals) {
+						final LayoutItemPortal layoutItemPortal = portal.getLayoutItem();
+						final String portalFromField = layoutItemPortal.getFromField();
+						if (fieldName.equals(portalFromField)) {
+							if (data[i] == null) {
+								continue;
+							}
+
+							final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getGlomType(),
+									data[i]);
+
+							final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName,
+									layoutItemPortal, foreignKeyValue, new RelatedListNavigationButtonCell(
+											layoutItemPortal));
+
+							if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
+								relatedListTable.hideNavigationButtons();
+							}
+
+							portal.setContents(relatedListTable);
+
+							setRowCountForRelatedListTable(relatedListTable, layoutItemPortal, foreignKeyValue);
 						}
-
-						final TypedDataItem foreignKeyValue = Utils.getTypedDataItem(layoutItemField.getGlomType(),
-								data[i]);
-
-						final RelatedListTable relatedListTable = new RelatedListTable(documentID, tableName,
-								layoutItemPortal, foreignKeyValue,
-								new RelatedListNavigationButtonCell(layoutItemPortal));
-
-						if (layoutItemPortal.getNavigationType() == LayoutItemPortal.NavigationType.NAVIGATION_NONE) {
-							relatedListTable.hideNavigationButtons();
-						}
-						portal.setContents(relatedListTable);
-
-						setRowCountForRelatedListTable(relatedListTable, layoutItemPortal, foreignKeyValue);
 					}
 				}
 			}

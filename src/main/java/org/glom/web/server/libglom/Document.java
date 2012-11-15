@@ -561,16 +561,10 @@ public class Document {
 		case TYPE_IMAGE: {
 			//Glom (at least since 2.23/24) uses base64 for the images:
 			
-			//Discover the mime type:
-			final byte[] bytes = com.google.gwt.user.server.Base64Utils.fromBase64(unescaped);
-			/*
-			final InputStream is = new ByteArrayInputStream(bytes);
-			String contentType = "";
-			try {
-				contentType = URLConnection.guessContentTypeFromStream(is);
-			} catch (IOException e) {
-				Log.error("getNodeTextChildAsValue(): unrecognised image data content type.");
-			}	
+			//This is only used on the server-side,
+			//either to create a database, during tests,
+			//or to return the full data from our OnlineGlomImage service.
+			//It is removed before being passed to the client-side.
 			
 			/* This does not seem to work with the text from g_base64_encode() that Glom uses,
 			 * maybe because of the newlines, which are apparently OK:
