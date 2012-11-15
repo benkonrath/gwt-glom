@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  *
  */
@@ -75,6 +77,58 @@ public class Utils {
 				return null;
 			}
 		}
+	}
+	
+	/** Build a :-separated string to represent the path as a string.
+	 * @param path
+	 * @return
+	 */
+	public static String buildLayoutPath(int[] path) {
+		if((path == null) || (path.length == 0)) {
+			return null;
+		}
+
+		String result = new String();
+		for(int i:path) {
+			if(!result.isEmpty()) {
+				result += ":";
+			}
+			
+			final String strIndex = Integer.toString(i);
+			result += strIndex;
+		}
+		
+		return result;
+	}
+
+	/** Get an array of int indices from the :-separated string.
+	 * See buildLayoutPath().
+	 * 
+	 * @param attrLayoutPath
+	 * @return The array of indices of the layout items.
+	 */
+	public static int[] parseLayoutPath(final String attrLayoutPath) {
+		if(StringUtils.isEmpty(attrLayoutPath)) {
+			return null;
+		}
+		
+		final String[] strIndices = attrLayoutPath.split(":");
+		final int[] indices = new int[strIndices.length];
+		for (int i = 0; i < strIndices.length; ++i) {
+			final String str = strIndices[i];
+	
+			try
+			{
+				indices[i] = Integer.parseInt(str);
+			}
+			catch (final NumberFormatException nfe)
+			{
+				//TODO: Log the error.
+				return null;
+			}
+		}
+	
+		return indices;
 	}
 
 }

@@ -1911,4 +1911,74 @@ public class Document {
 		}
 		return primaryKey;
 	}
+
+	/**
+	 * @param resp
+	 * @param attrDocumentID
+	 * @param tableName
+	 * @param layoutName
+	 * @param layoutPath
+	 * @return
+	 * @throws IOException
+	 */
+	public LayoutItem getLayoutItemByPath(
+			final String tableName, final String layoutName, final String layoutPath) throws IOException {
+		final List<LayoutGroup> listLayoutGroups = getDataLayoutGroups(layoutName, tableName);
+		if(listLayoutGroups == null) {
+			Log.error("The layout with the specified name was not found. tableName=" + tableName + ", layoutName=" + layoutName);
+			return null;
+		}
+
+		if(listLayoutGroups.isEmpty()) {
+			Log.error("The layout was empty. attrTableName=" + tableName + ", layoutName=" + layoutName);
+			return null;
+		}
+		
+		final int[] indices = Utils.parseLayoutPath(layoutPath);
+		if((indices == null) || (indices.length == 0)) {
+			Log.error("The layout path was empty or could not be parsed. layoutPath=" + layoutPath);
+			return null;
+		}
+	
+		LayoutItem item = null;
+		int depth = 0;
+		for(int index:indices) {
+			if(index < 0) {
+				Log.error("An index in the layout path was negative, at depth=" + depth + ", layoutPath=" + layoutPath);
+				return null;
+			}
+
+			//Get the nth item of either the top-level list or the current item:
+			if(depth == 0) {
+				if(index < listLayoutGroups.size()) {
+					item = listLayoutGroups.get(index);
+				} else {
+					Log.error("An index in the layout path is larger than the number of child items, at depth=" + depth + ", layoutPath=" + layoutPath);
+					return null;
+				}
+			} else {
+				if(item instanceof LayoutGroup) {
+					final LayoutGroup group = (LayoutGroup)item;
+					final List<LayoutItem> items = group.getItems();
+					if(index < items.size()) {
+						item = items.get(index);
+					} else {
+						Log.error("An index in the layout path is larger than the number of child items, at depth=" + depth + ", layoutPath=" + layoutPath);
+						return null;
+					}
+				} else {
+					Log.error("An intermediate item in the layout path is not a layout group, at depth=" + depth + ", layoutPath=" + layoutPath);
+					return null;
+				}
+			}
+			
+			depth++;
+		}
+		
+		if(item == null) {
+			Log.error("The item specifed by the layout path could not be found. layoutPath=" + layoutPath);
+			return null;
+		}
+		return item;
+	}
 }
