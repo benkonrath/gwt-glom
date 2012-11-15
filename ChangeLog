@@ -1,3 +1,13 @@
+2012-11-15  Murray Cumming  <murrayc@murrayc.com>
+
+        Document: Use a better base64 decoder to read static image data.
+
+        * src/test/java/org/glom/web/server/libglom/DocumentTest.java:
+        getNodeTextChildAsValue(): Use the apache commons base64 decoder
+	instead of the gwt one, because it correctly decodes the strings
+	from g_base64_encode(). It is probably more correct.
+	The newlines might be confusing the gwt decoder.
+
 2012-11-14  Murray Cumming  <murrayc@murrayc.com>
 
         Document: Do not use == to compare strings. Use equals().

@@ -47,6 +47,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
@@ -544,10 +545,18 @@ public class Document {
 				Log.error("getNodeTextChildAsValue(): unrecognised image data content type.");
 			}	
 			
-			final String base64 = "data:" + contentType + ";base64," + unescaped;
-			result.setImageDataUrl(base64);
-			*/
+			/* This does not seem to work with the text from g_base64_encode() that Glom uses,
+			 * maybe because of the newlines, which are apparently OK:
+			 * http://en.wikipedia.org/wiki/Base64#MIME
+			 * final byte[] bytes = com.google.gwt.user.server.Base64Utils.fromBase64(unescaped);
+			 */
+			
+			/* Use org.apache.commons.codec.binary.Base64: */
+			final Base64 decoder = new Base64();
+			byte[] bytes = (byte[]) decoder.decode(unescaped.getBytes());
+
 			result.setImageData(bytes);
+
 			break;
 		}
 		case TYPE_NUMERIC: {
