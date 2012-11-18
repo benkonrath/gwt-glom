@@ -49,6 +49,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.glom.web.server.Log;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.CustomTitle;
@@ -72,7 +73,6 @@ import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
-import org.jfree.util.Log;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -598,7 +598,7 @@ public class Document {
 			// TODO
 			break;
 		default:
-			Log.error("getNodeTextChildAsValue(): unexpected or invalid field type.");
+			Log.error(documentID, "getNodeTextChildAsValue(): unexpected or invalid field type.");
 			break;
 		}
 
@@ -634,7 +634,7 @@ public class Document {
 			str = ""; // TODO
 			break;
 		default:
-			Log.error("setNodeTextChildAsValue(): unexpected or invalid field type.");
+			Log.error(documentID, "setNodeTextChildAsValue(): unexpected or invalid field type.");
 			break;
 		}
 
@@ -771,7 +771,7 @@ public class Document {
 				} else if (name.equals(LAYOUT_NAME_LIST)) {
 					info.layoutGroupsList = listLayoutGroups;
 				} else {
-					Log.error("loadTableNode(): unexpected layout name: " + name);
+					Log.error(documentID, "loadTableNode(): unexpected layout name: " + name);
 				}
 			}
 		}

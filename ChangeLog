@@ -1,3 +1,11 @@
+2012-11-18  Murray Cumming  <murrayc@murrayc.com>
+
+        Document: Correct an import to use the correct Log API.
+
+        * src/main/java/org/glom/web/server/libglom/Document.java:
+	Use our Utils.Log API rather than the jfree one that Eclipse
+	must have suggested at some time.
+
 2012-11-15  Murray Cumming  <murrayc@murrayc.com>
 
         Details: Get static image data from our images services.
