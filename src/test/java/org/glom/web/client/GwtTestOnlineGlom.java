@@ -6,8 +6,10 @@ import org.glom.web.client.ui.DocumentSelectionView;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTestWithEasyMock;
 
+@GwtModule("org.glom.web.OnlineGlom")
 public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 
 	/**
@@ -29,11 +31,6 @@ public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 		 * // Assert assertFalse(app.dialogBox.isShowing()); assertEquals("Please enter at least four characters",
 		 * app.errorLabel.getText());
 		 */
-	}
-
-	@Override
-	public String getModuleName() {
-		return "org.glom.web.OnlineGlom";
 	}
 
 	@Before

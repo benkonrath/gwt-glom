@@ -1,5 +1,16 @@
 2012-11-18  Murray Cumming  <murrayc@murrayc.com>
 
+        Update versions of depdencies.
+
+        * pom.xml: Increase some version numbers based on the output of
+	, using mvn versions:display-dependency-updates.
+        * src/test/java/org/glom/web/client/GwtTestOnlineGlom.java:
+	Use the annotation instead of getModuleName().
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:
+        Do not use deprecated assert() classes/methods.
+
+2012-11-18  Murray Cumming  <murrayc@murrayc.com>
+
         Document: Correct an import to use the correct Log API.
 
         * src/main/java/org/glom/web/server/libglom/Document.java:

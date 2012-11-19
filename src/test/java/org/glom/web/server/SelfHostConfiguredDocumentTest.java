@@ -27,8 +27,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.DocumentTest;
@@ -84,7 +82,7 @@ public class SelfHostConfiguredDocumentTest {
 	
 	public void testGetListViewLayoutGroup(final String locale, final String field0Title, final String field1Title) {
 		final LayoutGroup group = configuredDoc.getListViewLayoutGroup("albums", defaultLocale);
-		Assert.assertNotNull(group);
+		assertNotNull(group);
 		
 		List<LayoutItem> items = group.getItems();
 		assertNotNull(items);
