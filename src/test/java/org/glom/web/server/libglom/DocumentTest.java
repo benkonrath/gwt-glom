@@ -92,13 +92,13 @@ public class DocumentTest {
 	@Test
 	public void testLocales() {
 		final List<String> localeIDs = document.getTranslationAvailableLocales();
-		assertEquals(8, localeIDs.size());
+		assertEquals(11, localeIDs.size());
 
 		String tables = localeIDs.get(0);
 		for (int i = 1; i < localeIDs.size(); i++) {
 			tables += ", " + localeIDs.get(i);
 		}
-		assertThat(tables, is("cs, de, es, fr, gl, pt_BR, sl, en"));
+		assertThat(tables, is("cs, de, el, es, fr, gl, id, lv, pt_BR, sl, en"));
 	}
 
 	@Test
