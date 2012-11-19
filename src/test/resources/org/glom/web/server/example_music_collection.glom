@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glom_document xmlns="http://glom.org/glom_document" translation_original_locale="en" database_title="Music Collection" is_example="true" format_version="8" title="Music Collection">
+<glom_document xmlns="http://glom.org/glom_document" translation_original_locale="en" database_title="Music Collection" is_example="true" format_version="9" title="Music Collection">
   <trans_set>
     <trans loc="cs" val="Hudební sbírka"/>
     <trans loc="de" val="Musiksammlung"/>
+    <trans loc="el" val="Μουσική συλλογή"/>
     <trans loc="es" val="Colección de música"/>
     <trans loc="fr" val="Collection de musique"/>
     <trans loc="gl" val="Colección de música"/>
+    <trans loc="id" val="Koleksi Musik"/>
+    <trans loc="lv" val="Mūzikas kolekcija"/>
     <trans loc="pt_BR" val="Coleção de música"/>
     <trans loc="sl" val="Zbirka glasbe"/>
   </trans_set>
@@ -56,9 +59,12 @@
     <trans_set>
       <trans loc="cs" val="Alba"/>
       <trans loc="de" val="Alben"/>
+      <trans loc="el" val="Δίσκοι"/>
       <trans loc="es" val="Álbumes"/>
       <trans loc="fr" val="Albums"/>
       <trans loc="gl" val="Álbums"/>
+      <trans loc="id" val="Album"/>
+      <trans loc="lv" val="Albumi"/>
       <trans loc="pt_BR" val="Álbuns"/>
       <trans loc="sl" val="Albumi"/>
     </trans_set>
@@ -68,9 +74,12 @@
         <trans_set>
           <trans loc="cs" val="ID alba"/>
           <trans loc="de" val="Albenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό δίσκου"/>
           <trans loc="es" val="ID del álbum"/>
           <trans loc="fr" val="ID de l'album"/>
           <trans loc="gl" val="ID do álbum"/>
+          <trans loc="id" val="ID Album"/>
+          <trans loc="lv" val="Albuma ID"/>
           <trans loc="pt_BR" val="ID de álbum"/>
           <trans loc="sl" val="ID albuma"/>
         </trans_set>
@@ -80,9 +89,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
           <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -92,9 +104,12 @@
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
           <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Nosaukums"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -114,9 +129,12 @@
         <trans_set>
           <trans loc="cs" val="ID umělce"/>
           <trans loc="de" val="Künstlerkennung"/>
+          <trans loc="el" val="Αναγνωριστικό καλλιτέχνη"/>
           <trans loc="es" val="ID del artista"/>
           <trans loc="fr" val="ID de l'artiste"/>
           <trans loc="gl" val="ID do artista"/>
+          <trans loc="id" val="ID Artis"/>
+          <trans loc="lv" val="Izpildītāja ID"/>
           <trans loc="pt_BR" val="ID de artista"/>
           <trans loc="sl" val="ID izvajalca"/>
         </trans_set>
@@ -136,9 +154,12 @@
         <trans_set>
           <trans loc="cs" val="ID vydavatele"/>
           <trans loc="de" val="Herausgeber-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό εκδότη"/>
           <trans loc="es" val="ID de la editorial"/>
           <trans loc="fr" val="ID de l'éditeur"/>
           <trans loc="gl" val="ID da editorial"/>
+          <trans loc="id" val="ID Penerbit"/>
+          <trans loc="lv" val="Izdevēja ID"/>
           <trans loc="pt_BR" val="ID de editor"/>
           <trans loc="sl" val="ID založnika"/>
         </trans_set>
@@ -148,9 +169,12 @@
         <trans_set>
           <trans loc="cs" val="Rok"/>
           <trans loc="de" val="Jahr"/>
+          <trans loc="el" val="Έτος"/>
           <trans loc="es" val="Año"/>
           <trans loc="fr" val="Année"/>
           <trans loc="gl" val="Ano"/>
+          <trans loc="id" val="Tahun"/>
+          <trans loc="lv" val="Gads"/>
           <trans loc="pt_BR" val="Ano"/>
           <trans loc="sl" val="Leto"/>
         </trans_set>
@@ -161,9 +185,12 @@
         <trans_set>
           <trans loc="cs" val="Umělec"/>
           <trans loc="de" val="Künstler"/>
+          <trans loc="el" val="Καλλιτέχνης"/>
           <trans loc="es" val="Artista"/>
           <trans loc="fr" val="Artiste"/>
           <trans loc="gl" val="Artista"/>
+          <trans loc="id" val="Artis"/>
+          <trans loc="lv" val="Izpildītājs"/>
           <trans loc="pt_BR" val="Artista"/>
           <trans loc="sl" val="Izvajalec"/>
         </trans_set>
@@ -172,9 +199,12 @@
         <trans_set>
           <trans loc="cs" val="Vydavatel"/>
           <trans loc="de" val="Herausgeber"/>
+          <trans loc="el" val="Εκδότης"/>
           <trans loc="es" val="Editorial"/>
           <trans loc="fr" val="Éditeur"/>
           <trans loc="gl" val="Editorial"/>
+          <trans loc="id" val="Penerbit"/>
+          <trans loc="lv" val="Izdevējs"/>
           <trans loc="pt_BR" val="Editor"/>
           <trans loc="sl" val="Založnik"/>
         </trans_set>
@@ -183,9 +213,12 @@
         <trans_set>
           <trans loc="cs" val="Skladby"/>
           <trans loc="de" val="Lieder"/>
+          <trans loc="el" val="Τραγούδια"/>
           <trans loc="es" val="Canciones"/>
           <trans loc="fr" val="Chansons"/>
           <trans loc="gl" val="Cancións"/>
+          <trans loc="id" val="Lagu"/>
+          <trans loc="lv" val="Dziesmas"/>
           <trans loc="pt_BR" val="Canções"/>
           <trans loc="sl" val="Skladbe"/>
         </trans_set>
@@ -198,9 +231,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
               <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -215,9 +251,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
               <trans loc="gl" val="Detalles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -225,9 +264,12 @@
               <trans_set>
                 <trans loc="cs" val="Umělec"/>
                 <trans loc="de" val="Artist"/>
+                <trans loc="el" val="Καλλιτέχνης"/>
                 <trans loc="es" val="Artista"/>
                 <trans loc="fr" val="Artiste"/>
                 <trans loc="gl" val="Artista"/>
+                <trans loc="id" val="Artis"/>
+                <trans loc="lv" val="Izpildītājs"/>
                 <trans loc="pt_BR" val="Artista"/>
                 <trans loc="sl" val="Izvajalec"/>
               </trans_set>
@@ -242,9 +284,12 @@
               <trans_set>
                 <trans loc="cs" val="Vydavatel"/>
                 <trans loc="de" val="Publisher"/>
+                <trans loc="el" val="Εκδότης"/>
                 <trans loc="es" val="Editorial"/>
                 <trans loc="fr" val="Éditeur"/>
                 <trans loc="gl" val="Editorial"/>
+                <trans loc="id" val="Penerbit"/>
+                <trans loc="lv" val="Izdevējs"/>
                 <trans loc="pt_BR" val="Editor"/>
                 <trans loc="sl" val="Založnik"/>
               </trans_set>
@@ -286,9 +331,12 @@
                 <trans_set>
                   <trans loc="cs" val="Jméno umělce"/>
                   <trans loc="de" val="Künstlername"/>
+                  <trans loc="el" val="Όνομα καλλιτέχνη"/>
                   <trans loc="es" val="Nombre del artista"/>
                   <trans loc="fr" val="Nom de l'artiste"/>
                   <trans loc="gl" val="Nome do artista"/>
+                  <trans loc="id" val="Nama Artis"/>
+                  <trans loc="lv" val="Izpildītāja vārds"/>
                   <trans loc="pt_BR" val="Nome do artista"/>
                   <trans loc="sl" val="Ime izvajalca"/>
                 </trans_set>
@@ -303,9 +351,12 @@
                 <trans_set>
                   <trans loc="cs" val="Jméno vydavatele"/>
                   <trans loc="de" val="Name des Herausgebers"/>
+                  <trans loc="el" val="Όνομα εκδότη"/>
                   <trans loc="es" val="Nombre de la editorial"/>
                   <trans loc="fr" val="Nom de l'éditeur"/>
                   <trans loc="gl" val="Nome da editorial"/>
+                  <trans loc="id" val="Nama Penerbit"/>
+                  <trans loc="lv" val="Izdevēja nosaukums"/>
                   <trans loc="pt_BR" val="Nome do editor"/>
                   <trans loc="sl" val="Ime izdajatelja"/>
                 </trans_set>
@@ -332,9 +383,12 @@
                       <trans_set>
                         <trans loc="cs" val="Jméno umělce"/>
                         <trans loc="de" val="Künstlername"/>
+                        <trans loc="el" val="Όνομα καλλιτέχνη"/>
                         <trans loc="es" val="Nombre del artista"/>
                         <trans loc="fr" val="Nom de l'artiste"/>
                         <trans loc="gl" val="Nome do artista"/>
+                        <trans loc="id" val="Nama Artis"/>
+                        <trans loc="lv" val="Izpildītāja vārds"/>
                         <trans loc="pt_BR" val="Nome do artista"/>
                         <trans loc="sl" val="Ime izvajalca"/>
                       </trans_set>
@@ -355,9 +409,12 @@
         <trans_set>
           <trans loc="cs" val="Alba od umělce"/>
           <trans loc="de" val="Alben nach Künstler"/>
+          <trans loc="el" val="Δίσκοι κατά καλλιτέχνες"/>
           <trans loc="es" val="Álbumes por artista"/>
           <trans loc="fr" val="Albums par artiste"/>
           <trans loc="gl" val="Álbums por artista"/>
+          <trans loc="id" val="Album Berdasar Artis"/>
+          <trans loc="lv" val="Albumi pēc izpildītāja"/>
           <trans loc="pt_BR" val="Álbuns por artista"/>
           <trans loc="sl" val="Albumi izvajalca"/>
         </trans_set>
@@ -395,9 +452,12 @@
     <trans_set>
       <trans loc="cs" val="Umělci"/>
       <trans loc="de" val="Künstler"/>
+      <trans loc="el" val="Καλλιτέχνες"/>
       <trans loc="es" val="Artistas"/>
       <trans loc="fr" val="Artistes"/>
       <trans loc="gl" val="Artistas"/>
+      <trans loc="id" val="Artis"/>
+      <trans loc="lv" val="Izpildītāji"/>
       <trans loc="pt_BR" val="Artistas"/>
       <trans loc="sl" val="Izvajalci"/>
     </trans_set>
@@ -407,9 +467,12 @@
         <trans_set>
           <trans loc="cs" val="ID umělce"/>
           <trans loc="de" val="Künstlerkennung"/>
+          <trans loc="el" val="Αναγνωριστικό καλλιτέχνη"/>
           <trans loc="es" val="ID del artista"/>
           <trans loc="fr" val="ID de l'artiste"/>
           <trans loc="gl" val="ID do artista"/>
+          <trans loc="id" val="ID Artis"/>
+          <trans loc="lv" val="Izpildītāja ID"/>
           <trans loc="pt_BR" val="ID de artista"/>
           <trans loc="sl" val="ID izvajalca"/>
         </trans_set>
@@ -419,9 +482,12 @@
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
           <trans loc="gl" val="Descrición"/>
+          <trans loc="id" val="Deskripsi"/>
+          <trans loc="lv" val="Apraksts"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -431,9 +497,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
           <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -443,9 +512,12 @@
         <trans_set>
           <trans loc="cs" val="Jméno"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
           <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Vārds"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -456,9 +528,12 @@
         <trans_set>
           <trans loc="cs" val="Alba"/>
           <trans loc="de" val="Alben"/>
+          <trans loc="el" val="Δίσκοι"/>
           <trans loc="es" val="Álbumes"/>
           <trans loc="fr" val="Albums"/>
           <trans loc="gl" val="Álbums"/>
+          <trans loc="id" val="Album"/>
+          <trans loc="lv" val="Albumi"/>
           <trans loc="pt_BR" val="Álbuns"/>
           <trans loc="sl" val="Albumi"/>
         </trans_set>
@@ -471,9 +546,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
               <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -488,9 +566,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
               <trans loc="gl" val="Detalles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -554,9 +635,12 @@
     <trans_set>
       <trans loc="cs" val="Vydavatelé"/>
       <trans loc="de" val="Herausgeber"/>
+      <trans loc="el" val="Εκδότες"/>
       <trans loc="es" val="Editoriales"/>
       <trans loc="fr" val="Éditeurs"/>
       <trans loc="gl" val="Editoriais"/>
+      <trans loc="id" val="Penerbit"/>
+      <trans loc="lv" val="Izdevēji"/>
       <trans loc="pt_BR" val="Editores"/>
       <trans loc="sl" val="Založniki"/>
     </trans_set>
@@ -566,9 +650,12 @@
         <trans_set>
           <trans loc="cs" val="ID vydavatele"/>
           <trans loc="de" val="Herausgeber-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό εκδότη"/>
           <trans loc="es" val="ID de la editorial"/>
           <trans loc="fr" val="ID de l'éditeur"/>
           <trans loc="gl" val="ID da editorial"/>
+          <trans loc="id" val="ID Penerbit"/>
+          <trans loc="lv" val="Izdevēja ID"/>
           <trans loc="pt_BR" val="ID de editor"/>
           <trans loc="sl" val="ID založnika"/>
         </trans_set>
@@ -578,9 +665,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
           <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -590,9 +680,12 @@
         <trans_set>
           <trans loc="cs" val="Jméno"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
           <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Nosaukums"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -603,9 +696,12 @@
         <trans_set>
           <trans loc="cs" val="Alba"/>
           <trans loc="de" val="Alben"/>
+          <trans loc="el" val="Δίσκοι"/>
           <trans loc="es" val="Álbumes"/>
           <trans loc="fr" val="Albums"/>
           <trans loc="gl" val="Álbums"/>
+          <trans loc="id" val="Album"/>
+          <trans loc="lv" val="Albumi"/>
           <trans loc="pt_BR" val="Álbuns"/>
           <trans loc="sl" val="Albumi"/>
         </trans_set>
@@ -618,9 +714,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
               <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -635,9 +734,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
               <trans loc="gl" val="Detalles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -977,9 +1079,12 @@
     <trans_set>
       <trans loc="cs" val="Skladby"/>
       <trans loc="de" val="Lieder"/>
+      <trans loc="el" val="Τραγούδια"/>
       <trans loc="es" val="Canciones"/>
       <trans loc="fr" val="Chansons"/>
       <trans loc="gl" val="Cancións"/>
+      <trans loc="id" val="Lagu"/>
+      <trans loc="lv" val="Dziesmas"/>
       <trans loc="pt_BR" val="Canções"/>
       <trans loc="sl" val="Skladbe"/>
     </trans_set>
@@ -989,9 +1094,12 @@
         <trans_set>
           <trans loc="cs" val="ID skladby"/>
           <trans loc="de" val="Lied-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό τραγουδιού"/>
           <trans loc="es" val="ID de la canción"/>
           <trans loc="fr" val="ID de la chanson"/>
           <trans loc="gl" val="ID da canción"/>
+          <trans loc="id" val="ID Lagu"/>
+          <trans loc="lv" val="Dziesmas ID"/>
           <trans loc="pt_BR" val="ID de canção"/>
           <trans loc="sl" val="ID skladbe"/>
         </trans_set>
@@ -1001,9 +1109,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
           <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -1013,9 +1124,12 @@
         <trans_set>
           <trans loc="cs" val="ID alba"/>
           <trans loc="de" val="Albenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό δίσκου"/>
           <trans loc="es" val="ID del álbum"/>
           <trans loc="fr" val="ID de l'album"/>
           <trans loc="gl" val="ID do álbum"/>
+          <trans loc="id" val="ID Album"/>
+          <trans loc="lv" val="Albuma ID"/>
           <trans loc="pt_BR" val="ID de álbum"/>
           <trans loc="sl" val="ID albuma"/>
         </trans_set>
@@ -1025,9 +1139,12 @@
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
           <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Nosaukums"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -1038,9 +1155,12 @@
         <trans_set>
           <trans loc="cs" val="Album"/>
           <trans loc="de" val="Album"/>
+          <trans loc="el" val="Δίσκος"/>
           <trans loc="es" val="Álbum"/>
           <trans loc="fr" val="Album"/>
           <trans loc="gl" val="Álbum"/>
+          <trans loc="id" val="Album"/>
+          <trans loc="lv" val="Albums"/>
           <trans loc="pt_BR" val="Álbum"/>
           <trans loc="sl" val="Album"/>
         </trans_set>
@@ -1053,9 +1173,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
               <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -1070,9 +1193,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
               <trans loc="gl" val="Detlles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -1080,9 +1206,12 @@
               <trans_set>
                 <trans loc="cs" val="Album"/>
                 <trans loc="de" val="Album-Künstler"/>
+                <trans loc="el" val="Δίσκος"/>
                 <trans loc="es" val="Álbum"/>
                 <trans loc="fr" val="Album"/>
                 <trans loc="gl" val="Álbum"/>
+                <trans loc="id" val="Album"/>
+                <trans loc="lv" val="Albums"/>
                 <trans loc="pt_BR" val="Álbum"/>
                 <trans loc="sl" val="Album"/>
               </trans_set>
@@ -1097,9 +1226,12 @@
               <trans_set>
                 <trans loc="cs" val="Umělci alba"/>
                 <trans loc="de" val="Album-Künstler"/>
+                <trans loc="el" val="Δίσκος καλλιτέχνη"/>
                 <trans loc="es" val="Artista del álbum"/>
                 <trans loc="fr" val="Artiste de l'album"/>
                 <trans loc="gl" val="Artista do álbum"/>
+                <trans loc="id" val="Artis Album"/>
+                <trans loc="lv" val="Albuma izpildītājs"/>
                 <trans loc="pt_BR" val="Álbum de artista"/>
                 <trans loc="sl" val="Izvajalec albuma"/>
               </trans_set>

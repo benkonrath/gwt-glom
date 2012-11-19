@@ -1,6 +1,16 @@
+2012-11-19  Murray Cumming  <murrayc@murrayc.com>
+
+        Update the .glom files used for tests.
+
+        * src/test/resources/org/glom/web/server/example_film_manager.glom:
+        * src/test/resources/org/glom/web/server/example_music_collection.glom:
+        * src/test/resources/org/glom/web/server/libglom/example_film_manager.glom:
+        * src/test/resources/org/glom/web/server/libglom/example_music_collection.glom:
+	Copy them from git master of Glom.
+
 2012-11-18  Murray Cumming  <murrayc@murrayc.com>
 
-        Update versions of depdencies.
+        Update versions of dependencies.
 
         * pom.xml: Increase some version numbers based on the output of
 	, using mvn versions:display-dependency-updates.

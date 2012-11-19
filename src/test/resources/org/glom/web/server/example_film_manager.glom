@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glom_document xmlns="http://glom.org/glom_document" database_title="Openismus Film Manager" is_example="true" translation_original_locale="en" format_version="8" title="Openismus Film Manager">
+<glom_document xmlns="http://glom.org/glom_document" database_title="Openismus Film Manager" is_example="true" translation_original_locale="en" format_version="9" title="Openismus Film Manager">
   <trans_set>
     <trans loc="cs" val="Filmový manažer"/>
     <trans loc="de" val="Openismus-Filmverwaltung"/>
+    <trans loc="el" val="Υπεύθυνος κινηματογράφου Openismus"/>
+    <trans loc="en_GB" val="Openismus Film Manager"/>
     <trans loc="es" val="Gestor de películas Openismus"/>
     <trans loc="fr" val="Gestionnaire de films Openismus"/>
+    <trans loc="id" val="Manajer Film Openismus"/>
     <trans loc="pt_BR" val="Gerenciador de filmes Openismus"/>
     <trans loc="sl" val="Organizator filmske produkcije Openismus"/>
   </trans_set>
@@ -14,8 +17,11 @@
     <trans_set>
       <trans loc="cs" val="Ubytování"/>
       <trans loc="de" val="Unterkunft"/>
+      <trans loc="el" val="Στέγαση"/>
+      <trans loc="en_GB" val="Accommodation"/>
       <trans loc="es" val="Alojamiento"/>
       <trans loc="fr" val="Logement"/>
+      <trans loc="id" val="Akomodasi"/>
       <trans loc="pt_BR" val="Acomodação"/>
       <trans loc="sl" val="Nastanitev"/>
     </trans_set>
@@ -25,8 +31,11 @@
         <trans_set>
           <trans loc="cs" val="ID ubytování"/>
           <trans loc="de" val="Unterkunftskennung"/>
+          <trans loc="el" val="Αναγνωριστικό μακιγιάζ σκηνής"/>
+          <trans loc="en_GB" val="Accommodation ID"/>
           <trans loc="es" val="ID de alojamiento"/>
           <trans loc="fr" val="ID du logement"/>
+          <trans loc="id" val="ID Akomodasi"/>
           <trans loc="pt_BR" val="ID de acomodação"/>
           <trans loc="sl" val="ID nastanitve"/>
         </trans_set>
@@ -36,9 +45,12 @@
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -48,9 +60,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -60,9 +75,12 @@
         <trans_set>
           <trans loc="cs" val="Ulice"/>
           <trans loc="de" val="Straße"/>
+          <trans loc="el" val="Οδός"/>
+          <trans loc="en_GB" val="Street"/>
           <trans loc="eo" val="Strato"/>
           <trans loc="es" val="Calle"/>
           <trans loc="fr" val="Rue"/>
+          <trans loc="id" val="Jalan"/>
           <trans loc="pt_BR" val="Rua"/>
           <trans loc="sl" val="Ulica"/>
         </trans_set>
@@ -72,9 +90,12 @@
         <trans_set>
           <trans loc="cs" val="Město"/>
           <trans loc="de" val="Ort"/>
+          <trans loc="el" val="Πόλη"/>
+          <trans loc="en_GB" val="Town"/>
           <trans loc="eo" val="Urbo"/>
           <trans loc="es" val="Ciudad"/>
           <trans loc="fr" val="Ville"/>
+          <trans loc="id" val="Kota"/>
           <trans loc="pt_BR" val="Cidade"/>
           <trans loc="sl" val="Mesto"/>
         </trans_set>
@@ -84,8 +105,11 @@
         <trans_set>
           <trans loc="cs" val="Region"/>
           <trans loc="de" val="Bundesland/Kanton"/>
+          <trans loc="el" val="Νομός"/>
+          <trans loc="en_GB" val="County"/>
           <trans loc="es" val="Condado"/>
           <trans loc="fr" val="Comté"/>
+          <trans loc="id" val="County"/>
           <trans loc="pt_BR" val="Condado"/>
           <trans loc="sl" val="Okrožje"/>
         </trans_set>
@@ -95,9 +119,12 @@
         <trans_set>
           <trans loc="cs" val="Země"/>
           <trans loc="de" val="Land"/>
+          <trans loc="el" val="Χώρα"/>
+          <trans loc="en_GB" val="Country"/>
           <trans loc="eo" val="Lando"/>
           <trans loc="es" val="País"/>
           <trans loc="fr" val="Pays"/>
+          <trans loc="id" val="Negara"/>
           <trans loc="pt_BR" val="País"/>
           <trans loc="sl" val="Država"/>
         </trans_set>
@@ -107,8 +134,11 @@
         <trans_set>
           <trans loc="cs" val="PSČ"/>
           <trans loc="de" val="Postleitzahl"/>
+          <trans loc="el" val="Ταχ. κώδικας"/>
+          <trans loc="en_GB" val="Postcode"/>
           <trans loc="es" val="Código postal"/>
           <trans loc="fr" val="Code postal"/>
+          <trans loc="id" val="Kode Pos"/>
           <trans loc="pt_BR" val="CEP"/>
           <trans loc="sl" val="Poštna številka"/>
         </trans_set>
@@ -118,9 +148,12 @@
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="eo" val="Kontakto-ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -130,9 +163,12 @@
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -143,9 +179,12 @@
         <trans_set>
           <trans loc="cs" val="Kontakty"/>
           <trans loc="de" val="Kontakte"/>
+          <trans loc="el" val="Επαφές"/>
+          <trans loc="en_GB" val="Contacts"/>
           <trans loc="eo" val="Kontaktoj"/>
           <trans loc="es" val="Contactos"/>
           <trans loc="fr" val="Contacts"/>
+          <trans loc="id" val="Kontak"/>
           <trans loc="pt_BR" val="Contatos"/>
           <trans loc="sl" val="Stiki"/>
         </trans_set>
@@ -158,9 +197,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -179,9 +221,12 @@
               <trans_set>
                 <trans loc="cs" val="Adresa"/>
                 <trans loc="de" val="Adresse"/>
+                <trans loc="el" val="Διεύθυνση"/>
+                <trans loc="en_GB" val="Address"/>
                 <trans loc="eo" val="Adreso"/>
                 <trans loc="es" val="Dirección"/>
                 <trans loc="fr" val="Adresse"/>
+                <trans loc="id" val="Alamat"/>
                 <trans loc="pt_BR" val="Endereço"/>
                 <trans loc="sl" val="Naslov"/>
               </trans_set>
@@ -205,9 +250,12 @@
               <trans_set>
                 <trans loc="cs" val="Kontakt"/>
                 <trans loc="de" val="Kontakt"/>
+                <trans loc="el" val="Επαφή"/>
+                <trans loc="en_GB" val="Contact"/>
                 <trans loc="eo" val="Kontakto"/>
                 <trans loc="es" val="Contacto"/>
                 <trans loc="fr" val="Contact"/>
+                <trans loc="id" val="Kontak"/>
                 <trans loc="pt_BR" val="Contato"/>
                 <trans loc="sl" val="Stik"/>
               </trans_set>
@@ -276,9 +324,12 @@
     <trans_set>
       <trans loc="cs" val="Auta"/>
       <trans loc="de" val="Autos"/>
+      <trans loc="el" val="Αυτοκίνητα"/>
+      <trans loc="en_GB" val="Cars"/>
       <trans loc="eo" val="Aŭtoj"/>
       <trans loc="es" val="Coches"/>
       <trans loc="fr" val="Voitures"/>
+      <trans loc="id" val="Mobil"/>
       <trans loc="pt_BR" val="Carros"/>
       <trans loc="sl" val="Vozila"/>
     </trans_set>
@@ -289,9 +340,12 @@
         <trans_set>
           <trans loc="cs" val="ID auta"/>
           <trans loc="de" val="Autokennung"/>
+          <trans loc="el" val="Αναγνωριστικό αυτοκινήτου"/>
+          <trans loc="en_GB" val="Car ID"/>
           <trans loc="eo" val="Aŭto-ID"/>
           <trans loc="es" val="ID del coche"/>
           <trans loc="fr" val="ID de la voiture"/>
+          <trans loc="id" val="ID Mobil"/>
           <trans loc="pt_BR" val="ID de carro"/>
           <trans loc="sl" val="ID vozila"/>
         </trans_set>
@@ -301,9 +355,12 @@
         <trans_set>
           <trans loc="cs" val="Výrobce"/>
           <trans loc="de" val="Hersteller"/>
+          <trans loc="el" val="Κατασκευαστής"/>
+          <trans loc="en_GB" val="Manufacturer"/>
           <trans loc="eo" val="Produktinto"/>
           <trans loc="es" val="Fabricante"/>
           <trans loc="fr" val="Concessionnaire"/>
+          <trans loc="id" val="Pabrikan"/>
           <trans loc="pt_BR" val="Fabricante"/>
           <trans loc="sl" val="Proizvajalec"/>
         </trans_set>
@@ -313,9 +370,12 @@
         <trans_set>
           <trans loc="cs" val="Model"/>
           <trans loc="de" val="Modell"/>
+          <trans loc="el" val="Μοντέλο"/>
+          <trans loc="en_GB" val="Model"/>
           <trans loc="eo" val="Modelo"/>
           <trans loc="es" val="Modelo"/>
           <trans loc="fr" val="Modèle"/>
+          <trans loc="id" val="Model"/>
           <trans loc="pt_BR" val="Modelo"/>
           <trans loc="sl" val="Model"/>
         </trans_set>
@@ -325,8 +385,11 @@
         <trans_set>
           <trans loc="cs" val="Registrační značka"/>
           <trans loc="de" val="Kennzeichnung"/>
+          <trans loc="el" val="Εγγραφή"/>
+          <trans loc="en_GB" val="Registration"/>
           <trans loc="es" val="Registro"/>
           <trans loc="fr" val="Immatriculation"/>
+          <trans loc="id" val="Pendaftaran"/>
           <trans loc="pt_BR" val="Registro"/>
           <trans loc="sl" val="Prijava"/>
         </trans_set>
@@ -336,9 +399,12 @@
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -348,9 +414,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámka"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχόλιο"/>
+          <trans loc="en_GB" val="Comment"/>
           <trans loc="eo" val="Komento"/>
           <trans loc="es" val="Comentario"/>
           <trans loc="fr" val="Commentaire "/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentário"/>
           <trans loc="sl" val="Opomba"/>
         </trans_set>
@@ -364,9 +433,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -381,9 +453,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -464,9 +539,12 @@
     <trans_set>
       <trans loc="cs" val="Postavy"/>
       <trans loc="de" val="Besetzung"/>
+      <trans loc="el" val="Χαρακτήρες"/>
+      <trans loc="en_GB" val="Characters"/>
       <trans loc="eo" val="Signoj"/>
       <trans loc="es" val="Caracteres"/>
       <trans loc="fr" val="Personnages"/>
+      <trans loc="id" val="Karakter"/>
       <trans loc="pt_BR" val="Caracteres"/>
       <trans loc="sl" val="Liki"/>
     </trans_set>
@@ -477,8 +555,11 @@
         <trans_set>
           <trans loc="cs" val="ID obsazení"/>
           <trans loc="de" val="Besetzungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό πρωταγωνιστλων"/>
+          <trans loc="en_GB" val="Cast ID"/>
           <trans loc="es" val="ID de reparto"/>
           <trans loc="fr" val="ID des acteurs"/>
+          <trans loc="id" val="ID Cast"/>
           <trans loc="pt_BR" val="ID de elenco"/>
           <trans loc="sl" val="ID zasedbe"/>
         </trans_set>
@@ -488,8 +569,11 @@
         <trans_set>
           <trans loc="cs" val="Postava"/>
           <trans loc="de" val="Charakter"/>
+          <trans loc="el" val="Χαρακτήρας"/>
+          <trans loc="en_GB" val="Character"/>
           <trans loc="es" val="Caracter"/>
           <trans loc="fr" val="Personnage"/>
+          <trans loc="id" val="Karakter"/>
           <trans loc="pt_BR" val="Caracter"/>
           <trans loc="sl" val="Lik"/>
         </trans_set>
@@ -499,9 +583,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -521,9 +608,12 @@
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="eo" val="Kontakto-ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -533,9 +623,12 @@
         <trans_set>
           <trans loc="cs" val="Hlavní část"/>
           <trans loc="de" val="Hauptrolle"/>
+          <trans loc="el" val="Κύριο μέρος"/>
+          <trans loc="en_GB" val="Main Part"/>
           <trans loc="eo" val="Ĉefa parto"/>
           <trans loc="es" val="Parte principal"/>
           <trans loc="fr" val="Personnage principal"/>
+          <trans loc="id" val="Bagian Utama"/>
           <trans loc="pt_BR" val="Parte principal"/>
           <trans loc="sl" val="Glavna vloga"/>
         </trans_set>
@@ -546,9 +639,12 @@
         <trans_set>
           <trans loc="cs" val="Herec"/>
           <trans loc="de" val="Schauspieler"/>
+          <trans loc="el" val="Ηθοποιός"/>
+          <trans loc="en_GB" val="Actor"/>
           <trans loc="eo" val="Aktoro"/>
           <trans loc="es" val="Actor"/>
           <trans loc="fr" val="Acteur"/>
+          <trans loc="id" val="Aktor"/>
           <trans loc="pt_BR" val="Ator"/>
           <trans loc="sl" val="Igralec"/>
         </trans_set>
@@ -557,8 +653,11 @@
         <trans_set>
           <trans loc="cs" val="Scény"/>
           <trans loc="de" val="Szenen"/>
+          <trans loc="el" val="Σκηνές"/>
+          <trans loc="en_GB" val="Scenes"/>
           <trans loc="es" val="Escenas"/>
           <trans loc="fr" val="Scènes"/>
+          <trans loc="id" val="Scene"/>
           <trans loc="pt_BR" val="Cenas"/>
           <trans loc="sl" val="Prizori"/>
         </trans_set>
@@ -572,9 +671,12 @@
               <trans_set>
                 <trans loc="cs" val="Přehled"/>
                 <trans loc="de" val="Übersicht"/>
+                <trans loc="el" val="Επισκόπηση"/>
+                <trans loc="en_GB" val="Overview"/>
                 <trans loc="eo" val="Superrigardo"/>
                 <trans loc="es" val="Visión general"/>
                 <trans loc="fr" val="Résumé"/>
+                <trans loc="id" val="Ringkasan"/>
                 <trans loc="pt_BR" val="Visão geral"/>
                 <trans loc="sl" val="Pregled"/>
               </trans_set>
@@ -592,9 +694,12 @@
               <trans_set>
                 <trans loc="cs" val="Podrobnosti"/>
                 <trans loc="de" val="Details"/>
+                <trans loc="el" val="Λεπτομέρειες"/>
+                <trans loc="en_GB" val="Details"/>
                 <trans loc="eo" val="Detaloj"/>
                 <trans loc="es" val="Detalles"/>
                 <trans loc="fr" val="Détails"/>
+                <trans loc="id" val="Rincian"/>
                 <trans loc="pt_BR" val="Detalhes"/>
                 <trans loc="sl" val="Podrobnosti"/>
               </trans_set>
@@ -602,9 +707,12 @@
                 <trans_set>
                   <trans loc="cs" val="Herec"/>
                   <trans loc="de" val="Schauspieler"/>
+                  <trans loc="el" val="Ηθοποιός"/>
+                  <trans loc="en_GB" val="Actor"/>
                   <trans loc="eo" val="Aktoro"/>
                   <trans loc="es" val="Actor"/>
                   <trans loc="fr" val="Acteur"/>
+                  <trans loc="id" val="Aktor"/>
                   <trans loc="pt_BR" val="Ator"/>
                   <trans loc="sl" val="Igralec"/>
                 </trans_set>
@@ -679,8 +787,11 @@
                 <trans_set>
                   <trans loc="cs" val="ID kontaktu herce"/>
                   <trans loc="de" val="Kontaktkennung des Schauspielers"/>
+                  <trans loc="el" val="Αναγνωριστικό επικοινωνίας ηθοποιού"/>
+                  <trans loc="en_GB" val="Actor's Contact ID"/>
                   <trans loc="es" val="ID de contacto de actor"/>
                   <trans loc="fr" val="ID du contact de l'acteur"/>
+                  <trans loc="id" val="ID Kontak Aktor"/>
                   <trans loc="pt_BR" val="ID de contato do ator"/>
                   <trans loc="sl" val="ID stika igralca"/>
                 </trans_set>
@@ -692,8 +803,11 @@
                 <trans_set>
                   <trans loc="cs" val="Jméno herce"/>
                   <trans loc="de" val="Name des Schauspielers"/>
+                  <trans loc="el" val="Όνομα ηθοποιού"/>
+                  <trans loc="en_GB" val="Actor's Name"/>
                   <trans loc="es" val="Nombre del actor"/>
                   <trans loc="fr" val="Nom de l'acteur"/>
+                  <trans loc="id" val="Nama Aktor"/>
                   <trans loc="pt_BR" val="Nome do ator"/>
                   <trans loc="sl" val="Ime igralca"/>
                 </trans_set>
@@ -715,9 +829,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -732,9 +849,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -745,9 +865,12 @@
               <trans_set>
                 <trans loc="cs" val="Herec"/>
                 <trans loc="de" val="Schauspieler"/>
+                <trans loc="el" val="Ηθοποιός"/>
+                <trans loc="en_GB" val="Actor"/>
                 <trans loc="eo" val="Aktoro"/>
                 <trans loc="es" val="Actor"/>
                 <trans loc="fr" val="Acteur"/>
+                <trans loc="id" val="Aktor"/>
                 <trans loc="pt_BR" val="Ator"/>
                 <trans loc="sl" val="Igralec"/>
               </trans_set>
@@ -759,8 +882,11 @@
                   <trans_set>
                     <trans loc="cs" val="Jméno herce"/>
                     <trans loc="de" val="Name des Schauspielers"/>
+                    <trans loc="el" val="Όνομα ηθοποιού"/>
+                    <trans loc="en_GB" val="Actor's Name"/>
                     <trans loc="es" val="Nombre del actor"/>
                     <trans loc="fr" val="Nom de l'acteur"/>
+                    <trans loc="id" val="Nama Aktor"/>
                     <trans loc="pt_BR" val="Nome do ator"/>
                     <trans loc="sl" val="Ime igralca"/>
                   </trans_set>
@@ -810,9 +936,12 @@
                 <trans_set>
                   <trans loc="cs" val="Herec"/>
                   <trans loc="de" val="Schauspieler"/>
+                  <trans loc="el" val="Ηθοποιός"/>
+                  <trans loc="en_GB" val="Actor"/>
                   <trans loc="eo" val="Aktoro"/>
                   <trans loc="es" val="Actor"/>
                   <trans loc="fr" val="Acteur"/>
+                  <trans loc="id" val="Aktor"/>
                   <trans loc="pt_BR" val="Ator"/>
                   <trans loc="sl" val="Igralec"/>
                 </trans_set>
@@ -854,9 +983,12 @@
                   <trans_set>
                     <trans loc="cs" val="Herec"/>
                     <trans loc="de" val="Schauspieler"/>
+                    <trans loc="el" val="Ηθοποιός"/>
+                    <trans loc="en_GB" val="Actor"/>
                     <trans loc="eo" val="Aktoro"/>
                     <trans loc="es" val="Actor"/>
                     <trans loc="fr" val="Acteur"/>
+                    <trans loc="id" val="Aktor"/>
                     <trans loc="pt_BR" val="Ator"/>
                     <trans loc="sl" val="Igralec"/>
                   </trans_set>
@@ -872,8 +1004,11 @@
                     <trans_set>
                       <trans loc="cs" val="Agent"/>
                       <trans loc="de" val="Agent"/>
+                      <trans loc="el" val="Συντελεστής"/>
+                      <trans loc="en_GB" val="Agent"/>
                       <trans loc="es" val="Agente"/>
                       <trans loc="fr" val="Imprésario"/>
+                      <trans loc="id" val="Agen"/>
                       <trans loc="pt_BR" val="Agente"/>
                       <trans loc="sl" val="Agent"/>
                     </trans_set>
@@ -890,8 +1025,11 @@
         <trans_set>
           <trans loc="cs" val="Seznam obsazení"/>
           <trans loc="de" val="Besetzungsliste"/>
+          <trans loc="el" val="Λίστα πρωταγωνιστών"/>
+          <trans loc="en_GB" val="Cast List"/>
           <trans loc="es" val="Reparto"/>
           <trans loc="fr" val="Liste des acteurs"/>
+          <trans loc="id" val="Daftar Cast"/>
           <trans loc="pt_BR" val="Lista do elenco"/>
           <trans loc="sl" val="Seznam igralcev"/>
         </trans_set>
@@ -906,7 +1044,7 @@
         <value column="name">Openismus GmbH</value>
         <value column="comments">Creators of Glom</value>
         <value column="description">Software Development</value>
-        <value column="logo"/>
+        <value column="logo" format="base64"/>
         <value column="website"/>
       </example_row>
       <example_row>
@@ -914,7 +1052,7 @@
         <value column="name">Wombles Catering Ltd</value>
         <value column="comments"/>
         <value column="description"/>
-        <value column="logo"/>
+        <value column="logo" format="base64"/>
         <value column="website"/>
       </example_row>
       <example_row>
@@ -922,7 +1060,7 @@
         <value column="name">Scooby Snack Catering Ltd</value>
         <value column="comments"/>
         <value column="description"/>
-        <value column="logo"/>
+        <value column="logo" format="base64"/>
         <value column="website"/>
       </example_row>
       <example_row>
@@ -930,7 +1068,7 @@
         <value column="name">Management International</value>
         <value column="comments"/>
         <value column="description">Agents and Managers</value>
-        <value column="logo"/>
+        <value column="logo" format="base64"/>
         <value column="website"/>
       </example_row>
       <example_row>
@@ -938,7 +1076,7 @@
         <value column="name">Talent Schmalent</value>
         <value column="comments"/>
         <value column="description">Agents and Managers</value>
-        <value column="logo"/>
+        <value column="logo" format="base64"/>
         <value column="website"/>
       </example_row>
       <example_row>
@@ -946,15 +1084,18 @@
         <value column="name"/>
         <value column="comments"/>
         <value column="description"/>
-        <value column="logo"/>
+        <value column="logo" format="base64"/>
         <value column="website"/>
       </example_row>
     </example_rows>
     <trans_set>
       <trans loc="cs" val="Společnosti"/>
       <trans loc="de" val="Firmen"/>
+      <trans loc="el" val="Εταιρίες"/>
+      <trans loc="en_GB" val="Companies"/>
       <trans loc="es" val="Compañías"/>
       <trans loc="fr" val="Sociétés"/>
+      <trans loc="id" val="Perusahaan"/>
       <trans loc="pt_BR" val="Empresas"/>
       <trans loc="sl" val="Podjetja"/>
     </trans_set>
@@ -965,8 +1106,11 @@
         <trans_set>
           <trans loc="cs" val="ID společnosti"/>
           <trans loc="de" val="Firmenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό εταιρίας"/>
+          <trans loc="en_GB" val="Company ID"/>
           <trans loc="es" val="ID de la compañía"/>
           <trans loc="fr" val="ID de la société"/>
+          <trans loc="id" val="ID Perusahaan"/>
           <trans loc="pt_BR" val="ID de empresa"/>
           <trans loc="sl" val="ID podjetja"/>
         </trans_set>
@@ -976,9 +1120,12 @@
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -988,9 +1135,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -1000,9 +1150,12 @@
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -1012,9 +1165,12 @@
         <trans_set>
           <trans loc="cs" val="Logo"/>
           <trans loc="de" val="Logo"/>
+          <trans loc="el" val="Λογότυπο"/>
+          <trans loc="en_GB" val="Logo"/>
           <trans loc="eo" val="Emblemo"/>
           <trans loc="es" val="Logo"/>
           <trans loc="fr" val="Logo"/>
+          <trans loc="id" val="Logo"/>
           <trans loc="pt_BR" val="Logomarca"/>
           <trans loc="sl" val="Logotip"/>
         </trans_set>
@@ -1024,9 +1180,12 @@
         <trans_set>
           <trans loc="cs" val="Webové stránky"/>
           <trans loc="de" val="Website"/>
+          <trans loc="el" val="Ιστοσελίδα"/>
+          <trans loc="en_GB" val="Web Site"/>
           <trans loc="eo" val="Retejo"/>
           <trans loc="es" val="Página web"/>
           <trans loc="fr" val="Site Web"/>
+          <trans loc="id" val="Situs Web"/>
           <trans loc="pt_BR" val="Página web"/>
           <trans loc="sl" val="Spletna stran"/>
         </trans_set>
@@ -1037,8 +1196,11 @@
         <trans_set>
           <trans loc="cs" val="Zaměstnanci"/>
           <trans loc="de" val="Angestellte"/>
+          <trans loc="el" val="Προσωπικό"/>
+          <trans loc="en_GB" val="Staff"/>
           <trans loc="es" val="Personal"/>
           <trans loc="fr" val="Personnel"/>
+          <trans loc="id" val="Staf"/>
           <trans loc="pt_BR" val="Produção"/>
           <trans loc="sl" val="Osebje"/>
         </trans_set>
@@ -1051,9 +1213,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -1068,9 +1233,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -1147,7 +1315,7 @@
         <value column="comments"/>
         <value column="name_full">Murray Cumming</value>
         <value column="company_id">0</value>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1173,7 +1341,7 @@
         <value column="comments"/>
         <value column="name_full">Jerry Maguire</value>
         <value column="company_id">3</value>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1199,7 +1367,7 @@
         <value column="comments"/>
         <value column="name_full">Johnny McAgent</value>
         <value column="company_id">4</value>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1225,7 +1393,7 @@
         <value column="comments"/>
         <value column="name_full">Andrew O'Actor</value>
         <value column="company_id"/>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1251,7 +1419,7 @@
         <value column="comments"/>
         <value column="name_full">Sharon Von Schauspieler</value>
         <value column="company_id"/>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1277,7 +1445,7 @@
         <value column="comments"/>
         <value column="name_full">Mook Mookity</value>
         <value column="company_id"/>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1303,7 +1471,7 @@
         <value column="comments"/>
         <value column="name_full">Rupert Pupkin</value>
         <value column="company_id"/>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1329,7 +1497,7 @@
         <value column="comments"/>
         <value column="name_full">Cal McCamera</value>
         <value column="company_id"/>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1355,7 +1523,7 @@
         <value column="comments"/>
         <value column="name_full">Sol McSound</value>
         <value column="company_id"/>
-        <value column="picture"/>
+        <value column="picture" format="base64"/>
         <value column="tel_home"/>
         <value column="tel_mobile"/>
         <value column="tel_fax"/>
@@ -1370,9 +1538,12 @@
     <trans_set>
       <trans loc="cs" val="Kontakty"/>
       <trans loc="de" val="Kontakte"/>
+      <trans loc="el" val="Επαφές"/>
+      <trans loc="en_GB" val="Contacts"/>
       <trans loc="eo" val="Kontaktoj"/>
       <trans loc="es" val="Contactos"/>
       <trans loc="fr" val="Contacts"/>
+      <trans loc="id" val="Kontak"/>
       <trans loc="pt_BR" val="Contatos"/>
       <trans loc="sl" val="Stiki"/>
     </trans_set>
@@ -1383,9 +1554,12 @@
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="eo" val="Kontakto-ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -1395,9 +1569,12 @@
         <trans_set>
           <trans loc="cs" val="Křestní jméno"/>
           <trans loc="de" val="Vorname"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="First Name"/>
           <trans loc="eo" val="Unua persona nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Prénom"/>
+          <trans loc="id" val="Nama Depan"/>
           <trans loc="pt_BR" val="Primeiro nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -1407,9 +1584,12 @@
         <trans_set>
           <trans loc="cs" val="Prostřední jméno"/>
           <trans loc="de" val="Zweiter Name"/>
+          <trans loc="el" val="Δεύτερο όνομα"/>
+          <trans loc="en_GB" val="Second Name"/>
           <trans loc="eo" val="Dua persona nomo"/>
           <trans loc="es" val="Primer apellido"/>
           <trans loc="fr" val="Deuxième nom"/>
+          <trans loc="id" val="Nama Kedua"/>
           <trans loc="pt_BR" val="Segundo nome"/>
           <trans loc="sl" val="Srednje ime"/>
         </trans_set>
@@ -1419,9 +1599,12 @@
         <trans_set>
           <trans loc="cs" val="Příjmení"/>
           <trans loc="de" val="Familienname"/>
+          <trans loc="el" val="Επώνυμο"/>
+          <trans loc="en_GB" val="Last Name"/>
           <trans loc="eo" val="Familia nomo"/>
           <trans loc="es" val="Segundo apellido"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama Belakang"/>
           <trans loc="pt_BR" val="Último nome"/>
           <trans loc="sl" val="Priimek"/>
         </trans_set>
@@ -1433,9 +1616,12 @@
               <trans_set>
                 <trans loc="cs" val="pan"/>
                 <trans loc="de" val="Herr"/>
+                <trans loc="el" val="Κος"/>
+                <trans loc="en_GB" val="Mr"/>
                 <trans loc="eo" val="S-ro"/>
                 <trans loc="es" val="Sr."/>
                 <trans loc="fr" val="M."/>
+                <trans loc="id" val="Tn"/>
                 <trans loc="pt_BR" val="Sr"/>
                 <trans loc="sl" val="g."/>
               </trans_set>
@@ -1444,8 +1630,11 @@
               <trans_set>
                 <trans loc="cs" val="paní/slečna"/>
                 <trans loc="de" val="Frau"/>
+                <trans loc="el" val="Κα"/>
+                <trans loc="en_GB" val="Ms"/>
                 <trans loc="es" val="Sra."/>
                 <trans loc="fr" val="Mme"/>
+                <trans loc="id" val="Nn"/>
                 <trans loc="pt_BR" val="Sra"/>
                 <trans loc="sl" val="ga."/>
               </trans_set>
@@ -1454,9 +1643,12 @@
               <trans_set>
                 <trans loc="cs" val="paní"/>
                 <trans loc="de" val="Frau"/>
+                <trans loc="el" val="Κα"/>
+                <trans loc="en_GB" val="Mrs"/>
                 <trans loc="eo" val="S-ino"/>
                 <trans loc="es" val="Srta."/>
                 <trans loc="fr" val="Mme"/>
+                <trans loc="id" val="Ny"/>
                 <trans loc="pt_BR" val="Sr"/>
                 <trans loc="sl" val="ga."/>
               </trans_set>
@@ -1465,8 +1657,11 @@
               <trans_set>
                 <trans loc="cs" val="slečna"/>
                 <trans loc="de" val="Frau"/>
+                <trans loc="el" val="Δις"/>
+                <trans loc="en_GB" val="Miss"/>
                 <trans loc="es" val="Señorita"/>
                 <trans loc="fr" val="Mlle"/>
+                <trans loc="id" val="Nona"/>
                 <trans loc="pt_BR" val="Senhorita"/>
                 <trans loc="sl" val="gdč."/>
               </trans_set>
@@ -1475,9 +1670,12 @@
               <trans_set>
                 <trans loc="cs" val="Dr."/>
                 <trans loc="de" val="Dr."/>
+                <trans loc="el" val="Δρ"/>
+                <trans loc="en_GB" val="Dr"/>
                 <trans loc="eo" val="D-ro"/>
                 <trans loc="es" val="Dr"/>
                 <trans loc="fr" val="Dr"/>
+                <trans loc="id" val="Dr"/>
                 <trans loc="pt_BR" val="Dr"/>
                 <trans loc="sl" val="dr."/>
               </trans_set>
@@ -1486,8 +1684,11 @@
               <trans_set>
                 <trans loc="cs" val="Prof."/>
                 <trans loc="de" val="Prof."/>
+                <trans loc="el" val="Καθ"/>
+                <trans loc="en_GB" val="Prof"/>
                 <trans loc="es" val="Prof"/>
                 <trans loc="fr" val="Pr"/>
+                <trans loc="id" val="Prof"/>
                 <trans loc="pt_BR" val="Prof"/>
                 <trans loc="sl" val="prof."/>
               </trans_set>
@@ -1497,9 +1698,12 @@
         <trans_set>
           <trans loc="cs" val="Oslovení"/>
           <trans loc="de" val="Titel"/>
+          <trans loc="el" val="Τίτλος"/>
+          <trans loc="en_GB" val="Title"/>
           <trans loc="eo" val="Titolo"/>
           <trans loc="es" val="Título"/>
           <trans loc="fr" val="Titre"/>
+          <trans loc="id" val="Gelar"/>
           <trans loc="pt_BR" val="Título"/>
           <trans loc="sl" val="Naziv"/>
         </trans_set>
@@ -1509,8 +1713,11 @@
         <trans_set>
           <trans loc="cs" val="Ulice (2. řádek)"/>
           <trans loc="de" val="Straße (2)"/>
+          <trans loc="el" val="Οδός (γραμμή 2)"/>
+          <trans loc="en_GB" val="Street (line 2)"/>
           <trans loc="es" val="Calle (línea 2)"/>
           <trans loc="fr" val="Rue (2e ligne)"/>
+          <trans loc="id" val="Jalan (baris 2)"/>
           <trans loc="pt_BR" val="Rua (linha 2)"/>
           <trans loc="sl" val="Ulica (druga vrstica)"/>
         </trans_set>
@@ -1520,9 +1727,12 @@
         <trans_set>
           <trans loc="cs" val="Město"/>
           <trans loc="de" val="Ort"/>
+          <trans loc="el" val="Πόλη"/>
+          <trans loc="en_GB" val="Town"/>
           <trans loc="eo" val="Urbo"/>
           <trans loc="es" val="Ciudad"/>
           <trans loc="fr" val="Ville"/>
+          <trans loc="id" val="Kota"/>
           <trans loc="pt_BR" val="Cidade"/>
           <trans loc="sl" val="Mesto"/>
         </trans_set>
@@ -1532,9 +1742,12 @@
         <trans_set>
           <trans loc="cs" val="Stát"/>
           <trans loc="de" val="Bundesland/Kanton"/>
+          <trans loc="el" val="Πολιτεία"/>
+          <trans loc="en_GB" val="State"/>
           <trans loc="eo" val="Ŝtato"/>
           <trans loc="es" val="Estado"/>
           <trans loc="fr" val="État"/>
+          <trans loc="id" val="Negara Bagian"/>
           <trans loc="pt_BR" val="Estado"/>
           <trans loc="sl" val="Zv. država"/>
         </trans_set>
@@ -1546,9 +1759,12 @@
               <trans_set>
                 <trans loc="cs" val="Německo"/>
                 <trans loc="de" val="Deutschland"/>
+                <trans loc="el" val="Γερμανία"/>
+                <trans loc="en_GB" val="Germany"/>
                 <trans loc="eo" val="Germanujo"/>
                 <trans loc="es" val="Alemania"/>
                 <trans loc="fr" val="Allemagne"/>
+                <trans loc="id" val="Jerman"/>
                 <trans loc="pt_BR" val="Alemanha"/>
                 <trans loc="sl" val="Nemčija"/>
               </trans_set>
@@ -1557,9 +1773,12 @@
               <trans_set>
                 <trans loc="cs" val="Velká Británie"/>
                 <trans loc="de" val="Großbritannien"/>
+                <trans loc="el" val="Ηνωμένο Βασίλειο"/>
+                <trans loc="en_GB" val="United Kingdom"/>
                 <trans loc="eo" val="Unuiĝinta Reĝlando"/>
                 <trans loc="es" val="Reino unido"/>
                 <trans loc="fr" val="Royaume-Uni"/>
+                <trans loc="id" val="Britania Raya"/>
                 <trans loc="pt_BR" val="Reino Unido"/>
                 <trans loc="sl" val="Združeno kraljestvo"/>
               </trans_set>
@@ -1568,9 +1787,12 @@
               <trans_set>
                 <trans loc="cs" val="USA"/>
                 <trans loc="de" val="USA"/>
+                <trans loc="el" val="Η.Π.Α"/>
+                <trans loc="en_GB" val="USA"/>
                 <trans loc="eo" val="Usono"/>
                 <trans loc="es" val="EE.UU."/>
                 <trans loc="fr" val="USA"/>
+                <trans loc="id" val="AS"/>
                 <trans loc="pt_BR" val="EUA"/>
                 <trans loc="sl" val="ZDA"/>
               </trans_set>
@@ -1579,9 +1801,12 @@
               <trans_set>
                 <trans loc="cs" val="Francie"/>
                 <trans loc="de" val="Frankreich"/>
+                <trans loc="el" val="Γαλλία"/>
+                <trans loc="en_GB" val="France"/>
                 <trans loc="eo" val="Francujo"/>
                 <trans loc="es" val="Francia"/>
                 <trans loc="fr" val="France"/>
+                <trans loc="id" val="Prancis"/>
                 <trans loc="pt_BR" val="França"/>
                 <trans loc="sl" val="Francija"/>
               </trans_set>
@@ -1590,9 +1815,12 @@
               <trans_set>
                 <trans loc="cs" val="Španělsko"/>
                 <trans loc="de" val="Spanien"/>
+                <trans loc="el" val="Ισπανία"/>
+                <trans loc="en_GB" val="Spain"/>
                 <trans loc="eo" val="Hispanujo"/>
                 <trans loc="es" val="España"/>
                 <trans loc="fr" val="Espagne"/>
+                <trans loc="id" val="Spanyol"/>
                 <trans loc="pt_BR" val="Espanha"/>
                 <trans loc="sl" val="Španija"/>
               </trans_set>
@@ -1602,9 +1830,12 @@
         <trans_set>
           <trans loc="cs" val="Země"/>
           <trans loc="de" val="Land"/>
+          <trans loc="el" val="Χώρα"/>
+          <trans loc="en_GB" val="Country"/>
           <trans loc="eo" val="Lando"/>
           <trans loc="es" val="País"/>
           <trans loc="fr" val="Pays"/>
+          <trans loc="id" val="Negara"/>
           <trans loc="pt_BR" val="País"/>
           <trans loc="sl" val="Država"/>
         </trans_set>
@@ -1614,8 +1845,11 @@
         <trans_set>
           <trans loc="cs" val="PSČ"/>
           <trans loc="de" val="Postleitzahl"/>
+          <trans loc="el" val="Ταχ. κώδικας"/>
+          <trans loc="en_GB" val="Postcode"/>
           <trans loc="es" val="Código postal"/>
           <trans loc="fr" val="Code postal"/>
+          <trans loc="id" val="Kode Pos"/>
           <trans loc="pt_BR" val="CEP"/>
           <trans loc="sl" val="Poštna številka"/>
         </trans_set>
@@ -1625,9 +1859,12 @@
         <trans_set>
           <trans loc="cs" val="Datum narození"/>
           <trans loc="de" val="Geburtsdatum"/>
+          <trans loc="el" val="Ημερομηνία Γέννησης"/>
+          <trans loc="en_GB" val="Date Of Birth"/>
           <trans loc="eo" val="Naskiĝtago"/>
           <trans loc="es" val="Fecha de nacimiento"/>
           <trans loc="fr" val="Date de naissance"/>
+          <trans loc="id" val="Tanggal Lahir"/>
           <trans loc="pt_BR" val="Data de nascimento"/>
           <trans loc="sl" val="Datum rojstva"/>
         </trans_set>
@@ -1637,9 +1874,12 @@
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -1650,9 +1890,12 @@
         <trans_set>
           <trans loc="cs" val="Celé jméno"/>
           <trans loc="de" val="Vollständiger Name"/>
+          <trans loc="el" val="Πλήρες Όνομα"/>
+          <trans loc="en_GB" val="Full Name"/>
           <trans loc="eo" val="Tuta nomo"/>
           <trans loc="es" val="Nombre completo"/>
           <trans loc="fr" val="Nom complet"/>
+          <trans loc="id" val="Nama Lengkap"/>
           <trans loc="pt_BR" val="Nome completo"/>
           <trans loc="sl" val="Polno ime"/>
         </trans_set>
@@ -1672,8 +1915,11 @@
         <trans_set>
           <trans loc="cs" val="ID společnosti"/>
           <trans loc="de" val="Firmenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό εταιρίας"/>
+          <trans loc="en_GB" val="Company ID"/>
           <trans loc="es" val="ID de la compañía"/>
           <trans loc="fr" val="ID de la compagnie"/>
+          <trans loc="id" val="ID Perusahaan"/>
           <trans loc="pt_BR" val="ID de empresa"/>
           <trans loc="sl" val="ID podjetja"/>
         </trans_set>
@@ -1683,9 +1929,12 @@
         <trans_set>
           <trans loc="cs" val="Obrázek"/>
           <trans loc="de" val="Bild"/>
+          <trans loc="el" val="Εικόνα"/>
+          <trans loc="en_GB" val="Picture"/>
           <trans loc="eo" val="Bildo"/>
           <trans loc="es" val="Foto"/>
           <trans loc="fr" val="Image"/>
+          <trans loc="id" val="Gambar"/>
           <trans loc="pt_BR" val="Foto"/>
           <trans loc="sl" val="Slika"/>
         </trans_set>
@@ -1695,9 +1944,12 @@
         <trans_set>
           <trans loc="cs" val="Telefon domů"/>
           <trans loc="de" val="Telefon (privat)"/>
+          <trans loc="el" val="Τηλέφωνο σπιτιού"/>
+          <trans loc="en_GB" val="Home Telephone"/>
           <trans loc="eo" val="Hejma telefono"/>
           <trans loc="es" val="Teléfono de casa"/>
           <trans loc="fr" val="Téléphone domicile"/>
+          <trans loc="id" val="Nomor Telepon Rumah"/>
           <trans loc="pt_BR" val="Telefone residencial"/>
           <trans loc="sl" val="Telefon doma"/>
         </trans_set>
@@ -1707,9 +1959,12 @@
         <trans_set>
           <trans loc="cs" val="Mobilní telefon"/>
           <trans loc="de" val="Telefon (mobil)"/>
+          <trans loc="el" val="Κινητό τηλέφωνο"/>
+          <trans loc="en_GB" val="Mobile Telephone"/>
           <trans loc="eo" val="Poŝtelefono"/>
           <trans loc="es" val="Móvil"/>
           <trans loc="fr" val="Téléphone portable"/>
+          <trans loc="id" val="Nomor Telepon Seluler"/>
           <trans loc="pt_BR" val="Telefone celular"/>
           <trans loc="sl" val="Mobilni telefon"/>
         </trans_set>
@@ -1719,9 +1974,12 @@
         <trans_set>
           <trans loc="cs" val="Fax"/>
           <trans loc="de" val="Fax"/>
+          <trans loc="el" val="Φαξ"/>
+          <trans loc="en_GB" val="Fax"/>
           <trans loc="eo" val="Faksilo"/>
           <trans loc="es" val="Fax"/>
           <trans loc="fr" val="Fax"/>
+          <trans loc="id" val="Faks"/>
           <trans loc="pt_BR" val="Fax"/>
           <trans loc="sl" val="Faks"/>
         </trans_set>
@@ -1731,9 +1989,12 @@
         <trans_set>
           <trans loc="cs" val="Telefon do práce"/>
           <trans loc="de" val="Telefon (Büro)"/>
+          <trans loc="el" val="Τηλέφωνο εργασίας"/>
+          <trans loc="en_GB" val="Work Telephone"/>
           <trans loc="eo" val="Laboreja telefono"/>
           <trans loc="es" val="Teléfono del trabajo"/>
           <trans loc="fr" val="Téléphone travail"/>
+          <trans loc="id" val="Nomor Telepon Kantor"/>
           <trans loc="pt_BR" val="Telefone comercial"/>
           <trans loc="sl" val="Telefon v službi"/>
         </trans_set>
@@ -1743,9 +2004,12 @@
         <trans_set>
           <trans loc="cs" val="E-mail"/>
           <trans loc="de" val="E-Mail"/>
+          <trans loc="el" val="Email"/>
+          <trans loc="en_GB" val="Email"/>
           <trans loc="eo" val="Retpoŝtadreso"/>
           <trans loc="es" val="Correo-e"/>
           <trans loc="fr" val="Adresse électronique"/>
+          <trans loc="id" val="Surel"/>
           <trans loc="pt_BR" val="E-mail"/>
           <trans loc="sl" val="Elektronska pošta"/>
         </trans_set>
@@ -1755,8 +2019,11 @@
         <trans_set>
           <trans loc="cs" val="Ulice (1. řádek)"/>
           <trans loc="de" val="Straße (1)"/>
+          <trans loc="el" val="Οδός (γραμμή 1)"/>
+          <trans loc="en_GB" val="Street (line 1)"/>
           <trans loc="es" val="Calle (línea 1)"/>
           <trans loc="fr" val="Rue (ligne 1)"/>
+          <trans loc="id" val="Jalan (baris 1)"/>
           <trans loc="pt_BR" val="Rua (line 1)"/>
           <trans loc="sl" val="Ulica (prva vrstica)"/>
         </trans_set>
@@ -1766,9 +2033,12 @@
         <trans_set>
           <trans loc="cs" val="Webové stránky"/>
           <trans loc="de" val="Website"/>
+          <trans loc="el" val="Ιστοσελίδα"/>
+          <trans loc="en_GB" val="Web Site"/>
           <trans loc="eo" val="Retejo"/>
           <trans loc="es" val="Página web"/>
           <trans loc="fr" val="Site Web"/>
+          <trans loc="id" val="Situs Web"/>
           <trans loc="pt_BR" val="Site na internet"/>
           <trans loc="sl" val="Spletna stran"/>
         </trans_set>
@@ -1788,8 +2058,11 @@
         <trans_set>
           <trans loc="cs" val="ID agenta"/>
           <trans loc="de" val="Agentenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό ατζέντη"/>
+          <trans loc="en_GB" val="Agent ID"/>
           <trans loc="es" val="ID de agente"/>
           <trans loc="fr" val="ID de l'agent"/>
+          <trans loc="id" val="ID Agen"/>
           <trans loc="pt_BR" val="ID de agente"/>
           <trans loc="sl" val="ID agenta"/>
         </trans_set>
@@ -1799,8 +2072,11 @@
         <trans_set>
           <trans loc="cs" val="Umělecké jméno"/>
           <trans loc="de" val="Künstlername"/>
+          <trans loc="el" val="Όνομα σκηνής"/>
+          <trans loc="en_GB" val="Stagename"/>
           <trans loc="es" val="Nombre artístico"/>
           <trans loc="fr" val="Nom de scène"/>
+          <trans loc="id" val="Nama Panggung"/>
           <trans loc="pt_BR" val="Nome artístico"/>
           <trans loc="sl" val="Umetniško ime"/>
         </trans_set>
@@ -1811,8 +2087,11 @@
         <trans_set>
           <trans loc="cs" val="Společnost"/>
           <trans loc="de" val="Firma"/>
+          <trans loc="el" val="Εταιρία"/>
+          <trans loc="en_GB" val="Company"/>
           <trans loc="es" val="Compañía"/>
           <trans loc="fr" val="Société"/>
+          <trans loc="id" val="Perusahaan"/>
           <trans loc="pt_BR" val="Empresa"/>
           <trans loc="sl" val="Podjetje"/>
         </trans_set>
@@ -1821,8 +2100,11 @@
         <trans_set>
           <trans loc="cs" val="Agent"/>
           <trans loc="de" val="Agent"/>
+          <trans loc="el" val="Συντελεστής"/>
+          <trans loc="en_GB" val="Agent"/>
           <trans loc="es" val="Agente"/>
           <trans loc="fr" val="Agent"/>
+          <trans loc="id" val="Agen"/>
           <trans loc="pt_BR" val="Agente"/>
           <trans loc="sl" val="Agent"/>
         </trans_set>
@@ -1831,8 +2113,11 @@
         <trans_set>
           <trans loc="cs" val="Štáb"/>
           <trans loc="de" val="Crew"/>
+          <trans loc="el" val="Πλήρωμα"/>
+          <trans loc="en_GB" val="Crew"/>
           <trans loc="es" val="Personal"/>
           <trans loc="fr" val="Équipe"/>
+          <trans loc="id" val="Kru"/>
           <trans loc="pt_BR" val="Equipe"/>
           <trans loc="sl" val="Ekipa"/>
         </trans_set>
@@ -1841,8 +2126,11 @@
         <trans_set>
           <trans loc="cs" val="Obsazení"/>
           <trans loc="de" val="Besetzung"/>
+          <trans loc="el" val="Πρωταγωνιστές"/>
+          <trans loc="en_GB" val="Cast"/>
           <trans loc="es" val="Reparto"/>
           <trans loc="fr" val="Acteurs"/>
+          <trans loc="id" val="Cast"/>
           <trans loc="pt_BR" val="Elenco"/>
           <trans loc="sl" val="Zasedba"/>
         </trans_set>
@@ -1855,9 +2143,12 @@
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -1872,9 +2163,12 @@
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -1883,9 +2177,12 @@
                 <trans_set>
                   <trans loc="cs" val="Název"/>
                   <trans loc="de" val="Name"/>
+                  <trans loc="el" val="Όνομα"/>
+                  <trans loc="en_GB" val="Name"/>
                   <trans loc="eo" val="Nomo"/>
                   <trans loc="es" val="Nombre"/>
                   <trans loc="fr" val="Nom"/>
+                  <trans loc="id" val="Nama"/>
                   <trans loc="pt_BR" val="Nome"/>
                   <trans loc="sl" val="Ime"/>
                 </trans_set>
@@ -1906,8 +2203,11 @@
                 <trans_set>
                   <trans loc="cs" val="Společnost"/>
                   <trans loc="de" val="Firma"/>
+                  <trans loc="el" val="Εταιρία"/>
+                  <trans loc="en_GB" val="Company"/>
                   <trans loc="es" val="Compañía"/>
                   <trans loc="fr" val="Société"/>
+                  <trans loc="id" val="Perusahaan"/>
                   <trans loc="pt_BR" val="Empresa"/>
                   <trans loc="sl" val="Podjetje"/>
                 </trans_set>
@@ -1922,9 +2222,12 @@
                 <trans_set>
                   <trans loc="cs" val="Adresa"/>
                   <trans loc="de" val="Adresse"/>
+                  <trans loc="el" val="Διεύθυνση"/>
+                  <trans loc="en_GB" val="Address"/>
                   <trans loc="eo" val="Adreso"/>
                   <trans loc="es" val="Dirección"/>
                   <trans loc="fr" val="Adresse"/>
+                  <trans loc="id" val="Alamat"/>
                   <trans loc="pt_BR" val="Endereço"/>
                   <trans loc="sl" val="Naslov"/>
                 </trans_set>
@@ -1951,9 +2254,12 @@
                 <trans_set>
                   <trans loc="cs" val="Telefon"/>
                   <trans loc="de" val="Telefon"/>
+                  <trans loc="el" val="Τηλέφωνο"/>
+                  <trans loc="en_GB" val="Telephone"/>
                   <trans loc="eo" val="Telefono"/>
                   <trans loc="es" val="Teléfono"/>
                   <trans loc="fr" val="Téléphone"/>
+                  <trans loc="id" val="Telepon"/>
                   <trans loc="pt_BR" val="Telefone"/>
                   <trans loc="sl" val="Telefon"/>
                 </trans_set>
@@ -1974,8 +2280,11 @@
                 <trans_set>
                   <trans loc="cs" val="Agent"/>
                   <trans loc="de" val="Agent"/>
+                  <trans loc="el" val="Συντελεστής"/>
+                  <trans loc="en_GB" val="Agent"/>
                   <trans loc="es" val="Agente"/>
                   <trans loc="fr" val="Agent"/>
+                  <trans loc="id" val="Agen"/>
                   <trans loc="pt_BR" val="Agente"/>
                   <trans loc="sl" val="Agent"/>
                 </trans_set>
@@ -2048,8 +2357,11 @@
                 <trans_set>
                   <trans loc="cs" val="Název společnosti"/>
                   <trans loc="de" val="Firmenname"/>
+                  <trans loc="el" val="Όνομα εταιρίας"/>
+                  <trans loc="en_GB" val="Company Name"/>
                   <trans loc="es" val="Nombre de la compañía"/>
                   <trans loc="fr" val="Nom de la société"/>
+                  <trans loc="id" val="Nama Perusahaan"/>
                   <trans loc="pt_BR" val="Nome da empresa"/>
                   <trans loc="sl" val="Ime podjetja"/>
                 </trans_set>
@@ -2081,9 +2393,12 @@
         <trans_set>
           <trans loc="cs" val="Kontakty podle země"/>
           <trans loc="de" val="Kontakte nach Land"/>
+          <trans loc="el" val="Επαφές κατά χώρα"/>
+          <trans loc="en_GB" val="Contacts By Country"/>
           <trans loc="es" val="Contactos por país"/>
           <trans loc="fr" val="Contacts par pays"/>
           <trans loc="gl" val="Contactos por país"/>
+          <trans loc="id" val="Kontak Menurut Negara"/>
           <trans loc="pt_BR" val="Contatos por país"/>
           <trans loc="sl" val="Stiki po državah"/>
         </trans_set>
@@ -2133,9 +2448,12 @@
         <trans_set>
           <trans loc="cs" val="Podle země, podle města"/>
           <trans loc="de" val="Nach Land, nach Ort"/>
+          <trans loc="el" val="Κατά χώρα, Κατά πόλη"/>
+          <trans loc="en_GB" val="By Country, By Town"/>
           <trans loc="es" val="Por país, por ciudad"/>
           <trans loc="fr" val="Par pays, par ville"/>
           <trans loc="gl" val="Por país, por cidade"/>
+          <trans loc="id" val="Menurut Negara, Menurut Kota"/>
           <trans loc="pt_BR" val="Por país, Por cidade"/>
           <trans loc="sl" val="Po državi, po mestu"/>
         </trans_set>
@@ -2492,8 +2810,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Kostým"/>
       <trans loc="de" val="Kostüm"/>
+      <trans loc="el" val="Ενδυμασία"/>
+      <trans loc="en_GB" val="Costume"/>
       <trans loc="es" val="Vestuario"/>
       <trans loc="fr" val="Costume"/>
+      <trans loc="id" val="Kostum"/>
       <trans loc="pt_BR" val="Figurino"/>
       <trans loc="sl" val="Kostum"/>
     </trans_set>
@@ -2503,8 +2824,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kostýmu"/>
           <trans loc="de" val="Kostümkennung"/>
+          <trans loc="el" val="Αναγνωριστικό ενδυμασίας"/>
+          <trans loc="en_GB" val="Costume ID"/>
           <trans loc="es" val="ID de vestuario"/>
           <trans loc="fr" val="ID du costume"/>
+          <trans loc="id" val="ID Kostum"/>
           <trans loc="pt_BR" val="ID de figurino"/>
           <trans loc="sl" val="ID kostuma"/>
         </trans_set>
@@ -2514,9 +2838,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -2526,8 +2853,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -2537,9 +2867,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -2568,9 +2901,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -2585,9 +2921,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -2624,8 +2963,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Štáb"/>
       <trans loc="de" val="Crew"/>
+      <trans loc="el" val="Πλήρωμα"/>
+      <trans loc="en_GB" val="Crew"/>
       <trans loc="es" val="Personal"/>
       <trans loc="fr" val="Équipe"/>
+      <trans loc="id" val="Kru"/>
       <trans loc="pt_BR" val="Equipe"/>
       <trans loc="sl" val="Ekipa"/>
     </trans_set>
@@ -2635,8 +2977,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID štábu"/>
           <trans loc="de" val="Crew-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό πληρώματος"/>
+          <trans loc="en_GB" val="Crew ID"/>
           <trans loc="es" val="ID de personal"/>
           <trans loc="fr" val="ID de l'équipe"/>
+          <trans loc="id" val="ID Kru"/>
           <trans loc="pt_BR" val="ID da equipe"/>
           <trans loc="sl" val="ID ekipe"/>
         </trans_set>
@@ -2646,9 +2991,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -2658,9 +3006,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -2680,8 +3031,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID týmu"/>
           <trans loc="de" val="Abteilungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό διαμερίσματος"/>
+          <trans loc="en_GB" val="Department ID"/>
           <trans loc="es" val="ID de departamento"/>
           <trans loc="fr" val="ID du service"/>
+          <trans loc="id" val="ID Departemen"/>
           <trans loc="pt_BR" val="ID de departamento"/>
           <trans loc="sl" val="ID sektorja"/>
         </trans_set>
@@ -2701,9 +3055,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="eo" val="Kontakto-ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -2714,9 +3071,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kontakty"/>
           <trans loc="de" val="Kontakte"/>
+          <trans loc="el" val="Επαφές"/>
+          <trans loc="en_GB" val="Contacts"/>
           <trans loc="eo" val="Kontaktoj"/>
           <trans loc="es" val="Contactos"/>
           <trans loc="fr" val="Contacts"/>
+          <trans loc="id" val="Kontak"/>
           <trans loc="pt_BR" val="Contatos"/>
           <trans loc="sl" val="Stiki"/>
         </trans_set>
@@ -2725,8 +3085,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Týmy"/>
           <trans loc="de" val="Abteilungen"/>
+          <trans loc="el" val="Αναχωρήσεις"/>
+          <trans loc="en_GB" val="Departments"/>
           <trans loc="es" val="Departmentos"/>
           <trans loc="fr" val="Services"/>
+          <trans loc="id" val="Departemen"/>
           <trans loc="pt_BR" val="Departamentos"/>
           <trans loc="sl" val="Sektorji"/>
         </trans_set>
@@ -2735,8 +3098,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Scény"/>
           <trans loc="de" val="Szenen"/>
+          <trans loc="el" val="Σκηνές"/>
+          <trans loc="en_GB" val="Scenes"/>
           <trans loc="es" val="Escenas"/>
           <trans loc="fr" val="Scènes"/>
+          <trans loc="id" val="Scene"/>
           <trans loc="pt_BR" val="Cenas"/>
           <trans loc="sl" val="Prizori"/>
         </trans_set>
@@ -2749,9 +3115,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -2770,8 +3139,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Tým"/>
                 <trans loc="de" val="Abteilung"/>
+                <trans loc="el" val="Διαμέρισμα"/>
+                <trans loc="en_GB" val="Department"/>
                 <trans loc="es" val="Departmento"/>
                 <trans loc="fr" val="Service"/>
+                <trans loc="id" val="Departemen"/>
                 <trans loc="pt_BR" val="Departamento"/>
                 <trans loc="sl" val="Sektor"/>
               </trans_set>
@@ -2786,9 +3158,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Kontakt"/>
                 <trans loc="de" val="Kontakt"/>
+                <trans loc="el" val="Επαφή"/>
+                <trans loc="en_GB" val="Contact"/>
                 <trans loc="eo" val="Kontakto"/>
                 <trans loc="es" val="Contacto"/>
                 <trans loc="fr" val="Contact"/>
+                <trans loc="id" val="Kontak"/>
                 <trans loc="pt_BR" val="Contato"/>
                 <trans loc="sl" val="Stik"/>
               </trans_set>
@@ -2802,9 +3177,12 @@ Orientation=portrait
                 <trans_set>
                   <trans loc="cs" val="Adresa"/>
                   <trans loc="de" val="Adresse"/>
+                  <trans loc="el" val="Διεύθυνση"/>
+                  <trans loc="en_GB" val="Address"/>
                   <trans loc="eo" val="Adreso"/>
                   <trans loc="es" val="Dirección"/>
                   <trans loc="fr" val="Adresse"/>
+                  <trans loc="id" val="Alamat"/>
                   <trans loc="pt_BR" val="Endereço"/>
                   <trans loc="sl" val="Naslov"/>
                 </trans_set>
@@ -2831,8 +3209,11 @@ Orientation=portrait
                 <trans_set>
                   <trans loc="cs" val="Agent"/>
                   <trans loc="de" val="Agent"/>
+                  <trans loc="el" val="Συντελεστής"/>
+                  <trans loc="en_GB" val="Agent"/>
                   <trans loc="es" val="Agente"/>
                   <trans loc="fr" val="Agent"/>
+                  <trans loc="id" val="Agen"/>
                   <trans loc="pt_BR" val="Agente"/>
                   <trans loc="sl" val="Agent"/>
                 </trans_set>
@@ -2881,8 +3262,11 @@ Orientation=portrait
                 <trans_set>
                   <trans loc="cs" val="Název týmu"/>
                   <trans loc="de" val="Abteilungsname"/>
+                  <trans loc="el" val="Όνομα διαμερίσματος"/>
+                  <trans loc="en_GB" val="Department Name"/>
                   <trans loc="es" val="Nombre del departamento"/>
                   <trans loc="fr" val="Nom du service"/>
+                  <trans loc="id" val="Nama Departemen"/>
                   <trans loc="pt_BR" val="Nome do departamento"/>
                   <trans loc="sl" val="Ime sektorja"/>
                 </trans_set>
@@ -2903,8 +3287,11 @@ Orientation=portrait
                   <trans_set>
                     <trans loc="cs" val="Název týmu"/>
                     <trans loc="de" val="Abteilungsname"/>
+                    <trans loc="el" val="Όνομα διαμερίσματος"/>
+                    <trans loc="en_GB" val="Department Name"/>
                     <trans loc="es" val="Nombre del departamento"/>
                     <trans loc="fr" val="Nom du service"/>
+                    <trans loc="id" val="Nama Departemen"/>
                     <trans loc="pt_BR" val="Nome do departamento"/>
                     <trans loc="sl" val="Ime sektorja"/>
                   </trans_set>
@@ -2957,8 +3344,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Seznam štábu"/>
           <trans loc="de" val="Stabliste"/>
+          <trans loc="el" val="Λίστα πληρώματος"/>
+          <trans loc="en_GB" val="Crew List"/>
           <trans loc="es" val="Lista de personal"/>
           <trans loc="fr" val="Liste de l'équipe"/>
+          <trans loc="id" val="Daftar Kru"/>
           <trans loc="pt_BR" val="Lista da equipe"/>
           <trans loc="sl" val="Seznam ekipe"/>
         </trans_set>
@@ -2971,8 +3361,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Dodávky"/>
       <trans loc="de" val="Lieferungen"/>
+      <trans loc="el" val="Παραδόσεις"/>
+      <trans loc="en_GB" val="Deliveries"/>
       <trans loc="es" val="Entregas"/>
       <trans loc="fr" val="Livraisons"/>
+      <trans loc="id" val="Pengiriman"/>
       <trans loc="pt_BR" val="Entregas"/>
       <trans loc="sl" val="Dostave"/>
     </trans_set>
@@ -2983,8 +3376,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID dodávky"/>
           <trans loc="de" val="Lieferungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό διανομής"/>
+          <trans loc="en_GB" val="Delivery ID"/>
           <trans loc="es" val="ID de entrega"/>
           <trans loc="fr" val="ID de la livraison"/>
+          <trans loc="id" val="ID Pengiriman"/>
           <trans loc="pt_BR" val="ID de entrega"/>
           <trans loc="sl" val="ID dostave"/>
         </trans_set>
@@ -2994,8 +3390,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Datum příjezdu"/>
           <trans loc="de" val="Eingangsdatum"/>
+          <trans loc="el" val="Ημερομηνία άφιξης"/>
+          <trans loc="en_GB" val="Arrival Date"/>
           <trans loc="es" val="Fecha de llegada"/>
           <trans loc="fr" val="Date d'arrivée"/>
+          <trans loc="id" val="Tanggal Kedatangan"/>
           <trans loc="pt_BR" val="Data de chegada"/>
           <trans loc="sl" val="Datum prihoda"/>
         </trans_set>
@@ -3015,8 +3414,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -3036,8 +3438,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -3047,8 +3452,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Čas příjezdu"/>
           <trans loc="de" val="Lieferungszeit"/>
+          <trans loc="el" val="Ώρα άφιξης"/>
+          <trans loc="en_GB" val="Arrival Time"/>
           <trans loc="es" val="Hora de llegada"/>
           <trans loc="fr" val="Heure d'arrivée"/>
+          <trans loc="id" val="Waktu Kedatangan"/>
           <trans loc="pt_BR" val="Hora de chegada"/>
           <trans loc="sl" val="Čas prihoda"/>
         </trans_set>
@@ -3058,8 +3466,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Místo příjezdu"/>
           <trans loc="de" val="Lieferungsadresse"/>
+          <trans loc="el" val="Τοποθεσία άφιξης"/>
+          <trans loc="en_GB" val="Arrival Place"/>
           <trans loc="es" val="Lugar de llegada"/>
           <trans loc="fr" val="Lieu d'arrivée"/>
+          <trans loc="id" val="Tempat Kedatangan"/>
           <trans loc="pt_BR" val="Local de chegada"/>
           <trans loc="sl" val="Mesto prihoda"/>
         </trans_set>
@@ -3069,8 +3480,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Čas odjezdu"/>
           <trans loc="de" val="Sendungszeit"/>
+          <trans loc="el" val="Ώρα αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Time"/>
           <trans loc="es" val="Hora de salida"/>
           <trans loc="fr" val="Heure de départ"/>
+          <trans loc="id" val="Waktu Keberangkatan"/>
           <trans loc="pt_BR" val="Hora de saída"/>
           <trans loc="sl" val="Čas odhoda"/>
         </trans_set>
@@ -3080,8 +3494,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Datum odjezdu"/>
           <trans loc="de" val="Sendungsdatum"/>
+          <trans loc="el" val="Ημερομηνία αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Date"/>
           <trans loc="es" val="Fecha de salida"/>
           <trans loc="fr" val="Date de départ"/>
+          <trans loc="id" val="Tanggal Keberangkatan"/>
           <trans loc="pt_BR" val="Data de saída"/>
           <trans loc="sl" val="Datum odhoda"/>
         </trans_set>
@@ -3091,8 +3508,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Místo odjezdu"/>
           <trans loc="de" val="Sendungsaddresse"/>
+          <trans loc="el" val="Τοποθεσία αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Place"/>
           <trans loc="es" val="Lugar de salida"/>
           <trans loc="fr" val="Lieu de départ"/>
+          <trans loc="id" val="Tempat Keberangkatan"/>
           <trans loc="pt_BR" val="Local de saída"/>
           <trans loc="sl" val="Mesto odhoda"/>
         </trans_set>
@@ -3102,9 +3522,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -3114,9 +3537,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -3127,8 +3553,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kontakt při odjezdu"/>
           <trans loc="de" val="Sendungskontakt"/>
+          <trans loc="el" val="Επικοινωνία αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Contact"/>
           <trans loc="es" val="Contacto de salida"/>
           <trans loc="fr" val="Contact au départ"/>
+          <trans loc="id" val="Kontak Keberangkatan"/>
           <trans loc="pt_BR" val="Contato de saída"/>
           <trans loc="sl" val="Stik ob odhodu"/>
         </trans_set>
@@ -3137,8 +3566,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kontakt při příjezdu"/>
           <trans loc="de" val="Empfaengerkontakt"/>
+          <trans loc="el" val="Επικοινωνία άφιξης"/>
+          <trans loc="en_GB" val="Arrival Contact"/>
           <trans loc="es" val="Contacto de llegada"/>
           <trans loc="fr" val="Contact à l'arrivée"/>
+          <trans loc="id" val="Kontak Kedatangan"/>
           <trans loc="pt_BR" val="Contato de chegada"/>
           <trans loc="sl" val="Stik ob prihodu"/>
         </trans_set>
@@ -3159,8 +3591,11 @@ Orientation=portrait
                 <trans_set>
                   <trans loc="cs" val="Název odjezdu"/>
                   <trans loc="de" val="Sendername"/>
+                  <trans loc="el" val="Όνομα αναχώρησης"/>
+                  <trans loc="en_GB" val="Departure Name"/>
                   <trans loc="es" val="Nombre de salida"/>
                   <trans loc="fr" val="Nom du départ"/>
+                  <trans loc="id" val="Nama Keberangkatan"/>
                   <trans loc="pt_BR" val="Nome de saída"/>
                   <trans loc="sl" val="Ime odhoda"/>
                 </trans_set>
@@ -3178,8 +3613,11 @@ Orientation=portrait
                 <trans_set>
                   <trans loc="cs" val="Název příjezdu"/>
                   <trans loc="de" val="Empfängerkontakt"/>
+                  <trans loc="el" val="Όνομα άφιξης"/>
+                  <trans loc="en_GB" val="Arrival Name"/>
                   <trans loc="es" val="Nombre de llegada"/>
                   <trans loc="fr" val="Nom de l'arrivée"/>
+                  <trans loc="id" val="Nama Kedatangan"/>
                   <trans loc="pt_BR" val="Nome de chegada"/>
                   <trans loc="sl" val="Ime prihoda"/>
                 </trans_set>
@@ -3201,9 +3639,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -3219,8 +3660,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Odjezd"/>
                 <trans loc="de" val="Departure"/>
+                <trans loc="el" val="Αναχώρηση"/>
+                <trans loc="en_GB" val="Departure"/>
                 <trans loc="es" val="Salida"/>
                 <trans loc="fr" val="Départ"/>
+                <trans loc="id" val="Keberangkatan"/>
                 <trans loc="pt_BR" val="Saída"/>
                 <trans loc="sl" val="Odhod"/>
               </trans_set>
@@ -3244,8 +3688,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Příjezd"/>
                 <trans loc="de" val="Arrival"/>
+                <trans loc="el" val="Άφιξη"/>
+                <trans loc="en_GB" val="Arrival"/>
                 <trans loc="es" val="Llegada"/>
                 <trans loc="fr" val="Arrivée"/>
+                <trans loc="id" val="Kedatangan"/>
                 <trans loc="pt_BR" val="Chegada"/>
                 <trans loc="sl" val="Prihod"/>
               </trans_set>
@@ -3323,8 +3770,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Odjezdy"/>
       <trans loc="de" val="Abteilungen"/>
+      <trans loc="el" val="Αναχωρήσεις"/>
+      <trans loc="en_GB" val="Departments"/>
       <trans loc="es" val="Departmentos"/>
       <trans loc="fr" val="Services"/>
+      <trans loc="id" val="Departemen"/>
       <trans loc="pt_BR" val="Departamentos"/>
       <trans loc="sl" val="Sektorji"/>
     </trans_set>
@@ -3335,8 +3785,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID odjezdu"/>
           <trans loc="de" val="Abteilungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό διαμερίσματος"/>
+          <trans loc="en_GB" val="Department ID"/>
           <trans loc="es" val="ID de departamento"/>
           <trans loc="fr" val="ID du service"/>
+          <trans loc="id" val="ID Departemen"/>
           <trans loc="pt_BR" val="ID de departamento"/>
           <trans loc="sl" val="ID sektorja"/>
         </trans_set>
@@ -3346,9 +3799,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -3358,9 +3814,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -3371,8 +3830,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Tým štábu"/>
           <trans loc="de" val="Abteilung Crew"/>
+          <trans loc="el" val="Διαμέρισμα πληρώματος"/>
+          <trans loc="en_GB" val="Department Crew"/>
           <trans loc="es" val="Personal del departamento"/>
           <trans loc="fr" val="Équipe du service"/>
+          <trans loc="id" val="Kru Departemen"/>
           <trans loc="pt_BR" val="Equipe do departamento"/>
           <trans loc="sl" val="Ekipa sektorja"/>
         </trans_set>
@@ -3385,9 +3847,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -3418,21 +3883,6 @@ Orientation=portrait
               </data_layout_item>
             </data_layout_portal>
             <data_layout_item name="comments" editable="true" use_default_formatting="true">
-              <formatting/>
-            </data_layout_item>
-          </data_layout_group>
-        </data_layout_groups>
-      </data_layout>
-      <data_layout name="list_related_related_department_crew" parent_table="crew">
-        <data_layout_groups>
-          <data_layout_group name="main">
-            <data_layout_item name="description" editable="true" use_default_formatting="true">
-              <formatting/>
-            </data_layout_item>
-            <data_layout_item name="contact_id" editable="true" use_default_formatting="true">
-              <formatting/>
-            </data_layout_item>
-            <data_layout_item name="name_full" editable="true" use_default_formatting="true">
               <formatting/>
             </data_layout_item>
           </data_layout_group>
@@ -3478,8 +3928,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Vybavení"/>
       <trans loc="de" val="Ausrüstung"/>
+      <trans loc="el" val="Εξοπλισμός"/>
+      <trans loc="en_GB" val="Equipment"/>
       <trans loc="es" val="Equipamiento"/>
       <trans loc="fr" val="Équipement"/>
+      <trans loc="id" val="Peralatan"/>
       <trans loc="pt_BR" val="Equipamento"/>
       <trans loc="sl" val="Oprema"/>
     </trans_set>
@@ -3489,8 +3942,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID vybavení"/>
           <trans loc="de" val="Ausrüstungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό εξοπλισμού"/>
+          <trans loc="en_GB" val="Equipment ID"/>
           <trans loc="es" val="ID de equipamiento"/>
           <trans loc="fr" val="ID de l'équipement"/>
+          <trans loc="id" val="ID Peralatan"/>
           <trans loc="pt_BR" val="ID de equipamento"/>
           <trans loc="sl" val="ID opreme"/>
         </trans_set>
@@ -3500,9 +3956,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -3512,9 +3971,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -3525,8 +3987,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Scény"/>
           <trans loc="de" val="Szenen"/>
+          <trans loc="el" val="Σκηνές"/>
+          <trans loc="en_GB" val="Scenes"/>
           <trans loc="es" val="Escenas"/>
           <trans loc="fr" val="Scènes"/>
+          <trans loc="id" val="Scene"/>
           <trans loc="pt_BR" val="Cenas"/>
           <trans loc="sl" val="Prizori"/>
         </trans_set>
@@ -3539,9 +4004,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -3553,9 +4021,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -3613,8 +4084,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Cestování"/>
       <trans loc="de" val="Fahrten"/>
+      <trans loc="el" val="Ταξίδια"/>
+      <trans loc="en_GB" val="Journeys"/>
       <trans loc="es" val="Viajes"/>
       <trans loc="fr" val="Trajets"/>
+      <trans loc="id" val="Perjalanan"/>
       <trans loc="pt_BR" val="Jornadas"/>
       <trans loc="sl" val="Potovanja"/>
     </trans_set>
@@ -3625,8 +4099,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID cesty"/>
           <trans loc="de" val="Fahrtkennung"/>
+          <trans loc="el" val="Αναγνωριστικό ταξιδιού"/>
+          <trans loc="en_GB" val="Journey ID"/>
           <trans loc="es" val="ID de viajes"/>
           <trans loc="fr" val="ID du trajet"/>
+          <trans loc="id" val="ID Perjalanan"/>
           <trans loc="pt_BR" val="ID de jornada"/>
           <trans loc="sl" val="ID potovanja"/>
         </trans_set>
@@ -3636,9 +4113,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámka"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχολιασμός"/>
+          <trans loc="en_GB" val="Comment"/>
           <trans loc="eo" val="Komento"/>
           <trans loc="es" val="Comentario"/>
           <trans loc="fr" val="Commentaire "/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentário"/>
           <trans loc="sl" val="Opomba"/>
         </trans_set>
@@ -3648,9 +4128,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -3660,8 +4143,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Datum příjezdu"/>
           <trans loc="de" val="Ankunftsdatum"/>
+          <trans loc="el" val="Ημερομηνία άφιξης"/>
+          <trans loc="en_GB" val="Arrival Date"/>
           <trans loc="es" val="Fecha de llegada"/>
           <trans loc="fr" val="Date d'arrivée"/>
+          <trans loc="id" val="Tanggal Kedatangan"/>
           <trans loc="pt_BR" val="Data de chegada"/>
           <trans loc="sl" val="Datum prihoda"/>
         </trans_set>
@@ -3671,8 +4157,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Čas příjezdu"/>
           <trans loc="de" val="Ankunftszeit"/>
+          <trans loc="el" val="ΏRA άφιξης"/>
+          <trans loc="en_GB" val="Arrival Time"/>
           <trans loc="es" val="Hora de llegada"/>
           <trans loc="fr" val="Heure d'arrivée"/>
+          <trans loc="id" val="Waktu Kedatangan"/>
           <trans loc="pt_BR" val="Hora de chegada"/>
           <trans loc="sl" val="Čas prihoda"/>
         </trans_set>
@@ -3682,8 +4171,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Místo příjezdu"/>
           <trans loc="de" val="Ankunftsort"/>
+          <trans loc="el" val="Τοποθεσία άφιξης"/>
+          <trans loc="en_GB" val="Arrival Place"/>
           <trans loc="es" val="Lugar de llegada"/>
           <trans loc="fr" val="Lieu d'arrivée"/>
+          <trans loc="id" val="Tempat Kedatangan"/>
           <trans loc="pt_BR" val="Local de chegada"/>
           <trans loc="sl" val="Mesto prihoda"/>
         </trans_set>
@@ -3693,8 +4185,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Datum odjezdu"/>
           <trans loc="de" val="Abfahrtsdatum"/>
+          <trans loc="el" val="Ημερομηνία αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Date"/>
           <trans loc="es" val="Fecha de salida"/>
           <trans loc="fr" val="Date du départ"/>
+          <trans loc="id" val="Tanggal Keberangkatan"/>
           <trans loc="pt_BR" val="Data de saída"/>
           <trans loc="sl" val="Datum odhoda"/>
         </trans_set>
@@ -3704,8 +4199,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Čas odjezdu"/>
           <trans loc="de" val="Abfahrtszeit"/>
+          <trans loc="el" val="Ώρα αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Time"/>
           <trans loc="es" val="Hora de salida"/>
           <trans loc="fr" val="Heure du départ"/>
+          <trans loc="id" val="Waktu Keberangkatan"/>
           <trans loc="pt_BR" val="Hora de saída"/>
           <trans loc="sl" val="Čas odhoda"/>
         </trans_set>
@@ -3715,8 +4213,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Místo odjezdu"/>
           <trans loc="de" val="Abfahrtsort"/>
+          <trans loc="el" val="Τοποθεσία αναχώρησης"/>
+          <trans loc="en_GB" val="Departure Place"/>
           <trans loc="es" val="Lugar de salida"/>
           <trans loc="fr" val="Lieu de départ"/>
+          <trans loc="id" val="Tempat Keberangkatan"/>
           <trans loc="pt_BR" val="Local de saída"/>
           <trans loc="sl" val="Mesto odhoda"/>
         </trans_set>
@@ -3736,8 +4237,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -3748,9 +4252,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kontakty"/>
           <trans loc="de" val="Kontakte"/>
+          <trans loc="el" val="Επαφές"/>
+          <trans loc="en_GB" val="Contacts"/>
           <trans loc="eo" val="Kontaktoj"/>
           <trans loc="es" val="Contactos"/>
           <trans loc="fr" val="Contacts"/>
+          <trans loc="id" val="Kontak"/>
           <trans loc="pt_BR" val="Contatos"/>
           <trans loc="sl" val="Stiki"/>
         </trans_set>
@@ -3790,9 +4297,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -3808,9 +4318,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Osoba"/>
                 <trans loc="de" val="Person"/>
+                <trans loc="el" val="Άτομο"/>
+                <trans loc="en_GB" val="Person"/>
                 <trans loc="eo" val="Persono"/>
                 <trans loc="es" val="Persona"/>
                 <trans loc="fr" val="Personne"/>
+                <trans loc="id" val="Orang"/>
                 <trans loc="pt_BR" val="Pessoa"/>
                 <trans loc="sl" val="Oseba"/>
               </trans_set>
@@ -3825,8 +4338,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Odjezd"/>
                 <trans loc="de" val="Abfahrt"/>
+                <trans loc="el" val="Αναχώρηση"/>
+                <trans loc="en_GB" val="Departure"/>
                 <trans loc="es" val="Salida"/>
                 <trans loc="fr" val="Départ"/>
+                <trans loc="id" val="Keberangkatan"/>
                 <trans loc="pt_BR" val="Partida"/>
                 <trans loc="sl" val="Odhod"/>
               </trans_set>
@@ -3844,8 +4360,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Příjezd"/>
                 <trans loc="de" val="Ankunft"/>
+                <trans loc="el" val="Άφιξη"/>
+                <trans loc="en_GB" val="Arrival"/>
                 <trans loc="es" val="Llegada"/>
                 <trans loc="fr" val="Arrivée"/>
+                <trans loc="id" val="Kedatangan"/>
                 <trans loc="pt_BR" val="Chegada"/>
                 <trans loc="sl" val="Prihod"/>
               </trans_set>
@@ -3901,8 +4420,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Místa"/>
       <trans loc="de" val="Orte"/>
+      <trans loc="el" val="Τοποθεσίες"/>
+      <trans loc="en_GB" val="Locations"/>
       <trans loc="es" val="Ubicaciones"/>
       <trans loc="fr" val="Emplacements"/>
+      <trans loc="id" val="Lokasi"/>
       <trans loc="pt_BR" val="Locais"/>
       <trans loc="sl" val="Lokacije"/>
     </trans_set>
@@ -3912,8 +4434,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID místa"/>
           <trans loc="de" val="Ortskennung"/>
+          <trans loc="el" val="Αναγνωριστικό τοποθεσίας"/>
+          <trans loc="en_GB" val="Location ID"/>
           <trans loc="es" val="ID de ubicación"/>
           <trans loc="fr" val="ID de l'emplacement"/>
+          <trans loc="id" val="ID Lokasi"/>
           <trans loc="pt_BR" val="ID de locação"/>
           <trans loc="sl" val="ID lokacije"/>
         </trans_set>
@@ -3923,9 +4448,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -3935,9 +4463,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Ulice"/>
           <trans loc="de" val="Straße"/>
+          <trans loc="el" val="Οδός"/>
+          <trans loc="en_GB" val="Street"/>
           <trans loc="eo" val="Strato"/>
           <trans loc="es" val="Calle"/>
           <trans loc="fr" val="Rue"/>
+          <trans loc="id" val="Jalan"/>
           <trans loc="pt_BR" val="Rua"/>
           <trans loc="sl" val="Ulica"/>
         </trans_set>
@@ -3947,9 +4478,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Město"/>
           <trans loc="de" val="Stadt"/>
+          <trans loc="el" val="Πόλη"/>
+          <trans loc="en_GB" val="Town"/>
           <trans loc="eo" val="Urbo"/>
           <trans loc="es" val="Ciudad"/>
           <trans loc="fr" val="Ville"/>
+          <trans loc="id" val="Kota"/>
           <trans loc="pt_BR" val="Cidade"/>
           <trans loc="sl" val="Mesto"/>
         </trans_set>
@@ -3959,8 +4493,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Region"/>
           <trans loc="de" val="Kreis"/>
+          <trans loc="el" val="Νομός"/>
+          <trans loc="en_GB" val="County"/>
           <trans loc="es" val="Condado"/>
           <trans loc="fr" val="Comté"/>
+          <trans loc="id" val="County"/>
           <trans loc="pt_BR" val="Condado"/>
           <trans loc="sl" val="Okrožje"/>
         </trans_set>
@@ -3970,9 +4507,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Země"/>
           <trans loc="de" val="Land"/>
+          <trans loc="el" val="Χώρα"/>
+          <trans loc="en_GB" val="Country"/>
           <trans loc="eo" val="Lando"/>
           <trans loc="es" val="País"/>
           <trans loc="fr" val="Pays"/>
+          <trans loc="id" val="Negara"/>
           <trans loc="pt_BR" val="País"/>
           <trans loc="sl" val="Država"/>
         </trans_set>
@@ -3982,8 +4522,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="PSČ"/>
           <trans loc="de" val="Postleitzahl"/>
+          <trans loc="el" val="Ταχ. κώδικας"/>
+          <trans loc="en_GB" val="Postcode"/>
           <trans loc="es" val="Código postal"/>
           <trans loc="fr" val="Code postal"/>
+          <trans loc="id" val="Kode Pos"/>
           <trans loc="pt_BR" val="CEP"/>
           <trans loc="sl" val="Poštna številka"/>
         </trans_set>
@@ -3993,9 +4536,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -4015,8 +4561,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -4026,8 +4575,10 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Pronájem"/>
           <trans loc="de" val="Mieten"/>
+          <trans loc="en_GB" val="Rent"/>
           <trans loc="es" val="Renta"/>
           <trans loc="fr" val="Location"/>
+          <trans loc="id" val="Sewa"/>
           <trans loc="pt_BR" val="Locação"/>
           <trans loc="sl" val="Najemnina"/>
         </trans_set>
@@ -4038,8 +4589,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Scény"/>
           <trans loc="de" val="Szenen"/>
+          <trans loc="el" val="Σκηνές"/>
+          <trans loc="en_GB" val="Scenes"/>
           <trans loc="es" val="Escenas"/>
           <trans loc="fr" val="Scènes"/>
+          <trans loc="id" val="Scene"/>
           <trans loc="pt_BR" val="Cenas"/>
           <trans loc="sl" val="Prizori"/>
         </trans_set>
@@ -4048,9 +4602,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kontakty"/>
           <trans loc="de" val="Kontakte"/>
+          <trans loc="el" val="Επαφές"/>
+          <trans loc="en_GB" val="Contacts"/>
           <trans loc="eo" val="Kontaktoj"/>
           <trans loc="es" val="Contactos"/>
           <trans loc="fr" val="Contacts"/>
+          <trans loc="id" val="Kontak"/>
           <trans loc="pt_BR" val="Contatos"/>
           <trans loc="sl" val="Stiki"/>
         </trans_set>
@@ -4063,8 +4620,11 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -4080,9 +4640,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Adresa"/>
                 <trans loc="de" val="Adresse"/>
+                <trans loc="el" val="Διεύθυνση"/>
+                <trans loc="en_GB" val="Address"/>
                 <trans loc="eo" val="Adreso"/>
                 <trans loc="es" val="Dirección"/>
                 <trans loc="fr" val="Adresse"/>
+                <trans loc="id" val="Alamat"/>
                 <trans loc="pt_BR" val="Endereço"/>
                 <trans loc="sl" val="Naslov"/>
               </trans_set>
@@ -4106,8 +4669,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Kontaktní osoba"/>
                 <trans loc="de" val="Kontakterson"/>
+                <trans loc="el" val="Επικοινωνία ατόμου"/>
+                <trans loc="en_GB" val="Contact Person"/>
                 <trans loc="es" val="Persona de contacto"/>
                 <trans loc="fr" val="Personne à contacter"/>
+                <trans loc="id" val="Contact Person"/>
                 <trans loc="pt_BR" val="Pessoa de contato"/>
                 <trans loc="sl" val="Kontaktna oseba"/>
               </trans_set>
@@ -4210,8 +4776,10 @@ Orientation=portrait
     </example_rows>
     <trans_set>
       <trans loc="cs" val="Rekvizity"/>
+      <trans loc="en_GB" val="Props"/>
       <trans loc="es" val="Accesorios"/>
       <trans loc="fr" val="Propriétés"/>
+      <trans loc="id" val="Prop"/>
       <trans loc="pt_BR" val="Adereços"/>
       <trans loc="sl" val="Rekviziti"/>
     </trans_set>
@@ -4221,8 +4789,10 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID rekvizity"/>
           <trans loc="de" val="Themenkennung"/>
+          <trans loc="en_GB" val="Prop ID"/>
           <trans loc="es" val="ID de accesorio"/>
           <trans loc="fr" val="ID de la propriété"/>
+          <trans loc="id" val="ID Prop"/>
           <trans loc="pt_BR" val="ID de adereço"/>
           <trans loc="sl" val="ID rekvizita"/>
         </trans_set>
@@ -4232,8 +4802,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -4243,9 +4816,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -4255,9 +4831,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -4286,9 +4865,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -4303,9 +4885,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -4364,8 +4949,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Obsazení scény"/>
       <trans loc="de" val="Szenenbesetzung"/>
+      <trans loc="el" val="Πρωταγωνιστές σκηνής"/>
+      <trans loc="en_GB" val="Scene Cast"/>
       <trans loc="es" val="Reparto de la escena"/>
       <trans loc="fr" val="Acteurs de la scène"/>
+      <trans loc="id" val="Cast Scene"/>
       <trans loc="pt_BR" val="Elenco da cena"/>
       <trans loc="sl" val="Zasedba vlog prizora"/>
     </trans_set>
@@ -4375,8 +4963,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID obsazení scény"/>
           <trans loc="de" val="Szenenbesetzungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό πρωταγωνιστών σκηνής"/>
+          <trans loc="en_GB" val="Scene Cast ID"/>
           <trans loc="es" val="ID de reparto de escena"/>
           <trans loc="fr" val="ID des acteurs de la scène"/>
+          <trans loc="id" val="ID Cast Scene"/>
           <trans loc="pt_BR" val="ID de elenco da cena"/>
           <trans loc="sl" val="ID zasedbe prizora"/>
         </trans_set>
@@ -4386,8 +4977,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -4407,8 +5001,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID obsazení"/>
           <trans loc="de" val="Besetzungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό πρωταγωνιστών"/>
+          <trans loc="en_GB" val="Cast ID"/>
           <trans loc="es" val="ID de reparto"/>
           <trans loc="fr" val="ID des acteurs"/>
+          <trans loc="id" val="ID Cast"/>
           <trans loc="pt_BR" val="ID de elenco"/>
           <trans loc="sl" val="ID zasedbe"/>
         </trans_set>
@@ -4418,8 +5015,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szenenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID de cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -4430,8 +5030,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Obsazení"/>
           <trans loc="de" val="Besetzung"/>
+          <trans loc="el" val="Πρωταγωνιστές"/>
+          <trans loc="en_GB" val="Cast"/>
           <trans loc="es" val="Reparto"/>
           <trans loc="fr" val="Acteurs"/>
+          <trans loc="id" val="Cast"/>
           <trans loc="pt_BR" val="Elenco"/>
           <trans loc="sl" val="Zasedba"/>
         </trans_set>
@@ -4468,9 +5071,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Přehled"/>
                 <trans loc="de" val="Übersicht"/>
+                <trans loc="el" val="Επισκόπηση"/>
+                <trans loc="en_GB" val="Overview"/>
                 <trans loc="eo" val="Superrigardo"/>
                 <trans loc="es" val="Visión general"/>
                 <trans loc="fr" val="Résumé"/>
+                <trans loc="id" val="Ringkasan"/>
                 <trans loc="pt_BR" val="Visão geral"/>
                 <trans loc="sl" val="Pregled"/>
               </trans_set>
@@ -4482,9 +5088,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Podrobnosti"/>
                 <trans loc="de" val="Details"/>
+                <trans loc="el" val="Λεπτομέρειες"/>
+                <trans loc="en_GB" val="Details"/>
                 <trans loc="eo" val="Detaloj"/>
                 <trans loc="es" val="Detalles"/>
                 <trans loc="fr" val="Détails"/>
+                <trans loc="id" val="Rincian"/>
                 <trans loc="pt_BR" val="Detalhes"/>
                 <trans loc="sl" val="Podrobnosti"/>
               </trans_set>
@@ -4535,8 +5144,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Kostým scény"/>
       <trans loc="de" val="Szene Besetzung"/>
+      <trans loc="el" val="Ενδυμασία σκηνής"/>
+      <trans loc="en_GB" val="Scene Costume"/>
       <trans loc="es" val="Vestuario de la escena"/>
       <trans loc="fr" val="Costume de la scène"/>
+      <trans loc="id" val="Kostum Scene"/>
       <trans loc="pt_BR" val="Figurino de cena"/>
       <trans loc="sl" val="Kostum prizora"/>
     </trans_set>
@@ -4546,8 +5158,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kostýmu scény"/>
           <trans loc="de" val="Szene Besetzung ID"/>
+          <trans loc="el" val="Αναγνωριστικό ενδυμασίας σκηνής"/>
+          <trans loc="en_GB" val="Scene Costume ID"/>
           <trans loc="es" val="ID de vestuario de escena"/>
           <trans loc="fr" val="ID du costume de la scène"/>
+          <trans loc="id" val="ID Kostum Scene"/>
           <trans loc="pt_BR" val="ID de figurino de cena"/>
           <trans loc="sl" val="ID kostuma prizora"/>
         </trans_set>
@@ -4557,9 +5172,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -4569,8 +5187,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szene-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene Id"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID da cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -4590,8 +5211,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kostýmu"/>
           <trans loc="de" val="Kostümkennung"/>
+          <trans loc="el" val="Αναγνωριστικό ενδυμασίας"/>
+          <trans loc="en_GB" val="Costume ID"/>
           <trans loc="es" val="ID de vestuario"/>
           <trans loc="fr" val="ID du costume"/>
+          <trans loc="id" val="ID Kostum"/>
           <trans loc="pt_BR" val="ID de figurino"/>
           <trans loc="sl" val="ID kostuma"/>
         </trans_set>
@@ -4602,8 +5226,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kostým"/>
           <trans loc="de" val="Kostüm"/>
+          <trans loc="el" val="Ενδυμασία"/>
+          <trans loc="en_GB" val="Costume"/>
           <trans loc="es" val="Vestuario"/>
           <trans loc="fr" val="Costume"/>
+          <trans loc="id" val="Kostum"/>
           <trans loc="pt_BR" val="Figurino"/>
           <trans loc="sl" val="Kostum"/>
         </trans_set>
@@ -4631,9 +5258,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -4645,9 +5275,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -4665,8 +5298,11 @@ Orientation=portrait
                 <trans_set>
                   <trans loc="cs" val="Název kostýmu"/>
                   <trans loc="de" val="Kostümname"/>
+                  <trans loc="el" val="Όνομα ενδυμασίας"/>
+                  <trans loc="en_GB" val="Costume Name"/>
                   <trans loc="es" val="Nombre del vestuario"/>
                   <trans loc="fr" val="Nom du costume"/>
+                  <trans loc="id" val="Nama Kostum"/>
                   <trans loc="pt_BR" val="Nome do figurino"/>
                   <trans loc="sl" val="Ime kostuma"/>
                 </trans_set>
@@ -4692,8 +5328,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Štáb scény"/>
       <trans loc="de" val="Szene Crew"/>
+      <trans loc="el" val="Πλήρωμα σκηνής"/>
+      <trans loc="en_GB" val="Scene Crew"/>
       <trans loc="es" val="Personal de la escena"/>
       <trans loc="fr" val="Acteurs de la scène"/>
+      <trans loc="id" val="Kru Scene"/>
       <trans loc="pt_BR" val="Equipe de cena"/>
       <trans loc="sl" val="Ekipa prizora"/>
     </trans_set>
@@ -4703,8 +5342,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID štábu scény"/>
           <trans loc="de" val="Szene Crew ID"/>
+          <trans loc="el" val="Αναγνωριστικό πληρώματος σκηνής"/>
+          <trans loc="en_GB" val="Scene Crew ID"/>
           <trans loc="es" val="ID de personal de escena"/>
           <trans loc="fr" val="ID des acteurs de la scène"/>
+          <trans loc="id" val="ID Kru Scene"/>
           <trans loc="pt_BR" val="ID de equipe de cena"/>
           <trans loc="sl" val="ID ekipe prizora"/>
         </trans_set>
@@ -4714,8 +5356,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentar"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -4735,8 +5380,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szene ID"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID de cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -4756,8 +5404,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID týmu"/>
           <trans loc="de" val="Abteilungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό διαμερίσματος"/>
+          <trans loc="en_GB" val="Department ID"/>
           <trans loc="es" val="ID de departamento"/>
           <trans loc="fr" val="ID du service"/>
+          <trans loc="id" val="ID Departemen"/>
           <trans loc="pt_BR" val="ID de departamento"/>
           <trans loc="sl" val="ID sektorja"/>
         </trans_set>
@@ -4768,8 +5419,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Tým"/>
           <trans loc="de" val="Abteilung"/>
+          <trans loc="el" val="Διαμέρισμα"/>
+          <trans loc="en_GB" val="Department"/>
           <trans loc="es" val="Departmento"/>
           <trans loc="fr" val="Service"/>
+          <trans loc="id" val="Departemen"/>
           <trans loc="pt_BR" val="Departamento"/>
           <trans loc="sl" val="Sektor"/>
         </trans_set>
@@ -4778,8 +5432,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Scény"/>
           <trans loc="de" val="Szenen"/>
+          <trans loc="el" val="Σκηνές"/>
+          <trans loc="en_GB" val="Scenes"/>
           <trans loc="es" val="Escenas"/>
           <trans loc="fr" val="Scènes"/>
+          <trans loc="id" val="Scene"/>
           <trans loc="pt_BR" val="Cenas"/>
           <trans loc="sl" val="Prizori"/>
         </trans_set>
@@ -4793,9 +5450,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Přehled"/>
                 <trans loc="de" val="Übersicht"/>
+                <trans loc="el" val="Επισκόπηση"/>
+                <trans loc="en_GB" val="Overview"/>
                 <trans loc="eo" val="Superrigardo"/>
                 <trans loc="es" val="Visión general"/>
                 <trans loc="fr" val="Résumé"/>
+                <trans loc="id" val="Ringkasan"/>
                 <trans loc="pt_BR" val="Visão geral"/>
                 <trans loc="sl" val="Pregled"/>
               </trans_set>
@@ -4807,9 +5467,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Podrobnosti"/>
                 <trans loc="de" val="Details"/>
+                <trans loc="el" val="Λεπτομέρειες"/>
+                <trans loc="en_GB" val="Details"/>
                 <trans loc="eo" val="Detaloj"/>
                 <trans loc="es" val="Detalles"/>
                 <trans loc="fr" val="Détails"/>
+                <trans loc="id" val="Rincian"/>
                 <trans loc="pt_BR" val="Detalhes"/>
                 <trans loc="sl" val="Podrobnosti"/>
               </trans_set>
@@ -4878,8 +5541,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID vybavení pro scénu"/>
           <trans loc="de" val="Szene Besetzung ID"/>
+          <trans loc="el" val="Αναγνωριστικό εξοπλισμού σκηνής"/>
+          <trans loc="en_GB" val="Scene Equipment ID"/>
           <trans loc="es" val="ID de equipamiento de escena"/>
           <trans loc="fr" val="Id de l'équipement de la scène"/>
+          <trans loc="id" val="ID Peralatan Scene"/>
           <trans loc="pt_BR" val="ID de equipamento de cena"/>
           <trans loc="sl" val="ID opreme za prizor"/>
         </trans_set>
@@ -4889,9 +5555,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -4911,8 +5580,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID vybavení"/>
           <trans loc="de" val="Ausrüstungskennung"/>
+          <trans loc="el" val="Αναγνωριστικό εξοπλισμού"/>
+          <trans loc="en_GB" val="Equipment ID"/>
           <trans loc="es" val="ID de equipamiento"/>
           <trans loc="fr" val="ID de l'équipement"/>
+          <trans loc="id" val="ID Peralatan"/>
           <trans loc="pt_BR" val="ID de equipamento"/>
           <trans loc="sl" val="ID opreme"/>
         </trans_set>
@@ -4922,8 +5594,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szenenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID da cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -4958,9 +5633,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -4972,9 +5650,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -4999,8 +5680,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Kompars pro scénu"/>
       <trans loc="de" val="Szene Besetzung"/>
+      <trans loc="el" val="Πρόσθετα σκηνής"/>
+      <trans loc="en_GB" val="Scene Extras"/>
       <trans loc="es" val="Extras de la escena"/>
       <trans loc="fr" val="Suppléments de la scène"/>
+      <trans loc="id" val="Ekstra Scene"/>
       <trans loc="pt_BR" val="Extras de cena"/>
       <trans loc="sl" val="Statisti prizora"/>
     </trans_set>
@@ -5010,8 +5694,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID komparsu pro scénu"/>
           <trans loc="de" val="Szene Besetzung ID"/>
+          <trans loc="el" val="Αναγνωριστικό πρόσθετων σκηνής"/>
+          <trans loc="en_GB" val="Scene Extras ID"/>
           <trans loc="es" val="ID de extras de escena"/>
           <trans loc="fr" val="ID des suppléments de la scène"/>
+          <trans loc="id" val="ID Ekstra Scene"/>
           <trans loc="pt_BR" val="ID de extra de cena"/>
           <trans loc="sl" val="ID statistov prizora"/>
         </trans_set>
@@ -5021,9 +5708,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -5033,9 +5723,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komenta literĉeno"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -5045,8 +5738,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szenenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID de cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -5066,8 +5762,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID kontaktu"/>
           <trans loc="de" val="Kontaktkennung"/>
+          <trans loc="el" val="Αναγνωριστικό επαφής"/>
+          <trans loc="en_GB" val="Contact ID"/>
           <trans loc="es" val="ID del contacto"/>
           <trans loc="fr" val="ID du contact"/>
+          <trans loc="id" val="ID Kontak"/>
           <trans loc="pt_BR" val="ID de contato"/>
           <trans loc="sl" val="ID stika"/>
         </trans_set>
@@ -5078,9 +5777,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Kontakt"/>
           <trans loc="de" val="Kontakt"/>
+          <trans loc="el" val="Επαφή"/>
+          <trans loc="en_GB" val="Contact"/>
           <trans loc="eo" val="Kontakto"/>
           <trans loc="es" val="Contacto"/>
           <trans loc="fr" val="Contact"/>
+          <trans loc="id" val="Kontak"/>
           <trans loc="pt_BR" val="Contato"/>
           <trans loc="sl" val="Stik"/>
         </trans_set>
@@ -5094,9 +5796,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Přehled"/>
                 <trans loc="de" val="Übersicht"/>
+                <trans loc="el" val="Επισκόπηση"/>
+                <trans loc="en_GB" val="Overview"/>
                 <trans loc="eo" val="Superrigardo"/>
                 <trans loc="es" val="Visión general"/>
                 <trans loc="fr" val="Résumé"/>
+                <trans loc="id" val="Ringkasan"/>
                 <trans loc="pt_BR" val="Visão geral"/>
                 <trans loc="sl" val="Pregled"/>
               </trans_set>
@@ -5108,9 +5813,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Podrobnosti"/>
                 <trans loc="de" val="Details"/>
+                <trans loc="el" val="Λεπτομέρειες"/>
+                <trans loc="en_GB" val="Details"/>
                 <trans loc="eo" val="Detaloj"/>
                 <trans loc="es" val="Detalles"/>
                 <trans loc="fr" val="Détails"/>
+                <trans loc="id" val="Rincian"/>
                 <trans loc="pt_BR" val="Detalhes"/>
                 <trans loc="sl" val="Podrobnosti"/>
               </trans_set>
@@ -5163,8 +5871,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Líčení pro scénu"/>
       <trans loc="de" val="Szenen-Makeup"/>
+      <trans loc="el" val="Μακιγιάζ σκηνής"/>
+      <trans loc="en_GB" val="Scene Makeup"/>
       <trans loc="es" val="Maquillaje de la escena"/>
       <trans loc="fr" val="Maquillage de la scène"/>
+      <trans loc="id" val="Makeup Scene"/>
       <trans loc="pt_BR" val="Maquiagem de cena"/>
       <trans loc="sl" val="Maska prizora"/>
     </trans_set>
@@ -5174,8 +5885,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID líčení pro scénu"/>
           <trans loc="de" val="Szenen-Makeup-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό μακιγιάζ σκηνής"/>
+          <trans loc="en_GB" val="Scene Makeup ID"/>
           <trans loc="es" val="ID de maquillaje de escena"/>
           <trans loc="fr" val="ID du maquillage de la scène"/>
+          <trans loc="id" val="ID Makeup Scene"/>
           <trans loc="pt_BR" val="ID de maquiagem de cena"/>
           <trans loc="sl" val="ID maske prizora"/>
         </trans_set>
@@ -5185,9 +5899,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="eo" val="Priskribo"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -5197,9 +5914,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -5209,8 +5929,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szenenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID de cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -5242,9 +5965,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -5256,8 +5982,11 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -5301,8 +6030,10 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Rekvizity pro scénu"/>
       <trans loc="de" val="Szene Besetzung"/>
+      <trans loc="en_GB" val="Scene Props"/>
       <trans loc="es" val="Accesorios de la escena"/>
       <trans loc="fr" val="Propriétés de la scène"/>
+      <trans loc="id" val="Prop Scene"/>
       <trans loc="pt_BR" val="Adereços de cena"/>
       <trans loc="sl" val="Rekviziti prizora"/>
     </trans_set>
@@ -5312,8 +6043,10 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID rekvizity pro scénu"/>
           <trans loc="de" val="Szene Besetzung ID"/>
+          <trans loc="en_GB" val="Scene Prop ID"/>
           <trans loc="es" val="ID de accesorio de escena"/>
           <trans loc="fr" val="ID de la propriété de la scène"/>
+          <trans loc="id" val="ID Prop Scene"/>
           <trans loc="pt_BR" val="ID de adereço de cena"/>
           <trans loc="sl" val="ID rekvizita prizora"/>
         </trans_set>
@@ -5323,8 +6056,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -5334,8 +6070,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szenenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de escena"/>
           <trans loc="fr" val="Id de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID de cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -5355,8 +6094,10 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID rekvizity"/>
           <trans loc="de" val="Themenkennung"/>
+          <trans loc="en_GB" val="Prop ID"/>
           <trans loc="es" val="ID de accesorio"/>
           <trans loc="fr" val="ID de la propriété"/>
+          <trans loc="id" val="ID Prop"/>
           <trans loc="pt_BR" val="ID de adereço"/>
           <trans loc="sl" val="ID rekvizita"/>
         </trans_set>
@@ -5366,8 +6107,10 @@ Orientation=portrait
       <relationship name="props" key="prop_id" other_table="props" other_key="prop_id" title="Props">
         <trans_set>
           <trans loc="cs" val="Rekvizity"/>
+          <trans loc="en_GB" val="Props"/>
           <trans loc="es" val="Accesorios"/>
           <trans loc="fr" val="Propriétés"/>
+          <trans loc="id" val="Prop"/>
           <trans loc="pt_BR" val="Adereços"/>
           <trans loc="sl" val="Rekviziti"/>
         </trans_set>
@@ -5395,9 +6138,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -5409,9 +6155,12 @@ Orientation=portrait
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -5464,8 +6213,11 @@ Orientation=portrait
     <trans_set>
       <trans loc="cs" val="Scény"/>
       <trans loc="de" val="Szenen"/>
+      <trans loc="el" val="Σκηνές"/>
+      <trans loc="en_GB" val="Scenes"/>
       <trans loc="es" val="Escenas"/>
       <trans loc="fr" val="Scènes"/>
+      <trans loc="id" val="Scene"/>
       <trans loc="pt_BR" val="Cenas"/>
       <trans loc="sl" val="Prizori"/>
     </trans_set>
@@ -5480,8 +6232,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID scény"/>
           <trans loc="de" val="Szenenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό σκηνής"/>
+          <trans loc="en_GB" val="Scene ID"/>
           <trans loc="es" val="ID de la escena"/>
           <trans loc="fr" val="ID de la scène"/>
+          <trans loc="id" val="ID Scene"/>
           <trans loc="pt_BR" val="ID de cena"/>
           <trans loc="sl" val="ID prizora"/>
         </trans_set>
@@ -5491,9 +6246,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Poznámky"/>
           <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="en_GB" val="Comments"/>
           <trans loc="eo" val="Komentoj"/>
           <trans loc="es" val="Comentarios"/>
           <trans loc="fr" val="Commentaires"/>
+          <trans loc="id" val="Komentar"/>
           <trans loc="pt_BR" val="Comentários"/>
           <trans loc="sl" val="Opombe"/>
         </trans_set>
@@ -5503,8 +6261,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Popis"/>
           <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="en_GB" val="Description"/>
           <trans loc="es" val="Descripción"/>
           <trans loc="fr" val="Description"/>
+          <trans loc="id" val="Deskripsi"/>
           <trans loc="pt_BR" val="Descrição"/>
           <trans loc="sl" val="Opis"/>
         </trans_set>
@@ -5524,8 +6285,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="ID místa"/>
           <trans loc="de" val="Ortskennung"/>
+          <trans loc="el" val="Αναγνωριστικό τοποθεσίας"/>
+          <trans loc="en_GB" val="Location ID"/>
           <trans loc="es" val="ID de ubicación"/>
           <trans loc="fr" val="ID de l'emplacement"/>
+          <trans loc="id" val="ID Lokasi"/>
           <trans loc="pt_BR" val="ID de locação"/>
           <trans loc="sl" val="ID lokacije"/>
         </trans_set>
@@ -5535,9 +6299,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Datum"/>
           <trans loc="de" val="Termin"/>
+          <trans loc="el" val="Ημερομηνία"/>
+          <trans loc="en_GB" val="Date"/>
           <trans loc="eo" val="Dato"/>
           <trans loc="es" val="Fecha"/>
           <trans loc="fr" val="Date"/>
+          <trans loc="id" val="Tanggal"/>
           <trans loc="pt_BR" val="Data"/>
           <trans loc="sl" val="Datum"/>
         </trans_set>
@@ -5547,9 +6314,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Čas"/>
           <trans loc="de" val="Zeit"/>
+          <trans loc="el" val="Χρόνος"/>
+          <trans loc="en_GB" val="Time"/>
           <trans loc="eo" val="Horo"/>
           <trans loc="es" val="Hora"/>
           <trans loc="fr" val="Heure"/>
+          <trans loc="id" val="Waktu"/>
           <trans loc="pt_BR" val="Hora"/>
           <trans loc="sl" val="Čas"/>
         </trans_set>
@@ -5559,8 +6329,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Stopka (v minutách)"/>
           <trans loc="de" val="Stop (Minuten)"/>
+          <trans loc="el" val="Διακοπή (λεπτά)"/>
+          <trans loc="en_GB" val="Stop (minutes)"/>
           <trans loc="es" val="Detener (minutos)"/>
           <trans loc="fr" val="Arrêt (minutes)"/>
+          <trans loc="id" val="Berhenti (menit)"/>
           <trans loc="pt_BR" val="Parada (minutes)"/>
           <trans loc="sl" val="Konec (v minutah)"/>
         </trans_set>
@@ -5572,9 +6345,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Den"/>
                 <trans loc="de" val="Tag"/>
+                <trans loc="el" val="Ημέρα"/>
+                <trans loc="en_GB" val="Day"/>
                 <trans loc="eo" val="Tago"/>
                 <trans loc="es" val="Día"/>
                 <trans loc="fr" val="Jour"/>
+                <trans loc="id" val="Siang"/>
                 <trans loc="pt_BR" val="Dia"/>
                 <trans loc="sl" val="Dan"/>
               </trans_set>
@@ -5583,9 +6359,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Noc"/>
                 <trans loc="de" val="Nacht"/>
+                <trans loc="el" val="Νύχτα"/>
+                <trans loc="en_GB" val="Night"/>
                 <trans loc="eo" val="Nokto"/>
                 <trans loc="es" val="Noche"/>
                 <trans loc="fr" val="Nuit"/>
+                <trans loc="id" val="Malam"/>
                 <trans loc="pt_BR" val="Noite"/>
                 <trans loc="sl" val="Noč"/>
               </trans_set>
@@ -5594,9 +6373,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Ráno"/>
                 <trans loc="de" val="Morgen"/>
+                <trans loc="el" val="Πρωί"/>
+                <trans loc="en_GB" val="Morning"/>
                 <trans loc="eo" val="Mateno"/>
                 <trans loc="es" val="Mañana"/>
                 <trans loc="fr" val="Matin"/>
+                <trans loc="id" val="Pagi"/>
                 <trans loc="pt_BR" val="Manhã"/>
                 <trans loc="sl" val="Jutro"/>
               </trans_set>
@@ -5605,9 +6387,12 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Večer"/>
                 <trans loc="de" val="Abend"/>
+                <trans loc="el" val="Απόγευμα"/>
+                <trans loc="en_GB" val="Evening"/>
                 <trans loc="eo" val="Vespero"/>
                 <trans loc="es" val="Noche"/>
                 <trans loc="fr" val="Soir"/>
+                <trans loc="id" val="Sore"/>
                 <trans loc="pt_BR" val="Tarde"/>
                 <trans loc="sl" val="Večer"/>
               </trans_set>
@@ -5615,8 +6400,11 @@ Orientation=portrait
             <custom_choice value="Dawn">
               <trans_set>
                 <trans loc="cs" val="Rozbřesk"/>
+                <trans loc="el" val="Αυγή"/>
+                <trans loc="en_GB" val="Dawn"/>
                 <trans loc="es" val="Amanecer"/>
                 <trans loc="fr" val="Aube"/>
+                <trans loc="id" val="Fajar"/>
                 <trans loc="pt_BR" val="Amanhecer"/>
                 <trans loc="sl" val="Zora"/>
               </trans_set>
@@ -5626,9 +6414,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Den/noc"/>
           <trans loc="de" val="Tag/Nacht"/>
+          <trans loc="el" val="Μέρα/Νύχτα"/>
+          <trans loc="en_GB" val="Day/Night"/>
           <trans loc="eo" val="Tago/Nokto"/>
           <trans loc="es" val="Día/Noche"/>
           <trans loc="fr" val="Jour/nuit"/>
+          <trans loc="id" val="Siang/Malam"/>
           <trans loc="pt_BR" val="Dia/Noite"/>
           <trans loc="sl" val="Dan/noč"/>
         </trans_set>
@@ -5640,8 +6431,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Interiér"/>
                 <trans loc="de" val="Innen"/>
+                <trans loc="el" val="Εσωτερικού"/>
+                <trans loc="en_GB" val="Interior"/>
                 <trans loc="es" val="Interior"/>
                 <trans loc="fr" val="Intérieur"/>
+                <trans loc="id" val="Interior"/>
                 <trans loc="pt_BR" val="Interior"/>
                 <trans loc="sl" val="Interier"/>
               </trans_set>
@@ -5650,8 +6444,11 @@ Orientation=portrait
               <trans_set>
                 <trans loc="cs" val="Exteriér"/>
                 <trans loc="de" val="Außen"/>
+                <trans loc="el" val="Εξωτερικός"/>
+                <trans loc="en_GB" val="Exterior"/>
                 <trans loc="es" val="Exterior"/>
                 <trans loc="fr" val="Extérieur"/>
+                <trans loc="id" val="Eksterior"/>
                 <trans loc="pt_BR" val="Exterior"/>
                 <trans loc="sl" val="Eksterier"/>
               </trans_set>
@@ -5661,8 +6458,11 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Interiér/exteriér"/>
           <trans loc="de" val="Innen/Außen"/>
+          <trans loc="el" val="Εσωτερικού/Εξωτερικού"/>
+          <trans loc="en_GB" val="Interior/Exterior"/>
           <trans loc="es" val="Interior/Exterior"/>
           <trans loc="fr" val="Intérieur/extérieur"/>
+          <trans loc="id" val="Interior/Eksterior"/>
           <trans loc="pt_BR" val="Interior/Exterior"/>
           <trans loc="sl" val="Interier/eksterier"/>
         </trans_set>
@@ -5672,9 +6472,12 @@ Orientation=portrait
         <trans_set>
           <trans loc="cs" val="Název"/>
           <trans loc="de" val="Szene"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="en_GB" val="Name"/>
           <trans loc="eo" val="Nomo"/>
           <trans loc="es" val="Nombre"/>
           <trans loc="fr" val="Nom"/>
+          <trans loc="id" val="Nama"/>
           <trans loc="pt_BR" val="Nome"/>
           <trans loc="sl" val="Ime"/>
         </trans_set>
@@ -5689,8 +6492,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Scéna"/>
           <trans loc="de" val="Szene"/>
+          <trans loc="el" val="Σκηνή"/>
+          <trans loc="en_GB" val="Scene"/>
           <trans loc="es" val="Escena"/>
           <trans loc="fr" val="Scène"/>
+          <trans loc="id" val="Scene"/>
           <trans loc="pt_BR" val="Cena"/>
           <trans loc="sl" val="Prizor"/>
         </trans_set>
@@ -5700,9 +6506,12 @@ else:
         <trans_set>
           <trans loc="cs" val="Stran"/>
           <trans loc="de" val="Seiten"/>
+          <trans loc="el" val="Σελίδες"/>
+          <trans loc="en_GB" val="Pages"/>
           <trans loc="eo" val="Paĝoj"/>
           <trans loc="es" val="Páginas"/>
           <trans loc="fr" val="Pages"/>
+          <trans loc="id" val="Halaman"/>
           <trans loc="pt_BR" val="Páginas"/>
           <trans loc="sl" val="Strani"/>
         </trans_set>
@@ -5712,8 +6521,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Den v scénáři"/>
           <trans loc="de" val="Drehtag"/>
+          <trans loc="el" val="Σενάριο ημέρας"/>
+          <trans loc="en_GB" val="Script Day"/>
           <trans loc="es" val="Guión del día"/>
           <trans loc="fr" val="Jour du scénario"/>
+          <trans loc="id" val="Hari Skrip"/>
           <trans loc="pt_BR" val="Roteiro do dia"/>
           <trans loc="sl" val="Dan v scenariju"/>
         </trans_set>
@@ -5724,9 +6536,12 @@ else:
         <trans_set>
           <trans loc="cs" val="Místa"/>
           <trans loc="de" val="Orte"/>
+          <trans loc="el" val="Τοποθεσίες"/>
+          <trans loc="en_GB" val="Locations"/>
           <trans loc="eo" val="Lokoj"/>
           <trans loc="es" val="Ubicaciones"/>
           <trans loc="fr" val="Emplacements"/>
+          <trans loc="id" val="Lokasi"/>
           <trans loc="pt_BR" val="Localizações"/>
           <trans loc="sl" val="Lokacije"/>
         </trans_set>
@@ -5735,8 +6550,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Dodatečný štáb"/>
           <trans loc="de" val="Zusätzliche Crew"/>
+          <trans loc="el" val="Επιπλέον πλήρωμα"/>
+          <trans loc="en_GB" val="Additional Crew"/>
           <trans loc="es" val="Personal adicional"/>
           <trans loc="fr" val="Équipe supplémentaires"/>
+          <trans loc="id" val="Kru Tambahan"/>
           <trans loc="pt_BR" val="Grupo adicional"/>
           <trans loc="sl" val="Dodatni člani ekipe"/>
         </trans_set>
@@ -5745,8 +6563,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Obsazení"/>
           <trans loc="de" val="Szene Besetzung"/>
+          <trans loc="el" val="Πρωταγωνιστές"/>
+          <trans loc="en_GB" val="Cast"/>
           <trans loc="es" val="Reparto"/>
           <trans loc="fr" val="Acteurs"/>
+          <trans loc="id" val="Cast"/>
           <trans loc="pt_BR" val="Elenco"/>
           <trans loc="sl" val="Zasedba"/>
         </trans_set>
@@ -5755,8 +6576,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Dodatečné vybavení"/>
           <trans loc="de" val="Zusätzliche Ausrüstung"/>
+          <trans loc="el" val="Επιπλέον εξοπλισμός:"/>
+          <trans loc="en_GB" val="Additional Equipment"/>
           <trans loc="es" val="Equipamiento adicional"/>
           <trans loc="fr" val="Équipement supplémentaire"/>
+          <trans loc="id" val="Peralatan Tambahan"/>
           <trans loc="pt_BR" val="Equipamento adicional"/>
           <trans loc="sl" val="Dodatna oprema"/>
         </trans_set>
@@ -5765,8 +6589,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Kompars"/>
           <trans loc="de" val="Extras"/>
+          <trans loc="el" val="Πρόσθετα"/>
+          <trans loc="en_GB" val="Extras"/>
           <trans loc="es" val="Extras"/>
           <trans loc="fr" val="Suppléments"/>
+          <trans loc="id" val="Ekstra"/>
           <trans loc="pt_BR" val="Extras"/>
           <trans loc="sl" val="Statisti"/>
         </trans_set>
@@ -5774,8 +6601,10 @@ else:
       <relationship name="scene_props" key="scene_id" other_table="scene_props" other_key="scene_id" auto_create="true" allow_edit="true" title="Props">
         <trans_set>
           <trans loc="cs" val="Rekvizity"/>
+          <trans loc="en_GB" val="Props"/>
           <trans loc="es" val="Accesorios"/>
           <trans loc="fr" val="Propriétés"/>
+          <trans loc="id" val="Prop"/>
           <trans loc="pt_BR" val="Adereços"/>
           <trans loc="sl" val="Rekviziti"/>
         </trans_set>
@@ -5784,8 +6613,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Kostým"/>
           <trans loc="de" val="Kostüm"/>
+          <trans loc="el" val="Ενδυμασία"/>
+          <trans loc="en_GB" val="Costume"/>
           <trans loc="es" val="Vestuario"/>
           <trans loc="fr" val="Costume"/>
+          <trans loc="id" val="Kostum"/>
           <trans loc="pt_BR" val="Figurino"/>
           <trans loc="sl" val="Kostum"/>
         </trans_set>
@@ -5794,8 +6626,11 @@ else:
         <trans_set>
           <trans loc="cs" val="Dodatečné líčení"/>
           <trans loc="de" val="Zusätzliches Makeup"/>
+          <trans loc="el" val="Επιπλέον μακιγιάζ"/>
+          <trans loc="en_GB" val="Additional Makeup"/>
           <trans loc="es" val="Maquillaje adicional"/>
           <trans loc="fr" val="Maquillage supplémentaire"/>
+          <trans loc="id" val="Makeup Tambahan"/>
           <trans loc="pt_BR" val="Maquiagem adicional"/>
           <trans loc="sl" val="Dodatna maska"/>
         </trans_set>
@@ -5808,9 +6643,12 @@ else:
             <trans_set>
               <trans loc="cs" val="Přehled"/>
               <trans loc="de" val="Übersicht"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="en_GB" val="Overview"/>
               <trans loc="eo" val="Superrigardo"/>
               <trans loc="es" val="Visión general"/>
               <trans loc="fr" val="Résumé"/>
+              <trans loc="id" val="Ringkasan"/>
               <trans loc="pt_BR" val="Visão geral"/>
               <trans loc="sl" val="Pregled"/>
             </trans_set>
@@ -5831,9 +6669,12 @@ else:
             <trans_set>
               <trans loc="cs" val="Podrobnosti"/>
               <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="en_GB" val="Details"/>
               <trans loc="eo" val="Detaloj"/>
               <trans loc="es" val="Detalles"/>
               <trans loc="fr" val="Détails"/>
+              <trans loc="id" val="Rincian"/>
               <trans loc="pt_BR" val="Detalhes"/>
               <trans loc="sl" val="Podrobnosti"/>
             </trans_set>
@@ -5848,8 +6689,11 @@ else:
               <trans_set>
                 <trans loc="cs" val="Scénář"/>
                 <trans loc="de" val="Stimmung"/>
+                <trans loc="el" val="Σενάριο"/>
+                <trans loc="en_GB" val="Scenario"/>
                 <trans loc="es" val="Escenario"/>
                 <trans loc="fr" val="Scénario"/>
+                <trans loc="id" val="Skenario"/>
                 <trans loc="pt_BR" val="Cenário"/>
                 <trans loc="sl" val="Scenarij"/>
               </trans_set>
@@ -5873,9 +6717,12 @@ else:
               <trans_set>
                 <trans loc="cs" val="Místo"/>
                 <trans loc="de" val="Ort"/>
+                <trans loc="el" val="Τοποθεσία"/>
+                <trans loc="en_GB" val="Location"/>
                 <trans loc="eo" val="Loko"/>
                 <trans loc="es" val="Ubicación"/>
                 <trans loc="fr" val="Emplacement"/>
+                <trans loc="id" val="Lokasi"/>
                 <trans loc="pt_BR" val="Locação"/>
                 <trans loc="sl" val="Lokacija"/>
               </trans_set>
@@ -5890,8 +6737,11 @@ else:
                   <trans_set>
                     <trans loc="cs" val="Jméno kontaktu"/>
                     <trans loc="de" val="Kontaktname"/>
+                    <trans loc="el" val="Όνομα επαφής"/>
+                    <trans loc="en_GB" val="Contact Name"/>
                     <trans loc="es" val="Nombre del contacto"/>
                     <trans loc="fr" val="Nom du contact"/>
+                    <trans loc="id" val="Nama Kontak"/>
                     <trans loc="pt_BR" val="Nome de contato"/>
                     <trans loc="sl" val="Ime stika"/>
                   </trans_set>
@@ -5923,8 +6773,11 @@ else:
                     <trans_set>
                       <trans loc="cs" val="Jméno herce"/>
                       <trans loc="de" val="Name des Schauspielers"/>
+                      <trans loc="el" val="Όνομα καλλιτέχνη"/>
+                      <trans loc="en_GB" val="Actor's Name"/>
                       <trans loc="es" val="Nombre del actor"/>
                       <trans loc="fr" val="Nom de l'acteur"/>
+                      <trans loc="id" val="Nama Aktor"/>
                       <trans loc="pt_BR" val="Nome do ator"/>
                       <trans loc="sl" val="Ime igralca"/>
                     </trans_set>
@@ -6028,21 +6881,6 @@ else:
               <formatting format_thousands_separator="true" format_decimal_places="2"/>
             </data_layout_item>
             <data_layout_item name="description" editable="true" use_default_formatting="true">
-              <formatting/>
-            </data_layout_item>
-          </data_layout_group>
-        </data_layout_groups>
-      </data_layout>
-      <data_layout name="list_related_related_scene_crew" parent_table="scene_crew">
-        <data_layout_groups>
-          <data_layout_group name="main">
-            <data_layout_item name="contact_id" editable="true" use_default_formatting="true">
-              <formatting/>
-            </data_layout_item>
-            <data_layout_item name="name_full" editable="true" use_default_formatting="true">
-              <formatting/>
-            </data_layout_item>
-            <data_layout_item name="comments" editable="true" use_default_formatting="true">
               <formatting/>
             </data_layout_item>
           </data_layout_group>
