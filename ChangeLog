@@ -1,5 +1,11 @@
 2012-11-20  Murray Cumming  <murrayc@murrayc.com>
 
+        Explicitly declare some dependencies (and scopes) that we use.
+
+        * pom.xml: The dependency report showed what we use.
+
+2012-11-20  Murray Cumming  <murrayc@murrayc.com>
+
         Update the gwt-test-utils version.
 
         * pom.xml: gwt-test-utils 0.43 uses GWT 2.5.0, not GWT 2.4.0.
