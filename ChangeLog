@@ -1,5 +1,12 @@
 2012-11-20  Murray Cumming  <murrayc@murrayc.com>
 
+        Update the jasperreports version.
+
+        * pom.xml: This was shown by
+	mvn versions:display-dependency-updates
+
+2012-11-20  Murray Cumming  <murrayc@murrayc.com>
+
         Eclipse: Reorder the Java Build Path to fix the build in Eclipse.
 
         * .classpath: This prevents an error saying that getTextContent()

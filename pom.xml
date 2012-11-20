@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>4.8.0</version>
+			<version>5.0.0</version>
 			<scope>compile</scope>
 			<exclusions>
 				<!-- There is apparently a clash between the jdtcore used by jasperreports
