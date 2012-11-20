@@ -1,5 +1,13 @@
 2012-11-20  Murray Cumming  <murrayc@murrayc.com>
 
+        Eclipse: Reorder the Java Build Path to fix the build in Eclipse.
+
+        * .classpath: This prevents an error saying that getTextContent()
+	is undefined.
+	See http://mergetag.com/the-method-gettextcontent-is-undefined-for-the-type-node/
+
+2012-11-20  Murray Cumming  <murrayc@murrayc.com>
+
         Explicitly declare some dependencies (and scopes) that we use.
 
         * pom.xml: The dependency report showed what we use.

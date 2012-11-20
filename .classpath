@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" output="target/gwt-glom-1.21.8.1/WEB-INF/classes" path="src/main/java"/>
 	<classpathentry kind="src" path="target/generated-sources/gwt"/>
 	<classpathentry excluding="**" kind="src" output="target/gwt-glom-1.21.8.1/WEB-INF/classes" path="src/main/resources"/>
@@ -7,6 +8,5 @@
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="src/main/webapp/WEB-INF/classes"/>
 </classpath>
