@@ -1,3 +1,10 @@
+1.23.1 (unstable):
+
+* Details: Show pictures from the database or 
+  from the layouts in the document.
+  (Murray Cumming)
+* Use GWT 2.5.0 instead of GWT 2.4.
+
 1.21.10 (unstable):
 
 * Show the translated database title.

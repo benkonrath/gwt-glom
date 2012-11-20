@@ -1,3 +1,5 @@
+1.23.1:
+
 2012-11-20  Murray Cumming  <murrayc@murrayc.com>
 
         Update the jasperreports version.
@@ -123,60 +125,6 @@
 	that it works.
 
 	This will be useful in subsequent commits.
-
-2012-11-15  Murray Cumming  <murrayc@murrayc.com>
-
-        Need a short description (OOPS!).
-        Need the bug URL (OOPS!).
-
-        Reviewed by NOBODY (OOPS!).
-
-        Additional information of the change such as approach, rationale. Please add per-function descriptions below (OOPS!).
-
-        * .classpath:
-        * .settings/com.google.gdt.eclipse.core.prefs:
-        * .settings/com.google.gwt.eclipse.core.prefs:
-        * src/main/java/org/glom/web/client/activity/DetailsActivity.java:
-        (DetailsActivity.createLayout):
-        (DetailsActivity.setData):
-        * src/main/java/org/glom/web/client/ui/details/DetailsCell.java:
-        (DetailsCell):
-        (DetailsCell.DetailsCell):
-        (DetailsCell.setupWidgets):
-        (DetailsCell.setData):
-        (DetailsCell.getLayoutItem):
-        * src/main/java/org/glom/web/client/ui/details/Group.java:
-        (Group.createChildWidget):
-        * src/main/java/org/glom/web/server/ConfiguredDocument.java:
-        (ConfiguredDocument.getValidListViewLayoutGroup):
-        (ConfiguredDocument.getDetailsLayoutGroup):
-        (ConfiguredDocument):
-        (ConfiguredDocument.updateLayoutItemImages):
-        * src/main/java/org/glom/web/server/ConfiguredDocumentSet.java:
-        (ConfiguredDocumentSet.getDocumentIdForFilename):
-        (ConfiguredDocumentSet):
-        (ConfiguredDocumentSet.addDocument):
-        (ConfiguredDocumentSet.readConfiguration):
-        * src/main/java/org/glom/web/server/OnlineGlomImages.java:
-        (OnlineGlomImages.OnlineGlomImages):
-        (OnlineGlomImages.doGet):
-        (OnlineGlomImages):
-        (OnlineGlomImages.getImageFromDocument):
-        (OnlineGlomImages.getImageFromDatabase):
-        * src/main/java/org/glom/web/server/Utils.java:
-        (Utils):
-        (Utils.buildImageDataUrl):
-        (Utils.buildImageDataUrlStart):
-        (Utils.buildLayoutPath):
-        (Utils.parseLayoutPath):
-        * src/main/java/org/glom/web/server/database/DBAccess.java:
-        (DBAccess.convertResultSetToDTO):
-        * src/main/java/org/glom/web/server/libglom/Document.java:
-        (Document):
-        (Document.Path):
-        (Document.Document):
-        * src/test/java/org/glom/web/server/libglom/DocumentTest.java:
-        (DocumentTest.TestThread.run):
 
 2012-11-15  Murray Cumming  <murrayc@murrayc.com>
 
