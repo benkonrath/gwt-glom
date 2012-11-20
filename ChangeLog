@@ -1,3 +1,13 @@
+2012-11-20  Murray Cumming  <murrayc@murrayc.com>
+
+        Update the gwt-test-utils version.
+
+        * pom.xml: gwt-test-utils 0.43 uses GWT 2.5.0, not GWT 2.4.0.
+	Using both in the same project was causing gwt-log to fail in GWTBrige,
+	with this error:
+	testOutOfBounds(org.glom.web.server.libglom.DocumentLayoutPathTest):
+	(class: com/google/gwt/core/client/GWT, method: setBridge signature: (Lcom/google/gwt/core/client/GWTBridge;)V) Incompatible argument to function
+
 2012-11-19  Murray Cumming  <murrayc@murrayc.com>
 
         DocumentTest: testLocales(): Update for the latest example version.

@@ -146,7 +146,7 @@
 		<dependency>
 			<groupId>com.googlecode.gwt-test-utils</groupId>
 			<artifactId>gwt-test-utils</artifactId>
-			<version>0.42</version>
+			<version>0.43</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
