@@ -1,3 +1,11 @@
+2012-11-22  Murray Cumming  <murrayc@murrayc.com>
+
+        Build: Specify the source encoding.
+
+        * pom.xml: Set project.build.sourceEncoding
+	This should fix this build problem on some systems:
+	[ERROR] /var/lib/jenkins/workspace/OnlineGlom/src/test/java/org/glom/web/server/libglom/DocumentTest.java:[139,72] error: unmappable character for encoding ASCII
+
 1.23.1:
 
 2012-11-20  Murray Cumming  <murrayc@murrayc.com>
