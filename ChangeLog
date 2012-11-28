@@ -1,3 +1,20 @@
+2012-11-28  Murray Cumming  <murrayc@murrayc.com>
+
+        SelfHosting test: Also try using a relationship.
+
+        * src/main/java/org/glom/web/server/database/DBAccess.java:
+        convertResultSetToDTO(): Move some code into a public 
+	method as:
+        * src/main/java/org/glom/web/server/SqlUtils.java:
+        fillDataItemFromResultSet(): This takes a DataItem and 
+	sets it from a value from a datbase recordset.
+        * src/main/java/org/glom/web/server/libglom/Document.java:
+	Make getDocument() public, so we can use it in a test.
+        * src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	Add testExampleMusiccollectionDataRelated() and call it from 
+        testExampleMusiccollectionData(), to do a basic test of using
+	a relationship.
+
 2012-11-22  Murray Cumming  <murrayc@murrayc.com>
 
         Build: Specify the source encoding.

@@ -1412,12 +1412,13 @@ public class Document {
 		return false;
 	}
 
-	/**
+	/** Get the relationship by name for a table.
+	 * 
 	 * @param tableName
 	 * @param relationshipName
 	 * @return
 	 */
-	private Relationship getRelationship(final String tableName, final String relationshipName) {
+	public Relationship getRelationship(final String tableName, final String relationshipName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
 			Log.error("table not found: " + tableName);

@@ -19,11 +19,18 @@
 
 package org.glom.web.server;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
 import org.glom.web.shared.libglom.Relationship;
@@ -399,5 +406,68 @@ public class SqlUtils {
 		}
 
 		return condition;
+	}
+
+	/**
+	 * @param dataItem
+	 * @param field
+	 * @param rsIndex
+	 * @param rs
+	 * @param primaryKeyValue
+	 * @throws SQLException
+	 */
+	public static void fillDataItemFromResultSet(final DataItem dataItem, final LayoutItemField field, final int rsIndex,
+			final ResultSet rs, final String documentID, final String tableName, final TypedDataItem primaryKeyValue) throws SQLException {
+		switch (field.getGlomType()) {
+		case TYPE_TEXT:
+			final String text = rs.getString(rsIndex);
+			dataItem.setText(text != null ? text : "");
+			break;
+		case TYPE_BOOLEAN:
+			dataItem.setBoolean(rs.getBoolean(rsIndex));
+			break;
+		case TYPE_NUMERIC:
+			dataItem.setNumber(rs.getDouble(rsIndex));
+			break;
+		case TYPE_DATE:
+			final Date date = rs.getDate(rsIndex);
+			if (date != null) {
+				// TODO: Pass Date and Time types instead of converting to text here?
+				// TODO: Use a 4-digit-year short form, somehow.
+				final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
+				dataItem.setText(dateFormat.format(date));
+			} else {
+				dataItem.setText("");
+			}
+			break;
+		case TYPE_TIME:
+			final Time time = rs.getTime(rsIndex);
+			if (time != null) {
+				final DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
+				dataItem.setText(timeFormat.format(time));
+			} else {
+				dataItem.setText("");
+			}
+			break;
+		case TYPE_IMAGE:
+			//We don't get the data here.
+			//Instead we provide a way for the client to get the image separately.
+			
+			//This doesn't seem to work,
+			//presumably because the base64 encoding is wrong:
+			//final byte[] imageByteArray = rs.getBytes(rsIndex);
+			//if (imageByteArray != null) {
+			//	String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
+			//	base64 = "data:image/png;base64," + base64;
+			
+			final String url = Utils.buildImageDataUrl(primaryKeyValue, documentID, tableName, field);
+			dataItem.setImageDataUrl(url);
+			break;
+		case TYPE_INVALID:
+		default:
+			Log.warn(documentID, tableName, "Invalid LayoutItem Field type. Using empty string for value.");
+			dataItem.setText("");
+			break;
+		}
 	}
 }

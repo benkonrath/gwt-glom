@@ -19,17 +19,14 @@
 
 package org.glom.web.server.database;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.glom.web.server.Log;
+import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
@@ -76,15 +73,14 @@ public abstract class DBAccess {
 			final DataItem[] rowArray = new DataItem[layoutFieldsSize];
 			for (int i = 0; i < layoutFieldsSize; i++) {
 				// make a new DataItem to set the text and colors
-				rowArray[i] = new DataItem(); // TODO: Performance: Set it in the rowArray at the end, to avoid repeated
-												// lookup via [].
+				final DataItem dataItem = new DataItem();
 
 				final LayoutItemField field = layoutFields.get(i);
 
 				if (i >= rsColumnscount) {
 					Log.error("convertResultSetToDTO(): index i=" + i + "+1 (field=" + field.getName()
 							+ " is out of range for the ResultSet. Using empty string for value.");
-					rowArray[i].setText("");
+					dataItem.setText("");
 					continue;
 				}
 
@@ -92,57 +88,9 @@ public abstract class DBAccess {
 
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
-				switch (field.getGlomType()) {
-				case TYPE_TEXT:
-					final String text = rs.getString(rsIndex);
-					rowArray[i].setText(text != null ? text : "");
-					break;
-				case TYPE_BOOLEAN:
-					rowArray[i].setBoolean(rs.getBoolean(rsIndex));
-					break;
-				case TYPE_NUMERIC:
-					rowArray[i].setNumber(rs.getDouble(rsIndex));
-					break;
-				case TYPE_DATE:
-					final Date date = rs.getDate(rsIndex);
-					if (date != null) {
-						// TODO: Pass Date and Time types instead of converting to text here?
-						// TODO: Use a 4-digit-year short form, somehow.
-						final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ROOT);
-						rowArray[i].setText(dateFormat.format(date));
-					} else {
-						rowArray[i].setText("");
-					}
-					break;
-				case TYPE_TIME:
-					final Time time = rs.getTime(rsIndex);
-					if (time != null) {
-						final DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.ROOT);
-						rowArray[i].setText(timeFormat.format(time));
-					} else {
-						rowArray[i].setText("");
-					}
-					break;
-				case TYPE_IMAGE:
-					//We don't get the data here.
-					//Instead we provide a way for the client to get the image separately.
-					
-					//This doesn't seem to work,
-					//presumably because the base64 encoding is wrong:
-					//final byte[] imageByteArray = rs.getBytes(rsIndex);
-					//if (imageByteArray != null) {
-					//	String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
-					//	base64 = "data:image/png;base64," + base64;
-					
-					final String url = Utils.buildImageDataUrl(primaryKeyValue, documentID, tableName, field);
-					rowArray[i].setImageDataUrl(url);
-					break;
-				case TYPE_INVALID:
-				default:
-					Log.warn(documentID, tableName, "Invalid LayoutItem Field type. Using empty string for value.");
-					rowArray[i].setText("");
-					break;
-				}
+				SqlUtils.fillDataItemFromResultSet(dataItem, field, rsIndex, rs, documentID, tableName, primaryKeyValue);
+				
+				rowArray[i] = dataItem;
 			}
 
 			// add the row of DataItems to the ArrayList we're going to return and update the row count

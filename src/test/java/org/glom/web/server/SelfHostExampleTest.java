@@ -34,6 +34,7 @@ import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
+import org.glom.web.shared.libglom.Relationship;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.jooq.Condition;
 import org.junit.AfterClass;
@@ -72,20 +73,21 @@ public class SelfHostExampleTest {
 	  //Check that some data is as expected:
 	  final TypedDataItem quickFindValue = new TypedDataItem();
 	  quickFindValue.setText("Born To Run");
-	  final Condition whereClause = SqlUtils.getFindWhereClauseQuick(document, "albums", quickFindValue);
+	  final String tableName = "albums";
+	  final Condition whereClause = SqlUtils.getFindWhereClauseQuick(document, tableName, quickFindValue);
 	  assertTrue(whereClause != null);
 
 	  final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
-	  Field field = document.getField("albums", "album_id");
+	  Field field = document.getField(tableName, "album_id");
+	  final LayoutItemField layoutItemFieldAlbumID = new LayoutItemField();
+	  layoutItemFieldAlbumID.setFullFieldDetails(field);
+	  fieldsToGet.add(layoutItemFieldAlbumID);
+	  field = document.getField(tableName, "name");
 	  LayoutItemField layoutItemField = new LayoutItemField();
 	  layoutItemField.setFullFieldDetails(field);
 	  fieldsToGet.add(layoutItemField);
-	  field = document.getField("albums", "name");
-	  layoutItemField = new LayoutItemField();
-	  layoutItemField.setFullFieldDetails(field);
-	  fieldsToGet.add(layoutItemField);
 	  
-	  final String sqlQuery = SqlUtils.buildSqlSelectWithWhereClause("albums", fieldsToGet, whereClause, null);
+	  final String sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, null);
 	  
 	  final Connection conn = selfHoster.createConnection(false);
 	  assertTrue(conn != null);
@@ -101,6 +103,61 @@ public class SelfHostExampleTest {
 	  rs.last();
 	  final int rsRowsCount = rs.getRow();
 	  Assert.assertEquals(1, rsRowsCount);
+	  
+	  final TypedDataItem albumID = new TypedDataItem();
+	  SqlUtils.fillDataItemFromResultSet(albumID, layoutItemFieldAlbumID, 1,
+				rs, "fake-document-id", tableName, null);
+	  testExampleMusiccollectionDataRelated(document, albumID);
+	}
+
+	/** Check that we can get data via a relationship.
+	 * @param document
+	 * @param albumID
+	 * @throws SQLException 
+	 */
+	private void testExampleMusiccollectionDataRelated(Document document, TypedDataItem albumID) throws SQLException {
+		final String tableName = "albums";
+		
+		//Normal fields:
+		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
+		final Field fieldAlbumID = document.getField(tableName, "album_id");
+		assertNotNull(fieldAlbumID);
+		LayoutItemField layoutItemField = new LayoutItemField();
+		layoutItemField.setFullFieldDetails(fieldAlbumID);
+		fieldsToGet.add(layoutItemField);
+		Field field = document.getField(tableName, "name");
+		assertNotNull(field);
+		layoutItemField = new LayoutItemField();
+		layoutItemField.setFullFieldDetails(field);
+		fieldsToGet.add(layoutItemField);
+		  
+		//Related field:
+		final Relationship relationship = document.getRelationship(tableName, "artist");
+		assertNotNull(relationship);
+		layoutItemField = new LayoutItemField();
+		layoutItemField.setRelationship(relationship);
+		field = document.getField("artists", "name");
+		assertNotNull(field);
+		layoutItemField.setFullFieldDetails(field);
+		fieldsToGet.add(layoutItemField);
+		
+		  
+		final String sqlQuery = SqlUtils.buildSqlSelectWithKey(tableName, fieldsToGet, fieldAlbumID, albumID);
+		  
+		final Connection conn = selfHoster.createConnection(false);
+		assertTrue(conn != null);
+		  
+		final Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		//st.setFetchSize(length);
+		final ResultSet rs = st.executeQuery(sqlQuery);
+		assertTrue(rs != null);
+		
+		final ResultSetMetaData rsMetaData = rs.getMetaData();
+		Assert.assertEquals(3, rsMetaData.getColumnCount());
+
+		rs.last();
+		final int rsRowsCount = rs.getRow();
+		Assert.assertEquals(1, rsRowsCount);
 	}
 
 	@AfterClass
