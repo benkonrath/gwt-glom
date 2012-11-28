@@ -1,5 +1,15 @@
 2012-11-28  Murray Cumming  <murrayc@murrayc.com>
 
+        SelfHostExampleTest: Move some checks into a utility function.
+
+        * src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+        Move the data checks into a new file:
+	* src/test/java/org/glom/web/server/SelfHostTestUtils.java:
+	SelfHostTestUtils.java: so we can use it in some other 
+	tests, with different documents.
+
+2012-11-28  Murray Cumming  <murrayc@murrayc.com>
+
         SelfHosting test: Also try using a relationship.
 
         * src/main/java/org/glom/web/server/database/DBAccess.java:
