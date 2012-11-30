@@ -63,7 +63,7 @@ public class DetailsPlace extends HasTablePlace {
 			case TYPE_NUMERIC:
 				// non-locale specific number-to-string conversion:
 				// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#toString%28double%29
-				primaryKeyValueString = Double.toString(primaryKeyValue.getNumber());
+				primaryKeyValueString = Double.toString(primaryKeyValue.getNumber()); //TODO: Handle other types.
 				// Remove the trailing point and zero on integers. This just makes URL string look nicer.
 				if (primaryKeyValueString.endsWith(".0")) {
 					primaryKeyValueString = primaryKeyValueString.substring(0, primaryKeyValueString.length() - 2);

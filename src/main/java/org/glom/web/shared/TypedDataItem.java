@@ -19,6 +19,8 @@
 
 package org.glom.web.shared;
 
+import java.util.Date;
+
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 
 /**
@@ -37,6 +39,33 @@ public class TypedDataItem extends DataItem {
 		return empty;
 	}
 
+	/** Get the value.
+	 * 
+	 * This is a generic alternative to getNumber(), getText(), etc.
+	 * @return
+	 */
+	public Object getValue() {
+		switch(type) {
+		case TYPE_NUMERIC:
+			return getNumber();
+		case TYPE_TEXT:
+			return getText();
+		case TYPE_DATE:
+			return getDate();
+		//TODO: case TYPE_TIME:
+		//	return getTime();
+		case TYPE_BOOLEAN:
+			return getBoolean();
+		case TYPE_IMAGE:
+			return getImageData();
+		case TYPE_INVALID:
+			return "value-with-invalid-type";
+		default:
+			return "value-with-unknown-type";
+		}
+	}
+
+	//TODO: Why is this override necessary?
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -72,6 +101,31 @@ public class TypedDataItem extends DataItem {
 		this.type = GlomFieldType.TYPE_TEXT;
 		super.setText(text);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.glom.web.shared.DataItem#setNumber(double)
+	 */
+	@Override
+	public void setDate(final Date date) {
+		this.empty = false;
+		this.type = GlomFieldType.TYPE_DATE;
+		super.setDate(date);
+	}
+
+	public void setImageData(final byte[] imageData) {
+		this.empty = false;
+		this.type = GlomFieldType.TYPE_IMAGE;
+		super.setImageData(imageData);
+	}
+
+	public void setImageDataUrl(final String image) {
+		this.empty = false;
+		this.type = GlomFieldType.TYPE_IMAGE;
+		super.setImageDataUrl(image);
+	}
+	
 
 	/*
 	 * (non-Javadoc)

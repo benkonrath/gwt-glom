@@ -62,7 +62,7 @@ public class DetailsPlaceTest {
 		assertNotNull(place.getPrimaryKeyValue());
 		assertTrue(place.getPrimaryKeyValue().isEmpty());
 		assertEquals(null, place.getPrimaryKeyValue().getUnknown());
-		assertEquals(0.0, place.getPrimaryKeyValue().getNumber(), 0.0);
+		assertEquals(0.0, place.getPrimaryKeyValue().getNumber(), 0.0); //TODO: Handle other types.
 		assertEquals(null, place.getPrimaryKeyValue().getText());
 	}
 

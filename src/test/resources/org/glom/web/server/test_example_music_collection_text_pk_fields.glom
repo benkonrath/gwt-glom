@@ -1,0 +1,1298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glom_document xmlns="http://glom.org/glom_document" translation_original_locale="en" database_title="Music Collection" is_example="true" format_version="9" title="Music Collection">
+  <trans_set>
+    <trans loc="cs" val="Hudební sbírka"/>
+    <trans loc="de" val="Musiksammlung"/>
+    <trans loc="el" val="Μουσική συλλογή"/>
+    <trans loc="es" val="Colección de música"/>
+    <trans loc="fr" val="Collection de musique"/>
+    <trans loc="gl" val="Colección de música"/>
+    <trans loc="id" val="Koleksi Musik"/>
+    <trans loc="lv" val="Mūzikas kolekcija"/>
+    <trans loc="pt_BR" val="Coleção de música"/>
+    <trans loc="sl" val="Zbirka glasbe"/>
+  </trans_set>
+  <connection hosting_mode="postgres_self" server="localhost" port="5433" try_other_ports="false" database="glom_musiccollection211"/>
+  <table name="albums" overview_x="15" overview_y="9" title="Albums">
+    <example_rows>
+      <example_row>
+        <value column="album_id">borntorun</value>
+        <value column="comments"/>
+        <value column="name">Born To Run</value>
+        <value column="artist_id">bruce</value>
+        <value column="publisher_id">0.000000</value>
+        <value column="year">1975</value>
+      </example_row>
+      <example_row>
+        <value column="album_id">trueblue</value>
+        <value column="comments"/>
+        <value column="name">True Blue</value>
+        <value column="artist_id">mad</value>
+        <value column="publisher_id">warnerbros</value>
+        <value column="year">1987</value>
+      </example_row>
+      <example_row>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="comments"/>
+        <value column="name">The Wild, the Innocent, &amp; the E-Street Shuffle</value>
+        <value column="artist_id">bruce</value>
+        <value column="publisher_id">0.000000</value>
+        <value column="year">1973</value>
+      </example_row>
+      <example_row>
+        <value column="album_id">signothetimes</value>
+        <value column="comments"/>
+        <value column="name">Sign 'O' The Times</value>
+        <value column="artist_id">prince</value>
+        <value column="publisher_id">1.000000</value>
+        <value column="year">1987</value>
+      </example_row>
+      <example_row>
+        <value column="album_id">superfly</value>
+        <value column="comments"/>
+        <value column="name">Superfly</value>
+        <value column="artist_id">curtis</value>
+        <value column="publisher_id">2.000000</value>
+        <value column="year">1972</value>
+      </example_row>
+    </example_rows>
+    <trans_set>
+      <trans loc="cs" val="Alba"/>
+      <trans loc="de" val="Alben"/>
+      <trans loc="el" val="Δίσκοι"/>
+      <trans loc="en_GB" val="Albums"/>
+      <trans loc="es" val="Álbumes"/>
+      <trans loc="fr" val="Albums"/>
+      <trans loc="gl" val="Álbums"/>
+      <trans loc="id" val="Album"/>
+      <trans loc="lv" val="Albumi"/>
+      <trans loc="pt_BR" val="Álbuns"/>
+      <trans loc="sl" val="Albumi"/>
+    </trans_set>
+    <fields>
+      <field name="album_id" primary_key="true" unique="true" type="Text" title="Album ID">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="ID alba"/>
+          <trans loc="de" val="Albenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό δίσκου"/>
+          <trans loc="en_GB" val="Album ID"/>
+          <trans loc="es" val="ID del álbum"/>
+          <trans loc="fr" val="ID de l'album"/>
+          <trans loc="gl" val="ID do álbum"/>
+          <trans loc="id" val="ID Album"/>
+          <trans loc="lv" val="Albuma ID"/>
+          <trans loc="pt_BR" val="ID de álbum"/>
+          <trans loc="sl" val="ID albuma"/>
+        </trans_set>
+      </field>
+      <field name="comments" type="Text" title="Comments">
+        <formatting format_text_multiline="true"/>
+        <trans_set>
+          <trans loc="cs" val="Poznámky"/>
+          <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="es" val="Comentarios"/>
+          <trans loc="fr" val="Commentaires"/>
+          <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
+          <trans loc="pt_BR" val="Comentários"/>
+          <trans loc="sl" val="Opombe"/>
+        </trans_set>
+      </field>
+      <field name="name" type="Text" title="Name">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="Název"/>
+          <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="es" val="Nombre"/>
+          <trans loc="fr" val="Nom"/>
+          <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Nosaukums"/>
+          <trans loc="pt_BR" val="Nome"/>
+          <trans loc="sl" val="Ime"/>
+        </trans_set>
+      </field>
+      <field name="artist_id" type="Text" title="Artist ID">
+        <formatting choices_related="true" choices_related_relationship="artist" choices_related_field="artist_id" choices_related_show_all="true">
+          <choices_related_extra_layout>
+            <data_layout_groups>
+              <data_layout_group>
+                <data_layout_item name="name" editable="true" use_default_formatting="true">
+                  <formatting/>
+                </data_layout_item>
+              </data_layout_group>
+            </data_layout_groups>
+          </choices_related_extra_layout>
+        </formatting>
+        <trans_set>
+          <trans loc="cs" val="ID umělce"/>
+          <trans loc="de" val="Künstlerkennung"/>
+          <trans loc="el" val="Αναγνωριστικό καλλιτέχνη"/>
+          <trans loc="en_GB" val="Artist ID"/>
+          <trans loc="es" val="ID del artista"/>
+          <trans loc="fr" val="ID de l'artiste"/>
+          <trans loc="gl" val="ID do artista"/>
+          <trans loc="id" val="ID Artis"/>
+          <trans loc="lv" val="Izpildītāja ID"/>
+          <trans loc="pt_BR" val="ID de artista"/>
+          <trans loc="sl" val="ID izvajalca"/>
+        </trans_set>
+      </field>
+      <field name="publisher_id" type="Text" title="Publisher ID">
+        <formatting choices_related="true" choices_related_relationship="publisher" choices_related_field="publishers_id" choices_related_show_all="true">
+          <choices_related_extra_layout>
+            <data_layout_groups>
+              <data_layout_group>
+                <data_layout_item name="name" editable="true" use_default_formatting="true">
+                  <formatting/>
+                </data_layout_item>
+              </data_layout_group>
+            </data_layout_groups>
+          </choices_related_extra_layout>
+        </formatting>
+        <trans_set>
+          <trans loc="cs" val="ID vydavatele"/>
+          <trans loc="de" val="Herausgeber-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό εκδότη"/>
+          <trans loc="en_GB" val="Publisher ID"/>
+          <trans loc="es" val="ID de la editorial"/>
+          <trans loc="fr" val="ID de l'éditeur"/>
+          <trans loc="gl" val="ID da editorial"/>
+          <trans loc="id" val="ID Penerbit"/>
+          <trans loc="lv" val="Izdevēja ID"/>
+          <trans loc="pt_BR" val="ID de editor"/>
+          <trans loc="sl" val="ID založnika"/>
+        </trans_set>
+      </field>
+      <field name="year" type="Number" title="Year">
+        <formatting format_decimal_places="2"/>
+        <trans_set>
+          <trans loc="cs" val="Rok"/>
+          <trans loc="de" val="Jahr"/>
+          <trans loc="el" val="Έτος"/>
+          <trans loc="en_GB" val="Year"/>
+          <trans loc="es" val="Año"/>
+          <trans loc="fr" val="Année"/>
+          <trans loc="gl" val="Ano"/>
+          <trans loc="id" val="Tahun"/>
+          <trans loc="lv" val="Gads"/>
+          <trans loc="pt_BR" val="Ano"/>
+          <trans loc="sl" val="Leto"/>
+        </trans_set>
+      </field>
+    </fields>
+    <relationships>
+      <relationship name="artist" key="artist_id" other_table="artists" other_key="artist_id" title="Artist">
+        <trans_set>
+          <trans loc="cs" val="Umělec"/>
+          <trans loc="de" val="Künstler"/>
+          <trans loc="el" val="Καλλιτέχνης"/>
+          <trans loc="es" val="Artista"/>
+          <trans loc="fr" val="Artiste"/>
+          <trans loc="gl" val="Artista"/>
+          <trans loc="id" val="Artis"/>
+          <trans loc="lv" val="Izpildītājs"/>
+          <trans loc="pt_BR" val="Artista"/>
+          <trans loc="sl" val="Izvajalec"/>
+        </trans_set>
+      </relationship>
+      <relationship name="publisher" key="publisher_id" other_table="publishers" other_key="publishers_id" title="Publisher">
+        <trans_set>
+          <trans loc="cs" val="Vydavatel"/>
+          <trans loc="de" val="Herausgeber"/>
+          <trans loc="el" val="Εκδότης"/>
+          <trans loc="es" val="Editorial"/>
+          <trans loc="fr" val="Éditeur"/>
+          <trans loc="gl" val="Editorial"/>
+          <trans loc="id" val="Penerbit"/>
+          <trans loc="lv" val="Izdevējs"/>
+          <trans loc="pt_BR" val="Editor"/>
+          <trans loc="sl" val="Založnik"/>
+        </trans_set>
+      </relationship>
+      <relationship name="songs" key="album_id" other_table="songs" other_key="album_id" auto_create="true" allow_edit="true" title="Songs">
+        <trans_set>
+          <trans loc="cs" val="Skladby"/>
+          <trans loc="de" val="Lieder"/>
+          <trans loc="el" val="Τραγούδια"/>
+          <trans loc="es" val="Canciones"/>
+          <trans loc="fr" val="Chansons"/>
+          <trans loc="gl" val="Cancións"/>
+          <trans loc="id" val="Lagu"/>
+          <trans loc="lv" val="Dziesmas"/>
+          <trans loc="pt_BR" val="Canções"/>
+          <trans loc="sl" val="Skladbe"/>
+        </trans_set>
+      </relationship>
+    </relationships>
+    <data_layouts>
+      <data_layout name="details" parent_table="albums">
+        <data_layout_groups>
+          <data_layout_group name="overview" columns_count="2" title="Overview">
+            <trans_set>
+              <trans loc="cs" val="Přehled"/>
+              <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="es" val="Visión general"/>
+              <trans loc="fr" val="Résumé"/>
+              <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
+              <trans loc="pt_BR" val="Visão geral"/>
+              <trans loc="sl" val="Pregled"/>
+            </trans_set>
+            <data_layout_item name="album_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+          <data_layout_group name="details" columns_count="2" title="Details">
+            <trans_set>
+              <trans loc="cs" val="Podrobnosti"/>
+              <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="es" val="Detalles"/>
+              <trans loc="fr" val="Détails"/>
+              <trans loc="gl" val="Detalles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
+              <trans loc="pt_BR" val="Detalhes"/>
+              <trans loc="sl" val="Podrobnosti"/>
+            </trans_set>
+            <data_layout_group name="artist" title="Artist">
+              <trans_set>
+                <trans loc="cs" val="Umělec"/>
+                <trans loc="de" val="Artist"/>
+                <trans loc="el" val="Καλλιτέχνης"/>
+                <trans loc="es" val="Artista"/>
+                <trans loc="fr" val="Artiste"/>
+                <trans loc="gl" val="Artista"/>
+                <trans loc="id" val="Artis"/>
+                <trans loc="lv" val="Izpildītājs"/>
+                <trans loc="pt_BR" val="Artista"/>
+                <trans loc="sl" val="Izvajalec"/>
+              </trans_set>
+              <data_layout_item name="artist_id" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="name" relationship="artist" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+            </data_layout_group>
+            <data_layout_group name="publisher" title="Publisher">
+              <trans_set>
+                <trans loc="cs" val="Vydavatel"/>
+                <trans loc="de" val="Publisher"/>
+                <trans loc="el" val="Εκδότης"/>
+                <trans loc="es" val="Editorial"/>
+                <trans loc="fr" val="Éditeur"/>
+                <trans loc="gl" val="Editorial"/>
+                <trans loc="id" val="Penerbit"/>
+                <trans loc="lv" val="Izdevējs"/>
+                <trans loc="pt_BR" val="Editor"/>
+                <trans loc="sl" val="Založnik"/>
+              </trans_set>
+              <data_layout_item name="publisher_id" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="name" relationship="publisher" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+            </data_layout_group>
+            <data_layout_item name="year" editable="true" use_default_formatting="true">
+              <formatting format_thousands_separator="true" format_decimal_places="2"/>
+            </data_layout_item>
+            <data_layout_portal relationship="songs" portal_rows_count_min="6" portal_rows_count_max="6">
+              <data_layout_item name="name" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+            </data_layout_portal>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+      <data_layout name="list" parent_table="albums">
+        <data_layout_groups>
+          <data_layout_group name="toplevel">
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="year" editable="true" use_default_formatting="true">
+              <formatting format_thousands_separator="true" format_decimal_places="2"/>
+            </data_layout_item>
+            <data_layout_item name="artist_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" relationship="artist" editable="true" use_default_formatting="true">
+              <title_custom use_custom="true" title="Artist Name">
+                <trans_set>
+                  <trans loc="cs" val="Jméno umělce"/>
+                  <trans loc="de" val="Künstlername"/>
+                  <trans loc="el" val="Όνομα καλλιτέχνη"/>
+                  <trans loc="es" val="Nombre del artista"/>
+                  <trans loc="fr" val="Nom de l'artiste"/>
+                  <trans loc="gl" val="Nome do artista"/>
+                  <trans loc="id" val="Nama Artis"/>
+                  <trans loc="lv" val="Izpildītāja vārds"/>
+                  <trans loc="pt_BR" val="Nome do artista"/>
+                  <trans loc="sl" val="Ime izvajalca"/>
+                </trans_set>
+              </title_custom>
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="publisher_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" relationship="publisher" editable="true" use_default_formatting="true">
+              <title_custom use_custom="true" title="Publisher Name">
+                <trans_set>
+                  <trans loc="cs" val="Jméno vydavatele"/>
+                  <trans loc="de" val="Name des Herausgebers"/>
+                  <trans loc="el" val="Όνομα εκδότη"/>
+                  <trans loc="es" val="Nombre de la editorial"/>
+                  <trans loc="fr" val="Nom de l'éditeur"/>
+                  <trans loc="gl" val="Nome da editorial"/>
+                  <trans loc="id" val="Nama Penerbit"/>
+                  <trans loc="lv" val="Izdevēja nosaukums"/>
+                  <trans loc="pt_BR" val="Nome do editor"/>
+                  <trans loc="sl" val="Ime izdajatelja"/>
+                </trans_set>
+              </title_custom>
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+    </data_layouts>
+    <reports>
+      <report name="albums_by_artist" show_table_title="true" title="Albums By Artist">
+        <data_layout_groups>
+          <data_layout_group>
+            <data_layout_item_groupby>
+              <groupby name="artist_id" editable="true" use_default_formatting="true"/>
+              <secondary_fields>
+                <data_layout_group>
+                  <data_layout_item name="name" relationship="artist" editable="true" use_default_formatting="true">
+                    <title_custom use_custom="true" title="Artist Name">
+                      <trans_set>
+                        <trans loc="cs" val="Jméno umělce"/>
+                        <trans loc="de" val="Künstlername"/>
+                        <trans loc="el" val="Όνομα καλλιτέχνη"/>
+                        <trans loc="es" val="Nombre del artista"/>
+                        <trans loc="fr" val="Nom de l'artiste"/>
+                        <trans loc="gl" val="Nome do artista"/>
+                        <trans loc="id" val="Nama Artis"/>
+                        <trans loc="lv" val="Izpildītāja vārds"/>
+                        <trans loc="pt_BR" val="Nome do artista"/>
+                        <trans loc="sl" val="Ime izvajalca"/>
+                      </trans_set>
+                    </title_custom>
+                    <formatting/>
+                  </data_layout_item>
+                </data_layout_group>
+              </secondary_fields>
+              <data_layout_item name="name" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="year" editable="true" use_default_formatting="true">
+                <formatting format_thousands_separator="true" format_decimal_places="2"/>
+              </data_layout_item>
+            </data_layout_item_groupby>
+          </data_layout_group>
+        </data_layout_groups>
+        <trans_set>
+          <trans loc="cs" val="Alba od umělce"/>
+          <trans loc="de" val="Alben nach Künstler"/>
+          <trans loc="el" val="Δίσκοι κατά καλλιτέχνες"/>
+          <trans loc="es" val="Álbumes por artista"/>
+          <trans loc="fr" val="Albums par artiste"/>
+          <trans loc="gl" val="Álbums por artista"/>
+          <trans loc="id" val="Album Berdasar Artis"/>
+          <trans loc="lv" val="Albumi pēc izpildītāja"/>
+          <trans loc="pt_BR" val="Álbuns por artista"/>
+          <trans loc="sl" val="Albumi izvajalca"/>
+        </trans_set>
+      </report>
+    </reports>
+    <print_layouts/>
+  </table>
+  <table name="artists" default="true" overview_x="407" overview_y="119" title="Artists">
+    <example_rows>
+      <example_row>
+        <value column="artist_id">bruce</value>
+        <value column="description"/>
+        <value column="comments"/>
+        <value column="name">Bruce Springsteen</value>
+      </example_row>
+      <example_row>
+        <value column="artist_id">mad</value>
+        <value column="description"/>
+        <value column="comments"/>
+        <value column="name">Madonna</value>
+      </example_row>
+      <example_row>
+        <value column="artist_id">prince</value>
+        <value column="description"/>
+        <value column="comments"/>
+        <value column="name">Prince</value>
+      </example_row>
+      <example_row>
+        <value column="artist_id">curtis</value>
+        <value column="description"/>
+        <value column="comments"/>
+        <value column="name">Curtis Mayfield</value>
+      </example_row>
+    </example_rows>
+    <trans_set>
+      <trans loc="cs" val="Umělci"/>
+      <trans loc="de" val="Künstler"/>
+      <trans loc="el" val="Καλλιτέχνες"/>
+      <trans loc="en_GB" val="Artists"/>
+      <trans loc="es" val="Artistas"/>
+      <trans loc="fr" val="Artistes"/>
+      <trans loc="gl" val="Artistas"/>
+      <trans loc="id" val="Artis"/>
+      <trans loc="lv" val="Izpildītāji"/>
+      <trans loc="pt_BR" val="Artistas"/>
+      <trans loc="sl" val="Izvajalci"/>
+    </trans_set>
+    <fields>
+      <field name="artist_id" primary_key="true" unique="true" type="Text" title="Artist ID">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="ID umělce"/>
+          <trans loc="de" val="Künstlerkennung"/>
+          <trans loc="el" val="Αναγνωριστικό καλλιτέχνη"/>
+          <trans loc="en_GB" val="Artist ID"/>
+          <trans loc="es" val="ID del artista"/>
+          <trans loc="fr" val="ID de l'artiste"/>
+          <trans loc="gl" val="ID do artista"/>
+          <trans loc="id" val="ID Artis"/>
+          <trans loc="lv" val="Izpildītāja ID"/>
+          <trans loc="pt_BR" val="ID de artista"/>
+          <trans loc="sl" val="ID izvajalca"/>
+        </trans_set>
+      </field>
+      <field name="description" type="Text" title="Description">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="Popis"/>
+          <trans loc="de" val="Beschreibung"/>
+          <trans loc="el" val="Περιγραφή"/>
+          <trans loc="es" val="Descripción"/>
+          <trans loc="fr" val="Description"/>
+          <trans loc="gl" val="Descrición"/>
+          <trans loc="id" val="Deskripsi"/>
+          <trans loc="lv" val="Apraksts"/>
+          <trans loc="pt_BR" val="Descrição"/>
+          <trans loc="sl" val="Opis"/>
+        </trans_set>
+      </field>
+      <field name="comments" type="Text" title="Comments">
+        <formatting format_text_multiline="true"/>
+        <trans_set>
+          <trans loc="cs" val="Poznámky"/>
+          <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="es" val="Comentarios"/>
+          <trans loc="fr" val="Commentaires"/>
+          <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
+          <trans loc="pt_BR" val="Comentários"/>
+          <trans loc="sl" val="Opombe"/>
+        </trans_set>
+      </field>
+      <field name="name" type="Text" title="Name">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="Jméno"/>
+          <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="es" val="Nombre"/>
+          <trans loc="fr" val="Nom"/>
+          <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Vārds"/>
+          <trans loc="pt_BR" val="Nome"/>
+          <trans loc="sl" val="Ime"/>
+        </trans_set>
+      </field>
+    </fields>
+    <relationships>
+      <relationship name="albums" key="artist_id" other_table="albums" other_key="artist_id" auto_create="true" allow_edit="true" title="Albums">
+        <trans_set>
+          <trans loc="cs" val="Alba"/>
+          <trans loc="de" val="Alben"/>
+          <trans loc="el" val="Δίσκοι"/>
+          <trans loc="es" val="Álbumes"/>
+          <trans loc="fr" val="Albums"/>
+          <trans loc="gl" val="Álbums"/>
+          <trans loc="id" val="Album"/>
+          <trans loc="lv" val="Albumi"/>
+          <trans loc="pt_BR" val="Álbuns"/>
+          <trans loc="sl" val="Albumi"/>
+        </trans_set>
+      </relationship>
+    </relationships>
+    <data_layouts>
+      <data_layout name="details" parent_table="artists">
+        <data_layout_groups>
+          <data_layout_group name="overview" columns_count="2" title="Overview">
+            <trans_set>
+              <trans loc="cs" val="Přehled"/>
+              <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="es" val="Visión general"/>
+              <trans loc="fr" val="Résumé"/>
+              <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
+              <trans loc="pt_BR" val="Visão geral"/>
+              <trans loc="sl" val="Pregled"/>
+            </trans_set>
+            <data_layout_item name="artist_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+          <data_layout_group name="details" columns_count="2" title="Details">
+            <trans_set>
+              <trans loc="cs" val="Podrobnosti"/>
+              <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="es" val="Detalles"/>
+              <trans loc="fr" val="Détails"/>
+              <trans loc="gl" val="Detalles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
+              <trans loc="pt_BR" val="Detalhes"/>
+              <trans loc="sl" val="Podrobnosti"/>
+            </trans_set>
+            <data_layout_item name="description" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_portal relationship="albums" portal_rows_count_min="6" portal_rows_count_max="6">
+              <data_layout_item name="name" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="year" editable="true" use_default_formatting="true">
+                <formatting format_thousands_separator="true" format_decimal_places="2"/>
+              </data_layout_item>
+            </data_layout_portal>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+      <data_layout name="list" parent_table="artists">
+        <data_layout_groups>
+          <data_layout_group name="main">
+            <data_layout_item name="artist_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="description" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+    </data_layouts>
+    <reports/>
+    <print_layouts/>
+  </table>
+  <table name="publishers" overview_x="411" overview_y="235" title="Publishers">
+    <example_rows>
+      <example_row>
+        <value column="publishers_id">sony</value>
+        <value column="comments"/>
+        <value column="name">Sony</value>
+      </example_row>
+      <example_row>
+        <value column="publishers_id">warnerbros</value>
+        <value column="comments"/>
+        <value column="name">Warner Bros</value>
+      </example_row>
+      <example_row>
+        <value column="publishers_id">rhino</value>
+        <value column="comments"/>
+        <value column="name">Rhino</value>
+      </example_row>
+    </example_rows>
+    <trans_set>
+      <trans loc="cs" val="Vydavatelé"/>
+      <trans loc="de" val="Herausgeber"/>
+      <trans loc="el" val="Εκδότες"/>
+      <trans loc="en_GB" val="Publishers"/>
+      <trans loc="es" val="Editoriales"/>
+      <trans loc="fr" val="Éditeurs"/>
+      <trans loc="gl" val="Editoriais"/>
+      <trans loc="id" val="Penerbit"/>
+      <trans loc="lv" val="Izdevēji"/>
+      <trans loc="pt_BR" val="Editores"/>
+      <trans loc="sl" val="Založniki"/>
+    </trans_set>
+    <fields>
+      <field name="publishers_id" primary_key="true" unique="true" type="Text" title="Publisher ID">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="ID vydavatele"/>
+          <trans loc="de" val="Herausgeber-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό εκδότη"/>
+          <trans loc="en_GB" val="Publisher ID"/>
+          <trans loc="es" val="ID de la editorial"/>
+          <trans loc="fr" val="ID de l'éditeur"/>
+          <trans loc="gl" val="ID da editorial"/>
+          <trans loc="id" val="ID Penerbit"/>
+          <trans loc="lv" val="Izdevēja ID"/>
+          <trans loc="pt_BR" val="ID de editor"/>
+          <trans loc="sl" val="ID založnika"/>
+        </trans_set>
+      </field>
+      <field name="comments" type="Text" title="Comments">
+        <formatting format_text_multiline="true"/>
+        <trans_set>
+          <trans loc="cs" val="Poznámky"/>
+          <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="es" val="Comentarios"/>
+          <trans loc="fr" val="Commentaires"/>
+          <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
+          <trans loc="pt_BR" val="Comentários"/>
+          <trans loc="sl" val="Opombe"/>
+        </trans_set>
+      </field>
+      <field name="name" type="Text" title="Name">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="Jméno"/>
+          <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="es" val="Nombre"/>
+          <trans loc="fr" val="Nom"/>
+          <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Nosaukums"/>
+          <trans loc="pt_BR" val="Nome"/>
+          <trans loc="sl" val="Ime"/>
+        </trans_set>
+      </field>
+    </fields>
+    <relationships>
+      <relationship name="albums" key="publishers_id" other_table="albums" other_key="publisher_id" title="Albums">
+        <trans_set>
+          <trans loc="cs" val="Alba"/>
+          <trans loc="de" val="Alben"/>
+          <trans loc="el" val="Δίσκοι"/>
+          <trans loc="es" val="Álbumes"/>
+          <trans loc="fr" val="Albums"/>
+          <trans loc="gl" val="Álbums"/>
+          <trans loc="id" val="Album"/>
+          <trans loc="lv" val="Albumi"/>
+          <trans loc="pt_BR" val="Álbuns"/>
+          <trans loc="sl" val="Albumi"/>
+        </trans_set>
+      </relationship>
+    </relationships>
+    <data_layouts>
+      <data_layout name="details" parent_table="publishers">
+        <data_layout_groups>
+          <data_layout_group name="overview" columns_count="2" title="Overview">
+            <trans_set>
+              <trans loc="cs" val="Přehled"/>
+              <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="es" val="Visión general"/>
+              <trans loc="fr" val="Résumé"/>
+              <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
+              <trans loc="pt_BR" val="Visão geral"/>
+              <trans loc="sl" val="Pregled"/>
+            </trans_set>
+            <data_layout_item name="publishers_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+          <data_layout_group name="details" title="Details">
+            <trans_set>
+              <trans loc="cs" val="Podrobnosti"/>
+              <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="es" val="Detalles"/>
+              <trans loc="fr" val="Détails"/>
+              <trans loc="gl" val="Detalles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
+              <trans loc="pt_BR" val="Detalhes"/>
+              <trans loc="sl" val="Podrobnosti"/>
+            </trans_set>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_portal relationship="albums" portal_rows_count_min="6" portal_rows_count_max="6">
+              <data_layout_item name="album_id" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="name" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="name" relationship="artist" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+            </data_layout_portal>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+      <data_layout name="list" parent_table="publishers">
+        <data_layout_groups>
+          <data_layout_group name="main">
+            <data_layout_item name="publishers_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+    </data_layouts>
+    <reports/>
+    <print_layouts/>
+  </table>
+  <table name="songs" overview_x="407" overview_y="7" title="Songs">
+    <example_rows>
+      <example_row>
+        <value column="song_id">4thofjuly</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">4th of July, Asbury Park (Sandy)</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">backstreets</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Backstreets</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">ballad</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Ballad of Dorothy Parker</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">borntorun</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Born To Run</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">estreetshuffle</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">E Street Shuffle</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">kittysback</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Kitty's Back</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">hotthing</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Hot Thing</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">foreverinmylife</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Forever In My Life</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">housequake</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Housequake</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">icouldnever</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">I Could Never Take The Place Of Your Man</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">ifiwasyourgirlfriend</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">If I Was Your Girlfriend</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">incident</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Incident on 57th Street</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">it</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">It</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">jungleland</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Jungleland</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">meeting</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Meeting Across The River</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">newyork</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">New York City Serenade</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">night</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Night</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">playinthtesunshine</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Play In The Sunshine</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">rosalita</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Rosalita (Come out Tonight)</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">shestheone</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">She's The One</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">signothetimes</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Sign 'O' The Times</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">slowlove</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Slow Love</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">starfishand</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Starfish and Coffee</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">strangerelationship</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Strange Relationship</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">tenthavenue</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Tenth Avenue Freeze Out</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">thunderroad</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Thunder Road</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">ugotthelook</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">U Got The Look</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">wildbilly</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Wild Billy's Circus Story</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">junkiechase</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Junkie Chase (Instrumental)</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">laisla</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">La Isla Bonita</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">littlechildrunningwild</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">Little Child Runnin' Wild</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">livetotell</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">Live To Tell</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">lovemakes</value>
+        <value column="comments"/>
+        <value column="album_id">thewildtheinnocent</value>
+        <value column="name">Love Makes The World Go Round</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">nothingonme</value>
+        <value column="comments"/>
+        <value column="album_id">superfly</value>
+        <value column="name">No Thing On Me (Cocaine Song)</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">openyourheart</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">Open Your Heart</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">papadontpreach</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">Papa Don't Preach</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">pusherman</value>
+        <value column="comments"/>
+        <value column="album_id">superfly</value>
+        <value column="name">Pusherman</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">superfly</value>
+        <value column="comments"/>
+        <value column="album_id">superfly</value>
+        <value column="name">Superfly</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">thecross</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">The Cross</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">think</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Think (Instrumental)</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">trueblue</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">True Blue</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">wherestheparty</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">Where's The Party</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">whiteheart</value>
+        <value column="comments"/>
+        <value column="album_id">trueblue</value>
+        <value column="name">White Heart</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">adore</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Adore</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">eddieyoushouldknowbetter</value>
+        <value column="comments"/>
+        <value column="album_id">borntorun</value>
+        <value column="name">Eddie You Should Know Better</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">freddiesdead</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Freddie's Dead</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">givemeyourlove</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Give Me Your Love (Love Song)</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">itsgonna</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">It's Gonna Be A Beautiful Night</value>
+      </example_row>
+      <example_row>
+        <value column="song_id">jimmyjimmy</value>
+        <value column="comments"/>
+        <value column="album_id">signothetimes</value>
+        <value column="name">Jimmy Jimmy</value>
+      </example_row>
+    </example_rows>
+    <trans_set>
+      <trans loc="cs" val="Skladby"/>
+      <trans loc="de" val="Lieder"/>
+      <trans loc="el" val="Τραγούδια"/>
+      <trans loc="en_GB" val="Songs"/>
+      <trans loc="es" val="Canciones"/>
+      <trans loc="fr" val="Chansons"/>
+      <trans loc="gl" val="Cancións"/>
+      <trans loc="id" val="Lagu"/>
+      <trans loc="lv" val="Dziesmas"/>
+      <trans loc="pt_BR" val="Canções"/>
+      <trans loc="sl" val="Skladbe"/>
+    </trans_set>
+    <fields>
+      <field name="song_id" primary_key="true" unique="true" type="Text" title="Song ID">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="ID skladby"/>
+          <trans loc="de" val="Lied-Kennung"/>
+          <trans loc="el" val="Αναγνωριστικό τραγουδιού"/>
+          <trans loc="en_GB" val="Song ID"/>
+          <trans loc="es" val="ID de la canción"/>
+          <trans loc="fr" val="ID de la chanson"/>
+          <trans loc="gl" val="ID da canción"/>
+          <trans loc="id" val="ID Lagu"/>
+          <trans loc="lv" val="Dziesmas ID"/>
+          <trans loc="pt_BR" val="ID de canção"/>
+          <trans loc="sl" val="ID skladbe"/>
+        </trans_set>
+      </field>
+      <field name="comments" type="Text" title="Comments">
+        <formatting format_text_multiline="true"/>
+        <trans_set>
+          <trans loc="cs" val="Poznámky"/>
+          <trans loc="de" val="Kommentare"/>
+          <trans loc="el" val="Σχόλια"/>
+          <trans loc="es" val="Comentarios"/>
+          <trans loc="fr" val="Commentaires"/>
+          <trans loc="gl" val="Comentarios"/>
+          <trans loc="id" val="Komentar"/>
+          <trans loc="lv" val="Komentāri"/>
+          <trans loc="pt_BR" val="Comentários"/>
+          <trans loc="sl" val="Opombe"/>
+        </trans_set>
+      </field>
+      <field name="album_id" type="Text" title="Album ID">
+        <formatting choices_related="true" choices_related_relationship="album" choices_related_field="album_id" choices_related_show_all="true">
+          <choices_related_extra_layout>
+            <data_layout_groups>
+              <data_layout_group>
+                <data_layout_item name="name" editable="true" use_default_formatting="true">
+                  <formatting/>
+                </data_layout_item>
+              </data_layout_group>
+            </data_layout_groups>
+          </choices_related_extra_layout>
+        </formatting>
+        <trans_set>
+          <trans loc="cs" val="ID alba"/>
+          <trans loc="de" val="Albenkennung"/>
+          <trans loc="el" val="Αναγνωριστικό δίσκου"/>
+          <trans loc="en_GB" val="Album ID"/>
+          <trans loc="es" val="ID del álbum"/>
+          <trans loc="fr" val="ID de l'album"/>
+          <trans loc="gl" val="ID do álbum"/>
+          <trans loc="id" val="ID Album"/>
+          <trans loc="lv" val="Albuma ID"/>
+          <trans loc="pt_BR" val="ID de álbum"/>
+          <trans loc="sl" val="ID albuma"/>
+        </trans_set>
+      </field>
+      <field name="name" type="Text" title="Name">
+        <formatting/>
+        <trans_set>
+          <trans loc="cs" val="Název"/>
+          <trans loc="de" val="Name"/>
+          <trans loc="el" val="Όνομα"/>
+          <trans loc="es" val="Nombre"/>
+          <trans loc="fr" val="Nom"/>
+          <trans loc="gl" val="Nome"/>
+          <trans loc="id" val="Nama"/>
+          <trans loc="lv" val="Nosaukums"/>
+          <trans loc="pt_BR" val="Nome"/>
+          <trans loc="sl" val="Ime"/>
+        </trans_set>
+      </field>
+    </fields>
+    <relationships>
+      <relationship name="album" key="album_id" other_table="albums" other_key="album_id" title="Album">
+        <trans_set>
+          <trans loc="cs" val="Album"/>
+          <trans loc="de" val="Album"/>
+          <trans loc="el" val="Δίσκος"/>
+          <trans loc="es" val="Álbum"/>
+          <trans loc="fr" val="Album"/>
+          <trans loc="gl" val="Álbum"/>
+          <trans loc="id" val="Album"/>
+          <trans loc="lv" val="Albums"/>
+          <trans loc="pt_BR" val="Álbum"/>
+          <trans loc="sl" val="Album"/>
+        </trans_set>
+      </relationship>
+    </relationships>
+    <data_layouts>
+      <data_layout name="details" parent_table="songs">
+        <data_layout_groups>
+          <data_layout_group name="overview" columns_count="2" title="Overview">
+            <trans_set>
+              <trans loc="cs" val="Přehled"/>
+              <trans loc="de" val="Overview"/>
+              <trans loc="el" val="Επισκόπηση"/>
+              <trans loc="es" val="Visión general"/>
+              <trans loc="fr" val="Résumé"/>
+              <trans loc="gl" val="Vista xeral"/>
+              <trans loc="id" val="Ringkasan"/>
+              <trans loc="lv" val="Pārskats"/>
+              <trans loc="pt_BR" val="Visão geral"/>
+              <trans loc="sl" val="Pregled"/>
+            </trans_set>
+            <data_layout_item name="song_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+          <data_layout_group name="details" columns_count="2" title="Details">
+            <trans_set>
+              <trans loc="cs" val="Podrobnosti"/>
+              <trans loc="de" val="Details"/>
+              <trans loc="el" val="Λεπτομέρειες"/>
+              <trans loc="es" val="Detalles"/>
+              <trans loc="fr" val="Détails"/>
+              <trans loc="gl" val="Detlles"/>
+              <trans loc="id" val="Rincian"/>
+              <trans loc="lv" val="Sīkāka informācija"/>
+              <trans loc="pt_BR" val="Detalhes"/>
+              <trans loc="sl" val="Podrobnosti"/>
+            </trans_set>
+            <data_layout_group name="album" title="Album">
+              <trans_set>
+                <trans loc="cs" val="Album"/>
+                <trans loc="de" val="Album-Künstler"/>
+                <trans loc="el" val="Δίσκος"/>
+                <trans loc="es" val="Álbum"/>
+                <trans loc="fr" val="Album"/>
+                <trans loc="gl" val="Álbum"/>
+                <trans loc="id" val="Album"/>
+                <trans loc="lv" val="Albums"/>
+                <trans loc="pt_BR" val="Álbum"/>
+                <trans loc="sl" val="Album"/>
+              </trans_set>
+              <data_layout_item name="album_id" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="name" relationship="album" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+            </data_layout_group>
+            <data_layout_group name="artist" title="Album Artist">
+              <trans_set>
+                <trans loc="cs" val="Umělci alba"/>
+                <trans loc="de" val="Album-Künstler"/>
+                <trans loc="el" val="Δίσκος καλλιτέχνη"/>
+                <trans loc="es" val="Artista del álbum"/>
+                <trans loc="fr" val="Artiste de l'album"/>
+                <trans loc="gl" val="Artista do álbum"/>
+                <trans loc="id" val="Artis Album"/>
+                <trans loc="lv" val="Albuma izpildītājs"/>
+                <trans loc="pt_BR" val="Álbum de artista"/>
+                <trans loc="sl" val="Izvajalec albuma"/>
+              </trans_set>
+              <data_layout_item name="artist_id" relationship="album" related_relationship="artist" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+              <data_layout_item name="name" relationship="album" related_relationship="artist" editable="true" use_default_formatting="true">
+                <formatting/>
+              </data_layout_item>
+            </data_layout_group>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+      <data_layout name="list" parent_table="songs">
+        <data_layout_groups>
+          <data_layout_group name="main">
+            <data_layout_item name="song_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="comments" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="album_id" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+            <data_layout_item name="name" editable="true" use_default_formatting="true">
+              <formatting/>
+            </data_layout_item>
+          </data_layout_group>
+        </data_layout_groups>
+      </data_layout>
+    </data_layouts>
+    <reports/>
+    <print_layouts/>
+  </table>
+  <groups><!--These are only used when recreating a database from an example file. The actual access-control is on the server, of course.-->
+    <group name="glom_developer" developer="true"/>
+  </groups>
+  <library_modules/></glom_document>

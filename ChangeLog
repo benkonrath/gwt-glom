@@ -1,3 +1,21 @@
+2012-11-30  Murray Cumming  <murrayc@murrayc.com>
+
+        Allow primary keys to be any type, and test it.
+
+        * src/main/java/org/glom/web/shared/TypedDataItem.java:
+	Add overrides for the other set*() methods, to set the type.
+        Added getValue() which returns a generic Object.
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	buildSimpleWhereExpression(): Use TypedDataItem.getValue() instead of 
+	getNumber().
+        * src/test/java/org/glom/web/server/SelfHostExampleNonNumericPrimaryKeysTest.java:
+	Added this test, which is much like SelfHostExampleTest, but which uses this
+	test file, take from Glom:
+        * src/test/resources/org/glom/web/server/test_example_music_collection_text_pk_fields.glom:
+	which has all the primary keys changes to text instead of numbers.
+
+	However, parts of the UI code still assume that primary keys are numbers.
+
 2012-11-28  Murray Cumming  <murrayc@murrayc.com>
 
         SelfHostExampleTest: Move some checks into a utility function.

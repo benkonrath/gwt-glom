@@ -85,7 +85,7 @@ public class SqlUtils {
 		}
 
 		final org.jooq.Field<Object> field = createField(tableName, fieldName);
-		result = field.equal(primaryKeyValue.getNumber()); // TODO: Handle other types too.
+		result = field.equal(primaryKeyValue.getValue());
 		return result;
 	}
 
@@ -418,6 +418,7 @@ public class SqlUtils {
 	 */
 	public static void fillDataItemFromResultSet(final DataItem dataItem, final LayoutItemField field, final int rsIndex,
 			final ResultSet rs, final String documentID, final String tableName, final TypedDataItem primaryKeyValue) throws SQLException {
+		
 		switch (field.getGlomType()) {
 		case TYPE_TEXT:
 			final String text = rs.getString(rsIndex);
