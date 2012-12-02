@@ -1,3 +1,29 @@
+2012-12-02  Murray Cumming  <murrayc@murrayc.com>
+
+        In the UI, allow primary keys to be any type, and test it.
+
+	* src/main/java/org/glom/web/shared/TypedDataItem.java:
+        Added isUnknownType() for convenience.
+        * src/main/java/org/glom/web/client/place/DetailsPlace.java:
+        getToken(): Move some code into getStringForData() and handle
+	other data types.
+        * src/main/java/org/glom/web/server/Utils.java:
+        Added transformUnknownToActualType(), to parse the unknown string
+	as a particular type of data. This should correspond with 
+	getStringForData() above.
+        * src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Add setDataItemType() to set the type of data for primary
+	keys.
+        getDetailsData(), getSuitableRecordToViewDetails():
+	Call it, to have the correctly-typed primary key value.
+	We do it here, on the server, instead of before, because it 
+	is only here that we can know the field type that is in the 
+	document.
+        * src/test/java/org/glom/web/client/place/DetailsPlaceTest.java:
+        Added testGetPlaceParametersNumericPrimaryKey(),
+	testGetPlaceParametersBooleanPrimaryKey() and 
+	testGetPlaceParametersDatePrimaryKey).
+
 2012-11-30  Murray Cumming  <murrayc@murrayc.com>
 
         Allow primary keys to be any type, and test it.

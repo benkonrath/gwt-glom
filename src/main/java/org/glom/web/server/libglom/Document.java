@@ -353,6 +353,7 @@ public class Document {
 			return 0;
 		}
 
+		// TODO: Are we sure that this is locale-independent?
 		double value = 0;
 		try {
 			value = Double.valueOf(str);

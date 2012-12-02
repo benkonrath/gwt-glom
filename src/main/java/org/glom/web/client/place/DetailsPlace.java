@@ -19,6 +19,7 @@
 
 package org.glom.web.client.place;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import org.glom.web.client.StringUtils;
@@ -54,16 +55,34 @@ public class DetailsPlace extends HasTablePlace {
 		 */
 		@Override
 		public String getToken(final DetailsPlace place) {
-			final TypedDataItem primaryKeyValue = place.getPrimaryKeyValue();
-			final GlomFieldType glomFieldType = primaryKeyValue.getType();
+			// create the URL string:
+			final String primaryKeyValueString = getStringForData(place.getPrimaryKeyValue());
 
-			// create the URL string based on the
+			final HashMap<String, String> params = new HashMap<String, String>();
+			params.put(documentKey, place.getDocumentID());
+			params.put(tableKey, place.getTableName());
+			params.put(primaryKeyValueKey, primaryKeyValueString);
+			return buildParamsToken(params);
+		}
+
+		/**
+		 * Create a string representation of a database value, for use in a URL.
+		 * This return string should be parseable by Utils.transformUnknownToActualType()
+		 * on the server.
+		 * 
+		 * @param value
+		 * @param glomFieldType
+		 * @return
+		 */
+		private String getStringForData(final TypedDataItem value) {
+			final GlomFieldType glomFieldType = value.getType();
+
 			String primaryKeyValueString = "";
 			switch (glomFieldType) {
 			case TYPE_NUMERIC:
 				// non-locale specific number-to-string conversion:
 				// http://docs.oracle.com/javase/6/docs/api/java/lang/Double.html#toString%28double%29
-				primaryKeyValueString = Double.toString(primaryKeyValue.getNumber()); //TODO: Handle other types.
+				primaryKeyValueString = Double.toString(value.getNumber());
 				// Remove the trailing point and zero on integers. This just makes URL string look nicer.
 				if (primaryKeyValueString.endsWith(".0")) {
 					primaryKeyValueString = primaryKeyValueString.substring(0, primaryKeyValueString.length() - 2);
@@ -71,13 +90,36 @@ public class DetailsPlace extends HasTablePlace {
 				break;
 
 			case TYPE_TEXT:
-				primaryKeyValueString = primaryKeyValue.getText();
+				primaryKeyValueString = value.getText();
+				break;
+				
+			case TYPE_BOOLEAN:
+				primaryKeyValueString = (value.getBoolean() ? "true" : "false");
+				break;
+
+			case TYPE_DATE:
+				final Date date = value.getDate();
+				if(date == null) {
+					primaryKeyValueString = "";
+				} else {
+					//Almost any use of GWT's DateTimeFormat on the server causes an exception
+					//because it is not implemented.
+					//See http://code.google.com/p/google-web-toolkit/issues/detail?id=7671
+					//
+					//final DateTimeFormat dateTimeFomat = DateTimeFormat.getFormat("yyyy-MM-dd");
+					//primaryKeyValueString = dateTimeFomat.format(date);
+					//
+					//Therefore, we do this manually:
+					primaryKeyValueString = String.format("%04d-%02d-%02d",
+							date.getYear() + 1900, date.getMonth() + 1, date.getDate());
+				}
+			
 				break;
 
 			case TYPE_INVALID:
-				final String urlText = primaryKeyValue.getUnknown();
-				if (!primaryKeyValue.isEmpty() && urlText != null) {
-					// An invalid type that's not empty indicates that primary key value has been created from a URL
+				final String urlText = value.getUnknown();
+				if (!value.isEmpty() && urlText != null) {
+					// An invalid type that's not empty indicates that the primary key value has been created from a URL
 					// string. Use the same string to represent the primary key value on the URL.
 					primaryKeyValueString = urlText;
 					// TODO: Update the primary key value string with the actual Gda Value that was created. The primary
@@ -99,11 +141,7 @@ public class DetailsPlace extends HasTablePlace {
 				break;
 			}
 
-			final HashMap<String, String> params = new HashMap<String, String>();
-			params.put(documentKey, place.getDocumentID());
-			params.put(tableKey, place.getTableName());
-			params.put(primaryKeyValueKey, primaryKeyValueString);
-			return buildParamsToken(params);
+			return primaryKeyValueString;
 		}
 
 		/**

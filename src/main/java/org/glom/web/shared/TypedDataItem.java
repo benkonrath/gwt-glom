@@ -38,6 +38,10 @@ public class TypedDataItem extends DataItem {
 	public boolean isEmpty() {
 		return empty;
 	}
+	
+	public boolean isUnknownType() {
+		return (type == GlomFieldType.TYPE_INVALID);
+	}
 
 	/** Get the value.
 	 * 

@@ -504,10 +504,32 @@ final class ConfiguredDocument {
 	DataItem[] getDetailsData(String tableName, final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
-
+		
+		setDataItemType(tableName, primaryKeyValue);
+		
 		final DetailsDBAccess detailsDBAccess = new DetailsDBAccess(document, documentID, cpds, tableName);
 
 		return detailsDBAccess.getData(primaryKeyValue);
+	}
+
+	/** 
+	 * This make sure that the primary key value knows its actual type,
+	 * in case it was received via a URL parameter as a string representation:
+	 * 
+	 * @param tableName The name of the table for which this is the primary key value
+	 * @param primaryKeyValue The TypedDataItem to be changes.
+	 */
+	private void setDataItemType(final String tableName, final TypedDataItem primaryKeyValue) {
+
+		if(primaryKeyValue.isUnknownType()) {
+			final Field primaryKeyField = document.getTablePrimaryKeyField(tableName);
+			if(primaryKeyField == null) {
+				Log.error(document.getDatabaseTitleOriginal(), tableName,
+						"Could not find the primary key.");
+			}
+
+			Utils.transformUnknownToActualType(primaryKeyValue, primaryKeyField.getGlomType());
+		}
 	}
 
 	/**
@@ -795,6 +817,8 @@ final class ConfiguredDocument {
 			final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
+		
+		setDataItemType(tableName, primaryKeyValue);
 
 		final RelatedListNavigation relatedListNavigation = new RelatedListNavigation(document, documentID, cpds,
 				tableName, portal);

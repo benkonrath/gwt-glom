@@ -30,6 +30,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Log;
 import org.glom.web.server.SqlUtils;
+import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.NavigationRecord;
 import org.glom.web.shared.TypedDataItem;
@@ -113,6 +114,11 @@ public class RelatedListNavigation extends DBAccess {
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:
 		final String relatedTableName = portal.getTableUsed("" /* not relevant */);
 		final Field primaryKeyField = document.getTablePrimaryKeyField(relatedTableName);
+		if (primaryKeyField == null) {
+			Log.error(documentID, tableName,
+					"The related table's primary key field could not be found, for related table " + relatedTableName);
+			return null;
+		}
 
 		final NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;
@@ -125,6 +131,10 @@ public class RelatedListNavigation extends DBAccess {
 			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 
 			if (primaryKeyValue != null) {
+				
+				// Make sure that the value knows its actual type,
+				// in case it was received via a URL parameter as a string representation:
+				Utils.transformUnknownToActualType(primaryKeyValue, primaryKeyField.getGlomType());
 
 				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField, primaryKeyValue);
 

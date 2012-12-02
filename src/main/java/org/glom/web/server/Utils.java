@@ -25,10 +25,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.glom.web.shared.TypedDataItem;
+import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.glom.web.shared.libglom.layout.LayoutItemField;
 
 /**
@@ -177,6 +181,67 @@ public class Utils {
 		}
 	
 		return indices;
+	}
+
+	public static void transformUnknownToActualType(final TypedDataItem dataItem, final GlomFieldType actualType) {
+		if(dataItem.getType() == actualType)
+			return;
+		
+		String unknownText = dataItem.getUnknown();
+		
+		//Avoid repeated checks for null:
+		if (unknownText == null) {
+			unknownText = "";
+		}
+	
+		switch(actualType) {
+		case TYPE_NUMERIC:
+			// TODO: Is this really locale-independent?
+			final double number = Double.parseDouble(unknownText);		
+			dataItem.setNumber(number);
+			break;
+		case TYPE_TEXT:
+			dataItem.setText(unknownText);
+			break;
+		case TYPE_DATE:
+			final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	        Date date = null;
+			try {
+				date = formatter.parse(unknownText);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+			dataItem.setDate(date); 
+			break;
+		case TYPE_TIME:
+			/*TODO :
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	        Date date;
+			try {
+				date = formatter.parse(unknownText);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+			setDate(date); 
+			*/
+			break;
+		case TYPE_BOOLEAN:
+			final boolean bool = unknownText.equals("true");
+			dataItem.setBoolean(bool); //TODO
+			break;
+		case TYPE_IMAGE:
+			dataItem.setImageDataUrl(unknownText);
+			//setImageData(null);//TODO: Though this is only used for primary keys anyway.
+			break;
+		case TYPE_INVALID:
+			break;
+		default:
+			break; //TODO: Warn because this is unusual?
+		}
 	}
 
 }
