@@ -11,9 +11,13 @@ import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 import org.junit.Test;
 
-public class DetailsPlaceTest {
+import com.googlecode.gwt.test.GwtModule;
+import com.googlecode.gwt.test.GwtTest;
 
-	public DetailsPlaceTest() {
+@GwtModule("org.glom.web.OnlineGlom")
+public class GwtTestDetailsPlace extends GwtTest {
+
+	public GwtTestDetailsPlace() {
 	}
 
 	@Test

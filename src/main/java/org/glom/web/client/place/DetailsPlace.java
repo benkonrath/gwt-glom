@@ -26,6 +26,7 @@ import org.glom.web.client.StringUtils;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field.GlomFieldType;
 
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.place.shared.Prefix;
 
@@ -102,16 +103,17 @@ public class DetailsPlace extends HasTablePlace {
 				if(date == null) {
 					primaryKeyValueString = "";
 				} else {
-					//Almost any use of GWT's DateTimeFormat on the server causes an exception
+					//Note that almost any use of GWT's DateTimeFormat on the server causes an exception
 					//because it is not implemented.
 					//See http://code.google.com/p/google-web-toolkit/issues/detail?id=7671
+					
+					final DateTimeFormat dateTimeFomat = DateTimeFormat.getFormat("yyyy-MM-dd");
+					primaryKeyValueString = dateTimeFomat.format(date);
+					
+					//We could this manually, but date.getYear(), etc, are not available in client-side GWT code.
 					//
-					//final DateTimeFormat dateTimeFomat = DateTimeFormat.getFormat("yyyy-MM-dd");
-					//primaryKeyValueString = dateTimeFomat.format(date);
-					//
-					//Therefore, we do this manually:
-					primaryKeyValueString = String.format("%04d-%02d-%02d",
-							date.getYear() + 1900, date.getMonth() + 1, date.getDate());
+					//primaryKeyValueString = String.format("%04d-%02d-%02d",
+					//		date.getYear() + 1900, date.getMonth() + 1, date.getDate());
 				}
 			
 				break;

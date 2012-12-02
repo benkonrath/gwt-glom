@@ -3,9 +3,13 @@ package org.glom.web.client.place;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class ListPlaceTest {
+import com.googlecode.gwt.test.GwtModule;
+import com.googlecode.gwt.test.GwtTest;
 
-	public ListPlaceTest() {
+@GwtModule("org.glom.web.OnlineGlom")
+public class GwtTestListPlace extends GwtTest {
+
+	public GwtTestListPlace() {
 	}
 
 	@Test
