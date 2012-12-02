@@ -1,5 +1,15 @@
 2012-12-02  Murray Cumming  <murrayc@murrayc.com>
 
+        Add GwtTestReportPlace.
+
+        * src/test/java/org/glom/web/client/place/GwtTestReportPlace.java:
+	This is like the existing GwtTest*Place tests.
+	It would be nice if we could just test that all client and shared
+	code can be compiled to Javascript without creating a test for it.
+	Currently, we only discover problems when starting it in a browser.
+
+2012-12-02  Murray Cumming  <murrayc@murrayc.com>
+
         Add GwtTestDetailsPlace to test the same code as client-side.
 
         * src/test/java/org/glom/web/client/place/GwtTestDetailsPlace.java:
