@@ -91,7 +91,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 		final String tableName = "sometable";
 		
 		//TODO: Is there no easier (and non-deprecated) way to create
-		//a Date intance?
+		//a Date instance?
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(new Date());
 		cal.set(Calendar.HOUR_OF_DAY, 0);
