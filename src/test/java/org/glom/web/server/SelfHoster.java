@@ -27,6 +27,7 @@ import java.net.ServerSocket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -47,7 +48,6 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.Factory;
 
 import com.google.common.io.Files;
-import com.ibm.icu.text.NumberFormat;
 
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
