@@ -1,5 +1,15 @@
 2012-12-04  Murray Cumming  <murrayc@murrayc.com>
 
+        GwtTestOnlineGlomService: Add some assertions.
+
+        * src/test/java/org/glom/web/client/GwtTestOnlineGlomService.java:
+	However, these assertions will never be run because we have no
+	way to set up the test conditions (specifying documents and their
+	databases) for the OnlineGlom service.
+	See https://groups.google.com/forum/?hl=en&fromgroups=#!topic/google-web-toolkit/Z6rPWG4kcKQ
+
+2012-12-04  Murray Cumming  <murrayc@murrayc.com>
+
         Add client-side tests for StringUtils and Utils.
 
         * src/test/java/org/glom/web/client/GwtTestStringUtils.java: Added.

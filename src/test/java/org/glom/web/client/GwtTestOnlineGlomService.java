@@ -44,8 +44,13 @@ public class GwtTestOnlineGlomService extends GWTTestCase {
 			public void onSuccess(final Documents documents) {
 				if (documents.getCount() > 0) {
 					for (int i = 0; i < documents.getCount(); i++) {
-						documents.getDocumentID(i);
-						documents.getTitle(i);
+						final String documentID = documents.getDocumentID(i);
+						assertNotNull(documentID);
+						assertFalse(StringUtils.isEmpty(documentID));
+
+						final String title = documents.getTitle(i);
+						assertNotNull(title);
+						assertFalse(StringUtils.isEmpty(title));
 					}
 				} else {
 					// getAndSetErrorMessage();
