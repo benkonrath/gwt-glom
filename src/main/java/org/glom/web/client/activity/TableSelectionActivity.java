@@ -77,6 +77,10 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setPresenter(this);
+		
+		// TODO: Check for authentication here?
+		// Or just let it fail to retrieve the list of tables,
+		// and let the other activity on the page ask for authentication.
 
 		// For table changes with the tableSelector:
 		final HasChangeHandlers tableSelector = tableSelectionView.getTableSelector();

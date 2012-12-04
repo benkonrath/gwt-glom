@@ -1,5 +1,12 @@
 2012-12-04  Murray Cumming  <murrayc@murrayc.com>
 
+        DetailsActivity: Check for authentication here too.
+
+        * src/main/java/org/glom/web/client/activity/DetailsActivity.java:
+        Call checkAuthentication to deal with a TODO here.
+
+2012-12-04  Murray Cumming  <murrayc@murrayc.com>
+
         Authentication: Reduce some copy/paste by moving code to base class.
 
         * src/main/java/org/glom/web/client/activity/HasTableActivity.java:
