@@ -147,10 +147,12 @@ public class ListActivity extends HasTableActivity {
 					@Override
 					public void onSuccess(final Boolean result) {
 						if (result) {
+							// If authentication succeeded, take us to the requested table:
 							authenticationPopup.hide();
 							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
 									.getSelectedTableName()));
 						} else {
+							// If authentication failed, tell the user:
 							authenticationPopup.setTextFieldsEnabled(true);
 							authenticationPopup.setError();
 						}

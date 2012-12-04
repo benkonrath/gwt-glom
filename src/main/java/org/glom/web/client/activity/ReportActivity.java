@@ -86,6 +86,9 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 
 			@Override
 			public void onSuccess(final Boolean result) {
+				
+				// If the user's session is not authenticated
+				// then attempt authentication, asking the user:
 				if (!result) {
 					setUpAuthClickHandler(eventBus);
 					authenticationPopup.center();
@@ -135,10 +138,12 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 					@Override
 					public void onSuccess(final Boolean result) {
 						if (result) {
+							// If authentication succeeded, take us to the requested table:
 							authenticationPopup.hide();
 							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
 									.getSelectedTableName()));
 						} else {
+							// If authentication failed, tell the user:
 							authenticationPopup.setTextFieldsEnabled(true);
 							authenticationPopup.setError();
 						}
