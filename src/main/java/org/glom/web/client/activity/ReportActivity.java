@@ -23,33 +23,25 @@ import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.Utils;
-import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.ReportPlace;
-import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.OnlineGlomConstants;
 import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.View;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ReportActivity extends AbstractActivity implements View.Presenter {
+public class ReportActivity extends HasTableActivity implements View.Presenter {
 
-	private final String documentID;
-	private final String tableName;
 	private final String reportName;
 	private final String quickFind;
 	private final ClientFactory clientFactory;
 	private final ReportView reportView;
-	private final AuthenticationPopup authenticationPopup;
 
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
@@ -57,13 +49,11 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
 	public ReportActivity(final ReportPlace place, final ClientFactory clientFactory) {
-		this.documentID = place.getDocumentID(); // TODO: Just store the place?
-		this.tableName = place.getTableName();
+		super(place, clientFactory);
 		this.quickFind = place.getQuickFind();
 		this.reportName = place.getReportName();
 		this.clientFactory = clientFactory;
 		reportView = clientFactory.getReportView();
-		authenticationPopup = clientFactory.getAuthenticationPopup();
 	}
 
 	@Override
@@ -75,27 +65,7 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 		// register this class as the presenter
 		reportView.setPresenter(this);
 
-		// TODO this should really be it's own Place/Activity
-		// check if the authentication info has been set for the document
-		final AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
-			@Override
-			public void onFailure(final Throwable caught) {
-				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(final Boolean result) {
-				
-				// If the user's session is not authenticated
-				// then attempt authentication, asking the user:
-				if (!result) {
-					setUpAuthClickHandler(eventBus);
-					authenticationPopup.center();
-				}
-			}
-		};
-		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
+		checkAuthentication(eventBus);
 
 		// populate the report part:
 		final AsyncCallback<String> callback = new AsyncCallback<String>() {
@@ -121,39 +91,6 @@ public class ReportActivity extends AbstractActivity implements View.Presenter {
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(reportView.asWidget());
-	}
-
-	private void setUpAuthClickHandler(final EventBus eventBus) {
-		authenticationPopup.setClickOkHandler(new ClickHandler() {
-			@Override
-			public void onClick(final ClickEvent event) {
-				authenticationPopup.setTextFieldsEnabled(false);
-				final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-					@Override
-					public void onFailure(final Throwable caught) {
-						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication(): " + caught.getMessage());
-					}
-
-					@Override
-					public void onSuccess(final Boolean result) {
-						if (result) {
-							// If authentication succeeded, take us to the requested table:
-							authenticationPopup.hide();
-							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
-									.getSelectedTableName()));
-						} else {
-							// If authentication failed, tell the user:
-							authenticationPopup.setTextFieldsEnabled(true);
-							authenticationPopup.setError();
-						}
-					}
-				};
-				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentID,
-						authenticationPopup.getUsername(), authenticationPopup.getPassword(), callback);
-			}
-
-		});
 	}
 
 	private void clearView() {

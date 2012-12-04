@@ -1,5 +1,15 @@
 2012-12-04  Murray Cumming  <murrayc@murrayc.com>
 
+        Authentication: Reduce some copy/paste by moving code to base class.
+
+        * src/main/java/org/glom/web/client/activity/HasTableActivity.java:
+        Add checkAuthentication().
+        * src/main/java/org/glom/web/client/activity/ListActivity.java:
+        * src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	Call it here instead of copy/pasting the code.
+
+2012-12-04  Murray Cumming  <murrayc@murrayc.com>
+
         GwtTestOnlineGlomService: Add some assertions.
 
         * src/test/java/org/glom/web/client/GwtTestOnlineGlomService.java:

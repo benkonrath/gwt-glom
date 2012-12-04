@@ -20,12 +20,19 @@
 package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
+import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.HasTablePlace;
 import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.View;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
@@ -57,6 +64,64 @@ public abstract class HasTableActivity extends AbstractActivity implements View.
 	@Override
 	public void goTo(final Place place) {
 		clientFactory.getPlaceController().goTo(place);
+	}
+	
+	/**
+	 * @param eventBus
+	 */
+	protected void checkAuthentication(final EventBus eventBus) {
+		// TODO this should really be it's own Place/Activity
+		// check if the authentication info has been set for the document
+		final AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
+			@Override
+			public void onFailure(final Throwable caught) {
+				// TODO: create a way to notify users of asynchronous callback failures
+				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(final Boolean result) {
+				if (!result) {
+					setUpAuthClickHandler(eventBus);
+					authenticationPopup.center();
+				}
+			}
+		};
+		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
+	}
+	
+	private void setUpAuthClickHandler(final EventBus eventBus) {
+		authenticationPopup.setClickOkHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				authenticationPopup.setTextFieldsEnabled(false);
+
+				final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+					@Override
+					public void onFailure(final Throwable caught) {
+						// TODO: create a way to notify users of asynchronous callback failures
+						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication(): " + caught.getMessage());
+					}
+
+					@Override
+					public void onSuccess(final Boolean result) {
+						if (result) {
+							// If authentication succeeded, take us to the requested table:
+							authenticationPopup.hide();
+							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
+									.getSelectedTableName()));
+						} else {
+							// If authentication failed, tell the user:
+							authenticationPopup.setTextFieldsEnabled(true);
+							authenticationPopup.setError();
+						}
+					}
+				};
+				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentID,
+						authenticationPopup.getUsername(), authenticationPopup.getPassword(), callback);
+			}
+
+		});
 	}
 
 }

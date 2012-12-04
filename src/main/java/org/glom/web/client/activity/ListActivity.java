@@ -36,8 +36,6 @@ import org.glom.web.client.ui.ListView;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -62,24 +60,7 @@ public class ListActivity extends HasTableActivity {
 		// register this class as the presenter
 		listView.setPresenter(this);
 
-		// TODO this should really be it's own Place/Activity
-		// check if the authentication info has been set for the document
-		final AsyncCallback<Boolean> isAuthCallback = new AsyncCallback<Boolean>() {
-			@Override
-			public void onFailure(final Throwable caught) {
-				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(final Boolean result) {
-				if (!result) {
-					setUpAuthClickHandler(eventBus);
-					authenticationPopup.center();
-				}
-			}
-		};
-		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
+		checkAuthentication(eventBus);
 
 		// set the change handler for the table selection widget
 		eventBus.addHandler(TableChangeEvent.TYPE, new TableChangeEventHandler() {
@@ -130,39 +111,6 @@ public class ListActivity extends HasTableActivity {
 
 		// indicate that the view is ready to be displayed
 		panel.setWidget(listView.asWidget());
-	}
-
-	private void setUpAuthClickHandler(final EventBus eventBus) {
-		authenticationPopup.setClickOkHandler(new ClickHandler() {
-			@Override
-			public void onClick(final ClickEvent event) {
-				authenticationPopup.setTextFieldsEnabled(false);
-				final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
-					@Override
-					public void onFailure(final Throwable caught) {
-						// TODO: create a way to notify users of asynchronous callback failures
-						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication(): " + caught.getMessage());
-					}
-
-					@Override
-					public void onSuccess(final Boolean result) {
-						if (result) {
-							// If authentication succeeded, take us to the requested table:
-							authenticationPopup.hide();
-							eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
-									.getSelectedTableName()));
-						} else {
-							// If authentication failed, tell the user:
-							authenticationPopup.setTextFieldsEnabled(true);
-							authenticationPopup.setError();
-						}
-					}
-				};
-				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentID,
-						authenticationPopup.getUsername(), authenticationPopup.getPassword(), callback);
-			}
-
-		});
 	}
 
 	private void clearView() {
