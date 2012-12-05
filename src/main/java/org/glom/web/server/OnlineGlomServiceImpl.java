@@ -321,7 +321,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public Reports getReportsList(final String documentID, final String tableName, final String localeID) {
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
-		return configuredDoc.getReports(tableName, localeID);
+		if(configuredDoc != null) {
+			return configuredDoc.getReports(tableName, localeID);
+		} else {
+			return null;
+		}
 	}
 
 	// TODO: It would be more efficient to get the extra related (or related related) column value along with the other

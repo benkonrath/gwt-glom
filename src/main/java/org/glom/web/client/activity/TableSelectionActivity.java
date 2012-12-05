@@ -19,6 +19,8 @@
 
 package org.glom.web.client.activity;
 
+import java.util.ArrayList;
+
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
 import org.glom.web.client.StringUtils;
@@ -166,7 +168,10 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				tableSelectionView.setTableSelection(result.getTableNames(), result.getTableTitles());
 
 				if (StringUtils.isEmpty(tableName)) {
-					tableName = result.getTableNames().get(result.getDefaultTableIndex());
+					final ArrayList<String> tableNames = result.getTableNames();
+					if(tableNames != null) {
+						tableName = tableNames.get(result.getDefaultTableIndex());
+					}
 				}
 
 				tableSelectionView.setSelectedTableName(tableName);

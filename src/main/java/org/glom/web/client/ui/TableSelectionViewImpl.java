@@ -228,6 +228,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	@Override
 	public void setLocaleList(final ArrayList<String> ids, final ArrayList<String> titles) {
 		localesChooser.clear();
+
+		if(ids == null) {
+			return;
+		}
+
 		for (int i = 0; i < ids.size(); i++) {
 			localesChooser.addItem(titles.get(i), ids.get(i));
 		}
@@ -301,6 +306,9 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		// so the user will not be able to choose that report to go to that page.
 		// TODO: Think of a better UI for this.
 		reportsChooser.addItem("-", "");
+
+		if(reports == null)
+			return;
 
 		for (int i = 0; i < reports.getCount(); i++) {
 			reportsChooser.addItem(reports.getTitle(i), reports.getName(i));

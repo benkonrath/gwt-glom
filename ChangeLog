@@ -1,5 +1,19 @@
 2012-12-05  Murray Cumming  <murrayc@murrayc.com>
 
+        Some checks for nulls.
+
+        * src/main/java/org/glom/web/client/activity/TableSelectionActivity.java:
+        fillView():
+        * src/main/java/org/glom/web/client/ui/TableSelectionViewImpl.java:
+        setLocaleList(), setReportList()):
+        * src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+        getReportsList(): Avoid using null objects.
+        * src/main/java/org/glom/web/server/Utils.java:
+        transformUnknownToActualType(): Try to avoid or catch
+	failures to parse the string as a double.
+
+2012-12-05  Murray Cumming  <murrayc@murrayc.com>
+
         Turn the authenication popup into a real Place.
 	
         * src/main/java/org/glom/web/client/place/HasTablePlace.java:

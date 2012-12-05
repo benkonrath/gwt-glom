@@ -197,7 +197,15 @@ public class Utils {
 		switch(actualType) {
 		case TYPE_NUMERIC:
 			// TODO: Is this really locale-independent?
-			final double number = Double.parseDouble(unknownText);		
+			double number = 0;
+			if(!StringUtils.isEmpty(unknownText)) {
+				try {
+					number = Double.parseDouble(unknownText);		
+				} catch (final NumberFormatException e) {
+					e.printStackTrace();
+				}
+			}
+
 			dataItem.setNumber(number);
 			break;
 		case TYPE_TEXT:
