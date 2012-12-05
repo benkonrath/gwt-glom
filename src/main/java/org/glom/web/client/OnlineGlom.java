@@ -55,7 +55,7 @@ public class OnlineGlom implements EntryPoint {
 
 	private final LayoutPanel rootLayoutPanel = RootLayoutPanel.get();
 	private final FlowPanel layoutPanel = new FlowPanel();
-	protected SimplePanel docSelectionPanel = new SimplePanel();
+	protected SimplePanel docSelectionPanel = new SimplePanel(); //Or document login.
 	protected SimplePanel dataPanel = new SimplePanel();
 	protected SimplePanel tableSelectionPanel = new SimplePanel();
 

@@ -19,9 +19,10 @@
 
 package org.glom.web.client;
 
-import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.client.ui.DetailsViewImpl;
+import org.glom.web.client.ui.DocumentLoginView;
+import org.glom.web.client.ui.DocumentLoginViewImpl;
 import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.DocumentSelectionViewImpl;
 import org.glom.web.client.ui.ListView;
@@ -38,10 +39,10 @@ import com.google.web.bindery.event.shared.EventBus;
 public class ClientFactoryImpl implements ClientFactory {
 	private final EventBus eventBus = new SimpleEventBus();
 	private final PlaceController placeController = new PlaceController(eventBus);
+	private final DocumentLoginView documentLoginView = new DocumentLoginViewImpl();
 	private final DocumentSelectionView documentSelectionView = new DocumentSelectionViewImpl();
 	private final TableSelectionView tableSelectionView = new TableSelectionViewImpl();
 	private final ListView listView = new ListViewImpl();
-	private final AuthenticationPopup authenticationPopup = new AuthenticationPopup();
 	private final DetailsView detailsView = new DetailsViewImpl();
 	private final ReportView reportView = new ReportViewImpl();
 
@@ -53,6 +54,11 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public PlaceController getPlaceController() {
 		return placeController;
+	}
+
+	@Override
+	public DocumentLoginView getDocumentLoginView() {
+		return documentLoginView;
 	}
 
 	@Override
@@ -68,11 +74,6 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public ListView getListView() {
 		return listView;
-	}
-
-	@Override
-	public AuthenticationPopup getAuthenticationPopup() {
-		return authenticationPopup;
 	}
 
 	@Override

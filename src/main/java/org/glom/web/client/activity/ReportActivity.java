@@ -93,9 +93,9 @@ public class ReportActivity extends HasTableActivity implements View.Presenter {
 		panel.setWidget(reportView.asWidget());
 	}
 
-	private void clearView() {
-		authenticationPopup.hide();
-		authenticationPopup.clear();
+	@Override
+	protected void clearView() {
+		super.clearView();
 		reportView.clear();
 	}
 

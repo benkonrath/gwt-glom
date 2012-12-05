@@ -20,7 +20,9 @@
 package org.glom.web.client.mvp;
 
 import org.glom.web.client.ClientFactory;
+import org.glom.web.client.activity.DocumentLoginActivity;
 import org.glom.web.client.activity.DocumentSelectionActivity;
+import org.glom.web.client.place.DocumentLoginPlace;
 import org.glom.web.client.place.DocumentSelectionPlace;
 
 import com.google.gwt.activity.shared.Activity;
@@ -53,6 +55,11 @@ public class DocumentSelectionActivityMapper implements ActivityMapper {
 		if (place instanceof DocumentSelectionPlace) {
 			return new DocumentSelectionActivity(clientFactory);
 		}
+		if (place instanceof DocumentLoginPlace) {
+			final DocumentLoginPlace derivedPlace = (DocumentLoginPlace)place;
+			return new DocumentLoginActivity(derivedPlace, clientFactory);
+		}
+		
 
 		return null;
 	}

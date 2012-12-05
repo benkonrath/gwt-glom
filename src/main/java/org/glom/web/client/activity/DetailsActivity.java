@@ -386,7 +386,7 @@ public class DetailsActivity extends HasTableActivity {
 	 */
 	@Override
 	public void onCancel() {
-		detailsView.clear();
+		clearView();
 	}
 
 	/*
@@ -396,6 +396,12 @@ public class DetailsActivity extends HasTableActivity {
 	 */
 	@Override
 	public void onStop() {
+		clearView();
+	}
+	
+	@Override
+	protected void clearView() {
+		super.clearView();
 		detailsView.clear();
 	}
 

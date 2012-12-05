@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Openismus GmbH
+ * Copyright (C) 2010, 2011 Openismus GmbH
  *
  * This file is part of GWT-Glom.
  *
@@ -22,28 +22,32 @@ package org.glom.web.client.ui;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
-/**
- *
- */
-public class AuthenticationPopup extends DecoratedPopupPanel {
+public class DocumentLoginViewImpl extends Composite implements DocumentLoginView {
+
+	//final private FlowPanel mainPanel = new FlowPanel();
 	private final TextBox usernameTextBox = new TextBox();
 	private final PasswordTextBox passwordTextBox = new PasswordTextBox();
-	private final Label errorMessage = new Label("Username and/or password not correct.");
-	private final Button okButton = new Button("OK");
+	private final Label errorMessage = new Label("Username and/or password not correct."); //TODO: Translate
+	private final Button loginButton = new Button("Login"); //TODO: Translate
+	private final Button cancelButton = new Button("Cancel"); //TODO: Translate
+	//TODO: ForgotPassword button.
 	FlexTable flexTable = new FlexTable();
+	private Presenter presenter;
+	
+	private HandlerRegistration authLoginButtonHandlerRegistration;
+	private HandlerRegistration authCancelButtonHandlerRegistration;
 
-	private HandlerRegistration authOkHandlerRegistration;
-
-	public AuthenticationPopup() {
-		// setup the layout
+	public DocumentLoginViewImpl() {
+		initWidget(flexTable);
+		
 		flexTable.setCellSpacing(10);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 		flexTable.setHTML(0, 0, "<b>Enter the PostgreSQL username and password.</b>");
@@ -55,25 +59,33 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 		flexTable.setHTML(2, 0, "Password");
 		flexTable.setWidget(2, 1, passwordTextBox);
 		cellFormatter.setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.setWidget(3, 1, okButton);
+		flexTable.setWidget(3, 0, cancelButton);
+		cellFormatter.setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		flexTable.setWidget(3, 1, loginButton);
 		cellFormatter.setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-
-		// setup the popup
-		setGlassEnabled(true);
-		setWidget(flexTable);
-
-		// setup properties for the error message
-		errorMessage.getElement().getStyle().setColor("Red");
 	}
 
-	public void setClickOkHandler(final ClickHandler clickHandler) {
-		authOkHandlerRegistration = okButton.addClickHandler(clickHandler);
+	@Override
+	public void setPresenter(final Presenter presenter) {
+		this.presenter = presenter;
+	}
+	
+	@Override
+	public void setClickLoginHandler(final ClickHandler clickHandler) {
+		authLoginButtonHandlerRegistration = loginButton.addClickHandler(clickHandler);
+	}
+	
+	@Override
+	public void setClickCancelHandler(final ClickHandler clickHandler) {
+		authCancelButtonHandlerRegistration = cancelButton.addClickHandler(clickHandler);
 	}
 
+	@Override
 	public String getUsername() {
 		return usernameTextBox.getValue();
 	}
 
+	@Override
 	public String getPassword() {
 		return passwordTextBox.getValue();
 
@@ -81,31 +93,41 @@ public class AuthenticationPopup extends DecoratedPopupPanel {
 
 	@Override
 	public void clear() {
-		if (authOkHandlerRegistration != null) {
-			authOkHandlerRegistration.removeHandler();
-			authOkHandlerRegistration = null;
+		if (authLoginButtonHandlerRegistration != null) {
+			authLoginButtonHandlerRegistration.removeHandler();
+			authLoginButtonHandlerRegistration = null;
 		}
+
+		if (authCancelButtonHandlerRegistration != null) {
+			authCancelButtonHandlerRegistration.removeHandler();
+			authCancelButtonHandlerRegistration = null;
+		}
+
 		usernameTextBox.setText("");
 		passwordTextBox.setText("");
 		setTextFieldsEnabled(true);
 		clearError();
 	}
 
+	@Override
 	public void setTextFieldsEnabled(final boolean enabled) {
 		usernameTextBox.setEnabled(enabled);
 		passwordTextBox.setEnabled(enabled);
 	}
-
+	
+	@Override
 	public void setError() {
 		flexTable.setWidget(4, 0, errorMessage);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 		cellFormatter.setColSpan(4, 0, 2);
 		cellFormatter.setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
-
+	
+	@Override
 	public void clearError() {
 		if (flexTable.getRowCount() == 5) {
 			flexTable.removeRow(4);
 		}
 	}
+
 }

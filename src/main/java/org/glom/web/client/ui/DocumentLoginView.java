@@ -17,29 +17,37 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.client.place;
+package org.glom.web.client.ui;
+
+import com.google.gwt.event.dom.client.ClickHandler;
 
 
 /**
- * Super type for Place objects (bookmarkable URLs) that display the TableSelectionView.
- * 
+ *
  */
-public abstract class HasTablePlace extends HasDocumentPlace {
+public interface DocumentLoginView extends View {
 
-	private final String tableName;
+	/** Specify a handler to be called when the user clicks the Login button
+	 * to attempt authentication.
+	 * 
+	 * @param clickHandler
+	 */
+	public void setClickLoginHandler(final ClickHandler clickHandler);
+	
+	/** Specify a handler to be called when the user clicks the cancel button
+	 * to cancel the attempt at authentication.
+	 * 
+	 * @param clickHandler
+	 */
+	public void setClickCancelHandler(final ClickHandler clickHandler);
 
-	public HasTablePlace(final String documentID, final String tableName) {
-		super(documentID);
-		this.tableName = tableName;
-	}
+	public void setTextFieldsEnabled(final boolean enabled);
 
+	public String getUsername();
 
-	public String getTableName() {
-		return tableName;
-	}
+	public String getPassword();
 
-	public static class Tokenizer extends HasDocumentPlace.Tokenizer {
-		protected final String tableKey = "table";
-	}
+	public void setError();
 
+	public void clearError();
 }

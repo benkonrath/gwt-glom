@@ -113,9 +113,9 @@ public class ListActivity extends HasTableActivity {
 		panel.setWidget(listView.asWidget());
 	}
 
-	private void clearView() {
-		authenticationPopup.hide();
-		authenticationPopup.clear();
+	@Override
+	protected void clearView() {
+		super.clearView();
 		listView.clear();
 	}
 

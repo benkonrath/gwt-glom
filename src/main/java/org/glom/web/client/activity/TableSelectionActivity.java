@@ -91,7 +91,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 				// update themselves.
 				eventBus.fireEvent(new TableChangeEvent(tableSelectionView.getSelectedTableName()));
 
-				// Update the browser title because there's place change and the setPlace() method will not be called.
+				// Update the browser title because there's a place change and the setPlace() method will not be called.
 				Window.setTitle(documentTitle + ": " + tableSelectionView.getSelectedTableTitle());
 			}
 		});

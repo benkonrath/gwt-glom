@@ -19,8 +19,8 @@
 
 package org.glom.web.client;
 
-import org.glom.web.client.ui.AuthenticationPopup;
 import org.glom.web.client.ui.DetailsView;
+import org.glom.web.client.ui.DocumentLoginView;
 import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.ListView;
 import org.glom.web.client.ui.ReportView;
@@ -45,12 +45,12 @@ public interface ClientFactory {
 	PlaceController getPlaceController();
 
 	DocumentSelectionView getDocumentSelectionView();
+	
+	DocumentLoginView getDocumentLoginView();
 
 	TableSelectionView getTableSelectionView();
 
 	ListView getListView();
-
-	AuthenticationPopup getAuthenticationPopup();
 
 	DetailsView getDetailsView();
 

@@ -1,3 +1,44 @@
+2012-12-05  Murray Cumming  <murrayc@murrayc.com>
+
+        Turn the authenication popup into a real Place.
+	
+        * src/main/java/org/glom/web/client/place/HasTablePlace.java:
+	Moved some of this into a base class:
+        * src/main/java/org/glom/web/client/place/HasDocumentPlace.java:
+	for use by:
+	* src/main/java/org/glom/web/client/place/DocumentLoginPlace.java
+	
+	* src/main/java/org/glom/web/client/ui/AuthenticationPopup.java:
+	Removed this, moving its UI into:
+	* src/main/java/org/glom/web/client/ui/DocumentLoginView.java
+	* src/main/java/org/glom/web/client/ui/DocumentLoginViewImpl.java
+
+        * src/main/java/org/glom/web/client/ClientFactory.java:
+        * src/main/java/org/glom/web/client/ClientFactoryImpl.java:
+        Added getDocumentLoginView() to return this view.
+
+        * src/main/java/org/glom/web/client/activity/HasTableActivity.java:
+	Move some of this into a base class:
+	* src/main/java/org/glom/web/client/activity/HasDocumentActivity.java
+	checkAuthentication(): If the user is not authenticated,
+	instead of showing the popup, go to the login place.
+	* src/main/java/org/glom/web/client/activity/DocumentLoginActivity.java
+	A new activity for the DocumentLoginPlace. This checks if the 
+	user is authenticated and either moves to the appropriate page or
+	waits for the user to enter credentials.
+
+        * src/main/java/org/glom/web/client/activity/ListActivity.java:
+        * src/main/java/org/glom/web/client/activity/ReportActivity.java:
+	Remove mentions of the authentication popup.
+
+        * src/main/java/org/glom/web/client/mvp/AppPlaceHistoryMapper.java:
+        Tell this about DocumentLoginPlace.
+        * src/main/java/org/glom/web/client/mvp/DocumentSelectionActivityMapper.java:
+        getActivity(): Also handle DocumentLoginPlace, returning DocumentLoginActivity.
+
+	The login screen is not pretty, and it does not yet attempt to take the use
+	back to the correct place.
+
 2012-12-04  Murray Cumming  <murrayc@murrayc.com>
 
         DetailsActivity: Check for authentication here too.
