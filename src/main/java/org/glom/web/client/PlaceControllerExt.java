@@ -27,6 +27,8 @@ import com.google.web.bindery.event.shared.EventBus;
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
  * 
+ * See http://stackoverflow.com/questions/7672895/using-gwts-activities-and-places-can-i-navigate-to-a-previous-page-without-using?rq=1
+ * 
  */
 public class PlaceControllerExt extends PlaceController {
 
