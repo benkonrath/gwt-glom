@@ -19,6 +19,7 @@
 
 package org.glom.web.client;
 
+import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.ui.DetailsView;
 import org.glom.web.client.ui.DetailsViewImpl;
 import org.glom.web.client.ui.DocumentLoginView;
@@ -38,7 +39,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public class ClientFactoryImpl implements ClientFactory {
 	private final EventBus eventBus = new SimpleEventBus();
-	private final PlaceController placeController = new PlaceController(eventBus);
+	private final PlaceController placeController = new PlaceControllerExt(eventBus, new DocumentSelectionPlace());
 	private final DocumentLoginView documentLoginView = new DocumentLoginViewImpl();
 	private final DocumentSelectionView documentSelectionView = new DocumentSelectionViewImpl();
 	private final TableSelectionView tableSelectionView = new TableSelectionViewImpl();

@@ -23,8 +23,6 @@ import org.glom.web.client.mvp.AppPlaceHistoryMapper;
 import org.glom.web.client.mvp.DataActivityMapper;
 import org.glom.web.client.mvp.DocumentSelectionActivityMapper;
 import org.glom.web.client.mvp.TableSelectionActivityMapper;
-import org.glom.web.client.place.DocumentSelectionPlace;
-
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
@@ -51,8 +49,6 @@ public class OnlineGlom implements EntryPoint {
 	/*
 	 * Some of these are protected, rather than private, so that GwtTestOnlineGlom can access them.
 	 */
-	private final Place defaultPlace = new DocumentSelectionPlace();
-
 	private final LayoutPanel rootLayoutPanel = RootLayoutPanel.get();
 	private final FlowPanel layoutPanel = new FlowPanel();
 	protected SimplePanel docSelectionPanel = new SimplePanel(); //Or document login.
@@ -143,6 +139,12 @@ public class OnlineGlom implements EntryPoint {
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper.
 		final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+		
+		Place defaultPlace = null;
+		if(placeController instanceof PlaceControllerExt) {
+			PlaceControllerExt ext = (PlaceControllerExt)placeController;
+			defaultPlace = ext.getDefaultPlace();
+		}
 		historyHandler.register(placeController, eventBus, defaultPlace);
 
 		// Goes to the place represented on the URL or the default place.

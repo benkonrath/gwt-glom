@@ -21,17 +21,16 @@ package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.PlaceControllerExt;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.event.TableChangeEvent;
-import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.HasDocumentPlace;
-import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.ui.DocumentLoginView;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -43,11 +42,31 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 		super(place, clientFactory);
 		this.view = clientFactory.getDocumentLoginView();
 	}
+	
+	private void goToPrevious() {
+		final PlaceController placeController = clientFactory.getPlaceController();
+		if(placeController instanceof PlaceControllerExt) {
+			final PlaceControllerExt ext = (PlaceControllerExt)placeController;
+			ext.previous();
+		} else {
+			GWT.log("The PlaceController was not a PlaceControllerExt.");
+		}
+	}
+	
+	private void goToDefault() {
+		final PlaceController placeController = clientFactory.getPlaceController();
+		if(placeController instanceof PlaceControllerExt) {
+			final PlaceControllerExt ext = (PlaceControllerExt)placeController;
+			goTo(ext.getDefaultPlace());
+		} else {
+			GWT.log("The PlaceController was not a PlaceControllerExt.");
+		}
+	}
 
 	@Override
 	public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
 		if (StringUtils.isEmpty(documentID)) {
-			goTo(new DocumentSelectionPlace());
+			goToPrevious();
 		}
 
 		// register this class as the presenter
@@ -113,7 +132,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 					setUpAuthClickHandlers(eventBus);
 				} else {
 					// The user was already authenticated, so go to the previous (or default) page:
-					goTo(new DocumentSelectionPlace());
+					goToPrevious();
 					eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
 							.getSelectedTableName()));
 				}
@@ -141,8 +160,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 					public void onSuccess(final Boolean result) {
 						if (result) {
 							// If authentication succeeded, take us to the requested table:
-							// TODO: Take us to the previous page.
-							goTo(new ListPlace(documentID, null, null));
+							goToPrevious();
 							//eventBus.fireEvent(new TableChangeEvent(clientFactory.getTableSelectionView()
 							//		.getSelectedTableName()));
 						} else {
@@ -161,8 +179,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 		view.setClickCancelHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				//TODO: Return to the previous (or default page):
-				goTo(new DocumentSelectionPlace());	
+				goToDefault();
 			}
 		});
 	}
