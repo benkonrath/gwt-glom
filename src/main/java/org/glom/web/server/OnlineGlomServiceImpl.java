@@ -113,14 +113,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DataItem[] getDetailsData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue) {
+		if (!isAuthenticated(documentID)) {
+			return new DataItem[0];
+		}
+
 		// An empty tableName is OK, because that means the default table.
 
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 		if (configuredDoc == null) {
 			return new DataItem[0];
 		}
-
-		// FIXME check for authentication
 
 		return configuredDoc.getDetailsData(tableName, primaryKeyValue);
 	}
@@ -134,14 +136,16 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue, final String localeID) {
+		if (!isAuthenticated(documentID)) {
+			return null;
+		}
+
 		// An empty tableName is OK, because that means the default table.
 
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 		if (configuredDoc == null) {
 			return null;
 		}
-
-		// FIXME check for authentication
 
 		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
 		initalDetailsView
@@ -159,6 +163,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DocumentInfo getDocumentInfo(final String documentID, final String localeID) {
 
+		if (!isAuthenticated(documentID)) {
+			return new DocumentInfo();
+		}
+
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 
 		// Avoid dereferencing a null object:
@@ -166,10 +174,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return new DocumentInfo();
 		}
 
-		// FIXME check for authentication
-
 		return configuredDoc.getDocumentInfo(StringUtils.defaultString(localeID));
-
 	}
 
 	/*
@@ -192,14 +197,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public ArrayList<DataItem[]> getListViewData(final String documentID, final String tableName,
 			final String quickFind, final int start, final int length, final int sortColumnIndex,
 			final boolean isAscending) {
+		if (!isAuthenticated(documentID)) {
+			return new ArrayList<DataItem[]>();
+		}
+
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
 		}
 
-		if (!configuredDoc.isAuthenticated()) {
-			return new ArrayList<DataItem[]>();
-		}
 		return configuredDoc.getListViewData(tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
 	}
 
@@ -210,12 +216,14 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 */
 	@Override
 	public LayoutGroup getListViewLayout(final String documentID, final String tableName, final String localeID) {
+		if (!isAuthenticated(documentID)) {
+			return new LayoutGroup();
+		}
+
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 		if (configuredDoc == null) {
 			return new LayoutGroup();
 		}
-
-		// FIXME check for authentication
 
 		return configuredDoc.getListViewLayoutGroup(tableName, StringUtils.defaultString(localeID));
 	}
@@ -230,6 +238,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	public ArrayList<DataItem[]> getRelatedListData(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
+		if (!isAuthenticated(documentID)) {
+			return new ArrayList<DataItem[]>();
+		}
+
 		// An empty tableName is OK, because that means the default table.
 
 		if (portal == null) {
@@ -242,8 +254,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return new ArrayList<DataItem[]>();
 		}
 
-		// FIXME check for authentication
-
 		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex,
 				ascending);
 	}
@@ -251,6 +261,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public int getRelatedListRowCount(final String documentID, final String tableName, final LayoutItemPortal portal,
 			final TypedDataItem foreignKeyValue) {
+		if (!isAuthenticated(documentID)) {
+			return 0;
+		}
+
 		// An empty tableName is OK, because that means the default table.
 
 		if (portal == null) {
@@ -262,8 +276,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null) {
 			return 0;
 		}
-
-		// FIXME check for authentication
 
 		return configuredDoc.getRelatedListRowCount(tableName, portal, foreignKeyValue);
 	}
@@ -278,6 +290,10 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public String getReportHTML(final String documentID, final String tableName, final String reportName,
 			final String quickFind, final String localeID) {
+		if (!isAuthenticated(documentID)) {
+			return "";
+		}
+
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 		if (configuredDoc == null) {
 			return "";
@@ -290,8 +306,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			// TODO: throw new Exception(errorMessage);
 			return "";
 		}
-
-		// FIXME check for authentication
 
 		final Report report = glomDocument.getReport(tableName, reportName);
 		if (report == null) {
@@ -340,6 +354,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
+		if (!isAuthenticated(documentID)) {
+			return null;
+		}
 		// An empty tableName is OK, because that means the default table.
 
 		if (portal == null) {
@@ -351,8 +368,6 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null) {
 			return null;
 		}
-
-		// FIXME check for authentication
 
 		return configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
 	}
