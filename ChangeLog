@@ -1,3 +1,33 @@
+2012-12-10  Murray Cumming  <murrayc@murrayc.com>
+
+        Experimenting with per-user access.
+
+        * src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Remove the connection, adding it as a parameter to public methods.
+	Moved setUsernameAndPassword() to 
+	* src/main/java/org/glom/web/server/SqlUtils.java:
+	as tryUsernameAndPassword().
+        * src/main/java/org/glom/web/server/ConfiguredDocumentSet.java:
+        Adapted.
+        * src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	checkAuthentication(): Store a cookie if the authentication was
+	successful. Also create the database connection and store that too,
+	for later use.
+        * src/main/java/org/glom/web/server/OnlineGlomImages.java:
+ 	* src/main/java/org/glom/web/server/OnlineGlomServlet.java: Share
+	a base class, which gets the existing connection based on 
+	the cookie.
+        * src/main/java/org/glom/web/server/SessionListener.java:
+	Used to invalidate the connection when the browser session
+	ends. However, this probably needs to be declared in our web.xml.
+        * src/main/java/org/glom/web/server/UserStore.java:
+	An in-memory store of the remembered credentials (and connections).
+	This is just a test: It never discards old unused credentials
+	and loses everything when the server stops.
+        * src/test/java/org/glom/web/server/ConfiguredDocumentTest.java:
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:
+	Adapted.
+
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
         Add a test for Utils.buildImageDataUrl().

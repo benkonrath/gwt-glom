@@ -19,7 +19,10 @@
 
 package org.glom.web.server;
 
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -51,12 +54,92 @@ import org.jooq.conf.RenderNameStyle;
 import org.jooq.conf.Settings;
 import org.jooq.impl.Factory;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 /**
  * @author Murray Cumming <murrayc@openismus.com>
  * 
  */
 public class SqlUtils {
 
+	/**
+	 * @param document
+	 * @return
+	 */
+	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
+		final ComboPooledDataSource cpds = new ComboPooledDataSource();
+
+		// We don't support sqlite or self-hosting yet.
+		if ((document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL)
+				&& (document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF)) {
+			// TODO: We allow self-hosting here, for testing,
+			// but maybe the startup of self-hosting should happen here.
+			Log.fatal("Error configuring the database connection." + " Only PostgreSQL hosting is supported.");
+			// FIXME: Throw exception?
+		}
+
+		try {
+			cpds.setDriverClass("org.postgresql.Driver");
+		} catch (final PropertyVetoException e) {
+			Log.fatal("Error loading the PostgreSQL JDBC driver."
+					+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
+			return null;
+		}
+
+		// setup the JDBC driver for the current glom document
+		String jdbcURL = "jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort();
+
+		String db = document.getConnectionDatabase();
+		if (StringUtils.isEmpty(db)) {
+			// Use the default PostgreSQL database, because ComboPooledDataSource.connect() fails otherwise.
+			db = "template1";
+		}
+		jdbcURL += "/" + db; // TODO: Quote the database name?
+
+		cpds.setJdbcUrl(jdbcURL);
+
+		return cpds;
+	}
+
+	/**
+	 * Sets the username and password for the database associated with the Glom document.
+	 * 
+	 * @return true if the username and password works, false otherwise
+	 */
+	public static ComboPooledDataSource tryUsernameAndPassword(final Document document, final String username, final String password) throws SQLException {
+		ComboPooledDataSource cpds = createAndSetupDataSource(document);
+		if (cpds == null)
+			return null;
+
+		cpds.setUser(username);
+		cpds.setPassword(password);
+
+		final int acquireRetryAttempts = cpds.getAcquireRetryAttempts();
+		cpds.setAcquireRetryAttempts(1);
+		Connection conn = null;
+		try {
+			// FIXME find a better way to check authentication
+			// it's possible that the connection could be failing for another reason
+			
+			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
+			//This is more than enough.
+			DriverManager.setLoginTimeout(5); 
+			
+			conn = cpds.getConnection();
+			return cpds;
+		} catch (final SQLException e) {
+			Log.info(Utils.getFileName(document.getFileURI()), e.getMessage());
+			Log.info(Utils.getFileName(document.getFileURI()),
+					"Connection Failed. Maybe the username or password is not correct.");
+			return null;
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
+		}
+	}
+	
 	// TODO: Change to final ArrayList<LayoutItem_Field> fieldsToGet
 	public static String buildSqlSelectWithKey(final String tableName, final List<LayoutItemField> fieldsToGet,
 			final Field primaryKey, final TypedDataItem primaryKeyValue) {

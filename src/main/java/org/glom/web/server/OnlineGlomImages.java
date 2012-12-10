@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,12 +44,13 @@ import org.glom.web.shared.libglom.layout.LayoutItemField;
 import org.glom.web.shared.libglom.layout.LayoutItemImage;
 
 import com.google.gwt.http.client.Response;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
  * 
  */
-public class OnlineGlomImages extends HttpServlet {
+public class OnlineGlomImages extends OnlineGlomServlet {
 
 	private static final long serialVersionUID = -3550760617357422853L;
 	
@@ -119,10 +119,12 @@ public class OnlineGlomImages extends HttpServlet {
 			return;
 		}
 		
+		/* TODO: Check for authentication:
 		if(!configuredDocument.isAuthenticated()) {
 			doError(resp, Response.SC_NOT_FOUND, "No access to the document.", attrDocumentID);
 			return;
 		}
+		*/
 
 		final Document document = configuredDocument.getDocument();
 		if(document == null) {
@@ -222,9 +224,14 @@ public class OnlineGlomImages extends HttpServlet {
 		fieldsToGet.add(layoutItemField);
 		final String query = SqlUtils.buildSqlSelectWithKey(attrTableName, fieldsToGet, fieldPrimaryKey, primaryKeyValue);
 		
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
+			return null;
+		}
+		
 		Connection connection = null;
 		try {
-			connection = configuredDocument.getCpds().getConnection();
+			connection = authenticatedConnection.getConnection();
 		} catch (final SQLException e) {
 			//e.printStackTrace();
 

@@ -22,8 +22,11 @@ package org.glom.web.server;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.client.OnlineGlomService;
@@ -39,7 +42,7 @@ import org.glom.web.shared.libglom.Report;
 import org.glom.web.shared.libglom.layout.LayoutGroup;
 import org.glom.web.shared.libglom.layout.LayoutItemPortal;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * This is the servlet class for setting up the server side of Online Glom. The client side can call the public methods
@@ -52,9 +55,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * changes to the properties (configuration)?
  */
 @SuppressWarnings("serial")
-public class OnlineGlomServiceImpl extends RemoteServiceServlet implements OnlineGlomService {
+public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGlomService {
 
-	ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
+	private ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
 
 	/*
 	 * (non-Javadoc)
@@ -69,13 +72,41 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			Log.error(documentID, "The document could not be found for this ID: " + documentID);
 			return false;
 		}
-
-		try {
-			return configuredDoc.setUsernameAndPassword(username, password);
+	    
+		final Document document = configuredDoc.getDocument();
+		ComboPooledDataSource authenticatedConnection = null;
+		try
+		{
+			authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, username, password);
 		} catch (final SQLException e) {
 			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
+		
+		if(authenticatedConnection != null) {
+			final HttpServletRequest request = this.getThreadLocalRequest();
+			final HttpSession session = request.getSession();
+			final String sessionID = session.getId();
+			
+			// This GWT page suggests doing this on the client-side,
+			// after returning the session ID to the client,
+			// but it seems cleaner to do it here on the server side:
+			final Cookie cookie = new Cookie(COOKIE_NAME, sessionID);
+			cookie.setMaxAge(-1);
+			cookie.setPath("/");
+			//cookie.setSecure(true);
+			cookie.setMaxAge(30 * 24 * 60 * 60); //30 days
+			//TODO: How can we do this? cookie.setHttpOnly(true); //Avoid its use from client-side javascript.
+			final HttpServletResponse response = this.getThreadLocalResponse();
+			response.addCookie(cookie);
+			
+			// Let us retrieve the login details later,
+			// based on the cookie's sessionID which we retrieve later:
+			final UserStore.Credentials credentials = new UserStore.Credentials(document, username, password, authenticatedConnection);
+			userStore.setCredentials(sessionID, credentials);
+		}
+		
+		return (authenticatedConnection != null);
 	}
 
 	/*
@@ -113,8 +144,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DataItem[] getDetailsData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue) {
-		if (!isAuthenticated(documentID)) {
-			return new DataItem[0];
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
+			return null;
 		}
 
 		// An empty tableName is OK, because that means the default table.
@@ -124,7 +156,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return new DataItem[0];
 		}
 
-		return configuredDoc.getDetailsData(tableName, primaryKeyValue);
+		return configuredDoc.getDetailsData(authenticatedConnection, tableName, primaryKeyValue);
 	}
 
 	/*
@@ -136,7 +168,8 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue, final String localeID) {
-		if (!isAuthenticated(documentID)) {
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
 			return null;
 		}
 
@@ -150,7 +183,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		final DetailsLayoutAndData initalDetailsView = new DetailsLayoutAndData();
 		initalDetailsView
 				.setLayout(configuredDoc.getDetailsLayoutGroup(tableName, StringUtils.defaultString(localeID)));
-		initalDetailsView.setData(configuredDoc.getDetailsData(tableName, primaryKeyValue));
+		initalDetailsView.setData(configuredDoc.getDetailsData(authenticatedConnection, tableName, primaryKeyValue));
 
 		return initalDetailsView;
 	}
@@ -205,8 +238,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
 		}
+		
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
+			return null;
+		}
 
-		return configuredDoc.getListViewData(tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
+		return configuredDoc.getListViewData(authenticatedConnection, tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
 	}
 
 	/*
@@ -253,8 +291,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
 		}
+		
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
+			return null;
+		}
 
-		return configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex,
+		return configuredDoc.getRelatedListData(authenticatedConnection, tableName, portal, foreignKeyValue, start, length, sortColumnIndex,
 				ascending);
 	}
 
@@ -276,8 +319,13 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 		if (configuredDoc == null) {
 			return 0;
 		}
+		
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
+			return 0;
+		}
 
-		return configuredDoc.getRelatedListRowCount(tableName, portal, foreignKeyValue);
+		return configuredDoc.getRelatedListRowCount(authenticatedConnection, tableName, portal, foreignKeyValue);
 	}
 
 	// TODO: Specify the foundset (via a where clause) and maybe a default sort order.
@@ -312,10 +360,15 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
 			return "";
 		}
+		
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
+			return "";
+		}
 
 		Connection connection;
 		try {
-			connection = configuredDoc.getCpds().getConnection();
+			connection = authenticatedConnection.getConnection();
 		} catch (final SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -354,9 +407,11 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
-		if (!isAuthenticated(documentID)) {
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		if(authenticatedConnection == null) {
 			return null;
 		}
+
 		// An empty tableName is OK, because that means the default table.
 
 		if (portal == null) {
@@ -369,7 +424,7 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 			return null;
 		}
 
-		return configuredDoc.getSuitableRecordToViewDetails(tableName, portal, primaryKeyValue);
+		return configuredDoc.getSuitableRecordToViewDetails(authenticatedConnection, tableName, portal, primaryKeyValue);
 	}
 
 	/*
@@ -390,13 +445,9 @@ public class OnlineGlomServiceImpl extends RemoteServiceServlet implements Onlin
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
 	 */
 	@Override
-	public boolean isAuthenticated(final String documentID) {
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
-		if (configuredDoc == null) {
-			return false;
-		}
-
-		return configuredDoc.isAuthenticated();
+	public boolean isAuthenticated(final String documentID) { //TODO: Use the document.
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		return (authenticatedConnection != null);
 	}
 
 }

@@ -21,7 +21,6 @@ package org.glom.web.server;
 
 import java.io.File;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
@@ -35,7 +34,7 @@ import org.glom.web.server.OnlineGlomProperties.Credentials;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.Documents;
 
-import com.mchange.v2.c3p0.DataSources;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author  Murray Cumming <murrayc@openismus.com>
@@ -155,14 +154,15 @@ public class ConfiguredDocumentSet {
 				// check if a username and password have been set and work for the current document
 				
 				// Username/password could be set. Let's check to see if it works.
+				ComboPooledDataSource authenticatedConnection = null;
 				final Credentials docCredentials = config.getCredentials(filename);
 				if(docCredentials != null) {
-						configuredDocument.setUsernameAndPassword(docCredentials.userName, docCredentials.password); // can throw an SQLException
+					authenticatedConnection = SqlUtils.tryUsernameAndPassword(configuredDocument.getDocument(), docCredentials.userName, docCredentials.password); // can throw an SQLException
 				}
 	
 				// check the if the global username and password have been set and work with this document
-				if (!configuredDocument.isAuthenticated()) {
-					configuredDocument.setUsernameAndPassword(globalUserName, globalPassword); // can throw an SQLException
+				if (authenticatedConnection == null) {
+					SqlUtils.tryUsernameAndPassword(configuredDocument.getDocument(), globalUserName, globalPassword); // can throw an SQLException
 				}
 	
 				if (!StringUtils.isEmpty(globalLocaleID)) {
@@ -187,12 +187,6 @@ public class ConfiguredDocumentSet {
 			final ConfiguredDocument configuredDoc = getDocument(documentID);
 			if (configuredDoc == null) {
 				continue;
-			}
-
-			try {
-				DataSources.destroy(configuredDoc.getCpds());
-			} catch (final SQLException e) {
-				Log.error(documentID, "Error cleaning up the ComboPooledDataSource.", e);
 			}
 		}
 		

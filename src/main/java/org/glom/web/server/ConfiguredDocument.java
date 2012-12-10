@@ -20,9 +20,6 @@
 package org.glom.web.server;
 
 import java.beans.PropertyVetoException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -60,8 +57,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 final class ConfiguredDocument {
 
 	private Document document;
-	private ComboPooledDataSource cpds;
-	private boolean authenticated = false;
 	private String documentID = "";
 	private String defaultLocaleID = "";
 
@@ -172,98 +167,11 @@ final class ConfiguredDocument {
 	}
 
 	ConfiguredDocument(final Document document) throws PropertyVetoException {
-
-		// load the jdbc driver
-		cpds = createAndSetupDataSource(document);
-
 		this.document = document;
-	}
-
-	/**
-	 * @param document
-	 * @return
-	 */
-	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
-		final ComboPooledDataSource cpds = new ComboPooledDataSource();
-
-		// We don't support sqlite or self-hosting yet.
-		if ((document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL)
-				&& (document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF)) {
-			// TODO: We allow self-hosting here, for testing,
-			// but maybe the startup of self-hosting should happen here.
-			Log.fatal("Error configuring the database connection." + " Only PostgreSQL hosting is supported.");
-			// FIXME: Throw exception?
-		}
-
-		try {
-			cpds.setDriverClass("org.postgresql.Driver");
-		} catch (final PropertyVetoException e) {
-			Log.fatal("Error loading the PostgreSQL JDBC driver."
-					+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
-			return null;
-		}
-
-		// setup the JDBC driver for the current glom document
-		String jdbcURL = "jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort();
-
-		String db = document.getConnectionDatabase();
-		if (StringUtils.isEmpty(db)) {
-			// Use the default PostgreSQL database, because ComboPooledDataSource.connect() fails otherwise.
-			db = "template1";
-		}
-		jdbcURL += "/" + db; // TODO: Quote the database name?
-
-		cpds.setJdbcUrl(jdbcURL);
-
-		return cpds;
-	}
-
-	/**
-	 * Sets the username and password for the database associated with the Glom document.
-	 * 
-	 * @return true if the username and password works, false otherwise
-	 */
-	boolean setUsernameAndPassword(final String username, final String password) throws SQLException {
-		cpds.setUser(username);
-		cpds.setPassword(password);
-
-		final int acquireRetryAttempts = cpds.getAcquireRetryAttempts();
-		cpds.setAcquireRetryAttempts(1);
-		Connection conn = null;
-		try {
-			// FIXME find a better way to check authentication
-			// it's possible that the connection could be failing for another reason
-			
-			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
-			//This is more than enough.
-			DriverManager.setLoginTimeout(5); 
-			
-			conn = cpds.getConnection();
-			authenticated = true;
-		} catch (final SQLException e) {
-			Log.info(Utils.getFileName(document.getFileURI()), e.getMessage());
-			Log.info(Utils.getFileName(document.getFileURI()),
-					"Connection Failed. Maybe the username or password is not correct.");
-			authenticated = false;
-		} finally {
-			if (conn != null) {
-				conn.close();
-			}
-			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
-		}
-		return authenticated;
 	}
 
 	Document getDocument() {
 		return document;
-	}
-
-	ComboPooledDataSource getCpds() {
-		return cpds;
-	}
-
-	boolean isAuthenticated() {
-		return authenticated;
 	}
 
 	String getDocumentID() {
@@ -467,9 +375,12 @@ final class ConfiguredDocument {
 	}
 
 	private void updateLayoutGroupExpectedResultSize(final LayoutGroup layoutGroup, final String tableName) {
+		//TODO: Remove this?
+		/*
 		final ListViewDBAccess listViewDBAccess = new ListViewDBAccess(document, documentID, cpds, tableName,
 				layoutGroup);
 		layoutGroup.setExpectedResultSize(listViewDBAccess.getExpectedResultSize());
+		*/
 	}
 
 	/**
@@ -484,7 +395,7 @@ final class ConfiguredDocument {
 	 * @param isAscending
 	 * @return
 	 */
-	ArrayList<DataItem[]> getListViewData(String tableName, final String quickFind, final int start, final int length,
+	public ArrayList<DataItem[]> getListViewData(ComboPooledDataSource cpds, String tableName, final String quickFind, final int start, final int length,
 			final boolean useSortClause, final int sortColumnIndex, final boolean isAscending) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
@@ -501,7 +412,7 @@ final class ConfiguredDocument {
 		return listViewDBAccess.getData(quickFind, start, length, sortColumnIndex, isAscending);
 	}
 
-	DataItem[] getDetailsData(String tableName, final TypedDataItem primaryKeyValue) {
+	DataItem[] getDetailsData(ComboPooledDataSource cpds, String tableName, final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
 		
@@ -544,7 +455,7 @@ final class ConfiguredDocument {
 	 * @param isAscending
 	 * @return
 	 */
-	ArrayList<DataItem[]> getRelatedListData(String tableName, final LayoutItemPortal portal,
+	ArrayList<DataItem[]> getRelatedListData(ComboPooledDataSource cpds, String tableName, final LayoutItemPortal portal,
 			final TypedDataItem foreignKeyValue, final int start, final int length, final int sortColumnIndex,
 			final boolean isAscending) {
 		if (portal == null) {
@@ -796,7 +707,7 @@ final class ConfiguredDocument {
 	/*
 	 * Gets the expected row count for a related list.
 	 */
-	int getRelatedListRowCount(String tableName, final LayoutItemPortal portal, final TypedDataItem foreignKeyValue) {
+	int getRelatedListRowCount(ComboPooledDataSource cpds, String tableName, final LayoutItemPortal portal, final TypedDataItem foreignKeyValue) {
 		if (portal == null) {
 			Log.error("getRelatedListData(): portal is null");
 			return 0;
@@ -813,7 +724,7 @@ final class ConfiguredDocument {
 		return relatedListDBAccess.getExpectedResultSize(foreignKeyValue);
 	}
 
-	NavigationRecord getSuitableRecordToViewDetails(String tableName, final LayoutItemPortal portal,
+	NavigationRecord getSuitableRecordToViewDetails(ComboPooledDataSource cpds, String tableName, final LayoutItemPortal portal,
 			final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);

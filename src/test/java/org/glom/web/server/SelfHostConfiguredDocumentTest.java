@@ -40,6 +40,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 /**
  * @author Murray Cumming <murrayc@openismus.com>
  *
@@ -48,6 +50,7 @@ public class SelfHostConfiguredDocumentTest {
 
 	private static SelfHoster selfHoster = null;
 	private static ConfiguredDocument configuredDoc;
+	private static ComboPooledDataSource authenticatedConnection;
 	private static Document document;
 	private static String defaultLocale = "";
 	private static String germanLocale = "de";
@@ -69,8 +72,8 @@ public class SelfHostConfiguredDocumentTest {
 		assertTrue(hosted);
 		
 		configuredDoc = new ConfiguredDocument(document);
-		configuredDoc.setUsernameAndPassword(selfHoster.getUsername(), selfHoster.getPassword());
-		assertTrue(configuredDoc.isAuthenticated());
+		authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, selfHoster.getUsername(), selfHoster.getPassword());
+		assertNotNull(authenticatedConnection);
 	}
 
 	@AfterClass
@@ -112,7 +115,7 @@ public class SelfHostConfiguredDocumentTest {
 
 	@Test
 	public void testGetListViewData() {
-		ArrayList<DataItem[]> list = configuredDoc.getListViewData("albums", defaultLocale, 0, 10, false, 0, false);
+		ArrayList<DataItem[]> list = configuredDoc.getListViewData(authenticatedConnection, "albums", defaultLocale, 0, 10, false, 0, false);
 		assertNotNull(list);
 		assertEquals(5, list.size());
 		
@@ -150,7 +153,7 @@ public class SelfHostConfiguredDocumentTest {
 	public void testGetDetailsData() {
 		final TypedDataItem primaryKeyValue = new TypedDataItem();
 		primaryKeyValue.setNumber(1);
-		final DataItem[] data = configuredDoc.getDetailsData("albums", primaryKeyValue);
+		final DataItem[] data = configuredDoc.getDetailsData(authenticatedConnection, "albums", primaryKeyValue);
 		assertNotNull(data);
 		assertEquals(8, data.length);
 		

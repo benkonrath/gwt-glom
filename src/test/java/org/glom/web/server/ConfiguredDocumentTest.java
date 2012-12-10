@@ -71,14 +71,6 @@ public class ConfiguredDocumentTest {
 	}
 
 	/**
-	 * Test method for {@link org.glom.web.server.ConfiguredDocument#isAuthenticated()}.
-	 */
-	@Test
-	public void testIsAuthenticated() {
-		assertFalse(configuredDoc.isAuthenticated());
-	}
-
-	/**
 	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getDocumentID()}.
 	 */
 	@Test
