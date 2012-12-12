@@ -19,6 +19,7 @@
 
 package org.glom.web.client.ui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
@@ -32,14 +33,20 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 public class DocumentLoginViewImpl extends Composite implements DocumentLoginView {
 
+	// OnlineGlomConstants.java is generated in the target/ directory,
+	// from OnlineGlomConstants.properties
+	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
+	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+
 	//final private FlowPanel mainPanel = new FlowPanel();
 	private final TextBox usernameTextBox = new TextBox();
 	private final PasswordTextBox passwordTextBox = new PasswordTextBox();
-	private final Label errorMessage = new Label("Username and/or password not correct."); //TODO: Translate
-	private final Button loginButton = new Button("Login"); //TODO: Translate
-	private final Button cancelButton = new Button("Cancel"); //TODO: Translate
+	private final Label errorMessage = new Label(constants.loginWrong());
+	private final Button loginButton = new Button(constants.login());
+	private final Button cancelButton = new Button(constants.cancel());
 	//TODO: ForgotPassword button.
 	FlexTable flexTable = new FlexTable();
+
 	private Presenter presenter;
 	
 	private HandlerRegistration authLoginButtonHandlerRegistration;
@@ -50,13 +57,13 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		
 		flexTable.setCellSpacing(10);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
-		flexTable.setHTML(0, 0, "<b>Enter the PostgreSQL username and password.</b>");
+		flexTable.setHTML(0, 0, "<b>" + constants.loginEnter() + "</b>");
 		cellFormatter.setColSpan(0, 0, 2);
 		cellFormatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.setHTML(1, 0, "Username");
+		flexTable.setHTML(1, 0, constants.loginUsername());
 		flexTable.setWidget(1, 1, usernameTextBox);
 		cellFormatter.setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.setHTML(2, 0, "Password");
+		flexTable.setHTML(2, 0, constants.loginPassword());
 		flexTable.setWidget(2, 1, passwordTextBox);
 		cellFormatter.setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.setWidget(3, 0, cancelButton);
