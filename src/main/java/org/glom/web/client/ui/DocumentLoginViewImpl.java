@@ -22,13 +22,18 @@ package org.glom.web.client.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 public class DocumentLoginViewImpl extends Composite implements DocumentLoginView {
@@ -37,6 +42,15 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
+
+	interface DocumentLoginViewImplUiBinder extends UiBinder<Widget, DocumentLoginViewImpl> {
+	}
+
+	private static DocumentLoginViewImplUiBinder uiBinder = GWT.create(DocumentLoginViewImplUiBinder.class);
+	@UiField
+	VerticalPanel documentLoginFields;
+	@UiField
+	HTMLPanel documentLoginPanel;
 
 	//final private FlowPanel mainPanel = new FlowPanel();
 	private final TextBox usernameTextBox = new TextBox();
@@ -47,13 +61,17 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 	//TODO: ForgotPassword button.
 	FlexTable flexTable = new FlexTable();
 
-	private Presenter presenter;
+	//private Presenter presenter;
 	
 	private HandlerRegistration authLoginButtonHandlerRegistration;
 	private HandlerRegistration authCancelButtonHandlerRegistration;
 
 	public DocumentLoginViewImpl() {
-		initWidget(flexTable);
+		initWidget(uiBinder.createAndBindUi(this));
+		documentLoginPanel.getElement().setId("documentLoginPanel");
+		documentLoginFields.addStyleName("documentLoginFields");
+		
+		documentLoginFields.add(flexTable);
 		
 		flexTable.setCellSpacing(10);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
@@ -74,7 +92,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 
 	@Override
 	public void setPresenter(final Presenter presenter) {
-		this.presenter = presenter;
+		//this.presenter = presenter;
 	}
 	
 	@Override
