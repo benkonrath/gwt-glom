@@ -1,5 +1,12 @@
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
+        Move configuredDocumentSet into the base OnlineGlomServlet.
+
+       	This leaves just one place where we can change the implementation
+	so we retrieve a shared document set instead.
+
+2012-12-17  Murray Cumming  <murrayc@murrayc.com>
+
         Move authentication to a separate login servlet.
 
         * src/main/java/org/glom/web/client/OnlineGlomService.java:

@@ -19,6 +19,7 @@
 
 package org.glom.web.server;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,12 +36,19 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	private static final long serialVersionUID = 6173927100594792748L;
 	protected static final String COOKIE_NAME = "OnlineGlomSessionID";
 	protected UserStore userStore = new UserStore();
+	private ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
 
 	/**
 	 * 
 	 */
 	public OnlineGlomServlet() {
 		super();
+		
+		try {
+			configuredDocumentSet.readConfiguration();
+		} catch (ServletException e) {
+			Log.error("Configuration error", e);
+		}
 	}
 
 	/**
@@ -50,6 +58,10 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		super(delegate);
 	}
 
+	protected ConfiguredDocumentSet getConfiguredDocumentSet() {
+		return configuredDocumentSet;
+	}
+	
 	protected ComboPooledDataSource getConnectionForCookie() {
 		final String sessionID = getSessionIdFromCookie();
 		if(StringUtils.isEmpty(sessionID)) {
@@ -93,5 +105,27 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		Log.info("sessionID=" + sessionID);
 		return sessionID;
 	}
+	
+	/*
+	 * This is called when the servlet is started or restarted.
+	 * 
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.GenericServlet#init()
+	 */
+	public void init() throws ServletException {
+		configuredDocumentSet.readConfiguration();
+	}
+	
+	/*
+	 * This is called when the servlet is stopped or restarted.
+	 * 
+	 * @see javax.servlet.GenericServlet#destroy()
+	 */
+	@Override
+	public void destroy() {
+		configuredDocumentSet.forgetDocuments();
+	}
+
 
 }

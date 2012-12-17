@@ -31,7 +31,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -54,14 +53,8 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 	
 	private static final long serialVersionUID = 4001959815578006604L;
 
-	ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
-	
 	public OnlineGlomImagesServlet() {
-		try {
-			configuredDocumentSet.readConfiguration();
-		} catch (ServletException e) {
-			Log.error("Configuration error", e);
-		}
+		super();
 	}
 	
 	private void doError(HttpServletResponse resp, int errorCode, final String errorMessage) throws IOException {
@@ -113,6 +106,12 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return;
 		}
 		
+		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
+		if(configuredDocumentSet == null) {
+			doError(resp, Response.SC_NOT_FOUND, "The document set could not be found.");
+			return;
+		}
+
 		final ConfiguredDocument configuredDocument = configuredDocumentSet.getDocument(attrDocumentID);
 		if(configuredDocument == null) {
 			doError(resp, Response.SC_NOT_FOUND, "The specified document was not found.", attrDocumentID);

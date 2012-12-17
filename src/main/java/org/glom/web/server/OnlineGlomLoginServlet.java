@@ -21,7 +21,6 @@ package org.glom.web.server;
 
 import java.sql.SQLException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,8 +44,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @SuppressWarnings("serial")
 public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineGlomLoginService {
 
-	private ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -54,6 +51,12 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 * java.lang.String)
 	 */
 	public boolean checkAuthentication(final String documentID, final String username, final String password) {
+		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
+		if(configuredDocumentSet == null) {
+			Log.error(documentID, "The document set could not be found.");
+			return false;
+		}
+
 		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
 		if (configuredDoc == null) {
 			Log.error(documentID, "The document could not be found for this ID: " + documentID);
@@ -94,27 +97,6 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 		}
 		
 		return (authenticatedConnection != null);
-	}
-
-	/*
-	 * This is called when the servlet is stopped or restarted.
-	 * 
-	 * @see javax.servlet.GenericServlet#destroy()
-	 */
-	@Override
-	public void destroy() {
-		configuredDocumentSet.forgetDocuments();
-	}
-
-	/*
-	 * This is called when the servlet is started or restarted.
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.GenericServlet#init()
-	 */
-	public void init() throws ServletException {
-		configuredDocumentSet.readConfiguration();
 	}
 
 	/*
