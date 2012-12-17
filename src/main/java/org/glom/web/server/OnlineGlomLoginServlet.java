@@ -114,7 +114,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 */
 	@Override
 	public boolean isAuthenticated(final String documentID) { //TODO: Use the document.
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie(null);
 		return (authenticatedConnection != null);
 	}
 

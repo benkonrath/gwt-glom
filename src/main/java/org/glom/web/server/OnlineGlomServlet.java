@@ -157,8 +157,13 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	}
 	
 	protected ComboPooledDataSource getConnectionForCookie() {
-		final String sessionID = getSessionIdFromCookie();
+		return getConnectionForCookie(null);
+	}
+	
+	protected ComboPooledDataSource getConnectionForCookie(final HttpServletRequest request) {
+		final String sessionID = getSessionIdFromCookie(request);
 		if(StringUtils.isEmpty(sessionID)) {
+			Log.info("Could not retrieve the session cookie");
 			return null;
 		}
 
@@ -179,10 +184,24 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	/**
 	 * @return
 	 */
-	protected String getSessionIdFromCookie() {
-		final HttpServletRequest request = this.getThreadLocalRequest();
+	protected String getSessionIdFromCookie(HttpServletRequest request) {
+		
+		if(request == null) {
+			//getThreadLocalRequest() might be only for services that are called by GWT-RPC.
+			request = this.getThreadLocalRequest();
+			if(request == null) {
+				Log.info("getThreadLocalRequest() returned null.");
+			}
+		}
+		
+		if(request == null) {
+			Log.error("The HttpServletRequest is null.");
+			return null;
+		}
+
 		final Cookie[] cookies = request.getCookies();
 		if (cookies == null) {
+			Log.error("getCookies() returned null.");
 			return null;
 		}
 
@@ -198,6 +217,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		}
 	
 		if (sessionCookie == null) {
+			Log.info("sessionID is null");
 			return null;
 		}
 		
@@ -228,8 +248,13 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	
 	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
 	protected boolean isAuthenticated(final String documentID) {
+		return isAuthenticated(null, documentID);
+	}
+	
+	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
+	protected boolean isAuthenticated(final HttpServletRequest request, final String documentID) {
 		//TODO: Use the document.
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie(request);
 		return (authenticatedConnection != null);
 	}
 

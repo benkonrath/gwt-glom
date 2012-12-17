@@ -86,7 +86,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return;
 		}
 
-		if(!isAuthenticated(attrDocumentID)) {
+		if(!isAuthenticated(req, attrDocumentID)) {
 			doError(resp, Response.SC_NOT_FOUND, "No access to the document.", attrDocumentID);
 			return;
 		}
@@ -125,10 +125,10 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 		
 		byte[] bytes = null;
 		if(fromDb) {
-			bytes = getImageFromDatabase(resp, attrDocumentID, attrTableName, attrPrimaryKeyValue, attrFieldName,
+			bytes = getImageFromDatabase(req, resp, attrDocumentID, attrTableName, attrPrimaryKeyValue, attrFieldName,
 				configuredDocument, document);
 		} else {
-			bytes = getImageFromDocument(resp, attrDocumentID, attrTableName, attrLayoutName, attrLayoutPath,
+			bytes = getImageFromDocument(req, resp, attrDocumentID, attrTableName, attrLayoutName, attrLayoutPath,
 					configuredDocument, document);
 		}
 		
@@ -165,7 +165,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 	 * @return
 	 * @throws IOException 
 	 */
-	private byte[] getImageFromDocument(HttpServletResponse resp, final String attrDocumentID, final String attrTableName,
+	private byte[] getImageFromDocument(final HttpServletRequest request , final HttpServletResponse resp, final String attrDocumentID, final String attrTableName,
 			final String attrLayoutName, final String attrLayoutPath, final ConfiguredDocument configuredDocument, final Document document) throws IOException {
 		final LayoutItem item = document.getLayoutItemByPath(attrTableName, attrLayoutName, attrLayoutPath);
 		
@@ -195,7 +195,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 	 * @return
 	 * @throws IOException
 	 */
-	private byte[] getImageFromDatabase(HttpServletResponse resp, final String attrDocumentID,
+	private byte[] getImageFromDatabase(final HttpServletRequest request, final HttpServletResponse resp, final String attrDocumentID,
 			final String attrTableName, final String attrPrimaryKeyValue, final String attrFieldName,
 			final ConfiguredDocument configuredDocument, final Document document) throws IOException {
 		final Field field = document.getField(attrTableName, attrFieldName);
@@ -215,7 +215,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 		fieldsToGet.add(layoutItemField);
 		final String query = SqlUtils.buildSqlSelectWithKey(attrTableName, fieldsToGet, fieldPrimaryKey, primaryKeyValue);
 		
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie(request);
 		if(authenticatedConnection == null) {
 			return null;
 		}

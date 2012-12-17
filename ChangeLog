@@ -1,5 +1,26 @@
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
+        OnlineGlomImagesServlet: Make authentication work. 
+
+        * src/main/java/org/glom/web/server/OnlineGlomImagesServlet.java:
+        (OnlineGlomImagesServlet.doGet(): Pass the request to 
+        isAuthenticated(), getImageFromDocument() and getImageFromDatabase() 
+	because getThreadLocalRequest() will not work if the servlet was
+	not called via GWT-RPC. 
+        * src/main/java/org/glom/web/server/OnlineGlomLoginServlet.java:
+        isAuthenticated() take a request.
+        * src/main/java/org/glom/web/server/OnlineGlomServlet.java:
+        Add an isAuthenticated() and a getConnectionForCookie() that take
+	a request.
+        getSessionIdFromCookie(): take a request, only trying 
+	getThreadLocalRequest() if the request is null.
+
+	We probably should not be using a GWT base class for this service anyway,
+	but it simplifies the multiple-inheritance. We should try containment
+	instead.
+
+2012-12-17  Murray Cumming  <murrayc@murrayc.com>
+
         Really use the shared configuredDocumentSet and shared userStore.
 
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
