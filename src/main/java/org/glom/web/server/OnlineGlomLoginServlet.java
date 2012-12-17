@@ -50,6 +50,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
+	@Override
 	public boolean checkAuthentication(final String documentID, final String username, final String password) {
 		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
 		if(configuredDocumentSet == null) {
@@ -89,9 +90,16 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			//TODO: How can we do this? cookie.setHttpOnly(true); //Avoid its use from client-side javascript.
 			final HttpServletResponse response = this.getThreadLocalResponse();
 			response.addCookie(cookie);
-			
+
+
 			// Let us retrieve the login details later,
 			// based on the cookie's sessionID which we retrieve later:
+			final UserStore userStore = getUserStore();
+			if(userStore == null) {
+				Log.error(documentID, "Could not retrieve the userStore");
+				return false;
+			}
+
 			final UserStore.Credentials credentials = new UserStore.Credentials(document, username, password, authenticatedConnection);
 			userStore.setCredentials(sessionID, credentials);
 		}
@@ -104,6 +112,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 * 
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
 	 */
+	@Override
 	public boolean isAuthenticated(final String documentID) { //TODO: Use the document.
 		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
 		return (authenticatedConnection != null);

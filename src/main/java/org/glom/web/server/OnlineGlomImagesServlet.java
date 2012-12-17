@@ -85,6 +85,11 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			doError(resp, Response.SC_NOT_FOUND, "No document ID was specified.");
 			return;
 		}
+
+		if(!isAuthenticated(attrDocumentID)) {
+			doError(resp, Response.SC_NOT_FOUND, "No access to the document.", attrDocumentID);
+			return;
+		}
 		
 		if(StringUtils.isEmpty(attrTableName)) {
 			doError(resp, Response.SC_NOT_FOUND, "No table name was specified.", attrDocumentID);
@@ -105,25 +110,12 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			doError(resp, Response.SC_NOT_FOUND, "No field name was specified.", attrDocumentID);
 			return;
 		}
-		
-		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
-		if(configuredDocumentSet == null) {
-			doError(resp, Response.SC_NOT_FOUND, "The document set could not be found.");
-			return;
-		}
 
-		final ConfiguredDocument configuredDocument = configuredDocumentSet.getDocument(attrDocumentID);
+		final ConfiguredDocument configuredDocument = getDocument(attrDocumentID);
 		if(configuredDocument == null) {
 			doError(resp, Response.SC_NOT_FOUND, "The specified document was not found.", attrDocumentID);
 			return;
 		}
-		
-		/* TODO: Check for authentication:
-		if(!configuredDocument.isAuthenticated()) {
-			doError(resp, Response.SC_NOT_FOUND, "No access to the document.", attrDocumentID);
-			return;
-		}
-		*/
 
 		final Document document = configuredDocument.getDocument();
 		if(document == null) {

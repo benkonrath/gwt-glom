@@ -45,7 +45,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * This is the servlet class for setting up the server side of Online Glom. The client side can call the public methods
  * in this class via OnlineGlom
  * 
- * For instance, it loads all the available documents and provide a list - see getDocuments(). It then provides
+ * For instance, it loads all the available documents and provide a list - see (). It then provides
  * information from each document. For instance, see getListViewLayout().
  * 
  * TODO: Watch for changes to the .glom files, to reload new versions and to load newly-added files. TODO: Watch for
@@ -54,8 +54,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGlomService {
 
-	private ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
-
+	
 	/*
 	 * This is called when the servlet is stopped or restarted.
 	 * 
@@ -63,7 +62,13 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	 */
 	@Override
 	public void destroy() {
-		configuredDocumentSet.forgetDocuments();
+		//TODO: This is an arbitrary place to do this,
+		//because this is shared by all servlets.
+		//It is even necessary?
+		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
+		if(configuredDocumentSet != null) {
+			configuredDocumentSet.forgetDocuments();
+		}
 	}
 
 	/*
@@ -73,7 +78,13 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	 */
 	@Override
 	public String getConfigurationErrorMessage() {
-		Exception configurationException = configuredDocumentSet.getConfigurationException();
+		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
+		if(configuredDocumentSet == null) {
+			Log.error("Could not get the configuredDocumentSet.");
+			return "";
+		}	
+			
+		final Exception configurationException = configuredDocumentSet.getConfigurationException();
 		if (configurationException == null) {
 			return "No configuration errors to report.";
 		} else if (configurationException.getMessage() == null) {
@@ -98,7 +109,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 		// An empty tableName is OK, because that means the default table.
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return new DataItem[0];
 		}
@@ -122,7 +133,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 		// An empty tableName is OK, because that means the default table.
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return null;
 		}
@@ -147,7 +158,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return new DocumentInfo();
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 
 		// Avoid dereferencing a null object:
 		if (configuredDoc == null) {
@@ -164,6 +175,12 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	 */
 	@Override
 	public Documents getDocuments() {
+		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
+		if(configuredDocumentSet == null) {
+			Log.error("Could not get the configuredDocumentSet.");
+			return null;
+		}
+
 		return configuredDocumentSet.getDocuments();
 	}
 
@@ -181,7 +198,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return new ArrayList<DataItem[]>();
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
 		}
@@ -205,7 +222,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return new LayoutGroup();
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return new LayoutGroup();
 		}
@@ -234,7 +251,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return null;
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return new ArrayList<DataItem[]>();
 		}
@@ -262,7 +279,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return 0;
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return 0;
 		}
@@ -289,7 +306,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return "";
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return "";
 		}
@@ -334,7 +351,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	 */
 	@Override
 	public Reports getReportsList(final String documentID, final String tableName, final String localeID) {
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if(configuredDoc != null) {
 			return configuredDoc.getReports(tableName, localeID);
 		} else {
@@ -366,7 +383,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return null;
 		}
 
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
+		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
 			return null;
 		}
@@ -383,15 +400,6 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	 */
 	@Override
 	public void init() throws ServletException {
-		configuredDocumentSet.readConfiguration();
-	}
-
-
-	private boolean isAuthenticated(final String documentID) {
-		//TODO: Use the login details from the OnlineGlomLoginServlet.
-		//TODO: Use the document.
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
-		return (authenticatedConnection != null);
 	}
 
 }

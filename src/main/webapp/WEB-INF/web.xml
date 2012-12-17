@@ -32,7 +32,7 @@
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>gwtGlomLginServlet</servlet-name>
+		<servlet-name>gwtGlomLoginServlet</servlet-name>
 		<url-pattern>/OnlineGlom/gwtGlomLogin</url-pattern>
 	</servlet-mapping>
 

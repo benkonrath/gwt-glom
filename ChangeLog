@@ -1,5 +1,9 @@
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
+        Really use the shared configuredDocumentSet and shared userStore.
+
+2012-12-17  Murray Cumming  <murrayc@murrayc.com>
+
         Add a test for Utils.buildImageDataUrl().
 
         * src/test/java/org/glom/web/server/UtilsTest.java:
