@@ -50,13 +50,13 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * @author Murray Cumming <murrayc@murrayc.com>
  * 
  */
-public class OnlineGlomImages extends OnlineGlomServlet {
+public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 
 	private static final long serialVersionUID = -3550760617357422853L;
 	
 	ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
 	
-	public OnlineGlomImages() {
+	public OnlineGlomImagesServlet() {
 		try {
 			configuredDocumentSet.readConfiguration();
 		} catch (ServletException e) {

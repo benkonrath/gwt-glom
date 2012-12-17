@@ -13,7 +13,7 @@
 	
 		<servlet>
 		<servlet-name>gwtGlomImagesServlet</servlet-name>
-		<servlet-class>org.glom.web.server.OnlineGlomImages</servlet-class>
+		<servlet-class>org.glom.web.server.OnlineGlomImagesServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

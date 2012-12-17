@@ -125,7 +125,7 @@ public class Utils {
 	private static URIBuilder buildImageDataUrlStart(final String documentID, final String tableName) {
 		final URIBuilder uriBuilder = new URIBuilder();
 		//uriBuilder.setHost(GWT.getModuleBaseURL());
-		uriBuilder.setPath("OnlineGlom/gwtGlomImages"); //The name of our images servlet. See OnlineGlomImages.
+		uriBuilder.setPath("OnlineGlom/gwtGlomImages"); //The name of our images servlet. See OnlineGlomImagesServlet.
 		uriBuilder.setParameter("document", documentID);
 		uriBuilder.setParameter("table", tableName);
 		return uriBuilder;
