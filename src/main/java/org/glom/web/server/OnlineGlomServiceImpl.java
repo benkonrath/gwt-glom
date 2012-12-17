@@ -23,12 +23,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.client.OnlineGlomService;
@@ -60,56 +55,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGlomService {
 
 	private ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
-	@Override
-	public boolean checkAuthentication(final String documentID, final String username, final String password) {
-		final ConfiguredDocument configuredDoc = configuredDocumentSet.getDocument(documentID);
-		if (configuredDoc == null) {
-			Log.error(documentID, "The document could not be found for this ID: " + documentID);
-			return false;
-		}
-	    
-		final Document document = configuredDoc.getDocument();
-		ComboPooledDataSource authenticatedConnection = null;
-		try
-		{
-			authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, username, password);
-		} catch (final SQLException e) {
-			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
-			return false;
-		}
-		
-		if(authenticatedConnection != null) {
-			final HttpServletRequest request = this.getThreadLocalRequest();
-			final HttpSession session = request.getSession();
-			final String sessionID = session.getId();
-			
-			// This GWT page suggests doing this on the client-side,
-			// after returning the session ID to the client,
-			// but it seems cleaner to do it here on the server side:
-			final Cookie cookie = new Cookie(COOKIE_NAME, sessionID);
-			cookie.setMaxAge(-1);
-			cookie.setPath("/");
-			//cookie.setSecure(true);
-			cookie.setMaxAge(30 * 24 * 60 * 60); //30 days
-			//TODO: How can we do this? cookie.setHttpOnly(true); //Avoid its use from client-side javascript.
-			final HttpServletResponse response = this.getThreadLocalResponse();
-			response.addCookie(cookie);
-			
-			// Let us retrieve the login details later,
-			// based on the cookie's sessionID which we retrieve later:
-			final UserStore.Credentials credentials = new UserStore.Credentials(document, username, password, authenticatedConnection);
-			userStore.setCredentials(sessionID, credentials);
-		}
-		
-		return (authenticatedConnection != null);
-	}
 
 	/*
 	 * This is called when the servlet is stopped or restarted.
@@ -441,13 +386,10 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 		configuredDocumentSet.readConfiguration();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
-	 */
-	@Override
-	public boolean isAuthenticated(final String documentID) { //TODO: Use the document.
+
+	private boolean isAuthenticated(final String documentID) {
+		//TODO: Use the login details from the OnlineGlomLoginServlet.
+		//TODO: Use the document.
 		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
 		return (authenticatedConnection != null);
 	}

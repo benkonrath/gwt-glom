@@ -54,8 +54,6 @@ public interface OnlineGlomServiceAsync {
 		}
 	}
 
-	void checkAuthentication(String documentID, String username, String password, AsyncCallback<Boolean> callback);
-
 	void getConfigurationErrorMessage(AsyncCallback<String> callback);
 
 	void getDetailsData(String documentID, String tableName, TypedDataItem primaryKeyValue,
@@ -88,6 +86,4 @@ public interface OnlineGlomServiceAsync {
 
 	void getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue, AsyncCallback<NavigationRecord> callback);
-
-	void isAuthenticated(String documentID, AsyncCallback<Boolean> callback);
 }

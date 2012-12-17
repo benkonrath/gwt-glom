@@ -1,5 +1,26 @@
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
+        Move authentication to a separate login servlet.
+
+        * src/main/java/org/glom/web/client/OnlineGlomService.java:
+        * src/main/java/org/glom/web/client/OnlineGlomServiceAsync.java:
+        * src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+	Move checkAuthentication() and isAuthenticated() to:
+        * src/main/java/org/glom/web/client/OnlineGlomLoginService.java
+        * src/main/java/org/glom/web/client/OnlineGlomLoginServiceAsync.java
+        * src/main/java/org/glom/web/server/OnlineGlomLoginServlet.java
+        * src/main/webapp/WEB-INF/web.xml: Mention the new servlet.
+        * src/main/java/org/glom/web/client/activity/DocumentLoginActivity.java:
+        * src/main/java/org/glom/web/client/activity/HasDocumentActivity.java:
+	Adapted.
+
+	We already have to (but do not yet) share the login details between
+	the regular and images servlets, so we might as well separate it
+	competely. This assumes that I will find a way to share the data
+	between servlets.
+
+2012-12-17  Murray Cumming  <murrayc@murrayc.com>
+
         Renamed OnlineGlomImages to OnlineGlomImagesServlet.
 
 2012-12-10  Murray Cumming  <murrayc@murrayc.com>

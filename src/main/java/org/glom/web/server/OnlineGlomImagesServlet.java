@@ -51,9 +51,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * 
  */
 public class OnlineGlomImagesServlet extends OnlineGlomServlet {
-
-	private static final long serialVersionUID = -3550760617357422853L;
 	
+	private static final long serialVersionUID = 4001959815578006604L;
+
 	ConfiguredDocumentSet configuredDocumentSet = new ConfiguredDocumentSet();
 	
 	public OnlineGlomImagesServlet() {

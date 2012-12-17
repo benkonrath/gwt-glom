@@ -20,7 +20,7 @@
 package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
-import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.OnlineGlomLoginServiceAsync;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.place.DocumentLoginPlace;
 import org.glom.web.client.place.HasDocumentPlace;
@@ -81,7 +81,7 @@ public abstract class HasDocumentActivity extends AbstractActivity implements Vi
 				}
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
+		OnlineGlomLoginServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 	}
 	
 	protected void clearView() {

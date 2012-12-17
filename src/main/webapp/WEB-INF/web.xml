@@ -11,19 +11,29 @@
 		<servlet-class>org.glom.web.server.OnlineGlomServiceImpl</servlet-class>
 	</servlet>
 	
-		<servlet>
+	<servlet>
 		<servlet-name>gwtGlomImagesServlet</servlet-name>
 		<servlet-class>org.glom.web.server.OnlineGlomImagesServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>gwtGlomLoginServlet</servlet-name>
+		<servlet-class>org.glom.web.server.OnlineGlomLoginServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>gwtGlomServlet</servlet-name>
 		<url-pattern>/OnlineGlom/gwtGlom</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>gwtGlomImagesServlet</servlet-name>
 		<url-pattern>/OnlineGlom/gwtGlomImages</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>gwtGlomLginServlet</servlet-name>
+		<url-pattern>/OnlineGlom/gwtGlomLogin</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

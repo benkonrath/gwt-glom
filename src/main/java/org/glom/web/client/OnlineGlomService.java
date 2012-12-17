@@ -37,20 +37,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("gwtGlom")
 public interface OnlineGlomService extends RemoteService {
 
-	/**
-	 * Checks if the provided PostgreSQL username and password are correct for the specified glom document. If the
-	 * information is correct it is saved for future access.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @param username
-	 *            the PostgreSQL username
-	 * @param password
-	 *            the POstgreSQL password
-	 * @return true if username and password are correct, false otherwise
-	 */
-	boolean checkAuthentication(String documentID, String username, String password);
-
 	String getConfigurationErrorMessage();
 
 	/**
@@ -178,13 +164,4 @@ public interface OnlineGlomService extends RemoteService {
 	// TODO: Do this only on the server side, or only on the client side?
 	NavigationRecord getSuitableRecordToViewDetails(String documentID, String tableName, LayoutItemPortal portal,
 			TypedDataItem primaryKeyValue);
-
-	/**
-	 * Checks if the PostgreSQL authentication has been set for this document.
-	 * 
-	 * @param documentID
-	 *            identifier for the Glom document
-	 * @return true if the authentication has been set, false if it hasn't
-	 */
-	boolean isAuthenticated(String documentID);
 }

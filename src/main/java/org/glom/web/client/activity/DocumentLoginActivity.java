@@ -20,7 +20,7 @@
 package org.glom.web.client.activity;
 
 import org.glom.web.client.ClientFactory;
-import org.glom.web.client.OnlineGlomServiceAsync;
+import org.glom.web.client.OnlineGlomLoginServiceAsync;
 import org.glom.web.client.PlaceControllerExt;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.event.TableChangeEvent;
@@ -138,7 +138,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 				}
 			}
 		};
-		OnlineGlomServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
+		OnlineGlomLoginServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 	}
 
 	private void setUpAuthClickHandlers(final EventBus eventBus) {
@@ -170,7 +170,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 						}
 					}
 				};
-				OnlineGlomServiceAsync.Util.getInstance().checkAuthentication(documentID,
+				OnlineGlomLoginServiceAsync.Util.getInstance().checkAuthentication(documentID,
 						view.getUsername(), view.getPassword(), callback);
 			}
 		});
