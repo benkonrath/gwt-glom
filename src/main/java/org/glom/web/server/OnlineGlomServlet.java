@@ -26,6 +26,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -156,11 +157,39 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		return configuredDocumentSet.getDocument(documentID);
 	}
 	
-	protected ComboPooledDataSource getConnectionForCookie() {
-		return getConnectionForCookie(null);
+	protected ComboPooledDataSource getConnection(final String documentID) {
+		return getConnection(null, documentID);
 	}
 	
-	protected ComboPooledDataSource getConnectionForCookie(final HttpServletRequest request) {
+	/**
+	 * Get a working connection, if any,
+	 * either based on credentials entered by the user (and recalled via a browser cookie),
+	 * or based on credentials in the config file.
+	 * 
+	 * @param request
+	 * @param documentID
+	 * @return
+	 */
+	protected ComboPooledDataSource getConnection(final HttpServletRequest request, final String documentID) {
+		final ConfiguredDocument configuredDocument = getDocument(documentID);
+		if(configuredDocument == null) {
+			Log.error("getDocument() returned null.");
+		}
+		
+		ComboPooledDataSource authenticatedConnection = null;
+
+		//Check the config credentials.
+		//These getConnection() calls attempt to create the connection if necessary.
+		Credentials credentials = configuredDocument.getCredentials();
+		if(credentials != null) {
+			authenticatedConnection = credentials.getConnection();
+		}
+		
+		if (authenticatedConnection != null) {
+			return authenticatedConnection;
+		}
+		
+		//Use the credentials previously entered by the user:
 		final String sessionID = getSessionIdFromCookie(request);
 		if(StringUtils.isEmpty(sessionID)) {
 			Log.info("Could not retrieve the session cookie");
@@ -172,8 +201,8 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 			Log.error("Could not retrieve the userStore");
 			return null;
 		}
-	
-		final UserStore.Credentials credentials = userStore.getCredentials(sessionID);
+
+		credentials = userStore.getCredentials(sessionID);
 		if(credentials == null) {
 			return null;
 		}
@@ -253,8 +282,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	
 	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
 	protected boolean isAuthenticated(final HttpServletRequest request, final String documentID) {
-		//TODO: Use the document.
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie(request);
+		final ComboPooledDataSource authenticatedConnection = getConnection(request, documentID);
 		return (authenticatedConnection != null);
 	}
 

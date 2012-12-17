@@ -28,11 +28,12 @@ import javax.servlet.http.HttpSessionListener;
  */
 public class SessionListener implements HttpSessionListener {
 
-	private UserStore.Credentials credentials;
+	private Credentials credentials;
+
 	/**
 	 * 
 	 */
-	public SessionListener(final UserStore.Credentials credentials) {
+	public SessionListener(final Credentials credentials) {
 		this.credentials = credentials;
 	}
 

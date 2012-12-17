@@ -19,13 +19,7 @@
 
 package org.glom.web.server;
 
-import java.sql.SQLException;
 import java.util.Hashtable;
-
-import org.glom.web.server.libglom.Document;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.mchange.v2.c3p0.DataSources;
 
 /**
  * A store of user credentials, details, etc,
@@ -36,71 +30,6 @@ import com.mchange.v2.c3p0.DataSources;
  *
  */
 public class UserStore {
-
-	public static class Credentials {
-		public Document document;
-		public String username;
-		public String password;
-		private ComboPooledDataSource cpds;
-		SessionListener connectionInvalidator = null;
-		
-		public Credentials(final Document document, final String username, final String password, final ComboPooledDataSource cpds) {
-			this.document = document;
-			this.username = username;
-			this.password = password;
-			
-			setConnection(cpds);
-		}
-		
-		private void setConnection(final ComboPooledDataSource cpds) {
-			this.cpds = cpds;
-
-			//Forget the connection when the user's browser session ends:
-			this.connectionInvalidator = new SessionListener(this);
-		}
-		
-		public void invalidateConnection() {
-			try {
-				DataSources.destroy(cpds);
-			} catch (final SQLException e) {
-				Log.error("Error cleaning up the ComboPooledDataSource.", e);
-			}
-
-			cpds = null;
-			connectionInvalidator = null;
-		}
-
-		/**
-		 * @return
-		 */
-		public ComboPooledDataSource getConnection() {
-			if(cpds != null) {
-				return cpds;
-			}
-			
-			// Try to recreate the connection,
-			// which might have been invalidated after some time:
-			ComboPooledDataSource authenticatedConnection = null;
-			try
-			{
-				authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, username, password);
-			} catch (final SQLException e) {
-				Log.error("Unknown SQL Error checking the database authentication.", e);
-				return null;
-			}
-			
-			if(authenticatedConnection == null) {
-				return null;
-			}
-			
-			//Remember it for a while:
-			setConnection(authenticatedConnection);
-			return authenticatedConnection;
-		}
-		
-		
-		
-	}
 	
 	/**
 	 * A map of the sessionID to the credentials.
@@ -112,8 +41,6 @@ public class UserStore {
 	 */
 	public UserStore() {
 	}
-	
-
 
 	/**
 	 * TODO: It would be far better to store a hash,

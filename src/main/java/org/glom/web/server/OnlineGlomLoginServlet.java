@@ -100,7 +100,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 				return false;
 			}
 
-			final UserStore.Credentials credentials = new UserStore.Credentials(document, username, password, authenticatedConnection);
+			final Credentials credentials = new Credentials(document, username, password, authenticatedConnection);
 			userStore.setCredentials(sessionID, credentials);
 		}
 		
@@ -113,9 +113,8 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
 	 */
 	@Override
-	public boolean isAuthenticated(final String documentID) { //TODO: Use the document.
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie(null);
-		return (authenticatedConnection != null);
+	public boolean isAuthenticated(final String documentID) {
+		return super.isAuthenticated(documentID);
 	}
 
 }

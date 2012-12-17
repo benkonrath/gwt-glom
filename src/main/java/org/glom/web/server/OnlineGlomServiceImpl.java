@@ -102,9 +102,9 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	@Override
 	public DataItem[] getDetailsData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue) {
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
-			return null;
+			return new DataItem[0];
 		}
 
 		// An empty tableName is OK, because that means the default table.
@@ -126,7 +126,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	@Override
 	public DetailsLayoutAndData getDetailsLayoutAndData(final String documentID, final String tableName,
 			final TypedDataItem primaryKeyValue, final String localeID) {
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return null;
 		}
@@ -203,9 +203,9 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return new ArrayList<DataItem[]>();
 		}
 		
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
-			return null;
+			return new ArrayList<DataItem[]>();
 		}
 
 		return configuredDoc.getListViewData(authenticatedConnection, tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
@@ -256,7 +256,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return new ArrayList<DataItem[]>();
 		}
 		
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return null;
 		}
@@ -284,7 +284,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return 0;
 		}
 		
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return 0;
 		}
@@ -325,7 +325,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			return "";
 		}
 		
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return "";
 		}
@@ -371,7 +371,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	@Override
 	public NavigationRecord getSuitableRecordToViewDetails(final String documentID, final String tableName,
 			final LayoutItemPortal portal, final TypedDataItem primaryKeyValue) {
-		final ComboPooledDataSource authenticatedConnection = getConnectionForCookie();
+		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return null;
 		}

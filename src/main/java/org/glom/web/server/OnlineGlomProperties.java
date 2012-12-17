@@ -30,13 +30,14 @@ class OnlineGlomProperties extends Properties {
 
 	private static final long serialVersionUID = 4290997725469072758L;
 	
-	public static class Credentials {
-		public String userName = "";
-		public String password = "";
-	};
 
-	public OnlineGlomProperties.Credentials getCredentials(final String filename) {
-		OnlineGlomProperties.Credentials result = null;
+	/** Get the credentials for a specific file, ignoring the global username and password.
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	public Credentials getCredentials(final String filename) {
+		Credentials result = null;
 
 		final String key = getKey(filename);
 		if (key == null) {
@@ -48,13 +49,12 @@ class OnlineGlomProperties extends Properties {
 		
 		//Check that the third item is "filename", as expected:
 		if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
-			result = new Credentials();
-			
 			//Get the username and password for this file:
 			final String usernameKey = key.replaceAll(keyArray[2], "username");
 			final String passwordKey = key.replaceAll(keyArray[2], "password");
-			result.userName = getPropertyNonNull(usernameKey).trim();
-			result.password = getPropertyNonNull(passwordKey);
+			final String username = getPropertyNonNull(usernameKey).trim();
+			final String password = getPropertyNonNull(passwordKey);
+			result = new Credentials(null, username, password, null);
 		}
 		
 		return result;

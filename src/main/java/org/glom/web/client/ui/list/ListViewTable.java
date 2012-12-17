@@ -87,6 +87,11 @@ public class ListViewTable extends ListTable {
 					@Override
 					public void onSuccess(final ArrayList<DataItem[]> result) {
 						// keep track of the number of non-empty rows (rows with data)
+						if(result == null) {
+							GWT.log("ListViewTable: result was null.");
+							return;
+						}
+						
 						numNonEmptyRows = result.size();
 
 						// Add empty rows if required.

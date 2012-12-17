@@ -1,5 +1,29 @@
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
+        Use the configuration file's username and password again.
+
+	* src/main/java/org/glom/web/server/OnlineGlomProperties.java:
+	Move Credentials to:
+	* src/main/java/org/glom/web/server/Credentials.java.
+	* src/main/java/org/glom/web/server/ConfiguredDocument.java:
+	Use Credentials here too, instead of its own Credentials class.
+	This keeps an open connection around for a while.
+        * src/main/java/org/glom/web/client/ui/list/ListViewTable.java:
+        * src/main/java/org/glom/web/server/ConfiguredDocumentSet.java:
+        * src/main/java/org/glom/web/server/SessionListener.java:
+        * src/main/java/org/glom/web/server/UserStore.java:
+	* src/test/java/org/glom/web/server/OnlineGlomPropertiesTest.java:
+        Adapted.
+	* src/main/java/org/glom/web/server/OnlineGlomServlet.java:
+	Rename getConnectionForCookie() to getConnection() and also try the
+	ConfiguredDocument.getConnection().
+        * src/main/java/org/glom/web/server/OnlineGlomImagesServlet.java:
+        * src/main/java/org/glom/web/server/OnlineGlomLoginServlet.java:
+	* src/main/java/org/glom/web/server/OnlineGlomServiceImpl.java:
+        Adapted.
+
+2012-12-17  Murray Cumming  <murrayc@murrayc.com>
+
         DocumentLoginViewImpl: Make this look like the document selector page.
 
 	* src/main/java/org/glom/web/client/ui/DocumentLoginViewImpl.ui.xml:

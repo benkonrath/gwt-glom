@@ -59,6 +59,13 @@ final class ConfiguredDocument {
 	private Document document;
 	private String documentID = "";
 	private String defaultLocaleID = "";
+	
+	/** Credentials for the document as specified in the config file,
+	 * so the user does not need to specify them.
+	 * 
+	 * @param docCredentials
+	 */
+	private Credentials credentials;
 
 	private static class LayoutLocaleMap extends Hashtable<String, List<LayoutGroup>> {
 		private static final long serialVersionUID = 6542501521673767267L;
@@ -782,5 +789,28 @@ final class ConfiguredDocument {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Set the credentials for the document as specified in the config file
+	 * so the user does not need to specify them.
+	 * These might be the global credentials, if the document-specific 
+	 * credentials failed.
+	 * 
+	 * @param docCredentials
+	 */
+	public void setCredentials(final Credentials docCredentials) {
+		this.credentials = docCredentials;
+	}
+	
+	/**
+	 * Get the credentials for the document as specified in the config file
+	 * so the user does not need to specify them.
+	 * These might be the global credentials, if the document-specific 
+	 * credentials failed.
+	 *
+	 */
+	Credentials getCredentials() {
+		return this.credentials;
 	}
 }

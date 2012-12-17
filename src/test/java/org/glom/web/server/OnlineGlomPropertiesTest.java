@@ -54,8 +54,8 @@ public class OnlineGlomPropertiesTest extends TestCase {
 	 */
 	@Test
 	public void testGetCredentials() {
-		OnlineGlomProperties.Credentials credentials = config.getCredentials("lesson-planner.glom");
-		assertEquals("ben", credentials.userName);
+		Credentials credentials = config.getCredentials("lesson-planner.glom");
+		assertEquals("ben", credentials.username);
 		assertEquals("ChangeMeToo", credentials.password);
 	}
 

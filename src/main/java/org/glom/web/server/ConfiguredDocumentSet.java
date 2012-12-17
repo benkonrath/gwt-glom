@@ -30,7 +30,6 @@ import javax.servlet.ServletException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.glom.web.server.OnlineGlomProperties.Credentials;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.Documents;
 
@@ -155,14 +154,29 @@ public class ConfiguredDocumentSet {
 				
 				// Username/password could be set. Let's check to see if it works.
 				ComboPooledDataSource authenticatedConnection = null;
-				final Credentials docCredentials = config.getCredentials(filename);
+				Credentials docCredentials = config.getCredentials(filename);
+
 				if(docCredentials != null) {
-					authenticatedConnection = SqlUtils.tryUsernameAndPassword(configuredDocument.getDocument(), docCredentials.userName, docCredentials.password); // can throw an SQLException
+					authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, docCredentials.username, docCredentials.password); // can throw an SQLException
+					if (authenticatedConnection != null) {
+						//Use the document-specific credentials:
+						docCredentials = new Credentials(document, docCredentials.username, docCredentials.password, authenticatedConnection);
+					}
 				}
 	
-				// check the if the global username and password have been set and work with this document
+				// Check the if the global username and password have been set and work with this document
 				if (authenticatedConnection == null) {
-					SqlUtils.tryUsernameAndPassword(configuredDocument.getDocument(), globalUserName, globalPassword); // can throw an SQLException
+					authenticatedConnection = SqlUtils.tryUsernameAndPassword(configuredDocument.getDocument(), globalUserName, globalPassword); // can throw an SQLException
+					if(authenticatedConnection != null) {		
+						//Use the global credentials:
+						docCredentials = new Credentials(document, globalUserName, globalPassword, authenticatedConnection);
+					}
+				}
+				
+				// Store the credentials for the document,
+				// also remembering the database connection for some time:
+				if (authenticatedConnection != null) {
+						configuredDocument.setCredentials(docCredentials);
 				}
 	
 				if (!StringUtils.isEmpty(globalLocaleID)) {
