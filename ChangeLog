@@ -1,5 +1,14 @@
 2012-12-17  Murray Cumming  <murrayc@murrayc.com>
 
+        Add a test for Utils.buildImageDataUrl().
+
+        * src/test/java/org/glom/web/server/UtilsTest.java:
+	Add this tests because this method has started failing with this
+	exception, and maybe this will help to debug it:
+	java.lang.NoSuchMethodError: org.apache.http.client.utils.URLEncodedUtils.encPath(Ljava/lang/String;Ljava/nio/charset/Charset;)Ljava/lang/String;
+
+2012-12-17  Murray Cumming  <murrayc@murrayc.com>
+
         Move configuredDocumentSet into the base OnlineGlomServlet.
 
        	This leaves just one place where we can change the implementation
