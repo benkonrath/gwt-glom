@@ -170,7 +170,9 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	 * @param documentID
 	 * @return
 	 */
-	protected ComboPooledDataSource getConnection(final HttpServletRequest request, final String documentID) {
+	protected ComboPooledDataSource getConnection(HttpServletRequest request, final String documentID) {
+		request = getRequest(request);
+			
 		final ConfiguredDocument configuredDocument = getDocument(documentID);
 		if(configuredDocument == null) {
 			Log.error("getDocument() returned null.");
@@ -215,13 +217,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	 */
 	protected String getSessionIdFromCookie(HttpServletRequest request) {
 		
-		if(request == null) {
-			//getThreadLocalRequest() might be only for services that are called by GWT-RPC.
-			request = this.getThreadLocalRequest();
-			if(request == null) {
-				Log.info("getThreadLocalRequest() returned null.");
-			}
-		}
+		request = getRequest(request);
 		
 		if(request == null) {
 			Log.error("The HttpServletRequest is null.");
@@ -253,6 +249,21 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		final String sessionID = sessionCookie.getValue();
 		Log.info("sessionID=" + sessionID);
 		return sessionID;
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	protected HttpServletRequest getRequest(HttpServletRequest request) {
+		if(request == null) {
+			//getThreadLocalRequest() might be only for services that are called by GWT-RPC.
+			request = this.getThreadLocalRequest();
+			if(request == null) {
+				Log.info("getThreadLocalRequest() returned null.");
+			}
+		}
+		return request;
 	}
 	
 	/*

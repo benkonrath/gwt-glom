@@ -1,5 +1,14 @@
 2012-12-19  Murray Cumming  <murrayc@murrayc.com>
 
+        OnlineGlomServlet(): Simplify getting the request in all cases.
+
+        * src/main/java/org/glom/web/server/OnlineGlomServlet.java:
+        getConnection(), getSessionIdFromCookie(): Move some code into
+	getRequest(), which lets us not worry about whether it is called
+	via GWT-RPC or as a regular servlet.
+
+2012-12-19  Murray Cumming  <murrayc@murrayc.com>
+
         DocumentLoginViewImpl: Refuse to try if not using HTTPS.
 
         * src/main/java/org/glom/web/client/ui/DocumentLoginViewImpl.java:
