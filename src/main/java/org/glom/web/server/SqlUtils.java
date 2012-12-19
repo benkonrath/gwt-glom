@@ -110,6 +110,11 @@ public class SqlUtils {
 		ComboPooledDataSource cpds = createAndSetupDataSource(document);
 		if (cpds == null)
 			return null;
+		
+		/* Do not bother trying if there are no credentials. */
+		if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password)) {
+			return null;
+		}
 
 		cpds.setUser(username);
 		cpds.setPassword(password);
