@@ -1,5 +1,18 @@
 2012-12-19  Murray Cumming  <murrayc@murrayc.com>
 
+        OnlineGlomLoginServlet.checkAuthentication(): Require HTTPS.
+
+        * pom.xml: Use HTTPS when running jetty for testing via mvn gwt:run.
+	This annoys us with a security warning about the self-signed certificate,
+	but it's better than the risk of deactivating the checks.
+        * src/main/java/org/glom/web/server/OnlineGlomLoginServlet.java:
+        checkAuthentication(): Refuse to check if the servlet is not running via
+	HTTPS.
+        * src/main/webapp/WEB-INF/web.xml: Add a comment about why we do 
+	not require HTTPS for the login servlet in all cases.
+
+2012-12-19  Murray Cumming  <murrayc@murrayc.com>
+
         Do not attempt connections for empty usernames and passwords.
 
         * src/main/java/org/glom/web/server/SqlUtils.java:

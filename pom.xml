@@ -32,6 +32,14 @@
 		<!-- Convenience property to set the GWT version -->
 		<gwt.version>2.5.0</gwt.version>
 
+		<!-- Make mvn gwt:run use SSL (HTTPS) when running Jetty.
+		     Login will fail (on purpose) if run as regular HTTP.
+		     TODO: We could instead enable this when running mvn gwt:run, like so:
+		      -Dgwt.server=:ssl
+                     but how do we disable it now that it's on by default here?
+                     Where is this maven gwt plugin property documented? -->
+		<gwt.server>:ssl</gwt.server>
+
 		<!-- GWT requires java 1.6 -->
 		<!-- TODO: Isn't this a duplicate of the maven-compiler-plugin properties below? -->
 		<maven.compiler.source>1.7</maven.compiler.source>
@@ -199,10 +207,12 @@
 				<configuration>
 					<runTarget>OnlineGlom.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
+
 					<i18nConstantsBundles>
 						<i18nConstantsBundle>org.glom.web.client.ui.OnlineGlomConstants</i18nConstantsBundle>
 					</i18nConstantsBundles>
 					<mode>htmlunit</mode> <!-- Because the default, manual, waits for us to paste a URL into a browser. -->
+
 					<!-- <productionMode>true</productionMode> -->
 				</configuration>
 			</plugin>

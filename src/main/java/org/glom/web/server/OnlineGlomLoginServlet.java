@@ -52,6 +52,14 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 */
 	@Override
 	public boolean checkAuthentication(final String documentID, final String username, final String password) {
+
+		final HttpServletRequest request = getRequest(null);
+		if (request != null && !request.isSecure()) {
+			//TODO: Warn the user, instead of just asking for the login details again.
+			Log.error("The servlet's checkAuthentication method was called via an insecure protocol. Refusing to continue.");
+			return false;
+		}
+	
 		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
 		if(configuredDocumentSet == null) {
 			Log.error(documentID, "The document set could not be found.");
@@ -66,8 +74,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	    
 		final Document document = configuredDoc.getDocument();
 		ComboPooledDataSource authenticatedConnection = null;
-		try
-		{
+		try {
 			authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, username, password);
 		} catch (final SQLException e) {
 			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
@@ -75,7 +82,6 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 		}
 		
 		if(authenticatedConnection != null) {
-			final HttpServletRequest request = this.getThreadLocalRequest();
 			final HttpSession session = request.getSession();
 			final String sessionID = session.getId();
 			
@@ -114,6 +120,21 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 	 */
 	@Override
 	public boolean isAuthenticated(final String documentID) {
+		/* We do not refuse to reply to this via HTTP (not HTTPS),
+		 * because we need to return true even if there is no
+		 * need to call checkAuthentication(), because everything
+		 * is specified in the configuration settings, to
+		 * make everything public.
+		 */
+		/*
+		final HttpServletRequest request = getRequest(null);
+		if (request != null && !request.isSecure()) {
+			//TODO: Warn the user, instead of just asking for the login details again.
+			Log.error("The servlet was called via an insecure protocol. Refusing to continue.");
+			return false;
+		}
+		*/
+
 		return super.isAuthenticated(documentID);
 	}
 

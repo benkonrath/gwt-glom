@@ -40,5 +40,23 @@
 	<welcome-file-list>
 		<welcome-file>OnlineGlom.html</welcome-file>
 	</welcome-file-list>
+	
+	<!-- We do not do this, to demand HTTPS for the login servlet,
+             because its isAuthenicated method can succeed based on
+             the configuration file, with no transmission of 
+	     credentials from the client.
+	     Instead, the client refuses to send the credentials
+             if it is not using HTTPS, and the server refuses 
+             to examine any transmitted credentials if it is did
+	     not receive them via HTTPS.
+	<security-constraint>
+       		<web-resource-collection>
+			<url-pattern>/OnlineGlom/gwtGlomLogin/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+        -->
 
 </web-app>

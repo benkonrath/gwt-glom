@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class DocumentLoginActivity extends HasDocumentActivity {
@@ -121,7 +122,21 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 			@Override
 			public void onFailure(final Throwable caught) {
 				// TODO: create a way to notify users of asynchronous callback failures
-				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): " + caught.getMessage());
+				if(caught instanceof StatusCodeException) {
+					final StatusCodeException statusException = (StatusCodeException)caught;
+					if(statusException.getStatusCode() == 403) {
+						//Warn that login cannot work unless the login servlet is served via HTTPS.
+						//And actually, the entire site must be served via HTTPS,
+						//or we would violate the Same Origin Policy by mixing protocols.
+						GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): with 403 status code, probably because the documentLogin servlet is not available via HTTPS. " +
+								"If you need to use login then you need to serve the entire site as HTTPS only." +
+								"\n  Full error message: " + caught.getMessage());
+					} else {
+						GWT.log("AsyncCallback FailedOnlineGlomLoginService.isAuthenticated(): with status code=" + statusException.getStatusCode() + ": " + caught.getMessage());
+					}
+				} else {
+					GWT.log("AsyncCallback Failed: OnlineGlomLoginService.isAuthenticated(): " + caught.getMessage());
+				}
 			}
 	
 			@Override
