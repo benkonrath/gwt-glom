@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -73,6 +74,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		
 		documentLoginFields.add(flexTable);
 		
+		//TODO: Use UIBinder to lay this out properly:
 		flexTable.setCellSpacing(10);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 		flexTable.setHTML(0, 0, "<b>" + constants.loginEnter() + "</b>");
@@ -88,6 +90,19 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		cellFormatter.setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.setWidget(3, 1, loginButton);
 		cellFormatter.setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+
+		final String protocol = Window.Location.getProtocol();
+		if((protocol != null) && !protocol.equals("https:")) {
+			//Warn that login cannot work unless the login servlet is served via HTTPS.
+			//And actually, the entire site must be served via HTTPS,
+			//or we would violate the Same Origin Policy by mixing protocols,
+			//so this very page should have been delivered by HTTPS.
+			GWT.log("The login page arrived via http, rather that https. Refusing to log in.");
+
+			errorMessage.setText(constants.loginNeedsHttps());
+			setError();
+			loginButton.setEnabled(false);
+		}
 	}
 
 	@Override
@@ -145,7 +160,8 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		flexTable.setWidget(4, 0, errorMessage);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
 		cellFormatter.setColSpan(4, 0, 2);
-		cellFormatter.setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		cellFormatter.setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_LEFT);
+		errorMessage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 	}
 	
 	@Override

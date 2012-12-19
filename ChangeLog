@@ -1,5 +1,16 @@
 2012-12-19  Murray Cumming  <murrayc@murrayc.com>
 
+        DocumentLoginViewImpl: Refuse to try if not using HTTPS.
+
+        * src/main/java/org/glom/web/client/ui/DocumentLoginViewImpl.java:
+	Show an error message, and disable the login button, if we are not using 
+	HTTPS.
+        * src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+        * src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_*.properties:
+	Add the translatable string for the error message.
+
+2012-12-19  Murray Cumming  <murrayc@murrayc.com>
+
         OnlineGlomLoginServlet.checkAuthentication(): Require HTTPS.
 
         * pom.xml: Use HTTPS when running jetty for testing via mvn gwt:run.
