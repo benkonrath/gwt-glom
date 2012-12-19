@@ -91,7 +91,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			final Cookie cookie = new Cookie(COOKIE_NAME, sessionID);
 			cookie.setMaxAge(-1);
 			cookie.setPath("/");
-			//cookie.setSecure(true);
+			cookie.setSecure(true);
 			cookie.setMaxAge(30 * 24 * 60 * 60); //30 days
 			//TODO: How can we do this? cookie.setHttpOnly(true); //Avoid its use from client-side javascript.
 			final HttpServletResponse response = this.getThreadLocalResponse();

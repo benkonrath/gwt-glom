@@ -1,5 +1,18 @@
 2012-12-19  Murray Cumming  <murrayc@murrayc.com>
 
+        Prevent client code from reading our client cookie.
+
+        * pom.xml: Use a later javax.servlet version than we seem to 
+	get automatically, probably via GWT, so we have the
+	Cookie.setSecure() method, though I cannot find out when it
+	was added.
+        * src/main/java/org/glom/web/server/OnlineGlomLoginServlet.java:
+        checkAuthentication(): Call setSecure() on the Cookie, so it
+	can only be retrieved via HTTP(S), not by client code,
+	making it harder for Javascript to hijack the session.
+
+2012-12-19  Murray Cumming  <murrayc@murrayc.com>
+
         OnlineGlomServlet(): Simplify getting the request in all cases.
 
         * src/main/java/org/glom/web/server/OnlineGlomServlet.java:
