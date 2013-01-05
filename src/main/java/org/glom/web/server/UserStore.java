@@ -51,6 +51,10 @@ public class UserStore {
 	}
 	
 	public void setCredentials(final String sessionID, final Credentials credentials) {
+		//Note that HashTable.put() is synchronized,
+		//but be careful if we ever change this to a container that does not
+		//have synchronized methods.
+		//TODO: Avoid races between checking and setting.
 		credentialsMap.put(sessionID, credentials);
 	}
 
