@@ -35,7 +35,7 @@ import org.junit.Test;
  */
 public class SelfHostExampleTest {
 
-	private static SelfHoster selfHoster = null;
+	private static SelfHosterPostgreSQL selfHosterPostgreSQL = null;
 
 	@Test
 	public void test() throws SQLException {
@@ -47,17 +47,17 @@ public class SelfHostExampleTest {
 		document.setFileURI(strUri);
 		assertTrue(document.load());
 
-		selfHoster = new SelfHoster(document);
-		final boolean hosted = selfHoster.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
+		selfHosterPostgreSQL = new SelfHosterPostgreSQL(document);
+		final boolean hosted = selfHosterPostgreSQL.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
 		assertTrue(hosted);
 		
-		SelfHostTestUtils.testExampleMusiccollectionData(selfHoster, document);
+		SelfHostTestUtils.testExampleMusiccollectionData(selfHosterPostgreSQL, document);
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		if (selfHoster != null) {
-			selfHoster.cleanup();
+		if (selfHosterPostgreSQL != null) {
+			selfHosterPostgreSQL.cleanup();
 		}
 	}
 }

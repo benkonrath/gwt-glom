@@ -481,7 +481,7 @@ public class Document {
 		}
 
 		// We do not normally use this,
-		// though we do use it during testing, in SelfHoster, to recreate the database data.
+		// though we do use it during testing, in SelfHosterPostgreSQL, to recreate the database data.
 		final Element exampleRowsNode = getElementByName(tableNode, NODE_EXAMPLE_ROWS);
 		if (exampleRowsNode != null) {
 

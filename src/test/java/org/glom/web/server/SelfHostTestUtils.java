@@ -43,7 +43,7 @@ import org.junit.Assert;
  *
  */
 public class SelfHostTestUtils {
-	static public void testExampleMusiccollectionData(final SelfHoster selfHoster, final Document document) throws SQLException
+	static public void testExampleMusiccollectionData(final SelfHosterPostgreSQL selfHosterPostgreSQL, final Document document) throws SQLException
 	{
 	  assertTrue(document != null);
 	  
@@ -66,7 +66,7 @@ public class SelfHostTestUtils {
 	  
 	  final String sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, null);
 	  
-	  final Connection conn = selfHoster.createConnection(false);
+	  final Connection conn = selfHosterPostgreSQL.createConnection(false);
 	  assertTrue(conn != null);
 	  
 	  final Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -84,7 +84,7 @@ public class SelfHostTestUtils {
 	  final TypedDataItem albumID = new TypedDataItem();
 	  SqlUtils.fillDataItemFromResultSet(albumID, layoutItemFieldAlbumID, 1,
 				rs, "fake-document-id", tableName, null);
-	  testExampleMusiccollectionDataRelated(selfHoster, document, albumID);
+	  testExampleMusiccollectionDataRelated(selfHosterPostgreSQL, document, albumID);
 	}
 
 	/** Check that we can get data via a relationship.
@@ -92,7 +92,7 @@ public class SelfHostTestUtils {
 	 * @param albumID
 	 * @throws SQLException 
 	 */
-	static private void testExampleMusiccollectionDataRelated(final SelfHoster selfHoster, final Document document, TypedDataItem albumID) throws SQLException {
+	static private void testExampleMusiccollectionDataRelated(final SelfHosterPostgreSQL selfHosterPostgreSQL, final Document document, TypedDataItem albumID) throws SQLException {
 		final String tableName = "albums";
 		
 		//Normal fields:
@@ -121,7 +121,7 @@ public class SelfHostTestUtils {
 		  
 		final String sqlQuery = SqlUtils.buildSqlSelectWithKey(tableName, fieldsToGet, fieldAlbumID, albumID);
 		  
-		final Connection conn = selfHoster.createConnection(false);
+		final Connection conn = selfHosterPostgreSQL.createConnection(false);
 		assertTrue(conn != null);
 		  
 		final Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

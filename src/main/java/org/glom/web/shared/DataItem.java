@@ -96,7 +96,7 @@ public class DataItem implements Serializable {
 		this.imageDataUrl = image;
 	}
 
-	/** This is used by SelfHoster to get data for a database column.
+	/** This is used by SelfHosterPostgreSQL to get data for a database column.
 	 * 
 	 * @param type The expected type of the data.
 	 * @return The data.

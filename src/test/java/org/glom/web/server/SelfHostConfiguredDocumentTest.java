@@ -48,7 +48,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public class SelfHostConfiguredDocumentTest {
 
-	private static SelfHoster selfHoster = null;
+	private static SelfHosterPostgreSQL selfHosterPostgreSQL = null;
 	private static ConfiguredDocument configuredDoc;
 	private static ComboPooledDataSource authenticatedConnection;
 	private static Document document;
@@ -67,19 +67,19 @@ public class SelfHostConfiguredDocumentTest {
 		final boolean retval = document.load();
 		assertTrue(retval);
 
-		selfHoster = new SelfHoster(document);
-		final boolean hosted = selfHoster.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
+		selfHosterPostgreSQL = new SelfHosterPostgreSQL(document);
+		final boolean hosted = selfHosterPostgreSQL.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
 		assertTrue(hosted);
 		
 		configuredDoc = new ConfiguredDocument(document);
-		authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, selfHoster.getUsername(), selfHoster.getPassword());
+		authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, selfHosterPostgreSQL.getUsername(), selfHosterPostgreSQL.getPassword());
 		assertNotNull(authenticatedConnection);
 	}
 
 	@AfterClass
 	static public void tearDown() {
-		if (selfHoster != null) {
-			selfHoster.cleanup();
+		if (selfHosterPostgreSQL != null) {
+			selfHosterPostgreSQL.cleanup();
 		}
 	}
 	
