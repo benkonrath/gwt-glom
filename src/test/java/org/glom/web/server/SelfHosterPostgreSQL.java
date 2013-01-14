@@ -68,30 +68,14 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	private static final String DEFAULT_CONFIG_PG_IDENT = "";
 	private static final String FILENAME_DATA = "data";
 
-	public boolean createAndSelfHostFromExample(final Document.HostingMode hostingMode) {
-
-		if (!createAndSelfHostNewEmpty(hostingMode)) {
-			// std::cerr << G_STRFUNC << ": test_create_and_selfhost_new_empty() failed." << std::endl;
-			return false;
-		}
-
-		final boolean recreated = recreateDatabaseFromDocument(); /* TODO: Progress callback */
-		if (!recreated) {
-			if (!cleanup()) {
-				return false;
-			}
-		}
-
-		return recreated;
-	}
-
 	/**
 	 * @param document
 	 * @param
 	 * @param subDirectoryPath
 	 * @return
+	 * @Override
 	 */
-	private boolean createAndSelfHostNewEmpty(final Document.HostingMode hostingMode) {
+	protected boolean createAndSelfHostNewEmpty(final Document.HostingMode hostingMode) {
 		if (hostingMode != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF) {
 			// TODO: std::cerr << G_STRFUNC << ": This test function does not support the specified hosting_mode: " <<
 			// hosting_mode << std::endl;
@@ -148,6 +132,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @param user
 	 * @param password
 	 * @return
+	 * @Override
 	 */
 	private boolean selfHost(final String user, final String password) {
 		// TODO: m_network_shared = network_shared;
@@ -545,7 +530,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @param document
 	 * @return
 	 */
-	private boolean recreateDatabaseFromDocument() {
+	protected boolean recreateDatabaseFromDocument() {
 		// Check whether the database exists already.
 		final String dbName = document.getConnectionDatabase();
 		if (StringUtils.isEmpty(dbName)) {

@@ -25,6 +25,10 @@
 
 2013-01-14  Murray Cumming  <murrayc@murrayc.com>
 
+        tests: Move more methods down to SelfHoster.
+
+2013-01-14  Murray Cumming  <murrayc@murrayc.com>
+
         tests: Split SelfHoster into SelfHoster and SelfHosterPostgreSQL.
 
 	This should let me add MySQL hosting too.

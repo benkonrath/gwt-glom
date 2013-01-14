@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Field;
 import org.jooq.InsertResultStep;
@@ -58,10 +59,39 @@ public class SelfHoster {
 	}
 	
 	public boolean createAndSelfHostFromExample(final Document.HostingMode hostingMode) {
-		//Derived classes should implement this.
-		return false;
+
+		if (!createAndSelfHostNewEmpty(hostingMode)) {
+			// std::cerr << G_STRFUNC << ": test_create_and_selfhost_new_empty() failed." << std::endl;
+			return false;
+		}
+
+		final boolean recreated = recreateDatabaseFromDocument(); /* TODO: Progress callback */
+		if (!recreated) {
+			if (!cleanup()) {
+				return false;
+			}
+		}
+
+		return recreated;
 	}
 	
+	/**
+	 * @return
+	 */
+	protected boolean recreateDatabaseFromDocument() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * @param hostingMode
+	 * @return
+	 */
+	protected boolean createAndSelfHostNewEmpty(HostingMode hostingMode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	/**
 	 */
 	public Connection createConnection(boolean failureExpected) {
