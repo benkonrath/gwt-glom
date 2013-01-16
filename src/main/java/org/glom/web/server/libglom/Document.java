@@ -189,6 +189,12 @@ public class Document {
 	public static final String LAYOUT_NAME_DETAILS = "details";
 	public static final String LAYOUT_NAME_LIST = "list";
 	private static final String QUOTE_FOR_FILE_FORMAT = "\"";
+	
+	private static final String ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL = "postgres_central";
+	private static final String ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF = "postgres_self";
+	private static final String ATTRIBUTE_CONNECTION_HOSTING_MYSQL_CENTRAL = "mysql_central";
+	private static final String ATTRIBUTE_CONNECTION_HOSTING_MYSQL_SELF = "mysql_self";
+	private static final String ATTRIBUTE_CONNECTION_HOSTING_SQLITE = "sqlite";
 
 	/**
 	 * Instantiate a Document with no documentID,
@@ -268,9 +274,15 @@ public class Document {
 		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if (nodeConnection != null) {
 			final String strHostingMode = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_HOSTING_MODE);
-			if (strHostingMode.equals("postgres_central")) {
+			if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL)) {
 				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
-			} else if (strHostingMode.equals("sqlite")) {
+			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF)) {
+				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
+			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_MYSQL_CENTRAL)) {
+				hostingMode = HostingMode.HOSTING_MODE_MYSQL_CENTRAL;
+			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_MYSQL_SELF)) {
+				hostingMode = HostingMode.HOSTING_MODE_MYSQL_SELF;
+			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_SQLITE)) {
 				hostingMode = HostingMode.HOSTING_MODE_SQLITE;
 			} else {
 				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
@@ -318,7 +330,7 @@ public class Document {
 		}
 
 		return true;
-	};
+	}
 
 	private Element getElementByName(final Element parentElement, final String tagName) {
 		final List<Node> listNodes = getChildrenByTagName(parentElement, tagName);
@@ -1206,7 +1218,7 @@ public class Document {
 	}
 
 	public enum HostingMode {
-		HOSTING_MODE_POSTGRES_CENTRAL, HOSTING_MODE_POSTGRES_SELF, HOSTING_MODE_SQLITE
+		HOSTING_MODE_POSTGRES_CENTRAL, HOSTING_MODE_POSTGRES_SELF, HOSTING_MODE_SQLITE, HOSTING_MODE_MYSQL_CENTRAL, HOSTING_MODE_MYSQL_SELF
 	};
 
 	public String getDatabaseTitle(final String locale) {
@@ -1657,11 +1669,17 @@ public class Document {
 
 		String strHostingMode = "";
 		if (hostingMode == HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
-			strHostingMode = "postgres_central";
+			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL;
+		} else if (hostingMode == HostingMode.HOSTING_MODE_POSTGRES_SELF) {
+			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF;
+		} else if (hostingMode == HostingMode.HOSTING_MODE_MYSQL_CENTRAL) {
+			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_MYSQL_CENTRAL;
+		} else if (hostingMode == HostingMode.HOSTING_MODE_MYSQL_SELF) {
+			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_MYSQL_SELF;
 		} else if (hostingMode == HostingMode.HOSTING_MODE_SQLITE) {
-			strHostingMode = "sqlite";
+			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_SQLITE;
 		} else {
-			strHostingMode = "postgres_self";
+			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF;
 		}
 		final Element nodeConnection = createElement(doc, rootNode, NODE_CONNECTION);
 		nodeConnection.setAttribute(ATTRIBUTE_CONNECTION_HOSTING_MODE, strHostingMode);

@@ -1,3 +1,12 @@
+2013-01-16  Murray Cumming  <murrayc@murrayc.com>
+
+        Document: Read and write the other hosting modes.
+
+        * src/main/java/org/glom/web/server/libglom/Document.java:
+       	Add to the hosting mode enum and handle all when loading
+	and saving a document. Also add constants for the XML
+	attribute values.
+
 2013-01-25  Murray Cumming  <murrayc@murrayc.com>
 
 	Change a translatable string slightly.
