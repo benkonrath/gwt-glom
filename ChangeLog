@@ -1,5 +1,13 @@
 2013-01-25  Murray Cumming  <murrayc@murrayc.com>
 
+	Change a translatable string slightly.
+
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants.properties:
+	Do not mention PostgreSQL, so we can support other database backends,
+	and other login systems in future.
+
+2013-01-25  Murray Cumming  <murrayc@murrayc.com>
+
 	Added a Hungarian translation.
 
 	* src/main/java/org/glom/web/OnlineGlom.gwt.xml:
