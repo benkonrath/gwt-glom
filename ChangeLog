@@ -1,3 +1,12 @@
+2013-01-25  Murray Cumming  <murrayc@murrayc.com>
+
+        Update translations from Glom.
+
+        * src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_es.properties
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_sl.properties:
+	Take the translations from the Glom .po files.
+
 2013-01-14  Murray Cumming  <murrayc@murrayc.com>
 
         tests: Split SelfHoster into SelfHoster and SelfHosterPostgreSQL.
