@@ -1,5 +1,13 @@
 2013-01-25  Murray Cumming  <murrayc@murrayc.com>
 
+	Added a Hungarian translation.
+
+	* src/main/java/org/glom/web/OnlineGlom.gwt.xml:
+	* src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_hu.properties:
+	This is from the new translation in Glom.
+
+2013-01-25  Murray Cumming  <murrayc@murrayc.com>
+
         Update translations from Glom.
 
         * src/main/resources/org/glom/web/client/ui/OnlineGlomConstants_cs.properties

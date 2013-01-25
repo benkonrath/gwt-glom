@@ -1,0 +1,14 @@
+search = Keresés
+backToList = Vissza a listához
+details = Részletek
+open = Részletek
+reports = Jelentések
+generatingReport = A jelentés előállítása…
+loginEnter = Adja meg a PostgreSQL felhasználónevét és jelszavát.
+loginUsername = Felhasználónév
+loginPassword = Jelszó
+login = Bejelentkezés
+logout = Kijelentkezés
+cancel = Mégse
+loginWrong = A felhasználónév vagy a jelszó nem helyes.
+loginNeedsHttps = Úgy tűnik, hogy bejelentkezés szükséges, de nem lesz megpróbálva. Ez az oldal nem HTTPS-en keresztül szolgáltat, amely szükséges lenne a biztonságos bejelentkezéshez. Kérem vegye fel a kapcsolatot a rendszergazdával.
