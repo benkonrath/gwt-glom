@@ -85,8 +85,9 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			final HttpSession session = request.getSession();
 			final String sessionID = session.getId();
 			
-			// This GWT page suggests doing this on the client-side,
+			// This GWT page apparently suggests doing this on the client-side,
 			// after returning the session ID to the client,
+			//  http://code.google.com/p/google-web-toolkit-incubator/wiki/LoginSecurityFAQ
 			// but it seems cleaner to do it here on the server side:
 			final Cookie cookie = new Cookie(COOKIE_NAME, sessionID);
 			cookie.setMaxAge(-1);
