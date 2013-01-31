@@ -1,5 +1,16 @@
 2013-01-31  Murray Cumming  <murrayc@murrayc.com>
 
+        SelfHosterPostgreSQL: Avoid some copy/pasting.
+
+        * src/main/java/org/glom/web/server/SqlUtils.java:
+	Added getJdbcConnectionDetails() and used it in 
+	createAndSetupDataSource(). Also support MySQL here.
+        * src/test/java/org/glom/web/server/SelfHosterPostgreSQL.java:
+        createConnection(): Use getJdbcConnectionDetails() instead of
+	repeating the start of the jdbc URI and the default database name.
+
+2013-01-31  Murray Cumming  <murrayc@murrayc.com>
+
         Avoid some copy/pasted connection/statement code.
 
         * src/main/java/org/glom/web/server/SqlUtils.java: Add executeQuery(),

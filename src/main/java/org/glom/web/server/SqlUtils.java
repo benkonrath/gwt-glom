@@ -68,36 +68,80 @@ public class SqlUtils {
 	 * @return
 	 */
 	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
+		return createAndSetupDataSource(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
+	}
+	
+	static class JdbcConnectionDetails {
+		String driverClass = null;
+		String jdbcURL = null;
+	};
+
+	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document document) {
+		return getJdbcConnectionDetails(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
+	}
+
+	private static JdbcConnectionDetails getJdbcConnectionDetails(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
+		final JdbcConnectionDetails details = new JdbcConnectionDetails();
+
+		String defaultDatabase = null;
+		switch (hostingMode) {
+			case HOSTING_MODE_POSTGRES_CENTRAL:
+			case HOSTING_MODE_POSTGRES_SELF: {
+				details.driverClass = "org.postgresql.Driver";
+				details.jdbcURL = "jdbc:postgresql://";
+				defaultDatabase = "template1";
+				break;
+			}
+			case HOSTING_MODE_MYSQL_CENTRAL:
+			case HOSTING_MODE_MYSQL_SELF: {
+				details.driverClass = "com.mysql.jdbc.Driver";
+				details.jdbcURL = "jdbc:mysql://";
+				defaultDatabase = "INFORMATION_SCHEMA";
+				break;
+			}
+			default: {
+				// TODO: We allow self-hosting here, for testing,
+				// but maybe the startup of self-hosting should happen here.
+				Log.fatal("Error configuring the database connection." + " Only PostgreSQL and MySQL hosting are supported.");
+				// FIXME: Throw exception?
+				return null;
+			}
+		}
+			
+		// setup the JDBC driver for the current glom document
+		details.jdbcURL += serverHost + ":" + serverPort;
+
+		String db = database;
+		if (StringUtils.isEmpty(db)) {
+			// Use the default PostgreSQL database, because ComboPooledDataSource.connect() fails otherwise.
+			db = defaultDatabase;
+		}
+		details.jdbcURL += "/" + db; // TODO: Quote the database name?
+		
+		return details;
+	}
+	
+	/**
+	 * @param document
+	 * @return
+	 */
+	private static ComboPooledDataSource createAndSetupDataSource(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
 		final ComboPooledDataSource cpds = new ComboPooledDataSource();
 
-		// We don't support sqlite or self-hosting yet.
-		if ((document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_CENTRAL)
-				&& (document.getHostingMode() != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF)) {
-			// TODO: We allow self-hosting here, for testing,
-			// but maybe the startup of self-hosting should happen here.
-			Log.fatal("Error configuring the database connection." + " Only PostgreSQL hosting is supported.");
-			// FIXME: Throw exception?
+		final JdbcConnectionDetails details = getJdbcConnectionDetails(hostingMode, serverHost, serverPort, database);
+		if (details == null) {
+			return null;
 		}
 
 		try {
-			cpds.setDriverClass("org.postgresql.Driver");
+			cpds.setDriverClass(details.driverClass);
 		} catch (final PropertyVetoException e) {
 			Log.fatal("Error loading the PostgreSQL JDBC driver."
 					+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
 			return null;
 		}
-
-		// setup the JDBC driver for the current glom document
-		String jdbcURL = "jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort();
-
-		String db = document.getConnectionDatabase();
-		if (StringUtils.isEmpty(db)) {
-			// Use the default PostgreSQL database, because ComboPooledDataSource.connect() fails otherwise.
-			db = "template1";
-		}
-		jdbcURL += "/" + db; // TODO: Quote the database name?
-
-		cpds.setJdbcUrl(jdbcURL);
+		
+		cpds.setJdbcUrl(details.jdbcURL);
 
 		return cpds;
 	}
