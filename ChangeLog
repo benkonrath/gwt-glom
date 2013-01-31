@@ -1,3 +1,17 @@
+2013-01-31  Murray Cumming  <murrayc@murrayc.com>
+
+        Avoid some copy/pasted connection/statement code.
+
+        * src/main/java/org/glom/web/server/SqlUtils.java: Add executeQuery(),
+	which does the getting of the Connection and the creation of the Statement,
+	so the caller does not have to.
+        * src/main/java/org/glom/web/server/OnlineGlomImagesServlet.java
+        * src/main/java/org/glom/web/server/database/DetailsDBAccess.java
+        * src/main/java/org/glom/web/server/database/ListDBAccess.java
+        * src/main/java/org/glom/web/server/database/RelatedListNavigation.java
+        * src/test/java/org/glom/web/server/SelfHoster.java: Use the new method
+	instead of doing all the work each time.
+
 2013-01-16  Murray Cumming  <murrayc@murrayc.com>
 
         Document: Read and write the other hosting modes.

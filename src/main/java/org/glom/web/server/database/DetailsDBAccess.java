@@ -19,10 +19,8 @@
 
 package org.glom.web.server.database;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,20 +63,14 @@ public class DetailsDBAccess extends DBAccess {
 		}
 
 		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
-		Connection conn = null;
-		Statement st = null;
 		ResultSet rs = null;
 		try {
-			// Setup the JDBC driver and get the query.
-			conn = cpds.getConnection();
-			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-
 			if (primaryKeyValue != null) {
 
 				final String query = SqlUtils
 						.buildSqlSelectWithKey(tableName, fieldsToGet, primaryKey, primaryKeyValue);
 
-				rs = st.executeQuery(query);
+				rs = SqlUtils.executeQuery(cpds, query);
 
 				// get the results from the ResultSet
 				// using 2 as a length parameter so we can log a warning if appropriate
@@ -94,12 +86,6 @@ public class DetailsDBAccess extends DBAccess {
 			try {
 				if (rs != null) {
 					rs.close();
-				}
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null) {
-					conn.close();
 				}
 			} catch (final Exception e) {
 				Log.error(documentID, tableName,

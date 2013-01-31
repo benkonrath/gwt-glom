@@ -19,11 +19,9 @@
 
 package org.glom.web.server.database;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,14 +120,8 @@ public class RelatedListNavigation extends DBAccess {
 
 		final NavigationRecord navigationRecord = new NavigationRecord();
 		String query = null;
-		Connection conn = null;
-		Statement st = null;
 		ResultSet rs = null;
 		try {
-			// Setup the JDBC driver and get the query.
-			conn = cpds.getConnection();
-			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-
 			if (primaryKeyValue != null) {
 				
 				// Make sure that the value knows its actual type,
@@ -138,7 +130,7 @@ public class RelatedListNavigation extends DBAccess {
 
 				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField, primaryKeyValue);
 
-				rs = st.executeQuery(query);
+				rs = SqlUtils.executeQuery(cpds, query);
 
 				// Set the output parameters:
 				navigationRecord.setTableName(navigationTable.tableName);
@@ -191,12 +183,6 @@ public class RelatedListNavigation extends DBAccess {
 			try {
 				if (rs != null) {
 					rs.close();
-				}
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null) {
-					conn.close();
 				}
 			} catch (final Exception e) {
 				Log.error(documentID, tableName,

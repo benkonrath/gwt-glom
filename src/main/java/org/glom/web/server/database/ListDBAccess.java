@@ -19,15 +19,14 @@
 
 package org.glom.web.server.database;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.glom.web.server.Log;
+import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
@@ -97,8 +96,6 @@ public abstract class ListDBAccess extends DBAccess {
 		}
 
 		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
-		Connection conn = null;
-		Statement st = null;
 		ResultSet rs = null;
 		try {
 			
@@ -106,26 +103,18 @@ public abstract class ListDBAccess extends DBAccess {
 			//This is more than enough.
 			DriverManager.setLoginTimeout(5);
 
-			// Setup the JDBC driver and get the query. Special care needs to be take to ensure that the results will be
+			// Setup the JDBC driver and get the query. Special care needs to be taken to ensure that the results will be
 			// based on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount
 			// of data. Here's the relevant PostgreSQL documentation:
 			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
-			conn = cpds.getConnection();
-			if(conn == null) {
-				Log.error(documentID, tableName, "The connection is null.");
-				return rowsList;
-			}
-			
-			conn.setAutoCommit(false);
-			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-			st.setFetchSize(length);
+
 			final String query = getSelectQuery(quickFind, sortClause) + " OFFSET " + start;
 			// TODO Test memory usage before and after we execute the query that would result in a large ResultSet.
 			// We need to ensure that the JDBC driver is in fact returning a cursor based result set that has a low
 			// memory footprint. Check the difference between this value before and after the query:
 			// Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
 			// Test the execution time at the same time (see the todo item in getLayoutListTable()).
-			rs = st.executeQuery(query);
+			rs = SqlUtils.executeQuery(cpds, query, length);
 
 			// get the results from the ResultSet
 			final TypedDataItem primaryKeyValue = null; //TODO: Discover it for each row instead.
@@ -138,12 +127,6 @@ public abstract class ListDBAccess extends DBAccess {
 			try {
 				if (rs != null) {
 					rs.close();
-				}
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null) {
-					conn.close();
 				}
 			} catch (final Exception e) {
 				Log.error(documentID, tableName,
@@ -159,8 +142,6 @@ public abstract class ListDBAccess extends DBAccess {
 	 */
 	protected int getResultSizeOfSQLQuery() {
 
-		Connection conn = null;
-		Statement st = null;
 		ResultSet rs = null;
 		try {
 			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
@@ -171,14 +152,11 @@ public abstract class ListDBAccess extends DBAccess {
 			// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
 			// data. Here's the relevant PostgreSQL documentation:
 			// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
-			conn = cpds.getConnection();
-			conn.setAutoCommit(false);
-			st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 			final String query = getCountQuery();
 
 			// TODO Test execution time of this query with when the number of rows in the table is large (say >
 			// 1,000,000). Test memory usage at the same time (see the todo item in getTableData()).
-			rs = st.executeQuery(query);
+			rs = SqlUtils.executeQuery(cpds, query);
 
 			// get the number of rows in the query
 			rs.next();
@@ -192,12 +170,6 @@ public abstract class ListDBAccess extends DBAccess {
 			try {
 				if (rs != null) {
 					rs.close();
-				}
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null) {
-					conn.close();
 				}
 			} catch (final Exception e) {
 				Log.error(documentID, tableName,

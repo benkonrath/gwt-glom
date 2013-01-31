@@ -24,10 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLConnection;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -220,32 +218,9 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return null;
 		}
 		
-		Connection connection = null;
-		try {
-			connection = authenticatedConnection.getConnection();
-		} catch (final SQLException e) {
-			//e.printStackTrace();
-
-			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
-			return null;
-		}
-		
-		Statement st = null;
-		try {
-			st = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		} catch (SQLException e) {
-			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
-			return null;
-		}
-		
-		if(st == null) {
-			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "The SQL statement is null.", attrDocumentID);
-			return null;
-		}
-
 		ResultSet rs = null;
 		try {
-			rs = st.executeQuery(query);
+			rs = SqlUtils.executeQuery(authenticatedConnection, query);
 		} catch (SQLException e) {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "SQL exception: " + e.getMessage(), attrDocumentID);
 			return null;
