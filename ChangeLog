@@ -1,3 +1,12 @@
+2013-02-03  Murray Cumming  <murrayc@murrayc.com>
+
+        SelfHostExampleTest: Use the generic SelfHoster base class.
+
+        * src/test/java/org/glom/web/server/SelfHostTestUtils.java:
+	Take a SelfHoster parameter rather than a SelfHosterPostgreSQL.
+        * src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	Use the base class type where possible.
+
 2013-01-31  Murray Cumming  <murrayc@murrayc.com>
 
         SelfHosterPostgreSQL: Avoid some copy/pasting.
