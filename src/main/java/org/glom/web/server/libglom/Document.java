@@ -73,6 +73,7 @@ import org.glom.web.shared.libglom.layout.TableToViewDetails;
 import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.glom.web.shared.libglom.layout.reportparts.LayoutItemGroupBy;
+import org.jooq.SQLDialect;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -1940,6 +1941,12 @@ public class Document {
 			case HOSTING_MODE_POSTGRES_CENTRAL:
 				dataDir = parent;
 				break;
+			case HOSTING_MODE_MYSQL_SELF:
+				dataDir = new File(parent, "glom_mysql_data");
+				break;
+			case HOSTING_MODE_MYSQL_CENTRAL:
+				dataDir = parent;
+				break;
 			case HOSTING_MODE_SQLITE:
 				dataDir = parent;
 				break;
@@ -1961,7 +1968,6 @@ public class Document {
 	 */
 	public void setConnectionDatabase(final String databaseName) {
 		connectionDatabase = databaseName;
-
 	}
 
 	/**
@@ -2052,5 +2058,23 @@ public class Document {
 			return null;
 		}
 		return item;
+	}
+
+	/**
+	 * @return
+	 */
+	public SQLDialect getSqlDialect() {
+		switch (hostingMode) {
+		case HOSTING_MODE_POSTGRES_SELF:
+		case HOSTING_MODE_POSTGRES_CENTRAL:
+			return SQLDialect.POSTGRES;
+		case HOSTING_MODE_MYSQL_SELF:
+		case HOSTING_MODE_MYSQL_CENTRAL:
+			return SQLDialect.MYSQL;
+		case HOSTING_MODE_SQLITE:
+			return SQLDialect.SQLITE;
+		default:
+			return null;
+		}
 	}
 }

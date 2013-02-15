@@ -1,3 +1,15 @@
+2013-02-15  Murray Cumming  <murrayc@murrayc.com>
+
+        SqlUtils: Do not hard-code the PostgreSQL SQL dialect.
+
+	* src/main/java/org/glom/web/server/SqlUtils.java: Take
+	the JOOQ SQLDialect as a parameter to these utility
+	functions.
+	* src/main/java/org/glom/web/server/libglom/Document.java:
+	Add getSqlDialect().
+	* src/main/java/org/glom/web/server/: Use getSqlDialect()
+	to provide the new parameter.
+
 2013-02-03  Murray Cumming  <murrayc@murrayc.com>
 
         SelfHostExampleTest: Use the generic SelfHoster base class.

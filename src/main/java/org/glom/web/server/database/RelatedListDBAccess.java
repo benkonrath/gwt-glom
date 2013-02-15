@@ -188,7 +188,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 			}
 		}
 
-		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, document.getSqlDialect());
 
 	}
 
@@ -238,7 +238,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 			}
 		}
 
-		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet, whereClause);
+		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet, whereClause, document.getSqlDialect());
 	}
 
 }

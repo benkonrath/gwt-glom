@@ -128,7 +128,7 @@ public class RelatedListNavigation extends DBAccess {
 				// in case it was received via a URL parameter as a string representation:
 				Utils.transformUnknownToActualType(primaryKeyValue, primaryKeyField.getGlomType());
 
-				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField, primaryKeyValue);
+				query = SqlUtils.buildSqlSelectWithKey(relatedTableName, fieldsToGet, primaryKeyField, primaryKeyValue, document.getSqlDialect());
 
 				rs = SqlUtils.executeQuery(cpds, query);
 

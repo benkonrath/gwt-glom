@@ -189,10 +189,58 @@ public class SqlUtils {
 			cpds.setAcquireRetryAttempts(acquireRetryAttempts);
 		}
 	}
+
+	public static ResultSet executeQuery(final ComboPooledDataSource cpds, final String query) throws SQLException {
+		return executeQuery(cpds, query, 0);
+	}
+
+	public static ResultSet executeQuery(final ComboPooledDataSource cpds, final String query, int expectedLength) throws SQLException {
+		if(cpds == null) {
+			Log.error("cpds is null.");
+			return null;
+		}
+
+		// Setup the JDBC driver and run the query.
+		final Connection conn = cpds.getConnection();
+		if(conn == null) {
+			Log.error("The connection is null.");
+			return null;
+		}
+		
+		return executeQuery(conn, query, expectedLength);
+	}
+
+	public static ResultSet executeQuery(final Connection conn, final String query) throws SQLException {
+		return executeQuery(conn, query, 0);
+	}
+
+	public static ResultSet executeQuery(final Connection conn, final String query, int expectedLength) throws SQLException {
+		// Setup and execute the query. Special care needs to be take to ensure that the results will be based
+		// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
+		// data. Here's the relevant PostgreSQL documentation:
+		// http://jdbc.postgresql.org/documentation/83/query.html#query-with-cursor
+		conn.setAutoCommit(false);
+		final Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		if(expectedLength > 0) {
+			st.setFetchSize(expectedLength);
+		}
+
+		return st.executeQuery(query);
+	}
+	
+	/**
+	 * @param connection
+	 * @param query
+	 */
+	public static void executeUpdate(final Connection conn, final String query) throws SQLException {
+		conn.setAutoCommit(false);
+		final Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		st.executeUpdate(query);
+	}
 	
 	// TODO: Change to final ArrayList<LayoutItem_Field> fieldsToGet
 	public static String buildSqlSelectWithKey(final String tableName, final List<LayoutItemField> fieldsToGet,
-			final Field primaryKey, final TypedDataItem primaryKeyValue) {
+			final Field primaryKey, final TypedDataItem primaryKeyValue, final SQLDialect sqlDialect) {
 
 		Condition whereClause = null; // Note that we ignore quickFind.
 		if (primaryKeyValue != null) {
@@ -200,7 +248,7 @@ public class SqlUtils {
 		}
 
 		final SortClause sortClause = null; // Ignored.
-		return buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
+		return buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, sqlDialect);
 	}
 
 	public static Condition buildSimpleWhereExpression(final String tableName, final Field primaryKey,
@@ -235,8 +283,8 @@ public class SqlUtils {
 	 */
 
 	public static String buildSqlSelectWithWhereClause(final String tableName, final List<LayoutItemField> fieldsToGet,
-			final Condition whereClause, final SortClause sortClause) {
-		final SelectFinalStep step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
+			final Condition whereClause, final SortClause sortClause, final SQLDialect sqlDialect) {
+		final SelectFinalStep step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, sqlDialect);
 		if (step == null) {
 			return "";
 		}
@@ -246,8 +294,8 @@ public class SqlUtils {
 		return query;
 	}
 
-	private static SelectSelectStep createSelect() {
-		final Factory factory = new Factory(SQLDialect.POSTGRES);
+	private static SelectSelectStep createSelect(final SQLDialect sqlDialect) {
+		final Factory factory = new Factory(sqlDialect);
 		final Settings settings = factory.getSettings();
 		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
 		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
@@ -257,9 +305,9 @@ public class SqlUtils {
 	}
 
 	private static SelectFinalStep buildSqlSelectStepWithWhereClause(final String tableName,
-			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause) {
+			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause, final SQLDialect sqlDialect) {
 
-		final SelectSelectStep selectStep = createSelect();
+		final SelectSelectStep selectStep = createSelect(sqlDialect);
 
 		// Add the fields, and any necessary joins:
 		final List<UsesRelationship> listRelationships = buildSqlSelectAddFieldsToGet(selectStep, tableName,
@@ -283,20 +331,20 @@ public class SqlUtils {
 	}
 
 	public static String buildSqlCountSelectWithWhereClause(final String tableName,
-			final List<LayoutItemField> fieldsToGet) {
-		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, null, null);
-		return buildSqlSelectCountRows(selectInner);
+			final List<LayoutItemField> fieldsToGet, final SQLDialect sqlDialect) {
+		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, null, null, sqlDialect);
+		return buildSqlSelectCountRows(selectInner, sqlDialect);
 	}
 
 	public static String buildSqlCountSelectWithWhereClause(final String tableName,
-			final List<LayoutItemField> fieldsToGet, final Condition whereClause) {
-		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, null);
-		return buildSqlSelectCountRows(selectInner);
+			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SQLDialect sqlDialect) {
+		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, null, sqlDialect);
+		return buildSqlSelectCountRows(selectInner, sqlDialect);
 	}
 
-	private static String buildSqlSelectCountRows(final SelectFinalStep selectInner) {
+	private static String buildSqlSelectCountRows(final SelectFinalStep selectInner, final SQLDialect sqlDialect) {
 		// TODO: Find a way to do this with the jOOQ API:
-		final SelectSelectStep select = createSelect();
+		final SelectSelectStep select = createSelect(sqlDialect);
 
 		final org.jooq.Field<?> field = Factory.field("*");
 		final AggregateFunction<?> count = Factory.count(field);

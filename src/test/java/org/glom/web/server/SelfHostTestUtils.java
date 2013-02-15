@@ -64,7 +64,7 @@ public class SelfHostTestUtils {
 	  layoutItemField.setFullFieldDetails(field);
 	  fieldsToGet.add(layoutItemField);
 	  
-	  final String sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, null);
+	  final String sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, null, selfHoster.getSqlDialect());
 	  
 	  final Connection conn = selfHoster.createConnection(false);
 	  assertTrue(conn != null);
@@ -119,7 +119,7 @@ public class SelfHostTestUtils {
 		fieldsToGet.add(layoutItemField);
 		
 		  
-		final String sqlQuery = SqlUtils.buildSqlSelectWithKey(tableName, fieldsToGet, fieldAlbumID, albumID);
+		final String sqlQuery = SqlUtils.buildSqlSelectWithKey(tableName, fieldsToGet, fieldAlbumID, albumID, selfHoster.getSqlDialect());
 		  
 		final Connection conn = selfHoster.createConnection(false);
 		assertTrue(conn != null);

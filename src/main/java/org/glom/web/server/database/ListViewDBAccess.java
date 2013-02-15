@@ -102,7 +102,7 @@ public class ListViewDBAccess extends ListDBAccess {
 			whereClause = SqlUtils.getFindWhereClauseQuick(document, tableName, quickFindValue);
 		}
 
-		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
+		return SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, document.getSqlDialect());
 	}
 
 	/*
@@ -112,7 +112,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	 */
 	@Override
 	protected String getCountQuery() {
-		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet);
+		return SqlUtils.buildSqlCountSelectWithWhereClause(tableName, fieldsToGet, document.getSqlDialect());
 	}
 
 	/**

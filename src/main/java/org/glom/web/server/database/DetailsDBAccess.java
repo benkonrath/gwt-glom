@@ -68,7 +68,7 @@ public class DetailsDBAccess extends DBAccess {
 			if (primaryKeyValue != null) {
 
 				final String query = SqlUtils
-						.buildSqlSelectWithKey(tableName, fieldsToGet, primaryKey, primaryKeyValue);
+						.buildSqlSelectWithKey(tableName, fieldsToGet, primaryKey, primaryKeyValue, document.getSqlDialect());
 
 				rs = SqlUtils.executeQuery(cpds, query);
 

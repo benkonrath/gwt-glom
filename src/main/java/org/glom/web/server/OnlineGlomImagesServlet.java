@@ -211,7 +211,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 		layoutItemField.setFullFieldDetails(field);
 		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
 		fieldsToGet.add(layoutItemField);
-		final String query = SqlUtils.buildSqlSelectWithKey(attrTableName, fieldsToGet, fieldPrimaryKey, primaryKeyValue);
+		final String query = SqlUtils.buildSqlSelectWithKey(attrTableName, fieldsToGet, fieldPrimaryKey, primaryKeyValue, document.getSqlDialect());
 		
 		final ComboPooledDataSource authenticatedConnection = getConnection(request, attrDocumentID);
 		if(authenticatedConnection == null) {

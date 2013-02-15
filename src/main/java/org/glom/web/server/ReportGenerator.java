@@ -172,7 +172,7 @@ public class ReportGenerator {
 
 		String sqlQuery = "";
 		if (!fieldsToGet.isEmpty()) {
-			sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause);
+			sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, glomDocument.getSqlDialect());
 		} else {
 			Log.info("generateReport(): fieldsToGet is empty.");
 		}
