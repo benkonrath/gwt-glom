@@ -456,4 +456,19 @@ public class SelfHoster {
 		return null;
 	}
 
+	/**
+	 * @param name
+	 * @return
+	 */
+	public static String quoteAndEscapeSqlId(final String name, final SQLDialect sqlDialect) {
+		//final Factory factory = new Factory(connection, getSqlDialect());
+		final org.jooq.Name jooqName = Factory.name(name);
+		if(jooqName == null) {
+			return null;
+		}
+
+		final Factory factory = new Factory(sqlDialect);
+		return factory.render(jooqName);
+	}
+
 }

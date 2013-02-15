@@ -25,6 +25,7 @@ import java.net.URL;
 import java.sql.SQLException;
 
 import org.glom.web.server.libglom.Document;
+import org.jooq.SQLDialect;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -44,6 +45,22 @@ public class SelfHostExampleTest {
 	@Test
 	public void testMySQL() throws SQLException {
 		doTest(Document.HostingMode.HOSTING_MODE_MYSQL_SELF);
+	}
+	
+	/* This is really a test of our test utility code. */
+	@Test
+	public void testSelfHosterEscapeIDSame() {
+		final String id = "something";
+		assertEquals("\"" + id + "\"", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.POSTGRES));
+		assertEquals("`" + id + "`", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.MYSQL));
+	}
+
+	/* This is really a test of our test utility code. */
+	@Test
+	public void testSelfHosterEscapeIDNotSame() {
+		final String id = "something with a \" and a ` char";
+		assertNotEquals("\"" + id + "\"", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.POSTGRES));
+		assertNotEquals("`" + id + "`", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.MYSQL));
 	}
 
 	/**

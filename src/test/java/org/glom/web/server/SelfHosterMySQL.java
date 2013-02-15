@@ -320,10 +320,10 @@ public class SelfHosterMySQL extends SelfHoster {
 		//ERROR 1396 (HY000): Operation RENAME USER failed for 'root'@'%'
 		//mysql> RENAME USER root@localhost TO glom_dev_user;
 		//Query OK, 0 rows affected (0.00 sec)
-		final String user = SqlUtils.quoteSqlIdentifier(oldUsername) + "@localhost";
+		final String user = quoteAndEscapeSqlId(oldUsername) + "@localhost";
 
 		//Login will fail after restart if we don't specify @localhost here too:
-		final String newUser = SqlUtils.quoteSqlIdentifier(newUsername) + "@localhost";
+		final String newUser = quoteAndEscapeSqlId(newUsername) + "@localhost";
 
 		return "RENAME USER " + user + " TO " + newUser;
 	}
@@ -666,7 +666,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		String sqlFields = "";
 		for (final Field field : fields) {
 			// Create SQL to describe this field:
-			String sqlFieldDescription = escapeSqlId(field.getName()) + " " + field.getSqlType(Field.SqlDialect.MYSQL);
+			String sqlFieldDescription = quoteAndEscapeSqlId(field.getName()) + " " + field.getSqlType(Field.SqlDialect.MYSQL);
 
 			if (field.getPrimaryKey()) {
 				sqlFieldDescription += " NOT NULL  PRIMARY KEY";
@@ -685,7 +685,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		}
 
 		// Actually create the table
-		final String query = "CREATE TABLE " + escapeSqlId(tableName) + " (" + sqlFields + ");";
+		final String query = "CREATE TABLE " + quoteAndEscapeSqlId(tableName) + " (" + sqlFields + ");";
 		final Factory factory = new Factory(connection, getSqlDialect());
 		try {
 			factory.execute(query);
@@ -707,17 +707,15 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @param name
 	 * @return
 	 */
-	private static String escapeSqlId(final String name) {
-		// MySQL seems to use backticks:
-		// TODO: Escaping.
-		return "`" + name + "`";
+	private static String quoteAndEscapeSqlId(final String name) {
+		return quoteAndEscapeSqlId(name, SQLDialect.MYSQL);
 	}
 
 	/**
 	 * @return
 	 */
 	private static boolean createDatabase(final Connection connection, final String databaseName) {
-		final String query = "CREATE DATABASE  " + escapeSqlId(databaseName);
+		final String query = "CREATE DATABASE  " + quoteAndEscapeSqlId(databaseName);
 		final Factory factory = new Factory(connection, SQLDialect.MYSQL);
 
 		try {

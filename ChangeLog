@@ -1,5 +1,23 @@
 2013-02-15  Murray Cumming  <murrayc@murrayc.com>
 
+        SelfHoster: Actually escape SQL IDs using JOOQ.
+
+	* src/test/java/org/glom/web/server/SelfHoster.java:
+	Added quoteAndEscapeSqlId(), wrapping the use of JOOQ's
+	Factory.render() to escape and quote the SQL ID.
+	* src/test/java/org/glom/web/server/SelfHosterPostgreSQL.java:
+	* src/test/java/org/glom/web/server/SelfHosterMySQL.java:
+	escapeSqlId(): Rename to quoteAndEscapeSqlId(),
+	calling the quoteAndEscapeSqlId() in the base class, passing
+	the SQL dialect. We no longer need to do the quoting
+	here because JOOQ does it.
+	* src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	Add testSelfHosterEscapeIDSame() and
+	testSelfHosterEscapeIDNotSame(), to test the SQL escaping,
+	though it is only used in the test code anyway.
+
+2013-02-15  Murray Cumming  <murrayc@murrayc.com>
+
         Test MySQL via self-hosting too, instead of just PostgreSQL.
 
         * pom.xml: Depend on the MYSQL JDBC driver.

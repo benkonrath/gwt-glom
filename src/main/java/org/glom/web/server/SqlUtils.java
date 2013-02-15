@@ -652,13 +652,4 @@ public class SqlUtils {
 			break;
 		}
 	}
-
-	/**
-	 * @param sqlId
-	 * @return
-	 */
-	public static String quoteSqlIdentifier(final String sqlId) {
-		//TODO:
-		return sqlId;
-	}
 }
