@@ -25,7 +25,6 @@ import java.net.URL;
 import java.sql.SQLException;
 
 import org.glom.web.server.libglom.Document;
-import org.glom.web.server.libglom.Document.HostingMode;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -38,7 +37,20 @@ public class SelfHostExampleTest {
 	private static SelfHoster selfHoster = null;
 
 	@Test
-	public void test() throws SQLException {
+	public void testPostgreSQL() throws SQLException {
+		doTest(Document.HostingMode.HOSTING_MODE_POSTGRES_SELF);
+	}
+	
+	@Test
+	public void testMySQL() throws SQLException {
+		doTest(Document.HostingMode.HOSTING_MODE_MYSQL_SELF);
+	}
+
+	/**
+	 * @param hostingMode 
+	 * @throws SQLException
+	 */
+	private void doTest(Document.HostingMode hostingMode) throws SQLException {
 		final URL url = SelfHostExampleTest.class.getResource("example_music_collection.glom");
 		assertTrue(url != null);
 		final String strUri = url.toString();
@@ -47,11 +59,24 @@ public class SelfHostExampleTest {
 		document.setFileURI(strUri);
 		assertTrue(document.load());
 
-		selfHoster = new SelfHosterPostgreSQL(document);
-		final boolean hosted = selfHoster.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
+		if (hostingMode == Document.HostingMode.HOSTING_MODE_POSTGRES_SELF) {
+			selfHoster = new SelfHosterPostgreSQL(document);
+		} else if (hostingMode == Document.HostingMode.HOSTING_MODE_MYSQL_SELF) {
+			selfHoster = new SelfHosterMySQL(document);
+		} else {
+			// TODO: std::cerr << G_STRFUNC << ": This test function does not support the specified hosting_mode: " <<
+			// hosting_mode << std::endl;
+			assert false;
+		}
+
+		final boolean hosted = selfHoster.createAndSelfHostFromExample();
 		assertTrue(hosted);
 		
 		SelfHostTestUtils.testExampleMusiccollectionData(selfHoster, document);
+		
+		if (selfHoster != null) {
+			selfHoster.cleanup();
+		}
 	}
 
 	@AfterClass

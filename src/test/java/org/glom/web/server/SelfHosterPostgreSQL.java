@@ -26,10 +26,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -75,38 +73,8 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @return
 	 * @Override
 	 */
-	protected boolean createAndSelfHostNewEmpty(final Document.HostingMode hostingMode) {
-		if (hostingMode != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF) {
-			// TODO: std::cerr << G_STRFUNC << ": This test function does not support the specified hosting_mode: " <<
-			// hosting_mode << std::endl;
-			return false;
-		}
-
-		// Save a copy, specifying the path to file in a directory:
-		// For instance, /tmp/testglom/testglom.glom");
-		final String tempFilename = "testglom";
-		final File tempFolder = Files.createTempDir();
-		final File tempDir = new File(tempFolder, tempFilename);
-
-		final String tempDirPath = tempDir.getPath();
-		final String tempFilePath = tempDirPath + File.separator + tempFilename;
-		final File file = new File(tempFilePath);
-
-		// Make sure that the file does not exist yet:
-		{
-			tempDir.delete();
-		}
-
-		// Save the example as a real file:
-		document.setFileURI(file.getPath());
-
-		document.setHostingMode(hostingMode);
-		document.setIsExampleFile(false);
-		final boolean saved = document.save();
-		if (!saved) {
-			System.out.println("createAndSelfHostNewEmpty(): Document.save() failed.");
-			return false; // TODO: Delete the directory.
-		}
+	protected boolean createAndSelfHostNewEmpty() {
+		final File tempDir = saveDocumentCopy(Document.HostingMode.HOSTING_MODE_POSTGRES_SELF);
 
 		// We must specify a default username and password:
 		final String user = "glom_default_developer_user";
@@ -168,9 +136,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 			return false; // STARTUPERROR_FAILED_UNKNOWN_REASON;
 		}
 
-		final NumberFormat format = NumberFormat.getInstance(Locale.US);
-		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
-		final String portAsText = format.format(availablePort);
+		final String portAsText = portNumberAsText(availablePort);
 
 		// -D specifies the data directory.
 		// -c config_file= specifies the configuration file
@@ -294,19 +260,6 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		return false;
 	}
 
-	/**
-	 * @param dbDirData
-	 * @return
-	 */
-	private String shellQuote(final String str) {
-		// TODO: If we add the quotes then they seem to be used as part of the path, though that is not a problem with
-		// the normal command line.
-		return str;
-
-		// TODO: Escape.
-		// return "'" + str + "'";
-	}
-
 	private String getSelfHostingPath(final String subpath, final boolean create) {
 		final String dbDir = document.getSelfHostedDirectoryPath();
 		if (StringUtils.isEmpty(subpath)) {
@@ -370,6 +323,16 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	private boolean initialize(final String initialUsername, final String initialPassword) {
 		if (!initializeConfFiles()) {
 			System.out.println("initialize(): initializeConfFiles() failed.");
+			return false;
+		}
+		
+		if (StringUtils.isEmpty(initialUsername)) {
+			System.out.println("initialize(): initialUsername is empty.");
+			return false;
+		}
+
+		if (StringUtils.isEmpty(initialPassword)) {
+			System.out.println("initialize(): initialPassword is empty.");
 			return false;
 		}
 
@@ -666,7 +629,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
 			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
 			DriverManager.setLoginTimeout(10);
-			conn = DriverManager.getConnection(details.jdbcURL + "/", connectionProps);
+			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
 			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
 		} catch (final SQLException e) {
 			if(!failureExpected) {
@@ -707,7 +670,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		String sqlFields = "";
 		for (final Field field : fields) {
 			// Create SQL to describe this field:
-			String sqlFieldDescription = escapeSqlId(field.getName()) + " " + field.getSqlType();
+			String sqlFieldDescription = escapeSqlId(field.getName()) + " " + field.getSqlType(Field.SqlDialect.POSTGRESQL);
 
 			if (field.getPrimaryKey()) {
 				sqlFieldDescription += " NOT NULL  PRIMARY KEY";
@@ -727,7 +690,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 
 		// Actually create the table
 		final String query = "CREATE TABLE " + escapeSqlId(tableName) + " (" + sqlFields + ");";
-		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
+		final Factory factory = new Factory(connection, getSqlDialect());
 		factory.execute(query);
 		tableCreationSucceeded = true;
 		if (!tableCreationSucceeded) {
@@ -741,8 +704,8 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @param name
 	 * @return
 	 */
-	private String escapeSqlId(final String name) {
-		// TODO:
+	private static String escapeSqlId(final String name) {
+		// TODO: Escaping
 		return "\"" + name + "\"";
 	}
 
@@ -750,8 +713,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @return
 	 */
 	private static boolean createDatabase(final Connection connection, final String databaseName) {
-
-		final String query = "CREATE DATABASE \"" + databaseName + "\""; // TODO: Escaping.
+		final String query = "CREATE DATABASE " + escapeSqlId(databaseName);
 		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
 
 		factory.execute(query);
@@ -802,5 +764,10 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		fileDoc.delete();
 
 		return result;
+	}
+	
+	@Override
+	public SQLDialect getSqlDialect() {
+		return SQLDialect.POSTGRES;
 	}
 }

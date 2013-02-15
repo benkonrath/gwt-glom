@@ -20,22 +20,19 @@
 package org.glom.web.server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.libglom.Field;
 import org.jooq.SQLDialect;
+import org.jooq.exception.DataAccessException;
 import org.jooq.impl.Factory;
 
 import com.google.common.io.Files;
@@ -49,10 +46,23 @@ public class SelfHosterMySQL extends SelfHoster {
 		super(document);
 	}
 
-	private static final int PORT_POSTGRESQL_SELF_HOSTED_START = 5433;
-	private static final int PORT_POSTGRESQL_SELF_HOSTED_END = 5500;
+	private static final int PORT_MYSQL_SELF_HOSTED_START = 3306;
+	private static final int PORT_MYSQL_SELF_HOSTED_END = 3350;
 	
 	private static final String FILENAME_DATA = "data";
+	
+	private static final String DEFAULT_DATABASE_NAME = "INFORMATION_SCHEMA";
+	
+	private int port;
+	  
+	//These are remembered in order to use them to issue the shutdown command via mysqladmin:
+	private String savedUsername;
+	private String savedPassword;
+	
+	boolean temporaryPasswordActive; //Whether the password is an initial temporary one.
+	private String initialPasswordToSet;
+	private String initialUsernameToSet;
+	private String temporaryPassword;
 
 	/**
 	 * @param document
@@ -61,41 +71,11 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @return
 	 * @Override
 	 */
-	protected boolean createAndSelfHostNewEmpty(final Document.HostingMode hostingMode) {
-		if (hostingMode != Document.HostingMode.HOSTING_MODE_POSTGRES_SELF) {
-			// TODO: std::cerr << G_STRFUNC << ": This test function does not support the specified hosting_mode: " <<
-			// hosting_mode << std::endl;
-			return false;
-		}
-
-		// Save a copy, specifying the path to file in a directory:
-		// For instance, /tmp/testglom/testglom.glom");
-		final String tempFilename = "testglom";
-		final File tempFolder = Files.createTempDir();
-		final File tempDir = new File(tempFolder, tempFilename);
-
-		final String tempDirPath = tempDir.getPath();
-		final String tempFilePath = tempDirPath + File.separator + tempFilename;
-		final File file = new File(tempFilePath);
-
-		// Make sure that the file does not exist yet:
-		{
-			tempDir.delete();
-		}
-
-		// Save the example as a real file:
-		document.setFileURI(file.getPath());
-
-		document.setHostingMode(hostingMode);
-		document.setIsExampleFile(false);
-		final boolean saved = document.save();
-		if (!saved) {
-			System.out.println("createAndSelfHostNewEmpty(): Document.save() failed.");
-			return false; // TODO: Delete the directory.
-		}
+	protected boolean createAndSelfHostNewEmpty() { 
+		final File tempDir = saveDocumentCopy(Document.HostingMode.HOSTING_MODE_MYSQL_SELF);
 
 		// We must specify a default username and password:
-		final String user = "glom_default_developer_user";
+		final String user = "glom_dev_user"; //Shorter than what we use for MYSQL, to satisfy MYSQL.
 		final String password = "glom_default_developer_password";
 
 		// Create the self-hosting files:
@@ -121,8 +101,6 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @Override
 	 */
 	private boolean selfHost(final String user, final String password) {
-		// TODO: m_network_shared = network_shared;
-
 		if (getSelfHostingActive()) {
 			// TODO: std::cerr << G_STRFUNC << ": Already started." << std::endl;
 			return false; // STARTUPERROR_NONE; //Just do it once.
@@ -143,91 +121,54 @@ public class SelfHosterMySQL extends SelfHoster {
 			// }
 		}
 
-		final int availablePort = SelfHoster.discoverFirstFreePort(PORT_POSTGRESQL_SELF_HOSTED_START,
-				PORT_POSTGRESQL_SELF_HOSTED_END);
-		// std::cout << "debug: " << G_STRFUNC << ":() : debug: Available port for self-hosting: " << available_port <<
-		// std::endl;
+		final int availablePort = SelfHoster.discoverFirstFreePort(PORT_MYSQL_SELF_HOSTED_START,
+				PORT_MYSQL_SELF_HOSTED_END);
+
 		if (availablePort == 0) {
 			// TODO: Use a return enum or exception so we can tell the user about this:
-			// TODO: std::cerr << G_STRFUNC << ": No port was available between " << PORT_POSTGRESQL_SELF_HOSTED_START
-			// << " and " << PORT_POSTGRESQL_SELF_HOSTED_END << std::endl;
+			// TODO: std::cerr << G_STRFUNC << ": No port was available between " << PORT_MYSQL_SELF_HOSTED_START
+			// << " and " << PORT_MYSQL_SELF_HOSTED_END << std::endl;
 			return false; // STARTUPERROR_FAILED_UNKNOWN_REASON;
 		}
 
-		final NumberFormat format = NumberFormat.getInstance(Locale.US);
-		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
-		final String portAsText = format.format(availablePort);
-
-		// -D specifies the data directory.
-		// -c config_file= specifies the configuration file
-		// -k specifies a directory to use for the socket. This must be writable by us.
-		// Make sure to use double quotes for the executable path, because the
-		// CreateProcess() API used on Windows does not support single quotes.
-		final String dbDir = getSelfHostingPath("", false);
-		final String dbDirConfig = getSelfHostingPath("config", false);
-		final String dbDirHba = dbDirConfig + File.separator + "pg_hba.conf";
-		final String dbDirIdent = dbDirConfig + File.separator + "pg_ident.conf";
+		final String portAsText = portNumberAsText(availablePort);
 		final String dbDirPid = getSelfHostingPath("pid", false);
+		final String dbDirSocket = getSelfHostingPath("mysqld.sock", false);
 
-		// Note that postgres returns this error if we split the arguments more,
-		// for instance splitting -D and dbDirData into separate strings:
-		// too many command-line arguments (first is "(null)")
-		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
-		// though that does not happen with the normal command line.
-		// However, we must have a space after -k.
-		// Also, the c hba_file=path argument must be split after -c, or postgres will get a " hba_file" configuration
-		// parameter instead of "hba_file".
-		final String commandPathStart = getPathToPostgresExecutable("postgres");
+		final String commandPathStart = getPathToMysqlExecutable("mysqld_safe");
 		if (StringUtils.isEmpty(commandPathStart)) {
-			System.out.println("selfHost(): getPathToPostgresExecutable(postgres) failed.");
+			System.out.println("selfHost(): getPathToMysqlExecutable(mysqld_safe) failed.");
 			return false;
 		}
-		final ProcessBuilder commandPostgresStart = new ProcessBuilder(commandPathStart, "-D" + shellQuote(dbDirData),
-				"-p", portAsText, "-i", // Equivalent to -h "*", which in turn is equivalent
-										// to
-				// listen_addresses in postgresql.conf. Listen to all IP addresses,
-				// so any client can connect (with a username+password)
-				"-c", "hba_file=" + shellQuote(dbDirHba), "-c", "ident_file=" + shellQuote(dbDirIdent), "-k"
-						+ shellQuote(dbDir), "--external_pid_file=" + shellQuote(dbDirPid));
-		// std::cout << G_STRFUNC << ": debug: " << command_postgres_start << std::endl;
 
-		// Make sure to use double quotes for the executable path, because the
-		// CreateProcess() API used on Windows does not support single quotes.
-		//
-		// Note that postgres returns this error if we split the arguments more,
-		// for instance splitting -D and dbDirData into separate strings:
-		// too many command-line arguments (first is "(null)")
-		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
-		// though that does not happen with the normal command line.
-		final String commandPathCheck = getPathToPostgresExecutable("pg_ctl");
-		if (StringUtils.isEmpty(commandPathCheck)) {
-			System.out.println("selfHost(): getPathToPostgresExecutable(pg_ctl) failed.");
-			return false;
-		}
-		final ProcessBuilder commandCheckPostgresHasStarted = new ProcessBuilder(commandPathCheck, "status", "-D"
-				+ shellQuote(dbDirData));
+		final ProcessBuilder commandMysqlStart = new ProcessBuilder(commandPathStart,
+				"--no-defaults",
+				"--port=" + portAsText,
+				"--datadir=" + shellQuote(dbDirData),
+				"--socket=" + shellQuote(dbDirSocket),
+				"--pid-file=" + shellQuote(dbDirPid));
 
-		// For postgres 8.1, this is "postmaster is running".
-		// For postgres 8.2, this is "server is running".
-		// This is a big hack that we should avoid. murrayc.
-		//
-		// pg_ctl actually seems to return a 0 result code for "is running" and a 1 for not running, at least with
-		// Postgres 8.2,
-		// so maybe we can avoid this in future.
-		// Please do test it with your postgres version, using "echo $?" to see the result code of the last command.
-		final String secondCommandSuccessText = "is running"; // TODO: This is not a stable API. Also, watch out for
+
+		port = availablePort; //Needed by getMysqlAdminCommand().
+		 
+		final List<String> progAndArgsCheck = getMysqlAdminCommand(savedUsername, savedPassword);
+		progAndArgsCheck.add("ping");
+		final ProcessBuilder commandCheckMysqlHasStarted = new ProcessBuilder(progAndArgsCheck);
+
+		final String secondCommandSuccessText = "mysqld is alive"; // TODO: This is not a stable API. Also, watch out for
 																// localisation.
 
 		// The first command does not return, but the second command can check whether it succeeded:
 		// TODO: Progress
-		final boolean result = executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(commandPostgresStart,
-				commandCheckPostgresHasStarted, secondCommandSuccessText);
+		final boolean result = executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(commandMysqlStart,
+				commandCheckMysqlHasStarted, secondCommandSuccessText);
 		if (!result) {
 			System.out.println("selfHost(): Error while attempting to self-host a database.");
 			return false; // STARTUPERROR_FAILED_UNKNOWN_REASON;
 		}
 
 		// Remember the port for later:
+		port = availablePort; //Remember it for later.
 		document.setConnectionPort(availablePort);
 
 		// Check that we can really connect:
@@ -241,7 +182,7 @@ public class SelfHosterMySQL extends SelfHoster {
 			e.printStackTrace();
 		}
 
-		// pg_ctl sometimes reports success before it is really ready to let us connect,
+		// mysqladmin could report success before it is really ready to let us connect,
 		// so in this case we can just keep trying until it works, for a while:
 		for (int i = 0; i < 10; i++) {
 
@@ -268,12 +209,19 @@ public class SelfHosterMySQL extends SelfHoster {
 				}
 
 				System.out.println("selfHost(): Connection succeeded after retries=" + i);
+				
+				if (temporaryPasswordActive) {
+					return setInitialUsernameAndPassword();
+				}
+
 				return true; // STARTUPERROR_NONE;
 			}
 
+			/*
 			System.out
 					.println("selfHost(): Waiting and retrying the connection due to suspected too-early success of pg_ctl. retries="
 							+ i);
+			*/
 		}
 
 		System.out.println("selfHost(): Test connection failed after multiple retries.");
@@ -281,20 +229,112 @@ public class SelfHosterMySQL extends SelfHoster {
 	}
 
 	/**
-	 * @param dbDirData
+	 * @return 
+	 * 
+	 */
+	private boolean setInitialUsernameAndPassword() {
+		//If necessary, set the initial root password and rename the root user:
+		if(!temporaryPasswordActive)
+			return true;
+		
+		if (StringUtils.isEmpty(initialUsernameToSet)) {
+			System.out.println("setInitialUsernameAndPassword(): initialUsernameToSet is empty.");
+			return false;
+		}
+
+		if (StringUtils.isEmpty(initialPasswordToSet)) {
+			System.out.println("setInitialUsernameAndPassword(): initialPasswordToSet is empty.");
+			return false;
+		}
+		
+		//Set the root password:
+		final List<String> progAndArgs = getMysqlAdminCommand("root", temporaryPassword);
+		progAndArgs.add("password");
+		progAndArgs.add(shellQuote(initialPasswordToSet));
+
+		final ProcessBuilder commandInitdbSetInitialPassword = new ProcessBuilder(progAndArgs);
+		final boolean result = executeCommandLineAndWait(commandInitdbSetInitialPassword);
+		
+		if(!result) {
+			System.out.println("setInitialUsernameAndPassword(): commandInitdbSetInitialPassword failed.");
+			return false;
+		}
+
+		temporaryPasswordActive = false;
+		temporaryPassword = null;
+
+		//Rename the root user,
+		//so we can connnect as the expected username:
+		//We connect to the INFORMATION_SCHEMA database, because libgda needs us to specify some database.
+		final Connection connection = createConnection(DEFAULT_DATABASE_NAME, "root", initialPasswordToSet, false);
+		if (connection == null) {
+			//std::cerr << G_STRFUNC << "Error while attempting to start self-hosting MYSQL database, when setting the initial username: connection failed." << std::endl;
+			return false;
+		}
+
+		savedPassword = initialPasswordToSet;
+
+		final String query = buildQueryChangeUsername(connection, "root", initialUsernameToSet);
+
+		try {
+			SqlUtils.executeUpdate(connection, query);
+		} catch (final SQLException e) {
+			System.out.println("setInitialUsernameAndPassword(): change username query failed: " + query.toString());
+			e.printStackTrace();
+			return false;
+		} finally {
+			// cleanup everything that has been used
+			try {
+				// TODO: If we use the ResultSet.
+			} catch (final Exception e) {
+				return false;
+			}
+		}
+
+		savedUsername = initialUsernameToSet;
+		initialUsernameToSet = null;
+
+		return true;
+	}
+
+	/**
+	 * @param connection
+	 * @param string
+	 * @param initialUsernameToSet2
 	 * @return
 	 */
-	private String shellQuote(final String str) {
-		// TODO: If we add the quotes then they seem to be used as part of the path, though that is not a problem with
-		// the normal command line.
-		return str;
+	private String buildQueryChangeUsername(Connection connection, String oldUsername, String newUsername) {
+		if (StringUtils.isEmpty(oldUsername)) {
+			//std::cerr << G_STRFUNC << ": old_username is empty." << std::endl;
+			return "";
+		}
 
-		// TODO: Escape.
-		// return "'" + str + "'";
+		if (StringUtils.isEmpty(newUsername)) {
+			//std::cerr << G_STRFUNC << ": new_username is empty." << std::endl;
+			return "";
+		}
+
+		//TODO: Try to avoid specifing @localhost.
+		//We do this to avoid this error:
+		//mysql> RENAME USER root TO glom_dev_user;
+		//ERROR 1396 (HY000): Operation RENAME USER failed for 'root'@'%'
+		//mysql> RENAME USER root@localhost TO glom_dev_user;
+		//Query OK, 0 rows affected (0.00 sec)
+		final String user = SqlUtils.quoteSqlIdentifier(oldUsername) + "@localhost";
+
+		//Login will fail after restart if we don't specify @localhost here too:
+		final String newUser = SqlUtils.quoteSqlIdentifier(newUsername) + "@localhost";
+
+		return "RENAME USER " + user + " TO " + newUser;
 	}
 
 	private String getSelfHostingPath(final String subpath, final boolean create) {
 		final String dbDir = document.getSelfHostedDirectoryPath();
+		if (StringUtils.isEmpty(dbDir)) {
+			System.out.println("getSelfHostingPath(): getSelfHostedDirectoryPath returned no path.");
+			return null;
+		}
+
 		if (StringUtils.isEmpty(subpath)) {
 			return dbDir;
 		}
@@ -332,12 +372,9 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @param string
 	 * @return
 	 */
-	private static String getPathToPostgresExecutable(final String string) {
+	private static String getPathToMysqlExecutable(final String string) {
 		final List<String> dirPaths = new ArrayList<String>();
 		dirPaths.add("/usr/bin");
-		dirPaths.add("/usr/lib/postgresql/9.1/bin");
-		dirPaths.add("/usr/lib/postgresql/9.0/bin");
-		dirPaths.add("/usr/lib/postgresql/8.4/bin");
 
 		for (String dir : dirPaths) {
 			final String path = dir + File.separator + string;
@@ -348,38 +385,55 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		return "";
 	}
+	
+	private List<String> getMysqlAdminCommand(final String username, final String password) {
+		if (StringUtils.isEmpty(username)) {
+			return null;
+		}
+		
+		final String portAsText = portNumberAsText(port);
+
+		final List<String> progAndArgs = new ArrayList<String>();
+		progAndArgs.add(getPathToMysqlExecutable("mysqladmin"));
+		progAndArgs.add("--no-defaults");
+		progAndArgs.add("--port=" + portAsText);
+		progAndArgs.add("--protocol=tcp"); //Otherwise we cannot connect as root. TODO: However, maybe we could use --skip-networking if network sharing is not enabled.
+		progAndArgs.add("--user=" + shellQuote(username));
+
+		//--password='' is not always interpreted the same as specifying no --password.
+		if(!StringUtils.isEmpty(password)) {
+			progAndArgs.add("--password=" + shellQuote(password));
+		}
+
+		return progAndArgs;
+	}
 
 	/**
 	 * @param cpds
 	 * @return
 	 */
 	private boolean initialize(final String initialUsername, final String initialPassword) {
-		if (!initializeConfFiles()) {
-			System.out.println("initialize(): initializeConfFiles() failed.");
+		if (StringUtils.isEmpty(initialUsername)) {
+			System.out.println("initialize(): initialUsername is empty.");
 			return false;
 		}
 
-		// initdb creates a new postgres database cluster:
+		if (StringUtils.isEmpty(initialPassword)) {
+			System.out.println("initialize(): initialPassword is empty.");
+			return false;
+		}
+		
+		// mysql_install_db creates a new mysql database cluster:
 
 		// Get file:// URI for the tmp/ directory:
-		File filePwFile = null;
-		try {
-			filePwFile = File.createTempFile("glom_initdb_pwfile", "");
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		final String tempPwFile = filePwFile.getPath();
-
-		final boolean pwfileCreationSucceeded = createTextFile(tempPwFile, initialPassword);
-		if (!pwfileCreationSucceeded) {
-			System.out.println("initialize(): createTextFile() failed.");
-			return false;
-		}
 
 		// Make sure to use double quotes for the executable path, because the
 		// CreateProcess() API used on Windows does not support single quotes.
 		final String dbDirData = getSelfHostingDataPath(false /* create */);
+		if(dbDirData.isEmpty()) {
+			System.out.println("initialize(): getSelfHostingDataPath returned no path.");
+			return false;
+		}
 
 		// Note that initdb returns this error if we split the arguments more,
 		// for instance splitting -D and dbDirData into separate strings:
@@ -388,12 +442,11 @@ public class SelfHosterMySQL extends SelfHoster {
 		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
 		// though that does not happen with the normal command line.
 		boolean result = false;
-		final String commandPath = getPathToPostgresExecutable("initdb");
+		final String commandPath = getPathToMysqlExecutable("mysql_install_db");
 		if (StringUtils.isEmpty(commandPath)) {
-			System.out.println("initialize(): getPathToPostgresExecutable(initdb) failed.");
+			System.out.println("initialize(): getPathToMysqlExecutable(mysql_install_db) failed.");
 		} else {
-			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "-D" + shellQuote(dbDirData), "-U",
-					initialUsername, "--pwfile=" + tempPwFile);
+			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "--no-defaults", "--datadir=" + shellQuote(dbDirData));
 
 			// Note that --pwfile takes the password from the first line of a file. It's an alternative to supplying it
 			// when
@@ -401,86 +454,23 @@ public class SelfHosterMySQL extends SelfHoster {
 			result = executeCommandLineAndWait(commandInitdb);
 		}
 
-		// Of course, we don't want this to stay around. It would be a security risk.
-		final File fileTempPwFile = new File(tempPwFile);
-		if (!fileTempPwFile.delete()) {
-			System.out.println("initialize(): Failed to delete the password file.");
-		}
-
 		if (!result) {
 			System.out.println("initialize(): Error while attempting to create self-hosting database.");
 			return false;
 		}
 
-		// Save the username and password for later;
-		this.username = initialUsername;
-		this.password = initialPassword;
+		//This is used during the first start:
+		initialPasswordToSet = initialPassword;
+	    initialUsernameToSet = initialUsername;
+
+	    //TODO: With MYSQL 5.6, use the new --random-passwords option (see above)
+	    temporaryPassword = "";
+	    temporaryPasswordActive = true;
+	    savedUsername = "root";
+	    savedPassword = "";
+	    username = "root";
 
 		return result; // ? INITERROR_NONE : INITERROR_COULD_NOT_START_SERVER;
-
-	}
-
-	private boolean initializeConfFiles() {
-
-		return true;
-	}
-
-	/**
-	 * @param path
-	 * @param contents
-	 * @return
-	 */
-	private static boolean createTextFile(final String path, final String contents) {
-		final File file = new File(path);
-		final File parent = file.getParentFile();
-		if (parent == null) {
-			System.out.println("initialize(): getParentFile() failed.");
-			return false;
-		}
-
-		parent.mkdirs();
-		try {
-			file.createNewFile();
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-
-		FileOutputStream output = null;
-		try {
-			output = new FileOutputStream(file);
-		} catch (final FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-
-		try {
-			output.write(contents.getBytes());
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-			//TODO: Avoid the duplicate close() here.
-			try {
-				output.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			return false;
-		}
-
-		try {
-			output.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return true;
 	}
 
 	/**
@@ -603,28 +593,33 @@ public class SelfHosterMySQL extends SelfHoster {
 		return true; // All tables created successfully.
 	}
 
-	/**
-	 */
-	public Connection createConnection(boolean failureExpected) {
-		final Properties connectionProps = new Properties();
-		connectionProps.put("user", this.username);
-		connectionProps.put("password", this.password);
-
-		String jdbcURL = "jdbc:postgresql://" + document.getConnectionServer() + ":" + document.getConnectionPort();
-		String db = document.getConnectionDatabase();
-		if (StringUtils.isEmpty(db)) {
-			// Use the default PostgreSQL database, because ComboPooledDataSource.connect() fails otherwise.
-			db = "template1";
+	public Connection createConnection(final String database, final String username, final String password, boolean failureExpected) {
+		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
+		//which does not automatically close its connections,
+		//leading to errors because connections are already open.
+		
+		if(StringUtils.isEmpty(username)) {
+			System.out.println("setInitialUsernameAndPassword(): username is empty.");
+			return null;
 		}
-		jdbcURL += "/" + db; // TODO: Quote the database name?
+
+		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), database);
+		if (details == null) {
+			System.out.println("setInitialUsernameAndPassword(): getJdbcConnectionDetails() returned null.");
+			return null;
+		}
+		
+		final Properties connectionProps = new Properties();
+		connectionProps.put("user", username);
+		connectionProps.put("password", password);
 
 		Connection conn = null;
 		try {
 			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
+			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");
 			DriverManager.setLoginTimeout(10);
-			conn = DriverManager.getConnection(jdbcURL + "/", connectionProps);
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
+			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
+			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");
 		} catch (final SQLException e) {
 			if(!failureExpected) {
 				e.printStackTrace();
@@ -633,6 +628,13 @@ public class SelfHosterMySQL extends SelfHoster {
 		}
 
 		return conn;
+	}
+	
+	/**
+	 */
+	public Connection createConnection(boolean failureExpected) {
+		final String db = document.getConnectionDatabase();
+		return createConnection(db, this.username, this.password, failureExpected);
 	}
 
 	/**
@@ -664,7 +666,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		String sqlFields = "";
 		for (final Field field : fields) {
 			// Create SQL to describe this field:
-			String sqlFieldDescription = escapeSqlId(field.getName()) + " " + field.getSqlType();
+			String sqlFieldDescription = escapeSqlId(field.getName()) + " " + field.getSqlType(Field.SqlDialect.MYSQL);
 
 			if (field.getPrimaryKey()) {
 				sqlFieldDescription += " NOT NULL  PRIMARY KEY";
@@ -684,8 +686,15 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		// Actually create the table
 		final String query = "CREATE TABLE " + escapeSqlId(tableName) + " (" + sqlFields + ");";
-		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
-		factory.execute(query);
+		final Factory factory = new Factory(connection, getSqlDialect());
+		try {
+			factory.execute(query);
+		} catch (DataAccessException e) {
+			System.out.println("createDatabase(): query failed: " + query);
+			e.printStackTrace();
+			return false;
+		}
+
 		tableCreationSucceeded = true;
 		if (!tableCreationSucceeded) {
 			System.out.println("recreatedDatabase(): CREATE TABLE() failed.");
@@ -698,20 +707,26 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @param name
 	 * @return
 	 */
-	private String escapeSqlId(final String name) {
-		// TODO:
-		return "\"" + name + "\"";
+	private static String escapeSqlId(final String name) {
+		// MySQL seems to use backticks:
+		// TODO: Escaping.
+		return "`" + name + "`";
 	}
 
 	/**
 	 * @return
 	 */
 	private static boolean createDatabase(final Connection connection, final String databaseName) {
+		final String query = "CREATE DATABASE  " + escapeSqlId(databaseName);
+		final Factory factory = new Factory(connection, SQLDialect.MYSQL);
 
-		final String query = "CREATE DATABASE \"" + databaseName + "\""; // TODO: Escaping.
-		final Factory factory = new Factory(connection, SQLDialect.POSTGRES);
-
-		factory.execute(query);
+		try {
+			factory.execute(query);
+		} catch (DataAccessException e) {
+			System.out.println("createDatabase(): query failed: " + query);
+			e.printStackTrace();
+			return false;
+		}
 
 		return true;
 	}
@@ -724,26 +739,13 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		// Stop the server:
 		if ((document != null) && (document.getConnectionPort() != 0)) {
-			final String dbDirData = getSelfHostingDataPath(false);
+			final List<String> progAndArgs = getMysqlAdminCommand(savedUsername, savedPassword);
+			progAndArgs.add("shutdown");
 
-			// -D specifies the data directory.
-			// -c config_file= specifies the configuration file
-			// -k specifies a directory to use for the socket. This must be writable by us.
-			// We use "-m fast" instead of the default "-m smart" because that waits for clients to disconnect (and
-			// sometimes never succeeds).
-			// TODO: Warn about connected clients on other computers? Warn those other users?
-			// Make sure to use double quotes for the executable path, because the
-			// CreateProcess() API used on Windows does not support single quotes.
-			final String commandPath = getPathToPostgresExecutable("pg_ctl");
-			if (StringUtils.isEmpty(commandPath)) {
-				System.out.println("cleanup(): getPathToPostgresExecutable(pg_ctl) failed.");
-			} else {
-				final ProcessBuilder commandPostgresStop = new ProcessBuilder(commandPath,
-						"-D" + shellQuote(dbDirData), "stop", "-m", "fast");
-				result = executeCommandLineAndWait(commandPostgresStop);
-				if (!result) {
-					System.out.println("cleanup(): Failed to stop the PostgreSQL server.");
-				}
+			final ProcessBuilder commandMySQLStop = new ProcessBuilder(progAndArgs);
+			result = executeCommandLineAndWait(commandMySQLStop);
+			if (!result) {
+				System.out.println("cleanup(): Failed to stop the MYSQL server.");
 			}
 
 			document.setConnectionPort(0);
@@ -759,5 +761,10 @@ public class SelfHosterMySQL extends SelfHoster {
 		fileDoc.delete();
 
 		return result;
+	}
+	
+	@Override
+	public SQLDialect getSqlDialect() {
+		return SQLDialect.MYSQL;
 	}
 }

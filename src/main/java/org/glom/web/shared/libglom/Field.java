@@ -66,26 +66,50 @@ public class Field extends Translatable {
 		return uniqueKey;
 	}
 
+	public enum SqlDialect {
+		POSTGRESQL,
+		MYSQL
+	};
+
 	/**
 	 * @return
 	 */
-	public String getSqlType() {
+	public String getSqlType(SqlDialect sqlDialect) {
 		// libglom uses libgda's map of Gda types and its API,
 		// without hardcoding the actual SQL type names.
-		// This is based on what it actually uses with PostgreSQL.
-		switch (getGlomType()) {
-		case TYPE_NUMERIC:
-			return "numeric";
-		case TYPE_TEXT:
-			return "character varying";
-		case TYPE_DATE:
-			return "date";
-		case TYPE_TIME:
-			return "time with time zone";
-		case TYPE_IMAGE:
-			return "bytea";
-		default:
-			return "unknowntype";
+		
+		if (sqlDialect == SqlDialect.POSTGRESQL) {
+			// This is based on what libgda actually uses with PostgreSQL.
+			switch (getGlomType()) {
+			case TYPE_NUMERIC:
+				return "numeric";
+			case TYPE_TEXT:
+				return "character varying";
+			case TYPE_DATE:
+				return "date";
+			case TYPE_TIME:
+				return "time with time zone";
+			case TYPE_IMAGE:
+				return "bytea";
+			default:
+				return "unknowntype";
+			}
+		} else { // MYSQL
+			// This is based on what Glom actually uses with MySQL.
+			switch (getGlomType()) {
+			case TYPE_NUMERIC:
+				return "double";
+			case TYPE_TEXT:
+				return "varchar(255)";
+			case TYPE_DATE:
+				return "date";
+			case TYPE_TIME:
+				return "time with time zone";
+			case TYPE_IMAGE:
+				return "blob";
+			default:
+				return "unknowntype";
+			}
 		}
 	}
 }

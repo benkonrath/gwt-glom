@@ -25,7 +25,6 @@ import java.net.URL;
 import java.sql.SQLException;
 
 import org.glom.web.server.libglom.Document;
-import org.glom.web.server.libglom.Document.HostingMode;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -48,7 +47,7 @@ public class SelfHostExampleNonNumericPrimaryKeysTest {
 		assertTrue(document.load());
 
 		selfHosterPostgreSQL = new SelfHosterPostgreSQL(document);
-		final boolean hosted = selfHosterPostgreSQL.createAndSelfHostFromExample(HostingMode.HOSTING_MODE_POSTGRES_SELF);
+		final boolean hosted = selfHosterPostgreSQL.createAndSelfHostFromExample();
 		assertTrue(hosted);
 		
 		SelfHostTestUtils.testExampleMusiccollectionData(selfHosterPostgreSQL, document);

@@ -1,5 +1,25 @@
 2013-02-15  Murray Cumming  <murrayc@murrayc.com>
 
+        Test MySQL via self-hosting too, instead of just PostgreSQL.
+
+        * pom.xml: Depend on the MYSQL JDBC driver.
+        * src/main/java/org/glom/web/server/SqlUtils.java:
+	Make getJdbcConnectionDetails() public, for use in tests.
+        * src/main/java/org/glom/web/shared/libglom/Field.java: getSqlType():
+	Take the SQL Dialect to support both MySQL and PostgreSQL.
+        * src/test/java/org/glom/web/server/SelfHostConfiguredDocumentTest.java:
+        Test MySQL too.
+        * src/test/java/org/glom/web/server/SelfHostExampleNonNumericPrimaryKeysTest.java:
+        * src/test/java/org/glom/web/server/SelfHostExampleTest.java:
+	Test MYSQL too.
+        * src/test/java/org/glom/web/server/SelfHoster.java:
+        * src/test/java/org/glom/web/server/SelfHosterMySQL.java:
+        * src/test/java/org/glom/web/server/SelfHosterPostgreSQL.java:
+	Abstract some code into the base SelfHoster and finish implementing
+	the MYSQL version.
+
+2013-02-15  Murray Cumming  <murrayc@murrayc.com>
+
         SqlUtils: Do not hard-code the PostgreSQL SQL dialect.
 
 	* src/main/java/org/glom/web/server/SqlUtils.java: Take

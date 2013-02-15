@@ -80,7 +80,7 @@ public class SqlUtils {
 		return getJdbcConnectionDetails(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
 	}
 
-	private static JdbcConnectionDetails getJdbcConnectionDetails(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
+	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
 		final JdbcConnectionDetails details = new JdbcConnectionDetails();
 
 		String defaultDatabase = null;
@@ -102,7 +102,7 @@ public class SqlUtils {
 			default: {
 				// TODO: We allow self-hosting here, for testing,
 				// but maybe the startup of self-hosting should happen here.
-				Log.fatal("Error configuring the database connection." + " Only PostgreSQL and MySQL hosting are supported.");
+				Log.fatal("Error configuring the database connection." + " Only PostgreSQL and MYSQL hosting are supported.");
 				// FIXME: Throw exception?
 				return null;
 			}
@@ -651,5 +651,14 @@ public class SqlUtils {
 			dataItem.setText("");
 			break;
 		}
+	}
+
+	/**
+	 * @param sqlId
+	 * @return
+	 */
+	public static String quoteSqlIdentifier(final String sqlId) {
+		//TODO:
+		return sqlId;
 	}
 }
