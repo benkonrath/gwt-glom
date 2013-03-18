@@ -1,3 +1,9 @@
+2013-03-18  Murray Cumming  <murrayc@murrayc.com>
+
+        Build: Update to gwt 2.5.1
+
+	* pom.xml: Update the gwt and gwt-maven-plugin to 2.5.1.
+
 2013-02-15  Murray Cumming  <murrayc@murrayc.com>
 
         SelfHoster: Actually escape SQL IDs using JOOQ.

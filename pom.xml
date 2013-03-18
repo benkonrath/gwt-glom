@@ -30,12 +30,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Convenience property to set the GWT version -->
-		<gwt.version>2.5.0</gwt.version>
+		<gwt.version>2.5.1</gwt.version>
 
 		<!-- Make mvn gwt:run use SSL (HTTPS) when running Jetty.
 		     Login will fail (on purpose) if run as regular HTTP.
 		     TODO: We could instead enable this when running mvn gwt:run, like so:
-		      -Dgwt.server=:ssl
+		      -Dgwt.server=:ssls
                      but how do we disable it now that it's on by default here?
                      Where is this maven gwt plugin property documented? -->
 		<gwt.server>:ssl</gwt.server>
@@ -213,7 +213,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.5.0</version>
+				<version>2.5.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -308,7 +308,7 @@
 									<pluginExecutionFilter>
 										<groupId>org.codehaus.mojo</groupId>
 										<artifactId>gwt-maven-plugin</artifactId>
-										<versionRange>[2.5.0,)</versionRange>
+										<versionRange>[2.5.1,)</versionRange>
 										<goals>
 											<goal>i18n</goal>
 										</goals>
