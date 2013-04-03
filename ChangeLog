@@ -1,5 +1,14 @@
 2013-03-18  Murray Cumming  <murrayc@murrayc.com>
 
+        Build: Eclipse file updates done by Eclipse.
+
+	* .classpath: 
+	* settings/com.google.gwt.eclipse.core.prefs:
+	Eclipse Quick Fix changes apparently to make these
+	up to date for the latest maven eclipse plugin.
+
+2013-03-18  Murray Cumming  <murrayc@murrayc.com>
+
         Build: Update to gwt 2.5.1
 
 	* pom.xml: Update the gwt and gwt-maven-plugin to 2.5.1.
