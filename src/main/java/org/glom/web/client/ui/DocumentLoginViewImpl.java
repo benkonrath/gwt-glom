@@ -97,7 +97,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 			//And actually, the entire site must be served via HTTPS,
 			//or we would violate the Same Origin Policy by mixing protocols,
 			//so this very page should have been delivered by HTTPS.
-			GWT.log("The login page arrived via http, rather that https. Refusing to log in.");
+			GWT.log("The login page arrived via http, rather than https. Refusing to log in.");
 
 			errorMessage.setText(constants.loginNeedsHttps());
 			setError();

@@ -47,7 +47,7 @@
 	     credentials from the client.
 	     Instead, the client refuses to send the credentials
              if it is not using HTTPS, and the server refuses 
-             to examine any transmitted credentials if it is did
+             to examine any transmitted credentials if did
 	     not receive them via HTTPS.
 	<security-constraint>
        		<web-resource-collection>
