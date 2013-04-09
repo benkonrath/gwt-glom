@@ -200,6 +200,23 @@
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- TODO: Do we really need to mention all of these? -->
+                <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>3.1.3.RELEASE</version>
+                </dependency>
+                <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>3.1.3.RELEASE</version>
+                </dependency>
+                <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>3.1.3.RELEASE</version>
+                </dependency>
 	</dependencies>
 
 	<url>http://www.glom.org/wiki/index.php?title=Development/OnlineGlom</url>
