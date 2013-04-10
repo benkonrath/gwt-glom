@@ -6,24 +6,32 @@
 	    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 			http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<!--: TOODO? <beans:bean id="customAuthListener" class="com.javacodegeeks.gwt.security.server.auth.CustomAuthListener"/> -->
+	<!--: TODO? <beans:bean id="customAuthListener" class="com.javacodegeeks.gwt.security.server.auth.CustomAuthListener"/> -->
 
     <!--  We use use-expressions="true" to allow access="permitAll". -->
 	<http auto-config="true" use-expressions="true">
-	    <!--  TODO if we use form-login: Disable security for the login page itself,
-	    but not so much (as with a separate <http> tag with security="none") that
-	    we cannot even discover the current user in the login page:
-	    <intercept-url pattern="/login.jsp*" access="IS_AUTHENTICATED_ANONYMOUSLY"/> -->
+	    <anonymous />
 
+	    <!-- TODO: Make his work: <form-login login-page="/OnlineGlom/#documentlogin"/> -->
+	    <form-login login-page="/login.html"/>
+		<!-- TODO: Allow logout too. -->
+		
+	    <!-- TODO: Disable security for the login page itself,
+	    but not so much (as with a separate <http> tag with security="none") that
+	    we cannot even discover the current user in the login page: -->
+	    <intercept-url pattern="/login.html" access="permitAll"/>
+	    <!-- Note that some documentation suggests this instead:
+	     <intercept-url pattern="/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+	     but that causes an exception with message:
+	     Failed to evaluate expression 'IS_AUTHENTICATED_ANONYMOUSLY' -->
+
+		<!-- TODO: What is this for? -->
 		<intercept-url pattern="/" access="permitAll"/>
 		<!--  TODO: Do this? <intercept-url pattern="/**" access="isAuthenticated()" /> -->
 		
 		<!-- Using just ROLE_USER, instead of hasRole('ROLE_USER'),
 		     causes a failed to evaluate expression exception. -->
 		<intercept-url pattern="/**" access="hasRole('ROLE_USER')"/> <!-- TODO: Use requires-channel="https"/ ? -->
-		
-		<!-- TODO: <form-login login-page='/login.jsp'/> -->
-		<!-- TODO: Allow logout too. -->
 		
 		<!-- TODO: Support openid-login to support login via google.
 		  See http://static.springsource.org/spring-security/site/docs/3.1.x/reference/springsecurity-single.html-->
