@@ -17,9 +17,11 @@
  * along with GWT-Glom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.glom.web.server;
+package org.glom.web.server.users;
 
 import java.util.Hashtable;
+
+import org.glom.web.server.Credentials;
 
 /**
  * A store of user credentials, details, etc,

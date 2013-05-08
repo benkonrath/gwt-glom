@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 
 import org.glom.web.client.OnlineGlomLoginService;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.users.UserStore;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
