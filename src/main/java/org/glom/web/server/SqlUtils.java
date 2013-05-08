@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.libglom.ServerDetails;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.TypedDataItem;
 import org.glom.web.shared.libglom.Field;
@@ -68,7 +69,7 @@ public class SqlUtils {
 	 * @return
 	 */
 	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
-		return createAndSetupDataSource(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
+		return createAndSetupDataSource(document.getConnectionDetails(), document.getConnectionDatabase());
 	}
 	
 	static class JdbcConnectionDetails {
@@ -77,14 +78,14 @@ public class SqlUtils {
 	};
 
 	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document document) {
-		return getJdbcConnectionDetails(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
+		return getJdbcConnectionDetails(document.getConnectionDetails(), document.getConnectionDatabase());
 	}
 
-	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
+	public static JdbcConnectionDetails getJdbcConnectionDetails(final ServerDetails serverDetails, final String database) {
 		final JdbcConnectionDetails details = new JdbcConnectionDetails();
 
 		String defaultDatabase = null;
-		switch (hostingMode) {
+		switch (serverDetails.hostingMode) {
 			case HOSTING_MODE_POSTGRES_CENTRAL:
 			case HOSTING_MODE_POSTGRES_SELF: {
 				details.driverClass = "org.postgresql.Driver";
@@ -109,7 +110,7 @@ public class SqlUtils {
 		}
 			
 		// setup the JDBC driver for the current glom document
-		details.jdbcURL += serverHost + ":" + serverPort;
+		details.jdbcURL += serverDetails.host + ":" + serverDetails.port;
 
 		String db = database;
 		if (StringUtils.isEmpty(db)) {
@@ -125,10 +126,10 @@ public class SqlUtils {
 	 * @param document
 	 * @return
 	 */
-	private static ComboPooledDataSource createAndSetupDataSource(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
+	private static ComboPooledDataSource createAndSetupDataSource(final ServerDetails serverDetails, final String database) {
 		final ComboPooledDataSource cpds = new ComboPooledDataSource();
 
-		final JdbcConnectionDetails details = getJdbcConnectionDetails(hostingMode, serverHost, serverPort, database);
+		final JdbcConnectionDetails details = getJdbcConnectionDetails(serverDetails, database);
 		if (details == null) {
 			return null;
 		}

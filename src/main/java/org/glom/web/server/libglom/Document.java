@@ -1234,9 +1234,11 @@ public class Document {
 		return translationAvailableLocales;
 	}
 
+	/*
 	public Document.HostingMode getHostingMode() {
 		return hostingMode;
 	}
+	*/
 
 	/**
 	 * @param hostingMode
@@ -1245,10 +1247,23 @@ public class Document {
 		this.hostingMode = hostingMode;
 	}
 
+	public ServerDetails getConnectionDetails() {
+		ServerDetails details = new ServerDetails();
+		details.hostingMode = hostingMode;
+		details.host = connectionServer;
+		details.port = connectionPort;
+		return details;
+	}
+
+	/*
 	public String getConnectionServer() {
 		return connectionServer;
 	}
+	*/
 
+	/* TODO: Change this to an explicit check that a connection is active,
+	 * instead of using this to check for == 0.
+	 */
 	public int getConnectionPort() {
 		return connectionPort;
 	}

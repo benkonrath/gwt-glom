@@ -30,6 +30,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.libglom.ServerDetails;
 import org.glom.web.shared.libglom.Field;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
@@ -603,7 +604,8 @@ public class SelfHosterMySQL extends SelfHoster {
 			return null;
 		}
 
-		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), database);
+		final ServerDetails serverDetails = document.getConnectionDetails();
+		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(serverDetails, database);
 		if (details == null) {
 			System.out.println("setInitialUsernameAndPassword(): getJdbcConnectionDetails() returned null.");
 			return null;
