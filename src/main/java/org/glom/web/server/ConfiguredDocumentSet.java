@@ -20,7 +20,6 @@
 package org.glom.web.server;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
@@ -68,26 +67,14 @@ public class ConfiguredDocumentSet {
 		configuredDocument.setDocumentID(documentID);
 		documentMapping.put(documentID, configuredDocument);
 	}
-	
-	
 
 	public void readConfiguration() throws ServletException {
 	
 		// All of the initialisation code is surrounded by a try/catch block so that the servlet can be in an
 		// initialised state and the error message can be retrieved by the client code.
 		try {
-			// Find the configuration file. See this thread for background info:
-			// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
-			final OnlineGlomProperties config = new OnlineGlomProperties();
-			final InputStream is = Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("onlineglom.properties");
-			if (is == null) {
-				final String errorMessage = "onlineglom.properties not found.";
-				Log.fatal(errorMessage);
-				throw new Exception(errorMessage);
-			}
-			config.load(is); // can throw an IOException
-	
+			OnlineGlomProperties config = OnlineGlomProperties.getConfig();
+
 			// check if we can read the configured glom file directory
 			final String documentDirName = config.getDocumentsDirectory();
 			final File documentDir = new File(documentDirName);
@@ -101,7 +88,7 @@ public class ConfiguredDocumentSet {
 				Log.fatal(errorMessage);
 				throw new Exception(errorMessage);
 			}
-	
+
 			// get and check the glom files in the specified directory
 			// TODO: Test this:
 			final String[] extensions = { GLOM_FILE_EXTENSION };

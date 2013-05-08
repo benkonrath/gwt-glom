@@ -19,6 +19,7 @@
 
 package org.glom.web.server;
 
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,10 +27,36 @@ import org.apache.commons.lang3.StringUtils;
 /** A convenience class for dealing with the Online Glom configuration file
  * TODO: test this.
  */
-class OnlineGlomProperties extends Properties {
+public class OnlineGlomProperties extends Properties {
 
 	private static final long serialVersionUID = 4290997725469072758L;
-	
+
+	/**
+	 * 
+	 */
+	private static final String KEY_GLOM_MASTER_DBSERVER = "glom.master.dbserver";
+
+
+	/** Get an instance that uses the onlineglom.properties file.
+	 * 
+	 * @return A new OnlineGlomProperties instance that uses the appropriate main configuration file.
+	 * @throws Exception
+	 */
+	public static OnlineGlomProperties getConfig() throws Exception {
+		// Find the configuration file. See this thread for background info:
+		// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
+		final OnlineGlomProperties config = new OnlineGlomProperties();
+		final InputStream is = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("onlineglom.properties");
+		if (is == null) {
+			final String errorMessage = "onlineglom.properties not found.";
+			Log.fatal(errorMessage);
+			throw new Exception(errorMessage);
+		}
+		config.load(is); // can throw an IOException
+
+		return config;
+	}
 
 	/** Get the credentials for a specific file, ignoring the global username and password.
 	 * 
