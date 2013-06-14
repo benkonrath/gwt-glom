@@ -50,6 +50,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.Log;
+import org.glom.web.server.SqlUtils;
 import org.glom.web.server.Utils;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.CustomTitle;
@@ -2079,17 +2080,6 @@ public class Document {
 	 * @return
 	 */
 	public SQLDialect getSqlDialect() {
-		switch (hostingMode) {
-		case HOSTING_MODE_POSTGRES_SELF:
-		case HOSTING_MODE_POSTGRES_CENTRAL:
-			return SQLDialect.POSTGRES;
-		case HOSTING_MODE_MYSQL_SELF:
-		case HOSTING_MODE_MYSQL_CENTRAL:
-			return SQLDialect.MYSQL;
-		case HOSTING_MODE_SQLITE:
-			return SQLDialect.SQLITE;
-		default:
-			return null;
-		}
+		return SqlUtils.getJooqSqlDialect(hostingMode);
 	}
 }

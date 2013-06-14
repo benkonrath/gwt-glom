@@ -705,7 +705,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @return
 	 */
 	private static String quoteAndEscapeSqlId(final String name) {
-		return quoteAndEscapeSqlId(name, SQLDialect.POSTGRES);
+		return SqlUtils.quoteAndEscapeSqlId(name, SQLDialect.POSTGRES);
 	}
 
 	/**

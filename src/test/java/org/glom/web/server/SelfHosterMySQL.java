@@ -710,7 +710,7 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @return
 	 */
 	private static String quoteAndEscapeSqlId(final String name) {
-		return quoteAndEscapeSqlId(name, SQLDialect.MYSQL);
+		return SqlUtils.quoteAndEscapeSqlId(name, SQLDialect.MYSQL);
 	}
 
 	/**

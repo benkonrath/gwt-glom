@@ -51,16 +51,16 @@ public class SelfHostExampleTest {
 	@Test
 	public void testSelfHosterEscapeIDSame() {
 		final String id = "something";
-		assertEquals("\"" + id + "\"", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.POSTGRES));
-		assertEquals("`" + id + "`", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.MYSQL));
+		assertEquals("\"" + id + "\"", SqlUtils.quoteAndEscapeSqlId(id, SQLDialect.POSTGRES));
+		assertEquals("`" + id + "`", SqlUtils.quoteAndEscapeSqlId(id, SQLDialect.MYSQL));
 	}
 
 	/* This is really a test of our test utility code. */
 	@Test
 	public void testSelfHosterEscapeIDNotSame() {
 		final String id = "something with a \" and a ` char";
-		assertNotEquals("\"" + id + "\"", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.POSTGRES));
-		assertNotEquals("`" + id + "`", SelfHosterMySQL.quoteAndEscapeSqlId(id, SQLDialect.MYSQL));
+		assertNotEquals("\"" + id + "\"", SqlUtils.quoteAndEscapeSqlId(id, SQLDialect.POSTGRES));
+		assertNotEquals("`" + id + "`", SqlUtils.quoteAndEscapeSqlId(id, SQLDialect.MYSQL));
 	}
 
 	/**

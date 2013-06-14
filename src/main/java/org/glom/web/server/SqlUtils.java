@@ -653,4 +653,37 @@ public class SqlUtils {
 			break;
 		}
 	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	public static String quoteAndEscapeSqlId(final String name, final SQLDialect sqlDialect) {
+		//final Factory factory = new Factory(connection, getSqlDialect());
+		final org.jooq.Name jooqName = Factory.name(name);
+		if(jooqName == null) {
+			return null;
+		}
+	
+		final Factory factory = new Factory(sqlDialect);
+		return factory.render(jooqName);
+	}
+
+	/**
+	 * @return
+	 */
+	public static SQLDialect getJooqSqlDialect(Document.HostingMode hostingMode) {
+		switch (hostingMode) {
+		case HOSTING_MODE_POSTGRES_SELF:
+		case HOSTING_MODE_POSTGRES_CENTRAL:
+			return SQLDialect.POSTGRES;
+		case HOSTING_MODE_MYSQL_SELF:
+		case HOSTING_MODE_MYSQL_CENTRAL:
+			return SQLDialect.MYSQL;
+		case HOSTING_MODE_SQLITE:
+			return SQLDialect.SQLITE;
+		default:
+			return null;
+		}
+	}
 }
