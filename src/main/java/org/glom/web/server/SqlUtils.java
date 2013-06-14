@@ -72,9 +72,9 @@ public class SqlUtils {
 		return createAndSetupDataSource(document.getConnectionDetails(), document.getConnectionDatabase());
 	}
 	
-	static class JdbcConnectionDetails {
-		String driverClass = null;
-		String jdbcURL = null;
+	public static class JdbcConnectionDetails {
+		public String driverClass = null;
+		public String jdbcURL = null;
 	};
 
 	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document document) {
@@ -82,6 +82,23 @@ public class SqlUtils {
 	}
 
 	public static JdbcConnectionDetails getJdbcConnectionDetails(final ServerDetails serverDetails, final String database) {
+		//TODO: More informative error checking:
+		if(serverDetails == null) {
+			return null;
+		}
+		
+		if(serverDetails.host == null) {
+			return null;
+		}
+
+		if(serverDetails.port == 0) {
+			return null;
+		}
+		
+		if(serverDetails.hostingMode == null) {
+			return null;
+		}
+
 		final JdbcConnectionDetails details = new JdbcConnectionDetails();
 
 		String defaultDatabase = null;
