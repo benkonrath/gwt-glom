@@ -22,15 +22,12 @@ package org.glom.web.server;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
-import org.glom.web.server.libglom.ServerDetails;
+import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.libglom.Field;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
@@ -45,6 +42,14 @@ import com.google.common.io.Files;
 public class SelfHosterMySQL extends SelfHoster {
 	SelfHosterMySQL(final Document document) {
 		super(document);
+
+		selfHostedServer.hostingMode = HostingMode.HOSTING_MODE_MYSQL_SELF;
+	}
+	
+	public SelfHosterMySQL(final String databaseName) {
+		super(databaseName);
+
+		selfHostedServer.hostingMode = HostingMode.HOSTING_MODE_MYSQL_SELF;
 	}
 
 	private static final int PORT_MYSQL_SELF_HOSTED_START = 3306;
@@ -53,8 +58,6 @@ public class SelfHosterMySQL extends SelfHoster {
 	private static final String FILENAME_DATA = "data";
 	
 	private static final String DEFAULT_DATABASE_NAME = "INFORMATION_SCHEMA";
-	
-	private int port;
 	  
 	//These are remembered in order to use them to issue the shutdown command via mysqladmin:
 	private String savedUsername;
@@ -72,7 +75,7 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @return
 	 * @Override
 	 */
-	protected boolean createAndSelfHostNewEmpty() { 
+	public boolean createAndSelfHostNewEmpty() { 
 		final File tempDir = saveDocumentCopy(Document.HostingMode.HOSTING_MODE_MYSQL_SELF);
 
 		// We must specify a default username and password:
@@ -150,7 +153,7 @@ public class SelfHosterMySQL extends SelfHoster {
 				"--pid-file=" + shellQuote(dbDirPid));
 
 
-		port = availablePort; //Needed by getMysqlAdminCommand().
+		selfHostedServer.port = availablePort; //Needed by getMysqlAdminCommand().
 		 
 		final List<String> progAndArgsCheck = getMysqlAdminCommand(savedUsername, savedPassword);
 		progAndArgsCheck.add("ping");
@@ -169,8 +172,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		}
 
 		// Remember the port for later:
-		port = availablePort; //Remember it for later.
-		document.setConnectionPort(availablePort);
+		selfHostedServer.port = availablePort; //Previously document.setConnectionPort(availablePort);
 
 		// Check that we can really connect:
 		
@@ -194,12 +196,20 @@ public class SelfHosterMySQL extends SelfHoster {
 				e.printStackTrace();
 			}
 
-			final String dbName = document.getConnectionDatabase();
-			document.setConnectionDatabase(""); // We have not created the database yet.
+			String dbName = null;
+			if(document != null) {
+				dbName = document.getConnectionDatabase();
+				document.setConnectionDatabase(""); // We have not created the database yet.
+			}
 
 			//Check that we can connect:
 			final Connection connection = createConnection(false);
-			document.setConnectionDatabase(dbName);
+
+			selfHostedDatabaseName = dbName;
+			if(document != null) {
+				document.setConnectionDatabase(dbName);
+			}
+
 			if (connection != null) {
 				//Close the connection:
 				try {
@@ -330,9 +340,9 @@ public class SelfHosterMySQL extends SelfHoster {
 	}
 
 	private String getSelfHostingPath(final String subpath, final boolean create) {
-		final String dbDir = document.getSelfHostedDirectoryPath();
+		final String dbDir = selfHostedDirectoryPath; //The same as document.getSelfHostedDirectoryPath(), when document != nul.
 		if (StringUtils.isEmpty(dbDir)) {
-			System.out.println("getSelfHostingPath(): getSelfHostedDirectoryPath returned no path.");
+			System.out.println("getSelfHostingPath(): selfHostedDirectoryPath has no path.");
 			return null;
 		}
 
@@ -392,7 +402,7 @@ public class SelfHosterMySQL extends SelfHoster {
 			return null;
 		}
 		
-		final String portAsText = portNumberAsText(port);
+		final String portAsText = portNumberAsText(selfHostedServer.port);
 
 		final List<String> progAndArgs = new ArrayList<String>();
 		progAndArgs.add(getPathToMysqlExecutable("mysqladmin"));
@@ -474,6 +484,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		return result; // ? INITERROR_NONE : INITERROR_COULD_NOT_START_SERVER;
 	}
 
+	//TODO: Move this to the base class:
 	/**
 	 * @param document
 	 * @return
@@ -594,51 +605,6 @@ public class SelfHosterMySQL extends SelfHoster {
 		return true; // All tables created successfully.
 	}
 
-	public Connection createConnection(final String database, final String username, final String password, boolean failureExpected) {
-		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
-		//which does not automatically close its connections,
-		//leading to errors because connections are already open.
-		
-		if(StringUtils.isEmpty(username)) {
-			System.out.println("setInitialUsernameAndPassword(): username is empty.");
-			return null;
-		}
-
-		final ServerDetails serverDetails = document.getConnectionDetails();
-		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(serverDetails, database);
-		if (details == null) {
-			System.out.println("setInitialUsernameAndPassword(): getJdbcConnectionDetails() returned null.");
-			return null;
-		}
-		
-		final Properties connectionProps = new Properties();
-		connectionProps.put("user", username);
-		connectionProps.put("password", password);
-
-		Connection conn = null;
-		try {
-			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
-			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");
-			DriverManager.setLoginTimeout(10);
-			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
-			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");
-		} catch (final SQLException e) {
-			if(!failureExpected) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		return conn;
-	}
-	
-	/**
-	 */
-	public Connection createConnection(boolean failureExpected) {
-		final String db = document.getConnectionDatabase();
-		return createConnection(db, this.username, this.password, failureExpected);
-	}
-
 	/**
 	 *
 	 */
@@ -717,7 +683,7 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @return
 	 */
 	private static boolean createDatabase(final Connection connection, final String databaseName) {
-		final String query = "CREATE DATABASE  " + quoteAndEscapeSqlId(databaseName);
+		final String query = "CREATE DATABASE " + quoteAndEscapeSqlId(databaseName);
 		final Factory factory = new Factory(connection, SQLDialect.MYSQL);
 
 		try {

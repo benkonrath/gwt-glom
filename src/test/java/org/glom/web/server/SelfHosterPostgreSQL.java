@@ -24,14 +24,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
 import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.libglom.Field;
 import org.jooq.SQLDialect;
 import org.jooq.impl.Factory;
@@ -45,6 +43,17 @@ import com.google.common.io.Files;
 public class SelfHosterPostgreSQL extends SelfHoster {
 	SelfHosterPostgreSQL(final Document document) {
 		super(document);
+
+		selfHostedServer.hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
+	}
+
+	/**
+	 * 
+	 */
+	public SelfHosterPostgreSQL(final String databaseName) {
+		super(databaseName);
+
+		selfHostedServer.hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
 	}
 
 	private static final int PORT_POSTGRESQL_SELF_HOSTED_START = 5433;
@@ -73,7 +82,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 * @return
 	 * @Override
 	 */
-	protected boolean createAndSelfHostNewEmpty() {
+	public boolean createAndSelfHostNewEmpty() {
 		final File tempDir = saveDocumentCopy(Document.HostingMode.HOSTING_MODE_POSTGRES_SELF);
 
 		// We must specify a default username and password:
@@ -208,7 +217,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		}
 
 		// Remember the port for later:
-		document.setConnectionPort(availablePort);
+		selfHostedServer.port = availablePort; //Previously document.setConnectionPort(availablePort);
 
 		// Check that we can really connect:
 		
@@ -232,12 +241,20 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 				e.printStackTrace();
 			}
 
-			final String dbName = document.getConnectionDatabase();
-			document.setConnectionDatabase(""); // We have not created the database yet.
+			String dbName = null;
+			if(document != null) {
+				dbName = document.getConnectionDatabase();
+				document.setConnectionDatabase(""); // We have not created the database yet.
+			}
 
 			//Check that we can connect:
 			final Connection connection = createConnection(false);
-			document.setConnectionDatabase(dbName);
+
+			selfHostedDatabaseName = dbName;
+			if(document != null) {
+				document.setConnectionDatabase(dbName);
+			}
+
 			if (connection != null) {
 				//Close the connection:
 				try {
@@ -261,7 +278,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	}
 
 	private String getSelfHostingPath(final String subpath, final boolean create) {
-		final String dbDir = document.getSelfHostedDirectoryPath();
+		final String dbDir = selfHostedDirectoryPath; //The same as: document.getSelfHostedDirectoryPath();
 		if (StringUtils.isEmpty(subpath)) {
 			return dbDir;
 		}
@@ -398,7 +415,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	}
 
 	private boolean initializeConfFiles() {
-		final String dataDirPath = document.getSelfHostedDirectoryPath();
+		final String dataDirPath = selfHostedDirectoryPath; //The same as document.getSelfHostedDirectoryPath();
 
 		final String dbDirConfig = dataDirPath + File.separator + "config";
 		// String defaultConfContents = "";
@@ -610,38 +627,6 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	}
 
 	/**
-	 */
-	public Connection createConnection(boolean failureExpected) {
-		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
-		//which does not automatically close its connections,
-		//leading to errors because connections are already open.
-		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(document);
-		if (details == null) {
-			return null;
-		}
-		
-		final Properties connectionProps = new Properties();
-		connectionProps.put("user", this.username);
-		connectionProps.put("password", this.password);
-
-		Connection conn = null;
-		try {
-			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
-			DriverManager.setLoginTimeout(10);
-			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
-		} catch (final SQLException e) {
-			if(!failureExpected) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		return conn;
-	}
-
-	/**
 	 *
 	 */
 	private void progress() {
@@ -727,7 +712,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		boolean result = true;
 
 		// Stop the server:
-		if ((document != null) && (document.getConnectionPort() != 0)) {
+		if (selfHostedServer.port != 0) { //Previously (document != null) && (document.getConnectionPort() != 0))
 			final String dbDirData = getSelfHostingDataPath(false);
 
 			// -D specifies the data directory.
@@ -750,7 +735,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 				}
 			}
 
-			document.setConnectionPort(0);
+			selfHostedServer.port = 0; //Previously document.setConnectionPort(0);
 		}
 
 		// Delete the files:
@@ -758,9 +743,12 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		final File fileSelfHosting = new File(selfhostingPath);
 		fileSelfHosting.delete();
 
-		final String docPath = document.getFileURI();
-		final File fileDoc = new File(docPath);
-		fileDoc.delete();
+		if(document != null) {
+			//Delete the temporary .glom file, if any:
+			final String docPath = document.getFileURI();
+			final File fileDoc = new File(docPath);
+			fileDoc.delete();
+		}
 
 		return result;
 	}

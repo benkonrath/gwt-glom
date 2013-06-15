@@ -433,7 +433,7 @@ public class SqlUtils {
 		return listRelationships;
 	}
 
-	private static org.jooq.Field<Object> createField(final String tableName, final String fieldName) {
+	public static org.jooq.Field<Object> createField(final String tableName, final String fieldName) {
 		if (StringUtils.isEmpty(tableName)) {
 			return null;
 		}

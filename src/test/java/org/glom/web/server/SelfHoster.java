@@ -35,7 +35,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
+import org.glom.web.server.libglom.ServerDetails;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Field;
 import org.jooq.InsertResultStep;
@@ -54,8 +56,16 @@ import com.google.common.io.Files;
  */
 public class SelfHoster {
 
+	/**
+	 * 
+	 */
+	private static final String HOSTNAME_LOCALHOST = "localhost";
 	protected boolean selfHostingActive = false;
 	protected Document document = null;
+	protected String selfHostedDirectoryPath = null;
+	protected ServerDetails selfHostedServer = new ServerDetails();
+	protected String selfHostedDatabaseName = null; //Also used for the temporary filepath.
+	protected boolean selfHostedDatabaseCreated = false; //Whether the database has been created yet.
 	protected String username = "";
 	protected String password = "";
 
@@ -65,8 +75,18 @@ public class SelfHoster {
 	public SelfHoster(final Document document) {
 		super();
 		this.document = document;
+		this.selfHostedServer.host = HOSTNAME_LOCALHOST;
 	}
 	
+	/**
+	 * 
+	 */
+	public SelfHoster(final String databaseName) {
+		super();
+		this.selfHostedServer.host = HOSTNAME_LOCALHOST;
+		this.selfHostedDatabaseName = databaseName;
+	}
+
 	public boolean createAndSelfHostFromExample() {
 
 		if (!createAndSelfHostNewEmpty()) {
@@ -93,11 +113,10 @@ public class SelfHoster {
 	}
 
 	/**
-	 * @param hostingMode
 	 * @return
 	 */
 	protected boolean createAndSelfHostNewEmpty() {
-		// TODO Auto-generated method stub
+		//Derived classes should implement this.
 		return false;
 	}
 	
@@ -107,6 +126,10 @@ public class SelfHoster {
 	public boolean cleanup() {
 		//Derived classes should implement this.
 		return false;
+	}
+
+	public ServerDetails getServerDetails() {
+		return selfHostedServer;
 	}
 
 	public String getUsername() {
@@ -370,29 +393,35 @@ public class SelfHoster {
 		final String portAsText = format.format(portNumber);
 		return portAsText;
 	}
-	
-	/**
-	 */
-	public Connection createConnection(boolean failureExpected) {
+
+	public Connection createConnection(final String database, final String username, final String password, boolean failureExpected) {
 		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
 		//which does not automatically close its connections,
 		//leading to errors because connections are already open.
-		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(document);
-		if (details == null) {
+
+		if(StringUtils.isEmpty(username)) {
+			System.out.println("setInitialUsernameAndPassword(): username is empty.");
 			return null;
 		}
-		
+
+		//Previously: final ServerDetails serverDetails = document.getConnectionDetails();
+		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(selfHostedServer, database);
+		if (details == null) {
+			System.out.println("setInitialUsernameAndPassword(): getJdbcConnectionDetails() returned null.");
+			return null;
+		}
+
 		final Properties connectionProps = new Properties();
-		connectionProps.put("user", this.username);
-		connectionProps.put("password", this.password);
+		connectionProps.put("user", username);
+		connectionProps.put("password", password);
 
 		Connection conn = null;
 		try {
 			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
+			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");
 			DriverManager.setLoginTimeout(10);
 			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
-			//System.out.println("debug: createConnection(): before createConnection()");
+			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");
 		} catch (final SQLException e) {
 			if(!failureExpected) {
 				e.printStackTrace();
@@ -401,6 +430,17 @@ public class SelfHoster {
 		}
 
 		return conn;
+	}
+
+	/**
+	 */
+	public Connection createConnection(boolean failureExpected) {
+		String db = null;
+		if(document != null) {
+			db = document.getConnectionDatabase();
+		}
+
+		return createConnection(db, this.username, this.password, failureExpected);
 	}
 
 	/**
@@ -435,16 +475,21 @@ public class SelfHoster {
 			tempDir.delete();
 		}
 
-		// Save the example as a real file:
-		document.setFileURI(file.getPath());
+		selfHostedDirectoryPath = tempDirPath; //This should be the same as document.getSelfHostingDirectoryPath();
 
-		document.setHostingMode(hostingMode);
-		document.setIsExampleFile(false);
-		final boolean saved = document.save();
-		if (!saved) {
-			System.out.println("createAndSelfHostNewEmpty(): Document.save() failed.");
-			return null; // TODO: Delete the directory.
+		// Save the example document, if any as a real file:
+		if(document != null) {
+			document.setFileURI(file.getPath());
+	
+			document.setHostingMode(hostingMode);
+			document.setIsExampleFile(false);
+			final boolean saved = document.save();
+			if (!saved) {
+				System.out.println("createAndSelfHostNewEmpty(): Document.save() failed.");
+				return null; // TODO: Delete the directory.
+			}
 		}
+
 		return tempDir;
 	}
 
@@ -455,20 +500,14 @@ public class SelfHoster {
 		//This must be overriden by the derived classes.
 		return null;
 	}
-
+	
 	/**
-	 * @param name
-	 * @return
+	 * Call this if the database was created outside of the SelfHoster instance.
 	 */
-	public static String quoteAndEscapeSqlId(final String name, final SQLDialect sqlDialect) {
-		//final Factory factory = new Factory(connection, getSqlDialect());
-		final org.jooq.Name jooqName = Factory.name(name);
-		if(jooqName == null) {
-			return null;
-		}
-
-		final Factory factory = new Factory(sqlDialect);
-		return factory.render(jooqName);
+	public void setDatabaseCreated() {
+		selfHostedDatabaseCreated = true;
+		
+		//createConnection() will not connect to the specific database.
 	}
 
 }
