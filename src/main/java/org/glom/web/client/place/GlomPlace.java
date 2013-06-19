@@ -85,6 +85,11 @@ public abstract class GlomPlace extends Place {
 		 */
 		protected String buildParamsToken(final HashMap<String, String> params) {
 			String token = "";
+			
+			if(params == null) {
+				return token;
+			}
+			
 			for (final Map.Entry<String, String> entry : params.entrySet()) {
 				final String key = entry.getKey();
 				final String value = entry.getValue();
