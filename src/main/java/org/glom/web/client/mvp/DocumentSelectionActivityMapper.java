@@ -22,15 +22,17 @@ package org.glom.web.client.mvp;
 import org.glom.web.client.ClientFactory;
 import org.glom.web.client.activity.DocumentLoginActivity;
 import org.glom.web.client.activity.DocumentSelectionActivity;
+import org.glom.web.client.activity.UserRegisterActivity;
 import org.glom.web.client.place.DocumentLoginPlace;
 import org.glom.web.client.place.DocumentSelectionPlace;
+import org.glom.web.client.place.UserRegisterPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 /**
- *
+ * TODO: Rename this, because this area of the page is no longer always about choosing a document. It's just a main area.
  */
 public class DocumentSelectionActivityMapper implements ActivityMapper {
 
@@ -54,12 +56,13 @@ public class DocumentSelectionActivityMapper implements ActivityMapper {
 	public Activity getActivity(final Place place) {
 		if (place instanceof DocumentSelectionPlace) {
 			return new DocumentSelectionActivity(clientFactory);
-		}
-		if (place instanceof DocumentLoginPlace) {
+		} else if (place instanceof DocumentLoginPlace) {
 			final DocumentLoginPlace derivedPlace = (DocumentLoginPlace)place;
 			return new DocumentLoginActivity(derivedPlace, clientFactory);
+		} else if (place instanceof UserRegisterPlace) {
+			final UserRegisterPlace derivedPlace = (UserRegisterPlace)place;
+			return new UserRegisterActivity(derivedPlace, clientFactory);
 		}
-		
 
 		return null;
 	}

@@ -24,6 +24,7 @@ import org.glom.web.client.place.DocumentSelectionPlace;
 import org.glom.web.client.place.DocumentLoginPlace;
 import org.glom.web.client.place.ListPlace;
 import org.glom.web.client.place.ReportPlace;
+import org.glom.web.client.place.UserRegisterPlace;
 
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
@@ -38,6 +39,6 @@ import com.google.gwt.place.shared.WithTokenizers;
  * https://code.google.com/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
  */
 @WithTokenizers({ ListPlace.Tokenizer.class, DocumentSelectionPlace.Tokenizer.class, DocumentLoginPlace.Tokenizer.class, DetailsPlace.Tokenizer.class,
-		ReportPlace.Tokenizer.class })
+		ReportPlace.Tokenizer.class, UserRegisterPlace.Tokenizer.class })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 }

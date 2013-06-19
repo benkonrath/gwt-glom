@@ -25,34 +25,21 @@ import com.google.gwt.event.dom.client.ClickHandler;
 /**
  *
  */
-public interface DocumentLoginView extends View {
+public interface UserRegisterView extends View {
 
-	/** Specify a handler to be called when the user clicks the Login button
-	 * to attempt authentication.
+	/** Specify a handler to be called when the user clicks the Register button
+	 * to attempt registration.
 	 * 
 	 * @param clickHandler
 	 */
-	public void setClickLoginHandler(final ClickHandler clickHandler);
+	public void setClickRegisterHandler(final ClickHandler clickHandler);
 	
 	/** Specify a handler to be called when the user clicks the cancel button
-	 * to cancel the attempt at authentication.
+	 * to cancel the attempt at registration.
 	 * 
 	 * @param clickHandler
 	 */
 	public void setClickCancelHandler(final ClickHandler clickHandler);
-	
-	/** Specify a handler to be called when the user clicks the register button
-	 * to register as a new user.
-	 * 
-	 * @param clickHandler
-	 */
-	void setClickRegisterHandler(ClickHandler clickHandler);
-
-	public void setTextFieldsEnabled(final boolean enabled);
-
-	public String getUsername();
-
-	public String getPassword();
 
 	public void setError();
 

@@ -25,6 +25,7 @@ import org.glom.web.client.ui.DocumentSelectionView;
 import org.glom.web.client.ui.ListView;
 import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.TableSelectionView;
+import org.glom.web.client.ui.UserRegisterView;
 
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
@@ -55,5 +56,7 @@ public interface ClientFactory {
 	DetailsView getDetailsView();
 
 	ReportView getReportView();
+
+	UserRegisterView getUserRegisterView();
 
 }

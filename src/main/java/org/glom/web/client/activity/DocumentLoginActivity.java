@@ -25,11 +25,13 @@ import org.glom.web.client.PlaceControllerExt;
 import org.glom.web.client.StringUtils;
 import org.glom.web.client.event.TableChangeEvent;
 import org.glom.web.client.place.HasDocumentPlace;
+import org.glom.web.client.place.UserRegisterPlace;
 import org.glom.web.client.ui.DocumentLoginView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
@@ -195,6 +197,15 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 			@Override
 			public void onClick(final ClickEvent event) {
 				goToDefault();
+			}
+		});
+
+		//The register button:
+		view.setClickRegisterHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				final Place place = new UserRegisterPlace();
+				goTo(place);
 			}
 		});
 	}

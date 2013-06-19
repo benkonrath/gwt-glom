@@ -32,6 +32,8 @@ import org.glom.web.client.ui.ReportView;
 import org.glom.web.client.ui.ReportViewImpl;
 import org.glom.web.client.ui.TableSelectionView;
 import org.glom.web.client.ui.TableSelectionViewImpl;
+import org.glom.web.client.ui.UserRegisterView;
+import org.glom.web.client.ui.UserRegisterViewImpl;
 
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
@@ -46,6 +48,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	private final ListView listView = new ListViewImpl();
 	private final DetailsView detailsView = new DetailsViewImpl();
 	private final ReportView reportView = new ReportViewImpl();
+	private final UserRegisterView userRegisterView = new UserRegisterViewImpl();
 
 	@Override
 	public EventBus getEventBus() {
@@ -90,6 +93,11 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public ReportView getReportView() {
 		return reportView;
+	}
+	
+	@Override
+	public UserRegisterView getUserRegisterView() {
+		return userRegisterView;
 	}
 
 }

@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -35,44 +36,42 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
-public class DocumentLoginViewImpl extends GlomComposite implements DocumentLoginView {
+public class UserRegisterViewImpl extends GlomComposite implements UserRegisterView {
 
 	// OnlineGlomConstants.java is generated in the target/ directory,
 	// from OnlineGlomConstants.properties
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
-	interface DocumentLoginViewImplUiBinder extends UiBinder<Widget, DocumentLoginViewImpl> {
+	interface UserRegisterViewImplUiBinder extends UiBinder<Widget, UserRegisterViewImpl> {
 	}
 
-	private static DocumentLoginViewImplUiBinder uiBinder = GWT.create(DocumentLoginViewImplUiBinder.class);
+	private static UserRegisterViewImplUiBinder uiBinder = GWT.create(UserRegisterViewImplUiBinder.class);
 	@UiField
-	VerticalPanel documentLoginFields;
+	VerticalPanel userRegisterFields;
 	@UiField
-	HTMLPanel documentLoginPanel;
+	HTMLPanel userRegisterPanel;
 
 	//final private FlowPanel mainPanel = new FlowPanel();
 	private final TextBox usernameTextBox = new TextBox();
 	private final PasswordTextBox passwordTextBox = new PasswordTextBox();
+	//TODO: Password confirmation.
 	private final Label errorMessage = new Label(constants.loginWrong());
-	private final Button loginButton = new Button(constants.login());
-	private final Button cancelButton = new Button(constants.cancel());
 	private final Button registerButton = new Button(constants.loginRegister());
-	//TODO: ForgotPassword button.
+	private final Button cancelButton = new Button(constants.cancel());
 	FlexTable flexTable = new FlexTable();
 
 	//private Presenter presenter;
 	
-	private HandlerRegistration authLoginButtonHandlerRegistration;
-	private HandlerRegistration authCancelButtonHandlerRegistration;
 	private HandlerRegistration authRegisterButtonHandlerRegistration;
+	private HandlerRegistration authCancelButtonHandlerRegistration;
 
-	public DocumentLoginViewImpl() {
+	public UserRegisterViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-		documentLoginPanel.getElement().setId("documentLoginPanel");
-		documentLoginFields.addStyleName("documentLoginFields");
+		userRegisterPanel.getElement().setId("userRegisterPanel");
+		userRegisterFields.addStyleName("userRegisterFields");
 		
-		documentLoginFields.add(flexTable);
+		userRegisterFields.add(flexTable);
 		
 		//TODO: Use UIBinder to lay this out properly:
 		flexTable.setCellSpacing(10);
@@ -88,23 +87,20 @@ public class DocumentLoginViewImpl extends GlomComposite implements DocumentLogi
 		cellFormatter.setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.setWidget(3, 0, cancelButton);
 		cellFormatter.setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.setWidget(3, 1, loginButton);
+		flexTable.setWidget(3, 1, registerButton);
 		cellFormatter.setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.setWidget(4, 0, registerButton);
-		cellFormatter.setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		//TODO: Check this somewhere other than in the view? It's not view-specific.
-		//TODO: Avoid copy/pasting of this code with UserRegisterView.
-		if(!usingSecureProtocol()) {
+		final String protocol = Window.Location.getProtocol();
+		if((protocol != null) && !protocol.equals("https:")) {
 			//Warn that login cannot work unless the login servlet is served via HTTPS.
 			//And actually, the entire site must be served via HTTPS,
 			//or we would violate the Same Origin Policy by mixing protocols,
 			//so this very page should have been delivered by HTTPS.
-			GWT.log("The login page arrived via http, rather than https. Refusing to log in.");
+			GWT.log("The registraion page arrived via http, rather than https. Refusing to allow registration.");
 
 			errorMessage.setText(constants.loginNeedsHttps());
 			setError();
-			loginButton.setEnabled(false);
+			registerButton.setEnabled(false);
 		}
 	}
 
@@ -114,8 +110,8 @@ public class DocumentLoginViewImpl extends GlomComposite implements DocumentLogi
 	}
 	
 	@Override
-	public void setClickLoginHandler(final ClickHandler clickHandler) {
-		authLoginButtonHandlerRegistration = loginButton.addClickHandler(clickHandler);
+	public void setClickRegisterHandler(final ClickHandler clickHandler) {
+		authRegisterButtonHandlerRegistration = registerButton.addClickHandler(clickHandler);
 	}
 	
 	@Override
@@ -124,26 +120,10 @@ public class DocumentLoginViewImpl extends GlomComposite implements DocumentLogi
 	}
 
 	@Override
-	public void setClickRegisterHandler(final ClickHandler clickHandler) {
-		authRegisterButtonHandlerRegistration = registerButton.addClickHandler(clickHandler);
-	}
-
-	@Override
-	public String getUsername() {
-		return usernameTextBox.getValue();
-	}
-
-	@Override
-	public String getPassword() {
-		return passwordTextBox.getValue();
-
-	}
-
-	@Override
 	public void clear() {
-		if (authLoginButtonHandlerRegistration != null) {
-			authLoginButtonHandlerRegistration.removeHandler();
-			authLoginButtonHandlerRegistration = null;
+		if (authRegisterButtonHandlerRegistration != null) {
+			authRegisterButtonHandlerRegistration.removeHandler();
+			authRegisterButtonHandlerRegistration = null;
 		}
 
 		if (authCancelButtonHandlerRegistration != null) {
@@ -151,21 +131,9 @@ public class DocumentLoginViewImpl extends GlomComposite implements DocumentLogi
 			authCancelButtonHandlerRegistration = null;
 		}
 
-		if (authRegisterButtonHandlerRegistration != null) {
-			authRegisterButtonHandlerRegistration.removeHandler();
-			authRegisterButtonHandlerRegistration = null;
-		}
-
 		usernameTextBox.setText("");
 		passwordTextBox.setText("");
-		setTextFieldsEnabled(true);
 		clearError();
-	}
-
-	@Override
-	public void setTextFieldsEnabled(final boolean enabled) {
-		usernameTextBox.setEnabled(enabled);
-		passwordTextBox.setEnabled(enabled);
 	}
 	
 	@Override
