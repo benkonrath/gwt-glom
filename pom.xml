@@ -103,7 +103,7 @@
 		<dependency>
 			<groupId>com.allen-sauer.gwt.log</groupId>
 			<artifactId>gwt-log</artifactId>
-			<version>3.1.8</version>
+			<version>3.2.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -182,7 +182,7 @@
 		<dependency>
 			<groupId>com.googlecode.gwt-test-utils</groupId>
 			<artifactId>gwt-test-utils</artifactId>
-			<version>0.43</version>
+			<version>0.44</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
