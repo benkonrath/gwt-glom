@@ -89,7 +89,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.23</version>
+			<version>5.1.25</version>
 			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
@@ -121,7 +121,7 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.7</version>
+			<version>1.8</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -138,7 +138,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>5.0.0</version>
+			<version>5.1.2</version>
 			<scope>compile</scope>
 			<exclusions>
 				<!-- There is apparently a clash between the jdtcore used by jasperreports
@@ -163,7 +163,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
  			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.2</version>
+			<version>1.7.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -197,7 +197,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 
