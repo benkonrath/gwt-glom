@@ -18,6 +18,13 @@
 		</license>
 	</licenses>
 
+	<!-- Specify a recent maven version, so we can use later plugin versions.
+	     We specify the same thing via the maven-enforcer-plugin, but that is normal.
+	     See http://maven.apache.org/enforcer/maven-enforcer-plugin/faq.html#question -->
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
 	<!-- gwt-test-utils is not in the regular maven repository: -->
 	<repositories>
 		<repository>
@@ -208,6 +215,29 @@
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 
 		<plugins>
+			<plugin>
+				<!-- Specify a recent maven version, so we can use later plugin versions.
+                                     We specify the same thing in the prerequisites tag, but that is normal.
+				     See http://maven.apache.org/enforcer/maven-enforcer-plugin/faq.html#question -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+  						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>2.2.1</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 			<!-- GWT Maven Plugin -->
 			<plugin>
