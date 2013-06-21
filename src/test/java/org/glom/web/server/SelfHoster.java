@@ -40,13 +40,14 @@ import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.ServerDetails;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Field;
+import org.jooq.DSLContext;
 import org.jooq.InsertResultStep;
 import org.jooq.InsertSetStep;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.exception.DataAccessException;
-import org.jooq.impl.Factory;
+import org.jooq.impl.DSL;
 
 import com.google.common.io.Files;
 
@@ -267,12 +268,12 @@ public class SelfHoster {
 	 */
 	protected boolean insertExampleData(final Connection connection, final Document document, final String tableName) {
 
-		final Factory factory = new Factory(connection, getSqlDialect());
-		final Table<Record> table = Factory.tableByName(tableName);
+		final DSLContext dslContext = DSL.using(connection, getSqlDialect());
+		final Table<Record> table = DSL.tableByName(tableName);
 
 		final List<Map<String, DataItem>> exampleRows = document.getExampleRows(tableName);
 		for (final Map<String, DataItem> row : exampleRows) {
-			InsertSetStep<Record> insertStep = factory.insertInto(table);
+			InsertSetStep<Record> insertStep = dslContext.insertInto(table);
 
 			for (final Entry<String, DataItem> entry : row.entrySet()) {
 				final String fieldName = entry.getKey();
@@ -286,7 +287,7 @@ public class SelfHoster {
 					continue;
 				}
 
-				final org.jooq.Field<Object> jooqField = Factory.fieldByName(field.getName());
+				final org.jooq.Field<Object> jooqField = DSL.fieldByName(field.getName());
 				if (jooqField == null) {
 					continue;
 				}

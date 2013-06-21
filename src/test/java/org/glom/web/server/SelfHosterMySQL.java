@@ -29,9 +29,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.server.libglom.Document.HostingMode;
 import org.glom.web.shared.libglom.Field;
+import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
-import org.jooq.impl.Factory;
+import org.jooq.impl.DSL;
 
 import com.google.common.io.Files;
 
@@ -654,9 +655,9 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		// Actually create the table
 		final String query = "CREATE TABLE " + quoteAndEscapeSqlId(tableName) + " (" + sqlFields + ");";
-		final Factory factory = new Factory(connection, getSqlDialect());
+		final DSLContext dslContext = DSL.using(connection, getSqlDialect());
 		try {
-			factory.execute(query);
+			dslContext.execute(query);
 		} catch (DataAccessException e) {
 			System.out.println("createDatabase(): query failed: " + query);
 			e.printStackTrace();
@@ -684,10 +685,10 @@ public class SelfHosterMySQL extends SelfHoster {
 	 */
 	private static boolean createDatabase(final Connection connection, final String databaseName) {
 		final String query = "CREATE DATABASE " + quoteAndEscapeSqlId(databaseName);
-		final Factory factory = new Factory(connection, SQLDialect.MYSQL);
+		final DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
 		try {
-			factory.execute(query);
+			dslContext.execute(query);
 		} catch (DataAccessException e) {
 			System.out.println("createDatabase(): query failed: " + query);
 			e.printStackTrace();

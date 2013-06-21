@@ -45,16 +45,14 @@ import org.glom.web.shared.libglom.layout.UsesRelationship;
 import org.glom.web.shared.libglom.layout.UsesRelationshipImpl;
 import org.jooq.AggregateFunction;
 import org.jooq.Condition;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.SelectFinalStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSelectStep;
 import org.jooq.Table;
-import org.jooq.conf.RenderKeywordStyle;
-import org.jooq.conf.RenderNameStyle;
-import org.jooq.conf.Settings;
-import org.jooq.impl.Factory;
+import org.jooq.impl.DSL;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -302,7 +300,7 @@ public class SqlUtils {
 
 	public static String buildSqlSelectWithWhereClause(final String tableName, final List<LayoutItemField> fieldsToGet,
 			final Condition whereClause, final SortClause sortClause, final SQLDialect sqlDialect) {
-		final SelectFinalStep step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, sqlDialect);
+		final SelectFinalStep<Record> step = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, sortClause, sqlDialect);
 		if (step == null) {
 			return "";
 		}
@@ -312,27 +310,29 @@ public class SqlUtils {
 		return query;
 	}
 
-	private static SelectSelectStep createSelect(final SQLDialect sqlDialect) {
-		final Factory factory = new Factory(sqlDialect);
-		final Settings settings = factory.getSettings();
-		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
-		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
+	private static SelectSelectStep<Record> createSelect(final SQLDialect sqlDialect) {
+		final DSLContext dslContext = DSL.using(sqlDialect);
+		
+		//TODO: Do this in jooq 3?
+		//final Settings settings = dslContext.getSettings();
+		//settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
+		//settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
 
-		final SelectSelectStep selectStep = factory.select();
+		final SelectSelectStep<Record> selectStep = dslContext.select();
 		return selectStep;
 	}
 
-	private static SelectFinalStep buildSqlSelectStepWithWhereClause(final String tableName,
+	private static SelectFinalStep<Record> buildSqlSelectStepWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SortClause sortClause, final SQLDialect sqlDialect) {
 
-		final SelectSelectStep selectStep = createSelect(sqlDialect);
+		final SelectSelectStep<Record> selectStep = createSelect(sqlDialect);
 
 		// Add the fields, and any necessary joins:
 		final List<UsesRelationship> listRelationships = buildSqlSelectAddFieldsToGet(selectStep, tableName,
 				fieldsToGet, sortClause, false /* extraJoin */);
 
-		final Table<Record> table = Factory.tableByName(tableName);
-		final SelectJoinStep joinStep = selectStep.from(table);
+		final Table<Record> table = DSL.tableByName(tableName);
+		final SelectJoinStep<Record> joinStep = selectStep.from(table);
 
 		// LEFT OUTER JOIN will get the field values from the other tables,
 		// and give us our fields for this table even if there is no corresponding value in the other table.
@@ -340,7 +340,7 @@ public class SqlUtils {
 			builderAddJoin(joinStep, usesRelationship);
 		}
 
-		SelectFinalStep finalStep = joinStep;
+		SelectFinalStep<Record> finalStep = joinStep;
 		if (whereClause != null) {
 			finalStep = joinStep.where(whereClause);
 		}
@@ -350,28 +350,28 @@ public class SqlUtils {
 
 	public static String buildSqlCountSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final SQLDialect sqlDialect) {
-		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, null, null, sqlDialect);
+		final SelectFinalStep<?> selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, null, null, sqlDialect);
 		return buildSqlSelectCountRows(selectInner, sqlDialect);
 	}
 
 	public static String buildSqlCountSelectWithWhereClause(final String tableName,
 			final List<LayoutItemField> fieldsToGet, final Condition whereClause, final SQLDialect sqlDialect) {
-		final SelectFinalStep selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, null, sqlDialect);
+		final SelectFinalStep<?> selectInner = buildSqlSelectStepWithWhereClause(tableName, fieldsToGet, whereClause, null, sqlDialect);
 		return buildSqlSelectCountRows(selectInner, sqlDialect);
 	}
 
-	private static String buildSqlSelectCountRows(final SelectFinalStep selectInner, final SQLDialect sqlDialect) {
+	private static String buildSqlSelectCountRows(final SelectFinalStep<?> selectInner, final SQLDialect sqlDialect) {
 		// TODO: Find a way to do this with the jOOQ API:
-		final SelectSelectStep select = createSelect(sqlDialect);
+		final SelectSelectStep<Record> select = createSelect(sqlDialect);
 
-		final org.jooq.Field<?> field = Factory.field("*");
-		final AggregateFunction<?> count = Factory.count(field);
+		final org.jooq.Field<?> field = DSL.field("*");
+		final AggregateFunction<?> count = DSL.count(field);
 		select.select(count).from(selectInner);
 		return select.getQuery().getSQL(true);
 		// return "SELECT COUNT(*) FROM (" + query + ") AS glomarbitraryalias";
 	}
 
-	private static List<UsesRelationship> buildSqlSelectAddFieldsToGet(SelectSelectStep step, final String tableName,
+	private static List<UsesRelationship> buildSqlSelectAddFieldsToGet(SelectSelectStep<Record> step, final String tableName,
 			final List<LayoutItemField> fieldsToGet, final SortClause sortClause, final boolean extraJoin) {
 
 		// Get all relationships used in the query:
@@ -442,7 +442,7 @@ public class SqlUtils {
 			return null;
 		}
 
-		return Factory.fieldByName(tableName, fieldName);
+		return DSL.fieldByName(tableName, fieldName);
 	}
 
 	private static org.jooq.Field<Object> createField(final String tableName, final LayoutItemField layoutField) {
@@ -520,13 +520,13 @@ public class SqlUtils {
 	 * } }
 	 */
 
-	private static void builderAddJoin(SelectJoinStep step, final UsesRelationship usesRelationship) {
+	private static void builderAddJoin(SelectJoinStep<Record> step, final UsesRelationship usesRelationship) {
 		final Relationship relationship = usesRelationship.getRelationship();
 		if (!relationship.getHasFields()) { // TODO: Handle related_record has_fields.
 			if (relationship.getHasToTable()) {
 				// It is a relationship that only specifies the table, without specifying linking fields:
 
-				// Table<Record> toTable = Factory.tableByName(relationship.getToTable());
+				// Table<Record> toTable = DSL.tableByName(relationship.getToTable());
 				// TODO: stepResult = step.from(toTable);
 			}
 
@@ -547,7 +547,7 @@ public class SqlUtils {
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
-			final Table<Record> toTable = Factory.tableByName(relationship.getToTable());
+			final Table<Record> toTable = DSL.tableByName(relationship.getToTable());
 			step = step.leftOuterJoin(toTable.as(aliasName)).on(condition);
 		} else {
 			final UsesRelationship parentRelationship = new UsesRelationshipImpl();
@@ -560,7 +560,7 @@ public class SqlUtils {
 			final Condition condition = fieldFrom.equal(fieldTo);
 
 			// Note that LEFT JOIN (used in libglom/GdaSqlBuilder) is apparently the same as LEFT OUTER JOIN.
-			final Table<Record> toTable = Factory.tableByName(relatedRelationship.getToTable());
+			final Table<Record> toTable = DSL.tableByName(relatedRelationship.getToTable());
 			step = step.leftOuterJoin(toTable.as(aliasName)).on(condition);
 		}
 	}
@@ -677,13 +677,13 @@ public class SqlUtils {
 	 */
 	public static String quoteAndEscapeSqlId(final String name, final SQLDialect sqlDialect) {
 		//final Factory factory = new Factory(connection, getSqlDialect());
-		final org.jooq.Name jooqName = Factory.name(name);
+		final org.jooq.Name jooqName = DSL.name(name);
 		if(jooqName == null) {
 			return null;
 		}
 	
-		final Factory factory = new Factory(sqlDialect);
-		return factory.render(jooqName);
+		final DSLContext dslContext = DSL.using(sqlDialect);
+		return dslContext.render(jooqName);
 	}
 
 	/**

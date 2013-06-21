@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.SqlUtils;
 import org.glom.web.server.libglom.ServerDetails;
 import org.jooq.Condition;
+import org.jooq.DSLContext;
 import org.jooq.DeleteConditionStep;
 import org.jooq.DeleteFinalStep;
 import org.jooq.DeleteWhereStep;
@@ -43,11 +44,8 @@ import org.jooq.SelectFinalStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSelectStep;
 import org.jooq.Table;
-import org.jooq.conf.RenderKeywordStyle;
-import org.jooq.conf.RenderNameStyle;
-import org.jooq.conf.Settings;
 import org.jooq.exception.DataAccessException;
-import org.jooq.impl.Factory;
+import org.jooq.impl.DSL;
 
 /**
  * This class creates and uses a SQL database with
@@ -118,10 +116,10 @@ public class UserDatabase {
 	}
 
 	private void executeQuery(final Connection connection, final String sql) throws DataAccessException {
-		final Factory factory = createJooqFactory(connection);
+		final DSLContext dslContext = createJooqDslContext(connection);
 
 		try {
-			factory.execute(sql);
+			dslContext.execute(sql);
 		} catch (DataAccessException e) {
 			System.out.println("createDatabase(): query failed: " + sql);
 			e.printStackTrace();
@@ -150,14 +148,15 @@ public class UserDatabase {
 	 * @param connection
 	 * @return
 	 */
-	private Factory createJooqFactory(final Connection connection) {
-		final Factory factory = new Factory(connection, SqlUtils.getJooqSqlDialect(serverDetails.hostingMode));
+	private DSLContext createJooqDslContext(final Connection connection) {
+		final DSLContext dslContext = DSL.using(connection, SqlUtils.getJooqSqlDialect(serverDetails.hostingMode));
 		
-		final Settings settings = factory.getSettings();
-		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
-		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
+		//TODO: Do this in jooq 3?
+		//TODO: final Settings settings = dslContext.getSettings();
+		//settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
+		//settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
 
-		return factory;
+		return dslContext;
 	}
 
 	public boolean createDatabase() {
@@ -237,17 +236,17 @@ public class UserDatabase {
 	} 
 
 	void createUser(final String username, final String password) {
-		final Factory factory = createJooqFactory(null);
+		final DSLContext dslContext = createJooqDslContext(null);
 
-		final Table<Record> table = Factory.tableByName(TABLENAME_USERS);
-		final InsertSetStep<Record> insertSetStep = factory.insertInto(table);
+		final Table<Record> table = DSL.tableByName(TABLENAME_USERS);
+		final InsertSetStep<Record> insertSetStep = dslContext.insertInto(table);
 		
 		//TODO: Use constants:
-		final Field<Object> fieldUsername = Factory.fieldByName("username"); //TODO: Avoid recreating this.
+		final Field<Object> fieldUsername = DSL.fieldByName("username"); //TODO: Avoid recreating this.
 		InsertSetMoreStep<Record> step = insertSetStep.set(fieldUsername, username);
-		final Field<Object> fieldPassword = Factory.fieldByName("password");
+		final Field<Object> fieldPassword = DSL.fieldByName("password");
 		step = step.set(fieldPassword, password);
-		final Field<Object> fieldEnabled = Factory.fieldByName("enabled");
+		final Field<Object> fieldEnabled = DSL.fieldByName("enabled");
 		step = step.set(fieldEnabled, true);
 		
 		InsertFinalStep<Record> finalStep = step;
@@ -274,10 +273,10 @@ public class UserDatabase {
 	}
 
 	void removeUser(final String username) {
-		final Factory factory = createJooqFactory(null);
+		final DSLContext dslContext = createJooqDslContext(null);
 
-		final Table<Record> table = Factory.tableByName(TABLENAME_USERS); //TODO: Avoid recreating this.
-		final DeleteWhereStep<Record> deleteWhereStep = factory.delete(table);
+		final Table<Record> table = DSL.tableByName(TABLENAME_USERS); //TODO: Avoid recreating this.
+		final DeleteWhereStep<Record> deleteWhereStep = dslContext.delete(table);
 
 		final org.jooq.Field<Object> field = SqlUtils.createField(TABLENAME_USERS, "username");
 		final Condition condition = field.equal(username);
@@ -418,15 +417,15 @@ public class UserDatabase {
 	 * @return
 	 */
 	public boolean userExists(String username) {
-		final Factory factory = createJooqFactory(null);
+		final DSLContext dslContext = createJooqDslContext(null);
 
-		SelectSelectStep selectStep = factory.select();
+		SelectSelectStep<Record> selectStep = dslContext.select();
 		selectStep = selectStep.select(SqlUtils.createField(TABLENAME_USERS, "username")); //TODO: Cache this. //TODO: Use prepared statements.
-		final SelectJoinStep selectJoinStep = selectStep.from(TABLENAME_USERS);
+		final SelectJoinStep<Record> selectJoinStep = selectStep.from(TABLENAME_USERS);
 		
 		final Condition condition = buildUserWhereExpression(username);
-		final SelectConditionStep conditionStep = selectJoinStep.where(condition);
-		final SelectFinalStep finalStep = conditionStep;
+		final SelectConditionStep<Record> conditionStep = selectJoinStep.where(condition);
+		final SelectFinalStep<Record> finalStep = conditionStep;
 		
 		//TODO: Make sure this is cached:
 		final Connection connection = createConnectionToDatabase();
