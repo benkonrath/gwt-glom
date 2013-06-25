@@ -88,7 +88,7 @@ public abstract class ListTable extends Composite {
 			if (numNonEmptyRows < getMinNumVisibleRows()) {
 				NumberFormat formatter = NumberFormat.getFormat("#,###");
 				return formatter.format(1) + "-" + formatter.format(numNonEmptyRows) + " of "
-						+ formatter.format(numNonEmptyRows);
+				+ formatter.format(numNonEmptyRows);
 			} else {
 				return super.createText();
 			}
@@ -358,16 +358,13 @@ public abstract class ListTable extends Composite {
 	public abstract int getNumNonEmptyRows();
 
 	/*
-	 * (non-Javadoc)
+	 * Sets the width of the navigation button column to be as small as possible.
 	 * 
 	 * @see com.google.gwt.user.client.ui.Widget#onLoad()
 	 */
 	@Override
 	protected void onLoad() {
 
-		/*
-		 * Set the width of the navigation button column to be as small as possible.
-		 */
 		// The navigationButtonColumn width will be null if it hasn't been set. This indicates that the column width
 		// hasn't been disabled with the hideNavigationButtons() or been set with this method. The width of the
 		// navigation button column shouldn't be changed once it's set.
@@ -387,7 +384,7 @@ public abstract class ListTable extends Composite {
 			doc.getBody().appendChild(navigationButton);
 			int buttonWidth = navigationButton.getOffsetWidth();
 
-			// remove the div from the from the document
+			// remove the div from the document
 			doc.getBody().removeChild(navigationButton);
 			navigationButton = null;
 
