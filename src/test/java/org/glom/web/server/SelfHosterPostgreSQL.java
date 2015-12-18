@@ -302,6 +302,10 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	private static String getPathToPostgresExecutable(final String string) {
 		final List<String> dirPaths = new ArrayList<String>();
 		dirPaths.add("/usr/bin");
+		dirPaths.add("/usr/lib/postgresql/9.5/bin");
+		dirPaths.add("/usr/lib/postgresql/9.4/bin");
+		dirPaths.add("/usr/lib/postgresql/9.3/bin");
+		dirPaths.add("/usr/lib/postgresql/9.2/bin");
 		dirPaths.add("/usr/lib/postgresql/9.1/bin");
 		dirPaths.add("/usr/lib/postgresql/9.0/bin");
 		dirPaths.add("/usr/lib/postgresql/8.4/bin");
