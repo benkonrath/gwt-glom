@@ -1477,11 +1477,6 @@ public class Document {
 			return null;
 		}
 
-		if (this == null) {
-			Log.error("document is null.");
-			return null;
-		}
-
 		if (getTableIsHidden(navigationTableName)) {
 			Log.error("navigation_table_name indicates a hidden table: " + navigationTableName);
 			return null;
@@ -1499,9 +1494,6 @@ public class Document {
 	 * @return
 	 */
 	private UsesRelationship getPortalNavigationRelationshipAutomatic(final LayoutItemPortal portal) {
-		if (this == null) {
-			return null;
-		}
 
 		// If the related table is not hidden then we can just navigate to that:
 		final String direct_related_table_name = portal.getTableUsed("" /* parent table - not relevant */);
@@ -1539,10 +1531,6 @@ public class Document {
 	private LayoutItemField getPortalFieldIsFromNonHiddenRelatedRecord(final LayoutItemPortal portal) {
 		// Find the first field that is from a non-hidden related table.
 
-		if (this == null) {
-			return null;
-		}
-
 		final LayoutItemField result = null;
 
 		final String parent_table_name = portal.getTableUsed("" /* parent table - not relevant */);
@@ -1571,11 +1559,6 @@ public class Document {
 	 */
 	private Relationship getPortalFieldIdentifiesNonHiddenRelatedRecord(final LayoutItemPortal portal) {
 		// Find the first field that is from a non-hidden related table.
-
-		if (this == null) {
-			Log.error("document is null");
-			return null;
-		}
 
 		final String parent_table_name = portal.getTableUsed("" /* parent table - not relevant */);
 
