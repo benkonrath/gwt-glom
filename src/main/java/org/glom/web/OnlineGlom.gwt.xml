@@ -21,9 +21,7 @@
 	<!-- The excludes are necessary to make the Eclipse Google -> GWT Compile feature work,
 	which could be useful for debugging. These excludes are not necessary for the maven build.  -->
 	<source path='client' excludes='**/*Test.java,**/GwtTest*.java'/>
-	<source path='shared' excludes='**/*Test.java,**/GwtTest*.java'/>/>
-
-	&lt;source path='client'
+	<source path='shared' excludes='**/*Test.java,**/GwtTest*.java'/>
 
 	<!-- Use ClientFactoryImpl by default -->
 	<replace-with class="org.glom.web.client.ClientFactoryImpl">
