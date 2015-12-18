@@ -435,7 +435,7 @@ public class SelfHosterMySQL extends SelfHoster {
 			return false;
 		}
 
-		// Note that initdb returns this error if we split the arguments more,
+		// Note that mysql_install_db returns this error if we split the arguments more,
 		// for instance splitting -D and dbDirData into separate strings:
 		// too many command-line arguments (first is "(null)")
 		// TODO: If we quote tempPwFile then initdb says that it cannot find it.
@@ -446,7 +446,11 @@ public class SelfHosterMySQL extends SelfHoster {
 		if (StringUtils.isEmpty(commandPath)) {
 			System.out.println("initialize(): getPathToMysqlExecutable(mysql_install_db) failed.");
 		} else {
-			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "--no-defaults", "--datadir=" + shellQuote(dbDirData));
+			//The --keep-my-cnf option is only needed for MySQL 5.6, to stop it trying to install
+			//a system-wide /usr/my.cnf file which, of course, we cannot do.
+			//As of MySQL 5.7, this doesn't happen so the --keep-my-cn option isn't needed:
+			//See http://dev.mysql.com/doc/refman/5.7/en/mysql-install-db.html#option_mysql_install_db_keep-my-cnf
+			final ProcessBuilder commandInitdb = new ProcessBuilder(commandPath, "--no-defaults", "--keep-my-cnf", "--datadir=" + shellQuote(dbDirData));
 
 			// Note that --pwfile takes the password from the first line of a file. It's an alternative to supplying it
 			// when
