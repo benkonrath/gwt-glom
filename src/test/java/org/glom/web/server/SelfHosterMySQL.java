@@ -435,12 +435,6 @@ public class SelfHosterMySQL extends SelfHoster {
 			return false;
 		}
 
-		// Note that mysql_install_db returns this error if we split the arguments more,
-		// for instance splitting -D and dbDirData into separate strings:
-		// too many command-line arguments (first is "(null)")
-		// TODO: If we quote tempPwFile then initdb says that it cannot find it.
-		// Note: If we use "-D " instead of "-D" then the initdb seems to make the space part of the filepath,
-		// though that does not happen with the normal command line.
 		boolean result = false;
 		final String commandPath = getPathToMysqlExecutable("mysql_install_db");
 		if (StringUtils.isEmpty(commandPath)) {
