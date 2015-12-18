@@ -429,7 +429,10 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		// Make sure to use double quotes for the executable path, because the
 		// CreateProcess() API used on Windows does not support single quotes.
-		final String dbDirData = getSelfHostingDataPath(false /* create */);
+		//
+		// We pass create=true, because. as of at least MySQL 5.6, mysql_install_db
+		// wants the directory to exist already:
+		final String dbDirData = getSelfHostingDataPath(true /* create */);
 		if(dbDirData.isEmpty()) {
 			System.out.println("initialize(): getSelfHostingDataPath returned no path.");
 			return false;
