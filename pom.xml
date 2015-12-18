@@ -37,7 +37,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Convenience property to set the GWT version -->
-		<gwt.version>2.5.1</gwt.version>
+		<gwt.version>2.6.1</gwt.version>
 
 		<!-- Make mvn gwt:run use SSL (HTTPS) when running Jetty.
 		     Login will fail (on purpose) if run as regular HTTP.
@@ -243,7 +243,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>2.6.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -338,7 +338,7 @@
 									<pluginExecutionFilter>
 										<groupId>org.codehaus.mojo</groupId>
 										<artifactId>gwt-maven-plugin</artifactId>
-										<versionRange>[2.5.1,)</versionRange>
+										<versionRange>[2.6.1,)</versionRange>
 										<goals>
 											<goal>i18n</goal>
 										</goals>
