@@ -82,7 +82,7 @@ public class Utils {
 		// Hidden elements are invisible, don't respond to events and are not part of the tab order. But they will take
 		// up space.
 		div.getStyle().setVisibility(Visibility.HIDDEN);
-		div.appendChild(widget.getElement().<com.google.gwt.user.client.Element> cast());
+		div.appendChild(widget.getElement());
 
 		doc.getBody().appendChild(div);
 		final int height = widget.getOffsetHeight();

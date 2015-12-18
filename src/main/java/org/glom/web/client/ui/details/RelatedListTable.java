@@ -212,7 +212,7 @@ public class RelatedListTable extends ListTable {
 		final Document doc = Document.get();
 		com.google.gwt.dom.client.Element div = doc.createDivElement();
 		div.getStyle().setVisibility(Visibility.HIDDEN);
-		div.appendChild(group.getElement().<com.google.gwt.user.client.Element> cast());
+		div.appendChild(group.getElement());
 		doc.getBody().appendChild(div);
 		final int relatedListTableHeight = group.getElement().getFirstChildElement().getOffsetHeight();
 
