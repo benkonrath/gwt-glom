@@ -30,7 +30,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -77,7 +76,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		});
 
 		final FlowPanel titlebox = new FlowPanel();
-		DOM.setElementAttribute(titlebox.getElement(), "id", "titlebox");
+		titlebox.getElement().setAttribute("id", "titlebox");
 		titlebox.add(documentTitleLabel);
 
 		titlebox.add(localesChooser);
@@ -90,7 +89,7 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 		documentTitleLabel.getElement().getStyle().setOpacity(0);
 		documentTitleLabel.setText("A");
 		documentTitleLabel.addStyleName("document-title");
-		DOM.setElementAttribute(documentTitleLabel.getElement(), "id", "document-title");
+		documentTitleLabel.getElement().setAttribute("id", "document-title");
 
 		reportsLabel.setStyleName("reportslabel"); // TODO: This is tedious.
 		reportsChooser.setStyleName("reportschooser"); // TODO: This is tedious.
@@ -99,11 +98,11 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 
 		// headbox with the table selector
 		final FlowPanel headbox = new FlowPanel();
-		DOM.setElementAttribute(headbox.getElement(), "id", "headbox");
+		headbox.getElement().setAttribute("id", "headbox");
 		headbox.add(tablesChooser);
 
 		final FlowPanel searchbox = new FlowPanel();
-		DOM.setElementAttribute(searchbox.getElement(), "id", "searchbox");
+		searchbox.getElement().setAttribute("id", "searchbox");
 		searchbox.add(searchLabel);
 		searchbox.add(searchTextBox);
 		headbox.add(searchbox);
