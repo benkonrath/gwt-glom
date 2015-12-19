@@ -286,12 +286,12 @@ public abstract class ListTable extends Composite {
 				public Boolean getValue(final DataItem[] row) {
 					if (row.length == 1 && row[0] == null) {
 						// an empty row
-						return null;
+						return false;
 					}
 
 					if (j >= row.length) {
 						GWT.log("addColumn(): j=" + j + " is out of range. length=" + row.length);
-						return null;
+						return false;
 					} else {
 						return row[j].getBoolean();
 					}
