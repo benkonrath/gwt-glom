@@ -728,10 +728,16 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	 *
 	 */
 	public boolean cleanup() {
+		if (document == null) {
+			//There can be nothing to cleanup,
+			//though this would be unexpected.
+			return true;
+		}
+
 		boolean result = true;
 
 		// Stop the server:
-		if ((document != null) && (document.getConnectionPort() != 0)) {
+		if (document.getConnectionPort() != 0) {
 			final String dbDirData = getSelfHostingDataPath(false);
 
 			// -D specifies the data directory.

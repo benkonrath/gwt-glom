@@ -734,10 +734,16 @@ public class SelfHosterMySQL extends SelfHoster {
 	 *
 	 */
 	public boolean cleanup() {
+		if (document == null) {
+			//There can be nothing to cleanup,
+			//though this would be unexpected.
+			return true;
+		}
+
 		boolean result = true;
 
 		// Stop the server:
-		if ((document != null) && (document.getConnectionPort() != 0)) {
+		if (document.getConnectionPort() != 0) {
 			final List<String> progAndArgs = getMysqlAdminCommand(savedUsername, savedPassword);
 			progAndArgs.add("shutdown");
 
