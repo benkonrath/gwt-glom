@@ -347,8 +347,8 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		try {
 			filePwFile = File.createTempFile("glom_initdb_pwfile", "");
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("initialize(): createTempFile() failed.");
+			return false;
 		}
 		final String tempPwFile = filePwFile.getPath();
 
