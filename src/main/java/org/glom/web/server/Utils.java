@@ -53,7 +53,10 @@ public class Utils {
 	}
 
 	public static String getFileName(final String fileURI) {
-		final String[] splitURI = fileURI.split(File.separator);
+		//Using just File.separator in a regex isn't portable,
+		//(FindBugs complains about it.)
+		final String separator = File.separatorChar == '\\' ? "\\\\" : File.separator;
+		final String[] splitURI = fileURI.split(separator);
 		return splitURI[splitURI.length - 1];
 	}
 
