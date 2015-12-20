@@ -367,8 +367,7 @@ public class SelfHoster {
 	protected String portNumberAsText(final int portNumber) {
 		final NumberFormat format = NumberFormat.getInstance(Locale.US);
 		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
-		final String portAsText = format.format(portNumber);
-		return portAsText;
+		return format.format(portNumber);
 	}
 	
 	/**

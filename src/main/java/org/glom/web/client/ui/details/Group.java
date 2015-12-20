@@ -125,11 +125,9 @@ public class Group extends Composite {
 			return detailsCell;
 
 		} else if (layoutItem instanceof LayoutItemText) {
-			final DetailsCell detailsCell = new DetailsCell((LayoutItemText) layoutItem);
-			return detailsCell;
+			return new DetailsCell((LayoutItemText) layoutItem);
 		} else if (layoutItem instanceof LayoutItemImage) {
-			final DetailsCell detailsCell = new DetailsCell((LayoutItemImage) layoutItem);
-			return detailsCell;
+			return new DetailsCell((LayoutItemImage) layoutItem);
 		} else if (layoutItem instanceof LayoutGroup) {
 
 			if (layoutItem instanceof LayoutItemPortal) {

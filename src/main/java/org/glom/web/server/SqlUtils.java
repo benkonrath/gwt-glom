@@ -300,8 +300,7 @@ public class SqlUtils {
 		settings.setRenderNameStyle(RenderNameStyle.QUOTED); // TODO: This doesn't seem to have any effect.
 		settings.setRenderKeywordStyle(RenderKeywordStyle.UPPER); // TODO: Just to make debugging nicer.
 
-		final SelectSelectStep selectStep = factory.select();
-		return selectStep;
+		return factory.select();
 	}
 
 	private static SelectFinalStep buildSqlSelectStepWithWhereClause(final String tableName,
