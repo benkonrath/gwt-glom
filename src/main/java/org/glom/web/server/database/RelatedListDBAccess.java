@@ -199,8 +199,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		}
 
 		final List<Field> fields = document.getTableFields(tableName);
-		for (int i = 0; i < fields.size(); i++) {
-			final Field field = fields.get(i);
+		for (final Field field : fields) {
 			if (fieldName.equals(field.getName())) {
 				return field;
 			}

@@ -623,8 +623,8 @@ public class ReportGenerator {
 
 		// Avoid adding duplicate fields,
 		// because JasperDesign.addField() throws a "Duplicate declaration of field" exception.
-		for (int i = 0; i < fieldsToGet.size(); ++i) {
-			final UsesRelationship thisField = fieldsToGet.get(i);
+		for (LayoutItemField aFieldsToGet : fieldsToGet) {
+			final UsesRelationship thisField = aFieldsToGet;
 			if (thisField.equals(libglomLayoutItemField)) {
 				return fieldName;
 			}

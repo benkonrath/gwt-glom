@@ -108,9 +108,7 @@ public abstract class DBAccess {
 		final List<LayoutItemField> listLayoutFIelds = new ArrayList<>();
 
 		// We will show the fields that the document says we should:
-		for (int i = 0; i < layoutGroupVec.size(); i++) {
-			final LayoutGroup layoutGroup = layoutGroupVec.get(i);
-
+		for (final LayoutGroup layoutGroup : layoutGroupVec) {
 			// satisfy the precondition of getDetailsLayoutGroup(String tableName, LayoutGroup
 			// libglomLayoutGroup)
 			if (layoutGroup == null) {

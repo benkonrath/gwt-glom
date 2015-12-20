@@ -208,8 +208,7 @@ public class DocumentTest {
 	public void testGetNumericFormat() {
 		final List<String> tableNames = document.getTableNames();
 
-		for (int i = 0; i < tableNames.size(); i++) {
-			final String table = tableNames.get(i);
+		for (final String table : tableNames) {
 			final List<LayoutGroup> layoutList = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, table);
 			assertTrue(!layoutList.isEmpty());
 			final LayoutGroup firstgroup = layoutList.get(0);

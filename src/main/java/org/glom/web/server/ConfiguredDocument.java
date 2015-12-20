@@ -297,8 +297,7 @@ final class ConfiguredDocument {
 
 			final List<Field> fieldsVec = document.getTableFields(tableName);
 			libglomLayoutGroup = new LayoutGroup();
-			for (int i = 0; i < fieldsVec.size(); i++) {
-				final Field field = fieldsVec.get(i);
+			for (final Field field : fieldsVec) {
 				final LayoutItemField layoutItemField = new LayoutItemField();
 				layoutItemField.setFullFieldDetails(field);
 				libglomLayoutGroup.addItem(layoutItemField);
