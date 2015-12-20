@@ -17,6 +17,7 @@ public class GwtTestStringUtils extends GwtTest {
 	public void testIsEmpty() {
 		assertTrue(StringUtils.isEmpty(""));
 		assertTrue(StringUtils.isEmpty(null));
+		//noinspection RedundantStringConstructorCall
 		assertTrue(StringUtils.isEmpty(new String()));
 		assertFalse(StringUtils.isEmpty("something"));
 	}
@@ -29,6 +30,7 @@ public class GwtTestStringUtils extends GwtTest {
 		assertEquals("something", StringUtils.defaultString("something"));
 	}
 
+	@SuppressWarnings("RedundantStringConstructorCall")
 	@Test
 	public void testEquals() {
 		assertTrue(StringUtils.equals(null, null));
