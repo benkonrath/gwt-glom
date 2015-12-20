@@ -113,7 +113,6 @@ public class Document {
 	}
 
 	private String fileURI = "";
-	private org.w3c.dom.Document xmlDocument = null;
 
 	private final Translatable databaseTitle = new Translatable();
 	private String translationOriginalLocale = "";
@@ -238,6 +237,7 @@ public class Document {
 			return false;
 		}
 
+		org.w3c.dom.Document xmlDocument;
 		try {
 			xmlDocument = documentBuilder.parse(fileURI);
 		} catch (final SAXException e) {

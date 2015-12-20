@@ -72,7 +72,6 @@ public class FlowTable extends Composite {
 		}
 	}
 
-	private final FlexTable table = new FlexTable();
 	private final ArrayList<FlowPanel> columns = new ArrayList<FlowPanel>();
 	private final ArrayList<FlowTableItem> items = new ArrayList<FlowTableItem>();
 
@@ -83,6 +82,7 @@ public class FlowTable extends Composite {
 
 	public FlowTable(int columnCount) {
 		// get the formatters
+		FlexTable table = new FlexTable();
 		final CellFormatter cellFormatter = table.getFlexCellFormatter();
 		final ColumnFormatter columnFormatter = table.getColumnFormatter();
 		final RowFormatter rowFormater = table.getRowFormatter();
