@@ -42,7 +42,7 @@ public interface OnlineGlomServiceAsync {
 	final class Util {
 		private static OnlineGlomServiceAsync instance;
 
-		public static final OnlineGlomServiceAsync getInstance() {
+		public static OnlineGlomServiceAsync getInstance() {
 			if (instance == null) {
 				instance = (OnlineGlomServiceAsync) GWT.create(OnlineGlomService.class);
 			}

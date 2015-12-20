@@ -30,7 +30,7 @@ public interface OnlineGlomLoginServiceAsync {
 	final class Util {
 		private static OnlineGlomLoginServiceAsync instance;
 
-		public static final OnlineGlomLoginServiceAsync getInstance() {
+		public static OnlineGlomLoginServiceAsync getInstance() {
 			if (instance == null) {
 				instance = (OnlineGlomLoginServiceAsync) GWT.create(OnlineGlomLoginService.class);
 			}
