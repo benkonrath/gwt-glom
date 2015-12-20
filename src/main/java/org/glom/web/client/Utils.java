@@ -102,7 +102,7 @@ public class Utils {
 			primaryKeyItem.setNumber(dataItem.getNumber());
 			break;
 		case TYPE_TEXT:
-			primaryKeyItem.setText(new String(dataItem.getText() == null ? "" : dataItem.getText()));
+			primaryKeyItem.setText(dataItem.getText() == null ? "" : dataItem.getText());
 			break;
 		default:
 			GWT.log("getTypedDataItem(): Unsupported Glom Field Type: " + glomFieldType);
