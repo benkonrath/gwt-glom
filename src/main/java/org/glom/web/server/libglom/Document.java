@@ -275,18 +275,25 @@ public class Document {
 		final Element nodeConnection = getElementByName(rootNode, NODE_CONNECTION);
 		if (nodeConnection != null) {
 			final String strHostingMode = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_HOSTING_MODE);
-			if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL)) {
-				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
-			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF)) {
-				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
-			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_MYSQL_CENTRAL)) {
-				hostingMode = HostingMode.HOSTING_MODE_MYSQL_CENTRAL;
-			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_MYSQL_SELF)) {
-				hostingMode = HostingMode.HOSTING_MODE_MYSQL_SELF;
-			} else if (strHostingMode.equals(ATTRIBUTE_CONNECTION_HOSTING_SQLITE)) {
-				hostingMode = HostingMode.HOSTING_MODE_SQLITE;
-			} else {
-				hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
+			switch (strHostingMode) {
+				case ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL:
+					hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
+					break;
+				case ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF:
+					hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
+					break;
+				case ATTRIBUTE_CONNECTION_HOSTING_MYSQL_CENTRAL:
+					hostingMode = HostingMode.HOSTING_MODE_MYSQL_CENTRAL;
+					break;
+				case ATTRIBUTE_CONNECTION_HOSTING_MYSQL_SELF:
+					hostingMode = HostingMode.HOSTING_MODE_MYSQL_SELF;
+					break;
+				case ATTRIBUTE_CONNECTION_HOSTING_SQLITE:
+					hostingMode = HostingMode.HOSTING_MODE_SQLITE;
+					break;
+				default:
+					hostingMode = HostingMode.HOSTING_MODE_POSTGRES_SELF;
+					break;
 			}
 
 			connectionServer = nodeConnection.getAttribute(ATTRIBUTE_CONNECTION_SERVER);
@@ -780,12 +787,16 @@ public class Document {
 				final Element element = (Element) node;
 				final String name = element.getAttribute(ATTRIBUTE_NAME);
 				final List<LayoutGroup> listLayoutGroups = loadLayoutNode(element, tableName, name);
-				if (name.equals(LAYOUT_NAME_DETAILS)) {
-					info.layoutGroupsDetails = listLayoutGroups;
-				} else if (name.equals(LAYOUT_NAME_LIST)) {
-					info.layoutGroupsList = listLayoutGroups;
-				} else {
-					Log.error(documentID, "loadTableNode(): unexpected layout name: " + name);
+				switch (name) {
+					case LAYOUT_NAME_DETAILS:
+						info.layoutGroupsDetails = listLayoutGroups;
+						break;
+					case LAYOUT_NAME_LIST:
+						info.layoutGroupsList = listLayoutGroups;
+						break;
+					default:
+						Log.error(documentID, "loadTableNode(): unexpected layout name: " + name);
+						break;
 				}
 			}
 		}
@@ -846,18 +857,24 @@ public class Document {
 
 				final Element element = (Element) nodeLayoutGroup;
 				final String tagName = element.getTagName();
-				if (tagName.equals(NODE_DATA_LAYOUT_GROUP)) {
-					final LayoutGroup group = new LayoutGroup();
-					loadDataLayoutGroup(element, group, tableName, path);
-					result.add(group);
-				} else if (tagName.equals(NODE_DATA_LAYOUT_NOTEBOOK)) {
-					final LayoutItemNotebook group = new LayoutItemNotebook();
-					loadDataLayoutGroup(element, group, tableName, path);
-					result.add(group);
-				} else if (tagName.equals(NODE_DATA_LAYOUT_PORTAL)) {
-					final LayoutItemPortal portal = new LayoutItemPortal();
-					loadDataLayoutPortal(element, portal, tableName, path);
-					result.add(portal);
+				switch (tagName) {
+					case NODE_DATA_LAYOUT_GROUP: {
+						final LayoutGroup group = new LayoutGroup();
+						loadDataLayoutGroup(element, group, tableName, path);
+						result.add(group);
+						break;
+					}
+					case NODE_DATA_LAYOUT_NOTEBOOK: {
+						final LayoutItemNotebook group = new LayoutItemNotebook();
+						loadDataLayoutGroup(element, group, tableName, path);
+						result.add(group);
+						break;
+					}
+					case NODE_DATA_LAYOUT_PORTAL:
+						final LayoutItemPortal portal = new LayoutItemPortal();
+						loadDataLayoutPortal(element, portal, tableName, path);
+						result.add(portal);
+						break;
 				}
 			}
 		}
@@ -977,34 +994,49 @@ public class Document {
 			pathChild.indices[depth] = pathIndex;
 			pathIndex++;
 
-			if (tagName.equals(NODE_DATA_LAYOUT_GROUP)) {
-				final LayoutGroup childGroup = new LayoutGroup();
-				loadDataLayoutGroup(element, childGroup, tableName, pathChild);
-				group.addItem(childGroup);
-			} else if (tagName.equals(NODE_DATA_LAYOUT_NOTEBOOK)) {
-				final LayoutItemNotebook childGroup = new LayoutItemNotebook();
-				loadDataLayoutGroup(element, childGroup, tableName, pathChild);
-				group.addItem(childGroup);
-			} else if (tagName.equals(NODE_DATA_LAYOUT_PORTAL)) {
-				final LayoutItemPortal childGroup = new LayoutItemPortal();
-				loadDataLayoutPortal(element, childGroup, tableName, pathChild);
-				group.addItem(childGroup);
-			} else if (tagName.equals(NODE_DATA_LAYOUT_ITEM)) {
-				final LayoutItemField item = new LayoutItemField();
-				loadDataLayoutItemField(element, item, tableName);
-				group.addItem(item);
-			} else if (tagName.equals(NODE_DATA_LAYOUT_TEXTOBJECT)) {
-				final LayoutItemText item = new LayoutItemText();
-				loadDataLayoutItemText(element, item);
-				group.addItem(item);
-			} else if (tagName.equals(NODE_DATA_LAYOUT_IMAGEOBJECT)) {
-				final LayoutItemImage item = new LayoutItemImage();
-				loadDataLayoutItemImage(element, item, pathChild);
-				group.addItem(item);
-			} else if (tagName.equals(NODE_DATA_LAYOUT_ITEM_GROUPBY)) {
-				final LayoutItemGroupBy item = new LayoutItemGroupBy();
-				loadDataLayoutItemGroupBy(element, item, tableName, pathChild);
-				group.addItem(item);
+			switch (tagName) {
+				case NODE_DATA_LAYOUT_GROUP: {
+					final LayoutGroup childGroup = new LayoutGroup();
+					loadDataLayoutGroup(element, childGroup, tableName, pathChild);
+					group.addItem(childGroup);
+					break;
+				}
+				case NODE_DATA_LAYOUT_NOTEBOOK: {
+					final LayoutItemNotebook childGroup = new LayoutItemNotebook();
+					loadDataLayoutGroup(element, childGroup, tableName, pathChild);
+					group.addItem(childGroup);
+					break;
+				}
+				case NODE_DATA_LAYOUT_PORTAL: {
+					final LayoutItemPortal childGroup = new LayoutItemPortal();
+					loadDataLayoutPortal(element, childGroup, tableName, pathChild);
+					group.addItem(childGroup);
+					break;
+				}
+				case NODE_DATA_LAYOUT_ITEM: {
+					final LayoutItemField item = new LayoutItemField();
+					loadDataLayoutItemField(element, item, tableName);
+					group.addItem(item);
+					break;
+				}
+				case NODE_DATA_LAYOUT_TEXTOBJECT: {
+					final LayoutItemText item = new LayoutItemText();
+					loadDataLayoutItemText(element, item);
+					group.addItem(item);
+					break;
+				}
+				case NODE_DATA_LAYOUT_IMAGEOBJECT: {
+					final LayoutItemImage item = new LayoutItemImage();
+					loadDataLayoutItemImage(element, item, pathChild);
+					group.addItem(item);
+					break;
+				}
+				case NODE_DATA_LAYOUT_ITEM_GROUPBY: {
+					final LayoutItemGroupBy item = new LayoutItemGroupBy();
+					loadDataLayoutItemGroupBy(element, item, tableName, pathChild);
+					group.addItem(item);
+					break;
+				}
 			}
 		}
 	}
@@ -1143,18 +1175,25 @@ public class Document {
 		Field.GlomFieldType fieldType = Field.GlomFieldType.TYPE_INVALID;
 		final String fieldTypeStr = element.getAttribute(ATTRIBUTE_FIELD_TYPE);
 		if (!StringUtils.isEmpty(fieldTypeStr)) {
-			if (fieldTypeStr.equals("Boolean")) {
-				fieldType = Field.GlomFieldType.TYPE_BOOLEAN;
-			} else if (fieldTypeStr.equals("Date")) {
-				fieldType = Field.GlomFieldType.TYPE_DATE;
-			} else if (fieldTypeStr.equals("Image")) {
-				fieldType = Field.GlomFieldType.TYPE_IMAGE;
-			} else if (fieldTypeStr.equals("Number")) {
-				fieldType = Field.GlomFieldType.TYPE_NUMERIC;
-			} else if (fieldTypeStr.equals("Text")) {
-				fieldType = Field.GlomFieldType.TYPE_TEXT;
-			} else if (fieldTypeStr.equals("Time")) {
-				fieldType = Field.GlomFieldType.TYPE_TIME;
+			switch (fieldTypeStr) {
+				case "Boolean":
+					fieldType = GlomFieldType.TYPE_BOOLEAN;
+					break;
+				case "Date":
+					fieldType = GlomFieldType.TYPE_DATE;
+					break;
+				case "Image":
+					fieldType = GlomFieldType.TYPE_IMAGE;
+					break;
+				case "Number":
+					fieldType = GlomFieldType.TYPE_NUMERIC;
+					break;
+				case "Text":
+					fieldType = GlomFieldType.TYPE_TEXT;
+					break;
+				case "Time":
+					fieldType = GlomFieldType.TYPE_TIME;
+					break;
 			}
 		}
 
@@ -1336,12 +1375,13 @@ public class Document {
 			return new ArrayList<>();
 		}
 
-		if (layoutName.equals(LAYOUT_NAME_DETAILS)) {
-			return info.layoutGroupsDetails;
-		} else if (layoutName.equals(LAYOUT_NAME_LIST)) {
-			return info.layoutGroupsList;
-		} else {
-			return new ArrayList<>();
+		switch (layoutName) {
+			case LAYOUT_NAME_DETAILS:
+				return info.layoutGroupsDetails;
+			case LAYOUT_NAME_LIST:
+				return info.layoutGroupsList;
+			default:
+				return new ArrayList<>();
 		}
 	}
 
