@@ -30,10 +30,9 @@ import org.glom.web.shared.libglom.layout.LayoutGroup;
  */
 public interface DetailsView extends View {
 
-	public void addGroup(LayoutGroup layoutGroup);
+	void addGroup(LayoutGroup layoutGroup);
 
-	public List<DetailsCell> getCells();
+	List<DetailsCell> getCells();
 
-	public List<Portal> getPortals();
-
+	List<Portal> getPortals();
 }

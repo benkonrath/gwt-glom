@@ -27,7 +27,7 @@ public interface OnlineGlomLoginServiceAsync {
 	/**
 	 * Utility class to get the RPC Async interface from client-side code
 	 */
-	public static final class Util {
+	final class Util {
 		private static OnlineGlomLoginServiceAsync instance;
 
 		public static final OnlineGlomLoginServiceAsync getInstance() {

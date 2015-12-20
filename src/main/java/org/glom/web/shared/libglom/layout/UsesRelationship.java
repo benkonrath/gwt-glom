@@ -29,35 +29,35 @@ import org.glom.web.shared.libglom.Relationship;
  */
 public interface UsesRelationship extends Serializable {
 
-	public abstract void setRelationship(final Relationship relationship);
+	void setRelationship(final Relationship relationship);
 
-	public abstract Relationship getRelationship();
+	Relationship getRelationship();
 
 	/**
 	 * @return
 	 */
-	public abstract boolean getHasRelationshipName();
+	boolean getHasRelationshipName();
 
 	/**
 	 * @param get_related_relationship
 	 */
-	public abstract void setRelatedRelationship(final Relationship relationship);
+	void setRelatedRelationship(final Relationship relationship);
 
-	public abstract Relationship getRelatedRelationship();
+	Relationship getRelatedRelationship();
 
-	public abstract boolean getHasRelatedRelationshipName();
+	boolean getHasRelatedRelationshipName();
 
-	public abstract String getSqlJoinAliasName();
+	String getSqlJoinAliasName();
 
-	public abstract String getSqlTableOrJoinAliasName(String tableName);
+	String getSqlTableOrJoinAliasName(String tableName);
 
 	/**
 	 * @param string
 	 * @return
 	 */
-	public abstract String getTableUsed(String string);
+	String getTableUsed(String string);
 
-	public abstract String getRelationshipNameUsed();
+	String getRelationshipNameUsed();
 
-	public abstract String getTitleUsed(String parentTableTitle, String locale);
+	String getTitleUsed(String parentTableTitle, String locale);
 }

@@ -27,11 +27,11 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface View extends IsWidget {
 
-	public interface Presenter {
+	interface Presenter {
 		void goTo(Place place);
 	}
 
-	public void setPresenter(Presenter presenter);
+	void setPresenter(Presenter presenter);
 
 	void clear();
 }

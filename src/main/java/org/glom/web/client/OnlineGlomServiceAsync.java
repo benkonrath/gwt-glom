@@ -39,7 +39,7 @@ public interface OnlineGlomServiceAsync {
 	/**
 	 * Utility class to get the RPC Async interface from client-side code
 	 */
-	public static final class Util {
+	final class Util {
 		private static OnlineGlomServiceAsync instance;
 
 		public static final OnlineGlomServiceAsync getInstance() {

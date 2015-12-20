@@ -32,22 +32,22 @@ public interface DocumentLoginView extends View {
 	 * 
 	 * @param clickHandler
 	 */
-	public void setClickLoginHandler(final ClickHandler clickHandler);
+	void setClickLoginHandler(final ClickHandler clickHandler);
 	
 	/** Specify a handler to be called when the user clicks the cancel button
 	 * to cancel the attempt at authentication.
 	 * 
 	 * @param clickHandler
 	 */
-	public void setClickCancelHandler(final ClickHandler clickHandler);
+	void setClickCancelHandler(final ClickHandler clickHandler);
 
-	public void setTextFieldsEnabled(final boolean enabled);
+	void setTextFieldsEnabled(final boolean enabled);
 
-	public String getUsername();
+	String getUsername();
 
-	public String getPassword();
+	String getPassword();
 
-	public void setError();
+	void setError();
 
-	public void clearError();
+	void clearError();
 }
