@@ -614,38 +614,6 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 	}
 
 	/**
-	 */
-	public Connection createConnection(boolean failureExpected) {
-		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
-		//which does not automatically close its connections,
-		//leading to errors because connections are already open.
-		final SqlUtils.JdbcConnectionDetails details = SqlUtils.getJdbcConnectionDetails(document);
-		if (details == null) {
-			return null;
-		}
-		
-		final Properties connectionProps = new Properties();
-		connectionProps.put("user", this.username);
-		connectionProps.put("password", this.password);
-
-		Connection conn = null;
-		try {
-			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
-			DriverManager.setLoginTimeout(10);
-			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
-			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
-		} catch (final SQLException e) {
-			if(!failureExpected) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		return conn;
-	}
-
-	/**
 	 *
 	 */
 	private void progress() {
