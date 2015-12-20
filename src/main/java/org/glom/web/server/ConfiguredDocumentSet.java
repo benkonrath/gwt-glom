@@ -137,7 +137,7 @@ public class ConfiguredDocumentSet {
 				final Document document = new Document(documentID);
 				document.setFileURI("file://" + glomFile.getAbsolutePath());
 				final boolean retval = document.load();
-				if (retval == false) {
+				if (!retval) {
 					final String message = "An error occurred when trying to load file: " + glomFile.getAbsolutePath();
 					Log.error(message);
 					// continue with for loop because there may be other documents in the directory
