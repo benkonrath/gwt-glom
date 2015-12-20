@@ -229,7 +229,7 @@ public class Document {
 
 	public boolean load() {
 		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = null;
+		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = dbf.newDocumentBuilder();
 		} catch (final ParserConfigurationException e) {
@@ -548,7 +548,7 @@ public class Document {
 		final String str = element.getTextContent();
 
 		// Unescape "" to ", because to_file_format() escaped ", as specified by the CSV RFC:
-		String unescaped = "";
+		String unescaped;
 		if (type == GlomFieldType.TYPE_IMAGE) {
 			unescaped = str; // binary data does not have quote characters so we do not bother to escape or unescape it.
 		} else {
@@ -1450,7 +1450,7 @@ public class Document {
 	 *            TODO
 	 */
 	public TableToViewDetails getPortalSuitableTableToViewDetails(final LayoutItemPortal portal) {
-		UsesRelationship navigationRelationship = null;
+		UsesRelationship navigationRelationship;
 
 		// Check whether a relationship was specified:
 		if (portal.getNavigationType() == NavigationType.NAVIGATION_AUTOMATIC) {
@@ -1634,7 +1634,7 @@ public class Document {
 	 */
 	public boolean save() {
 		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = null;
+		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = dbf.newDocumentBuilder();
 		} catch (final ParserConfigurationException e) {
@@ -1651,7 +1651,7 @@ public class Document {
 		rootNode.setAttribute(ATTRIBUTE_TRANSLATION_ORIGINAL_LOCALE, translationOriginalLocale);
 		setAttributeAsBoolean(rootNode, ATTRIBUTE_IS_EXAMPLE, isExample);
 
-		String strHostingMode = "";
+		String strHostingMode;
 		if (hostingMode == HostingMode.HOSTING_MODE_POSTGRES_CENTRAL) {
 			strHostingMode = ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL;
 		} else if (hostingMode == HostingMode.HOSTING_MODE_POSTGRES_SELF) {

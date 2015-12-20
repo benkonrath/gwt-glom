@@ -343,7 +343,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		// initdb creates a new postgres database cluster:
 
 		// Get file:// URI for the tmp/ directory:
-		File filePwFile = null;
+		File filePwFile;
 		try {
 			filePwFile = File.createTempFile("glom_initdb_pwfile", "");
 		} catch (final IOException e) {
@@ -457,7 +457,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 			return false;
 		}
 
-		FileOutputStream output = null;
+		FileOutputStream output;
 		try {
 			output = new FileOutputStream(file);
 		} catch (final FileNotFoundException e) {

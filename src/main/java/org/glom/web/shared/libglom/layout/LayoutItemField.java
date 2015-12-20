@@ -96,7 +96,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 	 * @return
 	 */
 	public String getLayoutDisplayName() {
-		String result = "";
+		String result;
 
 		if (field != null) {
 			result = field.getName();

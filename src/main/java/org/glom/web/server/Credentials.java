@@ -73,7 +73,7 @@ public class Credentials {
 		
 		// Try to recreate the connection,
 		// which might have been invalidated after some time:
-		ComboPooledDataSource authenticatedConnection = null;
+		ComboPooledDataSource authenticatedConnection;
 		try
 		{
 			authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, username, password);

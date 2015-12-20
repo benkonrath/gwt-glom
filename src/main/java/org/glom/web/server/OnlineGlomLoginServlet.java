@@ -73,7 +73,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 		}
 	    
 		final Document document = configuredDoc.getDocument();
-		ComboPooledDataSource authenticatedConnection = null;
+		ComboPooledDataSource authenticatedConnection;
 		try {
 			authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, username, password);
 		} catch (final SQLException e) {

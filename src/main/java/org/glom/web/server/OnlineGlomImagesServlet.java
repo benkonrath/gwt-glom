@@ -121,7 +121,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return;
 		}
 		
-		byte[] bytes = null;
+		byte[] bytes;
 		if(fromDb) {
 			bytes = getImageFromDatabase(req, resp, attrDocumentID, attrTableName, attrPrimaryKeyValue, attrFieldName,
 				configuredDocument, document);
@@ -218,7 +218,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return null;
 		}
 		
-		ResultSet rs = null;
+		ResultSet rs;
 		try {
 			rs = SqlUtils.executeQuery(authenticatedConnection, query);
 		} catch (SQLException e) {
@@ -231,7 +231,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return null;
 		}
 		
-		byte[] bytes = null;
+		byte[] bytes;
 		try {
 			rs.next();
 			bytes = rs.getBytes(1); //This is 1-indexed, not 0-indexed.

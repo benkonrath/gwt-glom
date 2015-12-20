@@ -614,7 +614,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		connectionProps.put("user", username);
 		connectionProps.put("password", password);
 
-		Connection conn = null;
+		Connection conn;
 		try {
 			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
 			//System.out.println("debug: SelfHosterMySQL.createConnection(): before createConnection()");

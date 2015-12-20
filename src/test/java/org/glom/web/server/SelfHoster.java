@@ -129,7 +129,7 @@ public class SelfHoster {
 		command.redirectErrorStream(true);
 
 		// Run the first command, and wait for it to return:
-		Process process = null;
+		Process process;
 		try {
 			process = command.start();
 		} catch (final IOException e) {
@@ -204,7 +204,7 @@ public class SelfHoster {
 
 		// Now run the second command, usually to verify that the first command has really done its work:
 		// We run this repeatedly until it succeeds, to show that the first command has finished.
-		boolean result = false;
+		boolean result;
 		while (true) {
 			result = executeCommandLineAndWait(commandSecond);
 			if (result) {
@@ -386,7 +386,7 @@ public class SelfHoster {
 		connectionProps.put("user", this.username);
 		connectionProps.put("password", this.password);
 
-		Connection conn = null;
+		Connection conn;
 		try {
 			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
 			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");

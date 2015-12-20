@@ -122,7 +122,7 @@ final class ConfiguredDocument {
 				return null;
 			}
 
-			LayoutLocaleMap map = null;
+			LayoutLocaleMap map;
 			if (details) {
 				map = tableLayouts.detailsLayouts;
 			} else {
@@ -139,7 +139,7 @@ final class ConfiguredDocument {
 				put(tableName, tableLayouts);
 			}
 
-			LayoutLocaleMap map = null;
+			LayoutLocaleMap map;
 			if (details) {
 				if (tableLayouts.detailsLayouts == null) {
 					tableLayouts.detailsLayouts = new LayoutLocaleMap();
@@ -279,7 +279,7 @@ final class ConfiguredDocument {
 		final List<LayoutGroup> layoutGroupVec = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, tableName);
 
 		final int listViewLayoutGroupSize = Utils.safeLongToInt(layoutGroupVec.size());
-		LayoutGroup libglomLayoutGroup = null;
+		LayoutGroup libglomLayoutGroup;
 		if (listViewLayoutGroupSize > 0) {
 			// A list layout group is defined.
 			// We use the first group as the list.

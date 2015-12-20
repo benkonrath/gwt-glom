@@ -83,7 +83,7 @@ public class SqlUtils {
 	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document.HostingMode hostingMode, final String serverHost, int serverPort, final String database) {
 		final JdbcConnectionDetails details = new JdbcConnectionDetails();
 
-		String defaultDatabase = null;
+		String defaultDatabase;
 		switch (hostingMode) {
 			case HOSTING_MODE_POSTGRES_CENTRAL:
 			case HOSTING_MODE_POSTGRES_SELF: {
