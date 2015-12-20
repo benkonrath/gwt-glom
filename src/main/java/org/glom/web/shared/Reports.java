@@ -32,8 +32,8 @@ public class Reports implements Serializable {
 	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
 	 */
 	// TODO: Test that.
-	private/* final */ArrayList<String> names = new ArrayList<String>();
-	private/* final */ArrayList<String> titles = new ArrayList<String>();
+	private/* final */ArrayList<String> names = new ArrayList<>();
+	private/* final */ArrayList<String> titles = new ArrayList<>();
 
 	public Reports() {
 	}

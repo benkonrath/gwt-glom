@@ -97,7 +97,7 @@ final class ConfiguredDocument {
 		}
 
 		public void setListLayout(final String tableName, final String locale, final LayoutGroup layout) {
-			final List<LayoutGroup> list = new ArrayList<LayoutGroup>();
+			final List<LayoutGroup> list = new ArrayList<>();
 			list.add(layout);
 			setLayout(tableName, locale, list, false);
 		}
@@ -209,8 +209,8 @@ final class ConfiguredDocument {
 		final int numTables = Utils.safeLongToInt(tablesVec.size());
 		// we don't know how many tables will be hidden so we'll use half of the number of tables for the default size
 		// of the ArrayList
-		final ArrayList<String> tableNames = new ArrayList<String>(numTables / 2);
-		final ArrayList<String> tableTitles = new ArrayList<String>(numTables / 2);
+		final ArrayList<String> tableNames = new ArrayList<>(numTables / 2);
+		final ArrayList<String> tableTitles = new ArrayList<>(numTables / 2);
 		boolean foundDefaultTable = false;
 		int visibleIndex = 0;
 		for (int i = 0; i < numTables; i++) {
@@ -236,8 +236,8 @@ final class ConfiguredDocument {
 		// Fetch arrays of locale IDs and titles:
 		final List<String> localesVec = document.getTranslationAvailableLocales();
 		final int numLocales = Utils.safeLongToInt(localesVec.size());
-		final ArrayList<String> localeIDs = new ArrayList<String>(numLocales);
-		final ArrayList<String> localeTitles = new ArrayList<String>(numLocales);
+		final ArrayList<String> localeIDs = new ArrayList<>(numLocales);
+		final ArrayList<String> localeTitles = new ArrayList<>(numLocales);
 		for (int i = 0; i < numLocales; i++) {
 			final String this_localeID = localesVec.get(i);
 			localeIDs.add(this_localeID);
@@ -501,7 +501,7 @@ final class ConfiguredDocument {
 		// Note that we don't use clone() here, because that would need clone() implementations
 		// in classes which are also used in the client code (though the clone() methods would
 		// not be used) and that makes the GWT java->javascript compilation fail.
-		final List<LayoutGroup> listCloned = new ArrayList<LayoutGroup>();
+		final List<LayoutGroup> listCloned = new ArrayList<>();
 		for (final LayoutGroup group : listGroups) {
 			final LayoutGroup cloned = (LayoutGroup) Utils.deepCopy(group);
 			if (cloned != null) {

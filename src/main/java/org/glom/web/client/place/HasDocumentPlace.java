@@ -61,7 +61,7 @@ public abstract class HasDocumentPlace extends Place {
 		 */
 		protected HashMap<String, String> getTokenParams(final String historyToken) {
 			final String[] arStr = historyToken.substring(0, historyToken.length()).split(separator);
-			final HashMap<String, String> params = new HashMap<String, String>();
+			final HashMap<String, String> params = new HashMap<>();
 			for (final String element : arStr) {
 				final String[] substr = element.split(equals);
 				if (substr.length != 2) {

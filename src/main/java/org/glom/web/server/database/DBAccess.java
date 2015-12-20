@@ -67,7 +67,7 @@ public abstract class DBAccess {
 
 		// get the data we've been asked for
 		int rowCount = 0;
-		final ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
+		final ArrayList<DataItem[]> rowsList = new ArrayList<>();
 		while (rs.next() && rowCount <= length) {
 			final int layoutFieldsSize = Utils.safeLongToInt(layoutFields.size());
 			final DataItem[] rowArray = new DataItem[layoutFieldsSize];
@@ -105,7 +105,7 @@ public abstract class DBAccess {
 	 * Gets a list to use when generating an SQL query.
 	 */
 	protected List<LayoutItemField> getFieldsToShowForSQLQuery(final List<LayoutGroup> layoutGroupVec) {
-		final List<LayoutItemField> listLayoutFIelds = new ArrayList<LayoutItemField>();
+		final List<LayoutItemField> listLayoutFIelds = new ArrayList<>();
 
 		// We will show the fields that the document says we should:
 		for (int i = 0; i < layoutGroupVec.size(); i++) {
@@ -133,7 +133,7 @@ public abstract class DBAccess {
 	 */
 	private ArrayList<LayoutItemField> getFieldsToShowForSQLQueryAddGroup(final LayoutGroup libglomLayoutGroup) {
 
-		final ArrayList<LayoutItemField> layoutItemFields = new ArrayList<LayoutItemField>();
+		final ArrayList<LayoutItemField> layoutItemFields = new ArrayList<>();
 		final List<LayoutItem> items = libglomLayoutGroup.getItems();
 		final int numItems = Utils.safeLongToInt(items.size());
 		for (int i = 0; i < numItems; i++) {

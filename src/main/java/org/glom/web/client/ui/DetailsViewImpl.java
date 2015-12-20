@@ -37,8 +37,8 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 	@SuppressWarnings("unused")
 	private Presenter presenter;
 	private final FlowPanel mainPanel = new FlowPanel();
-	private final ArrayList<DetailsCell> cells = new ArrayList<DetailsCell>();
-	private final ArrayList<Portal> portals = new ArrayList<Portal>();
+	private final ArrayList<DetailsCell> cells = new ArrayList<>();
+	private final ArrayList<Portal> portals = new ArrayList<>();
 
 	public DetailsViewImpl() {
 		initWidget(mainPanel);

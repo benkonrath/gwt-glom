@@ -373,7 +373,7 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @return
 	 */
 	private static String getPathToMysqlExecutable(final String string) {
-		final List<String> dirPaths = new ArrayList<String>();
+		final List<String> dirPaths = new ArrayList<>();
 		dirPaths.add("/usr/bin");
 
 		for (String dir : dirPaths) {
@@ -393,7 +393,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		
 		final String portAsText = portNumberAsText(port);
 
-		final List<String> progAndArgs = new ArrayList<String>();
+		final List<String> progAndArgs = new ArrayList<>();
 		progAndArgs.add(getPathToMysqlExecutable("mysqladmin"));
 		progAndArgs.add("--no-defaults");
 		progAndArgs.add("--port=" + portAsText);

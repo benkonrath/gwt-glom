@@ -62,7 +62,7 @@ public class DetailsDBAccess extends DBAccess {
 			return null;
 		}
 
-		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
+		ArrayList<DataItem[]> rowsList = new ArrayList<>();
 		ResultSet rs = null;
 		try {
 			if (primaryKeyValue != null) {

@@ -92,12 +92,12 @@ public class Document {
 		private boolean isDefault;
 		private boolean isHidden;
 
-		private final Hashtable<String, Field> fieldsMap = new Hashtable<String, Field>();
-		private final Hashtable<String, Relationship> relationshipsMap = new Hashtable<String, Relationship>();
-		private final Hashtable<String, Report> reportsMap = new Hashtable<String, Report>();
+		private final Hashtable<String, Field> fieldsMap = new Hashtable<>();
+		private final Hashtable<String, Relationship> relationshipsMap = new Hashtable<>();
+		private final Hashtable<String, Report> reportsMap = new Hashtable<>();
 
-		private List<LayoutGroup> layoutGroupsList = new ArrayList<LayoutGroup>();
-		private List<LayoutGroup> layoutGroupsDetails = new ArrayList<LayoutGroup>();
+		private List<LayoutGroup> layoutGroupsList = new ArrayList<>();
+		private List<LayoutGroup> layoutGroupsDetails = new ArrayList<>();
 
 		// A list of maps (field name to value).
 		private List<Map<String, DataItem>> exampleRows = null;
@@ -116,13 +116,13 @@ public class Document {
 
 	private final Translatable databaseTitle = new Translatable();
 	private String translationOriginalLocale = "";
-	private final List<String> translationAvailableLocales = new ArrayList<String>();
+	private final List<String> translationAvailableLocales = new ArrayList<>();
 	private boolean isExample = false;
 	private HostingMode hostingMode = HostingMode.HOSTING_MODE_POSTGRES_CENTRAL;
 	private String connectionServer = "";
 	private String connectionDatabase = "";
 	private int connectionPort = 0;
-	private final Hashtable<String, TableInfo> tablesMap = new Hashtable<String, TableInfo>();
+	private final Hashtable<String, TableInfo> tablesMap = new Hashtable<>();
 	private String documentID = null; //Only for use in the Path, for use in image DataItems.
 
 	private static final String NODE_ROOT = "glom_document";
@@ -498,7 +498,7 @@ public class Document {
 		final Element exampleRowsNode = getElementByName(tableNode, NODE_EXAMPLE_ROWS);
 		if (exampleRowsNode != null) {
 
-			final List<Map<String, DataItem>> exampleRows = new ArrayList<Map<String, DataItem>>();
+			final List<Map<String, DataItem>> exampleRows = new ArrayList<>();
 			final List<Node> listNodes = getChildrenByTagName(exampleRowsNode, NODE_EXAMPLE_ROW);
 			for (final Node node : listNodes) {
 				if (!(node instanceof Element)) {
@@ -506,7 +506,7 @@ public class Document {
 				}
 
 				final Element element = (Element) node;
-				final Map<String, DataItem> row = new HashMap<String, DataItem>();
+				final Map<String, DataItem> row = new HashMap<>();
 
 				final List<Node> listNodesValues = getChildrenByTagName(element, NODE_VALUE);
 				for (final Node nodeValue : listNodesValues) {
@@ -816,7 +816,7 @@ public class Document {
 			return null;
 		}
 
-		final List<LayoutGroup> result = new ArrayList<LayoutGroup>();
+		final List<LayoutGroup> result = new ArrayList<>();
 		int groupIndex = 0;
 		final List<Node> listNodes = getChildrenByTagName(node, NODE_DATA_LAYOUT_GROUPS);
 		for (final Node nodeGroups : listNodes) {
@@ -913,7 +913,7 @@ public class Document {
 	 * @return
 	 */
 	private List<Node> getChildrenByTagName(final Element parentNode, final String tagName) {
-		final List<Node> result = new ArrayList<Node>();
+		final List<Node> result = new ArrayList<>();
 
 		final NodeList list = parentNode.getElementsByTagName(tagName);
 		final int num = list.getLength();
@@ -1263,7 +1263,7 @@ public class Document {
 
 	public List<String> getTableNames() {
 		// TODO: Return a Set?
-		return new ArrayList<String>(tablesMap.keySet());
+		return new ArrayList<>(tablesMap.keySet());
 	}
 
 	public boolean getTableIsHidden(final String tableName) {
@@ -1318,7 +1318,7 @@ public class Document {
 			return null;
 		}
 
-		return new ArrayList<Field>(info.fieldsMap.values());
+		return new ArrayList<>(info.fieldsMap.values());
 	}
 
 	public Field getField(final String tableName, final String strFieldName) {
@@ -1333,7 +1333,7 @@ public class Document {
 	public List<LayoutGroup> getDataLayoutGroups(final String layoutName, final String parentTableName) {
 		final TableInfo info = getTableInfo(parentTableName);
 		if (info == null) {
-			return new ArrayList<LayoutGroup>();
+			return new ArrayList<>();
 		}
 
 		if (layoutName.equals(LAYOUT_NAME_DETAILS)) {
@@ -1341,17 +1341,17 @@ public class Document {
 		} else if (layoutName.equals(LAYOUT_NAME_LIST)) {
 			return info.layoutGroupsList;
 		} else {
-			return new ArrayList<LayoutGroup>();
+			return new ArrayList<>();
 		}
 	}
 
 	public List<String> getReportNames(final String tableName) {
 		final TableInfo info = getTableInfo(tableName);
 		if (info == null) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
-		return new ArrayList<String>(info.reportsMap.keySet());
+		return new ArrayList<>(info.reportsMap.keySet());
 	}
 
 	public Report getReport(final String tableName, final String reportName) {

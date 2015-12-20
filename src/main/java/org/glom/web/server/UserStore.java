@@ -34,7 +34,7 @@ public class UserStore {
 	/**
 	 * A map of the sessionID to the credentials.
 	 */
-	private Hashtable<String, Credentials> credentialsMap = new Hashtable<String, Credentials>();
+	private Hashtable<String, Credentials> credentialsMap = new Hashtable<>();
 
 	/**
 	 * 

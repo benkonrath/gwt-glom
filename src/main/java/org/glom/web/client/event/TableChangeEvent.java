@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.GwtEvent;
  *
  */
 public class TableChangeEvent extends GwtEvent<TableChangeEventHandler> {
-	public static Type<TableChangeEventHandler> TYPE = new Type<TableChangeEventHandler>();
+	public static Type<TableChangeEventHandler> TYPE = new Type<>();
 	private final String newTableName;
 
 	public TableChangeEvent(final String newTableName) {

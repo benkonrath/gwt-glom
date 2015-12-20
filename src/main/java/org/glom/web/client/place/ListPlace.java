@@ -37,7 +37,7 @@ public class ListPlace extends HasRecordsPlace {
 
 		@Override
 		public String getToken(final ListPlace place) {
-			final HashMap<String, String> params = new HashMap<String, String>();
+			final HashMap<String, String> params = new HashMap<>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
 			params.put(quickFindKey, place.getQuickFind());

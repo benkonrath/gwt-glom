@@ -40,8 +40,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Group extends Composite {
 	private final FlowPanel mainPanel = new FlowPanel();
-	private final ArrayList<DetailsCell> cells = new ArrayList<DetailsCell>();
-	private final ArrayList<Portal> portals = new ArrayList<Portal>();
+	private final ArrayList<DetailsCell> cells = new ArrayList<>();
+	private final ArrayList<Portal> portals = new ArrayList<>();
 
 	protected Group() {
 		// can used by sub-classes

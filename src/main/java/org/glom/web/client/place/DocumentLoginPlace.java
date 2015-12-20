@@ -37,7 +37,7 @@ public class DocumentLoginPlace extends HasDocumentPlace {
 
 		@Override
 		public String getToken(final DocumentLoginPlace place) {
-			final HashMap<String, String> params = new HashMap<String, String>();
+			final HashMap<String, String> params = new HashMap<>();
 			params.put(documentKey, place.getDocumentID());
 			return buildParamsToken(params);
 		}

@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.GwtEvent;
  *
  */
 public class LocaleChangeEvent extends GwtEvent<LocaleChangeEventHandler> {
-	public static Type<LocaleChangeEventHandler> TYPE = new Type<LocaleChangeEventHandler>();
+	public static Type<LocaleChangeEventHandler> TYPE = new Type<>();
 	private final String newLocaleID;
 
 	public LocaleChangeEvent(final String newLocaleID) {

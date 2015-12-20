@@ -180,7 +180,7 @@ public class DocumentTest {
 			final List<LayoutGroup> layoutList = document.getDataLayoutGroups(Document.LAYOUT_NAME_LIST, tables[i]);
 			assertTrue(!layoutList.isEmpty());
 			final List<LayoutItem> layoutItems = layoutList.get(0).getItems();
-			final List<LayoutItemField> layoutFields = new ArrayList<LayoutItemField>();
+			final List<LayoutItemField> layoutFields = new ArrayList<>();
 			final SortClause sortClause = new SortClause(); // TODO: Why use a SortClause instead of a List?
 			final int numItems = safeLongToInt(layoutItems.size());
 			for (int j = 0; j < numItems; j++) {

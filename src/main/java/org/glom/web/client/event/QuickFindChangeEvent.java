@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.GwtEvent;
  *
  */
 public class QuickFindChangeEvent extends GwtEvent<QuickFindChangeEventHandler> {
-	public static Type<QuickFindChangeEventHandler> TYPE = new Type<QuickFindChangeEventHandler>();
+	public static Type<QuickFindChangeEventHandler> TYPE = new Type<>();
 	private final String newQuickFindText;
 
 	public QuickFindChangeEvent(final String newQuickFindText) {

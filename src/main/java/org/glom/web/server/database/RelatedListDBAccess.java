@@ -64,7 +64,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 		this.tableName = portal.getTableUsed("" /* parent table - not relevant */);
 
 		// Convert the libglom LayoutGroup object into a List<LayoutItem_Field> suitable for SQL queries.
-		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<LayoutGroup>();
+		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<>();
 		tempLayoutGroupVec.add(portal);
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 

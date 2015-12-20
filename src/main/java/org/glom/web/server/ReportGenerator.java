@@ -90,7 +90,7 @@ public class ReportGenerator {
 	// An arbitrary width, because we must specify _some_ width:
 	final int width = 100; // Points, as specified later.
 
-	List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
+	List<LayoutItemField> fieldsToGet = new ArrayList<>();
 	SortClause sortClause = new SortClause();
 	String localeID;
 
@@ -154,7 +154,7 @@ public class ReportGenerator {
 		final JRDesignBand headerBand = new JRDesignBand();
 		headerBand.setHeight(height + 20);
 
-		fieldsToGet = new ArrayList<LayoutItemField>();
+		fieldsToGet = new ArrayList<>();
 		final int x = 0;
 		addGroupToReport(layout_group, detailBand, x, headerBand, 0);
 
@@ -191,7 +191,7 @@ public class ReportGenerator {
 
 		JasperPrint print;
 		try {
-			final HashMap<String, Object> parameters = new HashMap<String, Object>();
+			final HashMap<String, Object> parameters = new HashMap<>();
 			parameters.put("ReportTitle", report.getTitle(localeID)); // TODO: Use the title, not the name.
 			print = JasperFillManager.fillReport(jasperreport, parameters, connection);
 		} catch (final JRException ex) {

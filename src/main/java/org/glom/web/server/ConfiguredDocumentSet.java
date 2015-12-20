@@ -41,7 +41,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class ConfiguredDocumentSet {
 	private static final String GLOM_FILE_EXTENSION = "glom";
 
-	private Hashtable<String, ConfiguredDocument> documentMapping = new Hashtable<String, ConfiguredDocument>();
+	private Hashtable<String, ConfiguredDocument> documentMapping = new Hashtable<>();
 	private Exception configurationException = null;
 
 	/**

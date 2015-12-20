@@ -356,7 +356,7 @@ public class SqlUtils {
 			final List<LayoutItemField> fieldsToGet, final SortClause sortClause, final boolean extraJoin) {
 
 		// Get all relationships used in the query:
-		final List<UsesRelationship> listRelationships = new ArrayList<UsesRelationship>();
+		final List<UsesRelationship> listRelationships = new ArrayList<>();
 
 		final int layoutFieldsSize = Utils.safeLongToInt(fieldsToGet.size());
 		for (int i = 0; i < layoutFieldsSize; i++) {

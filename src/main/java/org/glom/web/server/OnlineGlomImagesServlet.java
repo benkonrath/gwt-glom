@@ -209,7 +209,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 		
 		final LayoutItemField layoutItemField = new LayoutItemField();
 		layoutItemField.setFullFieldDetails(field);
-		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
+		final List<LayoutItemField> fieldsToGet = new ArrayList<>();
 		fieldsToGet.add(layoutItemField);
 		final String query = SqlUtils.buildSqlSelectWithKey(attrTableName, fieldsToGet, fieldPrimaryKey, primaryKeyValue, document.getSqlDialect());
 		

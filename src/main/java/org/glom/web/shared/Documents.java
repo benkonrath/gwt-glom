@@ -32,9 +32,9 @@ public class Documents implements Serializable {
 	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
 	 */
 	// TODO: Test that.
-	private/* final */ArrayList<String> documentIDs = new ArrayList<String>();
-	private/* final */ArrayList<String> titles = new ArrayList<String>();
-	private/* final */ArrayList<String> defaultLocaleIDs = new ArrayList<String>();
+	private/* final */ArrayList<String> documentIDs = new ArrayList<>();
+	private/* final */ArrayList<String> titles = new ArrayList<>();
+	private/* final */ArrayList<String> defaultLocaleIDs = new ArrayList<>();
 
 	public Documents() {
 	}

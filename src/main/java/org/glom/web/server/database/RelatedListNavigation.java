@@ -106,7 +106,7 @@ public class RelatedListNavigation extends DBAccess {
 		}
 
 		// Get the value of the navigation related primary key:
-		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
+		final List<LayoutItemField> fieldsToGet = new ArrayList<>();
 		fieldsToGet.add(navigationRelationshipItem);
 
 		// For instance "invoice_line_id" if this is a portal to an "invoice_lines" table:

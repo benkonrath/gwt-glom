@@ -72,8 +72,8 @@ public class FlowTable extends Composite {
 		}
 	}
 
-	private final ArrayList<FlowPanel> columns = new ArrayList<FlowPanel>();
-	private final ArrayList<FlowTableItem> items = new ArrayList<FlowTableItem>();
+	private final ArrayList<FlowPanel> columns = new ArrayList<>();
+	private final ArrayList<FlowTableItem> items = new ArrayList<>();
 
 	@SuppressWarnings("unused")
 	private FlowTable() {

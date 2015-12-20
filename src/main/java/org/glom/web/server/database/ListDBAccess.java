@@ -95,7 +95,7 @@ public abstract class ListDBAccess extends DBAccess {
 			}
 		}
 
-		ArrayList<DataItem[]> rowsList = new ArrayList<DataItem[]>();
+		ArrayList<DataItem[]> rowsList = new ArrayList<>();
 		ResultSet rs = null;
 		try {
 			

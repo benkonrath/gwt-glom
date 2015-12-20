@@ -45,7 +45,7 @@ public class ListViewDBAccess extends ListDBAccess {
 		super(document, documentID, cpds, tableName);
 
 		// Convert the LayoutGroup object into a List suitable for SQL queries.
-		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<LayoutGroup>();
+		final List<LayoutGroup> tempLayoutGroupVec = new ArrayList<>();
 		tempLayoutGroupVec.add(libglomLayoutGroup);
 		fieldsToGet = getFieldsToShowForSQLQuery(tempLayoutGroupVec);
 

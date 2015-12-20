@@ -195,17 +195,17 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			final String quickFind, final int start, final int length, final int sortColumnIndex,
 			final boolean isAscending) {
 		if (!isAuthenticated(documentID)) {
-			return new ArrayList<DataItem[]>();
+			return new ArrayList<>();
 		}
 
 		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
-			return new ArrayList<DataItem[]>();
+			return new ArrayList<>();
 		}
 		
 		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
-			return new ArrayList<DataItem[]>();
+			return new ArrayList<>();
 		}
 
 		return configuredDoc.getListViewData(authenticatedConnection, tableName, quickFind, start, length, true, sortColumnIndex, isAscending);
@@ -241,7 +241,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			final LayoutItemPortal portal, final TypedDataItem foreignKeyValue, final int start, final int length,
 			final int sortColumnIndex, final boolean ascending) {
 		if (!isAuthenticated(documentID)) {
-			return new ArrayList<DataItem[]>();
+			return new ArrayList<>();
 		}
 
 		// An empty tableName is OK, because that means the default table.
@@ -253,7 +253,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 		final ConfiguredDocument configuredDoc = getDocument(documentID);
 		if (configuredDoc == null) {
-			return new ArrayList<DataItem[]>();
+			return new ArrayList<>();
 		}
 		
 		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);

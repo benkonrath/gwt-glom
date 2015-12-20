@@ -155,7 +155,7 @@ public abstract class ListTable extends Composite {
 		}
 
 		// create the CellTable with the requested number of rows and the key provider
-		cellTable = new CellTable<DataItem[]>(numVisibleRows, keyProvider);
+		cellTable = new CellTable<>(numVisibleRows, keyProvider);
 
 		// set some style
 		cellTable.setStyleName("data-list");

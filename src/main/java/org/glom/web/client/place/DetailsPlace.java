@@ -59,7 +59,7 @@ public class DetailsPlace extends HasTablePlace {
 			// create the URL string:
 			final String primaryKeyValueString = getStringForData(place.getPrimaryKeyValue());
 
-			final HashMap<String, String> params = new HashMap<String, String>();
+			final HashMap<String, String> params = new HashMap<>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
 			params.put(primaryKeyValueKey, primaryKeyValueString);

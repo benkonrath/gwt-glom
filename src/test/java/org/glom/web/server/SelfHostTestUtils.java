@@ -54,7 +54,7 @@ public class SelfHostTestUtils {
 	  final Condition whereClause = SqlUtils.getFindWhereClauseQuick(document, tableName, quickFindValue);
 	  assertTrue(whereClause != null);
 
-	  final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
+	  final List<LayoutItemField> fieldsToGet = new ArrayList<>();
 	  Field field = document.getField(tableName, "album_id");
 	  final LayoutItemField layoutItemFieldAlbumID = new LayoutItemField();
 	  layoutItemFieldAlbumID.setFullFieldDetails(field);
@@ -96,7 +96,7 @@ public class SelfHostTestUtils {
 		final String tableName = "albums";
 		
 		//Normal fields:
-		final List<LayoutItemField> fieldsToGet = new ArrayList<LayoutItemField>();
+		final List<LayoutItemField> fieldsToGet = new ArrayList<>();
 		final Field fieldAlbumID = document.getField(tableName, "album_id");
 		assertNotNull(fieldAlbumID);
 		LayoutItemField layoutItemField = new LayoutItemField();

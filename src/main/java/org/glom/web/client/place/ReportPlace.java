@@ -45,7 +45,7 @@ public class ReportPlace extends HasRecordsPlace {
 
 		@Override
 		public String getToken(final ReportPlace place) {
-			final HashMap<String, String> params = new HashMap<String, String>();
+			final HashMap<String, String> params = new HashMap<>();
 			params.put(documentKey, place.getDocumentID());
 			params.put(tableKey, place.getTableName());
 			params.put(reportKey, place.getReportName());
