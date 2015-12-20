@@ -279,7 +279,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		try {
 			SqlUtils.executeUpdate(connection, query);
 		} catch (final SQLException e) {
-			System.out.println("setInitialUsernameAndPassword(): change username query failed: " + query.toString());
+			System.out.println("setInitialUsernameAndPassword(): change username query failed: " + query);
 			e.printStackTrace();
 			return false;
 		} finally {
