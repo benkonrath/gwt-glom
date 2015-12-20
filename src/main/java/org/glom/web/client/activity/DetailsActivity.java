@@ -327,7 +327,7 @@ public class DetailsActivity extends HasTableActivity {
 
 			@Override
 			public void onSuccess(final Integer result) {
-				if (result.intValue() <= relatedListTable.getMinNumVisibleRows()) {
+				if (result <= relatedListTable.getMinNumVisibleRows()) {
 					// Set the table row count to the minimum row count if the data row count is less than or equal to
 					// the minimum row count. This ensures that data with fewer rows than the minimum will not create
 					// indexes in the underlying CellTable that will override the rendering of the empty rows.
@@ -335,7 +335,7 @@ public class DetailsActivity extends HasTableActivity {
 				} else {
 					// Set the table row count to the data row count if it's larger than the minimum number of rows
 					// visible.
-					relatedListTable.setRowCount(result.intValue());
+					relatedListTable.setRowCount(result);
 				}
 			}
 		};

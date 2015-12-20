@@ -71,7 +71,7 @@ public class NumericCell extends AbstractCell<Double> {
 		}
 
 		// set the foreground color to red if the number is negative and this is requested
-		if (useAltColorForNegatives && value.doubleValue() < 0) {
+		if (useAltColorForNegatives && value < 0) {
 			// The default alternative color in libglom is red.
 			colorCSSProp = SafeHtmlUtils.fromString("color: #FF0000;");
 		}
