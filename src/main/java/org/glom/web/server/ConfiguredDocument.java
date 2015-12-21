@@ -19,7 +19,6 @@
 
 package org.glom.web.server;
 
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -173,7 +172,7 @@ final class ConfiguredDocument {
 		// disable default constructor
 	}
 
-	ConfiguredDocument(final Document document) throws PropertyVetoException {
+	ConfiguredDocument(final Document document) {
 		this.document = document;
 	}
 

@@ -2020,10 +2020,9 @@ public class Document {
 	 * @param layoutName
 	 * @param layoutPath
 	 * @return
-	 * @throws IOException
 	 */
 	public LayoutItem getLayoutItemByPath(
-			final String tableName, final String layoutName, final String layoutPath) throws IOException {
+			final String tableName, final String layoutName, final String layoutPath) {
 		final List<LayoutGroup> listLayoutGroups = getDataLayoutGroups(layoutName, tableName);
 		if(listLayoutGroups == null) {
 			Log.error("The layout with the specified name was not found. tableName=" + tableName + ", layoutName=" + layoutName);
