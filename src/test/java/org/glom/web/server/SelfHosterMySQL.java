@@ -759,10 +759,12 @@ public class SelfHosterMySQL extends SelfHoster {
 		// Delete the files:
 		final String selfhostingPath = getSelfHostingPath("", false);
 		final File fileSelfHosting = new File(selfhostingPath);
+		//noinspection ResultOfMethodCallIgnored
 		fileSelfHosting.delete();
 
 		final String docPath = document.getFileURI();
 		final File fileDoc = new File(docPath);
+		//noinspection ResultOfMethodCallIgnored
 		fileDoc.delete();
 
 		return result;

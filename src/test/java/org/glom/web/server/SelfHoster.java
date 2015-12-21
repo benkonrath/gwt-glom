@@ -430,9 +430,8 @@ public class SelfHoster {
 		final File file = new File(tempFilePath);
 
 		// Make sure that the file does not exist yet:
-		{
-			tempDir.delete();
-		}
+		//noinspection ResultOfMethodCallIgnored
+		tempDir.delete();
 
 		// Save the example as a real file:
 		document.setFileURI(file.getPath());
