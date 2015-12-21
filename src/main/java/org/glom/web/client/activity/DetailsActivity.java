@@ -110,8 +110,8 @@ public class DetailsActivity extends HasTableActivity {
 
 	private TypedDataItem primaryKeyValue;
 	private final DetailsView detailsView;
-	List<DetailsCell> detailsCells;
-	List<Portal> portals;
+	private List<DetailsCell> detailsCells;
+	private List<Portal> portals;
 
 	public DetailsActivity(final DetailsPlace place, final ClientFactory clientFactory) {
 		super(place, clientFactory);

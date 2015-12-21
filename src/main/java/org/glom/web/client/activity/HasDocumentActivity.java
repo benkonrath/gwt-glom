@@ -38,13 +38,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public abstract class HasDocumentActivity extends AbstractActivity implements View.Presenter {
 
-	protected final ClientFactory clientFactory;
-	protected final String documentID;
+	final ClientFactory clientFactory;
+	final String documentID;
 
 	/**
 	 * 
 	 */
-	public HasDocumentActivity(final HasDocumentPlace place, final ClientFactory clientFactory) {
+	HasDocumentActivity(final HasDocumentPlace place, final ClientFactory clientFactory) {
 		super();
 		this.documentID = place.getDocumentID(); // TODO: Just store the place?
 		this.clientFactory = clientFactory;
@@ -58,7 +58,7 @@ public abstract class HasDocumentActivity extends AbstractActivity implements Vi
 	/**
 	 * @param eventBus
 	 */
-	protected void checkAuthentication(final EventBus eventBus) {
+	void checkAuthentication(final EventBus eventBus) {
 		if(StringUtils.isEmpty(documentID)) {
 			//TODO: Show that no document was chosen?
 			return;
@@ -84,7 +84,7 @@ public abstract class HasDocumentActivity extends AbstractActivity implements Vi
 		OnlineGlomLoginServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 	}
 	
-	protected void clearView() {
+	void clearView() {
 	}
 
 }

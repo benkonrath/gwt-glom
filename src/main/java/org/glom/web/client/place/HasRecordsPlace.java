@@ -25,13 +25,13 @@ package org.glom.web.client.place;
  */
 public abstract class HasRecordsPlace extends HasTablePlace {
 
-	protected final String quickFind;
+	private final String quickFind;
 
 	/**
 	 * @param documentID
 	 * @param tableName
 	 */
-	public HasRecordsPlace(final String documentID, final String tableName, final String quickFind) {
+	HasRecordsPlace(final String documentID, final String tableName, final String quickFind) {
 		super(documentID, tableName);
 		this.quickFind = quickFind;
 	}
@@ -41,7 +41,7 @@ public abstract class HasRecordsPlace extends HasTablePlace {
 	}
 
 	public static class Tokenizer extends HasTablePlace.Tokenizer {
-		protected final String quickFindKey = "quickfind";
+		final String quickFindKey = "quickfind";
 	}
 
 }

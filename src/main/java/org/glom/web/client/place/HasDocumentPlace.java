@@ -32,12 +32,12 @@ import com.google.gwt.place.shared.Place;
  */
 public abstract class HasDocumentPlace extends Place {
 
-	protected final String documentID;
+	private final String documentID;
 
 	/**
 	 * 
 	 */
-	public HasDocumentPlace(final String documentID) {
+	HasDocumentPlace(final String documentID) {
 		super();
 		this.documentID = documentID;
 	}
@@ -47,7 +47,7 @@ public abstract class HasDocumentPlace extends Place {
 	}
 	
 	public static class Tokenizer {
-		protected final String documentKey = "document";
+		final String documentKey = "document";
 		private final String equals = "=";
 		private final String separator = "&";
 		
@@ -59,7 +59,7 @@ public abstract class HasDocumentPlace extends Place {
 		 *            The historyToken provided to getPlace().
 		 * @return A HasMap of names to values.
 		 */
-		protected HashMap<String, String> getTokenParams(final String historyToken) {
+		HashMap<String, String> getTokenParams(final String historyToken) {
 			final String[] arStr = historyToken.substring(0, historyToken.length()).split(separator);
 			final HashMap<String, String> params = new HashMap<>();
 			for (final String element : arStr) {
@@ -94,7 +94,7 @@ public abstract class HasDocumentPlace extends Place {
 		 *            A HashMap of names and values.
 		 * @return A history string for use by getToken() implementation.
 		 */
-		protected String buildParamsToken(final HashMap<String, String> params) {
+		String buildParamsToken(final HashMap<String, String> params) {
 			String token = "";
 			for (final Map.Entry<String, String> entry : params.entrySet()) {
 				final String key = entry.getKey();

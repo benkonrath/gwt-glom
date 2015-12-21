@@ -28,7 +28,7 @@ public abstract class HasTablePlace extends HasDocumentPlace {
 
 	private final String tableName;
 
-	public HasTablePlace(final String documentID, final String tableName) {
+	HasTablePlace(final String documentID, final String tableName) {
 		super(documentID);
 		this.tableName = tableName;
 	}
@@ -39,7 +39,7 @@ public abstract class HasTablePlace extends HasDocumentPlace {
 	}
 
 	public static class Tokenizer extends HasDocumentPlace.Tokenizer {
-		protected final String tableKey = "table";
+		final String tableKey = "table";
 	}
 
 }

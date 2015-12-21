@@ -27,14 +27,14 @@ import org.glom.web.client.place.HasTablePlace;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public abstract class HasTableActivity extends HasDocumentActivity {
+abstract class HasTableActivity extends HasDocumentActivity {
 
-	protected final String tableName;
+	final String tableName;
 
 	/**
 	 * 
 	 */
-	public HasTableActivity(final HasTablePlace place, final ClientFactory clientFactory) {
+	HasTableActivity(final HasTablePlace place, final ClientFactory clientFactory) {
 		super(place, clientFactory);
 		this.tableName = place.getTableName();
 	}
