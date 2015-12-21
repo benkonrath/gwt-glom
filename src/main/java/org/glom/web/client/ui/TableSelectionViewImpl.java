@@ -47,18 +47,18 @@ public class TableSelectionViewImpl extends Composite implements TableSelectionV
 	// by the gwt-maven-plugin's i18n (mvn:i18n) goal.
 	private final OnlineGlomConstants constants = GWT.create(OnlineGlomConstants.class);
 
-	Label documentTitleLabel = new Label();
-	ListBox tablesChooser = new ListBox();
+	private Label documentTitleLabel = new Label();
+	private ListBox tablesChooser = new ListBox();
 
-	Label searchLabel = new Label(constants.search());
-	TextBox searchTextBox = new TextBox();
+	private Label searchLabel = new Label(constants.search());
+	private TextBox searchTextBox = new TextBox();
 
-	Label reportsLabel = new Label(constants.reports());
-	ListBox reportsChooser = new ListBox();
+	private Label reportsLabel = new Label(constants.reports());
+	private ListBox reportsChooser = new ListBox();
 
-	ListBox localesChooser = new ListBox();
+	private ListBox localesChooser = new ListBox();
 
-	Anchor backLink = new Anchor(constants.backToList());
+	private Anchor backLink = new Anchor(constants.backToList());
 	private Presenter presenter;
 	private HandlerRegistration backLinkHandlerReg;
 

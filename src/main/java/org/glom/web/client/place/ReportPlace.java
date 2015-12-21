@@ -41,7 +41,7 @@ public class ReportPlace extends HasRecordsPlace {
 
 	@Prefix("report")
 	public static class Tokenizer extends HasRecordsPlace.Tokenizer implements PlaceTokenizer<ReportPlace> {
-		protected final String reportKey = "report";
+		final String reportKey = "report";
 
 		@Override
 		public String getToken(final ReportPlace place) {

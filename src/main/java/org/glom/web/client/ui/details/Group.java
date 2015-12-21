@@ -115,7 +115,7 @@ public class Group extends Composite {
 	 * @param addGroupTitle
 	 *            whether or not to add a title label for the Group
 	 */
-	protected Widget createChildWidget(final LayoutItem layoutItem, final boolean addGroupTitle) {
+	Widget createChildWidget(final LayoutItem layoutItem, final boolean addGroupTitle) {
 
 		if (layoutItem instanceof LayoutItemField) {
 

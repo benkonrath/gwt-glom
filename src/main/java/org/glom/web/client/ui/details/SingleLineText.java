@@ -36,9 +36,9 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Ben Konrath <ben@bagu.org>
  * 
  */
-public class SingleLineText extends Composite {
+class SingleLineText extends Composite {
 
-	HandlerRegistration resizeHandlerReg;
+	private HandlerRegistration resizeHandlerReg;
 
 	public SingleLineText(final String text) {
 		Widget dataWidget;

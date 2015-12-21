@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  *
  */
-public class Notebook extends Group {
+class Notebook extends Group {
 
 	@SuppressWarnings("unused")
 	private Notebook() {

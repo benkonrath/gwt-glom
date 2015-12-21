@@ -60,7 +60,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 	private final Button loginButton = new Button(constants.login());
 	private final Button cancelButton = new Button(constants.cancel());
 	//TODO: ForgotPassword button.
-	FlexTable flexTable = new FlexTable();
+	private FlexTable flexTable = new FlexTable();
 
 	//private Presenter presenter;
 	

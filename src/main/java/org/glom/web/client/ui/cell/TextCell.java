@@ -31,8 +31,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  * Cell renderer for {@link GlomFieldType} TYPE_TEXT.
  */
 public class TextCell extends AbstractCell<String> {
-	SafeHtml colorCSSProp;
-	SafeHtml backgroundColorCSSProp;
+	private SafeHtml colorCSSProp;
+	private SafeHtml backgroundColorCSSProp;
 
 	// TODO Find a way to set the colors on the whole column
 	public TextCell(final String foregroundColor, final String backgroundColor) {

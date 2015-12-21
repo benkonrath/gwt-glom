@@ -1408,7 +1408,7 @@ public class Document {
 	 * @param field
 	 * @return
 	 */
-	public Relationship getFieldUsedInRelationshipToOne(final String tableName, final LayoutItemField layoutField) {
+	private Relationship getFieldUsedInRelationshipToOne(final String tableName, final LayoutItemField layoutField) {
 
 		if (layoutField == null) {
 			Log.error("layoutField was null");

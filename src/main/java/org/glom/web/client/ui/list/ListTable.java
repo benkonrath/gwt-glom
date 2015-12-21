@@ -100,10 +100,10 @@ public abstract class ListTable extends Composite {
 	final private ListTablePager pager = new ListTablePager();
 	protected String documentID;
 	protected String tableName;
-	protected String quickFind;
+	String quickFind;
 	protected CellTable<DataItem[]> cellTable;
 	protected EventBus eventBus;
-	Column<DataItem[], String> navigationButtonColumn;
+	private Column<DataItem[], String> navigationButtonColumn;
 	private int cellTableBodyHeight = 0;
 
 	abstract protected AbstractDataProvider<DataItem[]> getDataProvider();
@@ -113,7 +113,7 @@ public abstract class ListTable extends Composite {
 		// disable default constructor
 	}
 
-	public ListTable(final String documentID) {
+	protected ListTable(final String documentID) {
 		this.documentID = documentID;
 	}
 
@@ -425,9 +425,9 @@ public abstract class ListTable extends Composite {
 	 * 
 	 * @return The minimum number of rows that should be displayed.
 	 */
-	public abstract int getMinNumVisibleRows();
+	protected abstract int getMinNumVisibleRows();
 
-	public abstract int getNumNonEmptyRows();
+	protected abstract int getNumNonEmptyRows();
 
 	/*
 	 * (non-Javadoc)

@@ -86,18 +86,18 @@ public class ReportGenerator {
 		public int y = 0;
 	}
 
-	final int height = 30; // Points, as specified later.
+	private final int height = 30; // Points, as specified later.
 	// An arbitrary width, because we must specify _some_ width:
-	final int width = 100; // Points, as specified later.
+	private final int width = 100; // Points, as specified later.
 
-	List<LayoutItemField> fieldsToGet = new ArrayList<>();
-	SortClause sortClause = new SortClause();
-	String localeID;
+	private List<LayoutItemField> fieldsToGet = new ArrayList<>();
+	private SortClause sortClause = new SortClause();
+	private String localeID;
 
-	final JasperDesign design = new JasperDesign();
-	JRDesignStyle titleStyle = new JRDesignStyle();
-	JRDesignStyle normalStyle = new JRDesignStyle();
-	JRDesignStyle fieldTitleStyle = new JRDesignStyle();
+	private final JasperDesign design = new JasperDesign();
+	private JRDesignStyle titleStyle = new JRDesignStyle();
+	private JRDesignStyle normalStyle = new JRDesignStyle();
+	private JRDesignStyle fieldTitleStyle = new JRDesignStyle();
 
 	ReportGenerator(final String localeID) {
 		this.localeID = StringUtils.defaultString(localeID);

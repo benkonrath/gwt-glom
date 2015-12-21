@@ -40,7 +40,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	
 	private static final String CONFIGURED_DOCUMENT_SET = "configuredDocumentSet";
 	private static final String USER_STORE = "userStore";
-	protected static final String COOKIE_NAME = "OnlineGlomSessionID";
+	static final String COOKIE_NAME = "OnlineGlomSessionID";
 	
 	/**
 	 * 
