@@ -688,20 +688,12 @@ public class SelfHosterMySQL extends SelfHoster {
 		// Actually create the table
 		final String query = "CREATE TABLE " + quoteAndEscapeSqlId(tableName) + " (" + sqlFields + ");";
 		final Factory factory = new Factory(connection, getSqlDialect());
-		try {
-			factory.execute(query);
-		} catch (DataAccessException e) {
-			System.out.println("createDatabase(): query failed: " + query);
-			e.printStackTrace();
+		if (!executeCreateDatabase(query, factory)) {
+			System.out.println("recreatedDatabase(): CREATE TABLE() failed.");
 			return false;
 		}
 
-		tableCreationSucceeded = true;
-		if (!tableCreationSucceeded) {
-			System.out.println("recreatedDatabase(): CREATE TABLE() failed.");
-		}
-
-		return tableCreationSucceeded;
+		return true;
 	}
 
 	/**
@@ -719,6 +711,14 @@ public class SelfHosterMySQL extends SelfHoster {
 		final String query = "CREATE DATABASE  " + quoteAndEscapeSqlId(databaseName);
 		final Factory factory = new Factory(connection, SQLDialect.MYSQL);
 
+		if (!executeCreateDatabase(query, factory)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean executeCreateDatabase(String query, Factory factory) {
 		try {
 			factory.execute(query);
 		} catch (DataAccessException e) {
