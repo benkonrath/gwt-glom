@@ -66,7 +66,25 @@ class SelfHoster {
 		super();
 		this.document = document;
 	}
-	
+
+	static boolean createDirIfNecessaryWithParents(final File file) {
+		if (!file.exists()) {
+			try {
+				Files.createParentDirs(file);
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return true;
+			}
+
+			if (!file.mkdir()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	public boolean createAndSelfHostFromExample() {
 
 		if (!createAndSelfHostNewEmpty()) {

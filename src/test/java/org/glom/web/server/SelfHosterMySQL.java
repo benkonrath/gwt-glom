@@ -20,7 +20,6 @@
 package org.glom.web.server;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -34,8 +33,6 @@ import org.glom.web.shared.libglom.Field;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.Factory;
-
-import com.google.common.io.Files;
 
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
@@ -347,18 +344,8 @@ public class SelfHosterMySQL extends SelfHoster {
 			return dbDirData;
 		}
 
-		if (!file.exists()) {
-			try {
-				Files.createParentDirs(file);
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return "";
-			}
-
-			if (!file.mkdir()) {
-				return "";
-			}
+		if (!createDirIfNecessaryWithParents(file)) {
+			return "";
 		}
 
 		return dbDirData;

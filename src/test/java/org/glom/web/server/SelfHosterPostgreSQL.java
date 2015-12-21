@@ -272,18 +272,8 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 			return dbDirData;
 		}
 
-		if (!file.exists()) {
-			try {
-				Files.createParentDirs(file);
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return "";
-			}
-
-			if (!file.mkdir()) {
-				return "";
-			}
+		if (!createDirIfNecessaryWithParents(file)) {
+			return "";
 		}
 
 		return dbDirData;
