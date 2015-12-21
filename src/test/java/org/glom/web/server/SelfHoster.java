@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glom.web.server.libglom.Document;
 import org.glom.web.shared.DataItem;
 import org.glom.web.shared.libglom.Field;
@@ -101,13 +102,205 @@ class SelfHoster {
 
 		return recreated;
 	}
-	
+
 	/**
 	 * @return
 	 */
-	boolean recreateDatabaseFromDocument() {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean createDatabase(final Connection connection, final String databaseName) {
+		final String query = "CREATE DATABASE  " + quoteAndEscapeSqlId(databaseName);
+		final Factory factory = new Factory(connection, getSqlDialect());
+
+		if (!executeCreateDatabase(query, factory)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean executeCreateDatabase(String query, Factory factory) {
+		try {
+			factory.execute(query);
+		} catch (DataAccessException e) {
+			System.out.println("createDatabase(): query failed: " + query);
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param document
+	 * @return
+	 */
+	protected boolean recreateDatabaseFromDocument() {
+		// Check whether the database exists already.
+		final String dbName = document.getConnectionDatabase();
+		if (StringUtils.isEmpty(dbName)) {
+			return false;
+		}
+
+		document.setConnectionDatabase(dbName);
+		Connection connection = createConnection(true);
+		if (connection != null) {
+			// Connection to the database succeeded, so the database
+			// exists already.
+			try {
+				connection.close();
+			} catch (final SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return false;
+		}
+
+		// Create the database:
+		progress();
+		document.setConnectionDatabase("");
+
+		connection = createConnection(false);
+		if (connection == null) {
+			System.out.println("recreatedDatabase(): createConnection() failed, before creating the database.");
+			return false;
+		}
+
+		final boolean dbCreated = createDatabase(connection, dbName);
+
+		if (!dbCreated) {
+			return false;
+		}
+
+		progress();
+
+		// Check that we can connect:
+		try {
+			connection.close();
+		} catch (final SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		connection = null;
+
+		document.setConnectionDatabase(dbName);
+		connection = createConnection(false);
+		if (connection == null) {
+			System.out.println("recreatedDatabase(): createConnection() failed, after creating the database.");
+			return false;
+		}
+
+		progress();
+
+		// Create each table:
+		final List<String> tables = document.getTableNames();
+		for (final String tableName : tables) {
+
+			// Create SQL to describe all fields in this table:
+			final List<Field> fields = document.getTableFields(tableName);
+
+			progress();
+			final boolean tableCreationSucceeded = createTable(connection, document, tableName, fields);
+			progress();
+			if (!tableCreationSucceeded) {
+				// TODO: std::cerr << G_STRFUNC << ": CREATE TABLE failed with the newly-created database." <<
+				// std::endl;
+				return false;
+			}
+		}
+
+		// Note that create_database() has already called add_standard_tables() and add_standard_groups(document).
+
+		// Add groups from the document:
+		progress();
+		if (!addGroupsFromDocument(document)) {
+			// TODO: std::cerr << G_STRFUNC << ": add_groups_from_document() failed." << std::endl;
+			return false;
+		}
+
+		// Set table privileges, using the groups we just added:
+		progress();
+		if (!setTablePrivilegesGroupsFromDocument(document)) {
+			// TODO: std::cerr << G_STRFUNC << ": set_table_privileges_groups_from_document() failed." << std::endl;
+			return false;
+		}
+
+		for (final String tableName : tables) {
+			// Add any example data to the table:
+			progress();
+
+			// try
+			// {
+			progress();
+			final boolean tableInsertSucceeded = insertExampleData(connection, document, tableName);
+
+			if (!tableInsertSucceeded) {
+				// TODO: std::cerr << G_STRFUNC << ": INSERT of example data failed with the newly-created database." <<
+				// std::endl;
+				return false;
+			}
+			// }
+			// catch(final std::exception& ex)
+			// {
+			// std::cerr << G_STRFUNC << ": exception: " << ex.what() << std::endl;
+			// HandleError(ex);
+			// }
+
+		} // for(tables)
+
+		return true; // All tables created successfully.
+	}
+
+	/**
+	 * @param document
+	 * @param tableName
+	 * @param fields
+	 * @return
+	 */
+	private boolean createTable(final Connection connection, final Document document, final String tableName,
+								final List<Field> fields) {
+		boolean tableCreationSucceeded = false;
+
+		/*
+		 * TODO: //Create the standard field too: //(We don't actually use this yet) if(std::find_if(fields.begin(),
+		 * fields.end(), predicate_FieldHasName<Field>(GLOM_STANDARD_FIELD_LOCK)) == fields.end()) { sharedptr<Field>
+		 * field = sharedptr<Field>::create(); field->set_name(GLOM_STANDARD_FIELD_LOCK);
+		 * field->set_glom_type(Field::TYPE_TEXT); fields.push_back(field); }
+		 */
+
+		final Field.SqlDialect fieldSqlDialect = getSqlDialect() ==
+				SQLDialect.POSTGRES ? Field.SqlDialect.POSTGRESQL : Field.SqlDialect.MYSQL;
+
+		// Create SQL to describe all fields in this table:
+		String sqlFields = "";
+		for (final Field field : fields) {
+			// Create SQL to describe this field:
+			String sqlFieldDescription = quoteAndEscapeSqlId(field.getName()) + " " + field.getSqlType(fieldSqlDialect);
+
+			if (field.getPrimaryKey()) {
+				sqlFieldDescription += " NOT NULL  PRIMARY KEY";
+			}
+
+			// Append it:
+			if (!StringUtils.isEmpty(sqlFields)) {
+				sqlFields += ", ";
+			}
+
+			sqlFields += sqlFieldDescription;
+		}
+
+		if (StringUtils.isEmpty(sqlFields)) {
+			// TODO: std::cerr << G_STRFUNC << ": sql_fields is empty." << std::endl;
+		}
+
+		// Actually create the table
+		final String query = "CREATE TABLE " + quoteAndEscapeSqlId(tableName) + " (" + sqlFields + ");";
+		final Factory factory = new Factory(connection, getSqlDialect());
+		factory.execute(query);
+		tableCreationSucceeded = true;
+		if (!tableCreationSucceeded) {
+			System.out.println("recreatedDatabase(): CREATE TABLE() failed.");
+		}
+
+		return tableCreationSucceeded;
 	}
 
 	/**
@@ -118,7 +311,15 @@ class SelfHoster {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
+	/**
+	 *
+	 */
+	private void progress() {
+		// TODO Auto-generated method stub
+
+	}
+
 	/**
 	 *
 	 */
@@ -470,6 +671,14 @@ class SelfHoster {
 	public SQLDialect getSqlDialect() {
 		//This must be overriden by the derived classes.
 		return null;
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	String quoteAndEscapeSqlId(final String name) {
+		return quoteAndEscapeSqlId(name, getSqlDialect());
 	}
 
 	/**
