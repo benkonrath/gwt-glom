@@ -251,7 +251,7 @@ public class Document {
 		}
 
 		final Element rootNode = xmlDocument.getDocumentElement();
-		if (rootNode.getNodeName() != NODE_ROOT) {
+		if (!StringUtils.equals(rootNode.getNodeName(), NODE_ROOT)) {
 			Log.error("Unexpected XML root node name found: " + rootNode.getNodeName());
 			return false;
 		}

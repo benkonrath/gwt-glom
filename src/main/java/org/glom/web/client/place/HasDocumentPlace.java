@@ -103,7 +103,7 @@ public abstract class HasDocumentPlace extends Place {
 					continue;
 				}
 
-				if (token != "") {
+				if (!StringUtils.isEmpty(token)) {
 					token += separator;
 				}
 
