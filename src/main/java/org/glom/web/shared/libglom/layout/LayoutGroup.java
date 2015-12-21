@@ -34,7 +34,7 @@ public class LayoutGroup extends LayoutItem {
 
 	static protected class LayoutItemList extends ArrayList<LayoutItem> {
 		private static final long serialVersionUID = 8610424318876440333L;
-	};
+	}
 
 	/*
 	 * Don't make this final, because that breaks GWT serialization. See

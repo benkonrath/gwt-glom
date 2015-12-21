@@ -187,7 +187,7 @@ public class SelfHostConfiguredDocumentTest {
 		//TODO: final ArrayList<DataItem[]> list = configuredDoc.getRelatedListData(tableName, portal, foreignKeyValue, start, length, sortColumnIndex, isAscending)
 	}
 
-	private void testGetDetailsLayoutGroup(final String locale, final String detailsTitle) {;
+	private void testGetDetailsLayoutGroup(final String locale, final String detailsTitle) {
 		final List<LayoutGroup> list = configuredDoc.getDetailsLayoutGroup("albums", locale);
 		assertNotNull(list);
 		assertEquals(2, list.size());
@@ -201,7 +201,7 @@ public class SelfHostConfiguredDocumentTest {
 	}
 	
 	@Test
-	public void testGetDetailsLayoutGroup() {;
+	public void testGetDetailsLayoutGroup() {
 		testGetDetailsLayoutGroup(defaultLocale, "Details");
 		testGetDetailsLayoutGroup(germanLocale, "Details");
 	}

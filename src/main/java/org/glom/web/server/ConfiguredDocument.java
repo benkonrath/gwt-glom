@@ -69,7 +69,7 @@ final class ConfiguredDocument {
 
 	private static class LayoutLocaleMap extends Hashtable<String, List<LayoutGroup>> {
 		private static final long serialVersionUID = 6542501521673767267L;
-	};
+	}
 
 	private static class TableLayouts {
 		public LayoutLocaleMap listLayouts;

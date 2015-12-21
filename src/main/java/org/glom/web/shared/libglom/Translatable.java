@@ -13,7 +13,7 @@ public class Translatable implements Serializable {
 	public static class TranslationsMap extends HashMap<String, String> {
 
 		private static final long serialVersionUID = 1275019181399622213L;
-	};
+	}
 
 	private String name = "";
 	private String titleOriginal = "";
@@ -73,7 +73,7 @@ public class Translatable implements Serializable {
 		}
 
 		return title;
-	};
+	}
 
 	/**
 	 * Make sure that getTitle() or getTitleOriginal() returns the specified translation. And discard all translations.

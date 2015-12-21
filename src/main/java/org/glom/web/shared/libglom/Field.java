@@ -8,7 +8,7 @@ public class Field extends Translatable {
 
 	public enum GlomFieldType {
 		TYPE_INVALID, TYPE_NUMERIC, TYPE_TEXT, TYPE_DATE, TYPE_TIME, TYPE_BOOLEAN, TYPE_IMAGE
-	};
+	}
 
 	private GlomFieldType glomFieldType; // TODO: = glom_field_type.TYPE_INVALID;
 	private boolean primaryKey = false;
@@ -43,7 +43,7 @@ public class Field extends Translatable {
 	 */
 	public boolean getPrimaryKey() {
 		return primaryKey;
-	};
+	}
 
 	public void setPrimaryKey(final boolean primaryKey) {
 		this.primaryKey = primaryKey;
@@ -70,7 +70,7 @@ public class Field extends Translatable {
 	public enum SqlDialect {
 		POSTGRESQL,
 		MYSQL
-	};
+	}
 
 	/**
 	 * @return

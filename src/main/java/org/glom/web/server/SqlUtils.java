@@ -74,7 +74,7 @@ public class SqlUtils {
 	static class JdbcConnectionDetails {
 		String driverClass = null;
 		String jdbcURL = null;
-	};
+	}
 
 	public static JdbcConnectionDetails getJdbcConnectionDetails(final Document document) {
 		return getJdbcConnectionDetails(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
