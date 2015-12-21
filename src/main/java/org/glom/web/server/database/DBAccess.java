@@ -42,14 +42,14 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 /**
  *
  */
-public abstract class DBAccess {
-	public Document document;
-	protected String documentID;
-	protected String tableName;
-	protected ComboPooledDataSource cpds;
+abstract class DBAccess {
+	Document document;
+	String documentID;
+	String tableName;
+	ComboPooledDataSource cpds;
 
-	protected DBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
-			final String tableName) {
+	DBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+			 final String tableName) {
 		this.document = document;
 		this.documentID = documentID;
 		this.cpds = cpds;
@@ -59,8 +59,8 @@ public abstract class DBAccess {
 	/*
 	 * Converts data from a ResultSet to an ArrayList of DataItem array suitable for sending back to the client.
 	 */
-	final protected ArrayList<DataItem[]> convertResultSetToDTO(final int length,
-			final List<LayoutItemField> layoutFields, final TypedDataItem primaryKeyValue, final ResultSet rs) throws SQLException {
+	final ArrayList<DataItem[]> convertResultSetToDTO(final int length,
+													  final List<LayoutItemField> layoutFields, final TypedDataItem primaryKeyValue, final ResultSet rs) throws SQLException {
 
 		final ResultSetMetaData rsMetaData = rs.getMetaData();
 		final int rsColumnscount = rsMetaData.getColumnCount();
@@ -104,7 +104,7 @@ public abstract class DBAccess {
 	/*
 	 * Gets a list to use when generating an SQL query.
 	 */
-	protected List<LayoutItemField> getFieldsToShowForSQLQuery(final List<LayoutGroup> layoutGroupVec) {
+	List<LayoutItemField> getFieldsToShowForSQLQuery(final List<LayoutGroup> layoutGroupVec) {
 		final List<LayoutItemField> listLayoutFIelds = new ArrayList<>();
 
 		// We will show the fields that the document says we should:
@@ -179,7 +179,7 @@ public abstract class DBAccess {
 	 *            name of table to search for the primary key LayoutItem_Field
 	 * @return primary key LayoutItem_Field
 	 */
-	protected LayoutItemField getPrimaryKeyLayoutItemField(final String tableName) {
+	LayoutItemField getPrimaryKeyLayoutItemField(final String tableName) {
 		final Field primaryKey = document.getTablePrimaryKeyField(tableName);
 
 		final LayoutItemField libglomLayoutItemField = new LayoutItemField();

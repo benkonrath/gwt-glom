@@ -61,7 +61,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		super(delegate);
 	}
 
-	protected UserStore getUserStore() {
+	UserStore getUserStore() {
 		//See if there is already a shared userstore
 		final ServletConfig config = this.getServletConfig();
 		if(config == null) {
@@ -99,7 +99,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		return userStore;
 	}
 
-	protected ConfiguredDocumentSet getConfiguredDocumentSet() {
+	ConfiguredDocumentSet getConfiguredDocumentSet() {
 		//See if there is already a shared documentSet:
 		final ServletConfig config = this.getServletConfig();
 		if(config == null) {
@@ -147,7 +147,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	 * @param documentID
 	 * @return
 	 */
-	protected ConfiguredDocument getDocument(final String documentID) {
+	ConfiguredDocument getDocument(final String documentID) {
 		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
 		if(configuredDocumentSet == null) {
 			Log.error("Could not get the configuredDocumentSet.");
@@ -157,7 +157,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		return configuredDocumentSet.getDocument(documentID);
 	}
 	
-	protected ComboPooledDataSource getConnection(final String documentID) {
+	ComboPooledDataSource getConnection(final String documentID) {
 		return getConnection(null, documentID);
 	}
 	
@@ -170,7 +170,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	 * @param documentID
 	 * @return
 	 */
-	protected ComboPooledDataSource getConnection(HttpServletRequest request, final String documentID) {
+	ComboPooledDataSource getConnection(HttpServletRequest request, final String documentID) {
 		request = getRequest(request);
 			
 		final ConfiguredDocument configuredDocument = getDocument(documentID);
@@ -215,7 +215,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	/**
 	 * @return
 	 */
-	protected String getSessionIdFromCookie(HttpServletRequest request) {
+	private String getSessionIdFromCookie(HttpServletRequest request) {
 		
 		request = getRequest(request);
 		
@@ -255,7 +255,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	 * @param request
 	 * @return
 	 */
-	protected HttpServletRequest getRequest(HttpServletRequest request) {
+	HttpServletRequest getRequest(HttpServletRequest request) {
 		if(request == null) {
 			//getThreadLocalRequest() might be only for services that are called by GWT-RPC.
 			request = this.getThreadLocalRequest();
@@ -287,12 +287,12 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	}
 	
 	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
-	protected boolean isAuthenticated(final String documentID) {
+	boolean isAuthenticated(final String documentID) {
 		return isAuthenticated(null, documentID);
 	}
 	
 	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
-	protected boolean isAuthenticated(final HttpServletRequest request, final String documentID) {
+	boolean isAuthenticated(final HttpServletRequest request, final String documentID) {
 		final ComboPooledDataSource authenticatedConnection = getConnection(request, documentID);
 		return (authenticatedConnection != null);
 	}

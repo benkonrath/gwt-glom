@@ -214,7 +214,7 @@ public class SqlUtils {
 		return executeQuery(conn, query, 0);
 	}
 
-	public static ResultSet executeQuery(final Connection conn, final String query, int expectedLength) throws SQLException {
+	private static ResultSet executeQuery(final Connection conn, final String query, int expectedLength) throws SQLException {
 		// Setup and execute the query. Special care needs to be take to ensure that the results will be based
 		// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
 		// data. Here's the relevant PostgreSQL documentation:

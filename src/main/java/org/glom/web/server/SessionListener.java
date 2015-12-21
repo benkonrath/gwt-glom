@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSessionListener;
  * @author Murray Cumming <murrayc@murrayc.com>
  *
  */
-public class SessionListener implements HttpSessionListener {
+class SessionListener implements HttpSessionListener {
 
 	private Credentials credentials;
 

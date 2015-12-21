@@ -52,17 +52,17 @@ import com.google.common.io.Files;
  * @author Murray Cumming <murrayc@openismus.com>
  *
  */
-public class SelfHoster {
+class SelfHoster {
 
-	protected boolean selfHostingActive = false;
-	protected Document document = null;
-	protected String username = "";
-	protected String password = "";
+	private boolean selfHostingActive = false;
+	Document document = null;
+	String username = "";
+	String password = "";
 
 	/**
 	 * 
 	 */
-	public SelfHoster(final Document document) {
+	SelfHoster(final Document document) {
 		super();
 		this.document = document;
 	}
@@ -87,7 +87,7 @@ public class SelfHoster {
 	/**
 	 * @return
 	 */
-	protected boolean recreateDatabaseFromDocument() {
+	boolean recreateDatabaseFromDocument() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -96,7 +96,7 @@ public class SelfHoster {
 	 * @param hostingMode
 	 * @return
 	 */
-	protected boolean createAndSelfHostNewEmpty() {
+	boolean createAndSelfHostNewEmpty() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -120,11 +120,11 @@ public class SelfHoster {
 	/**
 	 * @return
 	 */
-	protected boolean getSelfHostingActive() {
+	boolean getSelfHostingActive() {
 		return selfHostingActive;
 	}
 	
-	protected boolean executeCommandLineAndWait(final ProcessBuilder command) {
+	boolean executeCommandLineAndWait(final ProcessBuilder command) {
 
 		command.redirectErrorStream(true);
 
@@ -178,8 +178,8 @@ public class SelfHoster {
 		return true;
 	}
 
-	protected boolean executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(final ProcessBuilder command,
-			final ProcessBuilder commandSecond, final String secondCommandSuccessText) {
+	boolean executeCommandLineAndWaitUntilSecondCommandReturnsSuccess(final ProcessBuilder command,
+																	  final ProcessBuilder commandSecond, final String secondCommandSuccessText) {
 		command.redirectErrorStream(true);
 
 		// Run the first command, and do not wait for it to return:
@@ -242,7 +242,7 @@ public class SelfHoster {
 	 * @param tableName
 	 * @return
 	 */
-	protected boolean insertExampleData(final Connection connection, final Document document, final String tableName) {
+	boolean insertExampleData(final Connection connection, final Document document, final String tableName) {
 
 		final Factory factory = new Factory(connection, getSqlDialect());
 		final Table<Record> table = Factory.tableByName(tableName);
@@ -298,7 +298,7 @@ public class SelfHoster {
 	 * @param document
 	 * @return
 	 */
-	protected boolean addGroupsFromDocument(final Document document) {
+	boolean addGroupsFromDocument(final Document document) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -307,7 +307,7 @@ public class SelfHoster {
 	 * @param document
 	 * @return
 	 */
-	protected boolean setTablePrivilegesGroupsFromDocument(final Document document) {
+	boolean setTablePrivilegesGroupsFromDocument(final Document document) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -316,7 +316,7 @@ public class SelfHoster {
 	 * @param dbDir
 	 * @return
 	 */
-	protected static boolean fileExists(final String filePath) {
+	static boolean fileExists(final String filePath) {
 		final File file = new File(filePath);
 		return file.exists();
 	}
@@ -326,7 +326,7 @@ public class SelfHoster {
 	 * @param end
 	 * @return
 	 */
-	protected static int discoverFirstFreePort(final int start, final int end) {
+	static int discoverFirstFreePort(final int start, final int end) {
 		for (int port = start; port <= end; ++port) {
 			try {
 				final ServerSocket socket = new ServerSocket(port);
@@ -347,7 +347,7 @@ public class SelfHoster {
 	 * @param path
 	 * @return
 	 */
-	protected static boolean fileExistsAndIsExecutable(String path) {
+	static boolean fileExistsAndIsExecutable(String path) {
 		final File file = new File(path);
 		if (!file.exists()) {
 			return false;
@@ -364,7 +364,7 @@ public class SelfHoster {
 	 * @param portNumber
 	 * @return
 	 */
-	protected String portNumberAsText(final int portNumber) {
+	String portNumberAsText(final int portNumber) {
 		final NumberFormat format = NumberFormat.getInstance(Locale.US);
 		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
 		return format.format(portNumber);
@@ -406,7 +406,7 @@ public class SelfHoster {
 	 * @param dbDirData
 	 * @return
 	 */
-	protected String shellQuote(final String str) {
+	String shellQuote(final String str) {
 		// TODO: If we add the quotes then they seem to be used as part of the path, though that is not a problem with
 		// the normal command line.
 		return str;
@@ -418,7 +418,7 @@ public class SelfHoster {
 	/**
 	 * @return The temporary directory where the file was saved.
 	 */
-	protected File saveDocumentCopy(Document.HostingMode hostingMode) {
+	File saveDocumentCopy(Document.HostingMode hostingMode) {
 		// Save a copy, specifying the path to file in a directory:
 		// For instance, /tmp/testglom/testglom.glom");
 		final String tempFilename = "testglom";

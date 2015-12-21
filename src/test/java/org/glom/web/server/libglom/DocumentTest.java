@@ -56,8 +56,8 @@ public class DocumentTest {
 	private static Document document;
 	private static String defaultLocale = "";
 	private static String germanLocale = "de";
-	static String testUriMusicCollection = "";
-	static String testUriFilmManager = "";
+	private static String testUriMusicCollection = "";
+	private static String testUriFilmManager = "";
 
 	@BeforeClass
 	static public void setUp() {
@@ -113,7 +113,7 @@ public class DocumentTest {
 		assertThat(tables, is("artists, albums, songs, publishers"));
 	}
 	
-	String getTitles(final List<Field> list, final String locale) {
+	private String getTitles(final List<Field> list, final String locale) {
 		String result = "";
 		for (int i = 0; i < list.size(); i++) {
 			final Translatable item = list.get(i);

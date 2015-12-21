@@ -42,11 +42,11 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 /**
  *
  */
-public abstract class ListDBAccess extends DBAccess {
-	protected List<LayoutItemField> fieldsToGet;
+abstract class ListDBAccess extends DBAccess {
+	List<LayoutItemField> fieldsToGet;
 
-	protected ListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
-			final String tableName) {
+	ListDBAccess(final Document document, final String documentID, final ComboPooledDataSource cpds,
+				 final String tableName) {
 		super(document, documentID, cpds, tableName);
 	}
 
@@ -64,8 +64,8 @@ public abstract class ListDBAccess extends DBAccess {
 	 * @param isAscending
 	 * @return
 	 */
-	protected ArrayList<DataItem[]> getListData(final String quickFind, final int start, final int length,
-			final int sortColumnIndex, final boolean isAscending) {
+	ArrayList<DataItem[]> getListData(final String quickFind, final int start, final int length,
+									  final int sortColumnIndex, final boolean isAscending) {
 
 		// create a sort clause for the column we've been asked to sort
 		final SortClause sortClause = new SortClause();
@@ -140,7 +140,7 @@ public abstract class ListDBAccess extends DBAccess {
 	 * Get the number of rows a query with the table name and layout fields would return. This is needed for the /* list
 	 * view pager.
 	 */
-	protected int getResultSizeOfSQLQuery() {
+	int getResultSizeOfSQLQuery() {
 
 		ResultSet rs = null;
 		try {

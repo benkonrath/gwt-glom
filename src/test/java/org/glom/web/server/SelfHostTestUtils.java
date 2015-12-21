@@ -42,7 +42,7 @@ import org.junit.Assert;
  * @author Murray Cumming <murrayc@openismus.com>
  *
  */
-public class SelfHostTestUtils {
+class SelfHostTestUtils {
 	static public void testExampleMusiccollectionData(final SelfHoster selfHoster, final Document document) throws SQLException
 	{
 	  assertTrue(document != null);

@@ -35,7 +35,7 @@ import org.junit.Test;
  */
 public class OnlineGlomPropertiesTest extends TestCase {
 
-	OnlineGlomProperties config = null;
+	private OnlineGlomProperties config = null;
 
 	@Override
 	@BeforeClass

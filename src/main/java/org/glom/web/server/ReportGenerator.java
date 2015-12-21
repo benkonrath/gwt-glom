@@ -69,7 +69,7 @@ import org.jooq.Condition;
  * @author Murray Cumming <murrayc@openimus.com>
  * 
  */
-public class ReportGenerator {
+class ReportGenerator {
 
 	private static class Position {
 		public Position(final int x, final int y) {

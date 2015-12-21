@@ -59,7 +59,7 @@ public class SelfHosterMySQL extends SelfHoster {
 	private String savedUsername;
 	private String savedPassword;
 	
-	boolean temporaryPasswordActive; //Whether the password is an initial temporary one.
+	private boolean temporaryPasswordActive; //Whether the password is an initial temporary one.
 	private String initialPasswordToSet;
 	private String initialUsernameToSet;
 	private String temporaryPassword;
@@ -594,7 +594,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		return true; // All tables created successfully.
 	}
 
-	public Connection createConnection(final String database, final String username, final String password, boolean failureExpected) {
+	private Connection createConnection(final String database, final String username, final String password, boolean failureExpected) {
 		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
 		//which does not automatically close its connections,
 		//leading to errors because connections are already open.
