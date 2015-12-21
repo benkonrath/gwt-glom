@@ -595,7 +595,7 @@ public class Document {
 			
 			/* Use org.apache.commons.codec.binary.Base64: */
 			final Base64 decoder = new Base64();
-			byte[] bytes = (byte[]) decoder.decode(unescaped.getBytes());
+			byte[] bytes = decoder.decode(unescaped.getBytes());
 
 			result.setImageData(bytes);
 

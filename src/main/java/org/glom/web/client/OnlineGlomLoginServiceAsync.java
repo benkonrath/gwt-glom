@@ -32,7 +32,7 @@ public interface OnlineGlomLoginServiceAsync {
 
 		public static OnlineGlomLoginServiceAsync getInstance() {
 			if (instance == null) {
-				instance = (OnlineGlomLoginServiceAsync) GWT.create(OnlineGlomLoginService.class);
+				instance = GWT.create(OnlineGlomLoginService.class);
 			}
 			return instance;
 		}

@@ -140,7 +140,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 		resp.setContentType(contentType);
 
 		// Set content size:
-		resp.setContentLength((int) bytes.length);
+		resp.setContentLength(bytes.length);
 
 		// Open the output stream:
 		final OutputStream out = resp.getOutputStream();
