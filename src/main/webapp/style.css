@@ -35,7 +35,7 @@ a:hover
 	overflow: hidden;
 }
 
-div#document-title
+.document-title
 {
 	float: left;
 	color: #333333;
