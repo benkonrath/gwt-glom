@@ -340,7 +340,7 @@ public class Document {
 		return true;
 	}
 
-	private Element getElementByName(final Element parentElement, final String tagName) {
+	private static Element getElementByName(final Element parentElement, final String tagName) {
 		final List<Node> listNodes = getChildrenByTagName(parentElement, tagName);
 		if (listNodes == null) {
 			return null;
@@ -353,7 +353,7 @@ public class Document {
 		return (Element) listNodes.get(0);
 	}
 
-	private boolean getAttributeAsBoolean(final Element node, final String attributeName) {
+	private static boolean getAttributeAsBoolean(final Element node, final String attributeName) {
 		final String str = node.getAttribute(attributeName);
 		if (str == null) {
 			return false;
@@ -362,12 +362,12 @@ public class Document {
 		return str.equals("true");
 	}
 
-	private void setAttributeAsBoolean(final Element node, final String attributeName, final boolean value) {
+	private static void setAttributeAsBoolean(final Element node, final String attributeName, final boolean value) {
 		final String str = value ? "true" : "false";
 		node.setAttribute(attributeName, str);
 	}
 
-	private double getAttributeAsDecimal(final Element node, final String attributeName) {
+	private static double getAttributeAsDecimal(final Element node, final String attributeName) {
 		final String str = node.getAttribute(attributeName);
 		if (StringUtils.isEmpty(str)) {
 			return 0;
@@ -384,13 +384,13 @@ public class Document {
 		return value;
 	}
 
-	private String getStringForDecimal(final double value) {
+	private static String getStringForDecimal(final double value) {
 		final NumberFormat format = NumberFormat.getInstance(Locale.US);
 		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
 		return format.format(value);
 	}
 
-	private void setAttributeAsDecimal(final Element node, final String attributeName, final double value) {
+	private static void setAttributeAsDecimal(final Element node, final String attributeName, final double value) {
 		node.setAttribute(attributeName, getStringForDecimal(value));
 	}
 
@@ -545,8 +545,8 @@ public class Document {
 	}
 
 	/**
-	 * @param elementValue
-	 * @param glomType
+	 * @param element
+	 * @param type
 	 * @return
 	 */
 	private DataItem getNodeTextChildAsValue(final Element element, final GlomFieldType type) {
@@ -924,12 +924,11 @@ public class Document {
 
 	/**
 	 * getElementsByTagName() is recursive, but we do not want that.
-	 * 
-	 * @param node
+	 *
 	 * @param
 	 * @return
 	 */
-	private List<Node> getChildrenByTagName(final Element parentNode, final String tagName) {
+	private static List<Node> getChildrenByTagName(final Element parentNode, final String tagName) {
 		final List<Node> result = new ArrayList<>();
 
 		final NodeList list = parentNode.getElementsByTagName(tagName);
@@ -1761,7 +1760,7 @@ public class Document {
 
 	/**
 	 * @param doc
-	 * @param nodeTable
+	 * @param tableNode
 	 * @param table
 	 */
 	private void saveTableLayouts(final org.w3c.dom.Document doc, final Element tableNode, final TableInfo table) {
