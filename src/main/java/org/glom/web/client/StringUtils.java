@@ -28,19 +28,17 @@ public class StringUtils {
 	}
 
 	/**
-	 * @param aName
-	 * @param bName
+	 * @param a
+	 * @param b
 	 * @return
 	 */
 	public static boolean equals(final String a, final String b) {
 		if (a == null) {
-			if (b == null) {
-				return true;
-			}
+			return b == null;
 		}
 
 		if (b == null) {
-			return false; // aName was already checked for null.
+			return false; // a was already checked for null.
 		}
 
 		return a.equals(b);
