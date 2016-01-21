@@ -42,11 +42,12 @@ public class OnlineGlomPropertiesTest extends TestCase {
 	public void setUp() throws IOException {
 		config = new OnlineGlomProperties();
 
-		final InputStream is = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("onlineglom.properties.sample");
-		assertNotNull(is);
+		try(final InputStream is = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("onlineglom.properties.sample")) {
+			assertNotNull(is);
 
-		config.load(is); // can throw an IOException
+			config.load(is); // can throw an IOException
+		}
 	}
 	
 	/**

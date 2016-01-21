@@ -79,14 +79,15 @@ public class ConfiguredDocumentSet {
 			// Find the configuration file. See this thread for background info:
 			// http://stackoverflow.com/questions/2161054/where-to-place-properties-files-in-a-jsp-servlet-web-application
 			final OnlineGlomProperties config = new OnlineGlomProperties();
-			final InputStream is = Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("onlineglom.properties");
-			if (is == null) {
-				final String errorMessage = "onlineglom.properties not found.";
-				Log.fatal(errorMessage);
-				throw new Exception(errorMessage);
+			try(final InputStream is = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream("onlineglom.properties")) {
+				if (is == null) {
+					final String errorMessage = "onlineglom.properties not found.";
+					Log.fatal(errorMessage);
+					throw new Exception(errorMessage);
+				}
+				config.load(is); // can throw an IOException
 			}
-			config.load(is); // can throw an IOException
 	
 			// check if we can read the configured glom file directory
 			final String documentDirName = config.getDocumentsDirectory();

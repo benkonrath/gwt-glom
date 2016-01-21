@@ -135,19 +135,21 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			return;
 		}
 		
-		final InputStream is = new ByteArrayInputStream(bytes);
-		final String contentType = URLConnection.guessContentTypeFromStream(is);	
-		resp.setContentType(contentType);
+		try (final InputStream is = new ByteArrayInputStream(bytes)) {
+			final String contentType = URLConnection.guessContentTypeFromStream(is);
+			resp.setContentType(contentType);
 
-		// Set content size:
-		resp.setContentLength(bytes.length);
+			// Set content size:
+			resp.setContentLength(bytes.length);
 
-		// Open the output stream:
-		final OutputStream out = resp.getOutputStream();
+			// Open the output stream:
+			try (final OutputStream out = resp.getOutputStream()) {
 
-		// Copy the contents to the output stream
-		out.write(bytes);
-		out.close();
+				// Copy the contents to the output stream
+				out.write(bytes);
+				out.close();
+			}
+		}
 	}
 
 	/** Get the image from a specific <data_layout_text> node of a specific layout for a specific table in the document,

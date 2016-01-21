@@ -61,35 +61,26 @@ public class Utils {
 	}
 
 	static public Object deepCopy(final Object oldObj) {
-		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
+		try (final ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+			try (final ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+				// serialize and pass the object
+				oos.writeObject(oldObj);
+				oos.flush();
 
-		try {
-			final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			oos = new ObjectOutputStream(bos);
-			// serialize and pass the object
-			oos.writeObject(oldObj);
-			oos.flush();
-			final ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray());
-			ois = new ObjectInputStream(bin);
-
-			// return the new object
-			return ois.readObject();
-		} catch (final Exception e) {
-			System.out.println("Exception in deepCopy:" + e);
-			return null;
-		} finally {
-			try {
-				oos.close();
-				ois.close();
-			} catch (final IOException e) {
-				System.out.println("Exception in deepCopy during finally: " + e);
-				return null;
+				try (final ByteArrayInputStream bin = new ByteArrayInputStream(bos.toByteArray())) {
+					try (final ObjectInputStream ois = new ObjectInputStream(bin)) {
+						// return the new object
+						return ois.readObject();
+					}
+				}
 			}
+		} catch (final Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
-	/** Build the URL for the service that will return the binary data for an image.
+		/** Build the URL for the service that will return the binary data for an image.
 	 * 
 	 * @param primaryKeyValue
 	 * @param field

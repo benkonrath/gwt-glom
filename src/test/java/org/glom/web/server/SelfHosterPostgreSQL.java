@@ -441,37 +441,17 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 			return false;
 		}
 
-		FileOutputStream output;
-		try {
-			output = new FileOutputStream(file);
+		try (final FileOutputStream output = new FileOutputStream(file)) {
+			output.write(contents.getBytes());
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
-		}
-
-		try {
-			output.write(contents.getBytes());
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-			//TODO: Avoid the duplicate close() here.
-			try {
-				output.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
 			return false;
-		}
-
-		try {
-			output.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		return true;

@@ -20,6 +20,7 @@
 package org.glom.web.server;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -199,44 +200,48 @@ class ReportGenerator {
 			return "Failed to Generate HTML: fillReport() failed.";
 		}
 
-		final ByteArrayOutputStream output = new ByteArrayOutputStream();
+		try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
 
-		// We use this because there is no JasperExportManager.exportReportToHtmlStream() method.
-		// JasperExportManager.exportReportToXmlStream(print, output);
-		try {
-			final JRXhtmlExporter exporter = new JRXhtmlExporter();
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
+			// We use this because there is no JasperExportManager.exportReportToHtmlStream() method.
+			// JasperExportManager.exportReportToXmlStream(print, output);
+			try {
+				final JRXhtmlExporter exporter = new JRXhtmlExporter();
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
 
-			// Use points instead of pixels for sizes, because pixels are silly
-			// in HTML:
-			exporter.setParameter(JRHtmlExporterParameter.SIZE_UNIT, "pt");
+				// Use points instead of pixels for sizes, because pixels are silly
+				// in HTML:
+				exporter.setParameter(JRHtmlExporterParameter.SIZE_UNIT, "pt");
 
-			// Avoid the page breaks, because they do not make sense for HTML:
-			// TODO: These do not seem to preven the page break gap.
-			exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-			exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "");
+				// Avoid the page breaks, because they do not make sense for HTML:
+				// TODO: These do not seem to preven the page break gap.
+				exporter.setParameter(JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "");
 
-			exporter.exportReport();
-		} catch (final JRException ex) {
-			ex.printStackTrace();
-			return "Failed to Generate HTML: exportReport() failed.";
+				exporter.exportReport();
+			} catch (final JRException ex) {
+				ex.printStackTrace();
+				return "Failed to Generate HTML: exportReport() failed.";
+			}
+
+			// System.out.print(output.toString() + "\n");
+			final String html = output.toString();
+
+			// This does not work because jasperReports does not put individual rows in separate table rows.
+			// jasperReports just puts the whole thing in one table row.
+			// Remove the arbitrary width and height that JasperReports forced us to specify:
+			// html = html.replaceAll("position:absolute;", "");
+			// html = html.replaceAll("top:(\\d*)pt;", "");
+			// html = html.replaceAll("left:(\\d*)pt;", "");
+			// html = html.replaceAll("height:(\\d*)pt;", "");
+			// html = html.replaceAll("width:(\\d*)pt;", "");
+			// html = html.replaceAll("overflow: hidden;", "");
+
+			return html;
+		} catch (final IOException e) {
+			e.printStackTrace();
+			return null;
 		}
-
-		// System.out.print(output.toString() + "\n");
-		final String html = output.toString();
-
-		// This does not work because jasperReports does not put individual rows in separate table rows.
-		// jasperReports just puts the whole thing in one table row.
-		// Remove the arbitrary width and height that JasperReports forced us to specify:
-		// html = html.replaceAll("position:absolute;", "");
-		// html = html.replaceAll("top:(\\d*)pt;", "");
-		// html = html.replaceAll("left:(\\d*)pt;", "");
-		// html = html.replaceAll("height:(\\d*)pt;", "");
-		// html = html.replaceAll("width:(\\d*)pt;", "");
-		// html = html.replaceAll("overflow: hidden;", "");
-
-		return html;
 	}
 
 	/**

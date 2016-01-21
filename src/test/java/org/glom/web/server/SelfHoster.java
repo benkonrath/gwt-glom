@@ -378,19 +378,23 @@ class SelfHoster {
 
 		if (result != 0) {
 			System.out.println("executeCommandLineAndWait(): Command failed: " + command.command().toString());
-			InputStream is = process.getInputStream();
-	        InputStreamReader isr = new InputStreamReader(is);
-	        BufferedReader br = new BufferedReader(isr);
-	        String line;
-	        try {
-				while ((line = br.readLine()) != null) {
-				    System.out.println(line);
+			try (final InputStream is = process.getInputStream()) {
+				try (final InputStreamReader isr = new InputStreamReader(is)) {
+					final BufferedReader br = new BufferedReader(isr);
+					String line;
+					try {
+						while ((line = br.readLine()) != null) {
+							System.out.println(line);
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
-	
+
 			return false;
 		}
 
