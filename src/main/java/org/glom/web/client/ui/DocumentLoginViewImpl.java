@@ -63,7 +63,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 	private FlexTable flexTable = new FlexTable();
 
 	//private Presenter presenter;
-	
+
 	private HandlerRegistration authLoginButtonHandlerRegistration;
 	private HandlerRegistration authCancelButtonHandlerRegistration;
 
@@ -71,9 +71,9 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		initWidget(uiBinder.createAndBindUi(this));
 		documentLoginPanel.getElement().setId("documentLoginPanel");
 		documentLoginFields.addStyleName("documentLoginFields");
-		
+
 		documentLoginFields.add(flexTable);
-		
+
 		//TODO: Use UIBinder to lay this out properly:
 		flexTable.setCellSpacing(10);
 		final FlexCellFormatter cellFormatter = flexTable.getFlexCellFormatter();
@@ -109,12 +109,12 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 	public void setPresenter(final Presenter presenter) {
 		//this.presenter = presenter;
 	}
-	
+
 	@Override
 	public void setClickLoginHandler(final ClickHandler clickHandler) {
 		authLoginButtonHandlerRegistration = loginButton.addClickHandler(clickHandler);
 	}
-	
+
 	@Override
 	public void setClickCancelHandler(final ClickHandler clickHandler) {
 		authCancelButtonHandlerRegistration = cancelButton.addClickHandler(clickHandler);
@@ -154,7 +154,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		usernameTextBox.setEnabled(enabled);
 		passwordTextBox.setEnabled(enabled);
 	}
-	
+
 	@Override
 	public void setError() {
 		flexTable.setWidget(4, 0, errorMessage);
@@ -163,7 +163,7 @@ public class DocumentLoginViewImpl extends Composite implements DocumentLoginVie
 		cellFormatter.setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_LEFT);
 		errorMessage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@Override
 	public void clearError() {
 		if (flexTable.getRowCount() == 5) {

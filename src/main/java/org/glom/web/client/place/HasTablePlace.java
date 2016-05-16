@@ -22,7 +22,7 @@ package org.glom.web.client.place;
 
 /**
  * Super type for Place objects (bookmarkable URLs) that display the TableSelectionView.
- * 
+ *
  */
 public abstract class HasTablePlace extends HasDocumentPlace {
 

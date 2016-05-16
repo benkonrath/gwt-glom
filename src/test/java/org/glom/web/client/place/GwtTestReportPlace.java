@@ -60,10 +60,10 @@ public class GwtTestReportPlace extends GwtTest {
 
 		assertTrue(place.getTableName() != null);
 		assertTrue(place.getTableName().isEmpty());
-		
+
 		assertTrue(place.getReportName() != null);
 		assertTrue(place.getReportName().isEmpty());
-				
+
 	}
 
 }

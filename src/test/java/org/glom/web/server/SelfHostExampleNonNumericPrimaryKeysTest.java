@@ -30,7 +30,7 @@ import org.junit.Test;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public class SelfHostExampleNonNumericPrimaryKeysTest {
 
@@ -49,7 +49,7 @@ public class SelfHostExampleNonNumericPrimaryKeysTest {
 		selfHosterPostgreSQL = new SelfHosterPostgreSQL(document);
 		final boolean hosted = selfHosterPostgreSQL.createAndSelfHostFromExample();
 		assertTrue(hosted);
-		
+
 		SelfHostTestUtils.testExampleMusiccollectionData(selfHosterPostgreSQL, document);
 	}
 

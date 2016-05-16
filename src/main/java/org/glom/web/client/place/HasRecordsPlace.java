@@ -21,7 +21,7 @@ package org.glom.web.client.place;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 public abstract class HasRecordsPlace extends HasTablePlace {
 

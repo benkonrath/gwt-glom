@@ -76,7 +76,7 @@ public class DetailsActivity extends HasTableActivity {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see com.google.gwt.cell.client.ButtonCell#onEnterKeyDown(com.google.gwt.cell.client.Cell.Context,
 		 * com.google.gwt.dom.client.Element, java.lang.String, com.google.gwt.dom.client.NativeEvent,
 		 * com.google.gwt.cell.client.ValueUpdater)
@@ -121,7 +121,7 @@ public class DetailsActivity extends HasTableActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
 	 * com.google.gwt.event.shared.EventBus)
 	 */
@@ -381,7 +381,7 @@ public class DetailsActivity extends HasTableActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.Activity#onCancel()
 	 */
 	@Override
@@ -391,14 +391,14 @@ public class DetailsActivity extends HasTableActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.Activity#onStop()
 	 */
 	@Override
 	public void onStop() {
 		clearView();
 	}
-	
+
 	@Override
 	protected void clearView() {
 		super.clearView();

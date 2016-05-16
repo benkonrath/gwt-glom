@@ -41,7 +41,7 @@ public class Portal extends Composite {
 
 	/**
 	 * Creates a new widget for a Portal.
-	 * 
+	 *
 	 * @param layoutItem
 	 *            The DTO that holds the Portal layout information
 	 * @param setTitle

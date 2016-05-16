@@ -112,16 +112,16 @@ public class DocumentTest {
 		}
 		assertThat(tables, is("artists, albums, songs, publishers"));
 	}
-	
+
 	private String getTitles(final List<Field> list, final String locale) {
 		String result = "";
 		for (int i = 0; i < list.size(); i++) {
 			final Translatable item = list.get(i);
-			
+
 			if(i != 0) {
 				result += ", ";
 			}
-			
+
 			result += item.getTitleOrName(locale);
 		}
 
@@ -137,7 +137,7 @@ public class DocumentTest {
 		// TODO: The sequence is not important. It's only important that they are all there.
 		assertThat(getTitles(fields, defaultLocale), is("Publisher ID, Artist ID, Album ID, Name, Year, Comments"));
 		assertThat(getTitles(fields, germanLocale), is("Herausgeber-Kennung, Künstlerkennung, Albenkennung, Name, Jahr, Kommentare"));
-		
+
 		fields = document.getTableFields("artists");
 		assertEquals(4, fields.size());
 
@@ -306,17 +306,17 @@ public class DocumentTest {
 		assertEquals(Document.LAYOUT_NAME_DETAILS, layoutGroup.getName());
 
 		final List<LayoutItem> items = layoutGroup.getItems();
-		
+
 		final LayoutItem item = items.get(1);
 		assertTrue(item instanceof LayoutItemText);
-		
+
 		LayoutItemText itemText = (LayoutItemText)item;
 		StaticText text = itemText.getText();
 		assertEquals(text.getTitle(), "The location name will be used if the name is empty.");
 	}
-		
-		
-		
+
+
+
 	@Test
 	public void testGetSuitableTableToViewDetails() {
 
@@ -391,10 +391,10 @@ public class DocumentTest {
 	public void testReadReportStructure() {
 		final Report report = document.getReport("albums", "albums_by_artist");
 		assertTrue(report != null);
-		
+
 		assertThat(report.getTitle(defaultLocale), is("Albums By Artist"));
-		assertThat(report.getTitle(germanLocale), is("Alben nach Künstler"));	
-		
+		assertThat(report.getTitle(germanLocale), is("Alben nach Künstler"));
+
 		final LayoutGroup layoutGroup = report.getLayoutGroup();
 		assertTrue(layoutGroup != null);
 		final List<LayoutItem> layoutItems = layoutGroup.getItems();
@@ -506,7 +506,7 @@ public class DocumentTest {
 
 	/*
 	 * This method safely converts longs from libglom into ints. This method was taken from stackoverflow:
-	 * 
+	 *
 	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
 	 */
 	private static int safeLongToInt(final long l) {

@@ -35,11 +35,11 @@ public class DataItemTest {
 		item.setText(val);
 		assertEquals(val, item.getText());
 	}
-	
+
 	@Test
 	public void testDate() {
 		final DataItem item = new DataItem();
-		
+
 		//Not that we use a different API to create a Date
 		//in the client-side test (GwtTestDataItem),
 		//because this API is not available in GWT client code.
@@ -55,7 +55,7 @@ public class DataItemTest {
 		cal.set(Calendar.MONTH, 4); /* The month is 0 indexed. */
 		cal.set(Calendar.DAY_OF_MONTH, 11);
 		final Date val = cal.getTime();
-				
+
 		item.setDate(val);
 		assertEquals(val, item.getDate());
 	}

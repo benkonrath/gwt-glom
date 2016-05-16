@@ -31,7 +31,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 public class NavigationButtonCell extends ButtonCell {
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.cell.client.ButtonCell#render(com.google.gwt.cell.client.Cell.Context,
 	 * com.google.gwt.safehtml.shared.SafeHtml, com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */

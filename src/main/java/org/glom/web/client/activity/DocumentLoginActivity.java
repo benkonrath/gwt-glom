@@ -43,7 +43,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 		super(place, clientFactory);
 		this.view = clientFactory.getDocumentLoginView();
 	}
-	
+
 	private void goToPrevious() {
 		final PlaceController placeController = clientFactory.getPlaceController();
 		if(placeController instanceof PlaceControllerExt) {
@@ -53,7 +53,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 			GWT.log("The PlaceController was not a PlaceControllerExt.");
 		}
 	}
-	
+
 	private void goToDefault() {
 		final PlaceController placeController = clientFactory.getPlaceController();
 		if(placeController instanceof PlaceControllerExt) {
@@ -89,7 +89,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onCancel()
 	 */
 	@Override
@@ -99,14 +99,14 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
 	 */
 	@Override
 	public void onStop() {
 		clearView();
 	}
-	
+
 	//TODO: Remove or modify this in the base class.
 	/**
 	 * @param eventBus
@@ -138,7 +138,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 					GWT.log("AsyncCallback Failed: OnlineGlomLoginService.isAuthenticated(): " + caught.getMessage());
 				}
 			}
-	
+
 			@Override
 			public void onSuccess(final Boolean result) {
 				if (!result) {
@@ -157,20 +157,20 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 	}
 
 	private void setUpAuthClickHandlers(final EventBus eventBus) {
-		
+
 		//The login button:
 		view.setClickLoginHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
 				view.setTextFieldsEnabled(false);
-	
+
 				final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 					@Override
 					public void onFailure(final Throwable caught) {
 						// TODO: create a way to notify users of asynchronous callback failures
 						GWT.log("AsyncCallback Failed: OnlineGlomService.checkAuthentication(): " + caught.getMessage());
 					}
-	
+
 					@Override
 					public void onSuccess(final Boolean result) {
 						if (result) {
@@ -189,7 +189,7 @@ public class DocumentLoginActivity extends HasDocumentActivity {
 						view.getUsername(), view.getPassword(), callback);
 			}
 		});
-		
+
 		//The cancel button:
 		view.setClickCancelHandler(new ClickHandler() {
 			@Override

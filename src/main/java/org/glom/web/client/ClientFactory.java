@@ -31,10 +31,10 @@ import com.google.web.bindery.event.shared.EventBus;
 
 /**
  * This creates the various views and other objects for OnlineGlom.
- * 
+ *
  * GWT.create(ClientFactory.class) actually instantiates ClientFactoryImpl (or an alternative) according to the rules in
  * our OnlineGlom.gwt.xml. See http://code.google.com/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
- * 
+ *
  * The *View types returned here are just interfaces, allowing alternative ClientFactory implementations to return
  * instances of different actual view classes.
  */
@@ -45,7 +45,7 @@ public interface ClientFactory {
 	PlaceController getPlaceController();
 
 	DocumentSelectionView getDocumentSelectionView();
-	
+
 	DocumentLoginView getDocumentLoginView();
 
 	TableSelectionView getTableSelectionView();

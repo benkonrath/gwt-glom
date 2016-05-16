@@ -101,7 +101,7 @@ public class ReportActivity extends HasTableActivity implements View.Presenter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onCancel()
 	 */
 	@Override
@@ -111,7 +111,7 @@ public class ReportActivity extends HasTableActivity implements View.Presenter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
 	 */
 	@Override
@@ -121,7 +121,7 @@ public class ReportActivity extends HasTableActivity implements View.Presenter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	@Override

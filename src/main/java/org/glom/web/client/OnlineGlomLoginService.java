@@ -29,7 +29,7 @@ public interface OnlineGlomLoginService extends RemoteService {
 	/**
 	 * Checks if the provided PostgreSQL username and password are correct for the specified glom document. If the
 	 * information is correct it is saved for future access.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param username
@@ -42,7 +42,7 @@ public interface OnlineGlomLoginService extends RemoteService {
 
 	/**
 	 * Checks if the PostgreSQL authentication has been set for this document.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @return true if the authentication has been set, false if it hasn't

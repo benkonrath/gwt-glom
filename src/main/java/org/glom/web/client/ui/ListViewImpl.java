@@ -48,7 +48,7 @@ public class ListViewImpl extends Composite implements ListView {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see com.google.gwt.cell.client.ButtonCell#onEnterKeyDown(com.google.gwt.cell.client.Cell.Context,
 		 * com.google.gwt.dom.client.Element, java.lang.String, com.google.gwt.dom.client.NativeEvent,
 		 * com.google.gwt.cell.client.ValueUpdater)
@@ -111,7 +111,7 @@ public class ListViewImpl extends Composite implements ListView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.ListView#clear()
 	 */
 	@Override

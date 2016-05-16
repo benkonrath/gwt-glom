@@ -45,7 +45,7 @@ public class DocumentLayoutPathTest {
 		assertTrue(url != null);
 		final String documentUri= url.toString();
 		assertTrue(!StringUtils.isEmpty(documentUri));
-		
+
 		document = new Document();
 		document.setFileURI(documentUri);
 		final boolean retval = document.load();
@@ -60,7 +60,7 @@ public class DocumentLayoutPathTest {
 	public void testNormal() throws IOException {
 		// Just an initial sanity check:
 		assertThat(document.getDatabaseTitleOriginal(), is("Music Collection"));
-		
+
 		final String layoutPath = "1:2";
 		final LayoutItem item = document.getLayoutItemByPath("artists", Document.LAYOUT_NAME_DETAILS, layoutPath);
 		assertNotNull(item);
@@ -68,14 +68,14 @@ public class DocumentLayoutPathTest {
 
 		assertEquals(item.getName(), "comments");
 	}
-	
+
 	@Test
 	public void testOutOfBounds() throws IOException {
 		final String layoutPath = "1:200"; //Check that it does not crash.
 		final LayoutItem item = document.getLayoutItemByPath("artists", Document.LAYOUT_NAME_DETAILS, layoutPath);
 		assertNull(item);
 	}
-	
+
 	@Test
 	public void testOutOfBoundsNegative() throws IOException {
 		final String layoutPath = "-1:-50"; //Check that it does not crash.

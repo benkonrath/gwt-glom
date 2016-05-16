@@ -71,7 +71,7 @@ public class DocumentSelectionViewImpl extends Composite implements DocumentSele
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.DocumentSelectionView#setErrorMessage(java.lang.String)
 	 */
 	@Override

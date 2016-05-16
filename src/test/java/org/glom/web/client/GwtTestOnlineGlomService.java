@@ -27,7 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public class GwtTestOnlineGlomService extends GWTTestCase {
 

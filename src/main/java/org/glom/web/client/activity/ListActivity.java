@@ -121,7 +121,7 @@ public class ListActivity extends HasTableActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onCancel()
 	 */
 	@Override
@@ -131,7 +131,7 @@ public class ListActivity extends HasTableActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
 	 */
 	@Override

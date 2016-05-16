@@ -25,9 +25,9 @@ public class GwtTestOnlineGlom extends GwtTestWithEasyMock {
 		assertTrue(true);
 		/*
 		 * TODO: For instance: // Arrange Browser.fillText(app.nameField, "123");
-		 * 
+		 *
 		 * // Act Browser.click(app.sendButton);
-		 * 
+		 *
 		 * // Assert assertFalse(app.dialogBox.isShowing()); assertEquals("Please enter at least four characters",
 		 * app.errorLabel.getText());
 		 */

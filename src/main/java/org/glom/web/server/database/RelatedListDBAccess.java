@@ -119,7 +119,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param start
 	 * @param length
 	 * @param foreignKeyValue
@@ -143,7 +143,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.server.ListDBAccess#getExpectedResultSize()
 	 */
 	public int getExpectedResultSize(final TypedDataItem foreignKeyValue) {
@@ -160,7 +160,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.server.ListDBAccess#getSelectQuery(org.glom.libglom.LayoutFieldVector,
 	 * org.glom.libglom.SortClause)
 	 */
@@ -210,7 +210,7 @@ public class RelatedListDBAccess extends ListDBAccess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.server.ListDBAccess#getCountQuery()
 	 */
 	@Override

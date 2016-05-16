@@ -34,7 +34,7 @@ import org.jooq.SQLDialect;
 
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
- * 
+ *
  */
 public class SelfHosterPostgreSQL extends SelfHoster {
 	SelfHosterPostgreSQL(final Document document) {
@@ -108,7 +108,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		if (StringUtils.isEmpty(dbDirData) || !SelfHoster.fileExists(dbDirData)) {
 			/*
 			 * final String dbDirBackup = dbDir + File.separator + FILENAME_BACKUP;
-			 * 
+			 *
 			 * if(fileExists(dbDirBackup)) { //TODO: std::cerr << G_STRFUNC <<
 			 * ": There is no data, but there is backup data." << std::endl; //Let the caller convert the backup to real
 			 * data and then try again: return false; // STARTUPERROR_FAILED_NO_DATA_HAS_BACKUP_DATA; } else {
@@ -205,7 +205,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 		document.setConnectionPort(availablePort);
 
 		// Check that we can really connect:
-		
+
 		//Sleep for a fairly long time initially to avoid distracting error messages when trying to connect,
 		//while the database server is still starting up.
 		try {
@@ -313,7 +313,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 			System.out.println("initialize(): initializeConfFiles() failed.");
 			return false;
 		}
-		
+
 		if (StringUtils.isEmpty(initialUsername)) {
 			System.out.println("initialize(): initialUsername is empty.");
 			return false;
@@ -515,7 +515,7 @@ public class SelfHosterPostgreSQL extends SelfHoster {
 
 		return result;
 	}
-	
+
 	@Override
 	public SQLDialect getSqlDialect() {
 		return SQLDialect.POSTGRES;

@@ -75,7 +75,7 @@ public class DetailsCell extends Composite {
 	public DetailsCell(final LayoutItemField layoutItemField) {
 
 		setupWidgets(layoutItemField);
-		
+
 		Formatting formatting = layoutItemField.getFormatting();
 		if (formatting == null) {
 			GWT.log("setData(): formatting is null");
@@ -100,7 +100,7 @@ public class DetailsCell extends Composite {
 
 		initWidget(mainPanel);
 	}
-	
+
 	public DetailsCell(final LayoutItemText layoutItemText) {
 
 		setupWidgets(layoutItemText);
@@ -109,14 +109,14 @@ public class DetailsCell extends Composite {
 		this.dataType = Field.GlomFieldType.TYPE_TEXT;
 
 		initWidget(mainPanel);
-		
+
 		//Use the static text:
 		final DataItem dataItem = new DataItem();
 		final String text = layoutItemText.getText().getTitle();
 		dataItem.setText(text);
 		setData(dataItem);
 	}
-	
+
 	public DetailsCell(final LayoutItemImage layoutItemImage) {
 
 		setupWidgets(layoutItemImage);
@@ -125,7 +125,7 @@ public class DetailsCell extends Composite {
 		this.dataType = Field.GlomFieldType.TYPE_IMAGE;
 
 		initWidget(mainPanel);
-		
+
 		//Use the static image:
 		setData(layoutItemImage.getImage());
 	}

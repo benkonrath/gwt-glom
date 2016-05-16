@@ -55,7 +55,7 @@ abstract class ListDBAccess extends DBAccess {
 	protected abstract String getCountQuery();
 
 	/**
-	 * 
+	 *
 	 * @param quickFind
 	 * @param start
 	 * @param length
@@ -98,7 +98,7 @@ abstract class ListDBAccess extends DBAccess {
 		ArrayList<DataItem[]> rowsList = new ArrayList<>();
 		ResultSet rs = null;
 		try {
-			
+
 			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
 			//This is more than enough.
 			DriverManager.setLoginTimeout(5);
@@ -146,8 +146,8 @@ abstract class ListDBAccess extends DBAccess {
 		try {
 			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
 			//This is more than enough.
-			DriverManager.setLoginTimeout(5); 
-			
+			DriverManager.setLoginTimeout(5);
+
 			// Setup and execute the count query. Special care needs to be take to ensure that the results will be based
 			// on a cursor so that large amounts of memory are not consumed when the query retrieve a large amount of
 			// data. Here's the relevant PostgreSQL documentation:

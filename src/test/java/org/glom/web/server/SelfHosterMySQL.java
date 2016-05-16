@@ -33,7 +33,7 @@ import org.jooq.SQLDialect;
 
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
- * 
+ *
  */
 public class SelfHosterMySQL extends SelfHoster {
 	SelfHosterMySQL(final Document document) {
@@ -42,17 +42,17 @@ public class SelfHosterMySQL extends SelfHoster {
 
 	private static final int PORT_MYSQL_SELF_HOSTED_START = 3306;
 	private static final int PORT_MYSQL_SELF_HOSTED_END = 3350;
-	
+
 	private static final String FILENAME_DATA = "data";
-	
+
 	private static final String DEFAULT_DATABASE_NAME = "INFORMATION_SCHEMA";
-	
+
 	private int port;
-	  
+
 	//These are remembered in order to use them to issue the shutdown command via mysqladmin:
 	private String savedUsername;
 	private String savedPassword;
-	
+
 	private boolean temporaryPasswordActive; //Whether the password is an initial temporary one.
 	private String initialPasswordToSet;
 	private String initialUsernameToSet;
@@ -65,7 +65,7 @@ public class SelfHosterMySQL extends SelfHoster {
 	 * @return
 	 * @Override
 	 */
-	protected boolean createAndSelfHostNewEmpty() { 
+	protected boolean createAndSelfHostNewEmpty() {
 		final File tempDir = saveDocumentCopy(Document.HostingMode.HOSTING_MODE_MYSQL_SELF);
 
 		// We must specify a default username and password:
@@ -104,7 +104,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		if (StringUtils.isEmpty(dbDirData) || !SelfHoster.fileExists(dbDirData)) {
 			/*
 			 * final String dbDirBackup = dbDir + File.separator + FILENAME_BACKUP;
-			 * 
+			 *
 			 * if(fileExists(dbDirBackup)) { //TODO: std::cerr << G_STRFUNC <<
 			 * ": There is no data, but there is backup data." << std::endl; //Let the caller convert the backup to real
 			 * data and then try again: return false; // STARTUPERROR_FAILED_NO_DATA_HAS_BACKUP_DATA; } else {
@@ -144,7 +144,7 @@ public class SelfHosterMySQL extends SelfHoster {
 
 
 		port = availablePort; //Needed by getMysqlAdminCommand().
-		 
+
 		final List<String> progAndArgsCheck = getMysqlAdminCommand(savedUsername, savedPassword);
 		progAndArgsCheck.add("ping");
 		final ProcessBuilder commandCheckMysqlHasStarted = new ProcessBuilder(progAndArgsCheck);
@@ -166,7 +166,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		document.setConnectionPort(availablePort);
 
 		// Check that we can really connect:
-		
+
 		//Sleep for a fairly long time initially to avoid distracting error messages when trying to connect,
 		//while the database server is still starting up.
 		try {
@@ -203,7 +203,7 @@ public class SelfHosterMySQL extends SelfHoster {
 				}
 
 				System.out.println("selfHost(): Connection succeeded after retries=" + i);
-				
+
 				if (temporaryPasswordActive) {
 					return setInitialUsernameAndPassword();
 				}
@@ -223,14 +223,14 @@ public class SelfHosterMySQL extends SelfHoster {
 	}
 
 	/**
-	 * @return 
-	 * 
+	 * @return
+	 *
 	 */
 	private boolean setInitialUsernameAndPassword() {
 		//If necessary, set the initial root password and rename the root user:
 		if(!temporaryPasswordActive)
 			return true;
-		
+
 		if (StringUtils.isEmpty(initialUsernameToSet)) {
 			System.out.println("setInitialUsernameAndPassword(): initialUsernameToSet is empty.");
 			return false;
@@ -240,7 +240,7 @@ public class SelfHosterMySQL extends SelfHoster {
 			System.out.println("setInitialUsernameAndPassword(): initialPasswordToSet is empty.");
 			return false;
 		}
-		
+
 		//Set the root password:
 		final List<String> progAndArgs = getMysqlAdminCommand("root", temporaryPassword);
 		progAndArgs.add("password");
@@ -248,7 +248,7 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		final ProcessBuilder commandInitdbSetInitialPassword = new ProcessBuilder(progAndArgs);
 		final boolean result = executeCommandLineAndWait(commandInitdbSetInitialPassword);
-		
+
 		if(!result) {
 			System.out.println("setInitialUsernameAndPassword(): commandInitdbSetInitialPassword failed.");
 			return false;
@@ -369,12 +369,12 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		return "";
 	}
-	
+
 	private List<String> getMysqlAdminCommand(final String username, final String password) {
 		if (StringUtils.isEmpty(username)) {
 			return null;
 		}
-		
+
 		final String portAsText = portNumberAsText(port);
 
 		final List<String> progAndArgs = new ArrayList<>();
@@ -406,7 +406,7 @@ public class SelfHosterMySQL extends SelfHoster {
 			System.out.println("initialize(): initialPassword is empty.");
 			return false;
 		}
-		
+
 		// mysql_install_db creates a new mysql database cluster:
 
 		// Get file:// URI for the tmp/ directory:
@@ -462,7 +462,7 @@ public class SelfHosterMySQL extends SelfHoster {
 		//We don't just use SqlUtils.tryUsernameAndPassword() because it uses ComboPooledDataSource,
 		//which does not automatically close its connections,
 		//leading to errors because connections are already open.
-		
+
 		if(StringUtils.isEmpty(username)) {
 			System.out.println("setInitialUsernameAndPassword(): username is empty.");
 			return null;
@@ -473,7 +473,7 @@ public class SelfHosterMySQL extends SelfHoster {
 			System.out.println("setInitialUsernameAndPassword(): getJdbcConnectionDetails() returned null.");
 			return null;
 		}
-		
+
 		final Properties connectionProps = new Properties();
 		connectionProps.put("user", username);
 		connectionProps.put("password", password);
@@ -494,7 +494,7 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		return conn;
 	}
-	
+
 	/**
 	 */
 	public Connection createConnection(boolean failureExpected) {
@@ -541,7 +541,7 @@ public class SelfHosterMySQL extends SelfHoster {
 
 		return result;
 	}
-	
+
 	@Override
 	public SQLDialect getSqlDialect() {
 		return SQLDialect.MYSQL;

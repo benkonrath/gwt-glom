@@ -45,21 +45,21 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author Murray Cumming <murrayc@murrayc.com>
- * 
+ *
  */
 public class OnlineGlomImagesServlet extends OnlineGlomServlet {
-	
+
 	private static final long serialVersionUID = 4001959815578006604L;
 
 	public OnlineGlomImagesServlet() {
 		super();
 	}
-	
+
 	private void doError(HttpServletResponse resp, int errorCode, final String errorMessage) throws IOException {
 		Log.error(errorMessage);
 		resp.sendError(errorCode, errorMessage);
 	}
-	
+
 	private void doError(HttpServletResponse resp, int errorCode, final String errorMessage, final String documentID) throws IOException {
 		Log.error(documentID, errorMessage);
 		resp.sendError(errorCode, errorMessage);
@@ -73,12 +73,12 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 		final String attrTableName = StringUtils.defaultString(req.getParameter("table"));
 		final String attrPrimaryKeyValue = StringUtils.defaultString(req.getParameter("value"));
 		final String attrFieldName = StringUtils.defaultString(req.getParameter("field"));
-		
+
 		//To request a static LayoutItemImage from the document
 		//instead of from the database:
 		final String attrLayoutName = StringUtils.defaultString(req.getParameter("layout"));
 		final String attrLayoutPath = StringUtils.defaultString(req.getParameter("layoutpath"));
-		
+
 		if(StringUtils.isEmpty(attrDocumentID)) {
 			doError(resp, Response.SC_NOT_FOUND, "No document ID was specified.");
 			return;
@@ -88,22 +88,22 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			doError(resp, Response.SC_NOT_FOUND, "No access to the document.", attrDocumentID);
 			return;
 		}
-		
+
 		if(StringUtils.isEmpty(attrTableName)) {
 			doError(resp, Response.SC_NOT_FOUND, "No table name was specified.", attrDocumentID);
 			return;
 		}
-		
+
 		//TODO: Is it from the database or is it a static LayouteItemText from the document.
-		
+
 		final boolean fromDb = !StringUtils.isEmpty(attrPrimaryKeyValue);
 		final boolean fromLayout = !StringUtils.isEmpty(attrLayoutName);
-		
+
 		if(!fromDb && !fromLayout) {
 			doError(resp, Response.SC_NOT_FOUND, "No primary key value or layout name was specified.", attrDocumentID);
 			return;
 		}
-		
+
 		if(fromDb && StringUtils.isEmpty(attrFieldName)) {
 			doError(resp, Response.SC_NOT_FOUND, "No field name was specified.", attrDocumentID);
 			return;
@@ -120,7 +120,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			doError(resp, Response.SC_NOT_FOUND, "The specified document details were not found.", attrDocumentID);
 			return;
 		}
-		
+
 		byte[] bytes;
 		if(fromDb) {
 			bytes = getImageFromDatabase(req, resp, attrDocumentID, attrTableName, attrPrimaryKeyValue, attrFieldName,
@@ -129,12 +129,12 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			bytes = getImageFromDocument(req, resp, attrDocumentID, attrTableName, attrLayoutName, attrLayoutPath,
 					configuredDocument, document);
 		}
-		
+
 		if(bytes == null) {
 			doError(resp, Response.SC_NOT_FOUND, "The image bytes could not be found. Please see the earlier error.", attrDocumentID);
 			return;
 		}
-		
+
 		try (final InputStream is = new ByteArrayInputStream(bytes)) {
 			final String contentType = URLConnection.guessContentTypeFromStream(is);
 			resp.setContentType(contentType);
@@ -154,7 +154,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 
 	/** Get the image from a specific <data_layout_text> node of a specific layout for a specific table in the document,
 	 * with no access to the database data.
-	 * 
+	 *
 	 * @param resp
 	 * @param attrDocumentID
 	 * @param attrTableName
@@ -163,28 +163,28 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 	 * @param configuredDocument
 	 * @param document
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private byte[] getImageFromDocument(final HttpServletRequest request , final HttpServletResponse resp, final String attrDocumentID, final String attrTableName,
 			final String attrLayoutName, final String attrLayoutPath, final ConfiguredDocument configuredDocument, final Document document) throws IOException {
 		final LayoutItem item = document.getLayoutItemByPath(attrTableName, attrLayoutName, attrLayoutPath);
-		
+
 		if(item == null) {
 			doError(resp, Response.SC_NOT_FOUND, "The item specifed by the layout path could not be found, attrLayoutPath=" + attrLayoutPath, attrDocumentID);
 			return null;
 		}
-		
+
 		if(!(item instanceof LayoutItemImage)) {
 			doError(resp, Response.SC_NOT_FOUND, "The item specifed by the layout path is not an image. It has class: " + item.getClass().getName() + " and item name=" + item.getName() + ", attrLayoutPath=" + attrLayoutPath, attrDocumentID);
 			return null;
 		}
-		
+
 		final LayoutItemImage image = (LayoutItemImage)item;
 		return image.getImage().getImageData();
 	}
 
 	/** Get the image from a specific field of a specific record in a specific table in the database.
-	 * 
+	 *
 	 * @param resp
 	 * @param attrDocumentID
 	 * @param attrTableName
@@ -203,23 +203,23 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			doError(resp, Response.SC_NOT_FOUND, "The specified field was not found: field=" + attrFieldName, attrDocumentID);
 			return null;
 		}
-		
+
 		final Field fieldPrimaryKey = document.getTablePrimaryKeyField(attrTableName);
-		
+
 		TypedDataItem primaryKeyValue = new TypedDataItem();
 		primaryKeyValue.setNumber(Double.parseDouble(attrPrimaryKeyValue));
-		
+
 		final LayoutItemField layoutItemField = new LayoutItemField();
 		layoutItemField.setFullFieldDetails(field);
 		final List<LayoutItemField> fieldsToGet = new ArrayList<>();
 		fieldsToGet.add(layoutItemField);
 		final String query = SqlUtils.buildSqlSelectWithKey(attrTableName, fieldsToGet, fieldPrimaryKey, primaryKeyValue, document.getSqlDialect());
-		
+
 		final ComboPooledDataSource authenticatedConnection = getConnection(request, attrDocumentID);
 		if(authenticatedConnection == null) {
 			return null;
 		}
-		
+
 		ResultSet rs;
 		try {
 			rs = SqlUtils.executeQuery(authenticatedConnection, query);
@@ -232,7 +232,7 @@ public class OnlineGlomImagesServlet extends OnlineGlomServlet {
 			doError(resp, Response.SC_INTERNAL_SERVER_ERROR, "The SQL result set is null.", attrDocumentID);
 			return null;
 		}
-		
+
 		byte[] bytes;
 		try {
 			rs.next();

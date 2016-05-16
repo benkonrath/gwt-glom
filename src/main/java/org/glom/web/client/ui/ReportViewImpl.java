@@ -46,7 +46,7 @@ public class ReportViewImpl extends Composite implements ReportView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.ListView#clear()
 	 */
 	@Override

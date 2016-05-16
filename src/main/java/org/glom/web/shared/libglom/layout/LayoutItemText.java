@@ -7,14 +7,14 @@ public class LayoutItemText extends LayoutItemWithFormatting {
 	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=1054
 	 */
 	private/* final */StaticText text = new StaticText();
-	
+
 	/**
 	 * @param text
 	 */
 	public void setText(final StaticText text) {
 		this.text = text;
 	}
-	
+
 	public StaticText getText() {
 		return text;
 	}

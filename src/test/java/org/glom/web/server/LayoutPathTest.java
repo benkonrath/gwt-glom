@@ -33,13 +33,13 @@ public class LayoutPathTest {
 	public void test() {
 		final String layoutPathExpected = "1:2:3:4";
 		final int[] indicesExpected = {1, 2, 3, 4};
-		
+
 		final int[] indices = Utils.parseLayoutPath(layoutPathExpected);
 		assertArrayEquals(indicesExpected, indices);
 
 		final String layoutPath = Utils.buildLayoutPath(indicesExpected);
 		assertEquals(layoutPathExpected, layoutPath);
 	}
-	
+
 
 }

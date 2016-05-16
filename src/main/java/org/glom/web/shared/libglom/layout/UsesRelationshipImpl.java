@@ -78,7 +78,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	/*
@@ -89,7 +89,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -148,7 +148,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
@@ -172,7 +172,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
 	 */
 	@Override
@@ -192,7 +192,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelationshipNameUsed()
 	 */
 	@Override
@@ -208,7 +208,7 @@ public class UsesRelationshipImpl implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
 	 */
 	@Override

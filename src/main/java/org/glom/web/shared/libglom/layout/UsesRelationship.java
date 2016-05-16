@@ -25,7 +25,7 @@ import org.glom.web.shared.libglom.Relationship;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public interface UsesRelationship extends Serializable {
 

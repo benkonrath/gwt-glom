@@ -78,7 +78,7 @@ public class Field extends Translatable {
 	public String getSqlType(SqlDialect sqlDialect) {
 		// libglom uses libgda's map of Gda types and its API,
 		// without hardcoding the actual SQL type names.
-		
+
 		if (sqlDialect == SqlDialect.POSTGRESQL) {
 			// This is based on what libgda actually uses with PostgreSQL.
 			switch (getGlomType()) {

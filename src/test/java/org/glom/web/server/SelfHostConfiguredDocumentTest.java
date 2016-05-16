@@ -53,7 +53,7 @@ public class SelfHostConfiguredDocumentTest {
 	private static Document document;
 	private static String defaultLocale = "";
 	private static String germanLocale = "de";
-	
+
 	@BeforeClass
 	static public void setUp() throws PropertyVetoException, SQLException {
 		URL url = DocumentTest.class.getResource("example_music_collection.glom");
@@ -69,7 +69,7 @@ public class SelfHostConfiguredDocumentTest {
 		selfHosterPostgreSQL = new SelfHosterPostgreSQL(document);
 		final boolean hosted = selfHosterPostgreSQL.createAndSelfHostFromExample();
 		assertTrue(hosted);
-		
+
 		configuredDoc = new ConfiguredDocument(document);
 		authenticatedConnection = SqlUtils.tryUsernameAndPassword(document, selfHosterPostgreSQL.getUsername(), selfHosterPostgreSQL.getPassword());
 		assertNotNull(authenticatedConnection);
@@ -81,28 +81,28 @@ public class SelfHostConfiguredDocumentTest {
 			selfHosterPostgreSQL.cleanup();
 		}
 	}
-	
+
 	private void testGetListViewLayoutGroup(final String locale, final String field0Title, final String field1Title) {
 		final LayoutGroup group = configuredDoc.getListViewLayoutGroup("albums", defaultLocale);
 		assertNotNull(group);
-		
+
 		List<LayoutItem> items = group.getItems();
 		assertNotNull(items);
 		assertEquals(8, items.size());
-		
+
 		LayoutItem item = items.get(0);
 		assertTrue(item instanceof LayoutItemField);
-		
+
 		assertEquals("name", item.getName());
 		assertEquals(field0Title, item.getTitle());
-		
+
 		item = items.get(1);
 		assertTrue(item instanceof LayoutItemField);
-		
+
 		assertEquals("year", item.getName());
 		assertEquals(field1Title, item.getTitle());
 	}
-	
+
 	/**
 	 * Test method for {@link org.glom.web.server.ConfiguredDocument#getListViewLayoutGroup(java.lang.String, java.lang.String)}.
 	 */
@@ -117,33 +117,33 @@ public class SelfHostConfiguredDocumentTest {
 		ArrayList<DataItem[]> list = configuredDoc.getListViewData(authenticatedConnection, "albums", defaultLocale, 0, 10, false, 0, false);
 		assertNotNull(list);
 		assertEquals(5, list.size());
-		
+
 		DataItem[] data = list.get(2);
 		assertNotNull(data);
 		assertEquals(8, data.length);
-		
+
 		DataItem dataItem = data[0];
 		assertNotNull(dataItem);
 		assertEquals("The Wild, the Innocent, & the E-Street Shuffle", dataItem.getText());
-		
+
 		dataItem = data[1];
 		assertEquals(1973.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[2];
 		assertEquals(0.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[3];
 		assertEquals("Bruce Springsteen", dataItem.getText());
-		
+
 		dataItem = data[4];
 		assertEquals(0.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[5];
 		assertEquals("Sony", dataItem.getText());
-		
+
 		dataItem = data[6];
 		assertEquals("", dataItem.getText());
-		
+
 		dataItem = data[7];
 		assertEquals(2.0, dataItem.getNumber(), 0);
 	}
@@ -155,29 +155,29 @@ public class SelfHostConfiguredDocumentTest {
 		final DataItem[] data = configuredDoc.getDetailsData(authenticatedConnection, "albums", primaryKeyValue);
 		assertNotNull(data);
 		assertEquals(8, data.length);
-		
+
 		DataItem dataItem = data[0];
 		assertNotNull(dataItem);
 		assertEquals(1.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[1];
 		assertEquals("True Blue", dataItem.getText());
-		
+
 		dataItem = data[2];
 		assertEquals(1.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[3];
 		assertEquals("Madonna", dataItem.getText());
-		
+
 		dataItem = data[4];
 		assertEquals(1.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[5];
 		assertEquals("Warner Bros", dataItem.getText());
-		
+
 		dataItem = data[6];
 		assertEquals(1987.0, dataItem.getNumber(), 0);
-		
+
 		dataItem = data[7];
 		assertEquals("", dataItem.getText());
 	}
@@ -192,14 +192,14 @@ public class SelfHostConfiguredDocumentTest {
 		assertNotNull(list);
 		assertEquals(2, list.size());
 		assertNotNull(list.get(0));
-		
+
 		LayoutGroup layoutGroup = list.get(1);
 		assertNotNull(layoutGroup);
 		assertEquals(Document.LAYOUT_NAME_DETAILS, layoutGroup.getName());
 		assertEquals("Details", layoutGroup.getTitle()); //We don't need to specify locale again.
 		//assertEquals("Details", layoutGroup.getTitle(germanLocale));
 	}
-	
+
 	@Test
 	public void testGetDetailsLayoutGroup() {
 		testGetDetailsLayoutGroup(defaultLocale, "Details");

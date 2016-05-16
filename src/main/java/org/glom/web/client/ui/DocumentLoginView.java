@@ -29,14 +29,14 @@ public interface DocumentLoginView extends View {
 
 	/** Specify a handler to be called when the user clicks the Login button
 	 * to attempt authentication.
-	 * 
+	 *
 	 * @param clickHandler
 	 */
 	void setClickLoginHandler(final ClickHandler clickHandler);
-	
+
 	/** Specify a handler to be called when the user clicks the cancel button
 	 * to cancel the attempt at authentication.
-	 * 
+	 *
 	 * @param clickHandler
 	 */
 	void setClickCancelHandler(final ClickHandler clickHandler);

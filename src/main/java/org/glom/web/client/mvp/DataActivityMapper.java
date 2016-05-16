@@ -41,7 +41,7 @@ public class DataActivityMapper implements ActivityMapper {
 
 	/**
 	 * ActivityMapper associates each Place with its corresponding {@link Activity}
-	 * 
+	 *
 	 * @param clientFactory
 	 *            Factory to be passed to activities
 	 */

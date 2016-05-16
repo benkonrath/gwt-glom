@@ -66,11 +66,11 @@ public class Utils {
 	 * Get the vertical height with decorations (i.e. CSS) by temporarily adding the widget to the body element of the
 	 * document in a transparent container. This is required because the size information is only available when the
 	 * widget is attached to the DOM.
-	 * 
+	 *
 	 * This method must be called before the widget is added to its container because it will be removed from any
 	 * container it is already inside. TODO: Fix this problem by saving a reference to its parent and re-addding it
 	 * after the height information has been calculated.
-	 * 
+	 *
 	 * @param widget
 	 *            get the height information for this widget
 	 * @return the height of the widget with styling applied

@@ -49,7 +49,7 @@ public class Group extends Composite {
 
 	/**
 	 * Creates a new widget for a main Group in the Details View.
-	 * 
+	 *
 	 * @param layoutGroup
 	 *            The DTO that holds the Group or sub-Group layout information
 	 */
@@ -60,7 +60,7 @@ public class Group extends Composite {
 
 	/**
 	 * Creates a new widget for a Group or sub-Group.
-	 * 
+	 *
 	 * @param layoutGroup
 	 *            The DTO that holds the Group or sub-Group layout information
 	 * @param subGroup
@@ -109,7 +109,7 @@ public class Group extends Composite {
 	/**
 	 * Creates a child widget for the specified LayoutItem and updates the cells and portals field appropriately. This
 	 * can be used by subclasses like {@link Notebook}.
-	 * 
+	 *
 	 * @param layoutItem
 	 *            The DTO that holds the layout information
 	 * @param addGroupTitle

@@ -31,7 +31,7 @@ class SessionListener implements HttpSessionListener {
 	private Credentials credentials;
 
 	/**
-	 * 
+	 *
 	 */
 	public SessionListener(final Credentials credentials) {
 		this.credentials = credentials;
@@ -43,7 +43,7 @@ class SessionListener implements HttpSessionListener {
 	@Override
 	public void sessionCreated(HttpSessionEvent arg0) {
 		// We don't need to do anything here.
-		
+
 	}
 
 	/* (non-Javadoc)

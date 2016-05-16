@@ -78,9 +78,9 @@ public abstract class ListTable extends Composite {
 		 * the CellTable. This method is needed because the row count change event handler
 		 * (AbstractPager.handleRowCountChange()) doesn't use the row count that is sent along with the
 		 * RowCountChangeEvent.
-		 * 
+		 *
 		 * @see com.google.gwt.user.cellview.client.AbstractPager#handleRowCountChange(int, boolean)
-		 * 
+		 *
 		 * @see com.google.gwt.user.cellview.client.SimplePager#createText()
 		 */
 		@Override
@@ -195,10 +195,10 @@ public abstract class ListTable extends Composite {
 		 * Update the height of the loading indicator widget to match the body of the CellTable so that the pager widget
 		 * doesn't bounce up and down while paging. This code also ensures that loading indicator GIF is in the centre
 		 * of the table.
-		 * 
+		 *
 		 * TODO: Make this work with related lists in Notebooks. These related list tables will have the original bouncy
 		 * behaviour because CellTable.getBodyHeight() of a related list table in an unselected notebook tab returns 0.
-		 * 
+		 *
 		 * TODO: Fix the bounce when paging to the first or last page that doesn't fall on a natural page boundary. This
 		 * happens in the first and last page when dataSize % pageSize != 0.
 		 */
@@ -219,7 +219,7 @@ public abstract class ListTable extends Composite {
 								 * has already been set. This is just a safety check for the case where the timer isn't
 								 * long enough and the body height is calculated to be smaller than its full size. In
 								 * practice this is not expected to happen.
-								 * 
+								 *
 								 * Since cellTableBodyHeight is initialised to 0, the indicator widget will not be
 								 * modified when the body height cannot be calculated (e.g. when a related list table is
 								 * in an unselected notebook tab).
@@ -422,7 +422,7 @@ public abstract class ListTable extends Composite {
 	/**
 	 * Gets the minimum number of rows the should be displayed. Empty rows will be added when the query returns fewer
 	 * rows than this minimum.
-	 * 
+	 *
 	 * @return The minimum number of rows that should be displayed.
 	 */
 	protected abstract int getMinNumVisibleRows();
@@ -431,7 +431,7 @@ public abstract class ListTable extends Composite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.user.client.ui.Widget#onLoad()
 	 */
 	@Override

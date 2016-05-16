@@ -63,7 +63,7 @@ class FlowTable extends Composite {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see com.google.gwt.user.client.ui.IsWidget#asWidget()
 		 */
 		@Override
@@ -132,7 +132,7 @@ class FlowTable extends Composite {
 	/**
 	 * Adds a Widget to the FlowTable. The layout of the child widgets is adjusted to minimize the vertical height of
 	 * the entire FlowTable.
-	 * 
+	 *
 	 * @param widget
 	 *            widget to add to the FlowTable
 	 */
@@ -166,7 +166,7 @@ class FlowTable extends Composite {
 	/*
 	 * Discover how best (least column height) to arrange these widgets in these columns, keeping them in sequence, and
 	 * then say how high the columns must be.
-	 * 
+	 *
 	 * This method was ported from the FlowTable class of Glom.
 	 */
 	private int getMinimumColumnHeight(final int startWidget, final int columnCount) {

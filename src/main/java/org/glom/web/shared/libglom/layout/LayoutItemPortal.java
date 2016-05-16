@@ -35,7 +35,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.glom.web.shared.libglom.layout.UsesRelationship#setRelationship(org.glom.web.shared.libglom.Relationship)
 	 */
@@ -46,7 +46,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelationship()
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getHasRelationshipName()
 	 */
 	@Override
@@ -66,7 +66,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.glom.web.shared.libglom.layout.UsesRelationship#setRelatedRelationship(org.glom.web.shared.libglom.Relationship
 	 * )
@@ -78,7 +78,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelatedRelationship()
 	 */
 	@Override
@@ -88,7 +88,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getHasRelatedRelationshipName()
 	 */
 	@Override
@@ -98,7 +98,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_join_alias_name()
 	 */
 	@Override
@@ -108,7 +108,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_sql_table_or_join_alias_name(java.lang.String)
 	 */
 	@Override
@@ -118,7 +118,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
@@ -161,7 +161,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelationshipNameUsed()
 	 */
 	@Override
@@ -205,7 +205,7 @@ public class LayoutItemPortal extends LayoutGroup implements UsesRelationship {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
 	 */
 	@Override

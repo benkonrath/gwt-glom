@@ -64,7 +64,7 @@ public class ListViewTable extends ListTable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.list.ListTable#getDataProvider()
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class ListViewTable extends ListTable {
 							GWT.log("ListViewTable: result was null.");
 							return;
 						}
-						
+
 						numNonEmptyRows = result.size();
 
 						// Add empty rows if required.
@@ -131,7 +131,7 @@ public class ListViewTable extends ListTable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.list.ListTable#getMinNumVisibleRows()
 	 */
 	@Override
@@ -141,7 +141,7 @@ public class ListViewTable extends ListTable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.list.ListTable#getNumNonEmptyRows()
 	 */
 	@Override

@@ -58,7 +58,7 @@ public class NumericCell extends AbstractCell<Double> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.cell.client.AbstractCell#render(com.google.gwt.cell.client.Cell.Context, java.lang.Object,
 	 * com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */

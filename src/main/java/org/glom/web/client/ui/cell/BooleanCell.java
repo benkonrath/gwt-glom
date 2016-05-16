@@ -41,7 +41,7 @@ public class BooleanCell extends CheckboxCell {
 	/*
 	 * This method is overridden to ensure the user can't toggle the checkbox. This method can be removed when support
 	 * for editing is added.
-	 * 
+	 *
 	 * @see com.google.gwt.cell.client.CheckboxCell#onBrowserEvent(com.google.gwt.cell.client.Cell.Context,
 	 * com.google.gwt.dom.client.Element, java.lang.Boolean, com.google.gwt.dom.client.NativeEvent,
 	 * com.google.gwt.cell.client.ValueUpdater)
@@ -59,7 +59,7 @@ public class BooleanCell extends CheckboxCell {
 
 	/*
 	 * This method is overridden to handle rendering empty rows.
-	 * 
+	 *
 	 * @see com.google.gwt.cell.client.CheckboxCell#render(com.google.gwt.cell.client.Cell.Context, java.lang.Boolean,
 	 * com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */

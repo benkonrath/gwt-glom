@@ -57,7 +57,7 @@ public class ListViewDBAccess extends ListDBAccess {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param quickFind
 	 * @param start
 	 * @param length
@@ -74,7 +74,7 @@ public class ListViewDBAccess extends ListDBAccess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.server.ListDBAccess#getExpectedResultSize()
 	 */
 	public int getExpectedResultSize() {
@@ -88,7 +88,7 @@ public class ListViewDBAccess extends ListDBAccess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.server.ListDBAccess#getSQLQuery(LayoutFieldVector, SortClause)
 	 */
 	@Override
@@ -107,7 +107,7 @@ public class ListViewDBAccess extends ListDBAccess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.server.ListDBAccess#getCountQuery(LayoutFieldVector)
 	 */
 	@Override
@@ -117,7 +117,7 @@ public class ListViewDBAccess extends ListDBAccess {
 
 	/**
 	 * Gets the primary key index of this list layout.
-	 * 
+	 *
 	 * @return index of primary key or -1 if a primary key was not found
 	 */
 	private int getPrimaryKeyIndex() {

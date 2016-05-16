@@ -37,21 +37,21 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class OnlineGlomServlet extends RemoteServiceServlet {
 
 	private static final long serialVersionUID = 6173927100594792748L;
-	
+
 	private static final String CONFIGURED_DOCUMENT_SET = "configuredDocumentSet";
 	private static final String USER_STORE = "userStore";
 	static final String COOKIE_NAME = "OnlineGlomSessionID";
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public OnlineGlomServlet() {
 		super();
-	
+
 	}
 
 	/**
-	 * 
+	 *
 	 */
 
 	/**
@@ -68,7 +68,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 			Log.error("getServletConfig() return null");
 			return null;
 		}
-	
+
 		final ServletContext context = config.getServletContext();
 		if(context == null) {
 			Log.error("getServletContext() return null");
@@ -81,7 +81,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 			Log.error("The configuredDocumentSet attribute is not of the expected type.");
 			return null;
 		}
-		
+
 		UserStore userStore = (UserStore)object;
 		if(userStore != null) {
 			return userStore;
@@ -94,7 +94,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 
 		//Store it in the Servlet Context,
 		//so it is available to all servlets:
-		context.setAttribute(USER_STORE, userStore);	
+		context.setAttribute(USER_STORE, userStore);
 
 		return userStore;
 	}
@@ -106,7 +106,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 			Log.error("getServletConfig() return null");
 			return null;
 		}
-	
+
 		final ServletContext context = config.getServletContext();
 		if(context == null) {
 			Log.error("getServletContext() return null");
@@ -119,7 +119,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 			Log.error("The configuredDocumentSet attribute is not of the expected type.");
 			return null;
 		}
-		
+
 		ConfiguredDocumentSet configuredDocumentSet = (ConfiguredDocumentSet)object;
 		if(configuredDocumentSet != null) {
 			return configuredDocumentSet;
@@ -135,14 +135,14 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 			Log.error("Configuration error", e);
 			return null;
 		}
-		
+
 		//Store it in the Servlet Context,
 		//so it is available to all servlets:
-		context.setAttribute(CONFIGURED_DOCUMENT_SET, configuredDocumentSet);	
+		context.setAttribute(CONFIGURED_DOCUMENT_SET, configuredDocumentSet);
 
 		return configuredDocumentSet;
 	}
-	
+
 	/**
 	 * @param documentID
 	 * @return
@@ -156,28 +156,28 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 
 		return configuredDocumentSet.getDocument(documentID);
 	}
-	
+
 	ComboPooledDataSource getConnection(final String documentID) {
 		return getConnection(null, documentID);
 	}
-	
+
 	/**
 	 * Get a working connection, if any,
 	 * either based on credentials entered by the user (and recalled via a browser cookie),
 	 * or based on credentials in the config file.
-	 * 
+	 *
 	 * @param request
 	 * @param documentID
 	 * @return
 	 */
 	ComboPooledDataSource getConnection(HttpServletRequest request, final String documentID) {
 		request = getRequest(request);
-			
+
 		final ConfiguredDocument configuredDocument = getDocument(documentID);
 		if(configuredDocument == null) {
 			Log.error("getDocument() returned null.");
 		}
-		
+
 		ComboPooledDataSource authenticatedConnection = null;
 
 		//Check the config credentials.
@@ -186,11 +186,11 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		if(credentials != null) {
 			authenticatedConnection = credentials.getConnection();
 		}
-		
+
 		if (authenticatedConnection != null) {
 			return authenticatedConnection;
 		}
-		
+
 		//Use the credentials previously entered by the user:
 		final String sessionID = getSessionIdFromCookie(request);
 		if(StringUtils.isEmpty(sessionID)) {
@@ -208,7 +208,7 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		if(credentials == null) {
 			return null;
 		}
-	
+
 		return credentials.getConnection();
 	}
 
@@ -216,9 +216,9 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 	 * @return
 	 */
 	private String getSessionIdFromCookie(HttpServletRequest request) {
-		
+
 		request = getRequest(request);
-		
+
 		if(request == null) {
 			Log.error("The HttpServletRequest is null.");
 			return null;
@@ -234,18 +234,18 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		for(Cookie cookie : cookies) {
 			if (cookie == null)
 				continue;
-			
+
 			if (StringUtils.equals(cookie.getName(), COOKIE_NAME)) {
 				sessionCookie = cookie;
 				break;
 			}
 		}
-	
+
 		if (sessionCookie == null) {
 			Log.info("sessionID is null");
 			return null;
 		}
-		
+
 		final String sessionID = sessionCookie.getValue();
 		Log.info("sessionID=" + sessionID);
 		return sessionID;
@@ -265,32 +265,32 @@ public class OnlineGlomServlet extends RemoteServiceServlet {
 		}
 		return request;
 	}
-	
+
 	/*
 	 * This is called when the servlet is started or restarted.
-	 * 
+	 *
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.servlet.GenericServlet#init()
 	 */
 	public void init() throws ServletException {
 	}
-	
+
 	/*
 	 * This is called when the servlet is stopped or restarted.
-	 * 
+	 *
 	 * @see javax.servlet.GenericServlet#destroy()
 	 */
 	@Override
 	public void destroy() {
 		//TODO: When should we do this for a shared set?: configuredDocumentSet.forgetDocuments();
 	}
-	
+
 	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
 	boolean isAuthenticated(final String documentID) {
 		return isAuthenticated(null, documentID);
 	}
-	
+
 	//TODO: Rename this to avoid confusion with OnlineGlomLoginServlet.isAuthenticated()?
 	boolean isAuthenticated(final HttpServletRequest request, final String documentID) {
 		final ComboPooledDataSource authenticatedConnection = getConnection(request, documentID);

@@ -27,7 +27,7 @@ public interface DocumentSelectionView extends View {
 
 	/**
 	 * Sets an error message to be displayed to the user.
-	 * 
+	 *
 	 * @param message
 	 *            the error message.
 	 */

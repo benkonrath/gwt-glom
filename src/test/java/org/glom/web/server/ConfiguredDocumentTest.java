@@ -42,7 +42,7 @@ public class ConfiguredDocumentTest {
 	private static Document document;
 	private static String defaultLocale = "";
 	private static String germanLocale = "de";
-	
+
 	@BeforeClass
 	static public void setUp() throws PropertyVetoException {
 		URL url = DocumentTest.class.getResource("example_music_collection.glom");
@@ -54,7 +54,7 @@ public class ConfiguredDocumentTest {
 		document.setFileURI(testUriMusicCollection);
 		final boolean retval = document.load();
 		assertTrue(retval);
-		
+
 		configuredDoc = new ConfiguredDocument(document);
 	}
 
@@ -98,12 +98,12 @@ public class ConfiguredDocumentTest {
 		DocumentInfo docInfo = configuredDoc.getDocumentInfo(defaultLocale);
 		assertNotNull(docInfo);
 		assertEquals(docInfo.getTitle(), "Music Collection");
-		
+
 		//Other locale:
 		docInfo = configuredDoc.getDocumentInfo(germanLocale);
 		assertNotNull(docInfo);
 		assertEquals(docInfo.getTitle(), "Musiksammlung");
-		
+
 		//Invalid locale, which should use the default one:
 		docInfo = configuredDoc.getDocumentInfo("someinvalidlocale");
 		assertNotNull(docInfo);

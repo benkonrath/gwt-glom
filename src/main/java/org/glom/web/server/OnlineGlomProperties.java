@@ -29,10 +29,10 @@ import org.apache.commons.lang3.StringUtils;
 class OnlineGlomProperties extends Properties {
 
 	private static final long serialVersionUID = 4290997725469072758L;
-	
+
 
 	/** Get the credentials for a specific file, ignoring the global username and password.
-	 * 
+	 *
 	 * @param filename
 	 * @return
 	 */
@@ -46,7 +46,7 @@ class OnlineGlomProperties extends Properties {
 
 		//Split the line at the . separators,
 		final String[] keyArray = key.split("\\.");
-		
+
 		//Check that the third item is "filename", as expected:
 		if (keyArray.length == 3 && "filename".equals(keyArray[2])) {
 			//Get the username and password for this file:
@@ -56,7 +56,7 @@ class OnlineGlomProperties extends Properties {
 			final String password = getPropertyNonNull(passwordKey);
 			result = new Credentials(null, username, password, null);
 		}
-		
+
 		return result;
 	}
 
@@ -75,16 +75,16 @@ class OnlineGlomProperties extends Properties {
 	public String getDocumentsDirectory() {
 		return getPropertyNonNull("glom.document.directory");
 	}
-	
+
 	/** Get the key for any *.*.filename = thefilename line.
 	 *
 	 * @param value
 	 * @return
 	 */
 	private String getKey(final String filename) {
-		
+
 		for (final String key : stringPropertyNames()) {
-			
+
 			//Split the line at the . separators,
 			final String[] keyArray = key.split("\\.");
 			if (keyArray.length != 3)
@@ -100,7 +100,7 @@ class OnlineGlomProperties extends Properties {
 
 		return null;
 	}
-	
+
 	private String getPropertyNonNull(final String key) {
 		return StringUtils.defaultString(getProperty(key));
 	}

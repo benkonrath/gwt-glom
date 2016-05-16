@@ -36,22 +36,22 @@ public class Credentials {
 	public String password;
 	private ComboPooledDataSource cpds;
 	SessionListener connectionInvalidator = null;
-	
+
 	public Credentials(final Document document, final String username, final String password, final ComboPooledDataSource cpds) {
 		this.document = document;
 		this.username = username;
 		this.password = password;
-		
+
 		setConnection(cpds);
 	}
-	
+
 	private void setConnection(final ComboPooledDataSource cpds) {
 		this.cpds = cpds;
 
 		//Forget the connection when the user's browser session ends:
 		this.connectionInvalidator = new SessionListener(this);
 	}
-	
+
 	public void invalidateConnection() {
 		try {
 			DataSources.destroy(cpds);
@@ -70,7 +70,7 @@ public class Credentials {
 		if(cpds != null) {
 			return cpds;
 		}
-		
+
 		// Try to recreate the connection,
 		// which might have been invalidated after some time:
 		ComboPooledDataSource authenticatedConnection;
@@ -81,14 +81,14 @@ public class Credentials {
 			Log.error("Unknown SQL Error checking the database authentication.", e);
 			return null;
 		}
-		
+
 		if(authenticatedConnection == null) {
 			return null;
 		}
-		
+
 		//Remember it for a while:
 		setConnection(authenticatedConnection);
 		return authenticatedConnection;
 	}
-	
+
 }

@@ -41,7 +41,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Gets data for the details view.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
@@ -55,7 +55,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Gets a {@link DetailsLayoutAndData} object that contains the layout and data of the details view.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
@@ -72,7 +72,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Gets a list of Glom documents found in the configured directory.
-	 * 
+	 *
 	 * @return an {@link ArrayList<String>} of Glom document titles. If the list is empty, no glom documents were found
 	 *         in the configured directory because it's empty or the directory is not configured correctly.
 	 */
@@ -80,7 +80,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Retrieves data for a list view table.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
@@ -105,7 +105,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Retrieves data for the related list table with the specified portal and foreign key value.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
@@ -131,7 +131,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Gets the expected row count for the related list table with the specified portal and foreign key value.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName
@@ -150,7 +150,7 @@ public interface OnlineGlomService extends RemoteService {
 
 	/**
 	 * Get a list of reports for the specified table.
-	 * 
+	 *
 	 * @param documentID
 	 *            identifier for the Glom document
 	 * @param tableName

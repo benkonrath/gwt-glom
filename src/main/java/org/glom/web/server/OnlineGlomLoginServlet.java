@@ -34,10 +34,10 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 /**
  * This is the servlet class for setting up the server side of Online Glom. The client side can call the public methods
  * in this class via OnlineGlom
- * 
+ *
  * For instance, it loads all the available documents and provide a list - see getDocuments(). It then provides
  * information from each document. For instance, see getListViewLayout().
- * 
+ *
  * TODO: Watch for changes to the .glom files, to reload new versions and to load newly-added files. TODO: Watch for
  * changes to the properties (configuration)?
  */
@@ -46,7 +46,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#checkAuthentication(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
@@ -59,7 +59,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			Log.error("The servlet's checkAuthentication method was called via an insecure protocol. Refusing to continue.");
 			return false;
 		}
-	
+
 		final ConfiguredDocumentSet configuredDocumentSet = getConfiguredDocumentSet();
 		if(configuredDocumentSet == null) {
 			Log.error(documentID, "The document set could not be found.");
@@ -71,7 +71,7 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			Log.error(documentID, "The document could not be found for this ID: " + documentID);
 			return false;
 		}
-	    
+
 		final Document document = configuredDoc.getDocument();
 		ComboPooledDataSource authenticatedConnection;
 		try {
@@ -80,11 +80,11 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			Log.error(documentID, "Unknown SQL Error checking the database authentication.", e);
 			return false;
 		}
-		
+
 		if(authenticatedConnection != null) {
 			final HttpSession session = request.getSession();
 			final String sessionID = session.getId();
-			
+
 			// This GWT page apparently suggests doing this on the client-side,
 			// after returning the session ID to the client,
 			//  http://code.google.com/p/google-web-toolkit-incubator/wiki/LoginSecurityFAQ
@@ -110,13 +110,13 @@ public class OnlineGlomLoginServlet extends OnlineGlomServlet implements OnlineG
 			final Credentials credentials = new Credentials(document, username, password, authenticatedConnection);
 			userStore.setCredentials(sessionID, credentials);
 		}
-		
+
 		return (authenticatedConnection != null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#isAuthenticated(java.lang.String)
 	 */
 	@Override

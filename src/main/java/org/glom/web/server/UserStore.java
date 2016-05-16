@@ -25,19 +25,19 @@ import java.util.Hashtable;
  * A store of user credentials, details, etc,
  * retrievable based on the session ID,
  * which we store in a cookie in the client's browser.
- * 
+ *
  * @author Murray Cumming <murrayc@murrayc.com>
  *
  */
 public class UserStore {
-	
+
 	/**
 	 * A map of the sessionID to the credentials.
 	 */
 	private Hashtable<String, Credentials> credentialsMap = new Hashtable<>();
 
 	/**
-	 * 
+	 *
 	 */
 	public UserStore() {
 	}
@@ -49,7 +49,7 @@ public class UserStore {
 	public Credentials getCredentials(final String sessionID) {
 		return credentialsMap.get(sessionID);
 	}
-	
+
 	public void setCredentials(final String sessionID, final Credentials credentials) {
 		//Note that HashTable.put() is synchronized,
 		//but be careful if we ever change this to a container that does not

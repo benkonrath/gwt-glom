@@ -44,20 +44,20 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 /**
  * This is the servlet class for setting up the server side of Online Glom. The client side can call the public methods
  * in this class via OnlineGlom
- * 
+ *
  * For instance, it loads all the available documents and provide a list - see (). It then provides
  * information from each document. For instance, see getListViewLayout().
- * 
+ *
  * TODO: Watch for changes to the .glom files, to reload new versions and to load newly-added files. TODO: Watch for
  * changes to the properties (configuration)?
  */
 @SuppressWarnings("serial")
 public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGlomService {
 
-	
+
 	/*
 	 * This is called when the servlet is stopped or restarted.
-	 * 
+	 *
 	 * @see javax.servlet.GenericServlet#destroy()
 	 */
 	@Override
@@ -73,7 +73,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getConfigurationErrorMessage()
 	 */
 	@Override
@@ -82,8 +82,8 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 		if(configuredDocumentSet == null) {
 			Log.error("Could not get the configuredDocumentSet.");
 			return "";
-		}	
-			
+		}
+
 		final Exception configurationException = configuredDocumentSet.getConfigurationException();
 		if (configurationException == null) {
 			return "No configuration errors to report.";
@@ -96,7 +96,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsData(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getDetailsLayoutAndData(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
@@ -148,7 +148,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getDocumentInfo(java.lang.String)
 	 */
 	@Override
@@ -170,7 +170,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getDocuments()
 	 */
 	@Override
@@ -186,7 +186,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getListViewData(java.lang.String, java.lang.String, int, int, int,
 	 * boolean)
 	 */
@@ -202,7 +202,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 		if (configuredDoc == null) {
 			return new ArrayList<>();
 		}
-		
+
 		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return new ArrayList<>();
@@ -213,7 +213,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getListViewLayout(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -232,7 +232,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getRelatedListData(java.lang.String, java.lang.String, int, int, int,
 	 * boolean)
 	 */
@@ -255,7 +255,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 		if (configuredDoc == null) {
 			return new ArrayList<>();
 		}
-		
+
 		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return null;
@@ -283,7 +283,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 		if (configuredDoc == null) {
 			return 0;
 		}
-		
+
 		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return 0;
@@ -295,7 +295,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	// TODO: Specify the foundset (via a where clause) and maybe a default sort order.
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getReportLayout(java.lang.String, java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
@@ -324,7 +324,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 			Log.info(documentID, tableName, "The report layout is not defined for this table:" + reportName);
 			return "";
 		}
-		
+
 		final ComboPooledDataSource authenticatedConnection = getConnection(documentID);
 		if(authenticatedConnection == null) {
 			return "";
@@ -346,7 +346,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getReportsList(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -364,7 +364,7 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 	// instead of doing a separate SQL query to get it now for a specific row.
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.OnlineGlomService#getSuitableRecordToViewDetails(java.lang.String, java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
@@ -393,9 +393,9 @@ public class OnlineGlomServiceImpl extends OnlineGlomServlet implements OnlineGl
 
 	/*
 	 * This is called when the servlet is started or restarted.
-	 * 
+	 *
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.servlet.GenericServlet#init()
 	 */
 	@Override

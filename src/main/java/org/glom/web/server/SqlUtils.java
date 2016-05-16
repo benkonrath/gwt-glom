@@ -59,7 +59,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public class SqlUtils {
 
@@ -70,7 +70,7 @@ public class SqlUtils {
 	private static ComboPooledDataSource createAndSetupDataSource(final Document document) {
 		return createAndSetupDataSource(document.getHostingMode(), document.getConnectionServer(), document.getConnectionPort(), document.getConnectionDatabase());
 	}
-	
+
 	static class JdbcConnectionDetails {
 		String driverClass = null;
 		String jdbcURL = null;
@@ -107,7 +107,7 @@ public class SqlUtils {
 				return null;
 			}
 		}
-			
+
 		// setup the JDBC driver for the current glom document
 		details.jdbcURL += serverHost + ":" + serverPort;
 
@@ -117,10 +117,10 @@ public class SqlUtils {
 			db = defaultDatabase;
 		}
 		details.jdbcURL += "/" + db; // TODO: Quote the database name?
-		
+
 		return details;
 	}
-	
+
 	/**
 	 * @param document
 	 * @return
@@ -140,7 +140,7 @@ public class SqlUtils {
 					+ " Is the PostgreSQL JDBC jar available to the servlet?", e);
 			return null;
 		}
-		
+
 		cpds.setJdbcUrl(details.jdbcURL);
 
 		return cpds;
@@ -148,14 +148,14 @@ public class SqlUtils {
 
 	/**
 	 * Sets the username and password for the database associated with the Glom document.
-	 * 
+	 *
 	 * @return true if the username and password works, false otherwise
 	 */
 	public static ComboPooledDataSource tryUsernameAndPassword(final Document document, final String username, final String password) throws SQLException {
 		ComboPooledDataSource cpds = createAndSetupDataSource(document);
 		if (cpds == null)
 			return null;
-		
+
 		/* Do not bother trying if there are no credentials. */
 		if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password)) {
 			return null;
@@ -170,11 +170,11 @@ public class SqlUtils {
 		try {
 			// FIXME find a better way to check authentication
 			// it's possible that the connection could be failing for another reason
-			
+
 			//Change the timeout, because it otherwise takes ages to fail sometimes when the details are not setup.
 			//This is more than enough.
-			DriverManager.setLoginTimeout(5); 
-			
+			DriverManager.setLoginTimeout(5);
+
 			conn = cpds.getConnection();
 			return cpds;
 		} catch (final SQLException e) {
@@ -206,7 +206,7 @@ public class SqlUtils {
 			Log.error("The connection is null.");
 			return null;
 		}
-		
+
 		return executeQuery(conn, query, expectedLength);
 	}
 
@@ -227,7 +227,7 @@ public class SqlUtils {
 
 		return st.executeQuery(query);
 	}
-	
+
 	/**
 	 * @param connection
 	 * @param query
@@ -237,7 +237,7 @@ public class SqlUtils {
 		final Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		st.executeUpdate(query);
 	}
-	
+
 	// TODO: Change to final ArrayList<LayoutItem_Field> fieldsToGet
 	public static String buildSqlSelectWithKey(final String tableName, final List<LayoutItemField> fieldsToGet,
 			final Field primaryKey, final TypedDataItem primaryKeyValue, final SQLDialect sqlDialect) {
@@ -485,19 +485,19 @@ public class SqlUtils {
 	/*
 	 * private static void listRemoveIfUsesRelationship(final List<UsesRelationship> listRelationships, final
 	 * Relationship relationship) { if (relationship == null) { return; }
-	 * 
+	 *
 	 * final Iterator<UsesRelationship> i = listRelationships.iterator(); while (i.hasNext()) { final UsesRelationship
 	 * eachUsesRel = i.next(); if (eachUsesRel == null) continue;
-	 * 
+	 *
 	 * // Ignore these: if (eachUsesRel.getHasRelatedRelationshipName()) { continue; }
-	 * 
+	 *
 	 * final Relationship eachRel = eachUsesRel.getRelationship(); if (eachRel == null) { continue; }
-	 * 
+	 *
 	 * Log.info("Checking: rel name=" + relationship.get_name() + ", eachRel name=" + eachRel.get_name());
-	 * 
+	 *
 	 * if (UsesRelationship.relationship_equals(relationship, eachRel)) { i.remove(); Log.info("  Removed"); } else {
 	 * Log.info(" not equal"); }
-	 * 
+	 *
 	 * } }
 	 */
 
@@ -598,7 +598,7 @@ public class SqlUtils {
 	 */
 	public static void fillDataItemFromResultSet(final DataItem dataItem, final LayoutItemField field, final int rsIndex,
 			final ResultSet rs, final String documentID, final String tableName, final TypedDataItem primaryKeyValue) throws SQLException {
-		
+
 		switch (field.getGlomType()) {
 		case TYPE_TEXT:
 			final String text = rs.getString(rsIndex);
@@ -633,14 +633,14 @@ public class SqlUtils {
 		case TYPE_IMAGE:
 			//We don't get the data here.
 			//Instead we provide a way for the client to get the image separately.
-			
+
 			//This doesn't seem to work,
 			//presumably because the base64 encoding is wrong:
 			//final byte[] imageByteArray = rs.getBytes(rsIndex);
 			//if (imageByteArray != null) {
 			//	String base64 = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(imageByteArray);
 			//	base64 = "data:image/png;base64," + base64;
-			
+
 			final String url = Utils.buildImageDataUrl(primaryKeyValue, documentID, tableName, field);
 			dataItem.setImageDataUrl(url);
 			break;

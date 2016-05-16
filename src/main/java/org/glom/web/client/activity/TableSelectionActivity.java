@@ -79,7 +79,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 		final TableSelectionView tableSelectionView = clientFactory.getTableSelectionView();
 		tableSelectionView.setPresenter(this);
-		
+
 		// TODO: Check for authentication here?
 		// Or just let it fail to retrieve the list of tables,
 		// and let the other activity on the page ask for authentication.
@@ -278,7 +278,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onCancel()
 	 */
 	@Override
@@ -288,7 +288,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
 	 */
 	@Override
@@ -298,7 +298,7 @@ public class TableSelectionActivity extends AbstractActivity implements View.Pre
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.View.Presenter#goTo(com.google.gwt.place.shared.Place)
 	 */
 	@Override

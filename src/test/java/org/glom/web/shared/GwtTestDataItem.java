@@ -36,16 +36,16 @@ public class GwtTestDataItem extends GwtTest {
 		item.setText(val);
 		assertEquals(val, item.getText());
 	}
-	
+
 	@Test
 	public void testDate() {
 		final DataItem item = new DataItem();
-		
+
 		//Not that we use a different API to create a Date
 		//in the server-side test (GwtTestDataItem),
 		//because this API is deprecated, but the alternative
 		//(Calendar) is not available in GWT client code.
-		final Date val = new Date(1973, 4, 11);			
+		final Date val = new Date(1973, 4, 11);
 		item.setDate(val);
 		assertEquals(val, item.getDate());
 	}

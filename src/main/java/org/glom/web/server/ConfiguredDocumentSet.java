@@ -45,15 +45,15 @@ public class ConfiguredDocumentSet {
 	private Exception configurationException = null;
 
 	/**
-	 * 
+	 *
 	 */
 	public ConfiguredDocumentSet() {
 	}
-	
+
 	public ConfiguredDocument getDocument(final String documentID) {
 		return documentMapping.get(documentID);
 	}
-	
+
 	public Exception getConfigurationException() {
 		return configurationException;
 	}
@@ -68,11 +68,11 @@ public class ConfiguredDocumentSet {
 		configuredDocument.setDocumentID(documentID);
 		documentMapping.put(documentID, configuredDocument);
 	}
-	
-	
+
+
 
 	public void readConfiguration() throws ServletException {
-	
+
 		// All of the initialisation code is surrounded by a try/catch block so that the servlet can be in an
 		// initialised state and the error message can be retrieved by the client code.
 		try {
@@ -88,7 +88,7 @@ public class ConfiguredDocumentSet {
 				}
 				config.load(is); // can throw an IOException
 			}
-	
+
 			// check if we can read the configured glom file directory
 			final String documentDirName = config.getDocumentsDirectory();
 			final File documentDir = new File(documentDirName);
@@ -102,7 +102,7 @@ public class ConfiguredDocumentSet {
 				Log.fatal(errorMessage);
 				throw new Exception(errorMessage);
 			}
-	
+
 			// get and check the glom files in the specified directory
 			// TODO: Test this:
 			final String[] extensions = { GLOM_FILE_EXTENSION };
@@ -112,7 +112,7 @@ public class ConfiguredDocumentSet {
 				Log.fatal(errorMessage);
 				throw new Exception(errorMessage);
 			}
-	
+
 			// don't continue if there aren't any Glom files to configure
 			if (glomFiles.size() <= 0) {
 				final String errorMessage = "Unable to find any Glom documents in the configured directory "
@@ -121,19 +121,19 @@ public class ConfiguredDocumentSet {
 				Log.error(errorMessage);
 				throw new Exception(errorMessage);
 			}
-	
+
 			// Check for a specified default locale,
 			// for table titles, field titles, etc:
 			final String globalLocaleID = StringUtils.defaultString(config.getGlobalLocale());
-	
+
 			for (final Object objGlomFile : glomFiles) {
 				if(!(objGlomFile instanceof File)) {
 					continue;
 				}
-				
+
 				final File glomFile = (File)objGlomFile;
 				final String filename = glomFile.getName();
-	
+
 				final String documentID = getDocumentIdForFilename(filename);
 				final Document document = new Document(documentID);
 				document.setFileURI("file://" + glomFile.getAbsolutePath());
@@ -144,15 +144,15 @@ public class ConfiguredDocumentSet {
 					// continue with for loop because there may be other documents in the directory
 					continue;
 				}
-	
+
 				final ConfiguredDocument configuredDocument = new ConfiguredDocument(document); // can throw a
 				// PropertyVetoException
-	
+
 				final String globalUserName = config.getGlobalUsername();
 				final String globalPassword = config.getGlobalPassword();
-	
+
 				// check if a username and password have been set and work for the current document
-				
+
 				// Username/password could be set. Let's check to see if it works.
 				ComboPooledDataSource authenticatedConnection = null;
 				Credentials docCredentials = config.getCredentials(filename);
@@ -164,38 +164,38 @@ public class ConfiguredDocumentSet {
 						docCredentials = new Credentials(document, docCredentials.username, docCredentials.password, authenticatedConnection);
 					}
 				}
-	
+
 				// Check the if the global username and password have been set and work with this document
 				if (authenticatedConnection == null) {
 					authenticatedConnection = SqlUtils.tryUsernameAndPassword(configuredDocument.getDocument(), globalUserName, globalPassword); // can throw an SQLException
-					if(authenticatedConnection != null) {		
+					if(authenticatedConnection != null) {
 						//Use the global credentials:
 						docCredentials = new Credentials(document, globalUserName, globalPassword, authenticatedConnection);
 					}
 				}
-				
+
 				// Store the credentials for the document,
 				// also remembering the database connection for some time:
 				if (authenticatedConnection != null) {
 						configuredDocument.setCredentials(docCredentials);
 				}
-	
+
 				if (!StringUtils.isEmpty(globalLocaleID)) {
 					configuredDocument.setDefaultLocaleID(globalLocaleID.trim());
 				}
-	
+
 				addDocument(configuredDocument, documentID);
 			}
-	
+
 		} catch (final Exception e) {
 			// Don't throw the Exception so that servlet will be initialised and the error message can be retrieved.
 			configurationException = e;
 		}
-	
+
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void forgetDocuments() {
 		for (final String documentID : documentMapping.keySet()) {
@@ -204,7 +204,7 @@ public class ConfiguredDocumentSet {
 				continue;
 			}
 		}
-		
+
 	}
 
 	/**

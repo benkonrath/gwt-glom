@@ -35,7 +35,7 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Get the number of lines of text that should be displayed.
-	 * 
+	 *
 	 * @returns the number of lines of text
 	 */
 	public int getTextFormatMultilineHeightLines() {
@@ -44,7 +44,7 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Set the number of lines of text that should be displayed.
-	 * 
+	 *
 	 * @param value
 	 *            number of lines of text that should be displayed
 	 * @returns the number of lines of text
@@ -55,10 +55,10 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Get the foreground color to use for text when displaying a field value.
-	 * 
+	 *
 	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColorForNegatives(boolean)} if that is
 	 * active.
-	 * 
+	 *
 	 * @returns the text foreground color in GdkColor color format
 	 */
 	public String getTextFormatColorForeground() {
@@ -67,10 +67,10 @@ public class Formatting implements Serializable {
 
 	/*
 	 * Get the foreground color to use for text when displaying a field value.
-	 * 
+	 *
 	 * This should be overridden by {@link GlomNumericFormat#setUseAltForegroundColorForNegatives(boolean)} if that is
 	 * active.
-	 * 
+	 *
 	 * @returns the text foreground color in HTML color format
 	 */
 	public String getTextFormatColorForegroundAsHTMLColor() {
@@ -79,7 +79,7 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Set the foreground color to use for text when displaying a field value.
-	 * 
+	 *
 	 * @param color
 	 *            the text foreground color in GdkColor color format
 	 */
@@ -89,7 +89,7 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Get the background color to use for text when displaying a field value.
-	 * 
+	 *
 	 * @returns the text background color in GdkColor color format
 	 */
 	public String getTextFormatColorBackground() {
@@ -98,7 +98,7 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Get the background color to use for text when displaying a field value.
-	 * 
+	 *
 	 * @returns the text background color in HTML color format
 	 */
 	public String getTextFormatColorBackgroundAsHTMLColor() {
@@ -107,7 +107,7 @@ public class Formatting implements Serializable {
 
 	/**
 	 * Set the background color to use for text when displaying a field value.
-	 * 
+	 *
 	 * @param color
 	 *            a text background color in HTML color format
 	 */

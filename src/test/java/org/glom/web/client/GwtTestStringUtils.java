@@ -26,7 +26,7 @@ public class GwtTestStringUtils extends GwtTest {
 	public void testDefaultString() {
 		assertEquals("", StringUtils.defaultString(""));
 		assertEquals("", StringUtils.defaultString(null));
-		
+
 		assertEquals("something", StringUtils.defaultString("something"));
 	}
 
@@ -42,7 +42,7 @@ public class GwtTestStringUtils extends GwtTest {
 		assertTrue(StringUtils.equals(new String(), null));
 		assertTrue(StringUtils.equals(null, new String()));
 		assertTrue(StringUtils.equals(new String(), null));
-		
+
 		assertFalse(StringUtils.equals("something", null));
 		assertFalse(StringUtils.equals("something", ""));
 		assertFalse(StringUtils.equals("something", new String()));

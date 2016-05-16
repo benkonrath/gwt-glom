@@ -38,13 +38,13 @@ public class TypedDataItem extends DataItem {
 	public boolean isEmpty() {
 		return empty;
 	}
-	
+
 	public boolean isUnknownType() {
 		return (type == GlomFieldType.TYPE_INVALID);
 	}
 
 	/** Get the value.
-	 * 
+	 *
 	 * This is a generic alternative to getNumber(), getText(), etc.
 	 * @return
 	 */
@@ -72,7 +72,7 @@ public class TypedDataItem extends DataItem {
 	//TODO: Why is this override necessary?
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.DataItem#setBoolean(boolean)
 	 */
 	@Override
@@ -84,7 +84,7 @@ public class TypedDataItem extends DataItem {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.DataItem#setNumber(double)
 	 */
 	@Override
@@ -96,7 +96,7 @@ public class TypedDataItem extends DataItem {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.DataItem#setText(java.lang.String)
 	 */
 	@Override
@@ -105,10 +105,10 @@ public class TypedDataItem extends DataItem {
 		this.type = GlomFieldType.TYPE_TEXT;
 		super.setText(text);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.DataItem#setNumber(double)
 	 */
 	@Override
@@ -129,11 +129,11 @@ public class TypedDataItem extends DataItem {
 		this.type = GlomFieldType.TYPE_IMAGE;
 		super.setImageDataUrl(image);
 	}
-	
+
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.DataItem#setText(java.lang.String)
 	 */
 	public void setUnknown(final String value) {

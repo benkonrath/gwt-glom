@@ -49,7 +49,7 @@ public class OnlineGlomPropertiesTest extends TestCase {
 			config.load(is); // can throw an IOException
 		}
 	}
-	
+
 	/**
 	 * Test method for {@link org.glom.web.server.OnlineGlomProperties#getCredentials(java.lang.String)}.
 	 */
@@ -92,7 +92,7 @@ public class OnlineGlomPropertiesTest extends TestCase {
 	public void testGetDocumentsDirectory() {
 		assertEquals("/home/someuser/glomfiles", config.getDocumentsDirectory());
 	}
-	
+
 	@Override
 	@AfterClass
 	public void tearDown() {

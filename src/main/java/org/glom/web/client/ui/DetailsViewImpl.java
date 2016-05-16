@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
- * 
+ *
  */
 public class DetailsViewImpl extends Composite implements DetailsView {
 
@@ -46,7 +46,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.View#setPresenter(org.glom.web.client.ui.View.Presenter)
 	 */
 	@Override
@@ -56,7 +56,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.DetailsView#addGroup(LayoutGroup)
 	 */
 	@Override
@@ -69,7 +69,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.DetailsView#clear()
 	 */
 	@Override
@@ -81,7 +81,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.DetailsView#getCells()
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class DetailsViewImpl extends Composite implements DetailsView {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.DetailsView#getPortals()
 	 */
 	@Override

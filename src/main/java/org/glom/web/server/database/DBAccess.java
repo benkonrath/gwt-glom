@@ -89,7 +89,7 @@ abstract class DBAccess {
 				// Convert the field value to a string based on the glom type. We're doing the formatting on the
 				// server side for now but it might be useful to move this to the client side.
 				SqlUtils.fillDataItemFromResultSet(dataItem, field, rsIndex, rs, documentID, tableName, primaryKeyValue);
-				
+
 				rowArray[i] = dataItem;
 			}
 
@@ -126,7 +126,7 @@ abstract class DBAccess {
 
 	/*
 	 * Gets an ArrayList of LayoutItem_Field objects to use when generating an SQL query.
-	 * 
+	 *
 	 * @precondition libglomLayoutGroup must not be null
 	 */
 	private ArrayList<LayoutItemField> getFieldsToShowForSQLQueryAddGroup(final LayoutGroup libglomLayoutGroup) {
@@ -174,7 +174,7 @@ abstract class DBAccess {
 
 	/**
 	 * Gets the primary key LayoutItem_Field for the specified table.
-	 * 
+	 *
 	 * @param tableName
 	 *            name of table to search for the primary key LayoutItem_Field
 	 * @return primary key LayoutItem_Field

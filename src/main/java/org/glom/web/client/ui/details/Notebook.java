@@ -44,7 +44,7 @@ class Notebook extends Group {
 
 	/**
 	 * Create a new Notebook widget based on the specified LayoutItemNotebook DTO.
-	 * 
+	 *
 	 * @param layoutItemNotebook
 	 */
 	public Notebook(final LayoutItemNotebook layoutItemNotebook) {

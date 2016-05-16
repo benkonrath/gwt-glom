@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * @author Ben Konrath <ben@bagu.org>
- * 
+ *
  */
 class SingleLineText extends Composite {
 
@@ -63,7 +63,7 @@ class SingleLineText extends Composite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.user.client.ui.Widget#onLoad()
 	 */
 	@Override
@@ -83,7 +83,7 @@ class SingleLineText extends Composite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.user.client.ui.Widget#onUnload()
 	 */
 	@Override

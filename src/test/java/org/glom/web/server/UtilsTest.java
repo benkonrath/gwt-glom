@@ -41,7 +41,7 @@ public class UtilsTest {
 		final String url = Utils.buildImageDataUrl("some-document-id", "some-table-name", "details", path);
 		assertNotNull(url);
 		assertFalse(StringUtils.isEmpty(url));
-			
+
 	}
 
 	/**

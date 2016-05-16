@@ -32,9 +32,9 @@ import com.google.gwt.place.shared.WithTokenizers;
  * PlaceHistoryMapper interface is used to attach all places which the PlaceHistoryHandler should be aware of. This is
  * done via the @WithTokenizers annotation or by extending PlaceHistoryMapperWithFactory and creating a separate
  * TokenizerFactory.
- * 
+ *
  * This code is mostly from AppPlaceHistoryMapper.java in the hellomvp GWT example:
- * 
+ *
  * https://code.google.com/webtoolkit/doc/latest/DevGuideMvpActivitiesAndPlaces.html
  */
 @WithTokenizers({ ListPlace.Tokenizer.class, DocumentSelectionPlace.Tokenizer.class, DocumentLoginPlace.Tokenizer.class, DetailsPlace.Tokenizer.class,

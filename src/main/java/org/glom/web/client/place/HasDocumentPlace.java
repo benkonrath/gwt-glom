@@ -35,26 +35,26 @@ public abstract class HasDocumentPlace extends Place {
 	private final String documentID;
 
 	/**
-	 * 
+	 *
 	 */
 	HasDocumentPlace(final String documentID) {
 		super();
 		this.documentID = documentID;
 	}
-	
+
 	public String getDocumentID() {
 		return documentID;
 	}
-	
+
 	public static class Tokenizer {
 		final String documentKey = "document";
 		private final String equals = "=";
 		private final String separator = "&";
-		
+
 		/**
 		 * Get a HashMap of parameter names and values from the history token. This can parse tokens built by
 		 * buildParamsToken().
-		 * 
+		 *
 		 * @param historyToken
 		 *            The historyToken provided to getPlace().
 		 * @return A HasMap of names to values.
@@ -89,7 +89,7 @@ public abstract class HasDocumentPlace extends Place {
 		/**
 		 * Build a history token based on a HashMap of parameter names and values. This can later be parsed by
 		 * getTokenParams().
-		 * 
+		 *
 		 * @param params
 		 *            A HashMap of names and values.
 		 * @return A history string for use by getToken() implementation.

@@ -45,7 +45,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 		place = getDetailsPlaceFromToken(token);
 		checkParameters(place, documentId, tableName, primaryKeyValue);
 	}
-	
+
 	@Test
 	public void testGetPlaceParametersNumericPrimaryKey() {
 		// Create a DetailsPlace, testing getPlace():
@@ -89,7 +89,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 		// Create a DetailsPlace, testing getPlace():
 		final String documentId = "somedocument";
 		final String tableName = "sometable";
-		
+
 		//TODO: Is there no easier (and non-deprecated) way to create
 		//a Date instance?
 		Calendar cal = new GregorianCalendar();
@@ -103,7 +103,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 		cal.set(Calendar.DAY_OF_MONTH, 11);
 		final Date primaryKeyValue = cal.getTime();
 		//final Date primaryKeyValue = new Date(1973, 4, 11); /* The month is 0-indexed. */
-		
+
 		final String primaryKeyValueText = "1973-05-11";
 		DetailsPlace place = getDetailsPlaceFromToken("document=" + documentId + "&table=" + tableName + "&value="
 				+ primaryKeyValueText);
@@ -125,7 +125,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 	 */
 	private void checkParameters(final DetailsPlace place, final String documentID, final String tableName, double primaryKeyValue) {
 		checkParametersBasic(place, documentID, tableName);
-		
+
 		//Check the value as a number:
 		final TypedDataItem dataItem = place.getPrimaryKeyValue();
 		Utils.transformUnknownToActualType(dataItem, GlomFieldType.TYPE_NUMERIC);
@@ -141,7 +141,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 		Utils.transformUnknownToActualType(dataItem, GlomFieldType.TYPE_TEXT);
 		assertEquals(primaryKeyValue, dataItem.getText());
 	}
-	
+
 	private void checkParameters(final DetailsPlace place, final String documentID, final String tableName,
 			final Date primaryKeyValue) {
 		checkParametersBasic(place, documentID, tableName);
@@ -151,7 +151,7 @@ public class GwtTestDetailsPlace extends GwtTest {
 		Utils.transformUnknownToActualType(dataItem, GlomFieldType.TYPE_DATE);
 		assertEquals(primaryKeyValue, dataItem.getDate());
 	}
-	
+
 	private void checkParameters(final DetailsPlace place, final String documentID, final String tableName,
 			final boolean primaryKeyValue) {
 		checkParametersBasic(place, documentID, tableName);

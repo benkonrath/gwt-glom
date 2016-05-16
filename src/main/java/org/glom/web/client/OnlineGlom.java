@@ -139,7 +139,7 @@ public class OnlineGlom implements EntryPoint {
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper.
 		final AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-		
+
 		Place defaultPlace = null;
 		if(placeController instanceof PlaceControllerExt) {
 			PlaceControllerExt ext = (PlaceControllerExt)placeController;

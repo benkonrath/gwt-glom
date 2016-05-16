@@ -31,7 +31,7 @@ import org.junit.Test;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public class SelfHostExampleTest {
 
@@ -41,12 +41,12 @@ public class SelfHostExampleTest {
 	public void testPostgreSQL() throws SQLException {
 		doTest(Document.HostingMode.HOSTING_MODE_POSTGRES_SELF);
 	}
-	
+
 	@Test
 	public void testMySQL() throws SQLException {
 		doTest(Document.HostingMode.HOSTING_MODE_MYSQL_SELF);
 	}
-	
+
 	/* This is really a test of our test utility code. */
 	@Test
 	public void testSelfHosterEscapeIDSame() {
@@ -64,7 +64,7 @@ public class SelfHostExampleTest {
 	}
 
 	/**
-	 * @param hostingMode 
+	 * @param hostingMode
 	 * @throws SQLException
 	 */
 	private void doTest(Document.HostingMode hostingMode) throws SQLException {
@@ -88,9 +88,9 @@ public class SelfHostExampleTest {
 
 		final boolean hosted = selfHoster.createAndSelfHostFromExample();
 		assertTrue(hosted);
-		
+
 		SelfHostTestUtils.testExampleMusiccollectionData(selfHoster, document);
-		
+
 		if (selfHoster != null) {
 			selfHoster.cleanup();
 		}

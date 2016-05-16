@@ -61,7 +61,7 @@ class SelfHoster {
 	String password = "";
 
 	/**
-	 * 
+	 *
 	 */
 	SelfHoster(final Document document) {
 		super();
@@ -342,7 +342,7 @@ class SelfHoster {
 	boolean getSelfHostingActive() {
 		return selfHostingActive;
 	}
-	
+
 	boolean executeCommandLineAndWait(final ProcessBuilder command) {
 
 		command.redirectErrorStream(true);
@@ -534,7 +534,7 @@ class SelfHoster {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
+
 	/**
 	 * @param dbDir
 	 * @return
@@ -553,7 +553,7 @@ class SelfHoster {
 		for (int port = start; port <= end; ++port) {
 			try {
 				final ServerSocket socket = new ServerSocket(port);
-	
+
 				// If the instantiation succeeded then the port was free:
 				final int result = socket.getLocalPort(); // This must equal port.
 				socket.close();
@@ -562,10 +562,10 @@ class SelfHoster {
 				continue; // try next port
 			}
 		}
-	
+
 		return 0;
 	}
-	
+
 	/**
 	 * @param path
 	 * @return
@@ -582,7 +582,7 @@ class SelfHoster {
 
 		return true;
 	}
-	
+
 	/**
 	 * @param portNumber
 	 * @return
@@ -592,7 +592,7 @@ class SelfHoster {
 		format.setGroupingUsed(false); // TODO: Does this change it system-wide?
 		return format.format(portNumber);
 	}
-	
+
 	/**
 	 */
 	public Connection createConnection(boolean failureExpected) {
@@ -603,14 +603,14 @@ class SelfHoster {
 		if (details == null) {
 			return null;
 		}
-		
+
 		final Properties connectionProps = new Properties();
 		connectionProps.put("user", this.username);
 		connectionProps.put("password", this.password);
 
 		Connection conn;
 		try {
-			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs. 
+			//TODO: Remove these debug prints when we figure out why getConnection sometimes hangs.
 			//System.out.println("debug: SelfHosterPostgreSQL.createConnection(): before createConnection()");
 			DriverManager.setLoginTimeout(10);
 			conn = DriverManager.getConnection(details.jdbcURL, connectionProps);
@@ -637,7 +637,7 @@ class SelfHoster {
 		// TODO: Escape.
 		// return "'" + str + "'";
 	}
-	
+
 	/**
 	 * @return The temporary directory where the file was saved.
 	 */

@@ -75,7 +75,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#get_table_used(java.lang.String)
 	 */
 	@Override
@@ -124,7 +124,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.glom.web.shared.libglom.layout.UsesRelationship#setRelationship(org.glom.web.shared.libglom.Relationship)
 	 */
@@ -135,7 +135,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelationship()
 	 */
 	@Override
@@ -145,7 +145,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getHasRelationshipName()
 	 */
 	@Override
@@ -155,7 +155,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.glom.web.shared.libglom.layout.UsesRelationship#setRelatedRelationship(org.glom.web.shared.libglom.Relationship
 	 * )
@@ -167,7 +167,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelatedRelationship()
 	 */
 	@Override
@@ -177,7 +177,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getHasRelatedRelationshipName()
 	 */
 	@Override
@@ -187,7 +187,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getSqlJoinAliasName()
 	 */
 	@Override
@@ -211,7 +211,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getSqlTableOrJoinAliasName(java.lang.String)
 	 */
 	@Override
@@ -233,7 +233,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getRelationshipNameUsed()
 	 */
 	@Override
@@ -295,7 +295,7 @@ public class LayoutItemField extends LayoutItemWithFormatting implements UsesRel
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.shared.libglom.layout.UsesRelationship#getTitleUsed(java.lang.String, java.lang.String)
 	 */
 	@Override

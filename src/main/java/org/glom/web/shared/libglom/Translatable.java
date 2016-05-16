@@ -78,7 +78,7 @@ public class Translatable implements Serializable {
 	/**
 	 * Make sure that getTitle() or getTitleOriginal() returns the specified translation. And discard all translations.
 	 * You should probably only call this on a clone()ed item.
-	 * 
+	 *
 	 * @param locale
 	 */
 	public void makeTitleOriginal(final String locale) {

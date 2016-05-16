@@ -49,7 +49,7 @@ public class DetailsPlace extends HasTablePlace {
 
 		/**
 		 * Creates the URL string that is shown in the browser. This is the bookmarked URL.
-		 * 
+		 *
 		 * @see com.google.gwt.place.shared.PlaceTokenizer#getToken(com.google.gwt.place.shared.Place)
 		 * @see org.glom.web.server.Utils.getGlomTypeGdaValueForTypedDataItem(String, String, glom_field_type,
 		 *      TypedDataItem)
@@ -70,7 +70,7 @@ public class DetailsPlace extends HasTablePlace {
 		 * Create a string representation of a database value, for use in a URL.
 		 * This return string should be parseable by Utils.transformUnknownToActualType()
 		 * on the server.
-		 * 
+		 *
 		 * @param value
 		 * @param glomFieldType
 		 * @return
@@ -93,7 +93,7 @@ public class DetailsPlace extends HasTablePlace {
 			case TYPE_TEXT:
 				primaryKeyValueString = value.getText();
 				break;
-				
+
 			case TYPE_BOOLEAN:
 				primaryKeyValueString = (value.getBoolean() ? "true" : "false");
 				break;
@@ -106,16 +106,16 @@ public class DetailsPlace extends HasTablePlace {
 					//Note that almost any use of GWT's DateTimeFormat on the server causes an exception
 					//because it is not implemented.
 					//See http://code.google.com/p/google-web-toolkit/issues/detail?id=7671
-					
+
 					final DateTimeFormat dateTimeFomat = DateTimeFormat.getFormat("yyyy-MM-dd");
 					primaryKeyValueString = dateTimeFomat.format(date);
-					
+
 					//We could this manually, but date.getYear(), etc, are not available in client-side GWT code.
 					//
 					//primaryKeyValueString = String.format("%04d-%02d-%02d",
 					//		date.getYear() + 1900, date.getMonth() + 1, date.getDate());
 				}
-			
+
 				break;
 
 			case TYPE_INVALID:
@@ -149,7 +149,7 @@ public class DetailsPlace extends HasTablePlace {
 		/**
 		 * Create a DetailPlace that should be loaded from a URL string. This is called when users load the details view
 		 * directly with the URL string (a bookmark or link).
-		 * 
+		 *
 		 * @see com.google.gwt.place.shared.PlaceTokenizer#getPlace(java.lang.String)
 		 * @see org.glom.web.server.Utils.getGlomTypeGdaValueForTypedDataItem(String, String, glom_field_type,
 		 *      TypedDataItem)

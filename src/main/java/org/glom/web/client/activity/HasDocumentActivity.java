@@ -42,7 +42,7 @@ public abstract class HasDocumentActivity extends AbstractActivity implements Vi
 	final String documentID;
 
 	/**
-	 * 
+	 *
 	 */
 	HasDocumentActivity(final HasDocumentPlace place, final ClientFactory clientFactory) {
 		super();
@@ -71,7 +71,7 @@ public abstract class HasDocumentActivity extends AbstractActivity implements Vi
 				// TODO: create a way to notify users of asynchronous callback failures
 				GWT.log("AsyncCallback Failed: OnlineGlomService.isAuthenticated(): " + caught.getMessage());
 			}
-	
+
 			@Override
 			public void onSuccess(final Boolean result) {
 				if (!result) {
@@ -83,7 +83,7 @@ public abstract class HasDocumentActivity extends AbstractActivity implements Vi
 		};
 		OnlineGlomLoginServiceAsync.Util.getInstance().isAuthenticated(documentID, isAuthCallback);
 	}
-	
+
 	void clearView() {
 	}
 

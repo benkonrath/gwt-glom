@@ -42,7 +42,7 @@ public class Utils {
 
 	/*
 	 * This method safely converts longs from libglom into ints. This method was taken from stackoverflow:
-	 * 
+	 *
 	 * http://stackoverflow.com/questions/1590831/safely-casting-long-to-int-in-java
 	 */
 	public static int safeLongToInt(final long value) {
@@ -81,25 +81,25 @@ public class Utils {
 	}
 
 		/** Build the URL for the service that will return the binary data for an image.
-	 * 
+	 *
 	 * @param primaryKeyValue
 	 * @param field
 	 * @return
 	 */
 	public static String buildImageDataUrl(final TypedDataItem primaryKeyValue, final String documentID, final String tableName, final LayoutItemField field) {
 		final URIBuilder uriBuilder = buildImageDataUrlStart(documentID, tableName);
-		
+
 		//TODO: Handle other types:
 		if(primaryKeyValue != null) {
 			uriBuilder.setParameter("value", Double.toString(primaryKeyValue.getNumber()));
 		}
-		
+
 		uriBuilder.setParameter("field", field.getName());
 		return uriBuilder.toString();
 	}
 
 	/** Build the URL for the service that will return the binary data for an image.
-	 * 
+	 *
 	 * @param primaryKeyValue
 	 * @param field
 	 * @return
@@ -139,17 +139,17 @@ public class Utils {
 			if(!result.isEmpty()) {
 				result += ":";
 			}
-			
+
 			final String strIndex = Integer.toString(i);
 			result += strIndex;
 		}
-		
+
 		return result;
 	}
 
 	/** Get an array of int indices from the :-separated string.
 	 * See buildLayoutPath().
-	 * 
+	 *
 	 * @param attrLayoutPath
 	 * @return The array of indices of the layout items.
 	 */
@@ -157,12 +157,12 @@ public class Utils {
 		if(StringUtils.isEmpty(attrLayoutPath)) {
 			return null;
 		}
-		
+
 		final String[] strIndices = attrLayoutPath.split(":");
 		final int[] indices = new int[strIndices.length];
 		for (int i = 0; i < strIndices.length; ++i) {
 			final String str = strIndices[i];
-	
+
 			try
 			{
 				indices[i] = Integer.parseInt(str);
@@ -173,28 +173,28 @@ public class Utils {
 				return null;
 			}
 		}
-	
+
 		return indices;
 	}
 
 	public static void transformUnknownToActualType(final TypedDataItem dataItem, final GlomFieldType actualType) {
 		if(dataItem.getType() == actualType)
 			return;
-		
+
 		String unknownText = dataItem.getUnknown();
-		
+
 		//Avoid repeated checks for null:
 		if (unknownText == null) {
 			unknownText = "";
 		}
-	
+
 		switch(actualType) {
 		case TYPE_NUMERIC:
 			// TODO: Is this really locale-independent?
 			double number = 0;
 			if(!StringUtils.isEmpty(unknownText)) {
 				try {
-					number = Double.parseDouble(unknownText);		
+					number = Double.parseDouble(unknownText);
 				} catch (final NumberFormatException e) {
 					e.printStackTrace();
 				}
@@ -214,8 +214,8 @@ public class Utils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	
-			dataItem.setDate(date); 
+
+			dataItem.setDate(date);
 			break;
 		case TYPE_TIME:
 			/*TODO :
@@ -227,8 +227,8 @@ public class Utils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	
-			setDate(date); 
+
+			setDate(date);
 			*/
 			break;
 		case TYPE_BOOLEAN:

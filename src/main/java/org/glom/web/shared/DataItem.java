@@ -26,7 +26,7 @@ import org.glom.web.shared.libglom.Field;
 
 /**
  * This Data Transfer Object (DTO) is used to send a data item between the client and the server.
- * 
+ *
  */
 @SuppressWarnings("serial")
 public class DataItem implements Serializable {
@@ -74,7 +74,7 @@ public class DataItem implements Serializable {
 	public void setDate(final Date date) {
 		this.date = date;
 	}
-	
+
 	/** This is not used in DataItem instances that are passed from the server to the client.
 	 * This is only used locally to recreate database data.
 	 * @param bytes
@@ -82,7 +82,7 @@ public class DataItem implements Serializable {
 	public void setImageData(final byte[] imageData) {
 		this.imageData = imageData;
 	}
-	
+
 	public byte[] getImageData() {
 		return imageData;
 	}
@@ -97,7 +97,7 @@ public class DataItem implements Serializable {
 	}
 
 	/** This is used by SelfHosterPostgreSQL to get data for a database column.
-	 * 
+	 *
 	 * @param type The expected type of the data.
 	 * @return The data.
 	 */

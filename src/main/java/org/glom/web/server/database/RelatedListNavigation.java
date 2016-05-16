@@ -62,7 +62,7 @@ public class RelatedListNavigation extends DBAccess {
 
 	/*
 	 * Gets a NavigationRecord for the related list given the primaryKeyValue.
-	 * 
+	 *
 	 * This code was ported from Glom: Box_Data_Portal::get_suitable_record_to_view_details()
 	 */
 	public NavigationRecord getNavigationRecord(final TypedDataItem primaryKeyValue) {
@@ -123,7 +123,7 @@ public class RelatedListNavigation extends DBAccess {
 		ResultSet rs = null;
 		try {
 			if (primaryKeyValue != null) {
-				
+
 				// Make sure that the value knows its actual type,
 				// in case it was received via a URL parameter as a string representation:
 				Utils.transformUnknownToActualType(primaryKeyValue, primaryKeyField.getGlomType());

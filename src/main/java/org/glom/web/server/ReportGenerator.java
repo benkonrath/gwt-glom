@@ -68,7 +68,7 @@ import org.jooq.Condition;
 
 /**
  * @author Murray Cumming <murrayc@openimus.com>
- * 
+ *
  */
 class ReportGenerator {
 
@@ -246,7 +246,7 @@ class ReportGenerator {
 
 	/**
 	 * A vertical group lays the fields out vertically instead of horizontally, with titles to the left.
-	 * 
+	 *
 	 * @param layout_group
 	 * @param parentBand
 	 * @param x

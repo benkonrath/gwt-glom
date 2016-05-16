@@ -50,7 +50,7 @@ public class TextCell extends AbstractCell<String> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.google.gwt.cell.client.AbstractCell#render(com.google.gwt.cell.client.Cell.Context, java.lang.Object,
 	 * com.google.gwt.safehtml.shared.SafeHtmlBuilder)
 	 */

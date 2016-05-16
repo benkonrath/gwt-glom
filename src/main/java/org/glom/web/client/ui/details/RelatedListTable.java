@@ -88,7 +88,7 @@ public class RelatedListTable extends ListTable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.list.ListTable#getDataProvider()
 	 */
 	@Override
@@ -152,7 +152,7 @@ public class RelatedListTable extends ListTable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.list.ListTable#getMinNumVisibleRows()
 	 */
 	@Override
@@ -162,7 +162,7 @@ public class RelatedListTable extends ListTable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.glom.web.client.ui.list.ListTable#getNumNonEmptyRows()
 	 */
 	@Override
@@ -172,7 +172,7 @@ public class RelatedListTable extends ListTable {
 
 	/**
 	 * Gets the expected height of a RelatedListTable.
-	 * 
+	 *
 	 * @return the expect height of a RelatedListTable in pixels
 	 */
 	public static int getExpectedHeight() {

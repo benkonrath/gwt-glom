@@ -29,7 +29,7 @@ import org.junit.Test;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public class LayoutItemPortalDeepCloneTest {
 

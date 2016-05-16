@@ -58,10 +58,10 @@ final class ConfiguredDocument {
 	private Document document;
 	private String documentID = "";
 	private String defaultLocaleID = "";
-	
+
 	/** Credentials for the document as specified in the config file,
 	 * so the user does not need to specify them.
-	 * 
+	 *
 	 * @param docCredentials
 	 */
 	private Credentials credentials;
@@ -316,7 +316,7 @@ final class ConfiguredDocument {
 
 			// Discard unwanted translations so that getTitle(void) returns what we want.
 			updateTitlesForLocale(cloned, localeID);
-			
+
 			// Discard binary image data:
 			updateLayoutItemImages(cloned);
 		}
@@ -389,7 +389,7 @@ final class ConfiguredDocument {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tableName
 	 * @param quickFind
 	 * @param start
@@ -420,18 +420,18 @@ final class ConfiguredDocument {
 	DataItem[] getDetailsData(ComboPooledDataSource cpds, String tableName, final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
-		
+
 		setDataItemType(tableName, primaryKeyValue);
-		
+
 		final DetailsDBAccess detailsDBAccess = new DetailsDBAccess(document, documentID, cpds, tableName);
 
 		return detailsDBAccess.getData(primaryKeyValue);
 	}
 
-	/** 
+	/**
 	 * This make sure that the primary key value knows its actual type,
 	 * in case it was received via a URL parameter as a string representation:
-	 * 
+	 *
 	 * @param tableName The name of the table for which this is the primary key value
 	 * @param primaryKeyValue The TypedDataItem to be changes.
 	 */
@@ -449,7 +449,7 @@ final class ConfiguredDocument {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tableName
 	 * @param portal
 	 * @param foreignKeyValue
@@ -512,7 +512,7 @@ final class ConfiguredDocument {
 
 		// Discard unwanted translations so that getTitle(void) returns what we want.
 		updateTitlesForLocale(listCloned, localeID);
-		
+
 		// Discard binary image data:
 		updateLayoutItemImages(listCloned);
 
@@ -529,7 +529,7 @@ final class ConfiguredDocument {
 		for (final LayoutGroup group : listGroups) {
 			updateLayoutItemImages(group);
 		}
-		
+
 	}
 
 	/** Discard binary image data.
@@ -549,7 +549,7 @@ final class ConfiguredDocument {
 				//The client can now request the full data via the path in DataItem.getImageDataUrl().
 			}
 		}
-		
+
 	}
 
 	/**
@@ -733,7 +733,7 @@ final class ConfiguredDocument {
 			final TypedDataItem primaryKeyValue) {
 		// Validate the table name.
 		tableName = getTableNameToUse(tableName);
-		
+
 		setDataItemType(tableName, primaryKeyValue);
 
 		final RelatedListNavigation relatedListNavigation = new RelatedListNavigation(document, documentID, cpds,
@@ -752,7 +752,7 @@ final class ConfiguredDocument {
 	 * Gets the table name to use when accessing the database and the document. This method guards against SQL injection
 	 * attacks by returning the default table if the requested table is not in the database or if the table name has not
 	 * been set.
-	 * 
+	 *
 	 * @param tableName
 	 *            The table name to validate.
 	 * @return The table name to use.
@@ -792,19 +792,19 @@ final class ConfiguredDocument {
 	/**
 	 * Set the credentials for the document as specified in the config file
 	 * so the user does not need to specify them.
-	 * These might be the global credentials, if the document-specific 
+	 * These might be the global credentials, if the document-specific
 	 * credentials failed.
-	 * 
+	 *
 	 * @param docCredentials
 	 */
 	public void setCredentials(final Credentials docCredentials) {
 		this.credentials = docCredentials;
 	}
-	
+
 	/**
 	 * Get the credentials for the document as specified in the config file
 	 * so the user does not need to specify them.
-	 * These might be the global credentials, if the document-specific 
+	 * These might be the global credentials, if the document-specific
 	 * credentials failed.
 	 *
 	 */

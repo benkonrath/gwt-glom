@@ -83,7 +83,7 @@ import com.google.common.io.Files;
 
 /**
  * @author Murray Cumming <murrayc@openismus.com>
- * 
+ *
  */
 public class Document {
 
@@ -102,7 +102,7 @@ public class Document {
 		// A list of maps (field name to value).
 		private List<Map<String, DataItem>> exampleRows = null;
 	}
-	
+
 	/** This is passed between methods to keep track of the hierarchy of layout items,
 	 * so we can later use it to specify the path to a layout item.
 	 */
@@ -189,7 +189,7 @@ public class Document {
 	public static final String LAYOUT_NAME_DETAILS = "details";
 	public static final String LAYOUT_NAME_LIST = "list";
 	private static final String QUOTE_FOR_FILE_FORMAT = "\"";
-	
+
 	private static final String ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_CENTRAL = "postgres_central";
 	private static final String ATTRIBUTE_CONNECTION_HOSTING_POSTGRES_SELF = "postgres_self";
 	private static final String ATTRIBUTE_CONNECTION_HOSTING_MYSQL_CENTRAL = "mysql_central";
@@ -203,7 +203,7 @@ public class Document {
 	 */
 	public Document() {
 	}
-	
+
 	/**
 	 * Instantiate a Document.
 	 *
@@ -396,7 +396,7 @@ public class Document {
 
 	/**
 	 * Load a title and its translations.
-	 * 
+	 *
 	 * @param node
 	 *            The XML Element that may contain a title attribute and a trans_set of translations of the title.
 	 * @param title
@@ -581,18 +581,18 @@ public class Document {
 		}
 		case TYPE_IMAGE: {
 			//Glom (at least since 2.23/24) uses base64 for the images:
-			
+
 			//This is only used on the server-side,
 			//either to create a database, during tests,
 			//or to return the full data from our OnlineGlomImage service.
 			//It is removed before being passed to the client-side.
-			
+
 			/* This does not seem to work with the text from g_base64_encode() that Glom uses,
 			 * maybe because of the newlines, which are apparently OK:
 			 * http://en.wikipedia.org/wiki/Base64#MIME
 			 * final byte[] bytes = com.google.gwt.user.server.Base64Utils.fromBase64(unescaped);
 			 */
-			
+
 			/* Use org.apache.commons.codec.binary.Base64: */
 			final Base64 decoder = new Base64();
 			byte[] bytes = decoder.decode(unescaped.getBytes());
@@ -848,7 +848,7 @@ public class Document {
 				if (!(nodeLayoutGroup instanceof Element)) {
 					continue;
 				}
-				
+
 				final Path path = new Path();
 				path.tableName = tableName;
 				path.layoutName = layoutName;
@@ -977,7 +977,7 @@ public class Document {
 
 			final Element element = (Element) node;
 			final String tagName = element.getTagName();
-			
+
 			//Do not increment pathIndex for an item
 			//that we will not use:
 			if(tagName.equals(NODE_TRANSLATIONS_SET)) {
@@ -1046,18 +1046,18 @@ public class Document {
 	 */
 	private void loadDataLayoutItemImage(Element element, LayoutItemImage item, final Path path) {
 		loadTitle(element, item);
-		
+
 		final Element elementValue = getElementByName(element, NODE_VALUE);
 		if (elementValue == null) {
 			return;
 		}
 
 		final DataItem image = getNodeTextChildAsValue(elementValue, Field.GlomFieldType.TYPE_IMAGE);
-		
+
 		//This lets the client-side request the full data from our OnlineGlomImage service.
 		final String layoutPath = Utils.buildImageDataUrl(documentID, path.tableName, path.layoutName, path.indices);
 		image.setImageDataUrl(layoutPath);
-		
+
 		item.setImage(image);
 	}
 
@@ -1067,12 +1067,12 @@ public class Document {
 	 */
 	private void loadDataLayoutItemText(Element element, LayoutItemText item) {
 		loadTitle(element, item);
-		
+
 		final Element elementText = getElementByName(element, NODE_DATA_LAYOUT_TEXTOBJECT_TEXT);
 		if (elementText == null) {
 			return;
 		}
-		
+
 		final StaticText text = new StaticText();
 		loadTitle(elementText, text); //This node reuses the title structure to hold its text.
 		item.setText(text);
@@ -1466,7 +1466,7 @@ public class Document {
 	}
 
 	/** Get the relationship by name for a table.
-	 * 
+	 *
 	 * @param tableName
 	 * @param relationshipName
 	 * @return
@@ -1994,7 +1994,7 @@ public class Document {
 
 	/**
 	 * Gets the primary key Field for the specified table name.
-	 * 
+	 *
 	 * @param tableName
 	 *            name of table to search for the primary key field
 	 * @return primary key Field
@@ -2032,13 +2032,13 @@ public class Document {
 			Log.error("The layout was empty. attrTableName=" + tableName + ", layoutName=" + layoutName);
 			return null;
 		}
-		
+
 		final int[] indices = Utils.parseLayoutPath(layoutPath);
 		if((indices == null) || (indices.length == 0)) {
 			Log.error("The layout path was empty or could not be parsed. layoutPath=" + layoutPath);
 			return null;
 		}
-	
+
 		LayoutItem item = null;
 		int depth = 0;
 		for(int index:indices) {
@@ -2070,10 +2070,10 @@ public class Document {
 					return null;
 				}
 			}
-			
+
 			depth++;
 		}
-		
+
 		if(item == null) {
 			Log.error("The item specifed by the layout path could not be found. layoutPath=" + layoutPath);
 			return null;

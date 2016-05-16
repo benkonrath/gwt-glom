@@ -46,7 +46,7 @@ class SelfHostTestUtils {
 	static public void testExampleMusiccollectionData(final SelfHoster selfHoster, final Document document) throws SQLException
 	{
 	  assertTrue(document != null);
-	  
+
 	  //Check that some data is as expected:
 	  final TypedDataItem quickFindValue = new TypedDataItem();
 	  quickFindValue.setText("Born To Run");
@@ -63,24 +63,24 @@ class SelfHostTestUtils {
 	  LayoutItemField layoutItemField = new LayoutItemField();
 	  layoutItemField.setFullFieldDetails(field);
 	  fieldsToGet.add(layoutItemField);
-	  
+
 	  final String sqlQuery = SqlUtils.buildSqlSelectWithWhereClause(tableName, fieldsToGet, whereClause, null, selfHoster.getSqlDialect());
-	  
+
 	  final Connection conn = selfHoster.createConnection(false);
 	  assertTrue(conn != null);
-	  
+
 	  final Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       //st.setFetchSize(length);
 	  final ResultSet rs = st.executeQuery(sqlQuery);
 	  assertTrue(rs != null);
-	  
+
 	  final ResultSetMetaData rsMetaData = rs.getMetaData();
 	  Assert.assertEquals(2, rsMetaData.getColumnCount());
-	  
+
 	  rs.last();
 	  final int rsRowsCount = rs.getRow();
 	  Assert.assertEquals(1, rsRowsCount);
-	  
+
 	  final TypedDataItem albumID = new TypedDataItem();
 	  SqlUtils.fillDataItemFromResultSet(albumID, layoutItemFieldAlbumID, 1,
 				rs, "fake-document-id", tableName, null);
@@ -90,11 +90,11 @@ class SelfHostTestUtils {
 	/** Check that we can get data via a relationship.
 	 * @param document
 	 * @param albumID
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	static private void testExampleMusiccollectionDataRelated(final SelfHoster selfHoster, final Document document, TypedDataItem albumID) throws SQLException {
 		final String tableName = "albums";
-		
+
 		//Normal fields:
 		final List<LayoutItemField> fieldsToGet = new ArrayList<>();
 		final Field fieldAlbumID = document.getField(tableName, "album_id");
@@ -107,7 +107,7 @@ class SelfHostTestUtils {
 		layoutItemField = new LayoutItemField();
 		layoutItemField.setFullFieldDetails(field);
 		fieldsToGet.add(layoutItemField);
-		  
+
 		//Related field:
 		final Relationship relationship = document.getRelationship(tableName, "artist");
 		assertNotNull(relationship);
@@ -117,18 +117,18 @@ class SelfHostTestUtils {
 		assertNotNull(field);
 		layoutItemField.setFullFieldDetails(field);
 		fieldsToGet.add(layoutItemField);
-		
-		  
+
+
 		final String sqlQuery = SqlUtils.buildSqlSelectWithKey(tableName, fieldsToGet, fieldAlbumID, albumID, selfHoster.getSqlDialect());
-		  
+
 		final Connection conn = selfHoster.createConnection(false);
 		assertTrue(conn != null);
-		  
+
 		final Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		//st.setFetchSize(length);
 		final ResultSet rs = st.executeQuery(sqlQuery);
 		assertTrue(rs != null);
-		
+
 		final ResultSetMetaData rsMetaData = rs.getMetaData();
 		Assert.assertEquals(3, rsMetaData.getColumnCount());
 
